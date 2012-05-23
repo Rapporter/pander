@@ -1,0 +1,43 @@
+\name{pandoc.title.return}
+\alias{pandoc.title}
+\alias{pandoc.title.return}
+\title{Create title block}
+\usage{
+  pandoc.title.return(author, title, date)
+}
+\arguments{
+  \item{author}{character vector or semicolon delimited
+  list of authors without line break}
+
+  \item{title}{character vector of lines of title or
+  multiline string with \code{\\n} separators}
+
+  \item{date}{any string fit in one line}
+}
+\value{
+  By default this function outputs (see: \code{cat}) the
+  result. If you would want to catch the result instead,
+  then call the function ending in \code{.return}.
+}
+\description{
+  Creates a pandoc style title block with optional author,
+  title and date fields.
+}
+\examples{
+pandoc.title('Gergely Daróczi', 'Render pandoc in R', '2012-05-16')
+pandoc.title(c('Tom', 'Jerry'), 'Render pandoc in R', '2012-05-16')
+pandoc.title('Tom; Jerry', 'Render pandoc in R', '2012-05-16')
+pandoc.title('Tom; Jerry', c('Render', 'pandoc', 'in R'), '2012-05-16')
+pandoc.title('Tom; Jerry', 'Render\\n    pandoc \\n    in R', '2012-05-16')
+
+## missing fields
+
+pandoc.title('Tom; Jerry', 'Render pandoc in R')
+pandoc.title('Tom; Jerry')
+pandoc.title(, 'Render pandoc in R', '2012-05-16')
+}
+\references{
+  John MacFarlane (2012): _Pandoc User's Guide_.
+  \url{http://johnmacfarlane.net/pandoc/README.html}
+}
+

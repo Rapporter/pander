@@ -1,0 +1,49 @@
+\name{pandoc.verbatim.return}
+\alias{pandoc.verbatim}
+\alias{pandoc.verbatim.return}
+\title{Add verbatim}
+\usage{
+  pandoc.verbatim.return(x,
+    style = c("inline", "indent", "delim"), attrs = "")
+}
+\arguments{
+  \item{x}{character vector}
+
+  \item{style}{show code \code{inline} or in a separate
+  (\code{indent}ed or \code{delim}ited) block}
+
+  \item{attrs}{(optionally) pass ID, classes and any
+  attribute to the \code{delimited} block}
+}
+\value{
+  By default this function outputs (see: \code{cat}) the
+  result. If you would want to catch the result instead,
+  then call the function ending in \code{.return}.
+}
+\description{
+  Pandoc style verbatim format (e.g. \code{`FOO`}) is added
+  to character string.
+}
+\examples{
+## different styles/formats
+pandoc.verbatim('FOO')
+
+src <- c('FOO', 'indent', 'BAR' )
+pandoc.verbatim(src)
+pandoc.verbatim.return(src)
+pandoc.verbatim(c('FOOO\\nBAR  ', ' I do R'), 'indent')
+pandoc.verbatim(c('FOOO\\nBAR  ', ' I do R'), 'delim')
+
+## add highlighting and HTML/LaTeX ID and classes (even custom attribute)
+pandoc.verbatim(c('cat("FOO")', 'mean(bar)'), 'delim', '.R #MyCode custom_var="10"')
+}
+\references{
+  John MacFarlane (2012): _Pandoc User's Guide_.
+  \url{http://johnmacfarlane.net/pandoc/README.html}
+}
+\seealso{
+  \code{\link{pandoc.emphasis}}
+  \code{\link{pandoc.strikeout}}
+  \code{\link{pandoc.strong}}
+}
+

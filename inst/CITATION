@@ -1,0 +1,15 @@
+if(!exists("meta") || is.null(meta)) meta <- packageDescription("rapport")
+citHeader("To cite package 'pandoc' in publications, please use:")
+year <- format(as.Date(meta$Date), '%Y')
+vers <- paste("R package version", meta$Version)
+citEntry(entry       = "Manual",
+         title       = "An R pandoc writer",
+         author      = as.person("Gergely Daróczi"),
+         year        = year,
+         note        = vers,
+         url         = "http://cran.r-project.org/package=pandoc",
+         textVersion = paste("Daróczi, G. (",
+                             year,
+                             "). An R pandoc writer. ",
+                             vers,
+                             ", URL http://cran.r-project.org/package=pandoc", sep = ""))
