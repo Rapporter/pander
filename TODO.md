@@ -8,7 +8,7 @@
 # Required util functions:
 
  * add significance stars
- * indent concatenated strings
+ * ~~indent concatenated strings~~ -> pandoc.indent
 
 # Pandoc methods:
 

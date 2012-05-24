@@ -40,6 +40,32 @@ p <- function(x)
     sprintf('%s and *%s*', paste(sprintf('*%s*', head(x, -1)), collapse = ', '), tail(x, 1))
 
 
+#' Indent text
+#'
+#' Indent all (optionally concatenated) lines of provided text with given level.
+#' @param x character vector
+#' @param level integer
+#' @author Gergely Daróczi
+#' @export
+#' @examples
+#' pandoc.indent('FOO', 1)
+#' pandoc.indent(pandoc.table.return(table(mtcars$gear)), 2)
+#' cat(pandoc.indent(pandoc.table.return(table(mtcars$gear)), 3))
+pandoc.indent <- function(x, level = 0) {
+
+    if (!is.character(x))
+        stop('Only character strings are allowed.')
+    indent <- rep.char(' ', level*4)
+    res <- paste0(indent, gsub('\n', paste0('\n', indent), x))
+
+    ## remove wasted space
+    res <- gsub(' *\n', '\n', res)
+    res <- sub(' *$', '', res)
+
+    res
+
+}
+
 #' Paragraphs
 #'
 #' Pandoc style paragraph.
