@@ -29,6 +29,17 @@ rep.char <- function(x, n, sep = '')
     paste(rep.int(x, n), collapse = sep)
 
 
+#' Pretty print vectors
+#' @param x vector
+#' @return character string
+#' @references Credit goes to Aleksandar Blagotić for the idea and implementation in rapport package. \url{http://github.com/aL3xa/rapport/blob/master/R/rp_helpers.R}
+#' @export
+#' @examples
+#' p(1:5)
+p <- function(x)
+    sprintf('%s and *%s*', paste(sprintf('*%s*', head(x, -1)), collapse = ', '), tail(x, 1))
+
+
 #' Paragraphs
 #'
 #' Pandoc style paragraph.
@@ -411,6 +422,7 @@ pandoc.list <- function(...)
 #' pandoc.table(matrix(sample(1:1000, 25), 5, 5))
 #' pandoc.table(matrix(runif(25), 5, 5))
 #' pandoc.table(matrix(runif(25), 5, 5), digits = 5)
+#' pandoc.table.return(table(mtcars$am))
 #' pandoc.table(table(mtcars$am, mtcars$gear))
 #' pandoc.table(table(state.division, state.region))
 #' pandoc.table(table(state.division, state.region), justify = 'centre')
@@ -433,7 +445,7 @@ pandoc.table.return <- function(t, caption, digits = 2, decimal.mark = '.', just
     }
 
     ## intializing result
-    res <- '\n'
+    res <- ''
 
     ## format numerics & convert to string
     t <- format(t, trim = TRUE, digits = digits, decimal.mark = decimal.mark)
@@ -441,13 +453,24 @@ pandoc.table.return <- function(t, caption, digits = 2, decimal.mark = '.', just
     ## TODO: adding formatting (emphasis, strong etc.)
 
     ## helper variables
-    t.colnames  <- colnames(t)
-    t.width     <- as.numeric(apply(cbind(nchar(t.colnames), apply(t, 2, function(x) max(nchar(x)))), 1, max))
-    t.rownames  <- rownames(t)
+    if (length(dim(t)) == 1) {
 
-    ## remove obvoius row.names
-    if (all(rownames(t) == 1:nrow(t)))
+        t.colnames  <- names(t)
+        t.rownames  <- NULL
+        t.width     <- as.numeric(apply(t, 1, nchar))
+
+    } else {
+
+        t.colnames  <- colnames(t)
+        t.rownames  <- rownames(t)
+        t.width     <- as.numeric(apply(cbind(nchar(t.colnames), apply(t, 2, function(x) max(nchar(x)))), 1, max))
+
+        ## remove obvoius row.names
+        if (all(rownames(t) == 1:nrow(t)))
         t.rownames <- NULL
+
+    }
+
 
     if (length(t.rownames) != 0) {
 
@@ -476,9 +499,14 @@ pandoc.table.return <- function(t, caption, digits = 2, decimal.mark = '.', just
     ## body
     res <- paste0(res, '\n')
     b   <- t
+
     if (length(t.rownames) != 0)
         b <- cbind(t.rownames, b)
-    res <- paste0(res, paste(apply(b, 1, function(x) paste(table.expand(x, t.width, justify), t.sep, sep = '\n')), collapse = '\n'))
+
+    if (length(dim(t)) > 1)
+        res <- paste0(res, paste(apply(b, 1, function(x) paste(table.expand(x, t.width, justify), t.sep, sep = '\n')), collapse = '\n'))
+    else
+        res <- paste0(res, paste(table.expand(b, t.width, justify), t.sep, sep = '\n'), collapse = '\n')
 
     res <- paste0(res, '\n\n')
 

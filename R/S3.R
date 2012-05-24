@@ -1,0 +1,103 @@
+#' Generic Pandoc method
+#'
+#' Prints an R object in pandoc style markdown.
+#' @param x an R object
+#' @param ... optional parameters
+#' @return By default this function outputs (see: \code{cat}) the result. If you would want to catch the result instead, then call the function ending in \code{.return}.
+#' @references \itemize{
+#' \item John MacFarlane (2012): _Pandoc User's Guide_. \url{http://johnmacfarlane.net/pandoc/README.html}
+#' \item David Hajage (2011): _ascii. Export R objects to several markup languages._ \url{http://CRAN.R-project.org/package=ascii}
+#' }
+#' @author Gergely Daróczi
+#' @export
+#' @examples
+#'
+#' ## Vectors
+#' Pandoc(1:10)
+#' Pandoc(letters)
+#' Pandoc(mtcars$am)
+#'
+#' ## Arrays
+#' Pandoc(mtcars)
+#' Pandoc(table(mtcars$am))
+#' Pandoc(table(mtcars$am, mtcars$gear))
+#'
+#' ## Tests
+#' Pandoc(ks.test(runif(50), runif(50)))
+#' Pandoc(chisq.test(table(mtcars$am, mtcars$gear)))
+#' Pandoc(t.test(extra ~ group, data = sleep))
+#'
+#' ## Models
+#' ml <- with(lm(mpg ~ hp + wt), data = mtcars)
+#' Pandoc(ml)
+#' Pandoc(anova(ml))
+#' Pandoc(aov(ml))
+#' ## Dobson (1990) Page 93: Randomized Controlled Trial (examples from: ?glm)
+#' counts <- c(18,17,15,20,10,20,25,13,12)
+#' outcome <- gl(3,1,9)
+#' treatment <- gl(3,3)
+#' m <- glm(counts ~ outcome + treatment, family=poisson())
+#' Pandoc(m)
+#' Pandoc(anova(m))
+#' Pandoc(aov(m))
+Pandoc <- function(x, ...)
+    UseMethod('Pandoc', x)
+
+#' @S3method Pandoc table
+Pandoc.table <- function(x, ...)
+    pandoc.table(x)
+
+#' @S3method Pandoc data.frame
+Pandoc.data.frame <- function(x, ...)
+    pandoc.table(x)
+
+#' @S3method Pandoc cast_df
+Pandoc.cast_df<- function(x, ...)
+    pandoc.table(as.data.frame(x))
+
+#' @S3method Pandoc matrix
+Pandoc.matrix <- function(x, ...)
+    pandoc.table(x)
+
+#' @S3method Pandoc numeric
+Pandoc.numeric <- function(x, ...)
+    p(x)        #ROUND!
+
+#' @S3method Pandoc character
+Pandoc.character <- function(x, ...)
+    p(x)
+
+#' @S3method Pandoc list
+Pandoc.list <- function(x, ...)
+    pandoc.list(x)
+
+#' @S3method Pandoc lm
+Pandoc.lm <- function(x, ...)
+    pandoc.table(summary(x)$coeff, caption = sprintf('Fitting linear model: %s', deparse(x$call$formula)))
+
+#' @S3method Pandoc glm
+Pandoc.glm <- function(x, ...)
+    pandoc.table(summary(x)$coeff, caption = sprintf('Fitting generalized (%s) linear model: %s', paste(x$family$family, x$family$link, sep = '/'), deparse(x$call$formula)))
+
+#' @S3method Pandoc aov
+Pandoc.aov <- function(x, ...)
+    pandoc.table(unclass(summary(x))[[1]], caption = 'Analysis of Variance Model')
+
+#' @S3method Pandoc anova
+Pandoc.anova <- function(x, ...)
+    pandoc.table(as.data.frame(x, check.names = FALSE), caption = strsplit(attr(x, 'heading'), '\n')[[1]][1])
+
+#' @S3method Pandoc htest
+Pandoc.htest <- function(x, ...) {
+
+    res <- data.frame('Test statistic' = as.numeric(x$statistic), check.names = FALSE)
+    if (!is.null(x$parameter))
+        res[names(x$parameter)] = x$parameter
+    if (!is.null(x$p.value))    # TODO: add significance stars
+        res$'P value' = x$p.value
+    if (!is.null(x$alternative))
+        res['Alternative hypothesis'] = x$alternative
+
+    pandoc.table(res, caption = x$method)
+
+}
