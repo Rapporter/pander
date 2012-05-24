@@ -27,7 +27,9 @@ Pandoc(factor(mtcars$am))
 ## Lists
 Pandoc(list(1,2,3, c(1,2)))
 Pandoc(list(1,2, table(mtcars$am)))
-Pandoc(list(1,2,3, list(1,2))) ## FIXME:
+Pandoc(list(1,2,3, list(1,2)))
+Pandoc(list('FOO', letters[1:3], list(1:5), table(mtcars$gear), list('FOOBAR', list('a', 'b'))))
+Pandoc(unclass(chisq.test(table(mtcars$am, mtcars$gear))))
 
 ## Arrays
 Pandoc(mtcars)
@@ -59,6 +61,11 @@ Pandoc(prcomp(USArrests))
 ## Others
 Pandoc(density(runif(10)))
 Pandoc(density(mtcars$hp))
+
+## default method
+x <- chisq.test(table(mtcars$am, mtcars$gear))
+class(x) <- 'I heave never heard of!'
+Pandoc(x)
 }
 \author{
   Gergely Daróczi

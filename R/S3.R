@@ -55,6 +55,11 @@
 #' ## Others
 #' Pandoc(density(runif(10)))
 #' Pandoc(density(mtcars$hp))
+#'
+#' ## default method
+#' x <- chisq.test(table(mtcars$am, mtcars$gear))
+#' class(x) <- 'I heave never heard of!'
+#' Pandoc(x)
 Pandoc <- function(x, ...)
     UseMethod('Pandoc', x)
 
