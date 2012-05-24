@@ -22,6 +22,7 @@
 Pandoc(1:10)
 Pandoc(letters)
 Pandoc(mtcars$am)
+Pandoc(factor(mtcars$am))
 
 ## Arrays
 Pandoc(mtcars)
@@ -46,6 +47,13 @@ m <- glm(counts ~ outcome + treatment, family=poisson())
 Pandoc(m)
 Pandoc(anova(m))
 Pandoc(aov(m))
+
+## Prcomp
+Pandoc(prcomp(USArrests))
+
+## Others
+Pandoc(density(runif(10)))
+Pandoc(density(mtcars$hp))
 }
 \author{
   Gergely Daróczi

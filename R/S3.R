@@ -16,6 +16,7 @@
 #' Pandoc(1:10)
 #' Pandoc(letters)
 #' Pandoc(mtcars$am)
+#' Pandoc(factor(mtcars$am))
 #'
 #' ## Arrays
 #' Pandoc(mtcars)
@@ -40,6 +41,13 @@
 #' Pandoc(m)
 #' Pandoc(anova(m))
 #' Pandoc(aov(m))
+#'
+#' ## Prcomp
+#' Pandoc(prcomp(USArrests))
+#'
+#' ## Others
+#' Pandoc(density(runif(10)))
+#' Pandoc(density(mtcars$hp))
 Pandoc <- function(x, ...)
     UseMethod('Pandoc', x)
 
@@ -67,25 +75,29 @@ Pandoc.numeric <- function(x, ...)
 Pandoc.character <- function(x, ...)
     p(x)
 
+#' @S3method Pandoc factor
+Pandoc.factor <- function(x, ...)
+    p(as.character(x))
+
 #' @S3method Pandoc list
 Pandoc.list <- function(x, ...)
     pandoc.list(x)
 
 #' @S3method Pandoc lm
 Pandoc.lm <- function(x, ...)
-    pandoc.table(summary(x)$coeff, caption = sprintf('Fitting linear model: %s', deparse(x$call$formula)))
+    pandoc.table(summary(x)$coeff, caption = sprintf('Fitting linear model: %s', deparse(x$call$formula)), justify = c('right', rep('centre', 4)))
 
 #' @S3method Pandoc glm
 Pandoc.glm <- function(x, ...)
-    pandoc.table(summary(x)$coeff, caption = sprintf('Fitting generalized (%s) linear model: %s', paste(x$family$family, x$family$link, sep = '/'), deparse(x$call$formula)))
+    pandoc.table(summary(x)$coeff, caption = sprintf('Fitting generalized (%s) linear model: %s', paste(x$family$family, x$family$link, sep = '/'), deparse(x$call$formula)), justify = c('right', rep('centre', 4)))
 
 #' @S3method Pandoc aov
 Pandoc.aov <- function(x, ...)
-    pandoc.table(unclass(summary(x))[[1]], caption = 'Analysis of Variance Model')
+    pandoc.table(unclass(summary(x))[[1]], caption = 'Analysis of Variance Model', justify = c('right', rep('centre', 4)))
 
 #' @S3method Pandoc anova
 Pandoc.anova <- function(x, ...)
-    pandoc.table(as.data.frame(x, check.names = FALSE), caption = strsplit(attr(x, 'heading'), '\n')[[1]][1])
+    pandoc.table(x, caption = strsplit(attr(x, 'heading'), '\n')[[1]][1], justify = c('right', rep('centre', 4)))
 
 #' @S3method Pandoc htest
 Pandoc.htest <- function(x, ...) {
@@ -98,6 +110,22 @@ Pandoc.htest <- function(x, ...) {
     if (!is.null(x$alternative))
         res['Alternative hypothesis'] = x$alternative
 
-    pandoc.table(res, caption = x$method)
+    pandoc.table(res, caption = x$method, justify = 'centre')
 
 }
+
+#' @S3method Pandoc prcomp
+Pandoc.prcomp <- function(x, ...) {
+    pandoc.table(x$rotation, caption = 'Principal Components Analysis')
+    pandoc.table(summary(x)$importance)
+}
+
+#' @S3method Pandoc density
+Pandoc.density <- function(x, ...) {
+
+    res <- data.frame(Coordinates = as.numeric(summary(x$x)), 'Density values' = as.numeric(summary(x$y)), check.names = FALSE)
+    rownames(res) <- names(summary(1))
+    pandoc.table(res, caption = sprintf('Kernel density of *%s* (bandwidth: %s)', x$data.name, format(x$bw)), justify = c('right', 'centre', 'centre'))
+}
+
+
