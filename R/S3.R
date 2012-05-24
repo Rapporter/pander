@@ -20,9 +20,10 @@
 #'
 #' ## Lists
 #' Pandoc(list(1,2,3, c(1,2)))
-#' Pandoc(list(1,2, table(mtcars$am)))
+#' Pandoc(list(a=1, b=2, c=table(mtcars$am)))
 #' Pandoc(list(1,2,3, list(1,2)))
 #' Pandoc(list('FOO', letters[1:3], list(1:5), table(mtcars$gear), list('FOOBAR', list('a', 'b'))))
+#' Pandoc(list(a=1, b=2, c=table(mtcars$am), x=list(myname=1,2), 56))
 #' Pandoc(unclass(chisq.test(table(mtcars$am, mtcars$gear))))
 #'
 #' ## Arrays
@@ -141,12 +142,22 @@ Pandoc.density <- function(x, ...) {
 }
 
 #' @S3method Pandoc list
-Pandoc.list <- function(x, indent = 0, ...) {
+Pandoc.list <- function(l, indent = 0, ...) {
 
-    ## TODO: list element's name
+    ## grab elements name (if any)
+    x.names       <- sapply(names(l), function(x) ifelse(x == '', '  *', sprintf('  * **%s**:', x)))
+    if (length(x.names) == 0)
+        x.names <- rep('', length(l))
 
-    ## capture output
-    res <- paste(unlist(lapply(x, function(x) capture.output(Pandoc(x, indent = indent + 1)))), collapse = '\n')
+    ## capture pandoc output of list element
+    res <- paste(unlist(lapply(1:length(l), function(i) {
+        res.i <- paste(capture.output(Pandoc(l[[i]], indent = indent + 1)), collapse = '\n')
+        if (grepl('\n', res.i) & !grepl('\n *\\*', res.i)) {
+            res.i <- sub('^\n', '\n\n', res.i)
+            res.i <- pandoc.indent(res.i, 1)
+        }
+        paste(x.names[i], res.i)
+    })), collapse = '\n')
 
     ## indent output
     res <- pandoc.indent(res, indent)
@@ -158,7 +169,7 @@ Pandoc.list <- function(x, indent = 0, ...) {
 #' @S3method Pandoc default
 Pandoc.default <- function(x, ...) {
 
-    warning(sprintf('No Pandoc method for %s, reverting to default.', class(x)))
+    warning(sprintf('No Pandoc method for "%s", reverting to default.', class(x)))
     class(x) <- 'list'
     Pandoc(x)
 

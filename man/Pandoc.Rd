@@ -26,9 +26,10 @@ Pandoc(factor(mtcars$am))
 
 ## Lists
 Pandoc(list(1,2,3, c(1,2)))
-Pandoc(list(1,2, table(mtcars$am)))
+Pandoc(list(a=1, b=2, c=table(mtcars$am)))
 Pandoc(list(1,2,3, list(1,2)))
 Pandoc(list('FOO', letters[1:3], list(1:5), table(mtcars$gear), list('FOOBAR', list('a', 'b'))))
+Pandoc(list(a=1, b=2, c=table(mtcars$am), x=list(myname=1,2), 56))
 Pandoc(unclass(chisq.test(table(mtcars$am, mtcars$gear))))
 
 ## Arrays
