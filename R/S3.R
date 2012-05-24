@@ -91,7 +91,7 @@ Pandoc.numeric <- function(x, ...)
 
 #' @S3method Pandoc character
 Pandoc.character <- function(x, ...)
-    cat(p(x))
+    cat(x)
 
 #' @S3method Pandoc factor
 Pandoc.factor <- function(x, ...)
