@@ -10,6 +10,7 @@
 #' }
 #' @author Gergely Daróczi
 #' @export
+#' @aliases Pandoc.return
 #' @examples
 #'
 #' ## Vectors
@@ -63,6 +64,10 @@
 #' Pandoc(x)
 Pandoc <- function(x, ...)
     UseMethod('Pandoc', x)
+
+#' @export
+Pandoc.return <- function(...)
+    capture.output(Pandoc(...))
 
 #' @S3method Pandoc table
 Pandoc.table <- function(x, ...)

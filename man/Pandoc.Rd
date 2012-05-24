@@ -1,5 +1,6 @@
 \name{Pandoc}
 \alias{Pandoc}
+\alias{Pandoc.return}
 \title{Generic Pandoc method}
 \usage{
   Pandoc(x, ...)
