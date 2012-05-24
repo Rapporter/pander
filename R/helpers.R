@@ -60,7 +60,7 @@ pandoc.indent <- function(x, level = 0) {
 
     if (!is.character(x))
         stop('Only character strings are allowed.')
-    indent <- rep.char(' ', level*4)
+    indent <- rep.char(' ', level * 4)
     res <- paste0(indent, gsub('\n', paste0('\n', indent), x))
 
     ## remove wasted space

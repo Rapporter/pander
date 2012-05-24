@@ -24,6 +24,11 @@ Pandoc(letters)
 Pandoc(mtcars$am)
 Pandoc(factor(mtcars$am))
 
+## Lists
+Pandoc(list(1,2,3, c(1,2)))
+Pandoc(list(1,2, table(mtcars$am)))
+Pandoc(list(1,2,3, list(1,2))) ## FIXME:
+
 ## Arrays
 Pandoc(mtcars)
 Pandoc(table(mtcars$am))

@@ -18,6 +18,13 @@
 #' Pandoc(mtcars$am)
 #' Pandoc(factor(mtcars$am))
 #'
+#' ## Lists
+#' Pandoc(list(1,2,3, c(1,2)))
+#' Pandoc(list(1,2, table(mtcars$am)))
+#' Pandoc(list(1,2,3, list(1,2)))
+#' Pandoc(list('FOO', letters[1:3], list(1:5), table(mtcars$gear), list('FOOBAR', list('a', 'b'))))
+#' Pandoc(unclass(chisq.test(table(mtcars$am, mtcars$gear))))
+#'
 #' ## Arrays
 #' Pandoc(mtcars)
 #' Pandoc(table(mtcars$am))
@@ -128,3 +135,26 @@ Pandoc.density <- function(x, ...) {
     pandoc.table(res, caption = sprintf('Kernel density of *%s* (bandwidth: %s)', x$data.name, format(x$bw)), justify = c('right', 'centre', 'centre'))
 }
 
+#' @S3method Pandoc list
+Pandoc.list <- function(x, indent = 0, ...) {
+
+    ## TODO: list element's name
+
+    ## capture output
+    res <- paste(unlist(lapply(x, function(x) capture.output(Pandoc(x, indent = indent + 1)))), collapse = '\n')
+
+    ## indent output
+    res <- pandoc.indent(res, indent)
+
+    pandoc.p(res)
+
+}
+
+#' @S3method Pandoc default
+Pandoc.default <- function(x, ...) {
+
+    warning(sprintf('No Pandoc method for %s, reverting to default.', class(x)))
+    class(x) <- 'list'
+    Pandoc(x)
+
+}
