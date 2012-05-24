@@ -69,15 +69,15 @@ Pandoc.matrix <- function(x, ...)
 
 #' @S3method Pandoc numeric
 Pandoc.numeric <- function(x, ...)
-    p(x)        #ROUND!
+    cat(p(x))        #ROUND!
 
 #' @S3method Pandoc character
 Pandoc.character <- function(x, ...)
-    p(x)
+    cat(p(x))
 
 #' @S3method Pandoc factor
 Pandoc.factor <- function(x, ...)
-    p(as.character(x))
+    cat(p(as.character(x)))
 
 #' @S3method Pandoc list
 Pandoc.list <- function(x, ...)
