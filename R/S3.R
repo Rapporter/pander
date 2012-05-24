@@ -128,4 +128,3 @@ Pandoc.density <- function(x, ...) {
     pandoc.table(res, caption = sprintf('Kernel density of *%s* (bandwidth: %s)', x$data.name, format(x$bw)), justify = c('right', 'centre', 'centre'))
 }
 
-

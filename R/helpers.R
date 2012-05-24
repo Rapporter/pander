@@ -36,8 +36,14 @@ rep.char <- function(x, n, sep = '')
 #' @export
 #' @examples
 #' p(1:5)
-p <- function(x)
-    sprintf('%s and *%s*', paste(sprintf('*%s*', head(x, -1)), collapse = ', '), tail(x, 1))
+p <- function(x) {
+
+    if (length(x) > 1)
+        sprintf('%s and *%s*', paste(sprintf('*%s*', head(x, -1)), collapse = ', '), tail(x, 1))
+    else
+        sprintf('*%s*', x)
+
+}
 
 
 #' Indent text
@@ -45,7 +51,6 @@ p <- function(x)
 #' Indent all (optionally concatenated) lines of provided text with given level.
 #' @param x character vector
 #' @param level integer
-#' @author Gergely Daróczi
 #' @export
 #' @examples
 #' pandoc.indent('FOO', 1)

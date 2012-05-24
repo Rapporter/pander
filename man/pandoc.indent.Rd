@@ -16,8 +16,6 @@
 \examples{
 pandoc.indent('FOO', 1)
 pandoc.indent(pandoc.table.return(table(mtcars$gear)), 2)
-}
-\author{
-  Gergely Daróczi
+cat(pandoc.indent(pandoc.table.return(table(mtcars$gear)), 3))
 }
 
