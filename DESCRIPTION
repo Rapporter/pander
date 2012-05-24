@@ -19,3 +19,4 @@ Depends:
 Collate:
     'helpers.R'
     'S3.R'
+    'R5.R'
