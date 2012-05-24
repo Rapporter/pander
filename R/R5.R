@@ -19,7 +19,6 @@ report$methods(show = function(x) {
     timer  <- proc.time()
 
     ## show header
-    cat('\n')
     cat(pandoc.header(.self$title, style = 'setext'))
     cat(' written by *', .self$author, '* at ', .self$date, '\n', sep = '')
     cat('\n', sprintf(' This report holds %s block(s).', length(.self$body)), '\n')
@@ -35,8 +34,7 @@ report$methods(show = function(x) {
         cat(pandoc.horizontal.rule())
         cat('\nProc. time: ', as.numeric(proc.time() - timer)[3], 'seconds. \n\n')
 
-    } else {
+    } else
         cat('\n)')
-    }
 
 })
