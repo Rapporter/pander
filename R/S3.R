@@ -167,6 +167,10 @@ Pandoc.list <- function(l, indent = 0, ...) {
     ## indent output
     res <- pandoc.indent(res, indent)
 
+    ## add (comment): end of list (preventing conflicts with forthcoming pandoc blocks)
+    if (indent == 0)
+        res <- paste0(res, '\n\n<!-- end of list -->\n')
+
     pandoc.p(res)
 
 }
