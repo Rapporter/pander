@@ -3,7 +3,7 @@
 \alias{pandoc.title.return}
 \title{Create title block}
 \usage{
-  pandoc.title.return(author, title, date)
+  pandoc.title.return(author = "", title = "", date = "")
 }
 \arguments{
   \item{author}{character vector or semicolon delimited
@@ -34,7 +34,7 @@ pandoc.title('Tom; Jerry', 'Render\\n    pandoc \\n    in R', '2012-05-16')
 
 pandoc.title('Tom; Jerry', 'Render pandoc in R')
 pandoc.title('Tom; Jerry')
-pandoc.title(, 'Render pandoc in R', '2012-05-16')
+pandoc.title(title = 'Render pandoc in R', date= '2012-05-16')
 }
 \references{
   John MacFarlane (2012): _Pandoc User's Guide_.

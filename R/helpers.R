@@ -84,7 +84,7 @@ pandoc.indent <- function(x, level = 0) {
 #' pandoc.p('FOO')
 #' pandoc.p(c('Lorem', 'ipsum', 'lorem ipsum'))
 pandoc.p.return <- function(x)
-    add.blank.lines(paste(x, collapse = '\n'))
+    add.blank.lines(add.blank.lines(paste(x, collapse = '\n')))
 
 #' @export
 pandoc.p <- function(...)
@@ -322,30 +322,30 @@ pandoc.header <- function(...)
 #'
 #' pandoc.title('Tom; Jerry', 'Render pandoc in R')
 #' pandoc.title('Tom; Jerry')
-#' pandoc.title(, 'Render pandoc in R', '2012-05-16')
-pandoc.title.return <- function(author, title, date) {
+#' pandoc.title(title = 'Render pandoc in R', date= '2012-05-16')
+pandoc.title.return <- function(author = '', title = '', date = '') {
 
-    if (missing(author) & missing(title) & !missing(date))
+    if ((author == '') & (title == '') & (date != ''))
         stop('You cannot create a title with only date specified!')
 
     ## updating title tags
-    if (!missing(author))
+    if (author != '')
         author <- paste('%', paste(author, collapse = '; '))
-    if (!missing(title))
+    if (title != '')
         title  <- paste0('% ', gsub('[\t ][\t ]*', '  ', gsub('\n', '\n  ', paste(title, collapse = '\n'))))
 
     ## formatting result
-    if (missing(title)) {               # author
+    if (title == '') {               # author
         res <- paste0('%\n', author)
     } else {
-        date <- paste0('% ', gsub('\n', ' ', date)[1])
-        if (missing(date)) {
-            if (missing(author))        # title
+        if (date == '') {
+            if (author == '')        # title
                 res <- title
             else                        # author & title
                 res <- paste(title, author, sep = '\n')
         } else {
-            if (missing(author))        # title & date
+            date <- paste0('% ', gsub('\n', ' ', date)[1])
+            if (author == '')        # title & date
                 res <- paste(title, '%', date, sep = '\n')
             else                        # author & title & date
                 res <- paste(title, author, date, sep = '\n')
@@ -353,7 +353,7 @@ pandoc.title.return <- function(author, title, date) {
         }
     }
 
-    add.blank.lines(res)
+    sprintf('%s\n', res)
 
 }
 

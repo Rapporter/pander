@@ -1,9 +1,13 @@
-\name{Pandoc}
-\alias{Pandoc}
-\alias{Pandoc.return}
-\title{Generic Pandoc method}
+\name{pandoc}
+\alias{pander}
+\alias{pander.return}
+\alias{pandoc}
+\alias{pandoc.return}
+\title{Generic pander method}
 \usage{
-  Pandoc(x, ...)
+  pander(x, ...)
+
+  pandoc(x, ...)
 }
 \arguments{
   \item{x}{an R object}
@@ -18,56 +22,60 @@
 \description{
   Prints an R object in pandoc style markdown.
 }
+\note{
+  This function can be called by \code{pander} and
+  \code{pandoc} too.
+}
 \examples{
 ## Vectors
-Pandoc(1:10)
-Pandoc(letters)
-Pandoc(mtcars$am)
-Pandoc(factor(mtcars$am))
+pander(1:10)
+pander(letters)
+pander(mtcars$am)
+pander(factor(mtcars$am))
 
 ## Lists
-Pandoc(list(1,2,3, c(1,2)))
-Pandoc(list(a=1, b=2, c=table(mtcars$am)))
-Pandoc(list(1,2,3, list(1,2)))
-Pandoc(list('FOO', letters[1:3], list(1:5), table(mtcars$gear), list('FOOBAR', list('a', 'b'))))
-Pandoc(list(a=1, b=2, c=table(mtcars$am), x=list(myname=1,2), 56))
-Pandoc(unclass(chisq.test(table(mtcars$am, mtcars$gear))))
+pander(list(1,2,3, c(1,2)))
+pander(list(a=1, b=2, c=table(mtcars$am)))
+pander(list(1,2,3, list(1,2)))
+pander(list('FOO', letters[1:3], list(1:5), table(mtcars$gear), list('FOOBAR', list('a', 'b'))))
+pander(list(a=1, b=2, c=table(mtcars$am), x=list(myname=1,2), 56))
+pander(unclass(chisq.test(table(mtcars$am, mtcars$gear))))
 
 ## Arrays
-Pandoc(mtcars)
-Pandoc(table(mtcars$am))
-Pandoc(table(mtcars$am, mtcars$gear))
+pander(mtcars)
+pander(table(mtcars$am))
+pander(table(mtcars$am, mtcars$gear))
 
 ## Tests
-Pandoc(ks.test(runif(50), runif(50)))
-Pandoc(chisq.test(table(mtcars$am, mtcars$gear)))
-Pandoc(t.test(extra ~ group, data = sleep))
+pander(ks.test(runif(50), runif(50)))
+pander(chisq.test(table(mtcars$am, mtcars$gear)))
+pander(t.test(extra ~ group, data = sleep))
 
 ## Models
 ml <- with(lm(mpg ~ hp + wt), data = mtcars)
-Pandoc(ml)
-Pandoc(anova(ml))
-Pandoc(aov(ml))
+pander(ml)
+pander(anova(ml))
+pander(aov(ml))
 ## Dobson (1990) Page 93: Randomized Controlled Trial (examples from: ?glm)
 counts <- c(18,17,15,20,10,20,25,13,12)
 outcome <- gl(3,1,9)
 treatment <- gl(3,3)
 m <- glm(counts ~ outcome + treatment, family=poisson())
-Pandoc(m)
-Pandoc(anova(m))
-Pandoc(aov(m))
+pander(m)
+pander(anova(m))
+pander(aov(m))
 
 ## Prcomp
-Pandoc(prcomp(USArrests))
+pander(prcomp(USArrests))
 
 ## Others
-Pandoc(density(runif(10)))
-Pandoc(density(mtcars$hp))
+pander(density(runif(10)))
+pander(density(mtcars$hp))
 
 ## default method
 x <- chisq.test(table(mtcars$am, mtcars$gear))
 class(x) <- 'I heave never heard of!'
-Pandoc(x)
+pander(x)
 }
 \author{
   Gergely Daróczi
