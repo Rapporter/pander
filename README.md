@@ -22,15 +22,15 @@ As it can be seen here: `pandoc` functions generally prints to console and do no
 Of course there are more complex functions in there too. Besides verbatim texts, (image) links or footnotes (among others) there are a helper e.g. for lists:
 
 ```
->  l <- list("First list element", paste0(1:5, '. subelement'), "Second element", list('F', 'B', 'I', c('phone', 'pad', 'talics')))
+>  l <- list("First list element", rep(5, 'subelement'), "Second element", list('F', 'B', 'I', c('phone', 'pad', 'talics')))
 > pandoc.list(l, 'roman')
 
 I. First list element
-    I. 1. subelement
-    II. 2. subelement
-    III. 3. subelement
-    IV. 4. subelement
-    V. 5. subelement
+    I. subelement
+    II. subelement
+    III. subelement
+    IV. subelement
+    V. subelement
 II. Second element
     I. F
     II. B

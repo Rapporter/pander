@@ -36,7 +36,7 @@ pander(factor(mtcars$am))
 ## Lists
 pander(list(1,2,3, c(1,2)))
 pander(list(a=1, b=2, c=table(mtcars$am)))
-pander(list(1,2,3, list(1,2)))
+pander(list(a = 1,2,3, list(1,2)))
 pander(list('FOO', letters[1:3], list(1:5), table(mtcars$gear), list('FOOBAR', list('a', 'b'))))
 pander(list(a=1, b=2, c=table(mtcars$am), x=list(myname=1,2), 56))
 pander(unclass(chisq.test(table(mtcars$am, mtcars$gear))))

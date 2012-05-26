@@ -41,7 +41,7 @@ pandoc.list(letters[1:5], 'roman')
 pandoc.list(letters[1:5], loose = TRUE)
 
 ## nested lists
-l <- list("First list element", paste0(1:5, '. subelement'), "Second element", list('F', 'B', 'I', c('phone', 'pad', 'talics')))
+l <- list("First list element", rep(5, 'subelement'), "Second element", list('F', 'B', 'I', c('phone', 'pad', 'talics')))
 pandoc.list(l)
 pandoc.list(l, loose = TRUE)
 pandoc.list(l, 'roman')

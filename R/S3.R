@@ -28,6 +28,7 @@
 #' pander(list(1,2,3, c(1,2)))
 #' pander(list(a=1, b=2, c=table(mtcars$am)))
 #' pander(list(1,2,3, list(1,2)))
+#' pander(list(a = 1,2,3, list(1,2)))
 #' pander(list('FOO', letters[1:3], list(1:5), table(mtcars$gear), list('FOOBAR', list('a', 'b'))))
 #' pander(list(a=1, b=2, c=table(mtcars$am), x=list(myname=1,2), 56))
 #' pander(unclass(chisq.test(table(mtcars$am, mtcars$gear))))
@@ -163,7 +164,7 @@ pander.list <- function(l, indent = 0, ...) {
     ## grab elements name (if any)
     x.names       <- sapply(names(l), function(x) ifelse(x == '', '  *', sprintf('  * **%s**:', x)))
     if (length(x.names) == 0)
-        x.names <- rep('', length(l))
+        x.names <- rep('  *', length(l))
 
     ## capture pandoc output of list element
     res <- paste(unlist(lapply(1:length(l), function(i) {
