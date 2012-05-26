@@ -20,6 +20,10 @@
   * ~~density~~
   * CrossTable
 
+# Exporting:
+
+ * remove multiple '\n's, see: `remove.extra.newlines()`
+
 # Brainstorming:
 
   * What to do with summary classes? Leaving out, implement in Pandoc methods or what?

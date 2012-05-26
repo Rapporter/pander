@@ -79,6 +79,14 @@ pandoc.return <- function(...)
 #' @export
 pander.return <- pandoc.return
 
+#' @S3method pander NULL
+pander.NULL <- function(x, ...)
+    return(invisible(NULL))
+
+#' @S3method pander image
+pander.image <- function(x, caption = NULL, ...)
+    pandoc.image(x, caption)
+
 #' @S3method pander table
 pander.table <- function(x, ...)
     pandoc.table(x)
@@ -97,7 +105,7 @@ pander.matrix <- function(x, ...)
 
 #' @S3method pander numeric
 pander.numeric <- function(x, ...)
-    cat(p(x))        #ROUND!
+    cat(p(x))        # TODO: ROUND!
 
 #' @S3method pander character
 pander.character <- function(x, ...)

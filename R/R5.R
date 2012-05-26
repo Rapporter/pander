@@ -59,3 +59,4 @@ Pandoc$methods(export = function(x) {
     return(invisible(fp))
 
 })
+

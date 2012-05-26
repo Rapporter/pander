@@ -9,6 +9,15 @@ add.blank.lines <- function(x)
     sprintf('\n%s\n', x)
 
 
+#' Remove more then two joined newlines
+#' @param x character vector
+#' @export
+#' @examples
+#' remove.extra.newlines(c('\n\n\n', '\n\n', '\n'))
+remove.extra.newlines <- function(x)
+    gsub('[\n][\n]+', '\n\n', x)
+
+
 #' Trim leading and trailing spaces
 #' @param x character vector
 #' @return character vector
