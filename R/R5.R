@@ -31,7 +31,7 @@ Pandoc$methods(show = function(x) {
 
         lapply(.self$body, pander)
 
-        ## show proc.tim
+        ## show proc.tim)
         cat(pandoc.horizontal.rule())
         cat('\nProc. time: ', as.numeric(proc.time() - timer)[3], 'seconds. \n\n')
 
@@ -40,7 +40,7 @@ Pandoc$methods(show = function(x) {
 
 })
 
-Pandoc$methods(export = function(f) {
+Pandoc$methods(export = function(f, open = TRUE) {
 
     if (missing(f))
         f <- tempfile('pander-', getwd())
@@ -57,6 +57,10 @@ Pandoc$methods(export = function(f) {
 
     ## return
     cat('\nExported to *', f, '.[md|', format, ']* under ', as.numeric(proc.time() - timer)[3], ' seconds.\n\n', sep = '')
+
+    if (open)
+        open.file.in.OS(sprintf('%s.%s', f, .self$format))
+
     return(invisible(fp))
 
 })

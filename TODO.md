@@ -23,7 +23,7 @@
 # Exporting:
 
  * remove multiple '\n's, see: `remove.extra.newlines()`
- * open exported docs
+ * ~~open exported docs~~
 
 # Brainstorming:
 
