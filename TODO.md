@@ -25,6 +25,7 @@
 
  * remove multiple '\n's, see: `remove.extra.newlines()`
  * ~~open exported docs~~
+ * add caption to images/tables (using attrs?)
 
 # Brainstorming:
 

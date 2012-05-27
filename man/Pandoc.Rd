@@ -44,6 +44,10 @@ myReport$add(aov(ml))
 ## And do some principal component analysis at last
 myReport$add(prcomp(USArrests))
 
+## Sorry, did not show how Pandoc deals with plots:
+myReport <- Pandoc$new()
+myReport$add(plot(1:10))
+
 ## Want to see the report? Just print it:
 myReport
 

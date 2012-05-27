@@ -3,7 +3,7 @@
 \alias{pandoc.image.return}
 \title{Create pandoc image tags}
 \usage{
-  pandoc.image.return(img, caption = "")
+  pandoc.image.return(img, caption = NULL)
 }
 \arguments{
   \item{img}{image path}

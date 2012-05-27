@@ -85,7 +85,7 @@ pander.NULL <- function(x, ...)
 
 #' @S3method pander image
 pander.image <- function(x, caption = NULL, ...)
-    pandoc.image(x, caption)
+    pandoc.image(as.character(x), caption)
 
 #' @S3method pander table
 pander.table <- function(x, ...)

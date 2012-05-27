@@ -38,6 +38,9 @@
 #' ## And do some principal component analysis at last
 #' myReport$add(prcomp(USArrests))
 #'
+#' ## Sorry, I did not show how Pandoc deals with plots:
+#' myReport$add(plot(1:10)) # TODO: caption
+#'
 #' ## Want to see the report? Just print it:
 #' myReport
 #'
@@ -50,6 +53,7 @@
 #'
 #' ## You do not want to see the generated report after generation?
 #' myReport$export(open = FALSE)
+#' @importFrom rapport evals
 Pandoc <- setRefClass('Pandoc', fields = list('author' = 'character', 'title' = 'character', 'date' = 'character', 'body' = 'list', 'format' = 'character'))
 
 Pandoc$methods(initialize = function(author = 'Anonymous', title = base::sprintf('%s\'s report', author), date = base::date(), format = 'pdf', ...) {
@@ -62,7 +66,7 @@ Pandoc$methods(initialize = function(author = 'Anonymous', title = base::sprintf
 
 })
 
-Pandoc$methods(add = function(x) .self$body <- c(.self$body, list(x)))
+Pandoc$methods(add = function(x) .self$body <- c(.self$body, evals(deparse(match.call()[[2]]))))
 Pandoc$methods(add.paragraph = function(x) .self$body <- c(.self$body, list(pandoc.p.return(x))))
 
 Pandoc$methods(show = function(x) {
@@ -80,7 +84,7 @@ Pandoc$methods(show = function(x) {
 
         cat(pandoc.horizontal.rule())
 
-        lapply(.self$body, pander)
+        lapply(.self$body, function(x) pander(x$output))
 
         ## show proc.tim)
         cat(pandoc.horizontal.rule())
@@ -101,7 +105,7 @@ Pandoc$methods(export = function(f, open = TRUE) {
 
     ## create pandoc file
     cat(pandoc.title.return(.self$title, .self$author, .self$date), file = fp)
-    lapply(.self$body, function(x) cat(paste(capture.output(pander(x)), collapse = '\n'), file = fp, append = TRUE))
+    lapply(.self$body, function(x) cat(paste(capture.output(pander(x$output)), collapse = '\n'), file = fp, append = TRUE))
 
     ## convert
     system(sprintf('pandoc %s -o %s', shQuote(fp), shQuote(fe)), intern = TRUE)
