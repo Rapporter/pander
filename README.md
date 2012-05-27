@@ -62,6 +62,35 @@ Or tables:
     Table: FOO
 ```
 
+Or quite wide tables which would not fit on the screen:
+
+```
+> pandoc.table(mtcars[1:3, ], caption = 'Wide enough?')
+
++---------------+-----+-----+------+-----+------+-----+------+----+
+|               | mpg | cyl | disp | hp  | drat | wt  | qsec | vs |
++===============+=====+=====+======+=====+======+=====+======+====+
+| Mazda RX4     | 21  | 6   | 160  | 110 | 3.9  | 2.6 | 16   | 0  |
++---------------+-----+-----+------+-----+------+-----+------+----+
+| Mazda RX4 Wag | 21  | 6   | 160  | 110 | 3.9  | 2.9 | 17   | 0  |
++---------------+-----+-----+------+-----+------+-----+------+----+
+| Datsun 710    | 23  | 4   | 108  | 93  | 3.9  | 2.3 | 19   | 1  |
++---------------+-----+-----+------+-----+------+-----+------+----+
+
+    Table: Wide enough? (continued below)
+
+
++---------------+----+------+------+
+|               | am | gear | carb |
++===============+====+======+======+
+| Mazda RX4     | 1  | 4    | 4    |
++---------------+----+------+------+
+| Mazda RX4 Wag | 1  | 4    | 4    |
++---------------+----+------+------+
+| Datsun 710    | 1  | 4    | 1    |
++---------------+----+------+------+
+```
+
 ## Generic pandoc (pander) method
 
 `pander` or `pandoc` (call as you wish) can deal with a bunch of R object types.
@@ -289,53 +318,57 @@ Or `density`:
 
 ## Exporting results
 
-Short demo without any comments:
+Short demo/tutorial: `?Pandoc`
 
 ```
-> x<-Pandoc$new('My name', 'Exciting title')
-> x$add.paragraph('This data set contains statistics, in arrests per 100,000 residents for assault, murder, and rape in each of the 50 US states in 1973.  Also given is the percent of the population living in urban areas:')
-> x$add(USArrests[1:5, ])
-> x$add(pi)
-> x
+## Initialize a new Pandoc object
+myReport <- Pandoc$new()
 
-Exciting title
-==============
- written by *My name* at *Sat May 26 00:28:33 2012*
+## Add author, title and date of document
+myReport$author <- 'Gergely Daróczi'
+myReport$title  <- 'Demo'
 
-  This report holds 3 block(s).
+## Or it could be done while initializing
+myReport <- Pandoc$new('Gergely Daróczi', 'Demo')
 
----
+## Add some free text
+myReport$add.paragraph('Hello there, this is a really short tutorial!')
 
+## Add maybe a header for later stuff
+myReport$add.paragraph('# Showing some raw R objects below')
 
-This data set contains statistics, in arrests per 100,000 residents for assault, murder, and rape in each of the 50 US states in 1973.  Also given is the percent of the population living in urban areas:
+## Adding a short matrix
+myReport$add(matrix(5,5,5))
 
+## Or a table with even
+myReport$add.paragraph('Hello table:')
+myReport$add(table(mtcars$am, mtcars$gear))
 
-+------------+--------+---------+----------+------+
-|            | Murder | Assault | UrbanPop | Rape |
-+============+========+=========+==========+======+
-| Alabama    | 13.2   | 236     | 58       | 21   |
-+------------+--------+---------+----------+------+
-| Alaska     | 10.0   | 263     | 48       | 44   |
-+------------+--------+---------+----------+------+
-| Arizona    | 8.1    | 294     | 80       | 31   |
-+------------+--------+---------+----------+------+
-| Arkansas   | 8.8    | 190     | 50       | 20   |
-+------------+--------+---------+----------+------+
-| California | 9.0    | 276     | 91       | 41   |
-+------------+--------+---------+----------+------+
+## Or a "large" dataframe which barely fits on a page
+myReport$add(mtcars)
 
-*3.14159265358979*
----
+## And a simple linear model with Anova tables
+ml <- with(lm(mpg ~ hp + wt), data = mtcars)
+myReport$add(ml)
+myReport$add(anova(ml))
+myReport$add(aov(ml))
 
-Proc. time:  0.024 seconds.
+## And do some principal component analysis at last
+myReport$add(prcomp(USArrests))
 
-> x$export()
+## Sorry, I did not show how Pandoc deals with plots:
+myReport$add(plot(1:10))
 
-Exported to */tmp/pander-2ce13041fe1.[md|pdf]* under 0.434 seconds.
+## Want to see the report? Just print it:
+myReport
 
-> x$format <- 'docx'
-> x$export()
+## Exporting to pdf (default)
+myReport$export()
 
-Exported to */tmp/pander-2ce16b70a27.[md|docx]* under 0.065 seconds.
+## Or to docx in tempdir():
+myReport$format <- 'docx'
+myReport$export(tempfile())
 
+## You do not want to see the generated report after generation?
+myReport$export(open = FALSE)
 ```
