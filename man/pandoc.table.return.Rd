@@ -3,7 +3,7 @@
 \alias{pandoc.table.return}
 \title{Create a table}
 \usage{
-  pandoc.table.return(t, caption, digits = 2,
+  pandoc.table.return(t, caption = NULL, digits = 2,
     decimal.mark = ".", justify = "left")
 }
 \arguments{
@@ -42,8 +42,8 @@ pandoc.table(mtcars)
 pandoc.table(mtcars, 'Motor Trend Car Road Tests')
 
 ## other input/output formats
-pandoc.table(mtcars, decimal.mark = ',')
-pandoc.table(mtcars, decimal.mark = ',', justify = 'right')
+pandoc.table(mtcars[, 1:3], decimal.mark = ',')
+pandoc.table(mtcars[, 1:3], decimal.mark = ',', justify = 'right')
 pandoc.table(matrix(sample(1:1000, 25), 5, 5))
 pandoc.table(matrix(runif(25), 5, 5))
 pandoc.table(matrix(runif(25), 5, 5), digits = 5)
@@ -55,6 +55,10 @@ pandoc.table(table(state.division, state.region), justify = 'centre')
 m <- data.frame(a=c(1, -500, 10320, 23, 77), b=runif(5), c=c('a', 'bb', 'ccc', 'dddd', 'eeeee'))
 pandoc.table(m)
 pandoc.table(m, justify = c('right', 'left', 'centre'))
+
+## splitting up too wide tables
+pandoc.table(mtcars)
+pandoc.table(mtcars, caption = 'Only once after the first part!')
 }
 \references{
   John MacFarlane (2012): _Pandoc User's Guide_.

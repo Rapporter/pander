@@ -484,8 +484,8 @@ pandoc.list <- function(...)
 #' pandoc.table(mtcars, 'Motor Trend Car Road Tests')
 #'
 #' ## other input/output formats
-#' pandoc.table(mtcars, decimal.mark = ',')
-#' pandoc.table(mtcars, decimal.mark = ',', justify = 'right')
+#' pandoc.table(mtcars[, 1:3], decimal.mark = ',')
+#' pandoc.table(mtcars[, 1:3], decimal.mark = ',', justify = 'right')
 #' pandoc.table(matrix(sample(1:1000, 25), 5, 5))
 #' pandoc.table(matrix(runif(25), 5, 5))
 #' pandoc.table(matrix(runif(25), 5, 5), digits = 5)
@@ -497,7 +497,11 @@ pandoc.list <- function(...)
 #' m <- data.frame(a=c(1, -500, 10320, 23, 77), b=runif(5), c=c('a', 'bb', 'ccc', 'dddd', 'eeeee'))
 #' pandoc.table(m)
 #' pandoc.table(m, justify = c('right', 'left', 'centre'))
-pandoc.table.return <- function(t, caption, digits = 2, decimal.mark = '.', justify = 'left') {
+#'
+#' ## splitting up too wide tables
+#' pandoc.table(mtcars)
+#' pandoc.table(mtcars, caption = 'Only once after the first part!')
+pandoc.table.return <- function(t, caption = NULL, digits = 2, decimal.mark = '.', justify = 'left') {
 
     ## helper functions
     table.sep  <- function(cols.width, sep = '+')
@@ -538,7 +542,6 @@ pandoc.table.return <- function(t, caption, digits = 2, decimal.mark = '.', just
 
     }
 
-
     if (length(t.rownames) != 0) {
 
         t.colnames <- c('', t.colnames)
@@ -554,35 +557,61 @@ pandoc.table.return <- function(t, caption, digits = 2, decimal.mark = '.', just
         justify <- rep(justify, length(t.width))
     }
 
-    t.sep <- table.sep(t.width)
+    ## split too wide tables
+    if (sum(t.width + 4) > 80) {
 
-    ## header
-    if (length(t.colnames) != 0) {
-        res <- paste(res, t.sep, table.expand(t.colnames, t.width, justify[1]), gsub('-', '=', t.sep), sep = '\n')
+        t.split <- which(cumsum(t.width + 4) > 80)[1]
+        if (!is.null(caption))
+            caption <- paste(caption, '(continued below)')
+
+        if (length(t.rownames) != 0) {
+            t.split <- t.split - 1
+            justify <- c(justify[1:(t.split - 1)], justify[c(1, t.split:length(t.width))])
+        } else {
+            justify <- c(justify[1:(t.split - 1)], justify[c(t.split:length(t.width))])
+        }
+
+        if (length(dim(t)) > 1)
+            res <- list(t[, 1:(t.split-1)], t[, t.split:ncol(t)])
+        else
+            res <- list(t[1:t.split], t[t.split:length(t)])
+
+        res <- paste(pandoc.table.return(res[[1]], caption = caption, digits = digits, decimal.mark = decimal.mark, justify = justify[1]), pandoc.table.return(res[[2]], caption = NULL, digits = digits, decimal.mark = decimal.mark, justify = justify[2]))
+
+        return(res)
+
     } else {
-        res <- paste(res, t.sep, sep = '\n')
+
+        t.sep <- table.sep(t.width)
+
+        ## header
+        if (length(t.colnames) != 0) {
+            res <- paste(res, t.sep, table.expand(t.colnames, t.width, justify[1]), gsub('-', '=', t.sep), sep = '\n')
+        } else {
+            res <- paste(res, t.sep, sep = '\n')
+        }
+
+        ## body
+        res <- paste0(res, '\n')
+        b   <- t
+
+        if (length(t.rownames) != 0)
+            b <- cbind(t.rownames, b)
+
+        if (length(dim(t)) > 1)
+            res <- paste0(res, paste(apply(b, 1, function(x) paste(table.expand(x, t.width, justify), t.sep, sep = '\n')), collapse = '\n'))
+        else
+            res <- paste0(res, paste(table.expand(b, t.width, justify), t.sep, sep = '\n'), collapse = '\n')
+
+        res <- paste0(res, '\n\n')
+
+        ## (optional) caption
+        if (!is.null(caption))
+            res <- sprintf('%s    Table: %s\n\n', res, caption)
+
+        return(res)
+
     }
-
-    ## body
-    res <- paste0(res, '\n')
-    b   <- t
-
-    if (length(t.rownames) != 0)
-        b <- cbind(t.rownames, b)
-
-    if (length(dim(t)) > 1)
-        res <- paste0(res, paste(apply(b, 1, function(x) paste(table.expand(x, t.width, justify), t.sep, sep = '\n')), collapse = '\n'))
-    else
-        res <- paste0(res, paste(table.expand(b, t.width, justify), t.sep, sep = '\n'), collapse = '\n')
-
-    res <- paste0(res, '\n\n')
-
-    ## (optional) caption
-    if (!missing(caption))
-        res <- sprintf('%s    Table: %s\n\n', res, caption)
-
-    return(res)
-
 }
 
 #' @export
