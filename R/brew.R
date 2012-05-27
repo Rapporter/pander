@@ -8,6 +8,8 @@
 #' text <- paste('# Header', '', '<%=as.list(runif(10))%>', '<%=mtcars[1:3, ]%>', '<%=plot(1:10)%>', sep = '\n')
 #' Pandoc.brew(text = text)
 #' }
+#' @importFrom brew brew
+#' @importFrom rapport evals
 Pandoc.brew <- function(file = stdin(), output = stdout(), text = NULL) {
 
     if (is.null(text))
