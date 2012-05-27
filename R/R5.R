@@ -40,9 +40,10 @@ Pandoc$methods(show = function(x) {
 
 })
 
-Pandoc$methods(export = function(x) {
+Pandoc$methods(export = function(f) {
 
-    f     <- tempfile('pander-', getwd())
+    if (missing(f))
+        f <- tempfile('pander-', getwd())
     fp    <- sprintf('%s.md', f)
     fe    <- sprintf('%s.%s', f, .self$format)
     timer <- proc.time()
