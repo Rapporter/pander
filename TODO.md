@@ -4,7 +4,7 @@
   * ~~"p" from rapport: modify defaults, fork it~~
   * check strings before applying formatting (to prevent e.g. "****foo****")
   * table: implement multi-line syntax for tables (as [Pandoc](http://johnmacfarlane.net/pandoc) does not support alignment with the current grid approach)
-  * table: support cells with linebreak
+  * ~~table: support cells with linebreak~~
   * ~~table: split too wide tables into multiple tables (global solution which can be handled in LaTeX, docx etc. separately)~~
   * table: add strong emphasis to rownames
   * table: add more styling options (e.g. (strong) emphasising custom cells)

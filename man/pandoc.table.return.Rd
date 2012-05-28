@@ -59,6 +59,10 @@ pandoc.table(m, justify = c('right', 'left', 'centre'))
 ## splitting up too wide tables
 pandoc.table(mtcars)
 pandoc.table(mtcars, caption = 'Only once after the first part!')
+
+## table with newlines in cells
+t <- data.frame(a = c('hundreds\\nof\\nmouses', '3 cats'), b=c('FOO is nice', 'BAR\\nBAR2'))
+pandoc.table(t)
 }
 \references{
   John MacFarlane (2012): _Pandoc User's Guide_.

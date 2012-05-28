@@ -504,6 +504,10 @@ pandoc.list <- function(...)
 #' ## splitting up too wide tables
 #' pandoc.table(mtcars)
 #' pandoc.table(mtcars, caption = 'Only once after the first part!')
+#'
+#' ## table with newlines in cells
+#' t <- data.frame(a = c('hundreds\nof\nmouses', '3 cats'), b=c('FOO is nice', 'BAR\nBAR2'))
+#' pandoc.table(t)
 pandoc.table.return <- function(t, caption = NULL, digits = 2, decimal.mark = '.', justify = 'left') {
 
     ## helper functions
@@ -513,8 +517,20 @@ pandoc.table.return <- function(t, caption = NULL, digits = 2, decimal.mark = '.
     table.expand <- function(cells, cols.width, justify) {
 
         df  <- data.frame(txt = cells, width = cols.width, justify = justify)
-        res <- apply(df, 1, function(x) format(x[1], justify = x[3], width = x[2]))
-        paste0('| ', paste(res, collapse = ' | '), ' |')
+
+        if (any(grepl('\n', df$txt))) {
+
+            res <- lapply(as.character(df$txt), function(x) strsplit(x, '\n')[[1]])
+            res.lines <- max(sapply(res, length))
+            res <- paste(sapply(1:res.lines, function(i) table.expand(sapply(res, function(x) ifelse(is.na(x[i]), '  ', x[i])), cols.width, justify)), collapse = '\n')
+            return(res)
+
+        } else {
+
+            res <- apply(df, 1, function(x) format(x[1], justify = x[3], width = x[2]))
+            return(paste0('| ', paste(res, collapse = ' | '), ' |'))
+
+        }
 
     }
 
@@ -537,18 +553,20 @@ pandoc.table.return <- function(t, caption = NULL, digits = 2, decimal.mark = '.
 
         t.colnames  <- colnames(t)
         t.rownames  <- rownames(t)
-        t.width     <- as.numeric(apply(cbind(nchar(t.colnames), apply(t, 2, function(x) max(nchar(x)))), 1, max))
+
+        ## also dealing with cells split by newlines
+        t.width     <-  as.numeric(apply(cbind(nchar(t.colnames), apply(t, 2, function(x) max(sapply(strsplit(x,'\n'), function(x) max(nchar(x)))))), 1, max))
 
         ## remove obvoius row.names
         if (all(rownames(t) == 1:nrow(t)))
-        t.rownames <- NULL
+            t.rownames <- NULL
 
     }
 
     if (length(t.rownames) != 0) {
 
         t.colnames <- c('', t.colnames)
-        t.width <- c(max(nchar(t.rownames)), t.width)
+        t.width <- c(max(sapply(strsplit(t.rownames, '\n'), function(x) max(nchar(x)))), t.width)
 
     }
 
