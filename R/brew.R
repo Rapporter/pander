@@ -1,6 +1,6 @@
 #' Brew in pandoc format
 #'
-#' This function bevaves just like \code{brew} except for the \code{<\%=...\%>} tags, where \code{Pandoc.brew} first translate the R object (where \code{length("the R object")} returns \code{1}) found between the tags to Pandoc markdown before passing to \code{cat} function.
+#' This function behaves just like \code{brew} except for the \code{<\%=...\%>} tags, where \code{Pandoc.brew} first translate the R object (where \code{length("the R object")} returns \code{1}) found between the tags to Pandoc markdown before passing to \code{cat} function.
 #' @param file file path of the brew template
 #' @param output (optional) file path of the output file
 #' @param text character vector (treated as the content of the \code{file}

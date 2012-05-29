@@ -21,7 +21,7 @@
   \item{add.end.of.list}{adding a separator comment after
   the list}
 
-  \item{indent.level}{the level of ident}
+  \item{indent.level}{the level of indent}
 }
 \value{
   By default this function outputs (see: \code{cat}) the
@@ -41,7 +41,7 @@ pandoc.list(letters[1:5], 'roman')
 pandoc.list(letters[1:5], loose = TRUE)
 
 ## nested lists
-l <- list("First list element", rep(5, 'subelement'), "Second element", list('F', 'B', 'I', c('phone', 'pad', 'talics')))
+l <- list("First list element", rep(5, 'sub element'), "Second element", list('F', 'B', 'I', c('phone', 'pad', 'talics')))
 pandoc.list(l)
 pandoc.list(l, loose = TRUE)
 pandoc.list(l, 'roman')

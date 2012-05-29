@@ -9,7 +9,7 @@
 
   \item{n}{integer}
 
-  \item{sep}{separator between repeatitions}
+  \item{sep}{separator between repetitions}
 }
 \value{
   character vector

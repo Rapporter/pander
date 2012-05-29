@@ -1,6 +1,6 @@
 #' Reporting with Pandoc
 #'
-#' This \code{R5} reference class can hold bunch of elements (text or R objects) from which it tries to create a Pandoc-style markdown textfile. Exporting the report to several formats (like: pdf, docx, odt etc. - see Pandoc's documentation) is also possible, see examples below.
+#' This \code{R5} reference class can hold bunch of elements (text or R objects) from which it tries to create a Pandoc-style markdown text file. Exporting the report to several formats (like: pdf, docx, odt etc. - see Pandoc's documentation) is also possible, see examples below.
 #' @export
 #' @examples
 #' ## Initialize a new Pandoc object
@@ -26,7 +26,7 @@
 #' myReport$add.paragraph('Hello table:')
 #' myReport$add(table(mtcars$am, mtcars$gear))
 #'
-#' ## Or a "large" dataframe which barely fits on a page
+#' ## Or a "large" data frame which barely fits on a page
 #' myReport$add(mtcars)
 #'
 #' ## And a simple linear model with Anova tables
@@ -119,4 +119,3 @@ Pandoc$methods(export = function(f, open = TRUE) {
     return(invisible(fp))
 
 })
-

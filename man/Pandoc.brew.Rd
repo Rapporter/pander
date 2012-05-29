@@ -14,7 +14,7 @@
   the \code{file}}
 }
 \description{
-  This function bevaves just like \code{brew} except for
+  This function behaves just like \code{brew} except for
   the \code{<\%=...\%>} tags, where \code{Pandoc.brew}
   first translate the R object (where \code{length("the R
   object")} returns \code{1}) found between the tags to

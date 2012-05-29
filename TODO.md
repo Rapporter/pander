@@ -4,10 +4,11 @@
   * ~~"p" from rapport: modify defaults, fork it~~
   * check strings before applying formatting (to prevent e.g. "****foo****")
   * table: implement multi-line syntax for tables (as [Pandoc](http://johnmacfarlane.net/pandoc) does not support alignment with the current grid approach)
-  * ~~table: support cells with linebreak~~
+  * ~~table: support cells with line breaks~~
   * ~~table: split too wide tables into multiple tables (global solution which can be handled in LaTeX, docx etc. separately)~~
-  * table: add strong emphasis to rownames
-  * table: add more styling options (e.g. (strong) emphasising custom cells)
+  * table: add strong emphasis to row names
+  *
+  table: add more styling options (e.g. (strong) emphasizing custom cells)
   * table: add option to draw significance starts in cells
 
 # Required util functions:
@@ -24,9 +25,9 @@
 
 # Exporting:
 
- * remove multiple '\n's, see: `remove.extra.newlines()`
+ * remove multiple line breaks, see: `remove.extra.newlines()`
  * ~~open exported docs~~
- * add caption to images/tables (using attrs?)
+ * add caption to images/tables (using `attrs`?)
 
 # Brainstorming:
 

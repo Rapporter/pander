@@ -4,7 +4,7 @@
 \description{
   This \code{R5} reference class can hold bunch of elements
   (text or R objects) from which it tries to create a
-  Pandoc-style markdown textfile. Exporting the report to
+  Pandoc-style markdown text file. Exporting the report to
   several formats (like: pdf, docx, odt etc. - see Pandoc's
   documentation) is also possible, see examples below.
 }
@@ -32,7 +32,7 @@ myReport$add(matrix(5,5,5))
 myReport$add.paragraph('Hello table:')
 myReport$add(table(mtcars$am, mtcars$gear))
 
-## Or a "large" dataframe which barely fits on a page
+## Or a "large" data frame which barely fits on a page
 myReport$add(mtcars)
 
 ## And a simple linear model with Anova tables

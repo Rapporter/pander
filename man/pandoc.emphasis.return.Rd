@@ -1,5 +1,5 @@
 \name{pandoc.emphasis.return}
-\alias{pandoc.empasis}
+\alias{pandoc.emphasis}
 \alias{pandoc.emphasis.return}
 \title{Emphasis}
 \usage{

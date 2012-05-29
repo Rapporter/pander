@@ -1,4 +1,4 @@
-**pander** is an [R](http://r-project.org) package containing helpers to return of user specified text elements (like: header, paragraph, table, image, lists etc.) in pandoc markdown or several type of R objects. Also capable of exporting/converting complex pandoc documents (reports).
+**pander** is an [R](http://r-project.org) package containing helpers to return of user specified text elements (like: header, paragraph, table, image, lists etc.) in Pandoc markdown or several type of R objects. Also capable of exporting/converting complex Pandoc documents (reports).
 
 # Short introduction
 
@@ -8,7 +8,7 @@ Till I finish that, please check out the below short examples.
 
 ## Helper functions
 
-There are a bunch of helper functions in `pander` which return user specified pandoc format. You could find this functions starting with `pandoc`. For example `pandoc.strong` would return the passed characters with strong emphasis. E.g.:
+There are a bunch of helper functions in `pander` which return user specified Pandoc format. You could find this functions starting with `pandoc`. For example `pandoc.strong` would return the passed characters with strong emphasis. E.g.:
 
 ```
 > pandoc.strong('FOO')
@@ -26,15 +26,15 @@ Of course there are more complex functions in there too. Besides verbatim texts,
 > pandoc.list(l, 'roman')
 
 I. First list element
-    I. subelement
-    II. subelement
-    III. subelement
-    IV. subelement
-    V. subelement
+	I. subelement
+	II. subelement
+	III. subelement
+	IV. subelement
+	V. subelement
 II. Second element
-    I. F
-    II. B
-    III. I
+	I. F
+	II. B
+	III. I
 	I. phone
 	II. pad
 	III. talics
@@ -59,7 +59,7 @@ Or tables:
 | Arkansas |  8,8   |   190   |    50    |  20  |
 +----------+--------+---------+----------+------+
 
-    Table: FOO
+	Table: FOO
 ```
 
 Or quite wide tables which would not fit on the screen:
@@ -77,7 +77,7 @@ Or quite wide tables which would not fit on the screen:
 | Datsun 710    | 23  | 4   | 108  | 93  | 3.9  | 2.3 | 19   | 1  |
 +---------------+-----+-----+------+-----+------+-----+------+----+
 
-    Table: Wide enough? (continued below)
+	Table: Wide enough? (continued below)
 
 
 +---------------+----+------+------+
@@ -105,16 +105,16 @@ Besides simple types (vectors, tables and e.g.  data frame), list might be inter
   * **b**: *2*
   * **c**:
 
-    +----+----+
-    | 0  | 1  |
-    +====+====+
-    | 19 | 13 |
-    +----+----+
+	+----+----+
+	| 0  | 1  |
+	+====+====+
+	| 19 | 13 |
+	+----+----+
 
   * **x**:
 
-      * **myname**: *1*
-      * *2*
+	  * **myname**: *1*
+	  * *2*
 
   * *56*
 
@@ -134,43 +134,43 @@ A nested list can be seen above with a table and all (optional) list names insid
   * **data.name**: table(mtcars$am, mtcars$gear)
   * **observed**:
 
-    +---+----+---+---+
-    |   | 3  | 4 | 5 |
-    +===+====+===+===+
-    | 0 | 15 | 4 | 0 |
-    +---+----+---+---+
-    | 1 | 0  | 8 | 5 |
-    +---+----+---+---+
+	+---+----+---+---+
+	|   | 3  | 4 | 5 |
+	+===+====+===+===+
+	| 0 | 15 | 4 | 0 |
+	+---+----+---+---+
+	| 1 | 0  | 8 | 5 |
+	+---+----+---+---+
 
   * **expected**:
 
-    +---+-----+-----+-----+
-    |   | 3   | 4   | 5   |
-    +===+=====+=====+=====+
-    | 0 | 8.9 | 7.1 | 3.0 |
-    +---+-----+-----+-----+
-    | 1 | 6.1 | 4.9 | 2.0 |
-    +---+-----+-----+-----+
+	+---+-----+-----+-----+
+	|   | 3   | 4   | 5   |
+	+===+=====+=====+=====+
+	| 0 | 8.9 | 7.1 | 3.0 |
+	+---+-----+-----+-----+
+	| 1 | 6.1 | 4.9 | 2.0 |
+	+---+-----+-----+-----+
 
   * **residuals**:
 
-    +---+------+------+------+
-    |   | 3    | 4    | 5    |
-    +===+======+======+======+
-    | 0 | 2.0  | -1.2 | -1.7 |
-    +---+------+------+------+
-    | 1 | -2.5 | 1.4  | 2.1  |
-    +---+------+------+------+
+	+---+------+------+------+
+	|   | 3    | 4    | 5    |
+	+===+======+======+======+
+	| 0 | 2.0  | -1.2 | -1.7 |
+	+---+------+------+------+
+	| 1 | -2.5 | 1.4  | 2.1  |
+	+---+------+------+------+
 
   * **stdres**:
 
-    +---+------+------+------+
-    |   | 3    | 4    | 5    |
-    +===+======+======+======+
-    | 0 | 4.4  | -2.3 | -2.9 |
-    +---+------+------+------+
-    | 1 | -4.4 | 2.3  | 2.9  |
-    +---+------+------+------+
+	+---+------+------+------+
+	|   | 3    | 4    | 5    |
+	+===+======+======+======+
+	| 0 | 4.4  | -2.3 | -2.9 |
+	+---+------+------+------+
+	| 1 | -4.4 | 2.3  | 2.9  |
+	+---+------+------+------+
 
 
 <!-- end of list -->
@@ -187,7 +187,7 @@ The output of different statistical methods are tried to be prettyfied. Some exa
 |      0.16      |  0.55   |       two-sided        |
 +----------------+---------+------------------------+
 
-    Table: Two-sample Kolmogorov-Smirnov test
+	Table: Two-sample Kolmogorov-Smirnov test
 
 > pander(chisq.test(table(mtcars$am, mtcars$gear)))
 
@@ -197,7 +197,7 @@ The output of different statistical methods are tried to be prettyfied. Some exa
 |       21       | 2  | 2.8e-05 |
 +----------------+----+---------+
 
-    Table: Pearson's Chi-squared test
+	Table: Pearson's Chi-squared test
 
 > pander(t.test(extra ~ group, data = sleep))
 
@@ -207,7 +207,7 @@ The output of different statistical methods are tried to be prettyfied. Some exa
 |      -1.9      | 18 |  0.079  |       two.sided        |
 +----------------+----+---------+------------------------+
 
-    Table: Welch Two Sample t-test
+	Table: Welch Two Sample t-test
 ```
 
 And models:
@@ -230,7 +230,7 @@ And models:
 |  treatment3 | 1.4e-15  |  2.0e-01   | 7.1e-15  | 1.0e+00  |
 +-------------+----------+------------+----------+----------+
 
-    Table: Fitting generalized (poisson/log) linear model: counts ~ outcome + treatment
+	Table: Fitting generalized (poisson/log) linear model: counts ~ outcome + treatment
 
 > pander(anova(m))
 
@@ -244,7 +244,7 @@ And models:
 | treatment | 2  | 2.7e-15  |     4     |    5.1     |
 +-----------+----+----------+-----------+------------+
 
-    Table: Analysis of Deviance Table
+	Table: Analysis of Deviance Table
 
 > pander(aov(m))
 
@@ -258,7 +258,7 @@ And models:
 | Residuals   | 4  | 8.3e+01 | 2.1e+01 |   NA    |   NA   |
 +-------------+----+---------+---------+---------+--------+
 
-    Table: Analysis of Variance Model
+	Table: Analysis of Variance Model
 ```
 
 And for example for `prcomp`:
@@ -278,7 +278,7 @@ And for example for `prcomp`:
 | Rape     | 0.075 | 0.201  | 0.974  | 0.072  |
 +----------+-------+--------+--------+--------+
 
-    Table: Principal Components Analysis
+	Table: Principal Components Analysis
 
 
 +------------------------+---------+---------+---------+---------+
@@ -313,7 +313,7 @@ Or `density`:
 |    Max. |     419     |    6.1e-03     |
 +---------+-------------+----------------+
 
-    Table: Kernel density of *mtcars$hp* (bandwidth: 28.04104)
+	Table: Kernel density of *mtcars$hp* (bandwidth: 28.04104)
 ```
 
 ## Exporting results
