@@ -7,8 +7,7 @@
   * ~~table: support cells with line breaks~~
   * ~~table: split too wide tables into multiple tables (global solution which can be handled in LaTeX, docx etc. separately)~~
   * table: add strong emphasis to row names
-  *
-  table: add more styling options (e.g. (strong) emphasizing custom cells)
+  * table: add more styling options (e.g. (strong) emphasizing custom cells)
   * table: add option to draw significance starts in cells
 
 # Required util functions:
