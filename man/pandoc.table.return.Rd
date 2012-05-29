@@ -4,7 +4,8 @@
 \title{Create a table}
 \usage{
   pandoc.table.return(t, caption = NULL, digits = 2,
-    decimal.mark = ".", justify = "left")
+    decimal.mark = ".", justify = "left",
+    style = c("multiline", "grid", "simple"))
 }
 \arguments{
   \item{t}{data frame, matrix or table}
@@ -16,6 +17,9 @@
   \item{decimal.mark}{see \code{prettyNum}}
 
   \item{justify}{see \code{prettyNum}}
+
+  \item{style}{which Pandoc style to use: \code{simple},
+  \code{multiline} or grid}
 }
 \value{
   By default this function outputs (see: \code{cat}) the
@@ -63,6 +67,14 @@ pandoc.table(mtcars, caption = 'Only once after the first part!')
 ## table with newlines in cells
 t <- data.frame(a = c('hundreds\\nof\\nmouses', '3 cats'), b=c('FOO is nice', 'BAR\\nBAR2'))
 pandoc.table(t)
+
+## exporting tables in other Pandoc styles
+pandoc.table(m)
+pandoc.table(m, style = "grid")
+pandoc.table(m, style = "simple")
+pandoc.table(t)
+pandoc.table(t, style = "grid")
+tryCatch(pandoc.table(t, style = "simple"), error = function(e) 'Yeah, no newline support in simple tables')
 }
 \references{
   John MacFarlane (2012): _Pandoc User's Guide_.

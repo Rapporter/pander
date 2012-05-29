@@ -58,7 +58,7 @@ trim.spaces <- function(x)
 #' Repeating a string \code{n} times and returning a concatenated character vector.
 #' @param x string to repeat
 #' @param n integer
-#' @param sep separator between repeatitions
+#' @param sep separator between repetitions
 #' @return character vector
 #' @export
 rep.char <- function(x, n, sep = '')
@@ -152,7 +152,7 @@ pandoc.strong <- function(...)
 #' @param x character vector
 #' @return By default this function outputs (see: \code{cat}) the result. If you would want to catch the result instead, then call the function ending in \code{.return}.
 #' @export
-#' @aliases pandoc.empasis
+#' @aliases pandoc.emphasis
 #' @seealso \code{\link{pandoc.strong}} \code{\link{pandoc.strikeout}} \code{\link{pandoc.verbatim}}
 #' @references John MacFarlane (2012): _Pandoc User's Guide_. \url{http://johnmacfarlane.net/pandoc/README.html}
 #' @examples
@@ -322,7 +322,7 @@ pandoc.header.return <- function(x, level = 1, style = c('atx', 'setext')) {
     if (!is.numeric(level))
         stop('Wrong level provided!')
     if (any((style == 'atx' & level > 6), (style == 'setext' & level > 2)))
-        stop('Too hight level provided!')
+        stop('Too high level provided!')
     if (level < 1)
         stop('Too low level provided!')
 
@@ -409,7 +409,7 @@ pandoc.title <- function(...)
 #' @param loose adding a newline between elements
 #' @param add.line.breaks adding a leading and trailing newline before/after the list
 #' @param add.end.of.list adding a separator comment after the list
-#' @param indent.level the level of ident
+#' @param indent.level the level of indent
 #' @return By default this function outputs (see: \code{cat}) the result. If you would want to catch the result instead, then call the function ending in \code{.return}.
 #' @export
 #' @aliases pandoc.list
@@ -423,7 +423,7 @@ pandoc.title <- function(...)
 #' pandoc.list(letters[1:5], loose = TRUE)
 #'
 #' ## nested lists
-#' l <- list("First list element", rep(5, 'subelement'), "Second element", list('F', 'B', 'I', c('phone', 'pad', 'talics')))
+#' l <- list("First list element", rep(5, 'sub element'), "Second element", list('F', 'B', 'I', c('phone', 'pad', 'talics')))
 #' pandoc.list(l)
 #' pandoc.list(l, loose = TRUE)
 #' pandoc.list(l, 'roman')
@@ -475,6 +475,7 @@ pandoc.list <- function(...)
 #' @param digits see \code{prettyNum}
 #' @param decimal.mark see \code{prettyNum}
 #' @param justify see \code{prettyNum}
+#' @param style which Pandoc style to use: \code{simple}, \code{multiline} or grid
 #' @return By default this function outputs (see: \code{cat}) the result. If you would want to catch the result instead, then call the function ending in \code{.return}.
 #' @export
 #' @aliases pandoc.table
@@ -508,36 +509,45 @@ pandoc.list <- function(...)
 #' ## table with newlines in cells
 #' t <- data.frame(a = c('hundreds\nof\nmouses', '3 cats'), b=c('FOO is nice', 'BAR\nBAR2'))
 #' pandoc.table(t)
-pandoc.table.return <- function(t, caption = NULL, digits = 2, decimal.mark = '.', justify = 'left') {
+#'
+#' ## exporting tables in other Pandoc styles
+#' pandoc.table(m)
+#' pandoc.table(m, style = "grid")
+#' pandoc.table(m, style = "simple")
+#' pandoc.table(t)
+#' pandoc.table(t, style = "grid")
+#' tryCatch(pandoc.table(t, style = "simple"), error = function(e) 'Yeah, no newline support in simple tables')
+pandoc.table.return <- function(t, caption = NULL, digits = 2, decimal.mark = '.', justify = 'left', style = c('multiline', 'grid', 'simple')) {
 
-    ## helper functions
-    table.sep  <- function(cols.width, sep = '+')
-        paste0(sep, paste(sapply(cols.width+2, function(x) rep.char('-', x)), collapse = sep), sep)
-
-    table.expand <- function(cells, cols.width, justify) {
+    ## helper function
+    table.expand <- function(cells, cols.width, justify, sep.cols) {
 
         df  <- data.frame(txt = cells, width = cols.width, justify = justify)
 
         if (any(grepl('\n', df$txt))) {
 
+            if (style == 'simple')
+                stop('Pandoc does not support newlines in simple table format!')
+
             res <- lapply(as.character(df$txt), function(x) strsplit(x, '\n')[[1]])
             res.lines <- max(sapply(res, length))
-            res <- paste(sapply(1:res.lines, function(i) table.expand(sapply(res, function(x) ifelse(is.na(x[i]), '  ', x[i])), cols.width, justify)), collapse = '\n')
+            res <- paste(sapply(1:res.lines, function(i) table.expand(sapply(res, function(x) ifelse(is.na(x[i]), '  ', x[i])), cols.width, justify, sep.cols)), collapse = '\n')
             return(res)
 
         } else {
 
             res <- apply(df, 1, function(x) format(x[1], justify = x[3], width = x[2]))
-            return(paste0('| ', paste(res, collapse = ' | '), ' |'))
+            return(paste0(sep.cols[1], paste(res, collapse = sep.cols[2]), sep.cols[3]))
 
         }
 
     }
 
-    ## intializing result
+    ## initializing
+    style <- match.arg(style)
     res <- ''
 
-    ## format numerics & convert to string
+    ## format numeric & convert to string
     t <- format(t, trim = TRUE, digits = digits, decimal.mark = decimal.mark)
 
     ## TODO: adding formatting (emphasis, strong etc.)
@@ -597,19 +607,37 @@ pandoc.table.return <- function(t, caption = NULL, digits = 2, decimal.mark = '.
         else
             res <- list(t[1:t.split], t[t.split:length(t)])
 
-        res <- paste(pandoc.table.return(res[[1]], caption = caption, digits = digits, decimal.mark = decimal.mark, justify = justify[1]), pandoc.table.return(res[[2]], caption = NULL, digits = digits, decimal.mark = decimal.mark, justify = justify[2]))
+        res <- paste(pandoc.table.return(res[[1]], caption = caption, digits = digits, decimal.mark = decimal.mark, justify = justify[1], style = style), pandoc.table.return(res[[2]], caption = NULL, digits = digits, decimal.mark = decimal.mark, justify = justify[2], style = style))
 
         return(res)
 
     } else {
 
-        t.sep <- table.sep(t.width)
+        switch(style,
+               'grid'      = {
+                   sep.row <- paste0('\n+', paste(sapply(t.width + 2, function(x) rep.char('-', x)), collapse = '+'), '+')
+                   sep.top <- sep.row
+                   sep.hdr <- gsub('-', '=', sep.row)
+                   sep.col <- c('| ', ' | ', ' |')
+               },
+               'multiline' = {
+                   sep.row <- '\n'
+                   sep.hdr <- paste(sapply(t.width, function(x) rep.char('-', x)), collapse = ' ')
+                   sep.top <- gsub(' ', '-', sep.hdr)
+                   sep.col <- c('', ' ', '')
+               },
+               'simple'   = {
+                   sep.row <- ''
+                   sep.top <- ''
+                   sep.hdr <- paste(sapply(t.width, function(x) rep.char('-', x)), collapse = ' ')
+                   sep.col <- c('', ' ', '')
+               })
 
         ## header
         if (length(t.colnames) != 0) {
-            res <- paste(res, t.sep, table.expand(t.colnames, t.width, justify[1]), gsub('-', '=', t.sep), sep = '\n')
+            res <- paste(res, sep.top, table.expand(t.colnames, t.width, justify[1], sep.col), sep.hdr, sep = '\n')
         } else {
-            res <- paste(res, t.sep, sep = '\n')
+            res <- paste(res, sep.top, sep = '\n')
         }
 
         ## body
@@ -620,9 +648,9 @@ pandoc.table.return <- function(t, caption = NULL, digits = 2, decimal.mark = '.
             b <- cbind(t.rownames, b)
 
         if (length(dim(t)) > 1)
-            res <- paste0(res, paste(apply(b, 1, function(x) paste(table.expand(x, t.width, justify), t.sep, sep = '\n')), collapse = '\n'))
+            res <- paste0(res, paste(apply(b, 1, function(x) paste0(table.expand(x, t.width, justify, sep.col), sep.row)), collapse = '\n'))
         else
-            res <- paste0(res, paste(table.expand(b, t.width, justify), t.sep, sep = '\n'), collapse = '\n')
+            res <- paste0(res, paste0(table.expand(b, t.width, justify, sep.col), sep.row), collapse = '\n')
 
         res <- paste0(res, '\n\n')
 
