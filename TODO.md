@@ -17,10 +17,16 @@
 
 # Pandoc methods:
 
+  * logical
   * ~~default~~
   * ~~list~~
   * ~~density~~
   * CrossTable
+
+# Brew
+
+  * check out image directory (should be `getwd()/images`)
+  * exporting features?
 
 # Exporting:
 
