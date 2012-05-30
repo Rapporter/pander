@@ -32,12 +32,13 @@ open.file.in.OS <- function(f) {
 #' @param format required output format. For all possible values here check out Pandoc homepage: \url{http://johnmacfarlane.net/pandoc/}
 #' @param open try to open converted document with operating system's default program
 #' @param options optionally passed arguments to Pandoc (instead of \code{pander}'s default)
+#' @param footer add footer to document with meta-information
 #' @param proc.time optionally passed number in seconds which would be shown in the generated document's footer
 #' @references John MacFarlane (2012): _Pandoc User's Guide_. \url{http://johnmacfarlane.net/pandoc/README.html}
 #' @note This function depends on \code{Pandoc} which should be pre-installed on user's machine.
 #' @return Converted file's path.
 #' @export
-Pandoc.convert <- function(f, format = 'html', open = TRUE, options = '', proc.time) {
+Pandoc.convert <- function(f, format = 'html', open = TRUE, options = '', footer = TRUE, proc.time) {
 
     ## check for Pandoc
     if (paste(suppressWarnings(tryCatch(system('pandoc -v', intern=T), error=function(x) 'NOPANDOC')), collapse='\n') == 'NOPANDOC')
@@ -63,8 +64,9 @@ Pandoc.convert <- function(f, format = 'html', open = TRUE, options = '', proc.t
     ## TODO
 
     ## add footer to file
-    if (!grepl('This report was generated', tail(readLines(f, warn = FALSE), 1)))
-        cat(sprintf('\n\n-------\nThis report was generated with [R](http://www.r-project.org/) (%s) and [pander](https://github.com/daroczig/pander) (%s)%son %s platform.', sprintf('%s.%s', R.version$major, R.version$minor), packageDescription("pander")$Version, ifelse(missing(proc.time), ' ', sprintf(' in %s sec ', proc.time)), R.version$platform), file = f, append = TRUE)
+    if (footer)
+        if (!grepl('This report was generated', tail(readLines(f, warn = FALSE), 1)))
+            cat(sprintf('\n\n-------\nThis report was generated with [R](http://www.r-project.org/) (%s) and [pander](https://github.com/daroczig/pander) (%s)%son %s platform.', sprintf('%s.%s', R.version$major, R.version$minor), packageDescription("pander")$Version, ifelse(missing(proc.time), ' ', sprintf(' in %s sec ', proc.time)), R.version$platform), file = f, append = TRUE)
 
     ## call Pandoc
     res <- suppressWarnings(tryCatch(system(sprintf('pandoc -s %s %s -o %s', options, f, f.out), intern=T), error=function(e) e))

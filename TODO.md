@@ -34,9 +34,14 @@
 
 # Exporting:
 
- * remove multiple line breaks, see: `remove.extra.newlines()`
- * ~~open exported docs~~
- * add caption to images/tables (using `attrs`?)
+  * remove multiple line breaks, see: `remove.extra.newlines()`
+  * ~~open exported docs~~
+  * add caption to images/tables (using `attrs`?)
+
+# Calling Pandoc (converting docs)
+
+  * add templates for different formats
+  * add option to change rendering backend's name (like: pander -> rapport with version number)
 
 # Brainstorming:
 
