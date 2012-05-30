@@ -14,7 +14,7 @@ The package is also capable of exporting/converting complex Pandoc documents (re
 
 There are a bunch of helper functions in `pander` which return user specified inputs in Pandoc format. You could find these functions starting with `pandoc.`. For example `pandoc.strong` would return the passed characters with strong emphasis. E.g.:
 
-```r
+```rout
 > pandoc.strong('FOO')
 **FOO**>
 > pandoc.strong.return('FOO')
