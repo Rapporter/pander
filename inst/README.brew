@@ -1,4 +1,4 @@
-**pander** is an [R](http://r-project.org) package containing [helpers](#helper-functions) to return [Pandoc](http://johnmacfarlane.net/pandoc/) markdown of user specified format or *automatically* of several type of [**R objects**](#generic-pandoc-method).
+**pander** is an [R](http://r-project.org) package containing [helpers](#helper-functions) to return [Pandoc](http://johnmacfarlane.net/pandoc/) markdown of user specified format or *automatically* of several type of [**R objects**](#generic-pander-method).
 
 The package is also capable of exporting/converting complex Pandoc documents (reports) in two ways ATM:
 
@@ -6,13 +6,15 @@ The package is also capable of exporting/converting complex Pandoc documents (re
 
     *Example*: this `README` is cooked with `Pandoc.brew` based on [`inst/README.brew`](https://github.com/daroczig/pander/blob/master/inst/README.brew). Details can be found [below](#brew-to-pandoc).
 
+<!-- endlist -->
+
  * or users might create a report in a live R session by adding some R objects and paragraphs to a `Pandoc` reference class object. Details can be found [below](#live-report-generation).
 
 # Helper functions
 
 There are a bunch of helper functions in `pander` which return user specified inputs in Pandoc format. You could find these functions starting with `pandoc.`. For example `pandoc.strong` would return the passed characters with strong emphasis. E.g.:
 
-```
+```r
 > pandoc.strong('FOO')
 **FOO**>
 > pandoc.strong.return('FOO')
@@ -23,7 +25,7 @@ As it can be seen here `pandoc` functions generally prints to console and do not
 
 Of course there are more complex functions too. Besides verbatim texts, (image) links or footnotes (among others) there are a helper e.g. for **lists**:
 
-```
+```r
 > l <- list("First list element", paste0(1:5, '. subelement'), "Second element", list('F', 'B', 'I', c('phone', 'pad', 'talics')))
 > pandoc.list(l, 'roman')
 ```
