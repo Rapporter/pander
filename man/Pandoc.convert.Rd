@@ -2,8 +2,8 @@
 \alias{Pandoc.convert}
 \title{Converts Pandoc to other format}
 \usage{
-  Pandoc.convert(f, format = "html", options = "",
-    proc.time)
+  Pandoc.convert(f, format = "html", open = TRUE,
+    options = "", proc.time)
 }
 \arguments{
   \item{f}{Pandoc markdown format file path}
@@ -11,6 +11,9 @@
   \item{format}{required output format. For all possible
   values here check out Pandoc homepage:
   \url{http://johnmacfarlane.net/pandoc/}}
+
+  \item{open}{try to open converted document with operating
+  system's default program}
 
   \item{options}{optionally passed arguments to Pandoc
   (instead of \code{pander}'s default)}

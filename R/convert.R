@@ -30,13 +30,14 @@ open.file.in.OS <- function(f) {
 #' Calling John MacFarlane's great program to convert specified file to other formats like \code{HTML}, \code{pdf}, \code{docx}, \code{odt} etc.
 #' @param f Pandoc markdown format file path
 #' @param format required output format. For all possible values here check out Pandoc homepage: \url{http://johnmacfarlane.net/pandoc/}
+#' @param open try to open converted document with operating system's default program
 #' @param options optionally passed arguments to Pandoc (instead of \code{pander}'s default)
-#' @param proc.time  optionally passed number in seconds which would be shown in the generated document's footer
+#' @param proc.time optionally passed number in seconds which would be shown in the generated document's footer
 #' @references John MacFarlane (2012): _Pandoc User's Guide_. \url{http://johnmacfarlane.net/pandoc/README.html}
 #' @note This function depends on \code{Pandoc} which should be pre-installed on user's machine.
 #' @return Converted file's path.
 #' @export
-Pandoc.convert <- function(f, format = 'html', options = '', proc.time) {
+Pandoc.convert <- function(f, format = 'html', open = TRUE, options = '', proc.time) {
 
     ## check for Pandoc
     if (paste(suppressWarnings(tryCatch(system('pandoc -v', intern=T), error=function(x) 'NOPANDOC')), collapse='\n') == 'NOPANDOC')
@@ -67,6 +68,10 @@ Pandoc.convert <- function(f, format = 'html', options = '', proc.time) {
 
     ## call Pandoc
     res <- suppressWarnings(tryCatch(system(sprintf('pandoc -s %s %s -o %s', options, f, f.out), intern=T), error=function(e) e))
+
+    ## open
+    if (open)
+        open.file.in.OS(f.out)
 
     if (length(res) == 0)
         return(f.out)
