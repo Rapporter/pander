@@ -10,6 +10,25 @@ The package is also capable of exporting/converting complex Pandoc documents (re
 
  * or users might create a report in a live R session by adding some R objects and paragraphs to a `Pandoc` reference class object. Details can be found [below](#live-report-generation).
 
+# Installation
+
+Currently, this package is hosted only on [GitHub](https://github.com/daroczig/pander).
+
+Until this gets on [CRAN](cran.r-project.org), you can install it via nifty function from `devtools` package:
+
+```
+library(devtools)
+install_github('pander', 'daroczig')
+```
+
+Or download the [sources in a zip file](https://github.com/daroczig/pander/zipball/master) and build manually. If you're running R on Windows, you need to install [Rtools](http://cran.stat.ucla.edu/bin/windows/Rtools/).
+
+## Depends
+
+`pander` heavily builds on [Pandoc](http://johnmacfarlane.net/pandoc) which should be **pre-installed** before trying to convert your reports to [different formats](http://johnmacfarlane.net/pandoc/). Although main functions work without Pandoc, e.g. you can generate a markdown formatted report via [Pandoc.brew](#brew-to-pandoc) or the custom [reference class](#live-report-generation).
+
+And as `pander` and `rapport` are quite Siamese twins, you would need an up-to-date version of [rapport](https://github.com/aL3xa/rapport) most likely installed from [Github](https://github.com/aL3xa/rapport).
+
 # Helper functions
 
 There are a bunch of helper functions in `pander` which return user specified inputs in Pandoc format. You could find these functions starting with `pandoc.`. For example `pandoc.strong` would return the passed characters with strong emphasis. E.g.:
