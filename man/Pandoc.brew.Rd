@@ -16,9 +16,25 @@
 \description{
   This function behaves just like \code{brew} except for
   the \code{<\%=...\%>} tags, where \code{Pandoc.brew}
-  first translate the R object (where \code{length("the R
-  object")} returns \code{1}) found between the tags to
-  Pandoc markdown before passing to \code{cat} function.
+  first translate the R object found between the tags to
+  Pandoc markdown before passing to the \code{cat}
+  function.
+}
+\details{
+  This parser tries to be smart in some ways:
+
+  \itemize{ \item a block (R commands between the tags)
+  could return a value in the middle of the block and do
+  something else without any output in the rest (but only
+  one returned value per block!)  \item plots and images
+  are grabbed in the document, rendered to a png file and
+  pander method would result in a Pandoc markdown formatted
+  image link (so the image would be shown/included in the
+  exported document). The images' are put in \code{images}
+  directory in current \code{getwd()} or to the specified
+  \code{output} file's directory.  \item all
+  warnings/messages and errors are recorded in the blocks
+  and returned in the document as a footnote }
 }
 \note{
   Only one of the input parameters (\code{file} or

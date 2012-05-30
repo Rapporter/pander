@@ -25,7 +25,7 @@
 
 # Brew
 
-  * check out image directory (should be `getwd()/images`)
+  * ~~check out image directory (should be `getwd()/images`)~~
   * exporting features?
 
 # Exporting:

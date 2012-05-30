@@ -173,7 +173,7 @@ A nested list can be seen above with a table and all (optional) list names insid
 
 ```rout
 > x <- chisq.test(table(mtcars$am, mtcars$gear))
-> class(x) <- 'I\'ve never heard of!'
+> class(x) <- "I've never heard of!"
 > pander(x)
 
   * **statistic**: *20.944669365722*
