@@ -25,14 +25,14 @@ As it can be seen here `pandoc` functions generally prints to console and do not
 
 Of course there are more complex functions too. Besides verbatim texts, (image) links or footnotes (among others) there are a helper e.g. for **lists**:
 
-```r
+```rout
 > l <- list("First list element", paste0(1:5, '. subelement'), "Second element", list('F', 'B', 'I', c('phone', 'pad', 'talics')))
 > pandoc.list(l, 'roman')
 ```
 
 Which returns:
 
-```r
+```
 
 * First list element 
     * 1. subelement 
@@ -56,7 +56,7 @@ Which returns:
 
   * The default style is the `multiline` format as most features (e.g. multi-line cells and alignment) are available in there.
 
-```r
+```rout
 > m <- mtcars[1:2, 1:3]
 > pandoc.table(m)
 
@@ -71,7 +71,7 @@ Mazda RX4 Wag 21  6   160
 
   * `simple` tables do not support line breaks in cells:
 
-```r
+```rout
 > pandoc.table(m, style = "simple")
 
               mpg cyl disp
@@ -83,7 +83,7 @@ Mazda RX4 Wag 21  6   160
 
   * `grid` format are really handy for [emacs](http://emacswiki.org/emacs/TableMode) users but do support line breaks inside cells, but do not tolerate cell alignment:
 
-```r
+```rout
 > pandoc.table(m, style = "grid")
 
 +---------------+-----+-----+------+
@@ -98,7 +98,7 @@ Mazda RX4 Wag 21  6   160
 
 Besides the `style` parameter there are several other ways to tweak the output like `decimal.mark` or `digits`. And of course it's really easy to add a **caption**:
 
-```r
+```rout
 > pandoc.table(m, style = "grid", caption = "Hello caption!")
 
 +---------------+-----+-----+------+
@@ -115,7 +115,7 @@ Besides the `style` parameter there are several other ways to tweak the output l
 
 `pandoc.table`˙can deal with the problem of really **wide tables**. Ever had an issue in LaTeX or MS Word when tried to print a correlation matrix of 40 variables? Not a problem any more as `pandoc.table` splits up the table if wider then 80 characters and handles caption too:
 
-```r
+```rout
 > pandoc.table(mtcars[1:2, ], style = "grid", caption = "Hello caption!")
 
 +---------------+-----+-----+------+-----+------+-----+------+----+
@@ -146,7 +146,7 @@ Besides the `style` parameter there are several other ways to tweak the output l
 
 Besides simple types (vectors, matrices, tables or data frames) lists might be interesting for you:
 
-```r
+```rout
 > pander(list(a=1, b=2, c=table(mtcars$am), x=list(myname=1,2), 56))
 
   * **a**: *1*
@@ -171,7 +171,7 @@ Besides simple types (vectors, matrices, tables or data frames) lists might be i
 
 A nested list can be seen above with a table and all (optional) list names inside. As a matter of fact `pander.list` is the default method of `pander` too, see:
 
-```r
+```rout
 > x <- chisq.test(table(mtcars$am, mtcars$gear))
 > class(x) <- 'I\'ve never heard of!'
 > pander(x)
@@ -226,7 +226,7 @@ So `pander` showed a not known class in an (almost) user-friendly way. And we go
 
 The output of different **statistical methods** are tried to be prettyfied. Some examples:
 
-```r
+```rout
 > pander(ks.test(runif(50), runif(50)))
 
 ---------------------------------------------
