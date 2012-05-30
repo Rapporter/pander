@@ -1,3 +1,7 @@
+# README.md:
+
+  * add installation details + Pandoc dependency
+  * add example files and html/pdf/docx exports
 
 # Utils:
 

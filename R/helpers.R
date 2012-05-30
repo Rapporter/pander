@@ -1,32 +1,3 @@
-## TODO: add more functionality to pandoc.table (see below)
-
-#' Open file
-#'
-#' Tries to open a file with operating system's default program.
-#' @param f file (with full path)
-#' @references This function is a fork of David Hajage's \code{convert} function: \url{https://github.com/eusebe/ascii/blob/master/R/export.r}
-#' @export
-open.file.in.OS <- function(f) {
-
-    if (missing(f))
-        stop('No file to open!')
-
-    f <- path.expand(f)
-
-    if (!file.exists(f))
-        stop('File not found!')
-
-    if (grepl("w|W", .Platform$OS.type)) { # we are on Windows
-        shell.exec(f)
-    } else {
-        if (grepl("darwin", version$os))   # Mac
-            system(paste(shQuote("open"), shQuote(f)), wait = FALSE, ignore.stderr = TRUE)
-        else                               # Linux-like
-            system(paste(shQuote("/usr/bin/xdg-open"), shQuote(f)), wait = FALSE, ignore.stderr = TRUE)
-    }
-
-}
-
 #' Add trailing and leading blank line
 #'
 #' Adds a line break before *and* after the character string(s).

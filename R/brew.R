@@ -6,7 +6,7 @@
 #'
 #' \itemize{
 #'      \item a block (R commands between the tags) could return a value in the middle of the block and do something else without any output in the rest (but only one returned value per block!)
-#'      \item plots and images are grabbed in the document, rendered to a png file and pander method would result in a Pandoc markdown formatted image link (so the image would be shown/included in the exported document). The images' are put in \code{images} directory in current \code{getwd()} or to the specified \code{output} file's directory.
+#'      \item plots and images are grabbed in the document, rendered to a png file and pander method would result in a Pandoc markdown formatted image link (so the image would be shown/included in the exported document). The images' are put in \code{plots} directory in current \code{getwd()} or to the specified \code{output} file's directory.
 #'      \item all warnings/messages and errors are recorded in the blocks and returned in the document as a footnote
 #' }
 #' @param file file path of the brew template
@@ -28,9 +28,9 @@
 Pandoc.brew <- function(file = stdin(), output = stdout(), text = NULL, envir = new.env()) {
 
     if (deparse(substitute(output)) != 'stdout()')
-        graph.dir <- file.path(dirname(output), 'images')
+        graph.dir <- file.path(dirname(output), 'plots')
     else
-        graph.dir <- 'images'
+        graph.dir <- 'plots'
 
     if (is.null(text))
         text <- paste(readLines(file, warn = FALSE), collapse = '\n')
