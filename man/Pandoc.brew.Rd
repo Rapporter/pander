@@ -3,7 +3,7 @@
 \title{Brew in pandoc format}
 \usage{
   Pandoc.brew(file = stdin(), output = stdout(),
-    text = NULL)
+    text = NULL, envir = new.env())
 }
 \arguments{
   \item{file}{file path of the brew template}

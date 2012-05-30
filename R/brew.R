@@ -11,20 +11,32 @@
 #' text <- paste('# Header', '', '<%=as.list(runif(10))%>', '<%=mtcars[1:3, ]%>', '<%=plot(1:10)%>', sep = '\n')
 #' Pandoc.brew(text = text)
 #' @importFrom brew brew
-#' @importFrom rapport evals
-Pandoc.brew <- function(file = stdin(), output = stdout(), text = NULL) {
+Pandoc.brew <- function(file = stdin(), output = stdout(), text = NULL, envir = new.env()) {
 
     if (is.null(text))
-        text <- readLines(file, warn = FALSE)
+        text <- paste(readLines(file, warn = FALSE), collapse = '\n')
     text <- gsub('<%=(.*?)%>','<%%\\1%%>', text)
 
     res <- capture.output(brew(text = text, tplParser = function(x) {
 
-        res <- evals(x)[[1]]
-        res <- pander.return(res$output, caption = res$msg$messages)
-        paste(res, collapse = '\n')
+        x <- gsub('\n', '', x)
+        #return(capture.output(str(evals(list(x))[[1]])))
+        res <- evals(list(x), env = parent.frame())[[1]]
+        o   <- pander.return(res$output, caption = res$msg$messages)
+        if (length(o) == 0)
+            o <- res$stdout
 
-     }))
+        o <- paste(o, collapse = '\n')
+
+        if (!is.null(res$msg$errors))
+            o <- paste0(o, ' **ERROR**', pandoc.footnote.return(res$msg$errors))
+        if (!is.null(res$msg$warnings))
+            o <- paste0(o, ' **WARNING**', pandoc.footnote.return(res$msg$warnings))
+
+        o
+
+     }, envir = envir))
 
     cat(remove.extra.newlines(paste(res, collapse = '\n')), file = output)
+
 }
