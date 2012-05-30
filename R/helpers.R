@@ -617,7 +617,7 @@ pandoc.table.return <- function(t, caption = NULL, digits = 2, decimal.mark = '.
                'grid'      = {
                    sep.row <- paste0('\n+', paste(sapply(t.width + 2, function(x) rep.char('-', x)), collapse = '+'), '+')
                    sep.top <- sep.row
-                   sep.hdr <- gsub('-', '=', sep.row)
+                   sep.hdr <- paste0('+', paste(sapply(t.width + 2, function(x) rep.char('=', x)), collapse = '+'), '+')
                    sep.col <- c('| ', ' | ', ' |')
                },
                'multiline' = {
