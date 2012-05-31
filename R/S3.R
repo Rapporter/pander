@@ -83,6 +83,10 @@ pander.return <- pandoc.return
 pander.NULL <- function(x, ...)
     return(invisible(NULL))
 
+#' @S3method pander logical
+pander.logical <- function(x, ...)
+    return(as.character(x))
+
 #' @S3method pander image
 pander.image <- function(x, caption = NULL, ...)
     pandoc.image(as.character(x), caption)

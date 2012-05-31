@@ -25,7 +25,7 @@
 
 # Pandoc methods:
 
-  * logical
+  * ~~logical~~
   * ~~default~~
   * ~~list~~
   * ~~density~~
@@ -36,10 +36,10 @@
   * ~~check out image directory (should be `getwd()/images`)~~
   * exporting features?
 
-# Exporting:
+# R5 Exporting:
 
-  * migrate to `Pandoc.convert`
-  * remove multiple line breaks, see: `remove.extra.newlines()`
+  * ~~migrate to `Pandoc.convert`~~
+  * ~~remove multiple line breaks, see: `remove.extra.newlines()`~~
   * ~~open exported docs~~
   * add caption to images/tables (using `attrs`?)
 

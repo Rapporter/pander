@@ -106,6 +106,9 @@ Pandoc$methods(export = function(f, open = TRUE) {
     cat(pandoc.title.return(.self$title, .self$author, .self$date), file = fp)
     lapply(.self$body, function(x) cat(paste(capture.output(pander(x$output)), collapse = '\n'), file = fp, append = TRUE))
 
+    ## remove extra line breaks
+    #cat(remove.extra.newlines(paste(readLines(fp, warn = FALSE), collapse = '\n')), file = fp)
+
     ## convert
     fe <- Pandoc.convert(fp, format = .self$format, open = open, proc.time = as.numeric(proc.time() - timer)[3])
 
