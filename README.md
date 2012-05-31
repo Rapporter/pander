@@ -10,6 +10,14 @@ The package is also capable of exporting/converting complex Pandoc documents (re
 
  * or users might create a report in a live R session by adding some R objects and paragraphs to a `Pandoc` reference class object. Details can be found [below](#live-report-generation).
 
+**How it is differ from Sweave, brew, knitr, R2HTML etc.?**
+
+  * `pander` results in Pandoc's *markdown* which can be converted to almost any text document format (like: pdf, HTML, odt, docx, textile etc.). Conversion can be done automatically after calling `pander` reporting functions ([Pander.brew](#brew-to-pandoc) or [Pandoc](#live-report-generation)).
+  * based on the above *no "traditional" R console output* is shown in the resulting document (nor in markdown, nor in exported docs) but **all R objects are transformed to tables, list etc**.
+  * *graphs/plots* are recognized in blocks of R commands without any special setting or marks around code block and saved to disk in a `png` file linked in the resulting document. This means if you create a report (e.g. `brew` a text file) and export it to pdf/docx etc. all the plots/images would be there.
+  * *does not use cache ATM*
+  * `knitr` *support* is coming too, for details see my [TODO list](https://github.com/daroczig/pander/blob/master/TODO.md)
+
 # Installation
 
 Currently, this package is hosted only on [GitHub](https://github.com/daroczig/pander).
@@ -85,6 +93,7 @@ Which returns:
 Mazda RX4     21  6   160 
 
 Mazda RX4 Wag 21  6   160 
+--------------------------
 
 ```
 
@@ -128,7 +137,7 @@ Besides the `style` parameter there are several other ways to tweak the output l
 | Mazda RX4 Wag | 21  | 6   | 160  |
 +---------------+-----+-----+------+
 
-    Table: Hello caption!
+Table: Hello caption!
 
 ```
 
@@ -145,7 +154,7 @@ Besides the `style` parameter there are several other ways to tweak the output l
 | Mazda RX4 Wag | 21  | 6   | 160  | 110 | 3.9  | 2.9 | 17   | 0  |
 +---------------+-----+-----+------+-----+------+-----+------+----+
 
-    Table: Hello caption! (continued below)
+Table: Hello caption! (continued below)
 
  
 
@@ -176,6 +185,7 @@ Besides simple types (vectors, matrices, tables or data frames) lists might be i
     0  1
     -- --
     19 13
+    -----
 
   * **x**:
 
@@ -208,6 +218,7 @@ A nested list can be seen above with a table and all (optional) list names insid
     0 15 4 0
 
     1 0  8 5
+    --------
 
   * **expected**:
 
@@ -217,6 +228,7 @@ A nested list can be seen above with a table and all (optional) list names insid
     0 8.9 7.1 3.0
 
     1 6.1 4.9 2.0
+    -------------
 
   * **residuals**:
 
@@ -226,6 +238,7 @@ A nested list can be seen above with a table and all (optional) list names insid
     0 2.0  -1.2 -1.7
 
     1 -2.5 1.4  2.1
+    ----------------
 
   * **stdres**:
 
@@ -235,6 +248,7 @@ A nested list can be seen above with a table and all (optional) list names insid
     0 4.4  -2.3 -2.9
 
     1 -4.4 2.3  2.9
+    ----------------
 
 <!-- end of list -->
 
@@ -252,8 +266,9 @@ The output of different **statistical methods** are tried to be prettyfied. Some
 Test statistic P value Alternative hypothesis
 -------------- ------- ----------------------
      0.18        0.4         two-sided       
+---------------------------------------------
 
-    Table: Two-sample Kolmogorov-Smirnov test
+Table: Two-sample Kolmogorov-Smirnov test
 
 > pander(chisq.test(table(mtcars$am, mtcars$gear)))
 
@@ -261,8 +276,9 @@ Test statistic P value Alternative hypothesis
 Test statistic df P value
 -------------- -- -------
       21       2  2.8e-05
+-------------------------
 
-    Table: Pearson's Chi-squared test
+Table: Pearson's Chi-squared test
  **WARNING**^[Chi-squared approximation may be incorrect]
 
 > pander(t.test(extra ~ group, data = sleep))
@@ -271,8 +287,9 @@ Test statistic df P value
 Test statistic df P value Alternative hypothesis
 -------------- -- ------- ----------------------
      -1.9      18  0.079        two.sided       
+------------------------------------------------
 
-    Table: Welch Two Sample t-test
+Table: Welch Two Sample t-test
 
 > ## Dobson (1990) Page 93: Randomized Controlled Trial (examples from: ?glm)
 > counts <- c(18,17,15,20,10,20,25,13,12)
@@ -293,8 +310,9 @@ Test statistic df P value Alternative hypothesis
  treatment2 1.3e-15   2.0e-01   6.7e-15  1.0e+00 
 
  treatment3 1.4e-15   2.0e-01   7.1e-15  1.0e+00 
+-------------------------------------------------
 
-    Table: Fitting generalized (poisson/log) linear model: counts ~ outcome + treatment
+Table: Fitting generalized (poisson/log) linear model: counts ~ outcome + treatment
 
 > pander(anova(m))
 
@@ -306,8 +324,9 @@ Test statistic df P value Alternative hypothesis
   outcome 2  5.5e+00      6        5.1    
 
 treatment 2  2.7e-15      4        5.1    
+------------------------------------------
 
-    Table: Analysis of Deviance Table
+Table: Analysis of Deviance Table
 
 > pander(aov(m))
 
@@ -319,8 +338,9 @@ outcome     2  9.3e+01 4.6e+01 2.2e+00  0.22
 treatment   2  8.4e-31 4.2e-31 2.0e-32  1.00 
 
 Residuals   4  8.3e+01 2.1e+01   NA      NA  
+---------------------------------------------
 
-    Table: Analysis of Variance Model
+Table: Analysis of Variance Model
 
 > pander(prcomp(USArrests))
 
@@ -334,8 +354,9 @@ Assault  0.995 -0.059 -0.068 0.039
 UrbanPop 0.046 0.977  -0.201 -0.058
 
 Rape     0.075 0.201  0.974  0.072 
+-----------------------------------
 
-    Table: Principal Components Analysis
+Table: Principal Components Analysis
 
 ------------------------------------------------------
                        PC1     PC2     PC3     PC4    
@@ -345,6 +366,7 @@ Standard deviation     8.4e+01 1.4e+01 6.5e+00 2.5e+00
 Proportion of Variance 9.7e-01 2.8e-02 5.8e-03 8.5e-04
 
 Cumulative Proportion  9.7e-01 9.9e-01 1.0e+00 1.0e+00
+------------------------------------------------------
 
 > pander(density(mtcars$hp))
 
@@ -362,8 +384,9 @@ Cumulative Proportion  9.7e-01 9.9e-01 1.0e+00 1.0e+00
 3rd Qu.     306        4.1e-03    
 
    Max.     419        6.1e-03    
+----------------------------------
 
-    Table: Kernel density of *mtcars$hp* (bandwidth: 28.04104)
+Table: Kernel density of *mtcars$hp* (bandwidth: 28.04104)
 
 ```
 
