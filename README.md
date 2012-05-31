@@ -396,7 +396,7 @@ Everyone knows and uses [brew](http://cran.r-project.org/web/packages/brew/index
 
   * TODO
 
-*In short*: a `brew` document is a simple text file with some special tags. `Pandoc.brew` uses only two of them (sorry, no brew templates here):
+**In short**: a `brew` document is a simple text file with some special tags. `Pandoc.brew` uses only two of them (sorry, no brew templates here):
 
   * `<\% ... \%>` (without the backslash) stand for running R calls
   * `<\%= ... \%>` (without the backslash) does pretty the same but applies `pander` to the returning R object (instead of `cat` like the original `brew` function does). So putting there any R object would return is a nice Pandoc markdown format.
@@ -415,46 +415,10 @@ Pandoc.brew(system.file('README.brew', package='pander'))
 
 `Pandoc.brew` could cook a file (default) or work with a character vector provided in the `text` argument. The output is set to `stdout` by default, it could be tweaked to write result to a text file and run Pandoc on that to create a `HTML`, `odt`, `docx` or other document.
 
-To export a brewed file to other then Pandoc's markdown, please use the `convert` parameter! For example:
+To export a brewed file to other then Pandoc's markdown, please use the `convert` parameter! For example (please disregard the backslash in front of the percent sign):
 
 ```r
-text <- paste('# Header', '', '
-
-  * *0.377043125918135*
-  * *0.850644759135321*
-  * *0.118731080321595*
-  * *0.403304554056376*
-  * *0.422037234529853*
-  * *0.29978177906014*
-  * *0.278195887571201*
-  * *0.497282495023683*
-  * *0.51662876131013*
-  * *0.811786913778633*
-
-<!-- end of list -->
-
-', '
------------------------------------------------
-              mpg cyl disp hp  drat wt  qsec vs
-------------- --- --- ---- --- ---- --- ---- --
-Mazda RX4     21  6   160  110 3.9  2.6 16   0 
-
-Mazda RX4 Wag 21  6   160  110 3.9  2.9 17   0 
-
-Datsun 710    23  4   108  93  3.9  2.3 19   1 
------------------------------------------------
-
- 
---------------------------
-              am gear carb
-------------- -- ---- ----
-Mazda RX4     1  4    4   
-
-Mazda RX4 Wag 1  4    4   
-
-Datsun 710    1  4    1   
---------------------------
-', '![](/home/omleny/Documents/eclipse/pandoc/plots/5ff877d64eaa.png)', sep = '\n')
+text <- paste('# Header', '', '<\%=as.list(runif(10))\%>', '<\%=mtcars[1:3, ]\%>', '<\%=plot(1:10)\%>', sep = '\n')
 Pandoc.brew(text = text, output = tempfile(), convert = 'html')
 Pandoc.brew(text = text, output = tempfile(), convert = 'pdf')
 ```
