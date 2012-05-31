@@ -634,7 +634,7 @@ pandoc.table.return <- function(t, caption = NULL, digits = 2, decimal.mark = '.
 
         ## (optional) caption
         if (!is.null(caption))
-            res <- sprintf('%s    Table: %s\n\n', res, caption)
+            res <- sprintf('%sTable: %s\n\n', res, caption)
 
         return(res)
 
