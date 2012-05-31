@@ -25,6 +25,10 @@
   \item{envir}{environment where to \code{brew} the
   template}
 }
+\value{
+  converted file name with full path if \code{convert} is
+  set, none otherwise
+}
 \description{
   This function behaves just like \code{brew} except for
   the \code{<\%=...\%>} tags, where \code{Pandoc.brew}
@@ -55,6 +59,8 @@
 \examples{
 text <- paste('# Header', '', '<\%=as.list(runif(10))\%>', '<\%=mtcars[1:3, ]\%>', '<\%=plot(1:10)\%>', sep = '\\n')
 Pandoc.brew(text = text)
+Pandoc.brew(text = text, output = tempfile(), convert = 'html')
+Pandoc.brew(text = text, output = tempfile(), convert = 'pdf')
 
 ## For a longer example checkout README.brew in this installed package or online: \\url{https://github.com/daroczig/pander/blob/master/inst/README.brew}
 }
