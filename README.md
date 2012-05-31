@@ -61,19 +61,19 @@ Which returns:
 
 ```
 
-* First list element 
-    * 1. subelement 
-    * 2. subelement 
-    * 3. subelement 
-    * 4. subelement 
-    * 5. subelement  
-* Second element 
-    * F 
-    * B 
-    * I 
-        * phone 
-        * pad 
-        * talics   
+I. First list element 
+    I. 1. subelement 
+    II. 2. subelement 
+    III. 3. subelement 
+    IV. 4. subelement 
+    V. 5. subelement  
+II. Second element 
+    I. F 
+    II. B 
+    III. I 
+        I. phone 
+        II. pad 
+        III. talics   
 
 <!-- end of list -->
 

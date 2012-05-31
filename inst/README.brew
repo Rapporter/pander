@@ -62,7 +62,7 @@ Which returns:
 ```
 <%%
 l <- list("First list element", paste0(1:5, '. subelement'), "Second element", list('F', 'B', 'I', c('phone', 'pad', 'talics')))
-pandoc.list(l)
+pandoc.list(l, 'roman')
 %%>
 ```
 
