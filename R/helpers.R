@@ -588,6 +588,7 @@ pandoc.table.return <- function(t, caption = NULL, digits = 2, decimal.mark = '.
                'grid'      = {
                    sep.row <- paste0('\n+', paste(sapply(t.width + 2, function(x) rep.char('-', x)), collapse = '+'), '+')
                    sep.top <- sep.row
+                   sep.btn <- sep.row
                    sep.hdr <- paste0('+', paste(sapply(t.width + 2, function(x) rep.char('=', x)), collapse = '+'), '+')
                    sep.col <- c('| ', ' | ', ' |')
                },
@@ -595,11 +596,13 @@ pandoc.table.return <- function(t, caption = NULL, digits = 2, decimal.mark = '.
                    sep.row <- '\n'
                    sep.hdr <- paste(sapply(t.width, function(x) rep.char('-', x)), collapse = ' ')
                    sep.top <- gsub(' ', '-', sep.hdr)
+                   sep.btn <- sep.top
                    sep.col <- c('', ' ', '')
                },
                'simple'   = {
                    sep.row <- ''
                    sep.top <- ''
+                   sep.btn <- ''
                    sep.hdr <- paste(sapply(t.width, function(x) rep.char('-', x)), collapse = ' ')
                    sep.col <- c('', ' ', '')
                })
@@ -623,7 +626,11 @@ pandoc.table.return <- function(t, caption = NULL, digits = 2, decimal.mark = '.
         else
             res <- paste0(res, paste0(table.expand(b, t.width, justify, sep.col), sep.row), collapse = '\n')
 
-        res <- paste0(res, '\n\n')
+        ## footer
+        if (style != 'grid')
+            res <- paste0(res, sep.btn, '\n\n')
+        else
+            res <- paste0(res, '\n\n')
 
         ## (optional) caption
         if (!is.null(caption))
