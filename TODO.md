@@ -36,18 +36,27 @@
   * ~~check out image directory (should be `getwd()/images`)~~
   * exporting features?
 
-# R5 Exporting:
+# Calling Pandoc (converting docs)
+
+  * update footer (currently shows: rapport)
+  * add templates for different formats
+  * add option to change rendering backend's name (like: pander -> rapport with version number)
+
+## R5 Exporting:
 
   * ~~migrate to `Pandoc.convert`~~
   * ~~remove multiple line breaks, see: `remove.extra.newlines()`~~
   * ~~open exported docs~~
   * add caption to images/tables (using `attrs`?)
 
-# Calling Pandoc (converting docs)
+## Brew exporting:
 
-  * update footer (currently shows: rapport)
-  * add templates for different formats
-  * add option to change rendering backend's name (like: pander -> rapport with version number)
+  * implement it :)
+
+## Add support for `knitr`
+
+  * implement it: `Pandoc.knitr`
+  * create `knitr` hooks which would apply `pander` to each R object
 
 # Brainstorming:
 
