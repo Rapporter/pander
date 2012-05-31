@@ -67,7 +67,7 @@ Pandoc$methods(initialize = function(author = 'Anonymous', title = base::sprintf
 })
 
 Pandoc$methods(add = function(x) .self$body <- c(.self$body, evals(deparse(match.call()[[2]]))))
-Pandoc$methods(add.paragraph = function(x) .self$body <- c(.self$body, list(pandoc.p.return(x))))
+Pandoc$methods(add.paragraph = function(x) .self$body <- c(.self$body, list(list(output = pandoc.p.return(x)))))
 
 Pandoc$methods(show = function(x) {
 
@@ -100,7 +100,6 @@ Pandoc$methods(export = function(f, open = TRUE) {
     if (missing(f))
         f <- tempfile('pander-', getwd())
     fp    <- sprintf('%s.md', f)
-    fe    <- sprintf('%s.%s', f, .self$format)
     timer <- proc.time()
 
     ## create pandoc file
@@ -108,14 +107,14 @@ Pandoc$methods(export = function(f, open = TRUE) {
     lapply(.self$body, function(x) cat(paste(capture.output(pander(x$output)), collapse = '\n'), file = fp, append = TRUE))
 
     ## convert
-    system(sprintf('pandoc %s -o %s', shQuote(fp), shQuote(fe)), intern = TRUE)
+    fe <- Pandoc.convert(fp, format = .self$format, open = open, proc.time = as.numeric(proc.time() - timer)[3])
 
     ## return
     cat('\nExported to *', f, '.[md|', format, ']* under ', as.numeric(proc.time() - timer)[3], ' seconds.\n\n', sep = '')
 
     if (open)
-        open.file.in.OS(sprintf('%s.%s', f, .self$format))
+        open.file.in.OS(fe)
 
-    return(invisible(fp))
+    return(invisible(fe))
 
 })

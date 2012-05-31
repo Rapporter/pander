@@ -1,3 +1,7 @@
+# General issues
+
+  * should not depend on `rapport`, try to only import
+
 # README.md:
 
   * ~~add installation details + Pandoc dependency~~
@@ -34,12 +38,14 @@
 
 # Exporting:
 
+  * migrate to `Pandoc.convert`
   * remove multiple line breaks, see: `remove.extra.newlines()`
   * ~~open exported docs~~
   * add caption to images/tables (using `attrs`?)
 
 # Calling Pandoc (converting docs)
 
+  * update footer (currently shows: rapport)
   * add templates for different formats
   * add option to change rendering backend's name (like: pander -> rapport with version number)
 

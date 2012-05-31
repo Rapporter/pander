@@ -3,7 +3,7 @@
 \title{Converts Pandoc to other format}
 \usage{
   Pandoc.convert(f, format = "html", open = TRUE,
-    options = "", proc.time)
+    options = "", footer = TRUE, proc.time)
 }
 \arguments{
   \item{f}{Pandoc markdown format file path}
@@ -17,6 +17,9 @@
 
   \item{options}{optionally passed arguments to Pandoc
   (instead of \code{pander}'s default)}
+
+  \item{footer}{add footer to document with
+  meta-information}
 
   \item{proc.time}{optionally passed number in seconds
   which would be shown in the generated document's footer}
