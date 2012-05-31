@@ -51,7 +51,7 @@
 
 ## Brew exporting:
 
-  * implement it :)
+  * ~~implement it :)~~
 
 ## Add support for `knitr`
 

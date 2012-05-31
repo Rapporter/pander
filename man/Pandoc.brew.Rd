@@ -3,12 +3,21 @@
 \title{Brew in pandoc format}
 \usage{
   Pandoc.brew(file = stdin(), output = stdout(),
-    text = NULL, envir = new.env())
+    convert = FALSE, open = TRUE, text = NULL,
+    envir = new.env())
 }
 \arguments{
   \item{file}{file path of the brew template}
 
   \item{output}{(optional) file path of the output file}
+
+  \item{convert}{string: format of required output document
+  (besides Pandoc's markdown). Pandoc is called if set via
+  \code{Pandoc.convert} and the converted document could be
+  also opened automatically (see below).}
+
+  \item{open}{try to open converted document with operating
+  system's default program}
 
   \item{text}{character vector (treated as the content of
   the \code{file}}

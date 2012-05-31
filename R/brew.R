@@ -11,10 +11,13 @@
 #' }
 #' @param file file path of the brew template
 #' @param output (optional) file path of the output file
+#' @param convert string: format of required output document (besides Pandoc's markdown). Pandoc is called if set via \code{Pandoc.convert} and the converted document could be also opened automatically (see below).
+#' @param open try to open converted document with operating system's default program
 #' @param text character vector (treated as the content of the \code{file}
 #' @param envir environment where to \code{brew} the template
 #' @note Only one of the input parameters (\code{file} or \code{text}) is to be used at once!
 #' @export
+#' @return converted file name with full path if \code{convert} is set, none otherwise
 #' @references \itemize{
 #'      \item Jeffrey Horner (2011). _brew: Templating Framework for Report Generation._ \url{http://CRAN.R-project.org/package=brew}
 #'      \item John MacFarlane (2012): _Pandoc User's Guide_. \url{http://johnmacfarlane.net/pandoc/README.html}
@@ -22,12 +25,23 @@
 #' @examples
 #' text <- paste('# Header', '', '<%=as.list(runif(10))%>', '<%=mtcars[1:3, ]%>', '<%=plot(1:10)%>', sep = '\n')
 #' Pandoc.brew(text = text)
+#' Pandoc.brew(text = text, output = tempfile(), convert = 'html')
+#' Pandoc.brew(text = text, output = tempfile(), convert = 'pdf')
 #'
 #' ## For a longer example checkout README.brew in this installed package or online: \url{https://github.com/daroczig/pander/blob/master/inst/README.brew}
 #' @importFrom brew brew
-Pandoc.brew <- function(file = stdin(), output = stdout(), text = NULL, envir = new.env()) {
+Pandoc.brew <- function(file = stdin(), output = stdout(), convert = FALSE, open = TRUE, text = NULL, envir = new.env()) {
 
-    if (deparse(substitute(output)) != 'stdout()')
+    timer <- proc.time()
+    output.stdout <- deparse(substitute(output)) == 'stdout()'
+
+    if (identical(convert, FALSE))
+        open <- FALSE
+    else
+        if (output.stdout)
+            stop('A file name should be provided while converting a document.')
+
+    if (!output.stdout)
         graph.dir <- file.path(dirname(output), 'plots')
     else
         graph.dir <- 'plots'
@@ -57,5 +71,8 @@ Pandoc.brew <- function(file = stdin(), output = stdout(), text = NULL, envir = 
      }, envir = envir))
 
     cat(remove.extra.newlines(paste(res, collapse = '\n')), file = output)
+
+    if (is.character(convert))
+        Pandoc.convert(output, format = convert, open = open, proc.time = as.numeric(proc.time() - timer)[3])
 
 }
