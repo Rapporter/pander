@@ -23,6 +23,8 @@
 #'      \item John MacFarlane (2012): _Pandoc User's Guide_. \url{http://johnmacfarlane.net/pandoc/README.html}
 #' }
 #' @examples
+#' Pandoc.brew(text = 'string:<%="sfasfas"%>\nimage:<%=plot(1:10)%>\nerror:<%=mean(no.R.object.like.this)%>')
+#'
 #' text <- paste('# Header', '', '<%=as.list(runif(10))%>', '<%=mtcars[1:3, ]%>', '<%=plot(1:10)%>', sep = '\n')
 #' Pandoc.brew(text = text)
 #' Pandoc.brew(text = text, output = tempfile(), convert = 'html')
@@ -48,27 +50,35 @@ Pandoc.brew <- function(file = stdin(), output = stdout(), convert = FALSE, open
 
     if (is.null(text))
         text <- paste(readLines(file, warn = FALSE), collapse = '\n')
-    text <- gsub('<%=(.*?)%>','<%%\\1%%>', text)
+    ## text <- gsub('<%=(.*?)%>','<%%\\1%%>', text) # this idea failed as brew templates are evaluated at the end of the file so loops fails
 
-    res <- capture.output(brew(text = text, tplParser = function(x) {
-
-        x <- gsub('\n', '', x)
-        res <- evals(list(x), env = parent.frame(), graph.dir = graph.dir)[[1]]
-
-        o   <- pander.return(res$output, caption = res$msg$messages)
-        if (length(o) == 0)
-            o <- res$stdout
-
-        o <- paste(o, collapse = '\n')
-
-        if (!is.null(res$msg$errors))
-            o <- paste0(o, ' **ERROR**', pandoc.footnote.return(res$msg$errors))
-        if (!is.null(res$msg$warnings))
-            o <- paste0(o, ' **WARNING**', pandoc.footnote.return(res$msg$warnings))
-
+    ## Pandoc.cat fn
+    Pandoc.evals <- function(..., envir = parent.frame()) {
+        #return(capture.output(str(list(...))))
+        src <- list(...)
+        r <- evals(src, env = envir)[[1]]
+        o <- pander(r$output)
+        if (!is.null(r$msg$error))
+            o <- paste0(o, ' **ERROR**', pandoc.footnote.return(r$msg$errors))
+        if (!is.null(r$msg$warnings))
+            o <- paste0(o, ' **WARNING**', pandoc.footnote.return(r$msg$warnings))
         o
+    }
 
-     }, envir = envir))
+    ## patching brew
+    brew <- brew::brew
+    brew.body <- deparse(body(brew))
+    if (trim.spaces(brew.body[156]) != "code[codeLen + 1] <- paste(\"cat(\", paste(text[textStart:textLen],")
+        stop('Unsupported brew version :(')
+    brew.body[156] <- "code[codeLen + 1] <- paste(\"cat(Pandoc.evals(c(\", paste(sapply(text[textStart:textLen], deparse), collapse = \",\"), "
+    brew.body[157] <- "\")))\", sep = \"\")"
+    body(brew) <- parse(text = brew.body)
+    `.brew.cached` <- brew:::`.brew.cached`
+    b <- deparse(body(`.brew.cached`))
+    b[16] <- "ret <- Pandoc.evals(sapply(code, deparse), envir = envir)"
+    body(`.brew.cached`) <- parse(text = b)
+
+    res <- capture.output(brew(text = text, envir = envir))
 
     cat(remove.extra.newlines(paste(res, collapse = '\n')), file = output)
 
@@ -76,3 +86,4 @@ Pandoc.brew <- function(file = stdin(), output = stdout(), convert = FALSE, open
         Pandoc.convert(output, format = convert, open = open, proc.time = as.numeric(proc.time() - timer)[3])
 
 }
+

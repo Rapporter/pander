@@ -57,6 +57,8 @@
   \code{text}) is to be used at once!
 }
 \examples{
+Pandoc.brew(text = 'string:<\%="sfasfas"\%>\\nimage:<\%=plot(1:10)\%>\\nerror:<\%=mean(no.R.object.like.this)\%>')
+
 text <- paste('# Header', '', '<\%=as.list(runif(10))\%>', '<\%=mtcars[1:3, ]\%>', '<\%=plot(1:10)\%>', sep = '\\n')
 Pandoc.brew(text = text)
 Pandoc.brew(text = text, output = tempfile(), convert = 'html')
