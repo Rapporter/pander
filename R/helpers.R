@@ -563,6 +563,12 @@ pandoc.table.return <- function(t, caption = NULL, digits = 2, decimal.mark = '.
     if (sum(t.width + 4) > 80) {
 
         t.split <- which(cumsum(t.width + 4) > 80)[1]
+        t.col.n <- ifelse(length(dim(t)) > 1, ncol(t), length(t))
+
+        ## do not make one column tables
+        if (t.split == t.col.n)
+            t.split <- t.split - 1
+
         if (!is.null(caption))
             caption <- paste(caption, '(continued below)')
 
