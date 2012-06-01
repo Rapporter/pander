@@ -1,0 +1,279 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="generator" content="pandoc" />
+  <meta name="author" content="Minimal example for Pandoc.brew" />
+  <title>Gergely Daróczi</title>
+  <!--[if lt IE 9]>
+      <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+      <![endif]-->
+  
+  <link rel="stylesheet" href="stylesheets/base.css" />
+  <link rel="stylesheet" href="stylesheets/skeleton.css" />
+  <link rel="stylesheet" href="stylesheets/layout.css" />
+  <link rel="stylesheet" href="stylesheets/fonts.css" />
+  <link rel="stylesheet" href="stylesheets/colorbox.css" />
+  <link rel="stylesheet" href="stylesheets/custom.css" />
+  
+  <link rel="shortcut icon" href="images/favicon.gif" />
+  <link rel="apple-touch-icon" href="images/apple-touch-icon.png" />
+  <link rel="apple-touch-icon" sizes="72x72" href="images/apple-touch-icon-72x72.png" />
+  <link rel="apple-touch-icon" sizes="114x114" href="images/apple-touch-icon-114x114.png" />
+  
+  <script type="text/javascript" src="javascripts/jquery-1.7.2.min.js"></script>
+  <script type="text/javascript" src="javascripts/tabs.js"></script>  <!--remove-->
+  <script type="text/javascript" src="javascripts/custom.js"></script>
+  <script type="text/javascript" src="javascripts/jquery.colorbox.js"></script>
+  <script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+    tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]}
+    });
+  </script>
+  <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_HTML"></script>
+</head>
+<body>
+<div id="header">
+<h1 class="title">Gergely Daróczi</h1>
+<h2 class="author">Minimal example for <code>Pandoc.brew</code></h2>
+</div>
+<h1 id="introduction">Introduction</h1>
+<p>We have two meta-information above:</p>
+<ul>
+<li>author</li>
+<li>title</li>
+</ul>
+<p>A third field could be there too: date. For details, please check out <a href="http://johnmacfarlane.net/pandoc/README.html#title-block">Pandoc's homepage</a> or just use <code>pandoc.title</code> function of this package.</p>
+<p>As you can see writing and formatting paragraphs cannot be easier :)</p>
+<p>But what about <a href="http://www.r-project.org/">R</a>? Let us return pi: <em>3.14159265358979</em></p>
+<h1 id="r-objects">R objects</h1>
+<p><code>Pander.brew</code> would transform any returned R object to Pandoc's markdown in each code block.</p>
+<p>For example <code>mtcars</code>'s first 5 cases look like:</p>
+<table>
+<col width="25%" />
+<col width="8%" />
+<col width="8%" />
+<col width="9%" />
+<col width="6%" />
+<col width="9%" />
+<col width="5%" />
+<thead>
+<tr class="header">
+<th align="left"></th>
+<th align="left">mpg</th>
+<th align="left">cyl</th>
+<th align="left">disp</th>
+<th align="left">hp</th>
+<th align="left">drat</th>
+<th align="left">wt</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">Mazda RX4</td>
+<td align="left">21</td>
+<td align="left">6</td>
+<td align="left">160</td>
+<td align="left">110</td>
+<td align="left">3.9</td>
+<td align="left">2.6</td>
+</tr>
+<tr class="even">
+<td align="left">Mazda RX4 Wag</td>
+<td align="left">21</td>
+<td align="left">6</td>
+<td align="left">160</td>
+<td align="left">110</td>
+<td align="left">3.9</td>
+<td align="left">2.9</td>
+</tr>
+<tr class="odd">
+<td align="left">Datsun 710</td>
+<td align="left">23</td>
+<td align="left">4</td>
+<td align="left">108</td>
+<td align="left">93</td>
+<td align="left">3.9</td>
+<td align="left">2.3</td>
+</tr>
+<tr class="even">
+<td align="left">Hornet 4 Drive</td>
+<td align="left">21</td>
+<td align="left">6</td>
+<td align="left">258</td>
+<td align="left">110</td>
+<td align="left">3.1</td>
+<td align="left">3.2</td>
+</tr>
+<tr class="odd">
+<td align="left">Hornet Sportabout</td>
+<td align="left">19</td>
+<td align="left">8</td>
+<td align="left">360</td>
+<td align="left">175</td>
+<td align="left">3.1</td>
+<td align="left">3.4</td>
+</tr>
+</tbody>
+</table>
+<table>
+<col width="25%" />
+<col width="9%" />
+<col width="6%" />
+<col width="6%" />
+<col width="9%" />
+<col width="9%" />
+<thead>
+<tr class="header">
+<th align="left"></th>
+<th align="left">qsec</th>
+<th align="left">vs</th>
+<th align="left">am</th>
+<th align="left">gear</th>
+<th align="left">carb</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">Mazda RX4</td>
+<td align="left">16</td>
+<td align="left">0</td>
+<td align="left">1</td>
+<td align="left">4</td>
+<td align="left">4</td>
+</tr>
+<tr class="even">
+<td align="left">Mazda RX4 Wag</td>
+<td align="left">17</td>
+<td align="left">0</td>
+<td align="left">1</td>
+<td align="left">4</td>
+<td align="left">4</td>
+</tr>
+<tr class="odd">
+<td align="left">Datsun 710</td>
+<td align="left">19</td>
+<td align="left">1</td>
+<td align="left">1</td>
+<td align="left">4</td>
+<td align="left">1</td>
+</tr>
+<tr class="even">
+<td align="left">Hornet 4 Drive</td>
+<td align="left">19</td>
+<td align="left">1</td>
+<td align="left">0</td>
+<td align="left">3</td>
+<td align="left">1</td>
+</tr>
+<tr class="odd">
+<td align="left">Hornet Sportabout</td>
+<td align="left">17</td>
+<td align="left">0</td>
+<td align="left">0</td>
+<td align="left">3</td>
+<td align="left">2</td>
+</tr>
+</tbody>
+</table>
+<p>As you can see some formatting was added to the returned table and was also split up as the original table would have been too wide.</p>
+<p>We could try other R objects too, for example <code>prcomp</code> on <code>iris</code>:</p>
+<table>
+<caption>Principal Components Analysis</caption>
+<col width="18%" />
+<col width="9%" />
+<col width="9%" />
+<col width="9%" />
+<col width="9%" />
+<thead>
+<tr class="header">
+<th align="left"></th>
+<th align="left">PC1</th>
+<th align="left">PC2</th>
+<th align="left">PC3</th>
+<th align="left">PC4</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">Sepal.Length</td>
+<td align="left">0.361</td>
+<td align="left">-0.657</td>
+<td align="left">0.582</td>
+<td align="left">0.315</td>
+</tr>
+<tr class="even">
+<td align="left">Sepal.Width</td>
+<td align="left">-0.085</td>
+<td align="left">-0.730</td>
+<td align="left">-0.598</td>
+<td align="left">-0.320</td>
+</tr>
+<tr class="odd">
+<td align="left">Petal.Length</td>
+<td align="left">0.857</td>
+<td align="left">0.173</td>
+<td align="left">-0.076</td>
+<td align="left">-0.480</td>
+</tr>
+<tr class="even">
+<td align="left">Petal.Width</td>
+<td align="left">0.358</td>
+<td align="left">0.075</td>
+<td align="left">-0.546</td>
+<td align="left">0.754</td>
+</tr>
+</tbody>
+</table>
+<table>
+<col width="31%" />
+<col width="9%" />
+<col width="9%" />
+<col width="9%" />
+<col width="9%" />
+<thead>
+<tr class="header">
+<th align="left"></th>
+<th align="left">PC1</th>
+<th align="left">PC2</th>
+<th align="left">PC3</th>
+<th align="left">PC4</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">Standard deviation</td>
+<td align="left">2.0563</td>
+<td align="left">0.4926</td>
+<td align="left">0.2797</td>
+<td align="left">0.1544</td>
+</tr>
+<tr class="even">
+<td align="left">Proportion of Variance</td>
+<td align="left">0.9246</td>
+<td align="left">0.0531</td>
+<td align="left">0.0171</td>
+<td align="left">0.0052</td>
+</tr>
+<tr class="odd">
+<td align="left">Cumulative Proportion</td>
+<td align="left">0.9246</td>
+<td align="left">0.9777</td>
+<td align="left">0.9948</td>
+<td align="left">1.0000</td>
+</tr>
+</tbody>
+</table>
+<h2 id="returning-plot">Returning plot</h2>
+<p>Plots are automatically grabbed between <code>brew</code> tags:</p>
+<div class="figure">
+<img src="/home/omleny/Documents/eclipse/pandoc.pages/plots/7ca298cc3f0.png" /><p class="caption"></p>
+</div>
+<hr />
+<p>This report was generated with <a href="http://www.r-project.org/">R</a> (2.15.0) and <a href="https://github.com/daroczig/pander">pander</a> (0.1) in 0.636 sec on x86_64-unknown-linux-gnu platform.</p>
+<p align="center">
+  Design: <a href="https://github.com/aL3xa/rapport"><i>rapport</i> Development Team</a> &copy; 2012 | Backend: <a href="https://github.com/daroczig/pander">pander</a> | License: <a href="http://www.gnu.org/licenses/agpl.html" target="_blank">AGPL3</a> | Styled with <a href="http://www.getskeleton.com/" target="_blank">skeleton</a>
+</p>
+</body>
+</html>

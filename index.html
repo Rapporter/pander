@@ -53,13 +53,13 @@ code > span.er { color: #ff0000; font-weight: bold; }
 </head>
 <body>
 <div id="header">
-<h1 class="title">pander: An R Pandoc writer</h1>
+<h1 class="title"><a href="https://github.com/daroczig/pander">pander: An R Pandoc writer</a></h1>
 </div>
 <p><strong>pander</strong> is an <a href="http://r-project.org">R</a> package containing <a href="#helper-functions">helpers</a> to return <a href="http://johnmacfarlane.net/pandoc/">Pandoc</a> markdown of user specified format or <em>automatically</em> of several type of <a href="#generic-pander-method"><strong>R objects</strong></a>.</p>
 <p>The package is also capable of exporting/converting complex Pandoc documents (reports) in two ways ATM:</p>
 <ul>
-<li><p>users might write some reports in <a href="http://cran.r-project.org/web/packages/brew/index.html">brew</a> syntax resulting in a pretty Pandoc document (where <code>cat</code>ed R object are transformed to table, list etc.).</p>
-<p><em>Example</em>: this <code>README</code> is cooked with <code>Pandoc.brew</code> based on <a href="https://github.com/daroczig/pander/blob/master/inst/README.brew"><code>inst/README.brew</code></a>. Details can be found <a href="#brew-to-pandoc">below</a>.</p></li>
+<li><p>users might write some reports in <a href="http://cran.r-project.org/web/packages/brew/index.html">brew</a> syntax resulting in a pretty <em>Pandoc</em> document (where <code>cat</code>ed R object are transformed to table, list etc.) and also in a <strong>bunch of formats</strong> automatically.</p>
+<p><em>Example</em>: this <a href="https://github.com/daroczig/pander/blob/master/README.md"><code>README.md</code></a> is cooked with <code>Pandoc.brew</code> based on <a href="https://github.com/daroczig/pander/blob/master/inst/README.brew"><code>inst/README.brew</code></a> and also exported to <a href="http://daroczig.github.com/pander/">HTML</a>. Details can be found <a href="#brew-to-pandoc">below</a> or head directly to <a href="#examples">examples</a>.</p></li>
 </ul>
 <!-- endlist -->
 
@@ -71,7 +71,7 @@ code > span.er { color: #ff0000; font-weight: bold; }
 <li><code>pander</code> results in Pandoc's <em>markdown</em> which can be converted to almost any text document format (like: pdf, HTML, odt, docx, textile etc.). Conversion can be done automatically after calling <code>pander</code> reporting functions (<a href="#brew-to-pandoc">Pander.brew</a> or <a href="#live-report-generation">Pandoc</a>).</li>
 <li>based on the above <em>no &quot;traditional&quot; R console output</em> is shown in the resulting document (nor in markdown, nor in exported docs) but <strong>all R objects are transformed to tables, list etc</strong>.</li>
 <li><em>graphs/plots</em> are recognized in blocks of R commands without any special setting or marks around code block and saved to disk in a <code>png</code> file linked in the resulting document. This means if you create a report (e.g. <code>brew</code> a text file) and export it to pdf/docx etc. all the plots/images would be there.</li>
-<li><em>does not use cache ATM</em></li>
+<li>can use <code>brew</code>'s caching mechanism</li>
 <li><code>knitr</code> <em>support</em> is coming too, for details see my <a href="https://github.com/daroczig/pander/blob/master/TODO.md">TODO list</a></li>
 </ul>
 <h1 id="installation">Installation</h1>
@@ -82,7 +82,7 @@ install_github(&#39;pander&#39;, &#39;daroczig&#39;)</code></pre>
 <p>Or download the <a href="https://github.com/daroczig/pander/zipball/master">sources in a zip file</a> and build manually. If you're running R on Windows, you need to install <a href="http://cran.stat.ucla.edu/bin/windows/Rtools/">Rtools</a>.</p>
 <h2 id="depends">Depends</h2>
 <p><code>pander</code> heavily builds on <a href="http://johnmacfarlane.net/pandoc">Pandoc</a> which should be <strong>pre-installed</strong> before trying to convert your reports to <a href="http://johnmacfarlane.net/pandoc/">different formats</a>. Although main functions work without Pandoc, e.g. you can generate a markdown formatted report via <a href="#brew-to-pandoc">Pandoc.brew</a> or the custom <a href="#live-report-generation">reference class</a>.</p>
-<p>And as <code>pander</code> and <code>rapport</code> are quite Siamese twins, you would need an up-to-date version of <a href="https://github.com/aL3xa/rapport">rapport</a> most likely installed from <a href="https://github.com/aL3xa/rapport">Github</a>.</p>
+<p>And as <code>pander</code> and <code>rapport</code> are quite Siamese twins, you would need an <strong>up-to-date</strong> version of <a href="http://rapport-package.info">rapport</a> most likely installed from <a href="https://github.com/aL3xa/rapport">Github</a>.</p>
 <h1 id="helper-functions">Helper functions</h1>
 <p>There are a bunch of helper functions in <code>pander</code> which return user specified inputs in Pandoc format. You could find these functions starting with <code>pandoc.</code>. For example <code>pandoc.strong</code> would return the passed characters with strong emphasis. E.g.:</p>
 <pre class="rout"><code>&gt; pandoc.strong(&#39;FOO&#39;)
@@ -216,12 +216,12 @@ pander(m)
 </ul>
 <p>To <code>brew</code> these examples on your machine try to run e.g.:</p>
 <pre class="sourceCode r"><code class="sourceCode r"><span class="kw">Pandoc.brew</span>(<span class="kw">system.file</span>(<span class="st">&#39;examples/minimal.brew&#39;</span>, <span class="dt">package=</span><span class="st">&#39;pander&#39;</span>), <span class="dt">output =</span> <span class="kw">tempfile</span>(), <span class="dt">convert =</span> <span class="st">&#39;html&#39;</span>)</code></pre>
-<p>For easy access I have uploaded the exported documents of the above examples:</p>
+<p>For easy access I have uploaded some exported documents of the above examples:</p>
 <ul>
-<li>minimal.brew: <a href="#TODO">html</a></li>
-<li>short-code-long-report.brew: <a href="#TODO">html</a></li>
+<li>minimal.brew: <a href="minimal.html">html</a> <a href="minimal.pdf">pdf</a> <a href="minimal.odt">odt</a> <a href="minimal.docx">docx</a></li>
+<li>short-code-long-report.brew: <a href="short-code-long-report.html">html</a> <a href="short-code-long-report.html">html</a> <a href="short-code-long-report.html">html</a> <a href="short-code-long-report.docx">html</a></li>
 </ul>
-<p>Please check out <code>pdf</code>, <code>docx</code>, <code>odt</code> and other formats (changing the above <code>convert</code> option) and do not forget to <a href="https://github.com/daroczig/pander/issues">give some feedback</a>!</p>
+<p>Please check out <code>pdf</code>, <code>docx</code>, <code>odt</code> and other formats (changing the above <code>convert</code> option) on your machine too and do not forget to <a href="https://github.com/daroczig/pander/issues">give some feedback</a>!</p>
 <h1 id="live-report-generation">Live report generation</h1>
 <p><code>pander</code> package has a special reference class called <code>Pandoc</code> which could collect some blocks in a live R session and export the whole document to Pandoc/pdf/HTML etc.</p>
 <p>Without any serious comments, please check out the below (self-commenting) example:</p>
@@ -276,7 +276,7 @@ myReport$<span class="kw">export</span>(<span class="kw">tempfile</span>())
 ## You do not want to see the generated report after generation?
 myReport$<span class="kw">export</span>(<span class="dt">open =</span> <span class="ot">FALSE</span>)</code></pre>
 <hr />
-<p>This report was generated with <a href="http://www.r-project.org/">R</a> (2.15.0) and <a href="https://github.com/daroczig/pander">pander</a> (0.1) in 0.065 sec on x86_64-unknown-linux-gnu platform.</p>
+<p>This report was generated with <a href="http://www.r-project.org/">R</a> (2.15.0) and <a href="https://github.com/daroczig/pander">pander</a> (0.1) in 0.071 sec on x86_64-unknown-linux-gnu platform.</p>
 <p align="center">
   Design: <a href="https://github.com/aL3xa/rapport"><i>rapport</i> Development Team</a> &copy; 2012 | Backend: <a href="https://github.com/daroczig/pander">pander</a> | License: <a href="http://www.gnu.org/licenses/agpl.html" target="_blank">AGPL3</a> | Styled with <a href="http://www.getskeleton.com/" target="_blank">skeleton</a>
 </p>
