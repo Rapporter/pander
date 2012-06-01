@@ -1,0 +1,90 @@
+% Gergely Daróczi
+% Looong report
+% <%=date()%>
+
+I have written the below report in 10 mins :)
+
+# Dataset
+
+Here I will do a pretty fast report on `mtcars` which is:
+
+<%=
+mtcars
+%>
+
+# Descriptives
+
+<%=
+rapport::rp.desc(names(mtcars), data = mtcars, fn = c("Average" = mean, "Median" = median, "Standard deviation" = sd, "Variance" = var))
+%>
+
+## In details
+
+<%
+for (v in names(mtcars)) {
+%>
+
+### <%=v%>
+
+We found the folloing values here:
+
+<%=
+mtcars[, v]
+%>
+
+The mean of <%=v%> is <%=mean(mtcars[, v])%> while the standard deviation is: <%=sd(mtcars[, v])%>. The most frequent value in <%=v%> is <%=names(sort(table(mtcars[, v]), decreasing =TRUE))[1]%>, but let us check out the frequency table too:
+
+<%=
+table(mtcars[, v])
+%>
+
+Tables are boring, let us show the same with a `histogram`:
+
+<%=
+histogram(mtcars[, v], xlab = v, col = sample(colors(), 1))
+%>
+
+<%
+}
+%>
+
+# Correlation
+
+And here goes a correlation table:
+
+<%=
+cor(mtcars)
+%>
+
+And the same on a graph:
+
+<%=
+I.have.time <- FALSE
+if (I.have.time)
+   pairs(mtcars)
+%>
+
+Yeah, that latter took a while to render in an image file :)
+
+That's not a `pander` issue.
+
+# Some models
+
+Okay, let us find out how `weight` affects other variables:
+
+<%
+for (v in names(mtcars)[-6]) {
+%>
+
+### <%=v%>
+
+A simple linear model: `mtcars$wt ~ mtcars$<%=v%>`
+
+<%=
+Dependent <- mtcars[, v]
+lm(mtcars$wt ~ Dependent)
+%>
+
+<%
+}
+%>

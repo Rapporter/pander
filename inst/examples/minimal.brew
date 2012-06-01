@@ -1,0 +1,38 @@
+% Gergely Daróczi
+% Minimal example for `Pandoc.brew`
+
+# Introduction
+
+We have two meta-information above:
+
+  * author
+  * title
+
+A third field could be there too: date. For details, please check out [Pandoc's homepage](http://johnmacfarlane.net/pandoc/README.html#title-block) or just use `pandoc.title` function of this package.
+
+As you can see writing and formatting paragraphs cannot be easier :)
+
+But what about [R](http://www.r-project.org/)? Let us return pi: <%=pi%>
+
+# R objects
+
+`Pander.brew` would transform any returned R object to Pandoc's markdown in each code block.
+
+For example `mtcars`'s first 5 cases look like:
+
+<%=mtcars[1:5, ]%>
+
+As you can see some formatting was added to the returned table and was also split up as the original table would have been too wide.
+
+We could try other R objects too, for example `prcomp` on `iris`:
+
+<%=prcomp(iris[, 1:4])%>
+
+## Returning plot
+
+Plots are automatically grabbed between `brew` tags:
+
+<%=
+library(lattice)
+histogram(mtcars$hp)
+%>

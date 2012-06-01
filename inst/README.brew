@@ -1,10 +1,12 @@
+% [pander: An R Pandoc writer](https://github.com/daroczig/pander)
+
 **pander** is an [R](http://r-project.org) package containing [helpers](#helper-functions) to return [Pandoc](http://johnmacfarlane.net/pandoc/) markdown of user specified format or *automatically* of several type of [**R objects**](#generic-pander-method).
 
 The package is also capable of exporting/converting complex Pandoc documents (reports) in two ways ATM:
 
-  * users might write some reports in [brew](http://cran.r-project.org/web/packages/brew/index.html) syntax resulting in a pretty Pandoc document (where `cat`ed R object are transformed to table, list etc.).
+  * users might write some reports in [brew](http://cran.r-project.org/web/packages/brew/index.html) syntax resulting in a pretty *Pandoc* document (where `cat`ed R object are transformed to table, list etc.) and also in a **bunch of formats** automatically.
 
-    *Example*: this `README` is cooked with `Pandoc.brew` based on [`inst/README.brew`](https://github.com/daroczig/pander/blob/master/inst/README.brew). Details can be found [below](#brew-to-pandoc).
+    *Example*: this [`README.md`](https://github.com/daroczig/pander/blob/master/README.md) is cooked with `Pandoc.brew` based on [`inst/README.brew`](https://github.com/daroczig/pander/blob/master/inst/README.brew) and also exported to [HTML](http://daroczig.github.com/pander/). Details can be found [below](#brew-to-pandoc) or head directly to [examples](#examples).
 
 <!-- endlist -->
 
@@ -15,7 +17,7 @@ The package is also capable of exporting/converting complex Pandoc documents (re
   * `pander` results in Pandoc's *markdown* which can be converted to almost any text document format (like: pdf, HTML, odt, docx, textile etc.). Conversion can be done automatically after calling `pander` reporting functions ([Pander.brew](#brew-to-pandoc) or [Pandoc](#live-report-generation)).
   * based on the above *no "traditional" R console output* is shown in the resulting document (nor in markdown, nor in exported docs) but **all R objects are transformed to tables, list etc**.
   * *graphs/plots* are recognized in blocks of R commands without any special setting or marks around code block and saved to disk in a `png` file linked in the resulting document. This means if you create a report (e.g. `brew` a text file) and export it to pdf/docx etc. all the plots/images would be there.
-  * *does not use cache ATM*
+  * can use `brew`'s caching mechanism
   * `knitr` *support* is coming too, for details see my [TODO list](https://github.com/daroczig/pander/blob/master/TODO.md)
 
 # Installation
@@ -35,7 +37,7 @@ Or download the [sources in a zip file](https://github.com/daroczig/pander/zipba
 
 `pander` heavily builds on [Pandoc](http://johnmacfarlane.net/pandoc) which should be **pre-installed** before trying to convert your reports to [different formats](http://johnmacfarlane.net/pandoc/). Although main functions work without Pandoc, e.g. you can generate a markdown formatted report via [Pandoc.brew](#brew-to-pandoc) or the custom [reference class](#live-report-generation).
 
-And as `pander` and `rapport` are quite Siamese twins, you would need an up-to-date version of [rapport](https://github.com/aL3xa/rapport) most likely installed from [Github](https://github.com/aL3xa/rapport).
+And as `pander` and `rapport` are quite Siamese twins, you would need an **up-to-date** version of [rapport](http://rapport-package.info) most likely installed from [Github](https://github.com/aL3xa/rapport).
 
 # Helper functions
 
@@ -219,6 +221,26 @@ Of course a text file could work as input (by default) the above example uses `t
 Pandoc.brew(system.file('README.brew', package='pander'), output = tempfile(), convert = 'html')
 Pandoc.brew(system.file('README.brew', package='pander'), output = tempfile(), convert = 'pdf')
 ```
+
+## Examples
+
+The package comes bundled with some examples for `Pandoc.brew` to let users check out its features pretty fast. These are:
+
+  * [minimal.brew](https://github.com/daroczig/pander/blob/master/inst/examples/minimal.brew)
+  * [short-code-long-report.brew](https://github.com/daroczig/pander/blob/master/inst/examples/short-code-long-report.brew)
+
+To `brew` these examples on your machine try to run e.g.:
+
+```r
+Pandoc.brew(system.file('examples/minimal.brew', package='pander'), output = tempfile(), convert = 'html')
+```
+
+For easy access I have uploaded some exported documents of the above examples:
+
+  * minimal.brew: [html](minimal.html) [pdf](minimal.pdf) [odt](minimal.odt) [docx](minimal.docx)
+  * short-code-long-report.brew: [html](short-code-long-report.html) [html](short-code-long-report.html) [html](short-code-long-report.html) [html](short-code-long-report.docx)
+
+Please check out `pdf`, `docx`, `odt` and other formats (changing the above `convert` option) on your machine too and do not forget to [give some feedback](https://github.com/daroczig/pander/issues)!
 
 # Live report generation
 

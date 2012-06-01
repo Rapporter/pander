@@ -5,7 +5,7 @@
 # README.md:
 
   * ~~add installation details + Pandoc dependency~~
-  * add example files and html/pdf/docx exports
+  * ~~add example files and html/pdf/docx exports~~
 
 # Utils:
 
@@ -34,11 +34,13 @@
 # Brew
 
   * ~~check out image directory (should be `getwd()/images`)~~
-  * exporting features?
+  * ~~exporting features?~~
+  * option to convert document to multiple formats at once (although with caching it's no so bad even now)
 
 # Calling Pandoc (converting docs)
 
-  * update footer (currently shows: rapport)
+  * ~~update footer (currently shows: rapport)~~
+  * **remove image absolute path**
   * add templates for different formats
   * add option to change rendering backend's name (like: pander -> rapport with version number)
 
