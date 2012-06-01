@@ -528,7 +528,7 @@ pandoc.table.return <- function(t, caption = NULL, digits = 2, decimal.mark = '.
 
         t.colnames  <- names(t)
         t.rownames  <- NULL
-        t.width     <- as.numeric(apply(t, 1, nchar))
+        t.width     <- as.numeric(apply(cbind(nchar(t.colnames), as.numeric(apply(t, 1, nchar))), 1, max))
 
     } else {
 
@@ -576,7 +576,7 @@ pandoc.table.return <- function(t, caption = NULL, digits = 2, decimal.mark = '.
         if (length(dim(t)) > 1)
             res <- list(t[, 1:(t.split-1)], t[, t.split:ncol(t)])
         else
-            res <- list(t[1:t.split], t[t.split:length(t)])
+            res <- list(t[1:(t.split-1)], t[t.split:length(t)])
 
         res <- paste(pandoc.table.return(res[[1]], caption = caption, digits = digits, decimal.mark = decimal.mark, justify = justify[1], style = style), pandoc.table.return(res[[2]], caption = NULL, digits = digits, decimal.mark = decimal.mark, justify = justify[2], style = style))
 
