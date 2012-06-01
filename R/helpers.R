@@ -528,7 +528,7 @@ pandoc.table.return <- function(t, caption = NULL, digits = 2, decimal.mark = '.
 
         t.colnames  <- names(t)
         t.rownames  <- NULL
-        t.width     <- as.numeric(apply(cbind(nchar(t.colnames), as.numeric(apply(t, 1, nchar))), 1, max))
+        t.width     <- as.numeric(apply(cbind(nchar(t.colnames) + 2, as.numeric(apply(t, 1, nchar))), 1, max))
 
     } else {
 
@@ -536,7 +536,7 @@ pandoc.table.return <- function(t, caption = NULL, digits = 2, decimal.mark = '.
         t.rownames  <- rownames(t)
 
         ## also dealing with cells split by newlines
-        t.width     <-  as.numeric(apply(cbind(nchar(t.colnames), apply(t, 2, function(x) max(sapply(strsplit(x,'\n'), function(x) max(nchar(x)))))), 1, max))
+        t.width     <-  as.numeric(apply(cbind(nchar(t.colnames) + 2, apply(t, 2, function(x) max(sapply(strsplit(x,'\n'), function(x) max(nchar(x)))))), 1, max))
 
         ## remove obvoius row.names
         if (all(rownames(t) == 1:nrow(t)))
