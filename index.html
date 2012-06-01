@@ -1,0 +1,284 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="generator" content="pandoc" />
+  <title>pander: An R Pandoc writer</title>
+  <style type="text/css">
+table.sourceCode, tr.sourceCode, td.lineNumbers, td.sourceCode {
+  margin: 0; padding: 0; vertical-align: baseline; border: none; }
+table.sourceCode { width: 100%; }
+td.lineNumbers { text-align: right; padding-right: 4px; padding-left: 4px; color: #aaaaaa; border-right: 1px solid #aaaaaa; }
+td.sourceCode { padding-left: 5px; }
+code > span.kw { color: #007020; font-weight: bold; }
+code > span.dt { color: #902000; }
+code > span.dv { color: #40a070; }
+code > span.bn { color: #40a070; }
+code > span.fl { color: #40a070; }
+code > span.ch { color: #4070a0; }
+code > span.st { color: #4070a0; }
+code > span.co { color: #60a0b0; font-style: italic; }
+code > span.ot { color: #007020; }
+code > span.al { color: #ff0000; font-weight: bold; }
+code > span.fu { color: #06287e; }
+code > span.er { color: #ff0000; font-weight: bold; }
+  </style>
+  <!--[if lt IE 9]>
+      <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+      <![endif]-->
+  
+  <link rel="stylesheet" href="stylesheets/base.css" />
+  <link rel="stylesheet" href="stylesheets/skeleton.css" />
+  <link rel="stylesheet" href="stylesheets/layout.css" />
+  <link rel="stylesheet" href="stylesheets/fonts.css" />
+  <link rel="stylesheet" href="stylesheets/colorbox.css" />
+  <link rel="stylesheet" href="stylesheets/custom.css" />
+  
+  <link rel="shortcut icon" href="images/favicon.gif" />
+  <link rel="apple-touch-icon" href="images/apple-touch-icon.png" />
+  <link rel="apple-touch-icon" sizes="72x72" href="images/apple-touch-icon-72x72.png" />
+  <link rel="apple-touch-icon" sizes="114x114" href="images/apple-touch-icon-114x114.png" />
+  
+  <script type="text/javascript" src="javascripts/jquery-1.7.2.min.js"></script>
+  <script type="text/javascript" src="javascripts/tabs.js"></script>  <!--remove-->
+  <script type="text/javascript" src="javascripts/custom.js"></script>
+  <script type="text/javascript" src="javascripts/jquery.colorbox.js"></script>
+  <script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+    tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]}
+    });
+  </script>
+  <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_HTML"></script>
+</head>
+<body>
+<div id="header">
+<h1 class="title">pander: An R Pandoc writer</h1>
+</div>
+<p><strong>pander</strong> is an <a href="http://r-project.org">R</a> package containing <a href="#helper-functions">helpers</a> to return <a href="http://johnmacfarlane.net/pandoc/">Pandoc</a> markdown of user specified format or <em>automatically</em> of several type of <a href="#generic-pander-method"><strong>R objects</strong></a>.</p>
+<p>The package is also capable of exporting/converting complex Pandoc documents (reports) in two ways ATM:</p>
+<ul>
+<li><p>users might write some reports in <a href="http://cran.r-project.org/web/packages/brew/index.html">brew</a> syntax resulting in a pretty Pandoc document (where <code>cat</code>ed R object are transformed to table, list etc.).</p>
+<p><em>Example</em>: this <code>README</code> is cooked with <code>Pandoc.brew</code> based on <a href="https://github.com/daroczig/pander/blob/master/inst/README.brew"><code>inst/README.brew</code></a>. Details can be found <a href="#brew-to-pandoc">below</a>.</p></li>
+</ul>
+<!-- endlist -->
+
+<ul>
+<li>or users might create a report in a live R session by adding some R objects and paragraphs to a <code>Pandoc</code> reference class object. Details can be found <a href="#live-report-generation">below</a>.</li>
+</ul>
+<p><strong>How it is differ from Sweave, brew, knitr, R2HTML etc.?</strong></p>
+<ul>
+<li><code>pander</code> results in Pandoc's <em>markdown</em> which can be converted to almost any text document format (like: pdf, HTML, odt, docx, textile etc.). Conversion can be done automatically after calling <code>pander</code> reporting functions (<a href="#brew-to-pandoc">Pander.brew</a> or <a href="#live-report-generation">Pandoc</a>).</li>
+<li>based on the above <em>no &quot;traditional&quot; R console output</em> is shown in the resulting document (nor in markdown, nor in exported docs) but <strong>all R objects are transformed to tables, list etc</strong>.</li>
+<li><em>graphs/plots</em> are recognized in blocks of R commands without any special setting or marks around code block and saved to disk in a <code>png</code> file linked in the resulting document. This means if you create a report (e.g. <code>brew</code> a text file) and export it to pdf/docx etc. all the plots/images would be there.</li>
+<li><em>does not use cache ATM</em></li>
+<li><code>knitr</code> <em>support</em> is coming too, for details see my <a href="https://github.com/daroczig/pander/blob/master/TODO.md">TODO list</a></li>
+</ul>
+<h1 id="installation">Installation</h1>
+<p>Currently, this package is hosted only on <a href="https://github.com/daroczig/pander">GitHub</a>.</p>
+<p>Until this gets on <a href="cran.r-project.org">CRAN</a>, you can install it via nifty function from <code>devtools</code> package:</p>
+<pre><code>library(devtools)
+install_github(&#39;pander&#39;, &#39;daroczig&#39;)</code></pre>
+<p>Or download the <a href="https://github.com/daroczig/pander/zipball/master">sources in a zip file</a> and build manually. If you're running R on Windows, you need to install <a href="http://cran.stat.ucla.edu/bin/windows/Rtools/">Rtools</a>.</p>
+<h2 id="depends">Depends</h2>
+<p><code>pander</code> heavily builds on <a href="http://johnmacfarlane.net/pandoc">Pandoc</a> which should be <strong>pre-installed</strong> before trying to convert your reports to <a href="http://johnmacfarlane.net/pandoc/">different formats</a>. Although main functions work without Pandoc, e.g. you can generate a markdown formatted report via <a href="#brew-to-pandoc">Pandoc.brew</a> or the custom <a href="#live-report-generation">reference class</a>.</p>
+<p>And as <code>pander</code> and <code>rapport</code> are quite Siamese twins, you would need an up-to-date version of <a href="https://github.com/aL3xa/rapport">rapport</a> most likely installed from <a href="https://github.com/aL3xa/rapport">Github</a>.</p>
+<h1 id="helper-functions">Helper functions</h1>
+<p>There are a bunch of helper functions in <code>pander</code> which return user specified inputs in Pandoc format. You could find these functions starting with <code>pandoc.</code>. For example <code>pandoc.strong</code> would return the passed characters with strong emphasis. E.g.:</p>
+<pre class="rout"><code>&gt; pandoc.strong(&#39;FOO&#39;)
+**FOO**&gt;
+&gt; pandoc.strong.return(&#39;FOO&#39;)
+[1] &quot;**FOO**&quot;</code></pre>
+<p>As it can be seen here <code>pandoc</code> functions generally prints to console and do not return anything. If you want the opposite (get the Pandoc format as a string): call each function ending in <code>.return</code> - like the second call in the above example. For details please check documentation, e.g. <code>?pandoc.strong</code>.</p>
+<p>Of course there are more complex functions too. Besides verbatim texts, (image) links or footnotes (among others) there are a helper e.g. for <strong>lists</strong>:</p>
+<pre class="rout"><code>&gt; l &lt;- list(&quot;First list element&quot;, paste0(1:5, &#39;. subelement&#39;), &quot;Second element&quot;, list(&#39;F&#39;, &#39;B&#39;, &#39;I&#39;, c(&#39;phone&#39;, &#39;pad&#39;, &#39;talics&#39;)))
+&gt; pandoc.list(l, &#39;roman&#39;)</code></pre>
+<p>Which returns:</p>
+<pre><code>&lt;%
+l &lt;- list(&quot;First list element&quot;, paste0(1:5, &#39;. subelement&#39;), &quot;Second element&quot;, list(&#39;F&#39;, &#39;B&#39;, &#39;I&#39;, c(&#39;phone&#39;, &#39;pad&#39;, &#39;talics&#39;)))
+pandoc.list(l, &#39;roman&#39;)
+%&gt;</code></pre>
+<p><code>pandoc</code> can return <strong>tables</strong> in <a href="http://johnmacfarlane.net/pandoc/README.html#tables">three formats</a>:</p>
+<ul>
+<li>The default style is the <code>multiline</code> format as most features (e.g. multi-line cells and alignment) are available in there.</li>
+</ul>
+<pre class="rout"><code>&gt; m &lt;- mtcars[1:2, 1:3]
+&gt; pandoc.table(m)
+&lt;%
+pandoc.table(mtcars[1:2, 1:3])
+%&gt;</code></pre>
+<ul>
+<li><code>simple</code> tables do not support line breaks in cells:</li>
+</ul>
+<pre class="rout"><code>&gt; pandoc.table(m, style = &quot;simple&quot;)
+&lt;%
+pandoc.table(mtcars[1:2, 1:3], style = &quot;simple&quot;)
+%&gt;</code></pre>
+<ul>
+<li><code>grid</code> format are really handy for <a href="http://emacswiki.org/emacs/TableMode">emacs</a> users but do support line breaks inside cells, but do not tolerate cell alignment:</li>
+</ul>
+<pre class="rout"><code>&gt; pandoc.table(m, style = &quot;grid&quot;)
+&lt;%
+pandoc.table(mtcars[1:2, 1:3], style = &quot;grid&quot;)
+%&gt;</code></pre>
+<p>Besides the <code>style</code> parameter there are several other ways to tweak the output like <code>decimal.mark</code> or <code>digits</code>. And of course it's really easy to add a <strong>caption</strong>:</p>
+<pre class="rout"><code>&gt; pandoc.table(m, style = &quot;grid&quot;, caption = &quot;Hello caption!&quot;)
+&lt;%
+pandoc.table(mtcars[1:2, 1:3], style = &quot;grid&quot;, caption = &#39;Hello caption!&#39;)
+%&gt;</code></pre>
+<p><code>pandoc.table</code>˙can deal with the problem of really <strong>wide tables</strong>. Ever had an issue in LaTeX or MS Word when tried to print a correlation matrix of 40 variables? Not a problem any more as <code>pandoc.table</code> splits up the table if wider then 80 characters and handles caption too:</p>
+<pre class="rout"><code>&gt; pandoc.table(mtcars[1:2, ], style = &quot;grid&quot;, caption = &quot;Hello caption!&quot;)
+&lt;%
+pandoc.table(mtcars[1:2, ], style = &quot;grid&quot;, caption = &#39;Hello caption!&#39;)
+%&gt;</code></pre>
+<h1 id="generic-pander-method">Generic pander method</h1>
+<p><code>pander</code> or <code>pandoc</code> (call as you wish) can deal with a bunch of R object types as being a pandocized <code>S3</code> method with a variety of classes.</p>
+<p>Besides simple types (vectors, matrices, tables or data frames) lists might be interesting for you:</p>
+<pre class="rout"><code>&gt; pander(list(a=1, b=2, c=table(mtcars$am), x=list(myname=1,2), 56))
+&lt;%pander(list(a=1, b=2, c=table(mtcars$am), x=list(myname=1,2), 56))%&gt;</code></pre>
+<p>A nested list can be seen above with a table and all (optional) list names inside. As a matter of fact <code>pander.list</code> is the default method of <code>pander</code> too, see:</p>
+<pre class="rout"><code>&gt; x &lt;- chisq.test(table(mtcars$am, mtcars$gear))
+&gt; class(x) &lt;- &quot;I&#39;ve never heard of!&quot;
+&gt; pander(x)
+&lt;%
+x &lt;- chisq.test(table(mtcars$am, mtcars$gear))
+class(x) &lt;- &#39;I\&#39;ve never heard of!&#39;
+pander(x)
+%&gt;</code></pre>
+<p>So <code>pander</code> showed a not known class in an (almost) user-friendly way. And we got some warnings too styled with <a href="http://johnmacfarlane.net/pandoc/README.html#footnotes">Pandoc <strong>footnote</strong></a>! If that document is exported to e.g. <code>HTML</code> or <code>pdf</code>, then the error/warning message could be found on the bottom of the page with a link. <em>Note</em>: there were two warnings in the above call - both captured and returned! Well, this is the feature of <code>Pandoc.brew</code>, see <a href="#brew-to-pandoc">below</a>.</p>
+<p>The output of different <strong>statistical methods</strong> are tried to be prettyfied. Some examples:</p>
+<pre class="rout"><code>&gt; pander(ks.test(runif(50), runif(50)))
+&lt;%pander(ks.test(runif(50), runif(50)))%&gt;
+
+&gt; pander(chisq.test(table(mtcars$am, mtcars$gear)))
+&lt;%pander(chisq.test(table(mtcars$am, mtcars$gear)))%&gt;
+
+&gt; pander(t.test(extra ~ group, data = sleep))
+&lt;%pander(t.test(extra ~ group, data = sleep))%&gt;
+
+&gt; ## Dobson (1990) Page 93: Randomized Controlled Trial (examples from: ?glm)
+&gt; counts &lt;- c(18,17,15,20,10,20,25,13,12)
+&gt; outcome &lt;- gl(3,1,9)
+&gt; treatment &lt;- gl(3,3)
+&gt; m &lt;- glm(counts ~ outcome + treatment, family=poisson())
+&gt; pander(m)
+&lt;%
+counts &lt;- c(18,17,15,20,10,20,25,13,12)
+outcome &lt;- gl(3,1,9)
+treatment &lt;- gl(3,3)
+m &lt;- glm(counts ~ outcome + treatment, family=poisson())
+pander(m)
+%&gt;
+
+&gt; pander(anova(m))
+&lt;%pander(anova(m))%&gt;
+
+&gt; pander(aov(m))
+&lt;%pander(aov(m))%&gt;
+
+&gt; pander(prcomp(USArrests))
+&lt;%pander(prcomp(USArrests))%&gt;
+
+&gt; pander(density(mtcars$hp))
+&lt;%pander(density(mtcars$hp))%&gt;
+</code></pre>
+<h1 id="brew-to-pandoc">Brew to Pandoc</h1>
+<p>Everyone knows and uses <a href="http://cran.r-project.org/web/packages/brew/index.html">brew</a> but if you would need some smack, the following links really worth visiting:</p>
+<ul>
+<li>TODO</li>
+</ul>
+<p><strong>In short</strong>: a <code>brew</code> document is a simple text file with some special tags. <code>Pandoc.brew</code> uses only two of them (sorry, no brew templates here):</p>
+<ul>
+<li><code>&lt;\% ... \%&gt;</code> (without the backslash) stand for running R calls</li>
+<li><code>&lt;\%= ... \%&gt;</code> (without the backslash) does pretty the same but applies <code>pander</code> to the returning R object (instead of <code>cat</code> like the original <code>brew</code> function does). So putting there any R object would return is a nice Pandoc markdown format.</li>
+</ul>
+<p>This latter tries to be smart in some ways:</p>
+<ul>
+<li>a block (R commands between the tags) could return a value in the middle of the block and do something else without any output in the rest (but only one returned value per block!)</li>
+<li>plots and images are grabbed in the document, rendered to a <code>png</code> file and <code>pander</code> method would result in a Pandoc markdown formatted image link (so the image would be shown/included in the exported document).</li>
+<li>all warnings/messages and errors are recorded in the blocks and returned in the document as a footnote</li>
+</ul>
+<p>This document was generated by <code>Pandoc.brew</code> based on <a href="https://github.com/daroczig/pander/blob/master/inst/README.brew"><code>inst/README.brew</code></a> so the above examples were generated automatically - which could be handy while writing some nifty statistical reports :)</p>
+<pre><code>Pandoc.brew(system.file(&#39;README.brew&#39;, package=&#39;pander&#39;))</code></pre>
+<p><code>Pandoc.brew</code> could cook a file (default) or work with a character vector provided in the <code>text</code> argument. The output is set to <code>stdout</code> by default, it could be tweaked to write result to a text file and run Pandoc on that to create a <code>HTML</code>, <code>odt</code>, <code>docx</code> or other document.</p>
+<p>To export a brewed file to other then Pandoc's markdown, please use the <code>convert</code> parameter! For example (please disregard the backslash in front of the percent sign):</p>
+<pre class="sourceCode r"><code class="sourceCode r">text &lt;- <span class="kw">paste</span>(<span class="st">&#39;# Header&#39;</span>, <span class="st">&#39;&#39;</span>, <span class="st">&#39;&lt;\%=as.list(runif(10))\%&gt;&#39;</span>, <span class="st">&#39;&lt;\%=mtcars[1:3, ]\%&gt;&#39;</span>, <span class="st">&#39;&lt;\%=plot(1:10)\%&gt;&#39;</span>, <span class="dt">sep =</span> <span class="st">&#39;</span><span class="ch">\n</span><span class="st">&#39;</span>)
+<span class="kw">Pandoc.brew</span>(<span class="dt">text =</span> text, <span class="dt">output =</span> <span class="kw">tempfile</span>(), <span class="dt">convert =</span> <span class="st">&#39;html&#39;</span>)
+<span class="kw">Pandoc.brew</span>(<span class="dt">text =</span> text, <span class="dt">output =</span> <span class="kw">tempfile</span>(), <span class="dt">convert =</span> <span class="st">&#39;pdf&#39;</span>)</code></pre>
+<p>Of course a text file could work as input (by default) the above example uses <code>text</code> parameter as a reproducible example. For example brewing this README with all R chunks run to html, pleae run:</p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">Pandoc.brew</span>(<span class="kw">system.file</span>(<span class="st">&#39;README.brew&#39;</span>, <span class="dt">package=</span><span class="st">&#39;pander&#39;</span>), <span class="dt">output =</span> <span class="kw">tempfile</span>(), <span class="dt">convert =</span> <span class="st">&#39;html&#39;</span>)
+<span class="kw">Pandoc.brew</span>(<span class="kw">system.file</span>(<span class="st">&#39;README.brew&#39;</span>, <span class="dt">package=</span><span class="st">&#39;pander&#39;</span>), <span class="dt">output =</span> <span class="kw">tempfile</span>(), <span class="dt">convert =</span> <span class="st">&#39;pdf&#39;</span>)</code></pre>
+<h2 id="examples">Examples</h2>
+<p>The package comes bundled with some examples for <code>Pandoc.brew</code> to let users check out its features pretty fast. These are:</p>
+<ul>
+<li><a href="https://github.com/daroczig/pander/blob/master/inst/examples/minimal.brew">minimal.brew</a></li>
+<li><a href="https://github.com/daroczig/pander/blob/master/inst/examples/short-code-long-report.brew">short-code-long-report.brew</a></li>
+</ul>
+<p>To <code>brew</code> these examples on your machine try to run e.g.:</p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">Pandoc.brew</span>(<span class="kw">system.file</span>(<span class="st">&#39;examples/minimal.brew&#39;</span>, <span class="dt">package=</span><span class="st">&#39;pander&#39;</span>), <span class="dt">output =</span> <span class="kw">tempfile</span>(), <span class="dt">convert =</span> <span class="st">&#39;html&#39;</span>)</code></pre>
+<p>For easy access I have uploaded the exported documents of the above examples:</p>
+<ul>
+<li>minimal.brew: <a href="#TODO">html</a></li>
+<li>short-code-long-report.brew: <a href="#TODO">html</a></li>
+</ul>
+<p>Please check out <code>pdf</code>, <code>docx</code>, <code>odt</code> and other formats (changing the above <code>convert</code> option) and do not forget to <a href="https://github.com/daroczig/pander/issues">give some feedback</a>!</p>
+<h1 id="live-report-generation">Live report generation</h1>
+<p><code>pander</code> package has a special reference class called <code>Pandoc</code> which could collect some blocks in a live R session and export the whole document to Pandoc/pdf/HTML etc.</p>
+<p>Without any serious comments, please check out the below (self-commenting) example:</p>
+<pre class="sourceCode r"><code class="sourceCode r">## Initialize a new Pandoc object
+myReport &lt;- Pandoc$<span class="kw">new</span>()
+
+## Add author, title and date of document
+myReport$author &lt;- <span class="st">&#39;Gergely Daróczi&#39;</span>
+myReport$title  &lt;- <span class="st">&#39;Demo&#39;</span>
+
+## Or it could be done while initializing
+myReport &lt;- Pandoc$<span class="kw">new</span>(<span class="st">&#39;Gergely Daróczi&#39;</span>, <span class="st">&#39;Demo&#39;</span>)
+
+## Add some free text
+myReport$<span class="kw">add.paragraph</span>(<span class="st">&#39;Hello there, this is a really short tutorial!&#39;</span>)
+
+## Add maybe a header for later stuff
+myReport$<span class="kw">add.paragraph</span>(<span class="st">&#39;# Showing some raw R objects below&#39;</span>)
+
+## Adding a short matrix
+myReport$<span class="kw">add</span>(<span class="kw">matrix</span>(<span class="dv">5</span>,<span class="dv">5</span>,<span class="dv">5</span>))
+
+## Or a table with even
+myReport$<span class="kw">add.paragraph</span>(<span class="st">&#39;Hello table:&#39;</span>)
+myReport$<span class="kw">add</span>(<span class="kw">table</span>(mtcars$am, mtcars$gear))
+
+## Or a &quot;large&quot; dataframe which barely fits on a page
+myReport$<span class="kw">add</span>(mtcars)
+
+## And a simple linear model with Anova tables
+ml &lt;- <span class="kw">with</span>(<span class="kw">lm</span>(mpg ~ hp + wt), <span class="dt">data =</span> mtcars)
+myReport$<span class="kw">add</span>(ml)
+myReport$<span class="kw">add</span>(<span class="kw">anova</span>(ml))
+myReport$<span class="kw">add</span>(<span class="kw">aov</span>(ml))
+
+## And do some principal component analysis at last
+myReport$<span class="kw">add</span>(<span class="kw">prcomp</span>(USArrests))
+
+## Sorry, I did not show how Pandoc deals with plots:
+myReport$<span class="kw">add</span>(<span class="kw">plot</span>(<span class="dv">1</span>:<span class="dv">10</span>))
+
+## Want to see the report? Just print it:
+myReport
+
+## Exporting to pdf (default)
+myReport$<span class="kw">export</span>()
+
+## Or to docx in tempdir():
+myReport$format &lt;- <span class="st">&#39;docx&#39;</span>
+myReport$<span class="kw">export</span>(<span class="kw">tempfile</span>())
+
+## You do not want to see the generated report after generation?
+myReport$<span class="kw">export</span>(<span class="dt">open =</span> <span class="ot">FALSE</span>)</code></pre>
+<hr />
+<p>This report was generated with <a href="http://www.r-project.org/">R</a> (2.15.0) and <a href="https://github.com/daroczig/pander">pander</a> (0.1) in 0.065 sec on x86_64-unknown-linux-gnu platform.</p>
+<p align="center">
+  Design: <a href="https://github.com/aL3xa/rapport"><i>rapport</i> Development Team</a> &copy; 2012 | Backend: <a href="https://github.com/daroczig/pander">pander</a> | License: <a href="http://www.gnu.org/licenses/agpl.html" target="_blank">AGPL3</a> | Styled with <a href="http://www.getskeleton.com/" target="_blank">skeleton</a>
+</p>
+</body>
+</html>
