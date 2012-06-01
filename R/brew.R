@@ -56,7 +56,7 @@ Pandoc.brew <- function(file = stdin(), output = stdout(), convert = FALSE, open
     Pandoc.evals <- function(..., envir = parent.frame()) {
         #return(capture.output(str(list(...))))
         src <- list(...)
-        r <- evals(src, env = envir)[[1]]
+        r <- evals(src, env = envir, graph.dir = graph.dir)[[1]]
         o <- pander(r$output)
         if (!is.null(r$msg$error))
             o <- paste0(o, ' **ERROR**', pandoc.footnote.return(r$msg$errors))
