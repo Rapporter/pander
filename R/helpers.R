@@ -615,7 +615,7 @@ pandoc.table.return <- function(t, caption = NULL, digits = 2, decimal.mark = '.
 
         ## header
         if (length(t.colnames) != 0) {
-            res <- paste(res, sep.top, table.expand(t.colnames, t.width, justify[1], sep.col), sep.hdr, sep = '\n')
+            res <- paste(res, sep.top, table.expand(t.colnames, t.width, justify, sep.col), sep.hdr, sep = '\n')
         } else {
             res <- paste(res, sep.top, sep = '\n')
         }
