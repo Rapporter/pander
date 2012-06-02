@@ -56,8 +56,9 @@ code > span.er { color: #ff0000; font-weight: bold; }
 <h1 class="title"><a href="https://github.com/daroczig/pander">pander: An R Pandoc writer</a></h1>
 </div>
 <p><strong>pander</strong> is an <a href="http://r-project.org">R</a> package containing <a href="#helper-functions">helpers</a> to return <a href="http://johnmacfarlane.net/pandoc/">Pandoc</a> markdown of user specified format or <em>automatically</em> of several type of <a href="#generic-pander-method"><strong>R objects</strong></a>.</p>
-<p>The package is also capable of exporting/converting complex Pandoc documents (reports) in two ways ATM:</p>
+<p>The package is also capable of exporting/converting complex Pandoc documents (reports) in three ways ATM:</p>
 <ul>
+<li><p>create somehow a markdown text file (e.g. with <code>brew</code>, <code>knitr</code> or any scripts of yours, maybe with <code>Pandoc.brew</code> - see just below) and transform that to other formats (like HTML, odt, pdf, docx etc.) with <code>Pandoc.convert</code></p></li>
 <li><p>users might write some reports in <a href="http://cran.r-project.org/web/packages/brew/index.html">brew</a> syntax resulting in a pretty <em>Pandoc</em> document (where <code>cat</code>ed R object are transformed to table, list etc.) and also in a <strong>bunch of formats</strong> automatically.</p>
 <p><em>Example</em>: this <a href="https://github.com/daroczig/pander/blob/master/README.md"><code>README.md</code></a> is cooked with <code>Pandoc.brew</code> based on <a href="https://github.com/daroczig/pander/blob/master/inst/README.brew"><code>inst/README.brew</code></a> and also exported to <a href="http://daroczig.github.com/pander/">HTML</a>. Details can be found <a href="#brew-to-pandoc">below</a> or head directly to <a href="#examples">examples</a>.</p></li>
 </ul>
@@ -72,7 +73,7 @@ code > span.er { color: #ff0000; font-weight: bold; }
 <li>based on the above <em>no &quot;traditional&quot; R console output</em> is shown in the resulting document (nor in markdown, nor in exported docs) but <strong>all R objects are transformed to tables, list etc</strong>.</li>
 <li><em>graphs/plots</em> are recognized in blocks of R commands without any special setting or marks around code block and saved to disk in a <code>png</code> file linked in the resulting document. This means if you create a report (e.g. <code>brew</code> a text file) and export it to pdf/docx etc. all the plots/images would be there.</li>
 <li>can use <code>brew</code>'s caching mechanism</li>
-<li><code>knitr</code> <em>support</em> is coming too, for details see my <a href="https://github.com/daroczig/pander/blob/master/TODO.md">TODO list</a></li>
+<li><code>knitr</code> <em>support</em> is coming too, for details see my <a href="https://github.com/daroczig/pander/blob/master/TODO.md">TODO list</a> <strong>Update</strong>: just use <code>knitr</code> to generate markdown and pass that to <code>Pandoc.convert</code></li>
 </ul>
 <h1 id="installation">Installation</h1>
 <p>Currently, this package is hosted only on <a href="https://github.com/daroczig/pander">GitHub</a>.</p>
@@ -276,7 +277,7 @@ myReport$<span class="kw">export</span>(<span class="kw">tempfile</span>())
 ## You do not want to see the generated report after generation?
 myReport$<span class="kw">export</span>(<span class="dt">open =</span> <span class="ot">FALSE</span>)</code></pre>
 <hr />
-<p>This report was generated with <a href="http://www.r-project.org/">R</a> (2.15.0) and <a href="https://github.com/daroczig/pander">pander</a> (0.1) in 0.058 sec on x86_64-unknown-linux-gnu platform.</p>
+<p>This report was generated with <a href="http://www.r-project.org/">R</a> (2.15.0) and <a href="https://github.com/daroczig/pander">pander</a> (0.1) in 0.066 sec on x86_64-unknown-linux-gnu platform.</p>
 <p align="center">
   Design: <a href="https://github.com/aL3xa/rapport"><i>rapport</i> Development Team</a> &copy; 2012 | Backend: <a href="https://github.com/daroczig/pander">pander</a> | License: <a href="http://www.gnu.org/licenses/agpl.html" target="_blank">AGPL3</a> | Styled with <a href="http://www.getskeleton.com/" target="_blank">skeleton</a>
 </p>
