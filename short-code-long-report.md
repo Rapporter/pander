@@ -1,6 +1,6 @@
 % Gergely Daróczi
 % Looong report
-% Sat Jun  2 12:46:55 2012
+% Sat Jun  2 23:21:35 2012
 
 I have written the below report in 10 mins :)
 
@@ -147,31 +147,31 @@ Volvo 142E          19     1    1    4      2
 
 # Descriptives
 
--------------------------------------------------------------
-Variable   Average   Median   Standard deviation   Variance  
----------- --------- -------- -------------------- ----------
-mpg        20.09     19.2     6.03                 3.6e+01   
+-------------------------------------------------------
+     Average   Median   Standard.deviation   Variance  
+---- --------- -------- -------------------- ----------
+mpg  20.09     19.2     6.03                 3.6e+01   
 
-cyl        6.19      6.0      1.79                 3.2e+00   
+cyl  6.19      6.0      1.79                 3.2e+00   
 
-disp       230.72    196.3    123.94               1.5e+04   
+disp 230.72    196.3    123.94               1.5e+04   
 
-hp         146.69    123.0    68.56                4.7e+03   
+hp   146.69    123.0    68.56                4.7e+03   
 
-drat       3.60      3.7      0.53                 2.9e-01   
+drat 3.60      3.7      0.53                 2.9e-01   
 
-wt         3.22      3.3      0.98                 9.6e-01   
+wt   3.22      3.3      0.98                 9.6e-01   
 
-qsec       17.85     17.7     1.79                 3.2e+00   
+qsec 17.85     17.7     1.79                 3.2e+00   
 
-vs         0.44      0.0      0.50                 2.5e-01   
+vs   0.44      0.0      0.50                 2.5e-01   
 
-am         0.41      0.0      0.50                 2.5e-01   
+am   0.41      0.0      0.50                 2.5e-01   
 
-gear       3.69      4.0      0.74                 5.4e-01   
+gear 3.69      4.0      0.74                 5.4e-01   
 
-carb       2.81      2.0      1.62                 2.6e+00   
--------------------------------------------------------------
+carb 2.81      2.0      1.62                 2.6e+00   
+-------------------------------------------------------
 
 ## In details
 
@@ -577,10 +577,10 @@ A simple linear model: `mtcars$wt ~ mtcars$mpg`
 ----------- ---------- ------------ --------- ----------
 (Intercept)  6.0e+00     3.1e-01     2.0e+01   1.2e-18  
 
-  Dependent  -1.4e-01    1.5e-02    -9.6e+00   1.3e-10  
+Independent  -1.4e-01    1.5e-02    -9.6e+00   1.3e-10  
 --------------------------------------------------------
 
-Table: Fitting linear model: mtcars$wt ~ Dependent
+Table: Fitting linear model: mtcars$wt ~ Independent
 
 ### cyl
 
@@ -591,10 +591,10 @@ A simple linear model: `mtcars$wt ~ mtcars$cyl`
 ----------- ---------- ------------ --------- ----------
 (Intercept)  5.6e-01     4.0e-01     1.4e+00   1.7e-01  
 
-  Dependent  4.3e-01     6.2e-02     6.9e+00   1.2e-07  
+Independent  4.3e-01     6.2e-02     6.9e+00   1.2e-07  
 --------------------------------------------------------
 
-Table: Fitting linear model: mtcars$wt ~ Dependent
+Table: Fitting linear model: mtcars$wt ~ Independent
 
 ### disp
 
@@ -605,10 +605,10 @@ A simple linear model: `mtcars$wt ~ mtcars$disp`
 ----------- ---------- ------------ --------- ----------
 (Intercept)  1.6e+00     1.7e-01     9.2e+00   2.7e-10  
 
-  Dependent  7.0e-03     6.6e-04     1.1e+01   1.2e-11  
+Independent  7.0e-03     6.6e-04     1.1e+01   1.2e-11  
 --------------------------------------------------------
 
-Table: Fitting linear model: mtcars$wt ~ Dependent
+Table: Fitting linear model: mtcars$wt ~ Independent
 
 ### hp
 
@@ -619,10 +619,10 @@ A simple linear model: `mtcars$wt ~ mtcars$hp`
 ----------- ---------- ------------ --------- ----------
 (Intercept)  1.8e+00     3.2e-01     5.8e+00   2.4e-06  
 
-  Dependent  9.4e-03     2.0e-03     4.8e+00   4.1e-05  
+Independent  9.4e-03     2.0e-03     4.8e+00   4.1e-05  
 --------------------------------------------------------
 
-Table: Fitting linear model: mtcars$wt ~ Dependent
+Table: Fitting linear model: mtcars$wt ~ Independent
 
 ### drat
 
@@ -633,10 +633,10 @@ A simple linear model: `mtcars$wt ~ mtcars$drat`
 ----------- ---------- ------------ --------- ----------
 (Intercept)  7.9e+00     8.5e-01     9.3e+00   2.5e-10  
 
-  Dependent  -1.3e+00    2.3e-01    -5.6e+00   4.8e-06  
+Independent  -1.3e+00    2.3e-01    -5.6e+00   4.8e-06  
 --------------------------------------------------------
 
-Table: Fitting linear model: mtcars$wt ~ Dependent
+Table: Fitting linear model: mtcars$wt ~ Independent
 
 ### qsec
 
@@ -647,10 +647,10 @@ A simple linear model: `mtcars$wt ~ mtcars$qsec`
 ----------- ---------- ------------ --------- ----------
 (Intercept)   4.9248      1.7654     2.7896     0.0091  
 
-  Dependent  -0.0957      0.0984     -0.9719    0.3389  
+Independent  -0.0957      0.0984     -0.9719    0.3389  
 --------------------------------------------------------
 
-Table: Fitting linear model: mtcars$wt ~ Dependent
+Table: Fitting linear model: mtcars$wt ~ Independent
 
 ### vs
 
@@ -661,10 +661,10 @@ A simple linear model: `mtcars$wt ~ mtcars$vs`
 ----------- ---------- ------------ --------- ----------
 (Intercept)  3.7e+00     2.0e-01     1.9e+01   3.2e-18  
 
-  Dependent  -1.1e+00    2.9e-01    -3.7e+00   9.8e-04  
+Independent  -1.1e+00    2.9e-01    -3.7e+00   9.8e-04  
 --------------------------------------------------------
 
-Table: Fitting linear model: mtcars$wt ~ Dependent
+Table: Fitting linear model: mtcars$wt ~ Independent
 
 ### am
 
@@ -675,10 +675,10 @@ A simple linear model: `mtcars$wt ~ mtcars$am`
 ----------- ---------- ------------ --------- ----------
 (Intercept)  3.8e+00     1.6e-01     2.3e+01   1.5e-20  
 
-  Dependent  -1.4e+00    2.6e-01    -5.3e+00   1.1e-05  
+Independent  -1.4e+00    2.6e-01    -5.3e+00   1.1e-05  
 --------------------------------------------------------
 
-Table: Fitting linear model: mtcars$wt ~ Dependent
+Table: Fitting linear model: mtcars$wt ~ Independent
 
 ### gear
 
@@ -689,10 +689,10 @@ A simple linear model: `mtcars$wt ~ mtcars$gear`
 ----------- ---------- ------------ --------- ----------
 (Intercept)  6.1e+00     7.4e-01     8.2e+00   3.6e-09  
 
-  Dependent  -7.7e-01    2.0e-01    -3.9e+00   4.6e-04  
+Independent  -7.7e-01    2.0e-01    -3.9e+00   4.6e-04  
 --------------------------------------------------------
 
-Table: Fitting linear model: mtcars$wt ~ Dependent
+Table: Fitting linear model: mtcars$wt ~ Independent
 
 ### carb
 
@@ -703,12 +703,12 @@ A simple linear model: `mtcars$wt ~ mtcars$carb`
 ----------- ---------- ------------ --------- ----------
 (Intercept)  2.5e+00     3.2e-01     7.7e+00   1.4e-08  
 
-  Dependent  2.6e-01     1.0e-01     2.6e+00   1.5e-02  
+Independent  2.6e-01     1.0e-01     2.6e+00   1.5e-02  
 --------------------------------------------------------
 
-Table: Fitting linear model: mtcars$wt ~ Dependent
+Table: Fitting linear model: mtcars$wt ~ Independent
 
 
 
 -------
-This report was generated with [R](http://www.r-project.org/) (2.15.0) and [pander](https://github.com/daroczig/pander) (0.1) in 17.245 sec on x86_64-unknown-linux-gnu platform.
+This report was generated with [R](http://www.r-project.org/) (2.15.0) and [pander](https://github.com/daroczig/pander) (0.1) in 16.821 sec on x86_64-unknown-linux-gnu platform.
