@@ -238,7 +238,7 @@ Pandoc.brew(system.file('examples/minimal.brew', package='pander'), output = tem
 For easy access I have uploaded some exported documents of the above examples:
 
   * minimal.brew: [markdown](minimal.md) [html](http://daroczig.github.com/pander/minimal.html) [pdf](http://daroczig.github.com/pander/minimal.pdf) [odt](http://daroczig.github.com/pander/minimal.odt) [docx](http://daroczig.github.com/pander/minimal.docx)
-  * short-code-long-report.brew: [markdown](http://daroczig.github.com/pander/short-code-long.report.md) [html](http://daroczig.github.com/pander/short-code-long-report.html) [pdf](http://daroczig.github.com/pander/short-code-long-report.pdf) [odt](http://daroczig.github.com/pander/short-code-long-report.odt) [docx](http://daroczig.github.com/pander/short-code-long-report.docx)
+  * short-code-long-report.brew: [markdown](http://daroczig.github.com/pander/short-code-long-report.md) [html](http://daroczig.github.com/pander/short-code-long-report.html) [pdf](http://daroczig.github.com/pander/short-code-long-report.pdf) [odt](http://daroczig.github.com/pander/short-code-long-report.odt) [docx](http://daroczig.github.com/pander/short-code-long-report.docx)
 
 Please check out `pdf`, `docx`, `odt` and other formats (changing the above `convert` option) on your machine too and do not forget to [give some feedback](https://github.com/daroczig/pander/issues)!
 
@@ -302,4 +302,4 @@ myReport$export(open = FALSE)
 ```
 
 -------
-This report was generated with [R](http://www.r-project.org/) (2.15.0) and [pander](https://github.com/daroczig/pander) (0.1) in 0.077 sec on x86_64-unknown-linux-gnu platform.
+This report was generated with [R](http://www.r-project.org/) (2.15.0) and [pander](https://github.com/daroczig/pander) (0.1) in 0.058 sec on x86_64-unknown-linux-gnu platform.
