@@ -4,10 +4,10 @@ Title: An R pandoc writer
 Type: Package
 Encoding: UTF-8
 Description: Contains helpers to return of user specified text elements (like:
-    header, paragraph, table, image, lists etc.) in pandoc markdown or several
+    header, paragraph, table, image, lists etc.) in Pandoc's markdown or several
     type of R objects similarly prettified (like: dealing with "too wide"
     tables and splitting those up etc.). Also capable of exporting/converting
-    complex pandoc documents (reports).
+    complex Pandoc documents (reports).
 Author: Gergely Daróczi <gergely@snowl.net>
 Version: 0.1
 Date: 2012-05-22
