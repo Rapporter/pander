@@ -9,6 +9,7 @@
   * ~~add installation details + Pandoc dependency~~
   * ~~add example files and html/pdf/docx exports~~
   * ~~add absolute path to examples (as view from two locations)~~
+  * ~~remove `rapport` dependency~~
 
 ## Github pages
 
