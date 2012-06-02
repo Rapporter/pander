@@ -2,7 +2,9 @@
 
 **pander** is an [R](http://r-project.org) package containing [helpers](#helper-functions) to return [Pandoc](http://johnmacfarlane.net/pandoc/) markdown of user specified format or *automatically* of several type of [**R objects**](#generic-pander-method).
 
-The package is also capable of exporting/converting complex Pandoc documents (reports) in two ways ATM:
+The package is also capable of exporting/converting complex Pandoc documents (reports) in three ways ATM:
+
+  * create somehow a markdown text file (e.g. with `brew`, `knitr` or any scripts of yours, maybe with `Pandoc.brew` - see just below) and transform that to other formats (like HTML, odt, pdf, docx etc.) with `Pandoc.convert`
 
   * users might write some reports in [brew](http://cran.r-project.org/web/packages/brew/index.html) syntax resulting in a pretty *Pandoc* document (where `cat`ed R object are transformed to table, list etc.) and also in a **bunch of formats** automatically.
 
@@ -18,7 +20,7 @@ The package is also capable of exporting/converting complex Pandoc documents (re
   * based on the above *no "traditional" R console output* is shown in the resulting document (nor in markdown, nor in exported docs) but **all R objects are transformed to tables, list etc**.
   * *graphs/plots* are recognized in blocks of R commands without any special setting or marks around code block and saved to disk in a `png` file linked in the resulting document. This means if you create a report (e.g. `brew` a text file) and export it to pdf/docx etc. all the plots/images would be there.
   * can use `brew`'s caching mechanism
-  * `knitr` *support* is coming too, for details see my [TODO list](https://github.com/daroczig/pander/blob/master/TODO.md)
+  * `knitr` *support* is coming too, for details see my [TODO list](https://github.com/daroczig/pander/blob/master/TODO.md) **Update**: just use `knitr` to generate markdown and pass that to `Pandoc.convert`
 
 # Installation
 
