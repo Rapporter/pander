@@ -78,3 +78,7 @@
 
   * implement it: `Pandoc.knitr`
   * create `knitr` hooks which would apply `pander` to each R object
+
+### Tests
+
+  * do that at last!

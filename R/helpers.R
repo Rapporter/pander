@@ -40,7 +40,6 @@ rep.char <- function(x, n, sep = '')
 #' @param x vector
 #' @return character string
 #' @references Credit goes to Aleksandar Blagotić for the idea and implementation in rapport package. \url{http://github.com/aL3xa/rapport/blob/master/R/rp_helpers.R}
-#' @export
 #' @examples
 #' p(1:5)
 p <- function(x) {

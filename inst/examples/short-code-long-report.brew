@@ -15,7 +15,7 @@ mtcars
 # Descriptives
 
 <%=
-rapport::rp.desc(names(mtcars), data = mtcars, fn = c("Average" = mean, "Median" = median, "Standard deviation" = sd, "Variance" = var))
+data.frame("Average" = sapply(mtcars, mean), "Median" = sapply(mtcars, median), "Standard deviation" = sapply(mtcars, sd), "Variance" = sapply(mtcars, var))
 %>
 
 ## In details
@@ -41,6 +41,7 @@ table(mtcars[, v])
 Tables are boring, let us show the same with a `histogram`:
 
 <%=
+require(lattice)
 histogram(mtcars[, v], xlab = v, col = sample(colors(), 1))
 %>
 
@@ -59,7 +60,7 @@ cor(mtcars)
 And the same on a graph:
 
 <%=
-I.have.time <- FALSE
+I.have.time <- TRUE
 if (I.have.time)
    pairs(mtcars)
 %>
@@ -81,8 +82,8 @@ for (v in names(mtcars)[-6]) {
 A simple linear model: `mtcars$wt ~ mtcars$<%=v%>`
 
 <%=
-Dependent <- mtcars[, v]
-lm(mtcars$wt ~ Dependent)
+Independent <- mtcars[, v]
+lm(mtcars$wt ~ Independent)
 %>
 
 <%

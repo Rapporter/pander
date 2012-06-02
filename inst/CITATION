@@ -1,4 +1,4 @@
-if(!exists("meta") || is.null(meta)) meta <- packageDescription("rapport")
+if(!exists("meta") || is.null(meta)) meta <- packageDescription("pander")
 citHeader("To cite package 'pandoc' in publications, please use:")
 year <- format(as.Date(meta$Date), '%Y')
 vers <- paste("R package version", meta$Version)

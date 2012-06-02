@@ -50,9 +50,7 @@ Pandoc.convert <- function(f, format = 'html', open = TRUE, options = '', footer
     if (format == 'html') {
         portable.dirs <- c('fonts', 'images', 'javascripts', 'stylesheets')
         for (portable.dir in portable.dirs)
-            file.copy(system.file(sprintf('includes/%s', portable.dir), package='rapport'), dirname(f), recursive  = TRUE)
-        ## updated custom.js
-        file.copy(system.file('includes/javascripts/custom.js', package='pander'), file.path(dirname(f), 'javascripts'), overwrite = TRUE)
+            file.copy(system.file(sprintf('includes/%s', portable.dir), package='pander'), dirname(f), recursive  = TRUE)
         if (options == '')
             options <- sprintf('-H "%s" -A "%s"', system.file('includes/html/header.html', package='pander'), system.file('includes/html/footer.html', package='pander'))
     } else {

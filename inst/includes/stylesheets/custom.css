@@ -1,0 +1,282 @@
+/* Custom stuff */
+
+body {
+    font-family: 'DroidSansRegular', sans-serif;
+}
+
+header {
+    margin: 20px 0;
+}
+
+h1, h2, h3, h4, h5, h6, .subtitle {
+    color: #383336;
+    font-family: 'DroidSansBold', sans-serif;
+    margin: 0 0 15px;
+}
+
+.subtitle {
+    font-size: 21pt;
+}
+
+.content {
+    text-align: justify;
+}
+
+.content a {
+    color: #0099D9;
+    text-decoration: none;
+}
+
+.content a:hover {
+    text-decoration: underline;
+}
+
+.highlight, code {
+    font-family: 'DroidSansMono', monospace;
+    background-color: #F5F5F5;
+    border: solid 1px #DDD;
+}
+
+.highlight code {
+    border: none;
+    padding: 0;
+}
+
+.highlight {
+    margin: 0 0 20px;
+    padding: 10px;
+    overflow: auto;
+}
+
+code {
+    padding: 0 5px;
+}
+
+pre code {
+    border: none;
+    background-color: transparent;   
+    padding: 0px;
+}
+
+pre {
+    background-color: #F5F5F5;
+    border: solid 1px #DDD;
+    padding: 5px;
+    margin: 0 0 20px;
+    overflow: auto;
+}
+
+nav {
+    height: 85%;
+    overflow: auto;
+    position: fixed;
+    width: 160px;
+}
+
+nav a {
+    color: #383336;
+    font-weight: bold;
+    text-decoration: none;
+}
+
+nav a:hover {
+    color: #0099D9;
+}
+
+
+/* Captions */
+caption, p.caption {
+    text-align: center;
+    font-style: italic;
+}
+
+
+/* Figure centering */
+div.figure {
+    text-align: center;
+    overflow: auto;
+}
+
+div.figure img {
+    margin: 0 auto;
+}
+
+div.figure p.caption {
+    margin: 15px 0 0 0;
+}
+
+
+/* Nested navigation */
+
+/* this shouldn't happen, but still... */
+.nnav-1 {
+    display: none;              /* a bit radical approach*/
+}
+
+.nnav-2 {
+    padding: 0;
+}
+
+.nnav-3 {
+    margin: -10px 0 12px;
+    padding: 0 0 0 10px;
+}
+
+.nnav-4 {
+    margin: -10px 0 12px;
+    padding: 0 0 0 20px;
+}
+
+.nnav-5 {
+    margin: -10px 0 12px;
+    padding: 0 0 0 30px;
+}
+
+.nnav-6 {
+    margin: -10px 0 12px;
+    padding: 0 0 0 40px;
+}
+
+#logo {
+    margin: 20px 0;
+}
+
+.noimg-link {
+    font-size: 2em;
+    font-weight: bold;
+}
+
+ul.tabs li {
+    margin-left: 2px;
+}
+
+ul.tabs li a.active {
+    color: #383336;
+    font-weight: bold;
+    text-decoration: none;
+}
+
+.content li {
+    list-style-type:circle;
+    margin-left: 60px;
+}
+
+.contact {
+    color: #383336;
+    font-family: DroidSans;
+    font-size: 1.5em;
+    font-weight: bold;
+}
+
+
+/* Table styling */
+.table-container {
+    margin: 0 0 20px 0;
+    max-height: 500px;
+    overflow: auto;
+    text-align: center;
+    width: 100%;
+}
+
+table {
+    background: none repeat scroll 0 0 #0099D9;
+    border-radius: 8px;
+    margin: 0 auto;
+}
+
+table caption {
+    margin: 0 0 15px 0;
+}
+
+th {
+    padding: 4px 10px;
+}
+
+th * {
+    color: #FFFFFF;
+}
+
+tbody tr:nth-child(even) {
+    background-color: #FDFDFD;
+}
+
+tbody tr:nth-child(odd) {
+    background-color: #EDEDEE;
+}
+
+td {
+    border: 1px solid #FFFFFF;
+    padding: 2px 10px;
+    min-width: 50px;
+}
+
+
+/* Math container */
+.math-container {
+    text-align: center;
+}
+
+.math-container span.math {
+    margin: 0 auto;
+}
+
+/* Mobile */
+
+@media only screen and (max-width: 767px) {
+    header h1 { font-size: 34px; line-height: 37px; }
+    nav { position: relative; }
+    nav ul,
+    #influads_block {
+        display: none;
+    }
+    #logo { text-align: left; }
+    #examples .four.columns {
+        padding-top: 30px;
+    }
+}
+
+/* Mobile Landscape */
+@media only screen and (min-width: 480px) and (max-width: 767px) {
+    nav ul {
+        display: none;
+    }
+}
+
+/* Non 960 */
+@media only screen and (max-width: 959px) {
+    #logo {
+        font-size: 21px;
+        margin-bottom: 15px; }
+    nav .button {
+        padding: 9px 20px 11px; }
+}
+
+/* iPad Portrait/Browser */
+@media only screen and (min-width: 768px) and (max-width: 959px) {
+    nav {
+        width: 124px; }
+}
+
+/* Mobile/Browser */
+@media only screen and (max-width: 767px) {}
+
+/* Mobile Landscape/Browser */
+@media only screen and (min-width: 480px) and (max-width: 767px) {}
+
+/* Anything smaller than standard 960 */
+@media only screen and (max-width: 959px) {}
+
+
+/* iPad Portrait Only */
+@media only screen and (min-width: 768px) and (max-width: 959px) and (max-device-width: 1000px) {}
+
+/* Mobile Only */
+@media only screen and (max-width: 767px) and (max-device-width: 1000px) {}
+
+/* Mobile Landscape Only */
+@media only screen and (min-width: 480px) and (max-width: 767px) and (max-device-width: 1000px) {}
+
+/* Anything smaller than standard 960 on a device */
+@media only screen and (max-width: 959px) and (max-device-width: 1000px) {
+    .resize { display: none; }
+}
