@@ -14,6 +14,10 @@
 
   * add absolute path to examples (as view from two locations)
 
+## Examples
+
+  * do not forget about switching `I.have.time` to `TRUE` before exporting to Github pages
+
 ## Vignette
 
   * TODO
@@ -39,7 +43,6 @@
 ### Calling Pandoc (converting docs)
 
   * ~~update footer (currently shows: rapport)~~
-  * **remove image absolute path**
   * add templates for different formats
   * add option to change rendering backend's name (like: pander -> rapport with version number)
 
@@ -58,6 +61,8 @@
 ## Brew
 
   * ~~check out image directory (should be `getwd()/images`)~~
+  * ~~remove image absolute path~~
+  * name images to `output` + index no.
   * ~~exporting features?~~
   * option to convert document to multiple formats at once (although with caching it's no so bad even now)
 
@@ -67,6 +72,7 @@
   * ~~remove multiple line breaks, see: `remove.extra.newlines()`~~
   * ~~open exported docs~~
   * add caption to images/tables (using `attrs`?)
+  * tweak `evals` like in `Pandoc.brew`
 
 ## Add support for `knitr`
 

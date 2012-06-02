@@ -68,8 +68,11 @@ Pandoc.convert <- function(f, format = 'html', open = TRUE, options = '', footer
         if (!grepl('This report was generated', tail(readLines(f, warn = FALSE), 1)))
             cat(sprintf('\n\n-------\nThis report was generated with [R](http://www.r-project.org/) (%s) and [pander](https://github.com/daroczig/pander) (%s)%son %s platform.', sprintf('%s.%s', R.version$major, R.version$minor), packageDescription("pander")$Version, ifelse(missing(proc.time), ' ', sprintf(' in %s sec ', format(proc.time))), R.version$platform), file = f, append = TRUE)
 
-    ## call Pandoc
+    ## call Pandoc in specified dir and reset wd
+    wd <- getwd()
+    setwd(dirname(f))
     res <- suppressWarnings(tryCatch(system(sprintf('pandoc -s %s %s -o %s', options, shQuote(f), shQuote(f.out)), intern=T), error=function(e) e))
+    setwd(wd)
 
     ## open
     if (open)

@@ -80,6 +80,10 @@ Pandoc.brew <- function(file = stdin(), output = stdout(), convert = FALSE, open
 
     res <- capture.output(brew(text = text, envir = envir))
 
+    ## remove absolute path from image links
+    if (!output.stdout)
+        res <- gsub(sprintf(']\\(%s/', dirname(output)), ']\\(', res)
+
     cat(remove.extra.newlines(paste(res, collapse = '\n')), file = output)
 
     if (is.character(convert))
