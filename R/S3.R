@@ -88,7 +88,7 @@ pander.logical <- function(x, ...)
     return(as.character(x))
 
 #' @S3method pander image
-pander.image <- function(x, caption = NULL, ...)
+pander.image <- function(x, caption = attr(x, 'caption'), ...)
     pandoc.image(as.character(x), caption)
 
 #' @S3method pander table
