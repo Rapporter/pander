@@ -8,11 +8,11 @@
 
   * ~~add installation details + Pandoc dependency~~
   * ~~add example files and html/pdf/docx exports~~
-  * add absolute path to examples (as view from two locations)
+  * ~~add absolute path to examples (as view from two locations)~~
 
 ## Github pages
 
-  * add absolute path to examples (as view from two locations)
+  * ~~add absolute path to examples (as view from two locations)~~
 
 ## Examples
 
@@ -62,7 +62,7 @@
 
   * ~~check out image directory (should be `getwd()/images`)~~
   * ~~remove image absolute path~~
-  * name images to `output` + index no.
+  * ~~prettify image names to `output` + index no.~~
   * ~~exporting features?~~
   * option to convert document to multiple formats at once (although with caching it's no so bad even now)
 
