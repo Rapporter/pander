@@ -43,10 +43,14 @@ Pandoc.brew <- function(file = stdin(), output = stdout(), convert = FALSE, open
         if (output.stdout)
             stop('A file name should be provided while converting a document.')
 
-    if (!output.stdout)
-        graph.dir <- file.path(dirname(output), 'plots')
-    else
-        graph.dir <- 'plots'
+    if (!output.stdout) {
+        basedir    <- dirname(output)
+        graph.name <- paste0(basename(output), '-%n')
+        graph.dir  <- file.path(basedir, 'plots')
+    } else {
+        graph.name <- '%t'
+        graph.dir  <- 'plots'
+    }
 
     if (is.null(text))
         text <- paste(readLines(file, warn = FALSE), collapse = '\n')
@@ -56,7 +60,7 @@ Pandoc.brew <- function(file = stdin(), output = stdout(), convert = FALSE, open
     Pandoc.evals <- function(..., envir = parent.frame()) {
         #return(capture.output(str(list(...))))
         src <- list(...)
-        r <- evals(src, env = envir, graph.dir = graph.dir)[[1]]
+        r <- evals(src, env = envir, graph.dir = graph.dir, graph.name = graph.name)[[1]]
         o <- pander(r$output)
         if (!is.null(r$msg$error))
             o <- paste0(o, ' **ERROR**', pandoc.footnote.return(r$msg$errors))
@@ -82,7 +86,7 @@ Pandoc.brew <- function(file = stdin(), output = stdout(), convert = FALSE, open
 
     ## remove absolute path from image links
     if (!output.stdout)
-        res <- gsub(sprintf(']\\(%s/', dirname(output)), ']\\(', res)
+        res <- gsub(sprintf(']\\(%s/', basedir), ']\\(', res)
 
     cat(remove.extra.newlines(paste(res, collapse = '\n')), file = output)
 
