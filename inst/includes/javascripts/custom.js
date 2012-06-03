@@ -70,7 +70,7 @@ $(document).ready(function() {
     $content.find('span.math').parent().wrap('<div class="math-container" />');
 
     // handling img captions
-    $('img').jcaption();
+    $('img[alt]').jcaption();
 
     // add title tags to imgs
     $('img').each(function() {$(this).attr('title', $(this).attr('alt'))});
@@ -100,4 +100,4 @@ $(window).load(function() {
 	return [el.parentNode.href, el.title];
     });
 
-})
+});
