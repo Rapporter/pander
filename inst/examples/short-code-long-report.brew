@@ -60,7 +60,7 @@ cor(mtcars)
 And the same on a graph:
 
 <%=
-I.have.time <- TRUE
+I.have.time <- FALSE
 if (I.have.time)
    pairs(mtcars)
 %>
@@ -89,3 +89,7 @@ lm(mtcars$wt ~ Independent)
 <%
 }
 %>
+
+
+-------
+This report was generated with [R](http://www.r-project.org/) (2.15.0) and [pander](https://github.com/daroczig/pander) (0.1) on x86_64-unknown-linux-gnu platform.

@@ -33,6 +33,11 @@
   * **add controllable, global options**
   * **add caption/other tweaks to images/tables using `attrs`**
 
+## Evals
+
+  * cleanup code from repeating code (like: `suppressMessages(suppressWarnings(...)))`)
+  * remove `evaluate` dependency
+
 ## Helper functions
 
   * ~~"p" from rapport: modify defaults, fork it~~
