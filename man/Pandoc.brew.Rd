@@ -3,8 +3,8 @@
 \title{Brew in pandoc format}
 \usage{
   Pandoc.brew(file = stdin(), output = stdout(),
-    convert = FALSE, open = TRUE, text = NULL,
-    envir = new.env())
+    convert = FALSE, open = TRUE, graph.hi.res = FALSE,
+    text = NULL, envir = new.env())
 }
 \arguments{
   \item{file}{file path of the brew template}
@@ -18,6 +18,9 @@
 
   \item{open}{try to open converted document with operating
   system's default program}
+
+  \item{graph.hi.res}{render high resolution images of
+  plots?}
 
   \item{text}{character vector (treated as the content of
   the \code{file}}

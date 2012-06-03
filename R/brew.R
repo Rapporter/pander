@@ -13,6 +13,7 @@
 #' @param output (optional) file path of the output file
 #' @param convert string: format of required output document (besides Pandoc's markdown). Pandoc is called if set via \code{Pandoc.convert} and the converted document could be also opened automatically (see below).
 #' @param open try to open converted document with operating system's default program
+#' @param graph.hi.res render high resolution images of plots? Default is \code{FALSE} except for HTML output.
 #' @param text character vector (treated as the content of the \code{file}
 #' @param envir environment where to \code{brew} the template
 #' @note Only one of the input parameters (\code{file} or \code{text}) is to be used at once!
@@ -32,7 +33,7 @@
 #'
 #' ## For a longer example checkout README.brew in this installed package or online: \url{https://github.com/daroczig/pander/blob/master/inst/README.brew}
 #' @importFrom brew brew
-Pandoc.brew <- function(file = stdin(), output = stdout(), convert = FALSE, open = TRUE, text = NULL, envir = new.env()) {
+Pandoc.brew <- function(file = stdin(), output = stdout(), convert = FALSE, open = TRUE, graph.hi.res = FALSE, text = NULL, envir = new.env()) {
 
     timer <- proc.time()
     output.stdout <- deparse(substitute(output)) == 'stdout()'
@@ -42,6 +43,10 @@ Pandoc.brew <- function(file = stdin(), output = stdout(), convert = FALSE, open
     else
         if (output.stdout)
             stop('A file name should be provided while converting a document.')
+
+    ## in HTML it's cool to have high resolution images too
+    if ((missing(graph.hi.res)) & (convert == 'html'))
+        graph.hi.res <- TRUE
 
     if (!output.stdout) {
         basedir    <- dirname(output)
@@ -58,9 +63,8 @@ Pandoc.brew <- function(file = stdin(), output = stdout(), convert = FALSE, open
 
     ## Pandoc.cat fn
     Pandoc.evals <- function(..., envir = parent.frame()) {
-        #return(capture.output(str(list(...))))
         src <- list(...)
-        r <- evals(src, env = envir, graph.dir = graph.dir, graph.name = graph.name)[[1]]
+        r <- evals(src, env = envir, graph.dir = graph.dir, graph.name = graph.name, hi.res = graph.hi.res)[[1]]
         o <- pander(r$output)
         if (!is.null(r$msg$error))
             o <- paste0(o, ' **ERROR**', pandoc.footnote.return(r$msg$errors))
