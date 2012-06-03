@@ -1,0 +1,9 @@
+/*
+* Copyright (C) 2009 Joel Sutherland
+* Licenced under the MIT license
+* http://www.newmediacampaigns.com/page/jcaption-a-jquery-plugin-for-simple-image-captions
+*/
+
+(function($){$.fn.jcaption=function(settings){settings=$.extend({wrapperElement:'div',wrapperClass:'caption',captionElement:'p',imageAttr:'alt',requireText:true,copyStyle:false,removeStyle:true,removeAlign:true,copyAlignmentToClass:false,copyFloatToClass:true,autoWidth:true,animate:false,show:{opacity:'show'},showDuration:200,hide:{opacity:'hide'},hideDuration:200},settings);return $(this).each(function(){$(this).bind('load',function(){if($(this).data('loaded'))return false;$(this).data('loaded',true);var image=$(this);if(image.attr(settings.imageAttr).length>0||!settings.requireText){image.wrap("<"+settings.wrapperElement+" class='"+settings.wrapperClass+"'></"+settings.wrapperElement+">");var imageFloat=image.css('float')
+var imageStyle=image.attr('style');if(settings.removeStyle)image.removeAttr('style');var imageAlign=image.attr('align');if(settings.removeAlign)image.removeAttr('align');var div=$(this).parent().append('<'+settings.captionElement+'>'+image.attr(settings.imageAttr)+'</'+settings.captionElement+'>');if(settings.animate){$(this).next().hide();$(this).parent().hover(function(){$(this).find('p').animate(settings.show,settings.showDuration);},function(){$(this).find('p').animate(settings.hide,settings.hideDuration);});}
+if(settings.copyStyle)div.attr('style',imageStyle);if(settings.copyAlignmentToClass)div.addClass(imageAlign);if(settings.copyFloatToClass)div.addClass(imageFloat);if(settings.autoWidth)div.width(image.width());}});if(this.complete||this.naturalWidth>0){$(this).trigger('load');}});}})(jQuery);

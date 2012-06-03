@@ -1,6 +1,6 @@
 % Gergely Daróczi
 % Looong report
-% Sat Jun  2 23:21:35 2012
+% Mon Jun  4 00:45:22 2012
 
 I have written the below report in 10 mins :)
 
@@ -212,7 +212,7 @@ The mean of mpg is *20.090625* while the standard deviation is: *6.0269480520891
 
 Tables are boring, let us show the same with a `histogram`:
 
-![](plots/short-code-long-report-37.png)
+[![](plots/short-code-long-report-1.png)](plots/short-code-long-report-1-hires.png)
 
 ### cyl
 
@@ -230,7 +230,7 @@ The mean of cyl is *6.1875* while the standard deviation is: *1.78592164694654*.
 
 Tables are boring, let us show the same with a `histogram`:
 
-![](plots/short-code-long-report-38.png)
+[![](plots/short-code-long-report-2.png)](plots/short-code-long-report-2-hires.png)
 
 ### disp
 
@@ -269,7 +269,7 @@ The mean of disp is *230.721875* while the standard deviation is: *123.938693831
 
 Tables are boring, let us show the same with a `histogram`:
 
-![](plots/short-code-long-report-39.png)
+[![](plots/short-code-long-report-3.png)](plots/short-code-long-report-3-hires.png)
 
 ### hp
 
@@ -301,7 +301,7 @@ The mean of hp is *146.6875* while the standard deviation is: *68.5628684893206*
 
 Tables are boring, let us show the same with a `histogram`:
 
-![](plots/short-code-long-report-40.png)
+[![](plots/short-code-long-report-4.png)](plots/short-code-long-report-4-hires.png)
 
 ### drat
 
@@ -333,7 +333,7 @@ The mean of drat is *3.5965625* while the standard deviation is: *0.534678736070
 
 Tables are boring, let us show the same with a `histogram`:
 
-![](plots/short-code-long-report-41.png)
+[![](plots/short-code-long-report-5.png)](plots/short-code-long-report-5-hires.png)
 
 ### wt
 
@@ -379,7 +379,7 @@ The mean of wt is *3.21725* while the standard deviation is: *0.978457442989697*
 
 Tables are boring, let us show the same with a `histogram`:
 
-![](plots/short-code-long-report-42.png)
+[![](plots/short-code-long-report-6.png)](plots/short-code-long-report-6-hires.png)
 
 ### qsec
 
@@ -425,7 +425,7 @@ The mean of qsec is *17.84875* while the standard deviation is: *1.7869432360968
 
 Tables are boring, let us show the same with a `histogram`:
 
-![](plots/short-code-long-report-43.png)
+[![](plots/short-code-long-report-7.png)](plots/short-code-long-report-7-hires.png)
 
 ### vs
 
@@ -443,7 +443,7 @@ The mean of vs is *0.4375* while the standard deviation is: *0.504016128774185*.
 
 Tables are boring, let us show the same with a `histogram`:
 
-![](plots/short-code-long-report-44.png)
+[![](plots/short-code-long-report-8.png)](plots/short-code-long-report-8-hires.png)
 
 ### am
 
@@ -461,7 +461,7 @@ The mean of am is *0.40625* while the standard deviation is: *0.498990917235846*
 
 Tables are boring, let us show the same with a `histogram`:
 
-![](plots/short-code-long-report-45.png)
+[![](plots/short-code-long-report-9.png)](plots/short-code-long-report-9-hires.png)
 
 ### gear
 
@@ -479,7 +479,7 @@ The mean of gear is *3.6875* while the standard deviation is: *0.737804065256947
 
 Tables are boring, let us show the same with a `histogram`:
 
-![](plots/short-code-long-report-46.png)
+[![](plots/short-code-long-report-10.png)](plots/short-code-long-report-10-hires.png)
 
 ### carb
 
@@ -497,7 +497,7 @@ The mean of carb is *2.8125* while the standard deviation is: *1.61519997763185*
 
 Tables are boring, let us show the same with a `histogram`:
 
-![](plots/short-code-long-report-47.png)
+[![](plots/short-code-long-report-11.png)](plots/short-code-long-report-11-hires.png)
 
 # Correlation
 
@@ -558,7 +558,7 @@ carb -0.570 0.058  0.274  1.000
 
 And the same on a graph:
 
-![](plots/short-code-long-report-48.png)
+[![](plots/short-code-long-report-12.png)](plots/short-code-long-report-12-hires.png)
 
 Yeah, that latter took a while to render in an image file :)
 
@@ -708,7 +708,5 @@ Independent  2.6e-01     1.0e-01     2.6e+00   1.5e-02
 
 Table: Fitting linear model: mtcars$wt ~ Independent
 
-
-
 -------
-This report was generated with [R](http://www.r-project.org/) (2.15.0) and [pander](https://github.com/daroczig/pander) (0.1) in 16.821 sec on x86_64-unknown-linux-gnu platform.
+This report was generated with [R](http://www.r-project.org/) (2.15.0) and [pander](https://github.com/daroczig/pander) (0.1) on x86_64-unknown-linux-gnu platform.

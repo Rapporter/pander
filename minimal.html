@@ -14,8 +14,9 @@
   <link rel="stylesheet" href="stylesheets/skeleton.css" />
   <link rel="stylesheet" href="stylesheets/layout.css" />
   <link rel="stylesheet" href="stylesheets/fonts.css" />
-  <link rel="stylesheet" href="stylesheets/colorbox.css" />
+  <link rel="stylesheet" href="stylesheets/slimbox2.css" />
   <link rel="stylesheet" href="stylesheets/custom.css" />
+  <link rel="stylesheet" href="stylesheets/caption.css"/>
   
   <link rel="shortcut icon" href="images/favicon.gif" />
   <link rel="apple-touch-icon" href="images/apple-touch-icon.png" />
@@ -25,13 +26,14 @@
   <script type="text/javascript" src="javascripts/jquery-1.7.2.min.js"></script>
   <script type="text/javascript" src="javascripts/tabs.js"></script>  <!--remove-->
   <script type="text/javascript" src="javascripts/custom.js"></script>
-  <script type="text/javascript" src="javascripts/jquery.colorbox.js"></script>
+  <script type="text/javascript" src="javascripts/slimbox2.js"></script>
   <script type="text/x-mathjax-config">
     MathJax.Hub.Config({
     tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]}
     });
   </script>
   <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_HTML"></script>
+  <script type="text/javascript" src="javascripts/jcaption.min.js" /></script>
 </head>
 <body>
 <div id="header">
@@ -267,13 +269,56 @@
 </table>
 <h2 id="returning-plot">Returning plot</h2>
 <p>Plots are automatically grabbed between <code>brew</code> tags:</p>
-<div class="figure">
-<img src="plots/minimal-1.png" /><p class="caption"></p>
-</div>
+<p><a href="plots/minimal-1-hires.png"><img src="plots/minimal-1.png" /></a></p>
+<p>And adding a caption is easy:</p>
+<p><a href="plots/minimal-2-hires.png"><img src="plots/minimal-2.png" alt="My second pander plot in red" /></a></p>
+<h1 id="captions">Captions</h1>
+<p>Just like with tables:</p>
+<table>
+<caption>Here goes the first two lines of USArrests</caption>
+<col width="11%" />
+<col width="12%" />
+<col width="13%" />
+<col width="15%" />
+<col width="8%" />
+<thead>
+<tr class="header">
+<th align="left"></th>
+<th align="left">Murder</th>
+<th align="left">Assault</th>
+<th align="left">UrbanPop</th>
+<th align="left">Rape</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">Alabama</td>
+<td align="left">13</td>
+<td align="left">236</td>
+<td align="left">58</td>
+<td align="left">21</td>
+</tr>
+<tr class="even">
+<td align="left">Alaska</td>
+<td align="left">10</td>
+<td align="left">263</td>
+<td align="left">48</td>
+<td align="left">44</td>
+</tr>
+</tbody>
+</table>
+<h2 id="it-happens">It happens</h2>
+<p><strong>ERROR</strong><sup><a href="#fn1" class="footnoteRef" id="fnref1">1</a></sup></p>
 <hr />
-<p>This report was generated with <a href="http://www.r-project.org/">R</a> (2.15.0) and <a href="https://github.com/daroczig/pander">pander</a> (0.1) in 0.251 sec on x86_64-unknown-linux-gnu platform.</p>
+<p>This report was generated with <a href="http://www.r-project.org/">R</a> (2.15.0) and <a href="https://github.com/daroczig/pander">pander</a> (0.1) on x86_64-unknown-linux-gnu platform.</p>
+<div class="footnotes">
+<hr />
+<ol>
+<li id="fn1"><p>object 'unknown.R.object' not found<a href="#fnref1">↩</a></p></li>
+</ol>
+</div>
 <p align="center">
-  Design: <a href="https://github.com/aL3xa/rapport"><i>rapport</i> Development Team</a> &copy; 2012 | Backend: <a href="https://github.com/daroczig/pander">pander</a> | License: <a href="http://www.gnu.org/licenses/agpl.html" target="_blank">AGPL3</a> | Styled with <a href="http://www.getskeleton.com/" target="_blank">skeleton</a>
+  Design: <a href="http://rapport-package.info/"><i>rapport</i> Development Team</a> &copy; 2012 | Backend: <a href="https://github.com/daroczig/pander">pander</a> | License: <a href="http://www.gnu.org/licenses/agpl.html" target="_blank">AGPL3</a> | Styled with <a href="http://www.getskeleton.com/" target="_blank">skeleton</a>
 </p>
 </body>
 </html>

@@ -81,7 +81,29 @@ Cumulative Proportion  0.9246 0.9777 0.9948 1.0000
 
 Plots are automatically grabbed between `brew` tags:
 
-![](plots/minimal-4.png)
+[![](plots/minimal-1.png)](plots/minimal-1-hires.png)
+
+And adding a caption is easy:
+
+[![My second `pander` plot in red](plots/minimal-2.png)](plots/minimal-2-hires.png)
+
+# Captions
+
+Just like with tables:
+
+--------------------------------------------
+        Murder   Assault   UrbanPop   Rape  
+------- -------- --------- ---------- ------
+Alabama 13       236       58         21    
+
+Alaska  10       263       48         44    
+--------------------------------------------
+
+Table: Here goes the first two lines of USArrests
+
+## It happens
+
+ **ERROR**^[object 'unknown.R.object' not found]
 
 -------
-This report was generated with [R](http://www.r-project.org/) (2.15.0) and [pander](https://github.com/daroczig/pander) (0.1) in 0.242 sec on x86_64-unknown-linux-gnu platform.
+This report was generated with [R](http://www.r-project.org/) (2.15.0) and [pander](https://github.com/daroczig/pander) (0.1) on x86_64-unknown-linux-gnu platform.

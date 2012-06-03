@@ -14,8 +14,9 @@
   <link rel="stylesheet" href="stylesheets/skeleton.css" />
   <link rel="stylesheet" href="stylesheets/layout.css" />
   <link rel="stylesheet" href="stylesheets/fonts.css" />
-  <link rel="stylesheet" href="stylesheets/colorbox.css" />
+  <link rel="stylesheet" href="stylesheets/slimbox2.css" />
   <link rel="stylesheet" href="stylesheets/custom.css" />
+  <link rel="stylesheet" href="stylesheets/caption.css"/>
   
   <link rel="shortcut icon" href="images/favicon.gif" />
   <link rel="apple-touch-icon" href="images/apple-touch-icon.png" />
@@ -25,19 +26,20 @@
   <script type="text/javascript" src="javascripts/jquery-1.7.2.min.js"></script>
   <script type="text/javascript" src="javascripts/tabs.js"></script>  <!--remove-->
   <script type="text/javascript" src="javascripts/custom.js"></script>
-  <script type="text/javascript" src="javascripts/jquery.colorbox.js"></script>
+  <script type="text/javascript" src="javascripts/slimbox2.js"></script>
   <script type="text/x-mathjax-config">
     MathJax.Hub.Config({
     tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]}
     });
   </script>
   <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_HTML"></script>
+  <script type="text/javascript" src="javascripts/jcaption.min.js" /></script>
 </head>
 <body>
 <div id="header">
 <h1 class="title">Gergely Daróczi</h1>
 <h2 class="author">Looong report</h2>
-<h3 class="date">Sat Jun 2 23:20:37 2012</h3>
+<h3 class="date">Mon Jun 4 00:45:22 2012</h3>
 </div>
 <p>I have written the below report in 10 mins :)</p>
 <h1 id="dataset">Dataset</h1>
@@ -845,9 +847,7 @@
 </tbody>
 </table>
 <p>Tables are boring, let us show the same with a <code>histogram</code>:</p>
-<div class="figure">
-<img src="plots/short-code-long-report-1.png" /><p class="caption"></p>
-</div>
+<p><a href="plots/short-code-long-report-1-hires.png"><img src="plots/short-code-long-report-1.png" /></a></p>
 <h3 id="cyl">cyl</h3>
 <p>We found the folloing values here:</p>
 <p><em>6</em>, <em>6</em>, <em>4</em>, <em>6</em>, <em>8</em>, <em>6</em>, <em>8</em>, <em>4</em>, <em>4</em>, <em>6</em>, <em>6</em>, <em>8</em>, <em>8</em>, <em>8</em>, <em>8</em>, <em>8</em>, <em>8</em>, <em>4</em>, <em>4</em>, <em>4</em>, <em>4</em>, <em>8</em>, <em>8</em>, <em>8</em>, <em>8</em>, <em>4</em>, <em>4</em>, <em>4</em>, <em>8</em>, <em>6</em>, <em>8</em> and <em>4</em></p>
@@ -872,9 +872,7 @@
 </tbody>
 </table>
 <p>Tables are boring, let us show the same with a <code>histogram</code>:</p>
-<div class="figure">
-<img src="plots/short-code-long-report-2.png" /><p class="caption"></p>
-</div>
+<p><a href="plots/short-code-long-report-2-hires.png"><img src="plots/short-code-long-report-2.png" /></a></p>
 <h3 id="disp">disp</h3>
 <p>We found the folloing values here:</p>
 <p><em>160</em>, <em>160</em>, <em>108</em>, <em>258</em>, <em>360</em>, <em>225</em>, <em>360</em>, <em>146.7</em>, <em>140.8</em>, <em>167.6</em>, <em>167.6</em>, <em>275.8</em>, <em>275.8</em>, <em>275.8</em>, <em>472</em>, <em>460</em>, <em>440</em>, <em>78.7</em>, <em>75.7</em>, <em>71.1</em>, <em>120.1</em>, <em>318</em>, <em>304</em>, <em>350</em>, <em>400</em>, <em>79</em>, <em>120.3</em>, <em>95.1</em>, <em>351</em>, <em>145</em>, <em>301</em> and <em>121</em></p>
@@ -1001,9 +999,7 @@
 </tbody>
 </table>
 <p>Tables are boring, let us show the same with a <code>histogram</code>:</p>
-<div class="figure">
-<img src="plots/short-code-long-report-3.png" /><p class="caption"></p>
-</div>
+<p><a href="plots/short-code-long-report-3-hires.png"><img src="plots/short-code-long-report-3.png" /></a></p>
 <h3 id="hp">hp</h3>
 <p>We found the folloing values here:</p>
 <p><em>110</em>, <em>110</em>, <em>93</em>, <em>110</em>, <em>175</em>, <em>105</em>, <em>245</em>, <em>62</em>, <em>95</em>, <em>123</em>, <em>123</em>, <em>180</em>, <em>180</em>, <em>180</em>, <em>205</em>, <em>215</em>, <em>230</em>, <em>66</em>, <em>52</em>, <em>65</em>, <em>97</em>, <em>150</em>, <em>150</em>, <em>245</em>, <em>175</em>, <em>66</em>, <em>91</em>, <em>113</em>, <em>264</em>, <em>175</em>, <em>335</em> and <em>109</em></p>
@@ -1105,9 +1101,7 @@
 </tbody>
 </table>
 <p>Tables are boring, let us show the same with a <code>histogram</code>:</p>
-<div class="figure">
-<img src="plots/short-code-long-report-4.png" /><p class="caption"></p>
-</div>
+<p><a href="plots/short-code-long-report-4-hires.png"><img src="plots/short-code-long-report-4.png" /></a></p>
 <h3 id="drat">drat</h3>
 <p>We found the folloing values here:</p>
 <p><em>3.9</em>, <em>3.9</em>, <em>3.85</em>, <em>3.08</em>, <em>3.15</em>, <em>2.76</em>, <em>3.21</em>, <em>3.69</em>, <em>3.92</em>, <em>3.92</em>, <em>3.92</em>, <em>3.07</em>, <em>3.07</em>, <em>3.07</em>, <em>2.93</em>, <em>3</em>, <em>3.23</em>, <em>4.08</em>, <em>4.93</em>, <em>4.22</em>, <em>3.7</em>, <em>2.76</em>, <em>3.15</em>, <em>3.73</em>, <em>3.08</em>, <em>4.08</em>, <em>4.43</em>, <em>3.77</em>, <em>4.22</em>, <em>3.62</em>, <em>3.54</em> and <em>4.11</em></p>
@@ -1209,9 +1203,7 @@
 </tbody>
 </table>
 <p>Tables are boring, let us show the same with a <code>histogram</code>:</p>
-<div class="figure">
-<img src="plots/short-code-long-report-5.png" /><p class="caption"></p>
-</div>
+<p><a href="plots/short-code-long-report-5-hires.png"><img src="plots/short-code-long-report-5.png" /></a></p>
 <h3 id="wt">wt</h3>
 <p>We found the folloing values here:</p>
 <p><em>2.62</em>, <em>2.875</em>, <em>2.32</em>, <em>3.215</em>, <em>3.44</em>, <em>3.46</em>, <em>3.57</em>, <em>3.19</em>, <em>3.15</em>, <em>3.44</em>, <em>3.44</em>, <em>4.07</em>, <em>3.73</em>, <em>3.78</em>, <em>5.25</em>, <em>5.424</em>, <em>5.345</em>, <em>2.2</em>, <em>1.615</em>, <em>1.835</em>, <em>2.465</em>, <em>3.52</em>, <em>3.435</em>, <em>3.84</em>, <em>3.845</em>, <em>1.935</em>, <em>2.14</em>, <em>1.513</em>, <em>3.17</em>, <em>2.77</em>, <em>3.57</em> and <em>2.78</em></p>
@@ -1354,9 +1346,7 @@
 </tbody>
 </table>
 <p>Tables are boring, let us show the same with a <code>histogram</code>:</p>
-<div class="figure">
-<img src="plots/short-code-long-report-6.png" /><p class="caption"></p>
-</div>
+<p><a href="plots/short-code-long-report-6-hires.png"><img src="plots/short-code-long-report-6.png" /></a></p>
 <h3 id="qsec">qsec</h3>
 <p>We found the folloing values here:</p>
 <p><em>16.46</em>, <em>17.02</em>, <em>18.61</em>, <em>19.44</em>, <em>17.02</em>, <em>20.22</em>, <em>15.84</em>, <em>20</em>, <em>22.9</em>, <em>18.3</em>, <em>18.9</em>, <em>17.4</em>, <em>17.6</em>, <em>18</em>, <em>17.98</em>, <em>17.82</em>, <em>17.42</em>, <em>19.47</em>, <em>18.52</em>, <em>19.9</em>, <em>20.01</em>, <em>16.87</em>, <em>17.3</em>, <em>15.41</em>, <em>17.05</em>, <em>18.9</em>, <em>16.7</em>, <em>16.9</em>, <em>14.5</em>, <em>15.5</em>, <em>14.6</em> and <em>18.6</em></p>
@@ -1502,9 +1492,7 @@
 </tbody>
 </table>
 <p>Tables are boring, let us show the same with a <code>histogram</code>:</p>
-<div class="figure">
-<img src="plots/short-code-long-report-7.png" /><p class="caption"></p>
-</div>
+<p><a href="plots/short-code-long-report-7-hires.png"><img src="plots/short-code-long-report-7.png" /></a></p>
 <h3 id="vs">vs</h3>
 <p>We found the folloing values here:</p>
 <p><em>0</em>, <em>0</em>, <em>1</em>, <em>1</em>, <em>0</em>, <em>1</em>, <em>0</em>, <em>1</em>, <em>1</em>, <em>1</em>, <em>1</em>, <em>0</em>, <em>0</em>, <em>0</em>, <em>0</em>, <em>0</em>, <em>0</em>, <em>1</em>, <em>1</em>, <em>1</em>, <em>1</em>, <em>0</em>, <em>0</em>, <em>0</em>, <em>0</em>, <em>1</em>, <em>0</em>, <em>1</em>, <em>0</em>, <em>0</em>, <em>0</em> and <em>1</em></p>
@@ -1526,9 +1514,7 @@
 </tbody>
 </table>
 <p>Tables are boring, let us show the same with a <code>histogram</code>:</p>
-<div class="figure">
-<img src="plots/short-code-long-report-8.png" /><p class="caption"></p>
-</div>
+<p><a href="plots/short-code-long-report-8-hires.png"><img src="plots/short-code-long-report-8.png" /></a></p>
 <h3 id="am">am</h3>
 <p>We found the folloing values here:</p>
 <p><em>1</em>, <em>1</em>, <em>1</em>, <em>0</em>, <em>0</em>, <em>0</em>, <em>0</em>, <em>0</em>, <em>0</em>, <em>0</em>, <em>0</em>, <em>0</em>, <em>0</em>, <em>0</em>, <em>0</em>, <em>0</em>, <em>0</em>, <em>1</em>, <em>1</em>, <em>1</em>, <em>0</em>, <em>0</em>, <em>0</em>, <em>0</em>, <em>0</em>, <em>1</em>, <em>1</em>, <em>1</em>, <em>1</em>, <em>1</em>, <em>1</em> and <em>1</em></p>
@@ -1550,9 +1536,7 @@
 </tbody>
 </table>
 <p>Tables are boring, let us show the same with a <code>histogram</code>:</p>
-<div class="figure">
-<img src="plots/short-code-long-report-9.png" /><p class="caption"></p>
-</div>
+<p><a href="plots/short-code-long-report-9-hires.png"><img src="plots/short-code-long-report-9.png" /></a></p>
 <h3 id="gear">gear</h3>
 <p>We found the folloing values here:</p>
 <p><em>4</em>, <em>4</em>, <em>4</em>, <em>3</em>, <em>3</em>, <em>3</em>, <em>3</em>, <em>4</em>, <em>4</em>, <em>4</em>, <em>4</em>, <em>3</em>, <em>3</em>, <em>3</em>, <em>3</em>, <em>3</em>, <em>3</em>, <em>4</em>, <em>4</em>, <em>4</em>, <em>3</em>, <em>3</em>, <em>3</em>, <em>3</em>, <em>3</em>, <em>4</em>, <em>5</em>, <em>5</em>, <em>5</em>, <em>5</em>, <em>5</em> and <em>4</em></p>
@@ -1577,9 +1561,7 @@
 </tbody>
 </table>
 <p>Tables are boring, let us show the same with a <code>histogram</code>:</p>
-<div class="figure">
-<img src="plots/short-code-long-report-10.png" /><p class="caption"></p>
-</div>
+<p><a href="plots/short-code-long-report-10-hires.png"><img src="plots/short-code-long-report-10.png" /></a></p>
 <h3 id="carb">carb</h3>
 <p>We found the folloing values here:</p>
 <p><em>4</em>, <em>4</em>, <em>1</em>, <em>1</em>, <em>2</em>, <em>1</em>, <em>4</em>, <em>2</em>, <em>2</em>, <em>4</em>, <em>4</em>, <em>3</em>, <em>3</em>, <em>3</em>, <em>4</em>, <em>4</em>, <em>4</em>, <em>1</em>, <em>2</em>, <em>1</em>, <em>1</em>, <em>2</em>, <em>2</em>, <em>4</em>, <em>2</em>, <em>1</em>, <em>2</em>, <em>2</em>, <em>4</em>, <em>6</em>, <em>8</em> and <em>2</em></p>
@@ -1613,9 +1595,7 @@
 </tbody>
 </table>
 <p>Tables are boring, let us show the same with a <code>histogram</code>:</p>
-<div class="figure">
-<img src="plots/short-code-long-report-11.png" /><p class="caption"></p>
-</div>
+<p><a href="plots/short-code-long-report-11-hires.png"><img src="plots/short-code-long-report-11.png" /></a></p>
 <h1 id="correlation">Correlation</h1>
 <p>And here goes a correlation table:</p>
 <table>
@@ -1848,9 +1828,7 @@
 </tbody>
 </table>
 <p>And the same on a graph:</p>
-<div class="figure">
-<img src="plots/short-code-long-report-12.png" /><p class="caption"></p>
-</div>
+<p><a href="plots/short-code-long-report-12-hires.png"><img src="plots/short-code-long-report-12.png" /></a></p>
 <p>Yeah, that latter took a while to render in an image file :)</p>
 <p>That's not a <code>pander</code> issue.</p>
 <h1 id="some-models">Some models</h1>
@@ -2206,9 +2184,9 @@
 </tbody>
 </table>
 <hr />
-<p>This report was generated with <a href="http://www.r-project.org/">R</a> (2.15.0) and <a href="https://github.com/daroczig/pander">pander</a> (0.1) in 20.115 sec on x86_64-unknown-linux-gnu platform.</p>
+<p>This report was generated with <a href="http://www.r-project.org/">R</a> (2.15.0) and <a href="https://github.com/daroczig/pander">pander</a> (0.1) on x86_64-unknown-linux-gnu platform.</p>
 <p align="center">
-  Design: <a href="https://github.com/aL3xa/rapport"><i>rapport</i> Development Team</a> &copy; 2012 | Backend: <a href="https://github.com/daroczig/pander">pander</a> | License: <a href="http://www.gnu.org/licenses/agpl.html" target="_blank">AGPL3</a> | Styled with <a href="http://www.getskeleton.com/" target="_blank">skeleton</a>
+  Design: <a href="http://rapport-package.info/"><i>rapport</i> Development Team</a> &copy; 2012 | Backend: <a href="https://github.com/daroczig/pander">pander</a> | License: <a href="http://www.gnu.org/licenses/agpl.html" target="_blank">AGPL3</a> | Styled with <a href="http://www.getskeleton.com/" target="_blank">skeleton</a>
 </p>
 </body>
 </html>
