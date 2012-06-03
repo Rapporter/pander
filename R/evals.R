@@ -488,28 +488,33 @@ evals <- function(txt = NULL, ind = NULL, body = NULL, classes = NULL, hooks = N
             if (graph.env)
                 save(list = ls(envir = env), file = sprintf('%s.env', file.name), envir = env)
 
-            ## generate high resolution images if needed
+            ## generate high resolution images on demand
             if (hi.res) {
 
                 file.hi.res <- sprintf('%s-hires.%s', file.name, graph.output)
 
+                ## initialize high resolution image file
                 if (graph.output %in% c('bmp', 'jpeg', 'png', 'tiff')) {
                     do.call(graph.output, list(file.hi.res, width = hi.res.width, height = hi.res.height, res = hi.res.res, ...))
                 } else {
 
-                    if (.Platform$OS.type == 'unix')
+                    if (.Platform$OS.type == 'unix')    # a symlink would be fine for vector formats on a unix-like OS
                         file.symlink(file, file.hi.res)
-                    else
+                    else                                # we have no option to do so on Windows (to be backward compatible)
                         do.call(graph.output, list(file.hi.res, width = hi.res.width/hi.res.res, height = hi.res.height/hi.res.res, ...)) # TODO: font-family?
                 }
 
+                ## render high resolution image (if needed)
                 if ((graph.output %in% c('bmp', 'jpeg', 'png', 'tiff')) | (.Platform$OS.type != 'unix')) {
                     if (check.output)
-                        suppressWarnings(eval(parse(text = src), envir = env.hires))
+                        suppressWarnings(evaluate(src, envir = env.hires))      # we need evaluate() here instead of simple eval() to prevent unprinted lattice/ggplot2 objects' issues
                     else
                         suppressWarnings(eval(parse(text = src), envir = env))
                     clear.devs()
                 }
+
+                ## add "href" attribute to returned R object
+                attr(returns, 'href') <- file.hi.res
 
             }
         } else {
