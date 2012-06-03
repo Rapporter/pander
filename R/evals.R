@@ -386,6 +386,7 @@ evals <- function(txt = NULL, ind = NULL, body = NULL, classes = NULL, hooks = N
 
                 return(res[output])
             }
+            errors <- NULL
 
             ## warnings
             warnings <- sapply(eval, is.warning)
@@ -434,19 +435,19 @@ evals <- function(txt = NULL, ind = NULL, body = NULL, classes = NULL, hooks = N
 
                     ## if last element returns value (happily)
                     if (eval.sources.last.outputs == tail(eval.sources.n, 1)) {
-                        returns <- suppressWarnings(eval(parse(text = src), envir = env))
+                        returns <- suppressMessages(suppressWarnings(eval(parse(text = src), envir = env)))
                     } else {    # if not the last element returns the value (lame)
                         ## eval in temp environment all elements before last element that really do output
                         env.temp <- env
                         ## run commands before the last element which does output something
                         if (eval.sources.last.outputs != 1)
                             lapply(1:(which(eval.sources.last.outputs == eval.sources.n)-1), function(i) {
-                                suppressWarnings(eval(parse(text = eval.sources[[i]]$src), envir = env.temp))
+                                suppressMessages(suppressWarnings(eval(parse(text = eval.sources[[i]]$src), envir = env.temp)))
                             })
                         ## grab output at last with last element with output
-                        returns <- suppressWarnings(eval(parse(text = eval.sources[[eval.sources.last.outputs]]$src), envir = env.temp))
+                        returns <- suppressMessages(suppressWarnings(eval(parse(text = eval.sources[[eval.sources.last.outputs]]$src), envir = env.temp)))
                         ## and run all stuff in main environment for consistency
-                        suppressWarnings(eval(parse(text = src), envir = env))
+                        suppressMessages(suppressWarnings(eval(parse(text = src), envir = env)))
                     }
 
                     sink()
@@ -471,6 +472,7 @@ evals <- function(txt = NULL, ind = NULL, body = NULL, classes = NULL, hooks = N
             returns  <- res$output
             warnings <- res$msg$warnings
             messages <- res$msg$messages
+            errors   <- NULL
             graph    <- ifelse(exists('recorded.plot'), ifelse(is.null(recorded.plot[[1]]), FALSE, file), FALSE)
             stdout   <- res$stdout
         }
@@ -554,7 +556,6 @@ evals <- function(txt = NULL, ind = NULL, body = NULL, classes = NULL, hooks = N
                 }
             }
 
-        errors <- NULL
         ## add captured attributes
         if (is.character(messages)) {
             add.attr <- function(x, value) {
@@ -568,7 +569,7 @@ evals <- function(txt = NULL, ind = NULL, body = NULL, classes = NULL, hooks = N
                 add.attr('caption', sub('.*\\\\caption\\{(.*)\\}.*', '\\1', messages))
                 messages <- sub('\\\\caption\\{.*\\}', '', messages)
             }
-            if (messages == '')
+            if (messages == '' & messages == '\n')
                 messages <- NULL
         }
 
