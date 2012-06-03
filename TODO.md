@@ -1,9 +1,6 @@
 # General issues
 
   * ~~should not depend on `rapport`, try to only import (against that: depending on rapport's options?)~~
-  * Great ideas:
-
-      * *Michael Lawrence* @ [ESS] mail list: *Another thing I've been wanting is a way to output objects in multiple ways, separate from the report itself. Typical side effects would be: generation of an R data package with the result as a dataset, or storage of the result in some other database. It would be cool to be able to specify, on a per-block basis, the output driver (or a list of them). For example, your pander() function could be a dual-dispatch S4 generic, dispatching on both the object to export, and an object representing the target.*
 
 # Documentation
 
@@ -97,3 +94,15 @@
 ### Tests
 
   * do that at last!
+
+# HTML/JS/CSS issues
+
+  * move errors (footnote) above of upper footer and add a header tag (if found)
+
+# ESS
+
+  * integrate (add some Lisp functions/optional key-bindings) `evals`/`pander`/`Pander.brew` - thanks for great ideas [*Michael Lawrence* @ [ESS] mail list](https://stat.ethz.ch/pipermail/ess-help/attachments/20120602/554dfb2f/attachment.pl)
+
+# Great ideas
+
+  * [*Michael Lawrence* @ [ESS] mail list](https://stat.ethz.ch/pipermail/ess-help/attachments/20120602/554dfb2f/attachment.pl): *Another thing I've been wanting is a way to output objects in multiple ways, separate from the report itself. Typical side effects would be: generation of an R data package with the result as a dataset, or storage of the result in some other database. It would be cool to be able to specify, on a per-block basis, the output driver (or a list of them). For example, your pander() function could be a dual-dispatch S4 generic, dispatching on both the object to export, and an object representing the target.* -> hook could depend on outer parameters in `evals`?
