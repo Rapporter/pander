@@ -1,6 +1,9 @@
 # General issues
 
-  * should not depend on `rapport`, try to only import (against that: depending on rapport's options?)
+  * ~~should not depend on `rapport`, try to only import (against that: depending on rapport's options?)~~
+  * Great ideas:
+
+      * *Michael Lawrence* @ [ESS] mail list: *Another thing I've been wanting is a way to output objects in multiple ways, separate from the report itself. Typical side effects would be: generation of an R data package with the result as a dataset, or storage of the result in some other database. It would be cool to be able to specify, on a per-block basis, the output driver (or a list of them). For example, your pander() function could be a dual-dispatch S4 generic, dispatching on both the object to export, and an object representing the target.*
 
 # Documentation
 
@@ -25,6 +28,11 @@
 
 # Coding
 
+## General tasks
+
+  * **add controllable, global options**
+  * **add caption/other tweaks to images/tables using `attrs`**
+
 ## Helper functions
 
   * ~~"p" from rapport: modify defaults, fork it~~
@@ -44,8 +52,10 @@
 ### Calling Pandoc (converting docs)
 
   * ~~update footer (currently shows: rapport)~~
+  * revert colorbox to slimbox2 with fullscreen images
   * add templates for different formats
-  * add option to change rendering backend's name (like: pander -> rapport with version number)
+  * add option to change rendering back-end's name (like: pander -> rapport with version number)
+  * **Q**: include Pandoc somehow in the package not to ask users to install it?
 
 ## Pandoc/pander methods
 
@@ -72,7 +82,6 @@
   * ~~migrate to `Pandoc.convert`~~
   * ~~remove multiple line breaks, see: `remove.extra.newlines()`~~
   * ~~open exported docs~~
-  * add caption to images/tables (using `attrs`?)
   * tweak `evals` like in `Pandoc.brew`
 
 ## Add support for `knitr`
