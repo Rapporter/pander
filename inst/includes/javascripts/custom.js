@@ -69,13 +69,31 @@ $(document).ready(function() {
     // add math container
     $content.find('span.math').parent().wrap('<div class="math-container" />');
 
-    // Colorbox
-    var $contentImg = $content.find('img');
-    $contentImg.each(function(i, e){
-	$(e).colorbox({
-	    inline: true,
-	    href: $(e)
-	});
+    // handling img captions
+    $('img').jcaption();
+
+    // add title tags to imgs
+    $('img').each(function() {$(this).attr('title', $(this).attr('alt'))});
+
+    // slimbox2
+    $('.content a > img:not([alt])').slimbox({
+        counterText: "Plot: {x} of {y}"
+    }, function(el) {
+	return [el.parentNode.href, el.title];
     });
 
 });
+
+$(window).load(function() {
+
+    // add title tags to imgs
+    $('.content a > div.caption').each(function() {$(this).attr('title', $(this).children(':first-child').attr('alt'))});
+
+    // slimbox2
+    $('.content a > div.caption').slimbox({
+        counterText: "Plot: {x} of {y}"
+    }, function(el) {
+	return [el.parentNode.href, el.title];
+    });
+
+})
