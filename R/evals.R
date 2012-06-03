@@ -554,6 +554,24 @@ evals <- function(txt = NULL, ind = NULL, body = NULL, classes = NULL, hooks = N
                 }
             }
 
+        errors <- NULL
+        ## add captured attributes
+        if (is.character(messages)) {
+            add.attr <- function(x, value) {
+                if (is.null(returns)) {
+                    errors <<- sprintf('No R object to add attr: %s', x)
+                } else {
+                    attr(returns, x) <<- value
+                }
+            }
+            if (grepl('\\\\caption\\{.*\\}', messages)) {
+                add.attr('caption', sub('.*\\\\caption\\{(.*)\\}.*', '\\1', messages))
+                messages <- sub('\\\\caption\\{.*\\}', '', messages)
+            }
+            if (messages == '')
+                messages <- NULL
+        }
+
         ## return list at last
         res <- list(src      = src,
                     output   = returns,
@@ -561,7 +579,7 @@ evals <- function(txt = NULL, ind = NULL, body = NULL, classes = NULL, hooks = N
                     msg      = list(
                         messages = messages,
                         warnings = warnings,
-                        errors   = NULL),
+                        errors   = errors),
                     stdout   = stdout
                     )
 

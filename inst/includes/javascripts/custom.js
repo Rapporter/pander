@@ -75,6 +75,10 @@ $(document).ready(function() {
     // add title tags to imgs
     $('img').each(function() {$(this).attr('title', $(this).attr('alt'))});
 
+    // add border to imgs without caption and center
+    $('.content a > img:not([alt])').addClass('image_without_caption');
+    $('img').closest('p').css('text-align', 'center');
+
     // slimbox2
     $('.content a > img:not([alt])').slimbox({
         counterText: "Plot: {x} of {y}"

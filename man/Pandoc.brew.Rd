@@ -20,7 +20,7 @@
   system's default program}
 
   \item{graph.hi.res}{render high resolution images of
-  plots?}
+  plots? Default is \code{FALSE} except for HTML output.}
 
   \item{text}{character vector (treated as the content of
   the \code{file}}

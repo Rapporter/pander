@@ -33,6 +33,21 @@ We could try other R objects too, for example `prcomp` on `iris`:
 Plots are automatically grabbed between `brew` tags:
 
 <%=
-library(lattice)
+require(lattice)
 histogram(mtcars$hp)
 %>
+
+And adding a caption is easy:
+
+<%=
+set.caption('My second `pander` plot in red')
+histogram(mtcars$hp, col = 'red')
+%>
+
+
+## It happens
+
+<%=
+mean(unknown.R.object)
+%>
+
