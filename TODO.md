@@ -10,7 +10,8 @@
   * ~~add example files and html/pdf/docx exports~~
   * ~~add absolute path to examples (as view from two locations)~~
   * ~~remove `rapport` dependency~~
-  * add [ESS](http://ess.r-project.org/) functions
+  * ~~add [ESS](http://ess.r-project.org/) functions~~
+  * add: short documentation (or at least mention!): `evals`
 
 ## Github pages
 

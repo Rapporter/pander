@@ -302,3 +302,14 @@ myReport$export(tempfile())
 ## You do not want to see the generated report after generation?
 myReport$export(open = FALSE)
 ```
+
+# ESS
+
+I have created some simple LISP functions which would be handy if you are using the best damn IDE for R. These functions and default key-bindings are [shipped with the package](https://github.com/daroczig/pander/tree/master/inst/pander.el), feel free to personalize:
+
+  * `pander-brew` (`C-c p b`): Run `Pandoc.brew` on current buffer and show results in *ess-output* while setting working directory to `tempdir()` temporary.
+  * `pander-brew-to-HTML` (`C-c p B`): Like the above function but exporting results to HTML too (and opening that automatically in default browser).
+  * `pander-evals-region` (`C-c p e`): Run `evals` on region and show results in *ess-output* while setting working directory to `tempdir()` temporary.
+  * `pander-region` (`C-c p r`): Run `pander` (after `eval`) on region and show results in *ess-output* while setting working directory to `tempdir()` temporary.
+
+These functions are rather a POC of what could be done with `pander` to speed up writing reports, but having great potentials - and besides that: doing a great job right now too (for me).
