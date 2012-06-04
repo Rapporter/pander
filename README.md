@@ -37,9 +37,9 @@ Or download the [sources in a zip file](https://github.com/daroczig/pander/zipba
 
 ## Depends
 
-`pander` heavily builds on [Pandoc](http://johnmacfarlane.net/pandoc) which should be **pre-installed** before trying to convert your reports to [different formats](http://johnmacfarlane.net/pandoc/). Although main functions work without Pandoc, e.g. you can generate a markdown formatted report via [Pandoc.brew](#brew-to-pandoc) or the custom [reference class](#live-report-generation).
+`pander` heavily builds on [Pandoc](http://johnmacfarlane.net/pandoc) which should be **pre-installed** before trying to convert your reports to [different formats](http://johnmacfarlane.net/pandoc/). Although **main functions work without Pandoc**, e.g. you can generate a markdown formatted report via [Pandoc.brew](#brew-to-pandoc) or the custom [reference class](#live-report-generation), but I would really suggest to install that really great piece of software!
 
-~~And as `pander` and `rapport` are quite Siamese twins, you would need an **up-to-date** version of [rapport](http://rapport-package.info) most likely installed from [Github](https://github.com/aL3xa/rapport).~~ `pander` now can work independently from `rapport`.
+~~And as `pander` and `rapport` are quite Siamese twins, you would need an **up-to-date** version of [rapport](http://rapport-package.info) most likely installed from [Github](https://github.com/aL3xa/rapport).~~ `pander` now can work independently from `rapport`. Now you would only need two cool packages ([brew](http://cran.r-project.org/web/packages/brew/index.html) and [evaluate](http://cran.r-project.org/web/packages/evaluate/index.html)) besides [R](http://www.r-project.org/).
 
 # Helper functions
 
@@ -274,7 +274,7 @@ myReport$add(matrix(5,5,5))
 myReport$add.paragraph('Hello table:')
 myReport$add(table(mtcars$am, mtcars$gear))
 
-## Or a "large" dataframe which barely fits on a page
+## Or a "large" data frame which barely fits on a page
 myReport$add(mtcars)
 
 ## And a simple linear model with Anova tables
@@ -303,5 +303,16 @@ myReport$export(tempfile())
 myReport$export(open = FALSE)
 ```
 
+# ESS
+
+I have created some simple LISP functions which would be handy if you are using the best damn IDE for R. These functions and default key-bindings are [shipped with the package](https://github.com/daroczig/pander/tree/master/inst/pander.el), feel free to personalize:
+
+  * `pander-brew` (`C-c p b`): Run `Pandoc.brew` on current buffer and show results in *ess-output* while setting working directory to `tempdir()` temporary.
+  * `pander-brew-to-HTML` (`C-c p B`): Like the above function but exporting results to HTML too (and opening that automatically in default browser).
+  * `pander-evals-region` (`C-c p e`): Run `evals` on region and show results in *ess-output* while setting working directory to `tempdir()` temporary.
+  * `pander-region` (`C-c p r`): Run `pander` (after `eval`) on region and show results in *ess-output* while setting working directory to `tempdir()` temporary.
+
+These functions are rather a POC of what could be done with `pander` to speed up writing reports, but having great potentials - and besides that: doing a great job right now too (for me).
+
 -------
-This report was generated with [R](http://www.r-project.org/) (2.15.0) and [pander](https://github.com/daroczig/pander) (0.1) in 0.062 sec on x86_64-unknown-linux-gnu platform.
+This report was generated with [R](http://www.r-project.org/) (2.15.0) and [pander](https://github.com/daroczig/pander) (0.1) in 0.053 sec on x86_64-unknown-linux-gnu platform.
