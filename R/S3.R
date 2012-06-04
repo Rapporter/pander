@@ -157,7 +157,7 @@ pander.htest <- function(x, ...) {
     if (!is.null(x$alternative))
         res['Alternative hypothesis'] = x$alternative
 
-    pandoc.table(res, caption = paste0(x$method, ': ', x$data.name), justify = 'centre')
+    pandoc.table(res, caption = paste0(x$method, ': `', gsub('( and | by )', '`\\1`', x$data.name), '`'), justify = 'centre')
 
 }
 
