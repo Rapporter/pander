@@ -485,6 +485,7 @@ evals <- function(txt = NULL, ind = NULL, body = NULL, classes = NULL, hooks = N
         if (is.character(graph)) {
             returns <- graph
             class(returns) <- "image"
+            stdout  <- NULL # not captured
 
             ## saving environment on demand
             if (graph.env)
