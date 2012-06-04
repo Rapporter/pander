@@ -212,3 +212,23 @@ pander.default <- function(x, ...) {
     pander(x)
 
 }
+
+#' @S3method pander evals
+pander.evals <- function(x, ...) {
+
+    ## one list element is not really a list!
+    if (length(x) == 1)
+        x <- x[[1]]
+
+    o <- pander(x$output)
+
+    if (!is.null(x$msg$messages))
+        o <- paste0(o, ' **MESSAGE**', pandoc.footnote.return(x$msg$messages))
+    if (!is.null(x$msg$warnings))
+        o <- paste0(o, ' **WARNING**', pandoc.footnote.return(x$msg$warnings))
+    if (!is.null(x$msg$error))
+        o <- paste0(o, ' **ERROR**', pandoc.footnote.return(x$msg$errors))
+
+    cat(o)
+
+}

@@ -570,8 +570,9 @@ evals <- function(txt = NULL, ind = NULL, body = NULL, classes = NULL, hooks = N
                 add.attr('caption', sub('.*\\\\caption\\{(.*)\\}.*', '\\1', messages))
                 messages <- sub('\\\\caption\\{.*\\}', '', messages)
             }
-            if (messages == '' & messages == '\n')
+            if (messages %in% c('', '\n')) {
                 messages <- NULL
+            }
         }
 
         ## return list at last
@@ -585,7 +586,9 @@ evals <- function(txt = NULL, ind = NULL, body = NULL, classes = NULL, hooks = N
                     stdout   = stdout
                     )
 
-        return(res[output])
+        res <- res[output]
+        class(res) <- 'evals'
+        return(res)
     })
 }
 
