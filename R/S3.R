@@ -157,7 +157,7 @@ pander.htest <- function(x, ...) {
     if (!is.null(x$alternative))
         res['Alternative hypothesis'] = x$alternative
 
-    pandoc.table(res, caption = paste0(x$method, ':', x$data.name), justify = 'centre')
+    pandoc.table(res, caption = paste0(x$method, ': ', x$data.name), justify = 'centre')
 
 }
 
@@ -215,10 +215,6 @@ pander.default <- function(x, ...) {
 
 #' @S3method pander evals
 pander.evals <- function(x, ...) {
-
-    ## one list element is not really a list!
-    if (length(x) == 1)
-        x <- x[[1]]
 
     o <- pander(x$output)
 
