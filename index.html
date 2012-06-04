@@ -84,8 +84,8 @@ code > span.er { color: #ff0000; font-weight: bold; }
 install_github(&#39;pander&#39;, &#39;daroczig&#39;)</code></pre>
 <p>Or download the <a href="https://github.com/daroczig/pander/zipball/master">sources in a zip file</a> and build manually. If you're running R on Windows, you need to install <a href="http://cran.stat.ucla.edu/bin/windows/Rtools/">Rtools</a>.</p>
 <h2 id="depends">Depends</h2>
-<p><code>pander</code> heavily builds on <a href="http://johnmacfarlane.net/pandoc">Pandoc</a> which should be <strong>pre-installed</strong> before trying to convert your reports to <a href="http://johnmacfarlane.net/pandoc/">different formats</a>. Although main functions work without Pandoc, e.g. you can generate a markdown formatted report via <a href="#brew-to-pandoc">Pandoc.brew</a> or the custom <a href="#live-report-generation">reference class</a>.</p>
-<p><del>And as <code>pander</code> and <code>rapport</code> are quite Siamese twins, you would need an <strong>up-to-date</strong> version of <a href="http://rapport-package.info">rapport</a> most likely installed from <a href="https://github.com/aL3xa/rapport">Github</a>.</del> <code>pander</code> now can work independently from <code>rapport</code>.</p>
+<p><code>pander</code> heavily builds on <a href="http://johnmacfarlane.net/pandoc">Pandoc</a> which should be <strong>pre-installed</strong> before trying to convert your reports to <a href="http://johnmacfarlane.net/pandoc/">different formats</a>. Although <strong>main functions work without Pandoc</strong>, e.g. you can generate a markdown formatted report via <a href="#brew-to-pandoc">Pandoc.brew</a> or the custom <a href="#live-report-generation">reference class</a>, but I would really suggest to install that really great piece of software!</p>
+<p><del>And as <code>pander</code> and <code>rapport</code> are quite Siamese twins, you would need an <strong>up-to-date</strong> version of <a href="http://rapport-package.info">rapport</a> most likely installed from <a href="https://github.com/aL3xa/rapport">Github</a>.</del> <code>pander</code> now can work independently from <code>rapport</code>. Now you would only need two cool packages (<a href="http://cran.r-project.org/web/packages/brew/index.html">brew</a> and <a href="http://cran.r-project.org/web/packages/evaluate/index.html">evaluate</a>) besides <a href="http://www.r-project.org/">R</a>.</p>
 <h1 id="helper-functions">Helper functions</h1>
 <p>There are a bunch of helper functions in <code>pander</code> which return user specified inputs in Pandoc format. You could find these functions starting with <code>pandoc.</code>. For example <code>pandoc.strong</code> would return the passed characters with strong emphasis. E.g.:</p>
 <pre class="rout"><code>&gt; pandoc.strong(&#39;FOO&#39;)
@@ -251,7 +251,7 @@ myReport$<span class="kw">add</span>(<span class="kw">matrix</span>(<span class=
 myReport$<span class="kw">add.paragraph</span>(<span class="st">&#39;Hello table:&#39;</span>)
 myReport$<span class="kw">add</span>(<span class="kw">table</span>(mtcars$am, mtcars$gear))
 
-## Or a &quot;large&quot; dataframe which barely fits on a page
+## Or a &quot;large&quot; data frame which barely fits on a page
 myReport$<span class="kw">add</span>(mtcars)
 
 ## And a simple linear model with Anova tables
@@ -278,8 +278,17 @@ myReport$<span class="kw">export</span>(<span class="kw">tempfile</span>())
 
 ## You do not want to see the generated report after generation?
 myReport$<span class="kw">export</span>(<span class="dt">open =</span> <span class="ot">FALSE</span>)</code></pre>
+<h1 id="ess">ESS</h1>
+<p>I have created some simple LISP functions which would be handy if you are using the best damn IDE for R. These functions and default key-bindings are <a href="https://github.com/daroczig/pander/tree/master/inst/pander.el">shipped with the package</a>, feel free to personalize:</p>
+<ul>
+<li><code>pander-brew</code> (<code>C-c p b</code>): Run <code>Pandoc.brew</code> on current buffer and show results in <em>ess-output</em> while setting working directory to <code>tempdir()</code> temporary.</li>
+<li><code>pander-brew-to-HTML</code> (<code>C-c p B</code>): Like the above function but exporting results to HTML too (and opening that automatically in default browser).</li>
+<li><code>pander-evals-region</code> (<code>C-c p e</code>): Run <code>evals</code> on region and show results in <em>ess-output</em> while setting working directory to <code>tempdir()</code> temporary.</li>
+<li><code>pander-region</code> (<code>C-c p r</code>): Run <code>pander</code> (after <code>eval</code>) on region and show results in <em>ess-output</em> while setting working directory to <code>tempdir()</code> temporary.</li>
+</ul>
+<p>These functions are rather a POC of what could be done with <code>pander</code> to speed up writing reports, but having great potentials - and besides that: doing a great job right now too (for me).</p>
 <hr />
-<p>This report was generated with <a href="http://www.r-project.org/">R</a> (2.15.0) and <a href="https://github.com/daroczig/pander">pander</a> (0.1) in 0.062 sec on x86_64-unknown-linux-gnu platform.</p>
+<p>This report was generated with <a href="http://www.r-project.org/">R</a> (2.15.0) and <a href="https://github.com/daroczig/pander">pander</a> (0.1) in 0.057 sec on x86_64-unknown-linux-gnu platform.</p>
 <p align="center">
   Design: <a href="http://rapport-package.info/"><i>rapport</i> Development Team</a> &copy; 2012 | Backend: <a href="https://github.com/daroczig/pander">pander</a> | License: <a href="http://www.gnu.org/licenses/agpl.html" target="_blank">AGPL3</a> | Styled with <a href="http://www.getskeleton.com/" target="_blank">skeleton</a>
 </p>

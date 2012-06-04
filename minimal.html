@@ -180,93 +180,28 @@
 </tbody>
 </table>
 <p>As you can see some formatting was added to the returned table and was also split up as the original table would have been too wide.</p>
-<p>We could try other R objects too, for example <code>prcomp</code> on <code>iris</code>:</p>
+<p>We could try other R objects too, for example let us check <code>chisq.test</code> on some variables of <code>mtcars</code>:</p>
 <table>
-<caption>Principal Components Analysis</caption>
-<col width="18%" />
-<col width="9%" />
-<col width="9%" />
-<col width="9%" />
-<col width="9%" />
+<caption>Pearson's Chi-squared test: <code>mtcars$am</code> and <code>mtcars$gear</code></caption>
+<col width="23%" />
+<col width="6%" />
+<col width="12%" />
 <thead>
 <tr class="header">
-<th align="left"></th>
-<th align="left">PC1</th>
-<th align="left">PC2</th>
-<th align="left">PC3</th>
-<th align="left">PC4</th>
+<th align="center">Test statistic</th>
+<th align="center">df</th>
+<th align="center">P value</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
-<td align="left">Sepal.Length</td>
-<td align="left">0.361</td>
-<td align="left">-0.657</td>
-<td align="left">0.582</td>
-<td align="left">0.315</td>
-</tr>
-<tr class="even">
-<td align="left">Sepal.Width</td>
-<td align="left">-0.085</td>
-<td align="left">-0.730</td>
-<td align="left">-0.598</td>
-<td align="left">-0.320</td>
-</tr>
-<tr class="odd">
-<td align="left">Petal.Length</td>
-<td align="left">0.857</td>
-<td align="left">0.173</td>
-<td align="left">-0.076</td>
-<td align="left">-0.480</td>
-</tr>
-<tr class="even">
-<td align="left">Petal.Width</td>
-<td align="left">0.358</td>
-<td align="left">0.075</td>
-<td align="left">-0.546</td>
-<td align="left">0.754</td>
+<td align="center">21</td>
+<td align="center">2</td>
+<td align="center">2.8e-05</td>
 </tr>
 </tbody>
 </table>
-<table>
-<col width="31%" />
-<col width="9%" />
-<col width="9%" />
-<col width="9%" />
-<col width="9%" />
-<thead>
-<tr class="header">
-<th align="left"></th>
-<th align="left">PC1</th>
-<th align="left">PC2</th>
-<th align="left">PC3</th>
-<th align="left">PC4</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td align="left">Standard deviation</td>
-<td align="left">2.0563</td>
-<td align="left">0.4926</td>
-<td align="left">0.2797</td>
-<td align="left">0.1544</td>
-</tr>
-<tr class="even">
-<td align="left">Proportion of Variance</td>
-<td align="left">0.9246</td>
-<td align="left">0.0531</td>
-<td align="left">0.0171</td>
-<td align="left">0.0052</td>
-</tr>
-<tr class="odd">
-<td align="left">Cumulative Proportion</td>
-<td align="left">0.9246</td>
-<td align="left">0.9777</td>
-<td align="left">0.9948</td>
-<td align="left">1.0000</td>
-</tr>
-</tbody>
-</table>
+<p><code>WARNING</code><sup><a href="#fn1" class="footnoteRef" id="fnref1">1</a></sup></p>
 <h2 id="returning-plot">Returning plot</h2>
 <p>Plots are automatically grabbed between <code>brew</code> tags:</p>
 <p><a href="plots/minimal-1-hires.png"><img src="plots/minimal-1.png" /></a></p>
@@ -308,13 +243,14 @@
 </tbody>
 </table>
 <h2 id="it-happens">It happens</h2>
-<p><strong>ERROR</strong><sup><a href="#fn1" class="footnoteRef" id="fnref1">1</a></sup></p>
+<p><code>ERROR</code><sup><a href="#fn2" class="footnoteRef" id="fnref2">2</a></sup></p>
 <hr />
 <p>This report was generated with <a href="http://www.r-project.org/">R</a> (2.15.0) and <a href="https://github.com/daroczig/pander">pander</a> (0.1) on x86_64-unknown-linux-gnu platform.</p>
 <div class="footnotes">
 <hr />
 <ol>
-<li id="fn1"><p>object 'unknown.R.object' not found<a href="#fnref1">↩</a></p></li>
+<li id="fn1"><p>Chi-squared approximation may be incorrect<a href="#fnref1">↩</a></p></li>
+<li id="fn2"><p>object 'unknown.R.object' not found<a href="#fnref2">↩</a></p></li>
 </ol>
 </div>
 <p align="center">

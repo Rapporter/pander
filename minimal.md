@@ -51,31 +51,17 @@ Hornet Sportabout 17     0    0    3      2
 
 As you can see some formatting was added to the returned table and was also split up as the original table would have been too wide.
 
-We could try other R objects too, for example `prcomp` on `iris`:
+We could try other R objects too, for example let us check `chisq.test` on some variables of `mtcars`:
 
-----------------------------------------
-             PC1    PC2    PC3    PC4   
------------- ------ ------ ------ ------
-Sepal.Length 0.361  -0.657 0.582  0.315 
+-------------------------------
+ Test statistic   df   P value 
+---------------- ---- ---------
+       21         2    2.8e-05 
+-------------------------------
 
-Sepal.Width  -0.085 -0.730 -0.598 -0.320
+Table: Pearson's Chi-squared test: `mtcars$am` and `mtcars$gear`
 
-Petal.Length 0.857  0.173  -0.076 -0.480
-
-Petal.Width  0.358  0.075  -0.546 0.754 
-----------------------------------------
-
-Table: Principal Components Analysis
-
---------------------------------------------------
-                       PC1    PC2    PC3    PC4   
----------------------- ------ ------ ------ ------
-Standard deviation     2.0563 0.4926 0.2797 0.1544
-
-Proportion of Variance 0.9246 0.0531 0.0171 0.0052
-
-Cumulative Proportion  0.9246 0.9777 0.9948 1.0000
---------------------------------------------------
+ `WARNING`^[Chi-squared approximation may be incorrect]
 
 ## Returning plot
 
@@ -103,7 +89,7 @@ Table: Here goes the first two lines of USArrests
 
 ## It happens
 
- **ERROR**^[object 'unknown.R.object' not found]
+ `ERROR`^[object 'unknown.R.object' not found]
 
 -------
 This report was generated with [R](http://www.r-project.org/) (2.15.0) and [pander](https://github.com/daroczig/pander) (0.1) on x86_64-unknown-linux-gnu platform.
