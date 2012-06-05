@@ -311,8 +311,12 @@ I have created some simple LISP functions which would be handy if you are using 
   * `pander-brew-to-HTML` (`C-c p B`): Like the above function but exporting results to HTML too (and opening that automatically in default browser).
   * `pander-evals-region` (`C-c p e`): Run `evals` on region and show results in *ess-output* while setting working directory to `tempdir()` temporary.
   * `pander-region` (`C-c p r`): Run `pander` (after `eval`) on region and show results in *ess-output* while setting working directory to `tempdir()` temporary.
+  * `pander-chunk` (`C-c p c`): Run `pander` (after `eval`) on current chunk (in which the pointer is) and show results in *ess-output* while setting working directory to `tempdir()` temporary. Chunk is **recognized** by opening and closing `brew` tags.
+  * `pander-region-or-chunk` (`C-c p p`): IMHO the most useful function :)
+    
+	Run `pander` (after `eval`) on region **or** current chunk (if marker is not set) and show results in *ess-output* while setting working directory to `tempdir()` temporary. Chunk is recognized by opening and closing `brew` tags.
 
 These functions are rather a POC of what could be done with `pander` to speed up writing reports, but having great potentials - and besides that: doing a great job right now too (for me).
 
 -------
-This report was generated with [R](http://www.r-project.org/) (2.15.0) and [pander](https://github.com/daroczig/pander) (0.1) in 0.057 sec on x86_64-unknown-linux-gnu platform.
+This report was generated with [R](http://www.r-project.org/) (2.15.0) and [pander](https://github.com/daroczig/pander) (0.1) in 0.059 sec on x86_64-unknown-linux-gnu platform.
