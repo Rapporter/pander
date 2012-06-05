@@ -556,9 +556,12 @@ pandoc.table.return <- function(t, caption = NULL, digits = 2, decimal.mark = '.
         ## also dealing with cells split by newlines
         t.width     <-  as.numeric(apply(cbind(nchar(t.colnames) + 2, apply(t, 2, function(x) max(sapply(strsplit(x,'\n'), function(x) max(nchar(x)))))), 1, max))
 
-        ## remove obvoius row.names
+        ## remove obvious row.names
         if (all(rownames(t) == 1:nrow(t)))
             t.rownames <- NULL
+
+        if (!is.null(t.rownames))
+            t.rownames <- pandoc.strong.return(t.rownames)
 
     }
 
@@ -587,9 +590,11 @@ pandoc.table.return <- function(t, caption = NULL, digits = 2, decimal.mark = '.
         if (t.split == t.col.n)
             t.split <- t.split - 1
 
+        ## update caption
         if (!is.null(caption))
             caption <- paste(caption, '(continued below)')
 
+        ## split
         if (length(t.rownames) != 0) {
             t.split <- t.split - 1
             justify <- c(justify[1:(t.split - 1)], justify[c(1, t.split:length(t.width))])
@@ -602,6 +607,7 @@ pandoc.table.return <- function(t, caption = NULL, digits = 2, decimal.mark = '.
         else
             res <- list(t[1:(t.split-1)], t[t.split:length(t)])
 
+        ## recursive call
         res <- paste(pandoc.table.return(res[[1]], caption = caption, digits = digits, decimal.mark = decimal.mark, justify = justify[1], style = style), pandoc.table.return(res[[2]], caption = NULL, digits = digits, decimal.mark = decimal.mark, justify = justify[2], style = style))
 
         return(res)
