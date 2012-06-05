@@ -285,10 +285,13 @@ myReport$<span class="kw">export</span>(<span class="dt">open =</span> <span cla
 <li><code>pander-brew-to-HTML</code> (<code>C-c p B</code>): Like the above function but exporting results to HTML too (and opening that automatically in default browser).</li>
 <li><code>pander-evals-region</code> (<code>C-c p e</code>): Run <code>evals</code> on region and show results in <em>ess-output</em> while setting working directory to <code>tempdir()</code> temporary.</li>
 <li><code>pander-region</code> (<code>C-c p r</code>): Run <code>pander</code> (after <code>eval</code>) on region and show results in <em>ess-output</em> while setting working directory to <code>tempdir()</code> temporary.</li>
+<li><code>pander-chunk</code> (<code>C-c p c</code>): Run <code>pander</code> (after <code>eval</code>) on current chunk (in which the pointer is) and show results in <em>ess-output</em> while setting working directory to <code>tempdir()</code> temporary. Chunk is <strong>recognized</strong> by opening and closing <code>brew</code> tags.</li>
+<li><p><code>pander-region-or-chunk</code> (<code>C-c p p</code>): IMHO the most useful function :)</p>
+<p>Run <code>pander</code> (after <code>eval</code>) on region <strong>or</strong> current chunk (if marker is not set) and show results in <em>ess-output</em> while setting working directory to <code>tempdir()</code> temporary. Chunk is recognized by opening and closing <code>brew</code> tags.</p></li>
 </ul>
 <p>These functions are rather a POC of what could be done with <code>pander</code> to speed up writing reports, but having great potentials - and besides that: doing a great job right now too (for me).</p>
 <hr />
-<p>This report was generated with <a href="http://www.r-project.org/">R</a> (2.15.0) and <a href="https://github.com/daroczig/pander">pander</a> (0.1) in 0.057 sec on x86_64-unknown-linux-gnu platform.</p>
+<p>This report was generated with <a href="http://www.r-project.org/">R</a> (2.15.0) and <a href="https://github.com/daroczig/pander">pander</a> (0.1) in 0.059 sec on x86_64-unknown-linux-gnu platform.</p>
 <p align="center">
   Design: <a href="http://rapport-package.info/"><i>rapport</i> Development Team</a> &copy; 2012 | Backend: <a href="https://github.com/daroczig/pander">pander</a> | License: <a href="http://www.gnu.org/licenses/agpl.html" target="_blank">AGPL3</a> | Styled with <a href="http://www.getskeleton.com/" target="_blank">skeleton</a>
 </p>
