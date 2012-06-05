@@ -19,6 +19,7 @@
 }
 \examples{
 pandoc.strikeout('FOO')
+pandoc.strikeout(c('FOO', '~~FOO~~'))
 pandoc.strikeout.return('FOO')
 }
 \references{

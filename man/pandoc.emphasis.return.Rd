@@ -19,6 +19,7 @@
 }
 \examples{
 pandoc.emphasis('FOO')
+pandoc.emphasis(c('FOO', '*FOO*'))
 pandoc.emphasis.return('FOO')
 }
 \references{

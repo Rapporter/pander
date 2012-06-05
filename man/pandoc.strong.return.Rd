@@ -19,6 +19,7 @@
 }
 \examples{
 pandoc.strong('FOO')
+pandoc.strong(c('FOO', '**FOO**'))
 pandoc.strong.return('FOO')
 }
 \references{

@@ -30,7 +30,7 @@
 ## General tasks
 
   * **add controllable, global options**
-  * **add caption/other tweaks to images/tables using `attrs`**
+  * **add ~~caption~~/other tweaks to images/tables using `attrs`**
 
 ## Evals
 
@@ -40,7 +40,7 @@
 ## Helper functions
 
   * ~~"p" from rapport: modify defaults, fork it~~
-  * check strings before applying formatting (to prevent e.g. "****foo****")
+  * ~~check strings before applying formatting (to prevent e.g. "****foo****")~~
   * ~~table: implement multi-line syntax for tables (as [Pandoc](http://johnmacfarlane.net/pandoc) does not support alignment with the current grid approach)~~
   * ~~table: support cells with line breaks~~
   * ~~table: split too wide tables into multiple tables (global solution which can be handled in LaTeX, docx etc. separately)~~
@@ -51,15 +51,17 @@
 ### Required helper functions
 
   * add significance stars
-  * ~~indent concatenated strings~~ -> pandoc.indent
+  * ~~indent concatenated strings~~: `pandoc.indent`
 
 ### Calling Pandoc (converting docs)
 
   * ~~update footer (currently shows: rapport)~~
-  * revert colorbox to slimbox2 with fullscreen images
+  * ~~revert colorbox to slimbox2 with fullscreen images~~
   * add templates for different formats
   * add option to change rendering back-end's name (like: pander -> rapport with version number)
   * **Q**: include Pandoc somehow in the package not to ask users to install it?
+  
+    **A**: INSTALL file updated + if Pandoc is not found it's shown to the user. Might try to auto-download binary for Mac/Windows? Linux users would deal with that problem, right? :)
 
 ## Pandoc/pander methods
 

@@ -97,6 +97,22 @@ pandoc.p <- function(...)
     cat(pandoc.p.return(...))
 
 
+#' @keywords internal
+pandoc.add.formatting <- function(x, f) {
+
+    if (!is.vector(x))
+        stop('Sorry, vectors only!')
+
+    f.e  <- gsub('*', '\\*', f, fixed = TRUE)
+    x    <- trim.spaces(x)
+    w    <- which(!grepl(sprintf('^%s.*%s$', f.e, f.e), x))
+    x[w] <- paste0(f, x[w], f)
+
+    return(x)
+
+}
+
+
 #' Strong emphasis
 #'
 #' Pandoc style strong emphasis format (e.g. \code{**FOO**}) is added to character string.
@@ -108,9 +124,10 @@ pandoc.p <- function(...)
 #' @references John MacFarlane (2012): _Pandoc User's Guide_. \url{http://johnmacfarlane.net/pandoc/README.html}
 #' @examples
 #' pandoc.strong('FOO')
+#' pandoc.strong(c('FOO', '**FOO**'))
 #' pandoc.strong.return('FOO')
 pandoc.strong.return <- function(x)
-    paste0('**', trim.spaces(x), '**')
+    pandoc.add.formatting(x, '**')
 
 #' @export
 pandoc.strong <- function(...)
@@ -127,9 +144,10 @@ pandoc.strong <- function(...)
 #' @references John MacFarlane (2012): _Pandoc User's Guide_. \url{http://johnmacfarlane.net/pandoc/README.html}
 #' @examples
 #' pandoc.emphasis('FOO')
+#' pandoc.emphasis(c('FOO', '*FOO*'))
 #' pandoc.emphasis.return('FOO')
 pandoc.emphasis.return <- function(x)
-    paste0('*', trim.spaces(x), '*')
+    pandoc.add.formatting(x, '*')
 
 #' @export
 pandoc.emphasis <- function(...)
@@ -147,9 +165,10 @@ pandoc.emphasis <- function(...)
 #' @references John MacFarlane (2012): _Pandoc User's Guide_. \url{http://johnmacfarlane.net/pandoc/README.html}
 #' @examples
 #' pandoc.strikeout('FOO')
+#' pandoc.strikeout(c('FOO', '~~FOO~~'))
 #' pandoc.strikeout.return('FOO')
 pandoc.strikeout.return <- function(x)
-    paste0('~~', trim.spaces(x), '~~')
+    pandoc.add.formatting(x, '~~')
 
 #' @export
 pandoc.strikeout <- function(...)
