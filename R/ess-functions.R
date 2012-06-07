@@ -1,4 +1,4 @@
-#' @keyword internal
+#' @keywords internal
 ess.pander.evals <- function(x) {
     require(pander)
     wd <- getwd()
@@ -9,6 +9,7 @@ ess.pander.evals <- function(x) {
     cat("\n")
 }
 
+#' @keywords internal
 ess.evals <- function(x) {
     require(pander)
     wd <- getwd()

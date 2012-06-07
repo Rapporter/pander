@@ -3,8 +3,10 @@
 \alias{pandoc.table.return}
 \title{Create a table}
 \usage{
-  pandoc.table.return(t, caption = NULL, digits = 2,
-    decimal.mark = ".", justify = "left",
+  pandoc.table.return(t, caption = NULL,
+    digits = pander.option("digits"),
+    decimal.mark = pander.option("decimal.mark"),
+    round = pander.option("round"), justify = "left",
     style = c("multiline", "grid", "simple"))
 }
 \arguments{
@@ -12,9 +14,11 @@
 
   \item{caption}{string}
 
-  \item{digits}{see \code{prettyNum}}
+  \item{digits}{passed to \code{format}}
 
-  \item{decimal.mark}{see \code{prettyNum}}
+  \item{decimal.mark}{passed to \code{format}}
+
+  \item{round}{passed to \code{round}}
 
   \item{justify}{see \code{prettyNum}}
 
@@ -51,7 +55,8 @@ pandoc.table(mtcars[, 1:3], decimal.mark = ',', justify = 'right')
 pandoc.table(matrix(sample(1:1000, 25), 5, 5))
 pandoc.table(matrix(runif(25), 5, 5))
 pandoc.table(matrix(runif(25), 5, 5), digits = 5)
-pandoc.table.return(table(mtcars$am))
+pandoc.table(matrix(runif(25),5,5), round = 1)
+pandoc.table(table(mtcars$am))
 pandoc.table(table(mtcars$am, mtcars$gear))
 pandoc.table(table(state.division, state.region))
 pandoc.table(table(state.division, state.region), justify = 'centre')

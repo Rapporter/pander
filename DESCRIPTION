@@ -27,3 +27,4 @@ Collate:
     'convert.R'
     'evals.R'
     'ess-functions.R'
+    'options.R'

@@ -29,13 +29,14 @@
 
 ## General tasks
 
-  * **add controllable, global options**
-  * **add ~~caption~~/other tweaks to images/tables using `attrs`**
+  * ~~**add controllable, global options**~~ `pander.option`
+  * **add ~~caption~~/other tweaks (sign. stars, emphasis etc.) to images/tables using `attrs`**
 
 ## Evals
 
   * cleanup code from repeating code (like: `suppressMessages(suppressWarnings(...)))`)
   * remove `evaluate` dependency
+  * add option: grab.images (render those to disk or return unprinted)
 
 ## Helper functions
 
@@ -97,7 +98,9 @@
 
 ### Tests
 
-  * do that at last!
+  * **Do that at last!**
+  * evals
+  * helper functions
 
 # HTML/JS/CSS issues
 

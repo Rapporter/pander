@@ -114,7 +114,7 @@ pander.matrix <- function(x, caption = attr(x, 'caption'), ...)
 
 #' @S3method pander numeric
 pander.numeric <- function(x, ...)
-    cat(p(x))        # TODO: ROUND!
+    cat(p(format(round(x, pander.option('round')), trim = TRUE, digits = pander.option('digits'), decimal.mark = pander.option('decimal.mark'))))
 
 #' @S3method pander character
 pander.character <- function(x, ...)

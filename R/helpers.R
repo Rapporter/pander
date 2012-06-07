@@ -133,6 +133,7 @@ pandoc.strong.return <- function(x)
 pandoc.strong <- function(...)
     cat(pandoc.strong.return(...))
 
+
 #' Emphasis
 #'
 #' Pandoc style emphasis format (e.g. \code{*FOO*}) is added to character string.
@@ -307,7 +308,11 @@ pandoc.horizontal.rule <- function(...)
 #' pandoc.header('Foo **bar**!', 1, 'setext')
 pandoc.header.return <- function(x, level = 1, style = c('atx', 'setext')) {
 
-    style <- match.arg(style)
+    if (missing(style))
+        style <- pander.option('header.style')
+    else
+        style <- match.arg(style)
+
     if (!is.numeric(level))
         stop('Wrong level provided!')
     if (any((style == 'atx' & level > 6), (style == 'setext' & level > 2)))
@@ -422,8 +427,12 @@ pandoc.list.return <- function(elements, style = c('bullet', 'ordered', 'roman')
     if (!is.logical(loose))
         stop('Wrong argument provided: loose')
 
+    if (missing(style))
+        style <- pander.option('list.style')
+    else
+        style <- match.arg(style)
+
     elements.l <- length(elements)
-    style      <- match.arg(style)
     marker     <- switch(style,
                          'bullet'  = rep('* ', elements.l),
                          'ordered' = paste0(1:elements.l, '. '),
@@ -461,8 +470,9 @@ pandoc.list <- function(...)
 #' This function will try to make pretty the provided R object's content like: rounding numbers, auto-recognizing if row names should be included etc.
 #' @param t data frame, matrix or table
 #' @param caption string
-#' @param digits see \code{prettyNum}
-#' @param decimal.mark see \code{prettyNum}
+#' @param digits passed to \code{format}
+#' @param decimal.mark passed to \code{format}
+#' @param round passed to \code{round}
 #' @param justify see \code{prettyNum}
 #' @param style which Pandoc style to use: \code{simple}, \code{multiline} or grid
 #' @return By default this function outputs (see: \code{cat}) the result. If you would want to catch the result instead, then call the function ending in \code{.return}.
@@ -482,7 +492,8 @@ pandoc.list <- function(...)
 #' pandoc.table(matrix(sample(1:1000, 25), 5, 5))
 #' pandoc.table(matrix(runif(25), 5, 5))
 #' pandoc.table(matrix(runif(25), 5, 5), digits = 5)
-#' pandoc.table.return(table(mtcars$am))
+#' pandoc.table(matrix(runif(25),5,5), round = 1)
+#' pandoc.table(table(mtcars$am))
 #' pandoc.table(table(mtcars$am, mtcars$gear))
 #' pandoc.table(table(state.division, state.region))
 #' pandoc.table(table(state.division, state.region), justify = 'centre')
@@ -506,7 +517,7 @@ pandoc.list <- function(...)
 #' pandoc.table(t)
 #' pandoc.table(t, style = "grid")
 #' tryCatch(pandoc.table(t, style = "simple"), error = function(e) 'Yeah, no newline support in simple tables')
-pandoc.table.return <- function(t, caption = NULL, digits = 2, decimal.mark = '.', justify = 'left', style = c('multiline', 'grid', 'simple')) {
+pandoc.table.return <- function(t, caption = NULL, digits = pander.option('digits'), decimal.mark = pander.option('decimal.mark'), round = pander.option('round'), justify = 'left', style = c('multiline', 'grid', 'simple')) {
 
     ## helper function
     table.expand <- function(cells, cols.width, justify, sep.cols) {
@@ -533,10 +544,24 @@ pandoc.table.return <- function(t, caption = NULL, digits = 2, decimal.mark = '.
     }
 
     ## initializing
-    style <- match.arg(style)
     res <- ''
+    if (missing(style))
+        style <- pander.option('table.style')
+    else
+        style <- match.arg(style)
 
     ## format numeric & convert to string
+    if (length(dim(t)) == 1) {
+        ## just numbers
+        t.n <- as.numeric(which(apply(t, 1, is.numeric)))
+        if (length(t.n) > 0)
+            t[t.n] <- round(t[t.n], round)
+    } else {
+        ## just numbers (not just column-wise to make it general)
+        t.n <- as.numeric(which(apply(t, 2, is.numeric)))
+        if (length(t.n) > 0)
+            t[, t.n] <- round(t[, t.n], round)
+    }
     t <- format(t, trim = TRUE, digits = digits, decimal.mark = decimal.mark)
 
     ## TODO: adding formatting (emphasis, strong etc.)
@@ -608,7 +633,7 @@ pandoc.table.return <- function(t, caption = NULL, digits = 2, decimal.mark = '.
             res <- list(t[1:(t.split-1)], t[t.split:length(t)])
 
         ## recursive call
-        res <- paste(pandoc.table.return(res[[1]], caption = caption, digits = digits, decimal.mark = decimal.mark, justify = justify[1], style = style), pandoc.table.return(res[[2]], caption = NULL, digits = digits, decimal.mark = decimal.mark, justify = justify[2], style = style))
+        res <- paste(pandoc.table.return(res[[1]], caption = caption, digits = digits, decimal.mark = decimal.mark, round = round, justify = justify[1], style = style), pandoc.table.return(res[[2]], caption = NULL, digits = digits, decimal.mark = decimal.mark, round = round, justify = justify[2], style = style))
 
         return(res)
 
