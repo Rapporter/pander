@@ -612,7 +612,7 @@ pandoc.table.return <- function(t, caption = NULL, digits = pander.option('digit
         t.col.n <- ifelse(length(dim(t)) > 1, ncol(t), length(t))
 
         ## do not make one column tables
-        if (t.split == t.col.n)
+        if (t.split >= t.col.n)
             t.split <- t.split - 1
 
         ## update caption
