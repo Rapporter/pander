@@ -36,6 +36,7 @@
 
   * cleanup code from repeating code (like: `suppressMessages(suppressWarnings(...)))`)
   * remove `evaluate` dependency
+  * **grab multiple returned object/images in one chunk**
   * add option: grab.images (render those to disk or return unprinted)
 
 ## Helper functions
@@ -99,7 +100,7 @@
 ### Tests
 
   * **Do that at last!**
-  * evals
+  * ~~evals~~
   * helper functions
 
 # HTML/JS/CSS issues
