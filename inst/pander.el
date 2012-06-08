@@ -63,14 +63,15 @@
 	(let (
 	      (selection (buffer-substring-no-properties (region-beginning) (region-end))))
 	  (if (= (length selection) 0)
-	      (message "Nothing to pass to evals.")
+	      (message "Nothing selected.")
 	    (ess-execute (format "pander:::ess.pander.evals(\"%s\")\n" (replace-regexp-in-string "\"" "'" selection))))
 	  )
     (error "mark not active"))
   )
 
+
+;; Run pander (after eval) on current chunk (in which the pointer is) and show results in *ess-output* while setting working directory to tempdir() temporary. Chunk is recognized by opening '<%' or '<%=', and closing '%>' tags.
 (defun pander-chunk ()
-  "Run pander (after eval) on current chunk (in which the pointer is) and show results in *ess-output* while setting working directory to tempdir() temporary. Chunk is recognized by opening '<%' or '<%=', and closing '%>' tags."
   (interactive)
   (let (p1 p2)
     (skip-chars-backward "^<%[=]+") (setq p1 (point))
@@ -85,12 +86,55 @@
   )
 
 
-;; Run pander (after eval) on region or current chunk (if marker is not set) and show results in *ess-output* while setting working directory to tempdir() temporary. Chunk is recognized by opening '<%' or '<%=', and closing '%>' tags.
+;; Run pander (after eval) on region *or* current chunk (if marker is not set) and show results in *ess-output* while setting working directory to tempdir() temporary. Chunk is recognized by opening '<%' or '<%=', and closing '%>' tags.
 (defun pander-region-or-chunk ()
   (interactive)
   (if mark-active
       (pander-region)
     (pander-chunk))
+  )
+
+
+;; Run pander (after eval) on region and convert results specified format in minibuffer.
+(defun pander-region-export ()
+  (interactive)
+  (if mark-active
+	(let (
+	      (selection (buffer-substring-no-properties (region-beginning) (region-end))))
+	  (if (= (length selection) 0)
+	      (message "Nothing selected.")
+	    (let ((output-format (completing-read  "Output format: "
+						   '(("html" 1) ("pdf" 2) ("odt" 3) ("docx" 4)) nil t "html")))
+	      (ess-command (format "Pandoc.convert(text=capture.output(pander:::ess.pander.evals(\"%s\")), format=\"%s\")\n" (replace-regexp-in-string "\"" "'" selection) output-format))))
+	    )
+	  (error "mark not active"))
+    )
+
+
+;; Run pander (after eval) on current chunk (in which the pointer is) and convert results specified format in minibuffer. Chunk is recognized by opening '<%' or '<%=', and closing '%>' tags.
+(defun pander-chunk-export ()
+  (interactive)
+  (let (p1 p2)
+    (skip-chars-backward "^<%[=]+") (setq p1 (point))
+    (skip-chars-forward "^%>") (setq p2 (point))
+    (let (
+	  (selection (buffer-substring-no-properties p1 p2)))
+      (if (= (length selection) 0)
+	  (message "Pointer is not inside a chunk!")
+	(let ((output-format (completing-read  "Output format: "
+					       '(("html" 1) ("pdf" 2) ("odt" 3) ("docx" 4)) nil t "html")))
+(ess-command (format "Pandoc.convert(text=capture.output(pander:::ess.pander.evals(\"%s\")), format=\"%s\")\n" (replace-regexp-in-string "\"" "'" selection) output-format))))
+      )
+    )
+  )
+
+
+;; Run pander (after eval) on region *or* current chunk (if marker is not set) and and convert results specified format in minibuffer. Chunk is recognized by opening '<%' or '<%=', and closing '%>' tags.
+(defun pander-region-or-chunk-export ()
+  (interactive)
+  (if mark-active
+      (pander-region-export)
+    (pander-chunk-export))
   )
 
 
@@ -101,3 +145,7 @@
 (global-set-key (kbd "C-c p r") 'pander-region)
 (global-set-key (kbd "C-c p c") 'pander-chunk)
 (global-set-key (kbd "C-c p p") 'pander-region-or-chunk)
+(global-set-key (kbd "C-c p R") 'pander-region-export)
+(global-set-key (kbd "C-c p C") 'pander-chunk-export)
+(global-set-key (kbd "C-c p P") 'pander-region-or-chunk-export)
+

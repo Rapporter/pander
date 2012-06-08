@@ -316,7 +316,11 @@ I have created some simple LISP functions which would be handy if you are using 
     
 	Run `pander` (after `eval`) on region **or** current chunk (if marker is not set) and show results in *ess-output* while setting working directory to `tempdir()` temporary. Chunk is recognized by opening and closing `brew` tags.
 
+  * `pander-region-export` (`C-c p R`): Run `pander` (after `eval`) on region and convert results specified format in minibuffer with auto-complete.
+  * `pander-chunk-export` (`C-c p C`): Run `pander` (after `eval`) on current chunk (in which the pointer is) and convert results specified format in minibuffer. Chunk is **recognized** by opening and closing `brew` tags with auto-complete.
+  * `pander-region-or-chunk-export` (`C-c p P`): Run `pander` (after `eval`) on region **or** current chunk (if marker is not set) and convert results specified format in minibuffer with auto-complete. Chunk is recognized by opening and closing `brew` tags.
+
 These functions are rather a POC of what could be done with `pander` to speed up writing reports, but having great potentials - and besides that: doing a great job right now too (for me).
 
 -------
-This report was generated with [R](http://www.r-project.org/) (2.15.0) and [pander](https://github.com/daroczig/pander) (0.1) in 0.059 sec on x86_64-unknown-linux-gnu platform.
+This report was generated with [R](http://www.r-project.org/) (2.15.0) and [pander](https://github.com/daroczig/pander) (0.1) in 0.05 sec on x86_64-unknown-linux-gnu platform.
