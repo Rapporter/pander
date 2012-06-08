@@ -288,10 +288,13 @@ myReport$<span class="kw">export</span>(<span class="dt">open =</span> <span cla
 <li><code>pander-chunk</code> (<code>C-c p c</code>): Run <code>pander</code> (after <code>eval</code>) on current chunk (in which the pointer is) and show results in <em>ess-output</em> while setting working directory to <code>tempdir()</code> temporary. Chunk is <strong>recognized</strong> by opening and closing <code>brew</code> tags.</li>
 <li><p><code>pander-region-or-chunk</code> (<code>C-c p p</code>): IMHO the most useful function :)</p>
 <p>Run <code>pander</code> (after <code>eval</code>) on region <strong>or</strong> current chunk (if marker is not set) and show results in <em>ess-output</em> while setting working directory to <code>tempdir()</code> temporary. Chunk is recognized by opening and closing <code>brew</code> tags.</p></li>
+<li><code>pander-region-export</code> (<code>C-c p R</code>): Run <code>pander</code> (after <code>eval</code>) on region and convert results specified format in minibuffer with auto-complete.</li>
+<li><code>pander-chunk-export</code> (<code>C-c p C</code>): Run <code>pander</code> (after <code>eval</code>) on current chunk (in which the pointer is) and convert results specified format in minibuffer. Chunk is <strong>recognized</strong> by opening and closing <code>brew</code> tags with auto-complete.</li>
+<li><p><code>pander-region-or-chunk-export</code> (<code>C-c p P</code>): Run <code>pander</code> (after <code>eval</code>) on region <strong>or</strong> current chunk (if marker is not set) and convert results specified format in minibuffer with auto-complete. Chunk is recognized by opening and closing <code>brew</code> tags.</p></li>
 </ul>
 <p>These functions are rather a POC of what could be done with <code>pander</code> to speed up writing reports, but having great potentials - and besides that: doing a great job right now too (for me).</p>
 <hr />
-<p>This report was generated with <a href="http://www.r-project.org/">R</a> (2.15.0) and <a href="https://github.com/daroczig/pander">pander</a> (0.1) in 0.059 sec on x86_64-unknown-linux-gnu platform.</p>
+<p>This report was generated with <a href="http://www.r-project.org/">R</a> (2.15.0) and <a href="https://github.com/daroczig/pander">pander</a> (0.1) in 0.05 sec on x86_64-unknown-linux-gnu platform.</p>
 <p align="center">
   Design: <a href="http://rapport-package.info/"><i>rapport</i> Development Team</a> &copy; 2012 | Backend: <a href="https://github.com/daroczig/pander">pander</a> | License: <a href="http://www.gnu.org/licenses/agpl.html" target="_blank">AGPL3</a> | Styled with <a href="http://www.getskeleton.com/" target="_blank">skeleton</a>
 </p>
