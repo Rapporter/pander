@@ -47,7 +47,7 @@ Pandoc.convert <- function(f, text, format = 'html', open = TRUE, options = '', 
 
     if (!missing(text)) {
         f <- tempfile()
-        cat(text, file = f)
+        cat(text, file = f, sep = '\n')
     }
 
     f.out <- paste0(f, '.', format)
