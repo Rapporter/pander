@@ -27,22 +27,28 @@ open.file.in.OS <- function(f) {
 
 #' Converts Pandoc to other format
 #'
-#' Calling John MacFarlane's great program to convert specified file to other formats like \code{HTML}, \code{pdf}, \code{docx}, \code{odt} etc.
+#' Calling John MacFarlane's great program to convert specified file (see \code{f} parameter below) or character vector {see \code{text} paramater} to other formats like \code{HTML}, \code{pdf}, \code{docx}, \code{odt} etc.
 #' @param f Pandoc markdown format file path
+#' @param text Pandoc markdown format character vector. Treated as the content of \code{f} file.
 #' @param format required output format. For all possible values here check out Pandoc homepage: \url{http://johnmacfarlane.net/pandoc/}
 #' @param open try to open converted document with operating system's default program
 #' @param options optionally passed arguments to Pandoc (instead of \code{pander}'s default)
 #' @param footer add footer to document with meta-information
 #' @param proc.time optionally passed number in seconds which would be shown in the generated document's footer
 #' @references John MacFarlane (2012): _Pandoc User's Guide_. \url{http://johnmacfarlane.net/pandoc/README.html}
-#' @note This function depends on \code{Pandoc} which should be pre-installed on user's machine.
+#' @note This function depends on \code{Pandoc} which should be pre-installed on user's machine. See the \code{INSTALL} file of the package.
 #' @return Converted file's path.
 #' @export
-Pandoc.convert <- function(f, format = 'html', open = TRUE, options = '', footer = TRUE, proc.time) {
+Pandoc.convert <- function(f, text, format = 'html', open = TRUE, options = '', footer = TRUE, proc.time) {
 
     ## check for Pandoc
     if (paste(suppressWarnings(tryCatch(system('pandoc -v', intern=T), error=function(x) 'NOPANDOC')), collapse='\n') == 'NOPANDOC')
         stop("It seems Pandoc is not installed or path of binary is not found. Did you restarted R after Pandoc install? See installation details by running:\n\n\t readLines(system.file('includes/html/footer.html', package='pander'))\n")
+
+    if (!missing(text)) {
+        f <- tempfile()
+        cat(text, file = f)
+    }
 
     f.out <- paste0(f, '.', format)
 

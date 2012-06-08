@@ -2,11 +2,14 @@
 \alias{Pandoc.convert}
 \title{Converts Pandoc to other format}
 \usage{
-  Pandoc.convert(f, format = "html", open = TRUE,
+  Pandoc.convert(f, text, format = "html", open = TRUE,
     options = "", footer = TRUE, proc.time)
 }
 \arguments{
   \item{f}{Pandoc markdown format file path}
+
+  \item{text}{Pandoc markdown format character vector.
+  Treated as the content of \code{f} file.}
 
   \item{format}{required output format. For all possible
   values here check out Pandoc homepage:
@@ -29,12 +32,15 @@
 }
 \description{
   Calling John MacFarlane's great program to convert
-  specified file to other formats like \code{HTML},
-  \code{pdf}, \code{docx}, \code{odt} etc.
+  specified file (see \code{f} parameter below) or
+  character vector {see \code{text} paramater} to other
+  formats like \code{HTML}, \code{pdf}, \code{docx},
+  \code{odt} etc.
 }
 \note{
   This function depends on \code{Pandoc} which should be
-  pre-installed on user's machine.
+  pre-installed on user's machine. See the \code{INSTALL}
+  file of the package.
 }
 \references{
   John MacFarlane (2012): _Pandoc User's Guide_.
