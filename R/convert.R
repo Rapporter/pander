@@ -28,8 +28,8 @@ open.file.in.OS <- function(f) {
 #' Converts Pandoc to other format
 #'
 #' Calling John MacFarlane's great program to convert specified file (see \code{f} parameter below) or character vector {see \code{text} paramater} to other formats like \code{HTML}, \code{pdf}, \code{docx}, \code{odt} etc.
-#' @param f Pandoc markdown format file path
-#' @param text Pandoc markdown format character vector. Treated as the content of \code{f} file.
+#' @param f Pandoc markdown format file path. If URL is provided then the generated file's path is \code{tempfile()}.
+#' @param text Pandoc markdown format character vector. Treated as the content of \code{f} file - so the \code{f} parameter is ignored. The generated file's path is \code{tempfile()}.
 #' @param format required output format. For all possible values here check out Pandoc homepage: \url{http://johnmacfarlane.net/pandoc/}
 #' @param open try to open converted document with operating system's default program
 #' @param options optionally passed arguments to Pandoc (instead of \code{pander}'s default)
@@ -39,24 +39,36 @@ open.file.in.OS <- function(f) {
 #' @note This function depends on \code{Pandoc} which should be pre-installed on user's machine. See the \code{INSTALL} file of the package.
 #' @return Converted file's path.
 #' @export
+#' @examples \dontrun{
+#' Pandoc.convert(text = c('# Demo', 'with a paragraph'))
+#' Pandoc.convert('http://daroczig.github.com/pander/minimal.md')
+#' }
 Pandoc.convert <- function(f, text, format = 'html', open = TRUE, options = '', footer = TRUE, proc.time) {
 
     ## check for Pandoc
     if (paste(suppressWarnings(tryCatch(system('pandoc -v', intern=T), error=function(x) 'NOPANDOC')), collapse='\n') == 'NOPANDOC')
         stop("It seems Pandoc is not installed or path of binary is not found. Did you restarted R after Pandoc install? See installation details by running:\n\n\t readLines(system.file('includes/html/footer.html', package='pander'))\n")
 
+    ## dealing with provided character vector
     if (!missing(text)) {
         f <- tempfile()
         cat(text, file = f, sep = '\n')
     }
 
-    f.out <- paste0(f, '.', format)
+    ## dealing with URLs
+    if (grepl('^https*://.*', f)) {
+        f.dir <- tempdir()
+        f.out <- paste0(tempfile(), '.', format)
+    } else {
+        f.dir <- dirname(f)
+        f.out <- paste0(f, '.', format)
+    }
 
     ## add nifty HTML/CSS/JS components
     if (format == 'html') {
         portable.dirs <- c('fonts', 'images', 'javascripts', 'stylesheets')
         for (portable.dir in portable.dirs)
-            file.copy(system.file(sprintf('includes/%s', portable.dir), package='pander'), dirname(f), recursive  = TRUE)
+            file.copy(system.file(sprintf('includes/%s', portable.dir), package='pander'), f.dir, recursive  = TRUE)
         if (options == '')
             options <- sprintf('-H "%s" -A "%s"', system.file('includes/html/header.html', package='pander'), system.file('includes/html/footer.html', package='pander'))
     } else {
@@ -74,8 +86,8 @@ Pandoc.convert <- function(f, text, format = 'html', open = TRUE, options = '', 
 
     ## call Pandoc in specified dir and reset wd
     wd <- getwd()
-    setwd(dirname(f))
-    res <- suppressWarnings(tryCatch(system(sprintf('pandoc -s %s %s -o %s', options, shQuote(f), shQuote(f.out)), intern=T), error=function(e) e))
+    setwd(f.dir)
+    res <- suppressWarnings(tryCatch(system(sprintf('pandoc -f markdown -s %s %s -o %s', options, shQuote(f), shQuote(f.out)), intern=T), error=function(e) e))
     setwd(wd)
 
     ## open

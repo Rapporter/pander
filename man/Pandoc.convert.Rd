@@ -6,10 +6,14 @@
     options = "", footer = TRUE, proc.time)
 }
 \arguments{
-  \item{f}{Pandoc markdown format file path}
+  \item{f}{Pandoc markdown format file path. If URL is
+  provided then the generated file's path is
+  \code{tempfile()}.}
 
   \item{text}{Pandoc markdown format character vector.
-  Treated as the content of \code{f} file.}
+  Treated as the content of \code{f} file - so the \code{f}
+  parameter is ignored. The generated file's path is
+  \code{tempfile()}.}
 
   \item{format}{required output format. For all possible
   values here check out Pandoc homepage:
