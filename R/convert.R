@@ -28,7 +28,7 @@ open.file.in.OS <- function(f) {
 #' Converts Pandoc to other format
 #'
 #' Calling John MacFarlane's great program to convert specified file (see \code{f} parameter below) or character vector {see \code{text} paramater} to other formats like \code{HTML}, \code{pdf}, \code{docx}, \code{odt} etc.
-#' @param f Pandoc markdown format file path. If URL is provided then the generated file's path is \code{tempfile()}.
+#' @param f Pandoc markdown format file path. If URL is provided then the generated file's path is \code{tempfile()} but please bear in mind that this way only images with absolute path would shown up in the document.
 #' @param text Pandoc markdown format character vector. Treated as the content of \code{f} file - so the \code{f} parameter is ignored. The generated file's path is \code{tempfile()}.
 #' @param format required output format. For all possible values here check out Pandoc homepage: \url{http://johnmacfarlane.net/pandoc/}
 #' @param open try to open converted document with operating system's default program
@@ -42,6 +42,7 @@ open.file.in.OS <- function(f) {
 #' @examples \dontrun{
 #' Pandoc.convert(text = c('# Demo', 'with a paragraph'))
 #' Pandoc.convert('http://daroczig.github.com/pander/minimal.md')
+#' ## Note: the generated HTML is not showing images with relative path from the above file. Based on that `pdf`, `docx` etc. formats would not work! If you want to convert an online markdown file to other formats with this function, please pre-process the file to have absolute paths instead.
 #' }
 Pandoc.convert <- function(f, text, format = 'html', open = TRUE, options = '', footer = TRUE, proc.time) {
 

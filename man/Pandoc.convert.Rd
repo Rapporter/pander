@@ -8,7 +8,9 @@
 \arguments{
   \item{f}{Pandoc markdown format file path. If URL is
   provided then the generated file's path is
-  \code{tempfile()}.}
+  \code{tempfile()} but please bear in mind that this way
+  only images with absolute path would shown up in the
+  document.}
 
   \item{text}{Pandoc markdown format character vector.
   Treated as the content of \code{f} file - so the \code{f}
@@ -45,6 +47,13 @@
   This function depends on \code{Pandoc} which should be
   pre-installed on user's machine. See the \code{INSTALL}
   file of the package.
+}
+\examples{
+\dontrun{
+Pandoc.convert(text = c('# Demo', 'with a paragraph'))
+Pandoc.convert('http://daroczig.github.com/pander/minimal.md')
+## Note: the generated HTML is not showing images with relative path from the above file. Based on that `pdf`, `docx` etc. formats would not work! If you want to convert an online markdown file to other formats with this function, please pre-process the file to have absolute paths instead.
+}
 }
 \references{
   John MacFarlane (2012): _Pandoc User's Guide_.
