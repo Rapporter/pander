@@ -104,7 +104,7 @@
 	  (if (= (length selection) 0)
 	      (message "Nothing selected.")
 	    (let ((output-format (completing-read  "Output format: "
-						   '(("html" 1) ("pdf" 2) ("odt" 3) ("docx" 4)) nil t "html")))
+						   '(("html" 1) ("pdf" 2) ("odt" 3) ("docx" 4)) nil nil "html")))
 	      (ess-command (format "Pandoc.convert(text=capture.output(pander:::ess.pander.evals(\"%s\")), format=\"%s\")\n" (replace-regexp-in-string "\"" "'" selection) output-format))))
 	    )
 	  (error "mark not active"))
