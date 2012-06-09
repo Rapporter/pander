@@ -28,10 +28,16 @@
 
 (provide 'ess-pander)
 
-;; Run Pandoc.brew on current buffer and show results in *ess-output* while setting working directory to tempdir() temporary.
+;; Run Pandoc.brew on current buffer or region and show results in *ess-output* while setting working directory to tempdir() temporary.
 (defun pander-brew ()
     (interactive)
-    (ess-execute (format "require(pander);wd<-getwd();setwd(tempdir());Pandoc.brew(\"%s\");setwd(wd)\n" buffer-file-name))
+    (if mark-active
+	(let (
+	      (selection (buffer-substring-no-properties (region-beginning) (region-end))))
+	  (ess-execute (format "require(pander);wd<-getwd();setwd(tempdir());Pandoc.brew(text=\"%s\");setwd(wd)\n" selection))
+	  )
+	(ess-execute (format "require(pander);wd<-getwd();setwd(tempdir());Pandoc.brew(\"%s\");setwd(wd)\n" buffer-file-name))
+      )
 )
 
 
