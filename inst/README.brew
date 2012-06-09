@@ -212,17 +212,18 @@ Pandoc.brew(system.file('README.brew', package='pander'))
 To export a brewed file to other then Pandoc's markdown, please use the `convert` parameter! For example (please disregard the backslash in front of the percent sign):
 
 ```r
-text <- paste('# Header', '', '<\%=as.list(runif(10))\%>', '<\%=mtcars[1:3, ]\%>', '<\%=plot(1:10)\%>', sep = '\n')
+text <- paste('# Header', '', 'What a lovely list:\n<%=as.list(runif(10))%>', 'A wide table:\n<%=mtcars[1:3, ]%>', 'And a nice chart:\n\n<%=plot(1:10)%>', sep = '\n')
 Pandoc.brew(text = text, output = tempfile(), convert = 'html')
 Pandoc.brew(text = text, output = tempfile(), convert = 'pdf')
 ```
 
-Of course a text file could work as input (by default) the above example uses `text` parameter as a reproducible example. For example brewing this README with all R chunks run to html, pleae run:
+Of course a text file could work as input (by default) the above example uses `text` parameter as a reproducible example. For example brewing this README with all R chunks run to html, please run:
 
 ```r
 Pandoc.brew(system.file('README.brew', package='pander'), output = tempfile(), convert = 'html')
-Pandoc.brew(system.file('README.brew', package='pander'), output = tempfile(), convert = 'pdf')
 ```
+
+And there are some package bundled examples too.
 
 ## Examples
 
@@ -231,10 +232,14 @@ The package comes bundled with some examples for `Pandoc.brew` to let users chec
   * [minimal.brew](https://github.com/daroczig/pander/blob/master/inst/examples/minimal.brew)
   * [short-code-long-report.brew](https://github.com/daroczig/pander/blob/master/inst/examples/short-code-long-report.brew)
 
-To `brew` these examples on your machine try to run e.g.:
+To `brew` these examples on your machine try to run the followings.:
 
 ```r
+Pandoc.brew(system.file('examples/minimal.brew', package='pander'))
 Pandoc.brew(system.file('examples/minimal.brew', package='pander'), output = tempfile(), convert = 'html')
+
+Pandoc.brew(system.file('examples/short-code-long-report.brew', package='pander'))
+Pandoc.brew(system.file('examples/short-code-long-report.brew', package='pander'), output = tempfile(), convert = 'html')
 ```
 
 For easy access I have uploaded some exported documents of the above examples:

@@ -9,7 +9,9 @@
 #'      \item plots and images are grabbed in the document, rendered to a png file and pander method would result in a Pandoc markdown formatted image link (so the image would be shown/included in the exported document). The images' are put in \code{plots} directory in current \code{getwd()} or to the specified \code{output} file's directory.
 #'      \item all warnings/messages and errors are recorded in the blocks and returned in the document as a footnote
 #' }
-#' @param file file path of the brew template
+#'
+#' Please see my Github page for details (\url{http://daroczig.github.com/pander/#brew-to-pandoc}) and examples (\url{http://daroczig.github.com/pander/#examples}).
+#' @param file file path of the brew template. As this is passed to \code{readLines}, \code{file} could be an URL too, but not over SSL (for that latter \code{RCurl} would be needed).
 #' @param output (optional) file path of the output file
 #' @param convert string: format of required output document (besides Pandoc's markdown). Pandoc is called if set via \code{Pandoc.convert} and the converted document could be also opened automatically (see below).
 #' @param open try to open converted document with operating system's default program
@@ -23,15 +25,20 @@
 #'      \item Jeffrey Horner (2011). _brew: Templating Framework for Report Generation._ \url{http://CRAN.R-project.org/package=brew}
 #'      \item John MacFarlane (2012): _Pandoc User's Guide_. \url{http://johnmacfarlane.net/pandoc/README.html}
 #' }
-#' @examples
-#' Pandoc.brew(text = 'string:<%="sfasfas"%>\nimage:<%=plot(1:10)%>\nerror:<%=mean(no.R.object.like.this)%>')
+#' @examples \dontrun{
+#' Pandoc.brew(text = 'string:<%="foobar"%>\nimage:<%=plot(1:10)%>\nerror:<%=mean(no.R.object.like.this)%>')
 #'
-#' text <- paste('# Header', '', '<%=as.list(runif(10))%>', '<%=mtcars[1:3, ]%>', '<%=plot(1:10)%>', sep = '\n')
+#' text <- paste('# Header', '', 'What a lovely list:\n<%=as.list(runif(10))%>', 'A wide table:\n<%=mtcars[1:3, ]%>', 'And a nice chart:\n\n<%=plot(1:10)%>', sep = '\n')
 #' Pandoc.brew(text = text)
 #' Pandoc.brew(text = text, output = tempfile(), convert = 'html')
 #' Pandoc.brew(text = text, output = tempfile(), convert = 'pdf')
 #'
-#' ## For a longer example checkout README.brew in this installed package or online: \url{https://github.com/daroczig/pander/blob/master/inst/README.brew}
+#' ## package bundled examples
+#' Pandoc.brew(system.file('examples/minimal.brew', package='pander'))
+#' Pandoc.brew(system.file('examples/minimal.brew', package='pander'), output = tempfile(), convert = 'html')
+#' Pandoc.brew(system.file('examples/short-code-long-report.brew', package='pander'))
+#' Pandoc.brew(system.file('examples/short-code-long-report.brew', package='pander'), output = tempfile(), convert = 'html')
+#' }
 #' @importFrom brew brew
 Pandoc.brew <- function(file = stdin(), output = stdout(), convert = FALSE, open = TRUE, graph.hi.res = FALSE, text = NULL, envir = new.env()) {
 
