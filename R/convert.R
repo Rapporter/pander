@@ -20,7 +20,7 @@ open.file.in.OS <- function(f) {
         if (grepl("darwin", version$os))   # Mac
             system(paste(shQuote("open"), shQuote(f)), wait = FALSE, ignore.stderr = TRUE)
         else                               # Linux-like
-            system(paste(shQuote("/usr/bin/xdg-open"), shQuote(f)), wait = FALSE, ignore.stderr = TRUE)
+            system(paste(shQuote("/usr/bin/xdg-open"), shQuote(f)), wait = FALSE, ignore.stdout = TRUE)
     }
 
 }
