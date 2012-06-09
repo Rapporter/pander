@@ -38,6 +38,13 @@
 	  )
 	(ess-execute (format "require(pander);wd<-getwd();setwd(tempdir());Pandoc.brew(\"%s\");setwd(wd)\n" buffer-file-name))
       )
+    ;; remove possible "+" chars at the beginning of the result
+    (save-excursion
+      (set-buffer "*ess-output*")
+      (beginning-of-line)
+      (while (re-search-forward "\\+ " (min (point-at-eol)) 'go)
+	(replace-match ""))
+      )
 )
 
 
