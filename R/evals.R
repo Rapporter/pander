@@ -384,7 +384,10 @@ evals <- function(txt = NULL, ind = NULL, body = NULL, classes = NULL, hooks = N
                             stdout = NULL
                             )
 
-                return(res[output])
+                res <- res[output]
+                class(res) <- 'evals'
+                return(res)
+
             }
             errors <- NULL
 
