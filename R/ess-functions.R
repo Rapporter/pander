@@ -1,6 +1,6 @@
 #' @keywords internal
 ess.pander.evals <- function(x) {
-    require(pander)
+    require(pander, quietly = T)
     wd <- getwd()
     setwd(tempdir())
     cat("\n")
@@ -11,7 +11,7 @@ ess.pander.evals <- function(x) {
 
 #' @keywords internal
 ess.evals <- function(x) {
-    require(pander)
+    require(pander, quietly = T)
     wd <- getwd()
     setwd(tempdir())
     cat("\n")
