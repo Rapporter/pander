@@ -4,10 +4,13 @@
 ;;
 ;; Author: Gergely Daróczi <gergely@snowl.net>
 ;; Version: 0.1
+;; Package-Requires: ((ess))
 ;; Keywords: ESS, R, report
 ;; X-URL: http://daroczig.github.com/pander/
 
-;; This program is free software; you can redistribute it and/or
+;; This file is not part of GNU Emacs.
+
+;; This "program" is free software; you can redistribute it and/or
 ;; modify it under the terms of the Affero General Public License
 ;; as published by the Free Software Foundation; version 3.
 ;;
@@ -16,48 +19,170 @@
 ;; MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 ;; AGPL for more details: http://www.gnu.org/licenses/agpl-3.0.html
 
+;;; Installation and load
 
-
-;; 
-;; TODO list:
-;;   * escaping issue (now changing all double quotes to single quotes in selection)
+;; This file can be found on your filesystem if pander R package
+;; is installed. If you do not know where it is, run the following
+;; command in *R*:
+;;
+;;	system.file('pander.el', package='pander')
+;;
+;; To use this minor, simply add the above firectory to your path
+;; and load pander.el, e.g.:
+;;
+;;	(add-to-list 'load-path "/usr/lib/R/library/pander/")
+;;	(require 'pander)
 ;;
 
+;;; Feedback
 
-;; Code:
+;; This minor-mode is under heavy development. Any suggestion/feedback
+;; really welcomed at GH issue tracker:
+;; 
+;;	http://daroczig.github.com/pander/issues
 
-(provide 'ess-pander)
+;;; TODO:
 
-;; Run Pandoc.brew on current buffer or region and show results in *ess-output* while setting working directory to tempdir() temporary.
+;;   * escaping issue (now changing all double quotes to single quotes in selection)
+
+;;; Code:
+
+;; minor mode
+
+(defgroup pander nil
+  "ESS integration of pander R package"
+  :group 'ess)
+
+(defvar pander-mode-map
+  (let ((keymap (make-sparse-keymap)))
+    (define-key keymap (kbd "C-c p b") 'pander-brew)
+    (define-key keymap (kbd "C-c p B") 'pander-brew-export)
+    (define-key keymap (kbd "C-c p e") 'pander-eval)
+    keymap)
+  "Keymap for pander-mode.")
+
+(define-minor-mode pander-mode
+  "Toggle pander mode.
+With no argument, this command toggles the mode. 
+Non-null prefix argument turns on the mode.
+Null prefix argument turns off the mode.
+
+When pander mode is enabled, some keybindigs
+are activated for pander functions."
+  :lighter " pander"
+  :group 'pander
+  )
+
+;; Define key-bindings for calling above functions
+
+;; (global-set-key (kbd "C-c p e") 'pander-evals-region)
+;; (global-set-key (kbd "C-c p r") 'pander-region)
+;; (global-set-key (kbd "C-c p c") 'pander-chunk)
+;; (global-set-key (kbd "C-c p p") 'pander-region-or-chunk)
+;; (global-set-key (kbd "C-c p R") 'pander-region-export)
+;; (global-set-key (kbd "C-c p C") 'pander-chunk-export)
+;; (global-set-key (kbd "C-c p P") 'pander-region-or-chunk-export)
+
+
+(defcustom pander-clipboard nil
+  "If non-nil then the result of pander-* functions would be copied to clipboard."
+  :type 'boolean
+  :group 'pander)
+
+
+;; functions
+
+(defun pander-postprocess-output ()
+
+  "Prettify results in *ess-output* and optionally copy to clipboard."
+
+  ;; remove possible "+" chars at the beginning of the result
+  (set-buffer "*ess-output*")
+  (beginning-of-line)
+  (while (re-search-forward "\\+ " (min (point-at-eol)) 'go)
+    (replace-match ""))
+  
+  ;; copy to clipboard
+  (if pander-clipboard
+      (clipboard-kill-ring-save (point-min) (point-max))
+    )
+  
+  )
+
+
 (defun pander-brew ()
+  "Run Pandoc.brew on current buffer or region (if mark is active), show results in *ess-output* and (optionally) copy results to clipboard while setting working directory to tempdir() temporary."
     (interactive)
+
+    (save-excursion
+      (if mark-active
+	  (let (
+		(selection (buffer-substring-no-properties (region-beginning) (region-end))))
+	    (ess-execute (format "require(pander, quietly=T);wd<-getwd();setwd(tempdir());Pandoc.brew(text=\"%s\");setwd(wd)\n" (replace-regexp-in-string "\"" "'" selection)))
+	    )
+	(ess-execute (format "require(pander, quietly=T);wd<-getwd();setwd(tempdir());Pandoc.brew(\"%s\");setwd(wd)\n" buffer-file-name))
+	)
+      (pander-postprocess-output)
+      )
+
+    )
+
+
+(defun pander-brew-export ()
+  "Run Pandoc.brew on current buffer or region (if mark is active) and export results. Also tries to open exported document."
+    (interactive)
+    
+    (save-excursion
+      (let ((output-format (completing-read  "Output format: "
+					     '(("html" 1) ("pdf" 2) ("odt" 3) ("docx" 4)) nil nil "html")))
+	(if mark-active
+	    (let (
+		  (selection (buffer-substring-no-properties (region-beginning) (region-end))))
+	      (ess-command (format "require(pander, quietly=T);wd<-getwd();setwd(tempdir());Pandoc.brew(text=\"%s\",output=tempfile(),convert=\"%s\" );setwd(wd)\n" (replace-regexp-in-string "\"" "'" selection) output-format))
+	      )
+	  (ess-command (format "require(pander, quietly=T);wd<-getwd();setwd(tempdir());Pandoc.brew(\"%s\",output=tempfile(),convert=\"%s\");setwd(wd)\n" buffer-file-name output-format))
+	  )
+	)
+      )
+    )
+    
+
+(defun pander-eval ()
+  "Run pander on (automatically evaluated) region *or* current chunk (if marker is not set), show results (of last returned R object) in *ess-output* and (optionally) copy those to clipboard while setting working directory to tempdir() temporary. Chunk is recognized by opening '<%' or '<%=', and closing '%>' tags."
+  (interactive)
+
+  (save-excursion
     (if mark-active
 	(let (
 	      (selection (buffer-substring-no-properties (region-beginning) (region-end))))
-	  (ess-execute (format "require(pander);wd<-getwd();setwd(tempdir());Pandoc.brew(text=\"%s\");setwd(wd)\n" selection))
-	  )
-	(ess-execute (format "require(pander);wd<-getwd();setwd(tempdir());Pandoc.brew(\"%s\");setwd(wd)\n" buffer-file-name))
-      )
-    ;; remove possible "+" chars at the beginning of the result
-    (save-excursion
-      (set-buffer "*ess-output*")
-      (beginning-of-line)
-      (while (re-search-forward "\\+ " (min (point-at-eol)) 'go)
-	(replace-match ""))
-      )
-)
+	  (if (= (length selection) 0)
+	      (message "Nothing selected in region.")
+	    (ess-execute (format "pander:::ess.pander.evals(\"%s\")\n" (replace-regexp-in-string "\"" "'" (replace-regexp-in-string "\"" "'" selection))))))
+
+      (let (p1 p2)
+	(skip-chars-backward "^<%[=]+") (setq p1 (point))
+	(skip-chars-forward "^%>") (setq p2 (point))
+	(let (
+	      (selection (buffer-substring-no-properties p1 p2)))
+	  (if (= (length selection) 0)
+	      (message "Pointer is not inside a chunk!")
+	    (ess-execute (format "pander:::ess.pander.evals(\"%s\")\n" (replace-regexp-in-string "\"" "'" selection)))))))
+    (pander-postprocess-output))
+
+  )
 
 
-;; Run Pandoc.brew on current buffer and export results in HTML. Also tries to open that automatically in default browser.
-(defun pander-brew-to-HTML ()
-    (interactive)
-    (ess-command (format "require(pander);wd<-getwd();setwd(tempdir());Pandoc.brew(\"%s\", output = tempfile(), convert = 'html');setwd(wd)\n" buffer-file-name))
-)
 
 
-;; Run evals on region and show results in *ess-output* while setting working directory to tempdir() temporary.
+
+
+
+
+;;; deprecated functions
+
 (defun pander-evals-region ()
-    (interactive)
+  "Run evals on region and show results in *ess-output* while setting working directory to tempdir() temporary."
+;;    (interactive)
     (if mark-active
 	(let (
 	      (selection (buffer-substring-no-properties (region-beginning) (region-end))))
@@ -68,10 +193,9 @@
       (error "mark not active"))
 )
 
-
-;; Run pander (after eval) on region and show results in *ess-output* while setting working directory to tempdir() temporary.
 (defun pander-region ()
-  (interactive)
+  "Run pander (after eval) on region and show results in *ess-output* while setting working directory to tempdir() temporary."
+;;  (interactive)
   (if mark-active
 	(let (
 	      (selection (buffer-substring-no-properties (region-beginning) (region-end))))
@@ -83,9 +207,9 @@
   )
 
 
-;; Run pander (after eval) on current chunk (in which the pointer is) and show results in *ess-output* while setting working directory to tempdir() temporary. Chunk is recognized by opening '<%' or '<%=', and closing '%>' tags.
 (defun pander-chunk ()
-  (interactive)
+  "Run pander (after eval) on current chunk (in which the pointer is) and show results in *ess-output* while setting working directory to tempdir() temporary. Chunk is recognized by opening '<%' or '<%=', and closing '%>' tags."
+;;  (interactive)
   (let (p1 p2)
     (skip-chars-backward "^<%[=]+") (setq p1 (point))
     (skip-chars-forward "^%>") (setq p2 (point))
@@ -99,18 +223,18 @@
   )
 
 
-;; Run pander (after eval) on region *or* current chunk (if marker is not set) and show results in *ess-output* while setting working directory to tempdir() temporary. Chunk is recognized by opening '<%' or '<%=', and closing '%>' tags.
 (defun pander-region-or-chunk ()
-  (interactive)
+  "Run pander (after eval) on region *or* current chunk (if marker is not set) and show results in *ess-output* while setting working directory to tempdir() temporary. Chunk is recognized by opening '<%' or '<%=', and closing '%>' tags."
+;;  (interactive)
   (if mark-active
       (pander-region)
     (pander-chunk))
   )
 
 
-;; Run pander (after eval) on region and convert results specified format in minibuffer.
 (defun pander-region-export ()
-  (interactive)
+  "Run pander (after eval) on region and convert results specified format in minibuffer."
+;;  (interactive)
   (if mark-active
 	(let (
 	      (selection (buffer-substring-no-properties (region-beginning) (region-end))))
@@ -118,15 +242,16 @@
 	      (message "Nothing selected.")
 	    (let ((output-format (completing-read  "Output format: "
 						   '(("html" 1) ("pdf" 2) ("odt" 3) ("docx" 4)) nil nil "html")))
-	      (ess-command (format "Pandoc.convert(text=capture.output(pander:::ess.pander.evals(\"%s\")), format=\"%s\")\n" (replace-regexp-in-string "\"" "'" selection) output-format))))
+	      (ess-command (format "pander::Pandoc.convert(text=capture.output(pander:::ess.pander.evals(\"%s\")), format=\"%s\")\n" (replace-regexp-in-string "\"" "'" selection) output-format)))
 	    )
-	  (error "mark not active"))
-    )
+	  )
+    (error "mark not active"))
+  )
 
 
-;; Run pander (after eval) on current chunk (in which the pointer is) and convert results specified format in minibuffer. Chunk is recognized by opening '<%' or '<%=', and closing '%>' tags.
 (defun pander-chunk-export ()
-  (interactive)
+  "Run pander (after eval) on current chunk (in which the pointer is) and convert results specified format in minibuffer. Chunk is recognized by opening '<%' or '<%=', and closing '%>' tags."
+;;  (interactive)
   (let (p1 p2)
     (skip-chars-backward "^<%[=]+") (setq p1 (point))
     (skip-chars-forward "^%>") (setq p2 (point))
@@ -136,29 +261,19 @@
 	  (message "Pointer is not inside a chunk!")
 	(let ((output-format (completing-read  "Output format: "
 					       '(("html" 1) ("pdf" 2) ("odt" 3) ("docx" 4)) nil t "html")))
-(ess-command (format "Pandoc.convert(text=capture.output(pander:::ess.pander.evals(\"%s\")), format=\"%s\")\n" (replace-regexp-in-string "\"" "'" selection) output-format))))
+(ess-command (format "pander::Pandoc.convert(text=capture.output(pander:::ess.pander.evals(\"%s\")), format=\"%s\")\n" (replace-regexp-in-string "\"" "'" selection) output-format))))
       )
     )
   )
 
 
-;; Run pander (after eval) on region *or* current chunk (if marker is not set) and and convert results specified format in minibuffer. Chunk is recognized by opening '<%' or '<%=', and closing '%>' tags.
 (defun pander-region-or-chunk-export ()
-  (interactive)
+  "Run pander (after eval) on region *or* current chunk (if marker is not set) and and convert results specified format in minibuffer. Chunk is recognized by opening '<%' or '<%=', and closing '%>' tags."
+;;  (interactive)
   (if mark-active
       (pander-region-export)
     (pander-chunk-export))
   )
 
 
-;; Define key-bindings for calling above functions
-(global-set-key (kbd "C-c p b") 'pander-brew)
-(global-set-key (kbd "C-c p B") 'pander-brew-to-HTML)
-(global-set-key (kbd "C-c p e") 'pander-evals-region)
-(global-set-key (kbd "C-c p r") 'pander-region)
-(global-set-key (kbd "C-c p c") 'pander-chunk)
-(global-set-key (kbd "C-c p p") 'pander-region-or-chunk)
-(global-set-key (kbd "C-c p R") 'pander-region-export)
-(global-set-key (kbd "C-c p C") 'pander-chunk-export)
-(global-set-key (kbd "C-c p P") 'pander-region-or-chunk-export)
-
+(provide 'pander)
