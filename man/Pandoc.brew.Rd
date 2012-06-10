@@ -7,7 +7,10 @@
     text = NULL, envir = new.env())
 }
 \arguments{
-  \item{file}{file path of the brew template}
+  \item{file}{file path of the brew template. As this is
+  passed to \code{readLines}, \code{file} could be an URL
+  too, but not over SSL (for that latter \code{RCurl} would
+  be needed).}
 
   \item{output}{(optional) file path of the output file}
 
@@ -54,20 +57,31 @@
   \code{output} file's directory.  \item all
   warnings/messages and errors are recorded in the blocks
   and returned in the document as a footnote }
+
+  Please see my Github page for details
+  (\url{http://daroczig.github.com/pander/#brew-to-pandoc})
+  and examples
+  (\url{http://daroczig.github.com/pander/#examples}).
 }
 \note{
   Only one of the input parameters (\code{file} or
   \code{text}) is to be used at once!
 }
 \examples{
-Pandoc.brew(text = 'string:<\%="sfasfas"\%>\\nimage:<\%=plot(1:10)\%>\\nerror:<\%=mean(no.R.object.like.this)\%>')
+\dontrun{
+Pandoc.brew(text = 'string:<\%="foobar"\%>\\nimage:<\%=plot(1:10)\%>\\nerror:<\%=mean(no.R.object.like.this)\%>')
 
-text <- paste('# Header', '', '<\%=as.list(runif(10))\%>', '<\%=mtcars[1:3, ]\%>', '<\%=plot(1:10)\%>', sep = '\\n')
+text <- paste('# Header', '', 'What a lovely list:\\n<\%=as.list(runif(10))\%>', 'A wide table:\\n<\%=mtcars[1:3, ]\%>', 'And a nice chart:\\n\\n<\%=plot(1:10)\%>', sep = '\\n')
 Pandoc.brew(text = text)
 Pandoc.brew(text = text, output = tempfile(), convert = 'html')
 Pandoc.brew(text = text, output = tempfile(), convert = 'pdf')
 
-## For a longer example checkout README.brew in this installed package or online: \\url{https://github.com/daroczig/pander/blob/master/inst/README.brew}
+## package bundled examples
+Pandoc.brew(system.file('examples/minimal.brew', package='pander'))
+Pandoc.brew(system.file('examples/minimal.brew', package='pander'), output = tempfile(), convert = 'html')
+Pandoc.brew(system.file('examples/short-code-long-report.brew', package='pander'))
+Pandoc.brew(system.file('examples/short-code-long-report.brew', package='pander'), output = tempfile(), convert = 'html')
+}
 }
 \references{
   \itemize{ \item Jeffrey Horner (2011). _brew: Templating
