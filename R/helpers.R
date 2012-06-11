@@ -475,10 +475,10 @@ pandoc.list <- function(...)
 #' @param round passed to \code{round}
 #' @param justify see \code{prettyNum}
 #' @param style which Pandoc style to use: \code{simple}, \code{multiline} or grid
+#' @param split.cells where to split cells' text with line breaks. Default to \code{30}, to disbale set to \code{Inf}.
 #' @return By default this function outputs (see: \code{cat}) the result. If you would want to catch the result instead, then call the function ending in \code{.return}.
 #' @export
 #' @aliases pandoc.table
-#' @note Pandoc does not support justify parameter for grid tables ATM. ## TODO: multiline?
 #' @references John MacFarlane (2012): _Pandoc User's Guide_. \url{http://johnmacfarlane.net/pandoc/README.html}
 #' @examples
 #' pandoc.table(mtcars)
@@ -506,20 +506,23 @@ pandoc.list <- function(...)
 #' pandoc.table(mtcars)
 #' pandoc.table(mtcars, caption = 'Only once after the first part!')
 #'
-#' ## table with newlines in cells
+#' ## tables with line breaks in cells
+#' ## Note: line breaks are removed from table content and added automatically based on "split.cells" parameter!
 #' t <- data.frame(a = c('hundreds\nof\nmouses', '3 cats'), b=c('FOO is nice', 'BAR\nBAR2'))
 #' pandoc.table(t)
+#' pandoc.table(t, split.cells = 5)
 #'
 #' ## exporting tables in other Pandoc styles
 #' pandoc.table(m)
 #' pandoc.table(m, style = "grid")
 #' pandoc.table(m, style = "simple")
-#' pandoc.table(t)
 #' pandoc.table(t, style = "grid")
-#' tryCatch(pandoc.table(t, style = "simple"), error = function(e) 'Yeah, no newline support in simple tables')
-pandoc.table.return <- function(t, caption = NULL, digits = pander.option('digits'), decimal.mark = pander.option('decimal.mark'), round = pander.option('round'), justify = 'left', style = c('multiline', 'grid', 'simple')) {
+#' pandoc.table(t, style = "grid", split.cells = 5)
+#' pandoc.table(t, style = "simple")
+#' tryCatch(pandoc.table(t, style = "simple", split.cells = 5), error = function(e) 'Yeah, no newline support in simple tables')
+pandoc.table.return <- function(t, caption = NULL, digits = pander.option('digits'), decimal.mark = pander.option('decimal.mark'), round = pander.option('round'), justify = 'left', style = c('multiline', 'grid', 'simple'), split.cells = 30) {
 
-    ## helper function
+    ## helper functions
     table.expand <- function(cells, cols.width, justify, sep.cols) {
 
         df  <- data.frame(txt = cells, width = cols.width, justify = justify)
@@ -542,6 +545,8 @@ pandoc.table.return <- function(t, caption = NULL, digits = pander.option('digit
         }
 
     }
+    split.large.cells <- function(cells)
+        sapply(cells, function(x) paste(strwrap(x, width = split.cells), collapse = '\n'), USE.NAMES = FALSE)
 
     ## initializing
     res <- ''
@@ -566,20 +571,37 @@ pandoc.table.return <- function(t, caption = NULL, digits = pander.option('digit
 
     ## TODO: adding formatting (emphasis, strong etc.)
 
-    ## helper variables
+    ## helper variables & split too long (30+ chars) cells
     if (length(dim(t)) == 1) {
 
-        t.colnames  <- names(t)
+        t[1:dim(t)] <- split.large.cells(t)
+
         t.rownames  <- NULL
-        t.width     <- as.numeric(apply(cbind(nchar(t.colnames) + 2, as.numeric(apply(t, 1, nchar))), 1, max))
+        t.colnames  <- names(t)
+        if (!is.null(t.colnames)) {
+            t.colnames       <- split.large.cells(t.colnames)
+            t.colnames.width <- sapply(t.colnames, function(x) max(nchar(strsplit(x, '\n')[[1]])), USE.NAMES = FALSE) + 2
+        } else {
+            t.colnames.width <- 0
+        }
+
+        t.width <- as.numeric(apply(cbind(t.colnames.width, as.numeric(apply(t, 1, nchar))), 1, max))
 
     } else {
 
-        t.colnames  <- colnames(t)
+        t <- apply(t, c(1,2), split.large.cells)
+
         t.rownames  <- rownames(t)
+        t.colnames  <- colnames(t)
+        if (!is.null(t.colnames)) {
+            t.colnames  <- split.large.cells(t.colnames)
+            t.colnames.width <- sapply(t.colnames, function(x) max(nchar(strsplit(x, '\n')[[1]])), USE.NAMES = FALSE) + 2
+        } else {
+            t.colnames.width <- 0
+        }
 
         ## also dealing with cells split by newlines
-        t.width     <-  as.numeric(apply(cbind(nchar(t.colnames) + 2, apply(t, 2, function(x) max(sapply(strsplit(x,'\n'), function(x) max(nchar(x)))))), 1, max))
+        t.width     <-  as.numeric(apply(cbind(t.colnames.width, apply(t, 2, function(x) max(sapply(strsplit(x,'\n'), function(x) max(nchar(x)))))), 1, max))
 
         ## remove obvious row.names
         if (all(rownames(t) == 1:nrow(t)))
@@ -592,6 +614,7 @@ pandoc.table.return <- function(t, caption = NULL, digits = pander.option('digit
 
     if (length(t.rownames) != 0) {
 
+        t.rownames <- split.large.cells(t.rownames)
         t.colnames <- c('', t.colnames)
         t.width <- c(max(sapply(strsplit(t.rownames, '\n'), function(x) max(nchar(x)))), t.width)
 

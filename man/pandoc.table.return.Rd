@@ -7,7 +7,8 @@
     digits = pander.option("digits"),
     decimal.mark = pander.option("decimal.mark"),
     round = pander.option("round"), justify = "left",
-    style = c("multiline", "grid", "simple"))
+    style = c("multiline", "grid", "simple"),
+    split.cells = 30)
 }
 \arguments{
   \item{t}{data frame, matrix or table}
@@ -24,6 +25,10 @@
 
   \item{style}{which Pandoc style to use: \code{simple},
   \code{multiline} or grid}
+
+  \item{split.cells}{where to split cells' text with line
+  breaks. Default to \code{30}, to disbale set to
+  \code{Inf}.}
 }
 \value{
   By default this function outputs (see: \code{cat}) the
@@ -38,10 +43,6 @@
   This function will try to make pretty the provided R
   object's content like: rounding numbers, auto-recognizing
   if row names should be included etc.
-}
-\note{
-  Pandoc does not support justify parameter for grid tables
-  ATM. ## TODO: multiline?
 }
 \examples{
 pandoc.table(mtcars)
@@ -69,17 +70,20 @@ pandoc.table(m, justify = c('right', 'left', 'centre'))
 pandoc.table(mtcars)
 pandoc.table(mtcars, caption = 'Only once after the first part!')
 
-## table with newlines in cells
+## tables with line breaks in cells
+## Note: line breaks are removed from table content and added automatically based on "split.cells" parameter!
 t <- data.frame(a = c('hundreds\\nof\\nmouses', '3 cats'), b=c('FOO is nice', 'BAR\\nBAR2'))
 pandoc.table(t)
+pandoc.table(t, split.cells = 5)
 
 ## exporting tables in other Pandoc styles
 pandoc.table(m)
 pandoc.table(m, style = "grid")
 pandoc.table(m, style = "simple")
-pandoc.table(t)
 pandoc.table(t, style = "grid")
-tryCatch(pandoc.table(t, style = "simple"), error = function(e) 'Yeah, no newline support in simple tables')
+pandoc.table(t, style = "grid", split.cells = 5)
+pandoc.table(t, style = "simple")
+tryCatch(pandoc.table(t, style = "simple", split.cells = 5), error = function(e) 'Yeah, no newline support in simple tables')
 }
 \references{
   John MacFarlane (2012): _Pandoc User's Guide_.
