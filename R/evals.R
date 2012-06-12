@@ -53,7 +53,7 @@ eval.msgs <- function(src, env = NULL) {
     con <- textConnection("stdout", "wr", local=TRUE)
     sink(con, split = FALSE)
 
-    returns <- suppressMessages(withCallingHandlers(tryCatch(eval(parse(text=src), envir = env), error = function(e) e), warning = warning.handler, message = message.handler))
+    result <- suppressMessages(withCallingHandlers(tryCatch(withVisible(eval(parse(text=src), envir = env)), error = function(e) e), warning = warning.handler, message = message.handler))
 
     sink()
     close(con)
@@ -79,7 +79,7 @@ eval.msgs <- function(src, env = NULL) {
 
 
     list(src    = src,
-         output = returns,
+         result = result,
          type   = class(returns),
          msg    = list(
              messages = messages,
