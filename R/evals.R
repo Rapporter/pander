@@ -163,6 +163,7 @@ eval.msgs <- function(src, env = NULL) {
 #'
 #' Please check the examples carefully below to get a detailed overview of \code{\link{evals}}.
 #' @param txt a character vector containing R code. This could be a list/vector of lines of code or a simple string holding R code separated by \code{;} or \code{\n}.
+#' @param parse if TRUE the provided \code{txt} elements would be merged into one string and parsed to logical chunks. This is useful if you would want to get separate results of your code parts - not just the last returned value, but you are passing the whole script in one string. To manually lock lines to each other (e.g. calling a \code{plot} and on next line adding an \code{abline} or \code{text} to it), use a plus char (\code{+}) at the beginning of each line which should be evaluated with the previous one(s).
 #' @param classes a vector or list of classes which should be returned. If set to \code{NULL} (by default) all R objects will be returned.
 #' @param hooks list of hooks to be run for given classes in the form of \code{list(class=fn)}. If you	would also specify some parameters of the function, a list should be provided in the form of \code{list(fn, param1, param2=NULL)} etc. So the hooks would become \code{list(class1=list(fn, param1, param2=NULL), ...)}. See example below. A default hook can be specified too by setting the class to \code{'default'}. This can be handy if you do not want to define separate methods/functions to each possible class, but automatically apply the default hook to all classes not mentioned in the list. You may also specify only one element in the list like: \code{hooks=list('default' = pander.return)}. Please note, that nor error/warning messages, nor stdout is captured while running hooks!
 #' @param length R object exceeding the specified length will not be returned. The default value (\code{Inf}) does not have any restrictions.
@@ -304,9 +305,43 @@ eval.msgs <- function(src, env = NULL) {
 #' }
 #' @export
 #' @importFrom evaluate evaluate is.error is.warning is.message
+evals <- function(txt, parse = TRUE, classes = NULL, hooks = NULL, length = Inf, output = c('all', 'src', 'output', 'type', 'msg', 'stdout'), env = NULL, check.output = TRUE, graph.nomargin = TRUE, graph.name = '%t', graph.dir = tempdir(), graph.output = c('png', 'bmp', 'jpeg', 'jpg', 'tiff', 'svg', 'pdf'), width = 480, height = 480, res= 72, hi.res = FALSE, hi.res.width = 960, hi.res.height = 960*(height/width), hi.res.res = res*(hi.res.width/width), graph.env = FALSE, graph.recordplot = FALSE, ...){
+
+    if (missing(txt))
+        stop('No R code provided to evaluate!')
+    if (!is.character(txt))
+        stop('R code should be passed as character vector. Please use `deparse`.')
+
+    ## parse provided code after concatenating
+    if (parse) {
+
+        txt.parsed <- tryCatch(parse(text = txt), error = function(e) e)
+
+        ## skip parsing on syntax error
+        if (is.error(txt.parsed)) {
+            res <- list(src = txt,
+                        output = NULL,
+                        type   = 'error',
+                        msg    = list(
+                            messages = NULL,
+                            warnings = NULL,
+                            errors   = sub('(<text>):([0-9]*):([0-9]*).*', 'Unexpected symbol at character \\3 in line \\2.', txt.parsed$message)
+                            ),
+                        stdout = NULL
+                        )
+            class(res) <- 'evals'
+            return(list(res))
+        }
 evals <- function(txt = NULL, ind = NULL, body = NULL, classes = NULL, hooks = NULL, length = Inf, output = c('all', 'src', 'output', 'type', 'msg', 'stdout'), env = NULL, check.output = TRUE, graph.nomargin = TRUE, graph.name = '%t', graph.dir = tempdir(), graph.output = c('png', 'bmp', 'jpeg', 'jpg', 'tiff', 'svg', 'pdf'), width = 480, height = 480, res= 72, hi.res = FALSE, hi.res.width = 960, hi.res.height = 960*(height/width), hi.res.res = res*(hi.res.width/width), graph.env = FALSE, graph.recordplot = FALSE, ...){
 
+        txt <- sapply(txt.parsed, function(x) paste(deparse(x), collapse = ' '))
+        if (length(txt) == 0)
+            stop('No R code provided to evaluate!')
 
+        ## (re)merge lines on demand (based on `+` at the beginning of file)
+        txt.sep <- c(which(!grepl('^\\+', txt)), length(txt)+1)
+        txt <-  lapply(1:(length(txt.sep)-1), function(i) txt[txt.sep[i]:(txt.sep[i+1]-1)])
+        txt <- rapply(txt, function(x) sub('^\\+', '', x), how = 'replace')
 
     }
 
