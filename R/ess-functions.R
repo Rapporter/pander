@@ -1,10 +1,15 @@
 #' @keywords internal
-ess.pander.evals <- function(x) {
+ess.pander.evals <- function(x, show.src = TRUE) {
     require(pander, quietly = T)
     wd <- getwd()
     setwd(tempdir())
     cat("\n")
-    pander(evals(list(strsplit(x, '\n')[[1]]))[[1]])
+    res <- evals(x)
+    for (x in res) {
+        if (show.src)
+            cat('\n```r\n', paste(x$src, collapse = '\n'), '\n```\n\n', sep ='')
+        cat(pander(x), sep = '\n')
+    }
     setwd(wd)
     cat("\n")
 }
@@ -15,7 +20,7 @@ ess.evals <- function(x) {
     wd <- getwd()
     setwd(tempdir())
     cat("\n")
-    evals(list(strsplit(x, '\n')[[1]]))
+    evals(x)
     setwd(wd)
     cat("\n")
 }
