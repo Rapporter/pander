@@ -2,8 +2,8 @@
 \alias{evals}
 \title{Evaluate and Check R Code}
 \usage{
-  evals(txt = NULL, ind = NULL, body = NULL,
-    classes = NULL, hooks = NULL, length = Inf,
+  evals(txt, parse = TRUE, classes = NULL, hooks = NULL,
+    length = Inf,
     output = c("all", "src", "output", "type", "msg", "stdout"),
     env = NULL, check.output = TRUE, graph.nomargin = TRUE,
     graph.name = "\%t", graph.dir = tempdir(),
@@ -15,14 +15,21 @@
     graph.env = FALSE, graph.recordplot = FALSE, ...)
 }
 \arguments{
-  \item{txt}{a list with character values containing R
-  code}
+  \item{txt}{a character vector containing R code. This
+  could be a list/vector of lines of code or a simple
+  string holding R code separated by \code{;} or
+  \code{\n}.}
 
-  \item{ind}{a list with numeric indices pointing to R code
-  in \code{body}}
-
-  \item{body}{a character vector that contains template
-  body}
+  \item{parse}{if TRUE the provided \code{txt} elements
+  would be merged into one string and parsed to logical
+  chunks. This is useful if you would want to get separate
+  results of your code parts - not just the last returned
+  value, but you are passing the whole script in one
+  string. To manually lock lines to each other (e.g.
+  calling a \code{plot} and on next line adding an
+  \code{abline} or \code{text} to it), use a plus char
+  (\code{+}) at the beginning of each line which should be
+  evaluated with the previous one(s).}
 
   \item{classes}{a vector or list of classes which should
   be returned. If set to \code{NULL} (by default) all R
@@ -216,7 +223,7 @@
 }
 \examples{
 \dontrun{
-# parsing line-by-line
+# parsing several lines of R code
 txt <- readLines(textConnection('x <- rnorm(100)
   runif(10)
   warning("Lorem ipsum foo-bar-foo!")
@@ -229,10 +236,17 @@ txt <- readLines(textConnection('x <- rnorm(100)
   ggplot(mtcars) + geom_point(aes(x = hp, y = mpg))'))
 evals(txt)
 
-## parsing a list of commands
+## parsing a list of commands                #TODO:::
 txt <- list('df <- mtcars',
  c('plot(mtcars$hp, pch = 19)','text(mtcars$hp, label = rownames(mtcars), pos = 4)'),
- 'ggplot(mtcars) + geom_point(aes(x = hp, y = mpg))')
+ 'ggplot(mtcars) + geom_point(aes(x = hp, y = mpg))'
+evals(txt, parse = FALSE)
+
+## the same commands in one string but also evaluating the `plot` with `text`
+txt <- 'df <- mtcars
+ plot(mtcars$hp, pch = 19)
+ +text(mtcars$hp, label = rownames(mtcars), pos = 4)
+ ggplot(mtcars) + geom_point(aes(x = hp, y = mpg))'
 evals(txt)
 
 ## returning only a few classes
@@ -246,24 +260,27 @@ evals(txt, classes = c('numeric', 'list'))
 ## handling messages
 evals('message(20)')
 evals('message(20)', check.output = FALSE)
-evals('caption("FOO"); plot(1:10)')
+
+## adding a caption to a plot (`plot` is started with a `+`!)
+evals('set.caption("FOO"); +plot(1:10)')
 
 ## handling warnings
 evals('chisq.test(mtcars$gear, mtcars$hp)')
-evals(list(c('chisq.test(mtcars$gear, mtcars$am)', 'pi', 'chisq.test(mtcars$gear, mtcars$hp)')))
+evals(list(c('chisq.test(mtcars$gear, mtcars$am)', 'pi', 'chisq.test(mtcars$gear, mtcars$hp)')), parse = F)
 evals(c('chisq.test(mtcars$gear, mtcars$am)', 'pi', 'chisq.test(mtcars$gear, mtcars$hp)'))
 
 ## handling errors
 evals('runiff(20)')
 evals('Old MacDonald had a farm\\\\dots')
 evals('## Some comment')
-evals(list(c('runiff(20)', 'Old MacDonald had a farm?')))
+evals(list(c('runiff(20)', 'Old MacDonald had a farm?')), parse = F)
 evals(c('mean(1:10)', 'no.R.function()'))
-evals(list(c('mean(1:10)', 'no.R.function()')))
+evals(list(c('mean(1:10)', 'no.R.function()')), parse = F)
 evals(c('no.R.object', 'no.R.function()', 'very.mixed.up(stuff)'))
-evals(list(c('no.R.object', 'no.R.function()', 'very.mixed.up(stuff)')))
+evals(list(c('no.R.object', 'no.R.function()', 'very.mixed.up(stuff)')), parse = F)
 evals(c('no.R.object', 'Old MacDonald had a farm\\\\dots', 'pi'))
-evals(list(c('no.R.object', 'Old MacDonald had a farm\\\\dots', 'pi')))
+evals(c('no.R.object', 'Old MacDonald had a farm\\\\dots', 'pi'), parse = F)
+evals(list(c('no.R.object', 'Old MacDonald had a farm\\\\dots', 'pi')), parse = F)
 
 ## graph options
 evals('plot(1:10)')
@@ -273,12 +290,12 @@ evals('plot(1:10)', height = 800, hi.res = T)
 evals('plot(1:10)', graph.output = 'pdf', hi.res = T)
 evals('plot(1:10)', res = 30)
 evals('plot(1:10)', graph.name = 'myplot')
-evals(list('plot(1:10)', 'plot(2:20)'), graph.name = 'myplots-\%INDEX')
-evals('plot(1:10)', graph.name = getOption('graph.name'))
+evals(list('plot(1:10)', 'plot(2:20)'), graph.name = 'myplots-\%d')
 evals('plot(1:10)', graph.env = TRUE)
 evals(list(c('x <- runif(100)', 'plot(x)')), graph.env = TRUE)
 evals(c('plot(1:10)', 'plot(2:20)'), graph.env = TRUE)
-evals(list(c('x <- runif(100)', 'plot(x)'), c('y <- runif(100)', 'plot(y)')), graph.env = TRUE)
+evals(c('x <- runif(100)', 'plot(x)','y <- runif(100)', 'plot(y)'), graph.env = TRUE)
+evals(list(c('x <- runif(100)', 'plot(x)'), c('y <- runif(100)', 'plot(y)')), graph.env = TRUE, parse = F)
 evals('plot(1:10)', graph.recordplot = TRUE)
 evals('histogram(mtcars$hp)', graph.recordplot = TRUE)
 evals(list(c('x <- runif(100)', 'plot(x)')), graph.recordplot = TRUE)
@@ -287,13 +304,13 @@ evals('plot(10:100)', graph.output = 'pdf')
 evals('runif(10)', graph.output = 'pdf')
 
 ## hooks
-hooks <- list('numeric' = round, 'matrix' = ascii)
+txt <- 'runif(1:4); matrix(runif(25), 5, 5); 1:5'
+hooks <- list('numeric' = round, 'matrix' = pander)
 evals(txt, hooks = hooks)
+## using pander's default hook
+evals(txt, hooks = list('default' = pander.return))
 evals('22/7', hooks = list('numeric' = round))
 evals('matrix(runif(25), 5, 5)', hooks = list('matrix' = round))
-
-## using pander's default hook
-evals('22/7', hooks = list('default' = pander.return))
 
 ## setting default hook
 evals(c('runif(10)', 'matrix(runif(9), 3, 3)'), hooks = list('default'=round))
@@ -301,8 +318,7 @@ evals(c('runif(10)', 'matrix(runif(9), 3, 3)'), hooks = list('default'=round))
 evals(c('runif(10)', 'matrix(runif(9), 3, 3)'), hooks = list(matrix = 'print', 'default' = round))
 
 # advanced hooks
-fun <- function(x, asciiformat) paste(capture.output(print(ascii(x), asciiformat)), collapse = '\\n')
-hooks <- list('numeric' = list(round, 2), 'matrix' = list(fun, "rest"))
+hooks <- list('numeric' = list(round, 2), 'matrix' = list(round, 1))
 evals(txt, hooks = hooks)
 
 # return only returned values
@@ -311,7 +327,7 @@ evals(txt, output = 'output')
 # return only messages (for checking syntax errors etc.)
 evals(txt, output = 'msg')
 
-# check the length of returned values
+# check the length of returned values and do not return looong R objects
 evals('runif(10)', length = 5)
 
 # note the following will not be filtered!
