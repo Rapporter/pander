@@ -59,13 +59,21 @@ eval.msgs <- function(src, env = NULL) {
         stdout <- NULL
 
     ## error handling
-    error <- grep('error', lapply(returns, function(x) class(x)))
-    error <- c(error, grep('error', class(returns)))
-    if (length(error) > 0) {
-        error <- returns$message
-        returns <- NULL
-    } else
-    error <- NULL
+    if (inherits(result, 'error')) {
+
+        error <- result$message
+
+        if (grepl('unexpected symbol', error))
+            error <- sub('<text>:([0-9]*):([0-9]*): unexpected symbol\n.*[0-9]*:(.*)\n.*[ \t]*$', 'Unexpected symbol at character \\2 in line \\1: `\\3`', error)
+
+        result <- output <- NULL
+        type   <- 'error'
+
+    } else {
+
+        error <- NULL
+
+    }
 
     ## warnings
     warnings <- warnings$message    # only last warning is returned!
