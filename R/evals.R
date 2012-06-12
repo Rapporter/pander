@@ -77,15 +77,41 @@ eval.msgs <- function(src, env = NULL) {
 
     }
 
+    ## check if printing is needed
+    if (!is.null(result)) {
 
+        if (result$visible) {
+
+            output <- vector("character")
+            con <- textConnection("output", "wr", local=TRUE)
+            sink(con, split = FALSE)
+
+            result <- print(result$value)
+
+            sink()
+            close(con)
+
+        } else {
+
+            result <- output <- NULL
+
+        }
+    }
+
+    if (is.null(error))
+        type  <- class(result)
+
+    ## return
     list(src    = src,
          result = result,
-         type   = class(returns),
+         output = output,
+         type   = type,
          msg    = list(
              messages = messages,
              warnings = warnings,
              errors   = error),
          stdout = stdout)
+
 }
 
 
