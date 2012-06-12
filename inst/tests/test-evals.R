@@ -7,6 +7,7 @@ test_that('returns', {
     expect_that(eval.msgs('mtcars')$result, equals(mtcars))
     expect_that(eval.msgs('x <- mtcars')$result, equals(NULL))
     expect_that(eval.msgs('plot(mtcars)')$result, equals(NULL))
+    expect_that(eval.msgs('cat(1:5);1:5')$result, equals(1:5))
 })
 
 test_that('messages', {
@@ -53,6 +54,7 @@ test_that('output', {
     expect_that(eval.msgs('x <- mtcars')$output, equals(NULL))
     expect_that(eval.msgs('plot(mtcars)')$output, equals(NULL))
     expect_that(eval.msgs('cat(1:5)')$output, equals(NULL))
+    expect_that(eval.msgs('cat(1:5);1:5')$output, is_a('character'))
 })
 
 test_that('stdout', {
@@ -61,6 +63,7 @@ test_that('stdout', {
     expect_that(eval.msgs('x <- mtcars')$stdout, equals(NULL))
     expect_that(eval.msgs('plot(mtcars)')$stdout, equals(NULL))
     expect_that(eval.msgs('cat(1:5)')$stdout, equals("1 2 3 4 5"))
+    expect_that(eval.msgs('cat(1:5);1:5')$stdout, equals("1 2 3 4 5"))
 })
 
 

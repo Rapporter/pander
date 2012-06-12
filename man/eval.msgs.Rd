@@ -70,6 +70,7 @@ eval.msgs('warning("d");warning("f");1')
 
 ## stdout
 eval.msgs('cat("writing to console")')
+eval.msgs('cat("writing to console");1:4')
 }
 }
 \seealso{

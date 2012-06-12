@@ -43,6 +43,7 @@
 #'
 #' ## stdout
 #' eval.msgs('cat("writing to console")')
+#' eval.msgs('cat("writing to console");1:4')
 #' }
 eval.msgs <- function(src, env = NULL) {
 
