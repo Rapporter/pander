@@ -420,6 +420,7 @@ evals <- function(txt = NULL, ind = NULL, body = NULL, classes = NULL, hooks = N
         ## remove margins
         if (graph.nomargin) {
             if (require(lattice, quietly = T))
+                lattice::trellis.par.set(layout.heights = list(top.padding = 0.1, bottom.padding = 0.1), layout.widths = list(right.padding = 0.1, left.padding = 0.4))
                 lattice::trellis.par.set(layout.heights = list(top.padding = 0.1, bottom.padding = 0.1), layout.widths = list(right.padding = 0.1, left.padding = 0.1))
             par(mar=c(4, 4, 2.1, 0.1))
         }
