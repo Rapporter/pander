@@ -162,9 +162,7 @@ eval.msgs <- function(src, env = NULL) {
 #' }
 #'
 #' Please check the examples carefully below to get a detailed overview of \code{\link{evals}}.
-#' @param txt a list with character values containing R code
-#' @param ind a list with numeric indices pointing to R code in \code{body}
-#' @param body a character vector that contains template body
+#' @param txt a character vector containing R code. This could be a list/vector of lines of code or a simple string holding R code separated by \code{;} or \code{\n}.
 #' @param classes a vector or list of classes which should be returned. If set to \code{NULL} (by default) all R objects will be returned.
 #' @param hooks list of hooks to be run for given classes in the form of \code{list(class=fn)}. If you	would also specify some parameters of the function, a list should be provided in the form of \code{list(fn, param1, param2=NULL)} etc. So the hooks would become \code{list(class1=list(fn, param1, param2=NULL), ...)}. See example below. A default hook can be specified too by setting the class to \code{'default'}. This can be handy if you do not want to define separate methods/functions to each possible class, but automatically apply the default hook to all classes not mentioned in the list. You may also specify only one element in the list like: \code{hooks=list('default' = pander.return)}. Please note, that nor error/warning messages, nor stdout is captured while running hooks!
 #' @param length R object exceeding the specified length will not be returned. The default value (\code{Inf}) does not have any restrictions.
@@ -308,14 +306,8 @@ eval.msgs <- function(src, env = NULL) {
 #' @importFrom evaluate evaluate is.error is.warning is.message
 evals <- function(txt = NULL, ind = NULL, body = NULL, classes = NULL, hooks = NULL, length = Inf, output = c('all', 'src', 'output', 'type', 'msg', 'stdout'), env = NULL, check.output = TRUE, graph.nomargin = TRUE, graph.name = '%t', graph.dir = tempdir(), graph.output = c('png', 'bmp', 'jpeg', 'jpg', 'tiff', 'svg', 'pdf'), width = 480, height = 480, res= 72, hi.res = FALSE, hi.res.width = 960, hi.res.height = 960*(height/width), hi.res.res = res*(hi.res.width/width), graph.env = FALSE, graph.recordplot = FALSE, ...){
 
-    if (!xor(missing(txt), missing(ind)))
-        stop('either a list of text or a list of indices should be provided')
 
-    if (!is.null(ind)){
-        if (is.null(body))
-            stop('you must provide body vector')
 
-        txt <- lapply(ind, function(x) body[x])
     }
 
     if (!identical(file.info(graph.dir)$isdir, TRUE))
