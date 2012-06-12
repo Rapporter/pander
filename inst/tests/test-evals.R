@@ -1,4 +1,69 @@
 ## test_file('test-evals.R')
+
+context('eval.msgs')
+
+test_that('returns', {
+    expect_that(eval.msgs('1:5')$result, equals(1:5))
+    expect_that(eval.msgs('mtcars')$result, equals(mtcars))
+    expect_that(eval.msgs('x <- mtcars')$result, equals(NULL))
+    expect_that(eval.msgs('plot(mtcars)')$result, equals(NULL))
+})
+
+test_that('messages', {
+    expect_that(eval.msgs('1:5')$msg$messages, equals(NULL))
+    expect_that(eval.msgs('mtcars')$msg$messages, equals(NULL))
+    expect_that(eval.msgs('x <- mtcars')$msg$messages, equals(NULL))
+    expect_that(eval.msgs('plot(mtcars)')$msg$messages, equals(NULL))
+    expect_that(eval.msgs('warning("d");warning("f");1')$msg$messages, equals(NULL))
+    expect_that(eval.msgs('message("FOO")')$msg$messages, equals('FOO'))
+    expect_that(eval.msgs(c('message("FOO")', '1:2'))$msg$messages, equals('FOO'))
+    expect_that(eval.msgs(c('message("FOO");message("FOO");warning("FOO")', '1:2'))$msg$messages, equals(c('FOO', 'FOO')))
+})
+
+test_that('warnings', {
+    expect_that(eval.msgs('1:5')$msg$warnings, equals(NULL))
+    expect_that(eval.msgs('mtcars')$msg$warnings, equals(NULL))
+    expect_that(eval.msgs('x <- mtcars')$msg$warnings, equals(NULL))
+    expect_that(eval.msgs('plot(mtcars)')$msg$warnings, equals(NULL))
+    expect_that(eval.msgs('warning("d");warning("f");1')$msg$warnings, equals(c('d', 'f')))
+    expect_that(eval.msgs('message("FOO")')$msg$warnings, equals(NULL))
+    expect_that(eval.msgs(c('message("FOO")', '1:2'))$msg$warnings, equals(NULL))
+    expect_that(eval.msgs(c('warning("FOO")', '1:2'))$msg$warnings, equals('FOO'))
+    expect_that(eval.msgs(c('warning("FOO");message("FOO");warning("FOO")', '1:2'))$msg$warnings, equals(c('FOO', 'FOO')))
+})
+
+test_that('errors', {
+    expect_that(eval.msgs('1:5')$msg$errors, equals(NULL))
+    expect_that(eval.msgs('mtcars')$msg$errors, equals(NULL))
+    expect_that(eval.msgs('x <- mtcars')$msg$errors, equals(NULL))
+    expect_that(eval.msgs('plot(mtcars)')$msg$errors, equals(NULL))
+    expect_that(eval.msgs('warning("d");warning("f");1')$msg$errors, equals(NULL))
+    expect_that(eval.msgs('message("FOO")')$msg$errors, equals(NULL))
+    expect_that(eval.msgs(c('message("FOO")', '1:2'))$msg$errors, equals(NULL))
+    expect_that(eval.msgs(c('warning("FOO")', '1:2'))$msg$errors, equals(NULL))
+    expect_that(eval.msgs(c('warning("FOO");message("FOO");warning("FOO")', '1:2'))$msg$errors, equals(NULL))
+    expect_that(eval.msgs('runiff(2)')$msg$errors, is_a('character'))
+    expect_that(eval.msgs('runif would be nice to run')$msg$errors, is_a('character'))
+    expect_that(eval.msgs('no.R.object.like.that')$msg$errors, is_a('character'))
+})
+
+test_that('output', {
+    expect_that(eval.msgs('1:5')$output, is_a('character'))
+    expect_that(eval.msgs('mtcars')$output, is_a('character'))
+    expect_that(eval.msgs('x <- mtcars')$output, equals(NULL))
+    expect_that(eval.msgs('plot(mtcars)')$output, equals(NULL))
+    expect_that(eval.msgs('cat(1:5)')$output, equals(NULL))
+})
+
+test_that('stdout', {
+    expect_that(eval.msgs('1:5')$stdout, equals(NULL))
+    expect_that(eval.msgs('mtcars')$stdout, equals(NULL))
+    expect_that(eval.msgs('x <- mtcars')$stdout, equals(NULL))
+    expect_that(eval.msgs('plot(mtcars)')$stdout, equals(NULL))
+    expect_that(eval.msgs('cat(1:5)')$stdout, equals("1 2 3 4 5"))
+})
+
+
 context('evals: no output generated')
 
 test_that('Variable assignement', {
