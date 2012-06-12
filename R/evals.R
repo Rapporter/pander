@@ -328,30 +328,18 @@ evals <- function(txt, parse = TRUE, classes = NULL, hooks = NULL, length = Inf,
         txt.parsed <- tryCatch(parse(text = txt), error = function(e) e)
 
         ## skip parsing on syntax error
-        if (is.error(txt.parsed)) {
-            res <- list(src = txt,
-                        output = NULL,
-                        type   = 'error',
-                        msg    = list(
-                            messages = NULL,
-                            warnings = NULL,
-                            errors   = sub('(<text>):([0-9]*):([0-9]*).*', 'Unexpected symbol at character \\3 in line \\2.', txt.parsed$message)
-                            ),
-                        stdout = NULL
-                        )
-            class(res) <- 'evals'
-            return(list(res))
+        if (!is.error(txt.parsed)) {
+
+            txt <- sapply(txt.parsed, function(x) paste(deparse(x), collapse = ' '))
+            if (length(txt) == 0)
+                stop('No R code provided to evaluate!')
+
+            ## (re)merge lines on demand (based on `+` at the beginning of file)
+            txt.sep <- c(which(!grepl('^\\+', txt)), length(txt)+1)
+            txt <-  lapply(1:(length(txt.sep)-1), function(i) txt[txt.sep[i]:(txt.sep[i+1]-1)])
+            txt <- rapply(txt, function(x) sub('^\\+', '', x), how = 'replace')
+
         }
-
-        txt <- sapply(txt.parsed, function(x) paste(deparse(x), collapse = ' '))
-        if (length(txt) == 0)
-            stop('No R code provided to evaluate!')
-
-        ## (re)merge lines on demand (based on `+` at the beginning of file)
-        txt.sep <- c(which(!grepl('^\\+', txt)), length(txt)+1)
-        txt <-  lapply(1:(length(txt.sep)-1), function(i) txt[txt.sep[i]:(txt.sep[i+1]-1)])
-        txt <- rapply(txt, function(x) sub('^\\+', '', x), how = 'replace')
-
     }
 
     if (!identical(file.info(graph.dir)$isdir, TRUE))
