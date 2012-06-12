@@ -70,16 +70,9 @@ Pandoc.brew <- function(file = stdin(), output = stdout(), convert = FALSE, open
 
     ## Pandoc.cat fn
     Pandoc.evals <- function(..., envir = parent.frame()) {
-        src <- list(...)
-        r <- evals(src, env = envir, graph.dir = graph.dir, graph.name = graph.name, hi.res = graph.hi.res)[[1]]
-        o <- pander(r$output)
-        if (!is.null(r$msg$messages))
-            o <- paste0(o, ' `MESSAGE`', pandoc.footnote.return(r$msg$messages))
-        if (!is.null(r$msg$warnings))
-            o <- paste0(o, ' `WARNING`', pandoc.footnote.return(r$msg$warnings))
-        if (!is.null(r$msg$error))
-            o <- paste0(o, ' `ERROR`', pandoc.footnote.return(r$msg$errors))
-        cat(o)
+        res <- evals(unlist(...), env = envir, graph.dir = graph.dir, graph.name = graph.name, hi.res = graph.hi.res)
+        for (r in res)
+            pander(r)
     }
 
     ## patching brew
