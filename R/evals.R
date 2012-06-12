@@ -36,14 +36,16 @@ eval.msgs <- function(src, env = NULL) {
 
     if (is.null(env)) env <- new.env()
 
+    ## grab warnings and messages
     warnings <- NULL
     warning.handler <- function(w) {
-        warnings <<- w
+        warnings <<- c(warnings, w$message)
         invokeRestart("muffleWarning")
     }
+
     messages <- NULL
     message.handler <- function(m) {
-        messages <<- m$message
+        messages <<- c(messages, sub('\n$', '', m$message))
     }
 
     ## grab stdout
@@ -75,8 +77,6 @@ eval.msgs <- function(src, env = NULL) {
 
     }
 
-    ## warnings
-    warnings <- warnings$message    # only last warning is returned!
 
     list(src    = src,
          output = returns,
