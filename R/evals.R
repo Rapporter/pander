@@ -1,37 +1,49 @@
 #' Evaluate with messages
 #'
-#' This function takes text(s) of R code and \code{\link{eval}}s all at one run then returns a list with four elements:
+#' This function takes text(s) of R code and \code{eval}s all at one run - returning a list with four elements. See \code{Details}.
 #'
+#' \code{eval.msgs} returns a detailed list of the result of evaluation:
 #' \itemize{
 #'     \item \emph{src} - character vector of specified R code.
-#'     \item \emph{output} - generated output. \code{NULL} if nothing is returned. If any string returned an R object while evaluating then the \emph{last} R object will be returned as a raw R object. If a graph is plotted in the given text, the returned object is a string specifying the path to the saved png in temporary directory (see: \code{\link{tempfile}}). If multiple plots was run in the same run (see: nested lists as inputs above) then the last plot is saved. If graphic device was touched, then no other R objects will be returned.
-#'     \item \emph{type} - class of generated output. "NULL" if nothing is returned, "image" if the graphic device was touched, "error" if some error occurred.
+#'     \item \emph{result} - result of evaluation. \code{NULL} if nothing is returned. If any R code returned an R object while evaluating then the \emph{last} R object will be returned as a raw R object. If a graph is plotted in the end of the given R code (remember: \emph{last} R object), it would be automatically printed (see e.g. \code{lattice} and \code{ggplot2}).
+#'      \item \emph{output} - character vector of printed version (\code{capture.output}) of \code{result}
+#'     \item \emph{type} - class of generated output. "NULL" if nothing is returned, "error" if some error occurred.
 #'     \item \emph{msg} - possible messages grabbed while evaluating specified R code with the following structure:
 #'     \itemize{
-#'         \item \emph{messages} - string of possible diagnostic message(s)
-#'         \item \emph{warnings} - string of possible warning message(s)
-#'         \item \emph{errors} - string of possible error message(s)
+#'         \item \emph{messages} - character vector of possible diagnostic message(s)
+#'         \item \emph{warnings} - character vector of possible warning message(s)
+#'         \item \emph{errors} - character vector of possible error message(s)
 #'     }
 #'     \item \emph{stdout} - character vector of possibly printed texts to standard output (console)
 #' }
 #' @param src character values containing R code
 #' @param env environment where evaluation takes place. If not set (by default), a new temporary environment is created.
-#' @return  a list of parsed elements each containing: src (the command run), output (what the command returns, \code{NULL} if nothing returned, path to image file if a plot was generated), type (class of returned object if any), messages: warnings (if any returned by the command run, otherwise set to \code{NULL}) and errors (if any returned by the command run, otherwise set to \code{NULL}) and possible stdout value. See Details above.
+#' @return  a list of parsed elements each containing: src (the command run), output (what the command returns, type (class of returned object if any), messages: messages, warnings and errors and possible stdout value. See Details above.
 #' @seealso \code{\link{evals}}
 #' @export
 #' @examples \dontrun{
 #' eval.msgs('1:5')
-#' eval.msgs(c('1:3', 'runiff(23)'))
-#' eval.msgs(c('1:5', '3:5'))
-#' eval.msgs(c('pi', '1:10', 'NULL'))
-#' eval.msgs('pi')
-#' eval.msgs('1:2')
-#' identical(evals('pi')[[1]], eval.msgs('pi'))
+#' eval.msgs('x <- 1:5')
+#' eval.msgs('lm(mtcars$hp ~ mtcars$wt)')
+#'
+#' ## plots
+#' eval.msgs('plot(runif(100))')
+#' eval.msgs('histogram(runif(100))')
+#'
+#' ## error handling
+#' eval.msgs('runiff(23)')
+#' eval.msgs('runif is a nice function')
+#' eval.msgs('no.R.object.like.that')
+#'
+#' ## messages
 #' eval.msgs(c('message("FOO")', '1:2'))
-#' eval.msgs(c('caption("FOO")', '1:2'))
+#' eval.msgs(c('warning("FOO")', '1:2'))
+#' eval.msgs(c('message("FOO");message("FOO");warning("FOO")', '1:2'))
+#' eval.msgs('warning("d");warning("f");1')
+#'
+#' ## stdout
 #' eval.msgs('cat("writing to console")')
 #' }
-#' @importFrom evaluate evaluate
 eval.msgs <- function(src, env = NULL) {
 
     if (is.null(env)) env <- new.env()
