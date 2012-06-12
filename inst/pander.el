@@ -89,6 +89,11 @@ are activated for pander functions."
   :type 'boolean
   :group 'pander)
 
+(defcustom pander-show-source nil
+  "If non-nil then the source of R commands would also show up in generated documents while running 'pander-eval'. This would not affect 'brew' function ATM."
+  :type 'boolean
+  :group 'pander)
+
 
 ;; functions
 
@@ -152,23 +157,30 @@ are activated for pander functions."
   (interactive)
 
   (save-excursion
-    (if mark-active
-	(let (
-	      (selection (buffer-substring-no-properties (region-beginning) (region-end))))
-	  (if (= (length selection) 0)
+    (let ((show-src
+	   (if pander-show-source
+	       (concat "TRUE")
+	     (concat "FALSE"))
+	   ))
+
+      (if mark-active
+	  (let (
+		(selection (buffer-substring-no-properties (region-beginning) (region-end))))
+	    (if (= (length selection) 0)
 	      (message "Nothing selected in region.")
-	    (ess-execute (format "pander:::ess.pander.evals(\"%s\")\n" (replace-regexp-in-string "\"" "'" (replace-regexp-in-string "\"" "'" selection))))))
+	    (ess-execute (format "pander:::ess.pander.evals(\"%s\", show.src=%s)\n" (replace-regexp-in-string "\"" "'" selection) show-src))))
+	
+	(let (p1 p2)
+	  (skip-chars-backward "^<%[=]+") (setq p1 (point))
+	  (skip-chars-forward "^%>") (setq p2 (point))
+	  (let (
+		(selection (buffer-substring-no-properties p1 p2)))
+	    (if (= (length selection) 0)
+		(message "Pointer is not inside a chunk!")
+	      (ess-execute (format "pander:::ess.pander.evals(\"%s\", show.src=%s)\n" (replace-regexp-in-string "\"" "'" selection) show-src))))))
 
-      (let (p1 p2)
-	(skip-chars-backward "^<%[=]+") (setq p1 (point))
-	(skip-chars-forward "^%>") (setq p2 (point))
-	(let (
-	      (selection (buffer-substring-no-properties p1 p2)))
-	  (if (= (length selection) 0)
-	      (message "Pointer is not inside a chunk!")
-	    (ess-execute (format "pander:::ess.pander.evals(\"%s\")\n" (replace-regexp-in-string "\"" "'" selection)))))))
-    (pander-postprocess-output))
-
+      )(pander-postprocess-output))
+  
   )
 
 
