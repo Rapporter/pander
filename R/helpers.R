@@ -727,8 +727,7 @@ pandoc.table <- function(...)
 #'
 #' This is a helper function to be used inside brew blocks to add a caption to the returning image/table.
 #' @param x string
-#' @return A custom syntax _message_ like: \code{\\caption\{...\}}
 #' @export
 set.caption <- function(x) {
-    message(sprintf('\\caption{%s}', x))
+    ## TODO
 }
