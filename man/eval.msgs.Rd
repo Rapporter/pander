@@ -12,11 +12,13 @@
   created.}
 }
 \value{
-  a list of parsed elements each containing: src (the
-  command run), output (what the command returns, type
-  (class of returned object if any), messages: messages,
-  warnings and errors and possible stdout value. See
-  Details above.
+  a list of parsed elements each containing: \code{src}
+  (the command run), \code{result} (R object: \code{NULL}
+  if nothing returned), \code{print}ed \code{output},
+  \code{type} (class of returned object if any),
+  informative/wawrning and error messages (if any returned
+  by the command run, otherwise set to \code{NULL}) and
+  possible \code{stdout}t value. See Details above.
 }
 \description{
   This function takes text(s) of R code and \code{eval}s

@@ -1,12 +1,12 @@
 \name{evals}
 \alias{evals}
-\title{Evaluate and Check R Code}
+\title{Evaluate and Process R Code}
 \usage{
   evals(txt, parse = TRUE, classes = NULL, hooks = NULL,
     length = Inf,
-    output = c("all", "src", "output", "type", "msg", "stdout"),
-    env = NULL, check.output = TRUE, graph.nomargin = TRUE,
-    graph.name = "\%t", graph.dir = tempdir(),
+    output = c("all", "src", "result", "output", "type", "msg", "stdout"),
+    env = NULL, graph.nomargin = TRUE, graph.name = "\%t",
+    graph.dir = tempdir(),
     graph.output = c("png", "bmp", "jpeg", "jpg", "tiff", "svg", "pdf"),
     width = 480, height = 480, res = 72, hi.res = FALSE,
     hi.res.width = 960,
@@ -18,25 +18,28 @@
   \item{txt}{a character vector containing R code. This
   could be a list/vector of lines of code or a simple
   string holding R code separated by \code{;} or
-  \code{\n}.}
+  \code{\\n}.}
 
-  \item{parse}{if TRUE the provided \code{txt} elements
-  would be merged into one string and parsed to logical
-  chunks. This is useful if you would want to get separate
-  results of your code parts - not just the last returned
-  value, but you are passing the whole script in one
-  string. To manually lock lines to each other (e.g.
+  \item{parse}{if \code{TRUE} the provided \code{txt}
+  elements would be merged into one string and parsed to
+  logical chunks. This is useful if you would want to get
+  separate results of your code parts - not just the last
+  returned value, but you are passing the whole script in
+  one string. To manually lock lines to each other (e.g.
   calling a \code{plot} and on next line adding an
   \code{abline} or \code{text} to it), use a plus char
   (\code{+}) at the beginning of each line which should be
-  evaluated with the previous one(s).}
+  evaluated with the previous one(s). If set to
+  \code{FALSE}, \code{evals} would not try to parse R code,
+  it would get evaluated in separate runs - as provided.
+  Please see examples below.}
 
   \item{classes}{a vector or list of classes which should
   be returned. If set to \code{NULL} (by default) all R
   objects will be returned.}
 
   \item{hooks}{list of hooks to be run for given classes in
-  the form of \code{list(class=fn)}. If you would also
+  the form of \code{list(class = fn)}. If you would also
   specify some parameters of the function, a list should be
   provided in the form of \code{list(fn, param1,
   param2=NULL)} etc. So the hooks would become
@@ -49,64 +52,64 @@
   You may also specify only one element in the list like:
   \code{hooks=list('default' = pander.return)}. Please
   note, that nor error/warning messages, nor stdout is
-  captured while running hooks!}
+  captured (so: updated) while running hooks!}
 
-  \item{length}{R object exceeding the specified length
+  \item{length}{any R object exceeding the specified length
   will not be returned. The default value (\code{Inf}) does
-  not have any restrictions.}
+  not filter out any R objects.}
 
   \item{output}{a character vector of required returned
-  values. See below.}
+  values. This might be useful if you are only interested
+  in the \code{result}, and do not want to save/see e.g.
+  \code{messages} or \code{print}ed \code{output}. See
+  examples below.}
 
   \item{env}{environment where evaluation takes place. If
   not set (by default), a new temporary environment is
   created.}
 
-  \item{check.output}{to check each line of \code{txt} for
-  outputs. If set to \code{TRUE} you would result in some
-  overhead as all commands have to be run twice (first to
-  check if any output was generated and if so in which
-  part(s), later the R objects are to be grabbed). With
-  \code{FALSE} settings \code{evals} runs much faster, but
-  as now checks are made, some requirements apply, see
-  Details.}
-
   \item{graph.nomargin}{should \code{evals} try to keep
   plots' margins minimal?}
 
   \item{graph.name}{set the file name of saved plots which
-  is a \code{\link{tempfile}} by default. A simple
-  character string might be provided where \code{\%d} would
-  be replaced by the index of the generating \code{txt}
+  is \code{\link{tempfile}} by default. A simple character
+  string might be provided where \code{\%d} would be
+  replaced by the index of the generating \code{txt}
   source, \code{\%n} with an incremented integer in
   \code{graph.dir} with similar file names and \code{\%t}
-  by some random characters. Default is set to call
-  \code{\link{tempfile}} instead.}
+  by some random characters. A function's name to be
+  \code{eval}uated can be passed here too.}
 
-  \item{graph.dir}{path to an existing directory where to
-  place generated images. Default set to NULL as using
-  \code{\link{tempfile}}s.}
+  \item{graph.dir}{path to a directory where to place
+  generated images. If the directory does not exist,
+  \code{evals} try to create that. Default set to NULL as
+  using \code{\link{tempfile}}s.}
 
   \item{graph.output}{set the required file format of saved
-  plots}
+  plots. Currently it could be any of \code{grDevices}':
+  \code{png}, \code{bmp}, \code{jpeg}, \code{jpg},
+  \code{tiff}, \code{svg} or \code{pdf}.}
 
   \item{width}{width of generated plot in pixels for even
-  vector formats (!)}
+  vector formats}
 
   \item{height}{height of generated plot in pixels for even
-  vector formats (!)}
+  vector formats}
 
-  \item{res}{nominal resolution in ppi. The height and
-  width of vector plots will be calculated based in this.}
+  \item{res}{nominal resolution in \code{ppi}. The height
+  and width of vector images will be calculated based in
+  this.}
 
-  \item{hi.res}{generate high resolution plots also?}
+  \item{hi.res}{generate high resolution plots also? If set
+  to \code{TRUE}, each R code parts resulting an image
+  would be run twice.}
 
   \item{hi.res.width}{width of generated high resolution
-  plot in pixels for even vector formats (!)}
+  plot in pixels for even vector formats}
 
   \item{hi.res.height}{height of generated high resolution
-  plot in pixels for even vector formats (!). This value
-  can be left blank to be automatically calculated to match
+  plot in pixels for even vector formats. This value can be
+  left blank to be automatically calculated to match
   original plot aspect ratio.}
 
   \item{hi.res.res}{nominal resolution of high resolution
@@ -115,108 +118,90 @@
   be automatically calculated to fit original plot scales.}
 
   \item{graph.env}{save the environments in which plots
-  were generated to distinct files with \code{env}
-  extension?}
+  were generated to distinct files (based on
+  \code{graph.name}) with \code{env} extension?}
 
   \item{graph.recordplot}{save the plot via
-  \code{\link{recordPlot}} to distinct files with
-  {recodplot} extension?}
+  \code{\link{recordPlot}} to distinct files (based on
+  \code{graph.name}) with {recodplot} extension?}
 
   \item{...}{optional parameters passed to graphics device
   (e.g. \code{bg}, \code{pointsize} etc.)}
 }
 \value{
-  a list of parsed elements each containing: src (the
-  command run), output (what the command returns,
-  \code{NULL} if nothing returned, path to image file if a
-  plot was generated), type (class of returned object if
-  any), messages: warnings (if any returned by the command
-  run, otherwise set to \code{NULL}) and errors (if any
-  returned by the command run, otherwise set to
-  \code{NULL}) and possible stdout value. See Details
-  above.
+  a list of parsed elements each containing: \code{src}
+  (the command run), \code{result} (R object: \code{NULL}
+  if nothing returned, path to image file if a plot was
+  generated), \code{print}ed \code{output}, \code{type}
+  (class of returned object if any), informative/wawrning
+  and error messages (if any returned by the command run,
+  otherwise set to \code{NULL}) and possible \code{stdout}t
+  value. See Details above.
 }
 \description{
-  This function takes either a list of integer indices
-  which point to position of R code in \code{body}
-  character vector, or a vector/list of strings with actual
-  R code, then evaluates each list element, and returns a
-  list with four elements: a character value with R code,
-  generated output, class of generated output and possible
-  error/warning messages. If a graph is plotted in the
+  This function takes either a vector/list of
+  \emph{strings} with actual R code, which it to be
+  \code{parse}d to separate elements. Each list element is
+  \code{eval}uated in a special environment, and a detailed
+  list of results is returned for each logical part of the
+  R code: a character value with R code, resulting R
+  object, printed output, class of resulting R object,
+  possible informative/warning/error messages and anything
+  written to \code{stdout}. If a graph is plotted in the
   given text, the returned object is a string specifying
-  the path to the saved png in temporary directory. Please
-  see Details below.
+  the path to the saved file. Please see Details below. If
+  \code{parse} option set to \code{FALSE}, then the
+  returned list's length equals to the length of the
+  \code{parse}d input - as each string is evaluated as
+  separate R code in the same environment. If a nested list
+  of R code or a concatenated string (separated by
+  \code{\\n} or \code{;}) is provided like
+  \code{list(c('runif(1)', 'runif(1)'))} with
+  \code{parse=FALSE}, then everything is \code{eval}ed at
+  one run so the length of returned list equals to one or
+  the length of the provided nested list. See examples
+  below.
 }
 \details{
-  If input strings are given as vector or not nested list
-  (or even only one string), the returned list's length
-  equals to the length of the input - as each string is
-  evaluated as separate R code in the same environment. If
-  a nested list is provided like \code{list(c('runif(1)',
-  'runif(1)'))} then all strings found in a list element is
-  \code{\link{eval}}ed at one run so the length of returned
-  list equals to the length of parent list. See examples
-  below.
-
   As \code{\link{evals}} tries to grab the plots
   internally, pleas do not run commands that set graphic
-  device or \code{\link{dev.off}} if you want to use
-  \code{\link{evals}} to save the images and return the
-  path of generated png(s). E.g. running
+  device or \code{dev.off}. E.g. running
   \code{evals(c('png("/tmp/x.png")', 'plot(1:10)',
-  'dev.off()'))} would fail.
+  'dev.off()'))} would fail. \code{print}ing of
+  \code{lattice} and \code{ggplot2} objects is not needed,
+  \code{evals} would deal with that automatically.
 
   The generated image file(s) of the plots can be
   fine-tuned by some specific options, please check out
   \code{graph.output}, \code{width}, \code{height},
   \code{res}, \code{hi.res}, \code{hi.res.width},
-  \code{hi.res.height} and \code{hi.res.res}. Most of these
-  options are better not to touch, see details of
-  parameters below.
+  \code{hi.res.height} and \code{hi.res.res} parameters.
+  Most of these options are better not to touch, see
+  details of parameters below.
 
   Returned result values: list with the following elements
-  \itemize{ \item \emph{src} - a character vector of
-  specified R code.  \item \emph{output} - generated
-  output. \code{NULL} if nothing is returned. If any string
-  returned an R object while \code{\link{eval}}ing then the
+  \itemize{ \item \emph{src} - character vector of
+  specified R code.  \item \emph{result} - result of
+  evaluation. \code{NULL} if nothing is returned. If any R
+  code returned an R object while evaluating then the
   \emph{last} R object will be returned as a raw R object.
   If a graph is plotted in the given text, the returned
-  object is a string specifying the path to the saved png
-  in temporary directory (see: \code{\link{tempfile}}). If
-  multiple plots was run in the same run (see: nested lists
-  as inputs above) then the last plot is saved. If graphic
-  device was touched, then no other R objects will be
-  returned.  \item \emph{type} - class of generated output.
-  "NULL" if nothing is returned, "image" if the graphic
-  device was touched, "error" if some error occurred.
+  object is a string (with \code{class} set to
+  \code{image}) specifying the path to the saved image
+  file. If graphic device was touched, then no other R
+  objects will be returned.  \item \emph{output} -
+  character vector of printed version
+  (\code{capture.output}) of \code{result} \item
+  \emph{type} - class of generated output. "NULL" if
+  nothing is returned, "error" if some error occurred.
   \item \emph{msg} - possible messages grabbed while
-  \code{\link{eval}}ing specified R code with the following
-  structure: \itemize{ \item \emph{messages} - string of
+  evaluating specified R code with the following structure:
+  \itemize{ \item \emph{messages} - character vector of
   possible diagnostic message(s) \item \emph{warnings} -
-  string of possible warning message(s) \item \emph{errors}
-  - string of possible error message(s) } \item
-  \emph{stdout} - character vector of possibly printed
-  texts to standard output (console) }
-
-  With \code{check.output} options set to \code{FALSE},
-  \code{\link{evals}} will not check each line of passed R
-  code for outputs to speed up runtime. This way the user
-  is required to pass only reliable and well
-  structured/formatted text to \code{\link{evals}}. A list
-  to check before running code in \code{\link{evals}}:
-
-  \itemize{ \item the code should return on the last line
-  of the passed code (if it returns before that, it would
-  not be grabbed), \item the code should always return
-  something on the last line (if you do not want to return
-  anything, add \code{NULL} as the last line), \item
-  \code{ggplot2} and \code{\link{lattice}} graphs should be
-  always printed (of course on the last line), \item a code
-  part resulting in a plot should not alter variables and
-  data sets, \item the code should be checked before live
-  run with \code{check.output} option set to \code{TRUE}
-  just to be sure if everything goes OK. }
+  character vector of possible warning message(s) \item
+  \emph{errors} - character vector of possible error
+  message(s) } \item \emph{stdout} - character vector of
+  possibly printed texts to standard output (console) }
 
   Please check the examples carefully below to get a
   detailed overview of \code{\link{evals}}.
@@ -236,18 +221,21 @@ txt <- readLines(textConnection('x <- rnorm(100)
   ggplot(mtcars) + geom_point(aes(x = hp, y = mpg))'))
 evals(txt)
 
-## parsing a list of commands                #TODO:::
+## parsing a list of commands
 txt <- list('df <- mtcars',
  c('plot(mtcars$hp, pch = 19)','text(mtcars$hp, label = rownames(mtcars), pos = 4)'),
- 'ggplot(mtcars) + geom_point(aes(x = hp, y = mpg))'
-evals(txt, parse = FALSE)
+ 'ggplot(mtcars) + geom_point(aes(x = hp, y = mpg))')
+evals(txt)
 
-## the same commands in one string but also evaluating the `plot` with `text`
+## the same commands in one string but also evaluating the `plot` with `text` (note the leading "+" on the beginning of `text...` line)
 txt <- 'df <- mtcars
  plot(mtcars$hp, pch = 19)
  +text(mtcars$hp, label = rownames(mtcars), pos = 4)
  ggplot(mtcars) + geom_point(aes(x = hp, y = mpg))'
 evals(txt)
+## but it would fail without parsing
+evals(txt, parse = FALSE)
+## if you do not want to auto-parse the text, use the above list/vector method
 
 ## returning only a few classes
 txt <- readLines(textConnection('rnorm(100)
@@ -259,10 +247,10 @@ evals(txt, classes = c('numeric', 'list'))
 
 ## handling messages
 evals('message(20)')
-evals('message(20)', check.output = FALSE)
+evals('message(20);message(20)', parse = FALSE)
 
 ## adding a caption to a plot (`plot` is started with a `+`!)
-evals('set.caption("FOO"); +plot(1:10)')
+evals('set.caption("FOO"); +plot(1:10)')     # TODO
 
 ## handling warnings
 evals('chisq.test(mtcars$gear, mtcars$hp)')
@@ -273,17 +261,19 @@ evals(c('chisq.test(mtcars$gear, mtcars$am)', 'pi', 'chisq.test(mtcars$gear, mtc
 evals('runiff(20)')
 evals('Old MacDonald had a farm\\\\dots')
 evals('## Some comment')
+evals(c('runiff(20)', 'Old MacDonald had a farm?'))
 evals(list(c('runiff(20)', 'Old MacDonald had a farm?')), parse = F)
 evals(c('mean(1:10)', 'no.R.function()'))
 evals(list(c('mean(1:10)', 'no.R.function()')), parse = F)
 evals(c('no.R.object', 'no.R.function()', 'very.mixed.up(stuff)'))
 evals(list(c('no.R.object', 'no.R.function()', 'very.mixed.up(stuff)')), parse = F)
 evals(c('no.R.object', 'Old MacDonald had a farm\\\\dots', 'pi'))
-evals(c('no.R.object', 'Old MacDonald had a farm\\\\dots', 'pi'), parse = F)
+evals('no.R.object;Old MacDonald had a farm\\\\dots;pi', parse = F)
 evals(list(c('no.R.object', 'Old MacDonald had a farm\\\\dots', 'pi')), parse = F)
 
 ## graph options
 evals('plot(1:10)')
+evals('plot(1:10);plot(2:20)')
 evals('plot(1:10)', graph.output = 'jpg')
 evals('plot(1:10)', height = 800)
 evals('plot(1:10)', height = 800, hi.res = T)
@@ -292,20 +282,17 @@ evals('plot(1:10)', res = 30)
 evals('plot(1:10)', graph.name = 'myplot')
 evals(list('plot(1:10)', 'plot(2:20)'), graph.name = 'myplots-\%d')
 evals('plot(1:10)', graph.env = TRUE)
-evals(list(c('x <- runif(100)', 'plot(x)')), graph.env = TRUE)
+evals('x <- runif(100);plot(x)', graph.env = TRUE)
 evals(c('plot(1:10)', 'plot(2:20)'), graph.env = TRUE)
 evals(c('x <- runif(100)', 'plot(x)','y <- runif(100)', 'plot(y)'), graph.env = TRUE)
 evals(list(c('x <- runif(100)', 'plot(x)'), c('y <- runif(100)', 'plot(y)')), graph.env = TRUE, parse = F)
 evals('plot(1:10)', graph.recordplot = TRUE)
+## unprinted lattice plot
 evals('histogram(mtcars$hp)', graph.recordplot = TRUE)
-evals(list(c('x <- runif(100)', 'plot(x)')), graph.recordplot = TRUE)
-evals(c('plot(1:10)', 'plot(2:20)'), graph.recordplot = TRUE)
-evals('plot(10:100)', graph.output = 'pdf')
-evals('runif(10)', graph.output = 'pdf')
 
 ## hooks
 txt <- 'runif(1:4); matrix(runif(25), 5, 5); 1:5'
-hooks <- list('numeric' = round, 'matrix' = pander)
+hooks <- list('numeric' = round, 'matrix' = pander.return)
 evals(txt, hooks = hooks)
 ## using pander's default hook
 evals(txt, hooks = list('default' = pander.return))
@@ -322,7 +309,7 @@ hooks <- list('numeric' = list(round, 2), 'matrix' = list(round, 1))
 evals(txt, hooks = hooks)
 
 # return only returned values
-evals(txt, output = 'output')
+evals(txt, output = 'result')
 
 # return only messages (for checking syntax errors etc.)
 evals(txt, output = 'msg')
@@ -337,7 +324,7 @@ evals('matrix(1,1,1)', length = 1)
 evals('matrix(1,1,1)', length = 1, classes = 'numeric')
 
 # hooks & filtering
-evals('matrix(5,5,5)', hooks = list('matrix' = ascii), output = 'output')
+evals('matrix(5,5,5)', hooks = list('matrix' = pander.return), output = 'result')
 
 # eval-ing chunks in given environment
 myenv <- new.env()
