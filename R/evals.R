@@ -47,7 +47,8 @@
 #' }
 eval.msgs <- function(src, env = NULL) {
 
-    if (is.null(env)) env <- new.env()
+    if (is.null(env))
+        env <- new.env()
 
     ## grab warnings and messages
     warnings <- NULL
@@ -201,18 +202,21 @@ eval.msgs <- function(src, env = NULL) {
 #'   ggplot(mtcars) + geom_point(aes(x = hp, y = mpg))'))
 #' evals(txt)
 #'
-#' ## parsing a list of commands                #TODO:::
+#' ## parsing a list of commands
 #' txt <- list('df <- mtcars',
 #'  c('plot(mtcars$hp, pch = 19)','text(mtcars$hp, label = rownames(mtcars), pos = 4)'),
-#'  'ggplot(mtcars) + geom_point(aes(x = hp, y = mpg))'
-#' evals(txt, parse = FALSE)
+#'  'ggplot(mtcars) + geom_point(aes(x = hp, y = mpg))')
+#' evals(txt)
 #'
-#' ## the same commands in one string but also evaluating the `plot` with `text`
+#' ## the same commands in one string but also evaluating the `plot` with `text` (note the leading "+" on the beginning of `text...` line)
 #' txt <- 'df <- mtcars
 #'  plot(mtcars$hp, pch = 19)
 #'  +text(mtcars$hp, label = rownames(mtcars), pos = 4)
 #'  ggplot(mtcars) + geom_point(aes(x = hp, y = mpg))'
 #' evals(txt)
+#' ## but it would fail without parsing
+#' evals(txt, parse = FALSE)
+#' ## if you do not want to auto-parse the text, use the above list/vector method
 #'
 #' ## returning only a few classes
 #' txt <- readLines(textConnection('rnorm(100)
@@ -224,7 +228,7 @@ eval.msgs <- function(src, env = NULL) {
 #'
 #' ## handling messages
 #' evals('message(20)')
-#' evals('message(20)', check.output = FALSE)
+#' evals('message(20);message(20)', parse = FALSE) #TODO
 #'
 #' ## adding a caption to a plot (`plot` is started with a `+`!)
 #' evals('set.caption("FOO"); +plot(1:10)')
@@ -314,13 +318,10 @@ eval.msgs <- function(src, env = NULL) {
 #' evals('mean(x)')
 #' }
 #' @export
-#' @importFrom evaluate evaluate is.error is.warning is.message
-evals <- function(txt, parse = TRUE, classes = NULL, hooks = NULL, length = Inf, output = c('all', 'src', 'output', 'type', 'msg', 'stdout'), env = NULL, check.output = TRUE, graph.nomargin = TRUE, graph.name = '%t', graph.dir = tempdir(), graph.output = c('png', 'bmp', 'jpeg', 'jpg', 'tiff', 'svg', 'pdf'), width = 480, height = 480, res= 72, hi.res = FALSE, hi.res.width = 960, hi.res.height = 960*(height/width), hi.res.res = res*(hi.res.width/width), graph.env = FALSE, graph.recordplot = FALSE, ...){
+evals <- function(txt, parse = TRUE, classes = NULL, hooks = NULL, length = Inf, output = c('all', 'src', 'result', 'output', 'type', 'msg', 'stdout'), env = NULL, graph.nomargin = TRUE, graph.name = '%t', graph.dir = tempdir(), graph.output = c('png', 'bmp', 'jpeg', 'jpg', 'tiff', 'svg', 'pdf'), width = 480, height = 480, res= 72, hi.res = FALSE, hi.res.width = 960, hi.res.height = 960*(height/width), hi.res.res = res*(hi.res.width/width), graph.env = FALSE, graph.recordplot = FALSE, ...){
 
     if (missing(txt))
         stop('No R code provided to evaluate!')
-    if (!is.character(txt))
-        stop('R code should be passed as character vector. Please use `deparse`.')
 
     ## parse provided code after concatenating
     if (parse) {
@@ -328,7 +329,7 @@ evals <- function(txt, parse = TRUE, classes = NULL, hooks = NULL, length = Inf,
         txt.parsed <- tryCatch(parse(text = txt), error = function(e) e)
 
         ## skip parsing on syntax error
-        if (!is.error(txt.parsed)) {
+        if (!inherits(txt.parsed, 'error')) {
 
             txt <- sapply(txt.parsed, function(x) paste(deparse(x), collapse = ' '))
             if (length(txt) == 0)
@@ -349,7 +350,7 @@ evals <- function(txt, parse = TRUE, classes = NULL, hooks = NULL, length = Inf,
     output <- match.arg(output, several.ok = TRUE)
 
     if (sum(grepl('all', output)) > 0)
-        output <- c('src', 'output', 'type', 'msg', 'stdout')
+        output <- c('src', 'result', 'output', 'type', 'msg', 'stdout')
 
     if (!any(is.list(hooks), is.null(hooks)))
         stop('Wrong list of hooks provided!')
@@ -359,14 +360,10 @@ evals <- function(txt, parse = TRUE, classes = NULL, hooks = NULL, length = Inf,
         graph.output <- 'jpeg'
 
     ## env for running all lines of code -> eval()
-    if (is.null(env)) env <- new.env()
-    if (!is.environment(env)) stop('Wrong env parameter (not an environment) provided!')
-    ## env for checking output before truly eval-ing -> evaluate()
-    if (check.output)
-        env.evaluate <- env
-    ## env for optional high resolution images while checking outputs
-    if (hi.res & check.output)
-        env.hires <- env
+    if (is.null(env))
+        env <- new.env()
+    if (!is.environment(env))
+        stop('Wrong env parameter (not an environment) provided!')
 
     `%d` <- 0
     lapply(txt, function(src) {
@@ -378,6 +375,10 @@ evals <- function(txt, parse = TRUE, classes = NULL, hooks = NULL, length = Inf,
                 dev.off(as.numeric(dev.list()[1]))
 
         clear.devs()
+
+        ## env for optional high resolution images
+        if (hi.res)
+            env.hires <- env
 
         ## init (potential) img file
         file.name <- gsub('%d', `%d`, eval(graph.name), fixed = TRUE)
@@ -406,7 +407,6 @@ evals <- function(txt, parse = TRUE, classes = NULL, hooks = NULL, length = Inf,
             file <- gsub('%n', `%n`, file, fixed = TRUE)
         }
 
-
         if (graph.output %in% c('bmp', 'jpeg', 'png', 'tiff'))
             do.call(graph.output, list(file, width = width, height = height, res = res, ...))
         if (graph.output == 'svg')
@@ -421,144 +421,36 @@ evals <- function(txt, parse = TRUE, classes = NULL, hooks = NULL, length = Inf,
             par(mar=c(4, 4, 2.1, 0.1))
         }
 
+        ## start recordPlot
         dev.control(displaylist = "enable")
 
-        if (check.output) {
-            ## running evaluate for checking outputs and grabbing warnings/errors
-            eval <- suppressWarnings(tryCatch(evaluate(src, envir = env.evaluate), error = function(e) e))
+        ## eval
+        res <- eval.msgs(src, env = env)
 
-            if (!is.null(dev.list())) {
-                recorded.plot <- recordPlot()
-                dev.control("inhibit")
-            }
-
-            ## error handling
-            error <- sapply(eval, is.error)
-            if (any(error)) {
-                error <- paste(sapply(which(error), function(x) eval[[x]]$message), collapse = ' + ')
-            } else {
-                if (is.error(eval))
-                    error <- eval$message
-            }
-
-            if (all(is.character(error))) {
-
-                res <- list(src = src,
-                            output = NULL,
-                            type   = 'error',
-                            msg    = list(
-                                messages = NULL,
-                                warnings = NULL,
-                                errors   = error
-                                ),
-                            stdout = NULL
-                            )
-
-                res <- res[output]
-                class(res) <- 'evals'
-                return(res)
-
-            }
-            errors <- NULL
-
-            ## warnings
-            warnings <- sapply(eval, is.warning)
-            if (any(warnings))
-                warnings <- paste(sapply(eval[warnings], function(x) x$message), collapse = " + ")
-            else
-                warnings <- NULL
-
-            ## messages
-            messages <- sapply(eval, is.message)
-            if (any(messages))
-                messages <- gsub('\n', '', paste(sapply(eval[messages], function(x) x$message), collapse = " + "))
-            else
-                messages <- NULL
-            ### good code survived here!
-
-            ### checking out which element produced the output               ## outRageous coding starts here
-            ## removing messages/errors
-            eval.no.msg <- eval[sapply(eval, function(x) {if (is.list(x)) all(names(x) == 'src') else TRUE})]
-            ## which elements are the sources?
-            eval.sources.n <- which(sapply(eval.no.msg, function(x) {if (!is.null(names(x))) (all(names(x) == 'src')) else FALSE}))
-            ## the sources
-            eval.sources <- eval.no.msg[eval.sources.n]
-            ## which sources do output?
-            eval.sources.outputs <- eval.sources.n[which(sapply(eval.sources.n, function(x) {
-                if (x+1 > length(eval.no.msg))
-                    FALSE
-                else
-                    class(eval.no.msg[[x+1]]) == "character"
-            }))]
-            ## which is the last element that produces output?              ## Rage /off
-            if (length(eval.sources.outputs) > 0)
-                eval.sources.last.outputs <- tail(eval.sources.outputs, 1)
-
-            ## graph was produced?
-            clear.devs()
-            graph <- ifelse(exists('recorded.plot'), ifelse(is.null(recorded.plot[[1]]), FALSE, file), FALSE)
-            ## any returned value?
-            if (length(eval.sources.outputs) > 0) {
-                if (is.logical(graph)) {
-
-                    ## grab stdout
-                    stdout <- vector("character")
-                    con <- textConnection("stdout", "wr", local=TRUE)
-                    sink(con, split = FALSE)
-
-                    ## if last element returns value (happily)
-                    if (eval.sources.last.outputs == tail(eval.sources.n, 1)) {
-                        returns <- suppressMessages(suppressWarnings(eval(parse(text = src), envir = env)))
-                    } else {    # if not the last element returns the value (lame)
-                        ## eval in temp environment all elements before last element that really do output
-                        env.temp <- env
-                        ## run commands before the last element which does output something
-                        if (eval.sources.last.outputs != 1)
-                            lapply(1:(which(eval.sources.last.outputs == eval.sources.n)-1), function(i) {
-                                suppressMessages(suppressWarnings(eval(parse(text = eval.sources[[i]]$src), envir = env.temp)))
-                            })
-                        ## grab output at last with last element with output
-                        returns <- suppressMessages(suppressWarnings(eval(parse(text = eval.sources[[eval.sources.last.outputs]]$src), envir = env.temp)))
-                        ## and run all stuff in main environment for consistency
-                        suppressMessages(suppressWarnings(eval(parse(text = src), envir = env)))
-                    }
-
-                    sink()
-                    close(con)
-                    if (length(stdout) == 0)
-                        stdout <- NULL
-
-                }
-            } else {
-                returns <- NULL
-                stdout  <- NULL
-            }
-        } else {
-            res <- eval.msgs(src, env = env)
-            if (!is.null(dev.list())) {
-                recorded.plot <- recordPlot()
-                dev.control("inhibit")
-            }
-            clear.devs()
-            if (!is.null(res$msg$errors))
-                return(res)
-            returns  <- res$output
-            warnings <- res$msg$warnings
-            messages <- res$msg$messages
-            errors   <- NULL
-            graph    <- ifelse(exists('recorded.plot'), ifelse(is.null(recorded.plot[[1]]), FALSE, file), FALSE)
-            stdout   <- res$stdout
+        ## grab recorded.plot
+        if (!is.null(dev.list())) {
+            recorded.plot <- recordPlot()
+            dev.control("inhibit")
         }
+        clear.devs()
 
-        ## save recorded plot on demand
-        if (is.character(graph) & graph.recordplot) {
-            saveRDS(recorded.plot, file = sprintf('%s.recordplot', file.name))
-        }
+        ## error handling
+        if (!is.null(res$msg$errors))
+            return(res)
 
+        result <- res$result
+        graph  <- ifelse(exists('recorded.plot'), ifelse(is.null(recorded.plot[[1]]), FALSE, file), FALSE)
+
+        ## we have a graph
         if (is.character(graph)) {
-            returns <- graph
-            class(returns) <- "image"
-            stdout  <- NULL # not captured
+
+            ## save recorded plot on demand
+            if (graph.recordplot) {
+                saveRDS(recorded.plot, file = sprintf('%s.recordplot', file.name))
+            }
+
+            result <- graph
+            class(result) <- "image"
 
             ## saving environment on demand
             if (graph.env)
@@ -582,61 +474,52 @@ evals <- function(txt, parse = TRUE, classes = NULL, hooks = NULL, length = Inf,
 
                 ## render high resolution image (if needed)
                 if ((graph.output %in% c('bmp', 'jpeg', 'png', 'tiff')) | (.Platform$OS.type != 'unix')) {
-                    if (check.output)
-                        suppressWarnings(evaluate(src, envir = env.hires))      # we need evaluate() here instead of simple eval() to prevent unprinted lattice/ggplot2 objects' issues
-                    else
-                        suppressWarnings(eval(parse(text = src), envir = env))
+                    eval.msgs(src, env = env.hires)      # we need eval.msgs() here instead of simple eval() to prevent unprinted lattice/ggplot2 objects' issues
                     clear.devs()
                 }
 
                 ## add "href" attribute to returned R object
-                attr(returns, 'href') <- file.hi.res
-
+                attr(result, 'href') <- file.hi.res
             }
-        } else {
-
-            unlink(file)
-
-            if (hi.res & check.output)
-                env.hires <- env
         }
 
         ## check length
-        if (length(returns) > length) returns <- NULL
+        if (length(result) > length)
+            result <- NULL
 
         ## check classes
         if (!is.null(classes))
-            if (!(class(returns) %in% classes))
-                returns <- NULL
+            if (!inherits(result, classes))
+                result <- output <- NULL
 
         ## run hooks if specified
         if (!is.null(hooks))
-            ## Q: why not inherits(returns, names(hooks)) ?
-            if (class(returns) %in% names(hooks)) {
-                fn <- hooks[[class(returns)]]; params <- list(returns)
+            if (inherits(result, names(hooks))) {
+                fn <- hooks[[class(result)]]; params <- list(result)
                 if (is.list(fn)) {
-                    params <- list(returns, fn[[-1]])
+                    params <- list(result, fn[[-1]])
                     fn <- fn[[1]]
                 }
-                returns <- do.call(fn, params)
+                result <- do.call(fn, params)
             } else {
                 if ('default' %in% names(hooks)) {
-                    fn <- hooks[['default']]; params <- list(returns)
+                    fn <- hooks[['default']]; params <- list(result)
                     if (is.list(fn)) {
-                        params <- list(returns, fn[[-1]])
+                        params <- list(result, fn[[-1]])
                         fn <- fn[[1]]
                     }
-                    returns <- do.call(fn, params)
+                    result <- do.call(fn, params)
                 }
             }
 
         ## add captured attributes
+        messages <- res$msg$messages
         if (is.character(messages)) {
             add.attr <- function(x, value) {
-                if (is.null(returns)) {
+                if (is.null(result)) {
                     errors <<- sprintf('No R object to add attr: %s', x)
                 } else {
-                    attr(returns, x) <<- value
+                    attr(result, x) <<- value
                 }
             }
             if (grepl('\\\\caption\\{.*\\}', messages)) {
@@ -650,18 +533,20 @@ evals <- function(txt, parse = TRUE, classes = NULL, hooks = NULL, length = Inf,
 
         ## return list at last
         res <- list(src      = src,
-                    output   = returns,
-                    type     = class(returns),
+                    result   = result,
+                    output   = res$output,
+                    type     = class(result),
                     msg      = list(
-                        messages = messages,
-                        warnings = warnings,
-                        errors   = errors),
-                    stdout   = stdout
+                        messages = res$msg$messages,
+                        warnings = res$msg$warnings,
+                        errors   = res$msg$errors),
+                    stdout   = res$msg$stdout
                     )
 
         res <- res[output]
         class(res) <- 'evals'
         return(res)
+
     })
 }
 
