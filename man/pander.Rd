@@ -1,4 +1,4 @@
-\name{pandoc}
+\name{pander}
 \alias{pander}
 \alias{pander.return}
 \alias{pandoc}
