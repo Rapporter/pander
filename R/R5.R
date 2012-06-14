@@ -66,7 +66,7 @@ Pandoc$methods(initialize = function(author = 'Anonymous', title = base::sprintf
 })
 
 Pandoc$methods(add = function(x) .self$body <- c(.self$body, evals(deparse(match.call()[[2]]))))
-Pandoc$methods(add.paragraph = function(x) .self$body <- c(.self$body, list(list(output = pandoc.p.return(x)))))
+Pandoc$methods(add.paragraph = function(x) .self$body <- c(.self$body, list(list(result = pandoc.p.return(x)))))
 
 Pandoc$methods(show = function(x) {
 
@@ -83,7 +83,7 @@ Pandoc$methods(show = function(x) {
 
         cat(pandoc.horizontal.rule())
 
-        lapply(.self$body, function(x) pander(x$output))
+        lapply(.self$body, function(x) pander(x$result))
 
         ## show proc.tim)
         cat(pandoc.horizontal.rule())
@@ -103,7 +103,7 @@ Pandoc$methods(export = function(f, open = TRUE) {
 
     ## create pandoc file
     cat(pandoc.title.return(.self$title, .self$author, .self$date), file = fp)
-    lapply(.self$body, function(x) cat(paste(capture.output(pander(x$output)), collapse = '\n'), file = fp, append = TRUE))
+    lapply(.self$body, function(x) cat(paste(capture.output(pander(x$result)), collapse = '\n'), file = fp, append = TRUE))
 
     ## remove extra line breaks
     #cat(remove.extra.newlines(paste(readLines(fp, warn = FALSE), collapse = '\n')), file = fp)

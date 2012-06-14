@@ -216,7 +216,7 @@ pander.default <- function(x, ...) {
 #' @S3method pander evals
 pander.evals <- function(x, ...) {
 
-    o <- pander(x$output)
+    o <- pander(x$result)
 
     if (!is.null(x$msg$messages))
         o <- paste0(o, ' **MESSAGE**', pandoc.footnote.return(x$msg$messages))
