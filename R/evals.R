@@ -423,8 +423,10 @@ evals <- function(txt, parse = TRUE, classes = NULL, hooks = NULL, length = Inf,
         clear.devs()
 
         ## error handling
-        if (!is.null(res$msg$errors))
+        if (!is.null(res$msg$errors)) {
+            class(res) <- 'evals'
             return(res)
+        }
 
         result <- res$result
         graph  <- ifelse(exists('recorded.plot'), ifelse(is.null(recorded.plot[[1]]), FALSE, file), FALSE)
