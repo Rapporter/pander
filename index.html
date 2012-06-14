@@ -97,67 +97,234 @@ install_github(&#39;pander&#39;, &#39;daroczig&#39;)</code></pre>
 <pre class="rout"><code>&gt; l &lt;- list(&quot;First list element&quot;, paste0(1:5, &#39;. subelement&#39;), &quot;Second element&quot;, list(&#39;F&#39;, &#39;B&#39;, &#39;I&#39;, c(&#39;phone&#39;, &#39;pad&#39;, &#39;talics&#39;)))
 &gt; pandoc.list(l, &#39;roman&#39;)</code></pre>
 <p>Which returns:</p>
-<pre><code>&lt;%
-l &lt;- list(&quot;First list element&quot;, paste0(1:5, &#39;. subelement&#39;), &quot;Second element&quot;, list(&#39;F&#39;, &#39;B&#39;, &#39;I&#39;, c(&#39;phone&#39;, &#39;pad&#39;, &#39;talics&#39;)))
-pandoc.list(l, &#39;roman&#39;)
-%&gt;</code></pre>
+<pre><code>
+I. First list element 
+    I. 1. subelement 
+    II. 2. subelement 
+    III. 3. subelement 
+    IV. 4. subelement 
+    V. 5. subelement  
+II. Second element 
+    I. F 
+    II. B 
+    III. I 
+        I. phone 
+        II. pad 
+        III. talics   
+
+&lt;!-- end of list --&gt;
+</code></pre>
 <p><code>pandoc</code> can return <strong>tables</strong> in <a href="http://johnmacfarlane.net/pandoc/README.html#tables">three formats</a>:</p>
 <ul>
 <li>The default style is the <code>multiline</code> format as most features (e.g. multi-line cells and alignment) are available in there.</li>
 </ul>
 <pre class="rout"><code>&gt; m &lt;- mtcars[1:2, 1:3]
 &gt; pandoc.table(m)
-&lt;%
-pandoc.table(mtcars[1:2, 1:3])
-%&gt;</code></pre>
+
+------------------------------------
+                  mpg   cyl   disp  
+----------------- ----- ----- ------
+**Mazda RX4**     21    6     160   
+
+**Mazda RX4 Wag** 21    6     160   
+------------------------------------
+</code></pre>
 <ul>
 <li><code>simple</code> tables do not support line breaks in cells:</li>
 </ul>
 <pre class="rout"><code>&gt; pandoc.table(m, style = &quot;simple&quot;)
-&lt;%
-pandoc.table(mtcars[1:2, 1:3], style = &quot;simple&quot;)
-%&gt;</code></pre>
+
+                  mpg   cyl   disp  
+----------------- ----- ----- ------
+**Mazda RX4**     21    6     160   
+**Mazda RX4 Wag** 21    6     160   
+</code></pre>
 <ul>
 <li><code>grid</code> format are really handy for <a href="http://emacswiki.org/emacs/TableMode">emacs</a> users but do support line breaks inside cells, but do not tolerate cell alignment:</li>
 </ul>
 <pre class="rout"><code>&gt; pandoc.table(m, style = &quot;grid&quot;)
-&lt;%
-pandoc.table(mtcars[1:2, 1:3], style = &quot;grid&quot;)
-%&gt;</code></pre>
+
++-------------------+-------+-------+--------+
+|                   | mpg   | cyl   | disp   |
++===================+=======+=======+========+
+| **Mazda RX4**     | 21    | 6     | 160    |
++-------------------+-------+-------+--------+
+| **Mazda RX4 Wag** | 21    | 6     | 160    |
++-------------------+-------+-------+--------+
+</code></pre>
 <p>Besides the <code>style</code> parameter there are several other ways to tweak the output like <code>decimal.mark</code> or <code>digits</code>. And of course it's really easy to add a <strong>caption</strong>:</p>
 <pre class="rout"><code>&gt; pandoc.table(m, style = &quot;grid&quot;, caption = &quot;Hello caption!&quot;)
-&lt;%
-pandoc.table(mtcars[1:2, 1:3], style = &quot;grid&quot;, caption = &#39;Hello caption!&#39;)
-%&gt;</code></pre>
+
++-------------------+-------+-------+--------+
+|                   | mpg   | cyl   | disp   |
++===================+=======+=======+========+
+| **Mazda RX4**     | 21    | 6     | 160    |
++-------------------+-------+-------+--------+
+| **Mazda RX4 Wag** | 21    | 6     | 160    |
++-------------------+-------+-------+--------+
+
+Table: Hello caption!
+</code></pre>
 <p><code>pandoc.table</code>˙can deal with the problem of really <strong>wide tables</strong>. Ever had an issue in LaTeX or MS Word when tried to print a correlation matrix of 40 variables? Not a problem any more as <code>pandoc.table</code> splits up the table if wider then 80 characters and handles caption too:</p>
 <pre class="rout"><code>&gt; pandoc.table(mtcars[1:2, ], style = &quot;grid&quot;, caption = &quot;Hello caption!&quot;)
-&lt;%
-pandoc.table(mtcars[1:2, ], style = &quot;grid&quot;, caption = &#39;Hello caption!&#39;)
-%&gt;</code></pre>
+
++-------------------+-------+-------+--------+------+--------+------+
+|                   | mpg   | cyl   | disp   | hp   | drat   | wt   |
++===================+=======+=======+========+======+========+======+
+| **Mazda RX4**     | 21    | 6     | 160    | 110  | 3.9    | 2.6  |
++-------------------+-------+-------+--------+------+--------+------+
+| **Mazda RX4 Wag** | 21    | 6     | 160    | 110  | 3.9    | 2.9  |
++-------------------+-------+-------+--------+------+--------+------+
+
+Table: Hello caption! (continued below)
+
+ 
+
++-------------------+--------+------+------+--------+--------+
+|                   | qsec   | vs   | am   | gear   | carb   |
++===================+========+======+======+========+========+
+| **Mazda RX4**     | 16     | 0    | 1    | 4      | 4      |
++-------------------+--------+------+------+--------+--------+
+| **Mazda RX4 Wag** | 17     | 0    | 1    | 4      | 4      |
++-------------------+--------+------+------+--------+--------+
+</code></pre>
+<p>And too wide cells are also split by line breaks. E.g.:</p>
+<pre class="rout"><code>&gt; pandoc.table(data.frame(id=1:2, value=c(&#39;FOO&#39;, &#39;Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.&#39;)))
+
+----------------------------------
+id   value                        
+---- -----------------------------
+1    FOO                          
+
+2    Lorem ipsum dolor sit amet,  
+     consectetur adipisicing elit,
+     sed do eiusmod tempor        
+     incididunt ut labore et      
+     dolore magna aliqua. Ut enim 
+     ad minim veniam, quis nostrud
+     exercitation ullamco laboris 
+     nisi ut aliquip ex ea commodo
+     consequat. Duis aute irure   
+     dolor in reprehenderit in    
+     voluptate velit esse cillum  
+     dolore eu fugiat nulla       
+     pariatur. Excepteur sint     
+     occaecat cupidatat non       
+     proident, sunt in culpa qui  
+     officia deserunt mollit anim 
+     id est laborum.              
+----------------------------------
+</code></pre>
 <h1 id="generic-pander-method">Generic pander method</h1>
 <p><code>pander</code> or <code>pandoc</code> (call as you wish) can deal with a bunch of R object types as being a pandocized <code>S3</code> method with a variety of classes.</p>
 <p>Besides simple types (vectors, matrices, tables or data frames) lists might be interesting for you:</p>
 <pre class="rout"><code>&gt; pander(list(a=1, b=2, c=table(mtcars$am), x=list(myname=1,2), 56))
-&lt;%pander(list(a=1, b=2, c=table(mtcars$am), x=list(myname=1,2), 56))%&gt;</code></pre>
+
+  * **a**: *1*
+  * **b**: *2*
+  * **c**:
+
+    -------
+    0   1
+    --- ---
+    19  13
+    -------
+
+  * **x**:
+
+      * **myname**: *1*
+      * *2*
+
+  * *56*
+
+&lt;!-- end of list --&gt;
+</code></pre>
 <p>A nested list can be seen above with a table and all (optional) list names inside. As a matter of fact <code>pander.list</code> is the default method of <code>pander</code> too, see:</p>
 <pre class="rout"><code>&gt; x &lt;- chisq.test(table(mtcars$am, mtcars$gear))
 &gt; class(x) &lt;- &quot;I&#39;ve never heard of!&quot;
 &gt; pander(x)
-&lt;%
-x &lt;- chisq.test(table(mtcars$am, mtcars$gear))
-class(x) &lt;- &#39;I\&#39;ve never heard of!&#39;
-pander(x)
-%&gt;</code></pre>
+ **WARNING**^[Chi-squared approximation may be incorrect]
+
+  * **statistic**: *21*
+  * **parameter**: *2*
+  * **p.value**: *2.8e-05*
+  * **method**: Pearson&#39;s Chi-squared test
+  * **data.name**: table(mtcars$am, mtcars$gear)
+  * **observed**:
+
+    -----------------
+          3   4   5
+    ----- --- --- ---
+    **0** 15  4   0
+
+    **1** 0   8   5
+    -----------------
+
+  * **expected**:
+
+    -----------------
+          3   4   5
+    ----- --- --- ---
+    **0** 8.9 7.1 3.0
+
+    **1** 6.1 4.9 2.0
+    -----------------
+
+  * **residuals**:
+
+    --------------------
+          3    4    5
+    ----- ---- ---- ----
+    **0** 2.0  -1.2 -1.7
+
+    **1** -2.5 1.4  2.1
+    --------------------
+
+  * **stdres**:
+
+    --------------------
+          3    4    5
+    ----- ---- ---- ----
+    **0** 4.4  -2.3 -2.9
+
+    **1** -4.4 2.3  2.9
+    --------------------
+
+&lt;!-- end of list --&gt;
+</code></pre>
 <p>So <code>pander</code> showed a not known class in an (almost) user-friendly way. And we got some warnings too styled with <a href="http://johnmacfarlane.net/pandoc/README.html#footnotes">Pandoc <strong>footnote</strong></a>! If that document is exported to e.g. <code>HTML</code> or <code>pdf</code>, then the error/warning message could be found on the bottom of the page with a link. <em>Note</em>: there were two warnings in the above call - both captured and returned! Well, this is the feature of <code>Pandoc.brew</code>, see <a href="#brew-to-pandoc">below</a>.</p>
 <p>The output of different <strong>statistical methods</strong> are tried to be prettyfied. Some examples:</p>
 <pre class="rout"><code>&gt; pander(ks.test(runif(50), runif(50)))
-&lt;%pander(ks.test(runif(50), runif(50)))%&gt;
+
+---------------------------------------------------
+ Test statistic   P value   Alternative hypothesis 
+---------------- --------- ------------------------
+      0.16         0.55           two-sided        
+---------------------------------------------------
+
+Table: Two-sample Kolmogorov-Smirnov test: `runif(50)` and `runif(50)`
 
 &gt; pander(chisq.test(table(mtcars$am, mtcars$gear)))
-&lt;%pander(chisq.test(table(mtcars$am, mtcars$gear)))%&gt;
+
+-------------------------------
+ Test statistic   df   P value 
+---------------- ---- ---------
+       21         2    2.8e-05 
+-------------------------------
+
+Table: Pearson&#39;s Chi-squared test: `table(mtcars$am, mtcars$gear)`
+
+ **WARNING**^[Chi-squared approximation may be incorrect]
 
 &gt; pander(t.test(extra ~ group, data = sleep))
-&lt;%pander(t.test(extra ~ group, data = sleep))%&gt;
+
+--------------------------------------------------------
+ Test statistic   df   P value   Alternative hypothesis 
+---------------- ---- --------- ------------------------
+      -1.9        18    0.079          two.sided        
+--------------------------------------------------------
+
+Table: Welch Two Sample t-test: `extra` by `group`
 
 &gt; ## Dobson (1990) Page 93: Randomized Controlled Trial (examples from: ?glm)
 &gt; counts &lt;- c(18,17,15,20,10,20,25,13,12)
@@ -165,25 +332,126 @@ pander(x)
 &gt; treatment &lt;- gl(3,3)
 &gt; m &lt;- glm(counts ~ outcome + treatment, family=poisson())
 &gt; pander(m)
-&lt;%
-counts &lt;- c(18,17,15,20,10,20,25,13,12)
-outcome &lt;- gl(3,1,9)
-treatment &lt;- gl(3,3)
-m &lt;- glm(counts ~ outcome + treatment, family=poisson())
-pander(m)
-%&gt;
+
+------------------------------------------------------------
+                 Estimate   Std. Error   z value   Pr(&gt;|z|) 
+--------------- ---------- ------------ --------- ----------
+**(Intercept)**  3.0e+00     1.7e-01     1.8e+01   5.4e-71  
+
+   **outcome2**  -4.5e-01    2.0e-01    -2.2e+00   2.5e-02  
+
+   **outcome3**  -2.9e-01    1.9e-01    -1.5e+00   1.3e-01  
+
+ **treatment2**  1.3e-15     2.0e-01     6.7e-15   1.0e+00  
+
+ **treatment3**  1.4e-15     2.0e-01     7.1e-15   1.0e+00  
+------------------------------------------------------------
+
+Table: Fitting generalized (poisson/log) linear model: counts ~ outcome + treatment
 
 &gt; pander(anova(m))
-&lt;%pander(anova(m))%&gt;
+
+------------------------------------------------------
+               Df   Deviance   Resid. Df   Resid. Dev 
+------------- ---- ---------- ----------- ------------
+     **NULL**  NA      NA          8          10.6    
+
+  **outcome**  2    5.5e+00        6          5.1     
+
+**treatment**  2    2.7e-15        4          5.1     
+------------------------------------------------------
+
+Table: Analysis of Deviance Table
 
 &gt; pander(aov(m))
-&lt;%pander(aov(m))%&gt;
+
+--------------------------------------------------------
+               Df   Sum Sq   Mean Sq   F value   Pr(&gt;F) 
+------------- ---- -------- --------- --------- --------
+  **outcome**  2   9.3e+01   4.6e+01   2.2e+00    0.22  
+
+**treatment**  2   8.4e-31   4.2e-31   2.0e-32    1.00  
+
+**Residuals**  4   8.3e+01   2.1e+01     NA        NA   
+--------------------------------------------------------
+
+Table: Analysis of Variance Model
 
 &gt; pander(prcomp(USArrests))
-&lt;%pander(prcomp(USArrests))%&gt;
+
+---------------------------------------
+             PC1   PC2    PC3    PC4   
+------------ ----- ------ ------ ------
+**Murder**   0.042 -0.045 0.080  -0.995
+
+**Assault**  0.995 -0.059 -0.068 0.039 
+
+**UrbanPop** 0.046 0.977  -0.201 -0.058
+
+**Rape**     0.075 0.201  0.974  0.072 
+---------------------------------------
+
+Table: Principal Components Analysis
+
+----------------------------------------------------------
+                           PC1     PC2     PC3     PC4    
+-------------------------- ------- ------- ------- -------
+**Standard deviation**     8.4e+01 1.4e+01 6.5e+00 2.5e+00
+
+**Proportion of Variance** 9.7e-01 2.8e-02 5.8e-03 8.5e-04
+
+**Cumulative Proportion**  9.7e-01 9.9e-01 1.0e+00 1.0e+00
+----------------------------------------------------------
 
 &gt; pander(density(mtcars$hp))
-&lt;%pander(density(mtcars$hp))%&gt;
+
+------------------------------------------
+             Coordinates   Density values 
+----------- ------------- ----------------
+   **Min.**      -32          5.0e-06     
+
+**1st Qu.**      81           4.1e-04     
+
+ **Median**      194          1.7e-03     
+
+   **Mean**      194          2.2e-03     
+
+**3rd Qu.**      306          4.1e-03     
+
+   **Max.**      419          6.1e-03     
+------------------------------------------
+
+Table: Kernel density of *mtcars$hp* (bandwidth: 28.04104)
+</code></pre>
+<p>And of course tables are formatted (e.g. auto add of line breaks and splitting up tables) nicely:</p>
+<pre class="rout"><code>&gt; set.caption(&#39;Foo Bar&#39;)
+&gt; pander(data.frame(id=1:2, value=c(&#39;FOO&#39;, &#39;Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.&#39;)))
+
+----------------------------------
+id   value                        
+---- -----------------------------
+1    FOO                          
+
+2    Lorem ipsum dolor sit amet,  
+     consectetur adipisicing elit,
+     sed do eiusmod tempor        
+     incididunt ut labore et      
+     dolore magna aliqua. Ut enim 
+     ad minim veniam, quis nostrud
+     exercitation ullamco laboris 
+     nisi ut aliquip ex ea commodo
+     consequat. Duis aute irure   
+     dolor in reprehenderit in    
+     voluptate velit esse cillum  
+     dolore eu fugiat nulla       
+     pariatur. Excepteur sint     
+     occaecat cupidatat non       
+     proident, sunt in culpa qui  
+     officia deserunt mollit anim 
+     id est laborum.              
+----------------------------------
+
+Table: Foo Bar
 </code></pre>
 <h1 id="brew-to-pandoc">Brew to Pandoc</h1>
 <p>Everyone knows and uses <a href="http://cran.r-project.org/web/packages/brew/index.html">brew</a> but if you would need some smack, the following links really worth visiting:</p>
@@ -197,7 +465,7 @@ pander(m)
 </ul>
 <p>This latter tries to be smart in some ways:</p>
 <ul>
-<li>a block (R commands between the tags) could return a value in the middle of the block and do something else without any output in the rest (but only one returned value per block!)</li>
+<li>a block (R commands between the tags) could return values in any part of the block</li>
 <li>plots and images are grabbed in the document, rendered to a <code>png</code> file and <code>pander</code> method would result in a Pandoc markdown formatted image link (so the image would be shown/included in the exported document).</li>
 <li>all warnings/messages and errors are recorded in the blocks and returned in the document as a footnote</li>
 </ul>
@@ -205,20 +473,24 @@ pander(m)
 <pre><code>Pandoc.brew(system.file(&#39;README.brew&#39;, package=&#39;pander&#39;))</code></pre>
 <p><code>Pandoc.brew</code> could cook a file (default) or work with a character vector provided in the <code>text</code> argument. The output is set to <code>stdout</code> by default, it could be tweaked to write result to a text file and run Pandoc on that to create a <code>HTML</code>, <code>odt</code>, <code>docx</code> or other document.</p>
 <p>To export a brewed file to other then Pandoc's markdown, please use the <code>convert</code> parameter! For example (please disregard the backslash in front of the percent sign):</p>
-<pre class="sourceCode r"><code class="sourceCode r">text &lt;- <span class="kw">paste</span>(<span class="st">&#39;# Header&#39;</span>, <span class="st">&#39;&#39;</span>, <span class="st">&#39;&lt;\%=as.list(runif(10))\%&gt;&#39;</span>, <span class="st">&#39;&lt;\%=mtcars[1:3, ]\%&gt;&#39;</span>, <span class="st">&#39;&lt;\%=plot(1:10)\%&gt;&#39;</span>, <span class="dt">sep =</span> <span class="st">&#39;</span><span class="ch">\n</span><span class="st">&#39;</span>)
+<pre class="sourceCode r"><code class="sourceCode r">text &lt;- <span class="kw">paste</span>(<span class="st">&#39;# Header&#39;</span>, <span class="st">&#39;&#39;</span>, <span class="st">&#39;What a lovely list:</span><span class="ch">\n</span><span class="st">&lt;\%=as.list(runif(10))\%&gt;&#39;</span>, <span class="st">&#39;A wide table:</span><span class="ch">\n</span><span class="st">&lt;\%=mtcars[1:3, ]\%&gt;&#39;</span>, <span class="st">&#39;And a nice chart:</span><span class="ch">\n\n</span><span class="st">&lt;\%=plot(1:10)\%&gt;&#39;</span>, <span class="dt">sep =</span> <span class="st">&#39;</span><span class="ch">\n</span><span class="st">&#39;</span>)
 <span class="kw">Pandoc.brew</span>(<span class="dt">text =</span> text, <span class="dt">output =</span> <span class="kw">tempfile</span>(), <span class="dt">convert =</span> <span class="st">&#39;html&#39;</span>)
 <span class="kw">Pandoc.brew</span>(<span class="dt">text =</span> text, <span class="dt">output =</span> <span class="kw">tempfile</span>(), <span class="dt">convert =</span> <span class="st">&#39;pdf&#39;</span>)</code></pre>
-<p>Of course a text file could work as input (by default) the above example uses <code>text</code> parameter as a reproducible example. For example brewing this README with all R chunks run to html, pleae run:</p>
-<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">Pandoc.brew</span>(<span class="kw">system.file</span>(<span class="st">&#39;README.brew&#39;</span>, <span class="dt">package=</span><span class="st">&#39;pander&#39;</span>), <span class="dt">output =</span> <span class="kw">tempfile</span>(), <span class="dt">convert =</span> <span class="st">&#39;html&#39;</span>)
-<span class="kw">Pandoc.brew</span>(<span class="kw">system.file</span>(<span class="st">&#39;README.brew&#39;</span>, <span class="dt">package=</span><span class="st">&#39;pander&#39;</span>), <span class="dt">output =</span> <span class="kw">tempfile</span>(), <span class="dt">convert =</span> <span class="st">&#39;pdf&#39;</span>)</code></pre>
+<p>Of course a text file could work as input (by default) the above example uses <code>text</code> parameter as a reproducible example. For example brewing this README with all R chunks run to html, please run:</p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">Pandoc.brew</span>(<span class="kw">system.file</span>(<span class="st">&#39;README.brew&#39;</span>, <span class="dt">package=</span><span class="st">&#39;pander&#39;</span>), <span class="dt">output =</span> <span class="kw">tempfile</span>(), <span class="dt">convert =</span> <span class="st">&#39;html&#39;</span>)</code></pre>
+<p>And there are some package bundled examples too.</p>
 <h2 id="examples">Examples</h2>
 <p>The package comes bundled with some examples for <code>Pandoc.brew</code> to let users check out its features pretty fast. These are:</p>
 <ul>
 <li><a href="https://github.com/daroczig/pander/blob/master/inst/examples/minimal.brew">minimal.brew</a></li>
 <li><a href="https://github.com/daroczig/pander/blob/master/inst/examples/short-code-long-report.brew">short-code-long-report.brew</a></li>
 </ul>
-<p>To <code>brew</code> these examples on your machine try to run e.g.:</p>
-<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">Pandoc.brew</span>(<span class="kw">system.file</span>(<span class="st">&#39;examples/minimal.brew&#39;</span>, <span class="dt">package=</span><span class="st">&#39;pander&#39;</span>), <span class="dt">output =</span> <span class="kw">tempfile</span>(), <span class="dt">convert =</span> <span class="st">&#39;html&#39;</span>)</code></pre>
+<p>To <code>brew</code> these examples on your machine try to run the followings.:</p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">Pandoc.brew</span>(<span class="kw">system.file</span>(<span class="st">&#39;examples/minimal.brew&#39;</span>, <span class="dt">package=</span><span class="st">&#39;pander&#39;</span>))
+<span class="kw">Pandoc.brew</span>(<span class="kw">system.file</span>(<span class="st">&#39;examples/minimal.brew&#39;</span>, <span class="dt">package=</span><span class="st">&#39;pander&#39;</span>), <span class="dt">output =</span> <span class="kw">tempfile</span>(), <span class="dt">convert =</span> <span class="st">&#39;html&#39;</span>)
+
+<span class="kw">Pandoc.brew</span>(<span class="kw">system.file</span>(<span class="st">&#39;examples/short-code-long-report.brew&#39;</span>, <span class="dt">package=</span><span class="st">&#39;pander&#39;</span>))
+<span class="kw">Pandoc.brew</span>(<span class="kw">system.file</span>(<span class="st">&#39;examples/short-code-long-report.brew&#39;</span>, <span class="dt">package=</span><span class="st">&#39;pander&#39;</span>), <span class="dt">output =</span> <span class="kw">tempfile</span>(), <span class="dt">convert =</span> <span class="st">&#39;html&#39;</span>)</code></pre>
 <p>For easy access I have uploaded some exported documents of the above examples:</p>
 <ul>
 <li>minimal.brew: <a href="minimal.md">markdown</a> <a href="http://daroczig.github.com/pander/minimal.html">html</a> <a href="http://daroczig.github.com/pander/minimal.pdf">pdf</a> <a href="http://daroczig.github.com/pander/minimal.odt">odt</a> <a href="http://daroczig.github.com/pander/minimal.docx">docx</a></li>
@@ -293,8 +565,20 @@ myReport$<span class="kw">export</span>(<span class="dt">open =</span> <span cla
 <li><p><code>pander-region-or-chunk-export</code> (<code>C-c p P</code>): Run <code>pander</code> (after <code>eval</code>) on region <strong>or</strong> current chunk (if marker is not set) and convert results specified format in minibuffer with auto-complete. Chunk is recognized by opening and closing <code>brew</code> tags.</p></li>
 </ul>
 <p>These functions are rather a POC of what could be done with <code>pander</code> to speed up writing reports, but having great potentials - and besides that: doing a great job right now too (for me).</p>
+<h2 id="pander-mode">pander-mode</h2>
+<p>The above functions are to be removed from <code>pander.el</code> as I am currently working on <code>pander-mode</code> with options and much useful functions. ATM there are only three of them:</p>
+<ul>
+<li><code>pander-brew</code> (<code>C-c p b</code>): Run <code>Pandoc.brew</code> on current buffer or region (if mark is active), show results in <em>ess-output</em> and (optionally) copy results to clipboard while setting working directory to tempdir() temporary.</li>
+<li><code>pander-brew-export</code> (<code>C-c p B</code>): Run <code>Pandoc.brew</code> on current buffer or region (if mark is active) and export results to specified (auto-complete in minibuffer) format. Also tries to open exported document.</li>
+<li><code>pander-eval</code> (<code>C-c p e</code>): Run <code>pander</code> on (automatically evaluated) region <em>or</em> current chunk (if marker is not set), show results (of last returned R object) in <code>*ess-output*</code> and (optionally) copy those to clipboard while setting working directory to <code>tempdir()</code> temporary.</li>
+</ul>
+<p>And a few options: <code>M-x customize-group pander</code></p>
+<ul>
+<li><code>pander-clipboard</code>: If non-nil then the result of <code>pander-*</code> functions would be copied to clipboard.</li>
+<li><code>pander-show-source</code>: If non-nil then the source of R commands would also show up in generated documents while running 'pander-eval'. This would not affect <code>brew</code> functions ATM.</li>
+</ul>
 <hr />
-<p>This report was generated with <a href="http://www.r-project.org/">R</a> (2.15.0) and <a href="https://github.com/daroczig/pander">pander</a> (0.1) in 0.05 sec on x86_64-unknown-linux-gnu platform.</p>
+<p>This report was generated with <a href="http://www.r-project.org/">R</a> (2.15.0) and <a href="https://github.com/daroczig/pander">pander</a> (0.1) in 0.447 sec on x86_64-unknown-linux-gnu platform.</p>
 <p align="center">
   Design: <a href="http://rapport-package.info/"><i>rapport</i> Development Team</a> &copy; 2012 | Backend: <a href="https://github.com/daroczig/pander">pander</a> | License: <a href="http://www.gnu.org/licenses/agpl.html" target="_blank">AGPL3</a> | Styled with <a href="http://www.getskeleton.com/" target="_blank">skeleton</a>
 </p>

@@ -190,6 +190,7 @@ table caption {
 
 th {
     padding: 4px 10px;
+    vertical-align: middle;
 }
 
 th * {
@@ -208,6 +209,7 @@ td {
     border: 1px solid #FFFFFF;
     padding: 2px 10px;
     min-width: 50px;
+    vertical-align: middle;
 }
 
 

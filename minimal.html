@@ -48,12 +48,12 @@
 </ul>
 <p>A third field could be there too: date. For details, please check out <a href="http://johnmacfarlane.net/pandoc/README.html#title-block">Pandoc's homepage</a> or just use <code>pandoc.title</code> function of this package.</p>
 <p>As you can see writing and formatting paragraphs cannot be easier :)</p>
-<p>But what about <a href="http://www.r-project.org/">R</a>? Let us return pi: <em>3.14159265358979</em></p>
+<p>But what about <a href="http://www.r-project.org/">R</a>? Let us return pi: <em>3.1</em></p>
 <h1 id="r-objects">R objects</h1>
 <p><code>Pander.brew</code> would transform any returned R object to Pandoc's markdown in each code block.</p>
 <p>For example <code>mtcars</code>'s first 5 cases look like:</p>
 <table>
-<col width="25%" />
+<col width="30%" />
 <col width="8%" />
 <col width="8%" />
 <col width="9%" />
@@ -73,7 +73,7 @@
 </thead>
 <tbody>
 <tr class="odd">
-<td align="left">Mazda RX4</td>
+<td align="left"><strong>Mazda RX4</strong></td>
 <td align="left">21</td>
 <td align="left">6</td>
 <td align="left">160</td>
@@ -82,7 +82,7 @@
 <td align="left">2.6</td>
 </tr>
 <tr class="even">
-<td align="left">Mazda RX4 Wag</td>
+<td align="left"><strong>Mazda RX4 Wag</strong></td>
 <td align="left">21</td>
 <td align="left">6</td>
 <td align="left">160</td>
@@ -91,7 +91,7 @@
 <td align="left">2.9</td>
 </tr>
 <tr class="odd">
-<td align="left">Datsun 710</td>
+<td align="left"><strong>Datsun 710</strong></td>
 <td align="left">23</td>
 <td align="left">4</td>
 <td align="left">108</td>
@@ -100,7 +100,7 @@
 <td align="left">2.3</td>
 </tr>
 <tr class="even">
-<td align="left">Hornet 4 Drive</td>
+<td align="left"><strong>Hornet 4 Drive</strong></td>
 <td align="left">21</td>
 <td align="left">6</td>
 <td align="left">258</td>
@@ -109,7 +109,7 @@
 <td align="left">3.2</td>
 </tr>
 <tr class="odd">
-<td align="left">Hornet Sportabout</td>
+<td align="left"><strong>Hornet Sportabout</strong></td>
 <td align="left">19</td>
 <td align="left">8</td>
 <td align="left">360</td>
@@ -120,7 +120,7 @@
 </tbody>
 </table>
 <table>
-<col width="25%" />
+<col width="30%" />
 <col width="9%" />
 <col width="6%" />
 <col width="6%" />
@@ -138,7 +138,7 @@
 </thead>
 <tbody>
 <tr class="odd">
-<td align="left">Mazda RX4</td>
+<td align="left"><strong>Mazda RX4</strong></td>
 <td align="left">16</td>
 <td align="left">0</td>
 <td align="left">1</td>
@@ -146,7 +146,7 @@
 <td align="left">4</td>
 </tr>
 <tr class="even">
-<td align="left">Mazda RX4 Wag</td>
+<td align="left"><strong>Mazda RX4 Wag</strong></td>
 <td align="left">17</td>
 <td align="left">0</td>
 <td align="left">1</td>
@@ -154,7 +154,7 @@
 <td align="left">4</td>
 </tr>
 <tr class="odd">
-<td align="left">Datsun 710</td>
+<td align="left"><strong>Datsun 710</strong></td>
 <td align="left">19</td>
 <td align="left">1</td>
 <td align="left">1</td>
@@ -162,7 +162,7 @@
 <td align="left">1</td>
 </tr>
 <tr class="even">
-<td align="left">Hornet 4 Drive</td>
+<td align="left"><strong>Hornet 4 Drive</strong></td>
 <td align="left">19</td>
 <td align="left">1</td>
 <td align="left">0</td>
@@ -170,7 +170,7 @@
 <td align="left">1</td>
 </tr>
 <tr class="odd">
-<td align="left">Hornet Sportabout</td>
+<td align="left"><strong>Hornet Sportabout</strong></td>
 <td align="left">17</td>
 <td align="left">0</td>
 <td align="left">0</td>
@@ -201,17 +201,17 @@
 </tr>
 </tbody>
 </table>
-<p><code>WARNING</code><sup><a href="#fn1" class="footnoteRef" id="fnref1">1</a></sup></p>
+<p><strong>WARNING</strong><sup><a href="#fn1" class="footnoteRef" id="fnref1">1</a></sup></p>
 <h2 id="returning-plot">Returning plot</h2>
 <p>Plots are automatically grabbed between <code>brew</code> tags:</p>
-<p><a href="plots/minimal-1-hires.png"><img src="plots/minimal-1.png" /></a></p>
+<p><a href="plots/minimal-3-hires.png"><img src="plots/minimal-3.png" /></a></p>
 <p>And adding a caption is easy:</p>
-<p><a href="plots/minimal-2-hires.png"><img src="plots/minimal-2.png" alt="My second pander plot in red" /></a></p>
+<p><a href="plots/minimal-4-hires.png"><img src="plots/minimal-4.png" alt="My second pander plot in red" /></a></p>
 <h1 id="captions">Captions</h1>
 <p>Just like with tables:</p>
 <table>
 <caption>Here goes the first two lines of USArrests</caption>
-<col width="11%" />
+<col width="16%" />
 <col width="12%" />
 <col width="13%" />
 <col width="15%" />
@@ -227,14 +227,14 @@
 </thead>
 <tbody>
 <tr class="odd">
-<td align="left">Alabama</td>
+<td align="left"><strong>Alabama</strong></td>
 <td align="left">13</td>
 <td align="left">236</td>
 <td align="left">58</td>
 <td align="left">21</td>
 </tr>
 <tr class="even">
-<td align="left">Alaska</td>
+<td align="left"><strong>Alaska</strong></td>
 <td align="left">10</td>
 <td align="left">263</td>
 <td align="left">48</td>
@@ -242,8 +242,25 @@
 </tr>
 </tbody>
 </table>
-<h2 id="it-happens">It happens</h2>
-<p><code>ERROR</code><sup><a href="#fn2" class="footnoteRef" id="fnref2">2</a></sup></p>
+<h1 id="multiple-results">Multiple results</h1>
+<p>And the chunks can result in multiple R objects of course:</p>
+<ul>
+<li><em>1</em>, <em>2</em>, <em>3</em>, <em>4</em> and <em>5</em></li>
+</ul>
+<!-- end of list -->
+
+<ul>
+<li><em>3.1</em></li>
+</ul>
+<!-- end of list -->
+
+<ul>
+<li><em>110</em>, <em>110</em>, <em>93</em>, <em>110</em>, <em>175</em>, <em>105</em>, <em>245</em>, <em>62</em>, <em>95</em>, <em>123</em>, <em>123</em>, <em>180</em>, <em>180</em>, <em>180</em>, <em>205</em>, <em>215</em>, <em>230</em>, <em>66</em>, <em>52</em>, <em>65</em>, <em>97</em>, <em>150</em>, <em>150</em>, <em>245</em>, <em>175</em>, <em>66</em>, <em>91</em>, <em>113</em>, <em>264</em>, <em>175</em>, <em>335</em> and <em>109</em></li>
+</ul>
+<!-- end of list -->
+
+<h1 id="it-happens">It happens</h1>
+<p><strong>ERROR</strong><sup><a href="#fn2" class="footnoteRef" id="fnref2">2</a></sup></p>
 <hr />
 <p>This report was generated with <a href="http://www.r-project.org/">R</a> (2.15.0) and <a href="https://github.com/daroczig/pander">pander</a> (0.1) on x86_64-unknown-linux-gnu platform.</p>
 <div class="footnotes">
