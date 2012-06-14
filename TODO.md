@@ -12,6 +12,7 @@
   * ~~remove `rapport` dependency~~
   * ~~add [ESS](http://ess.r-project.org/) functions~~
   * add: short documentation (or at least mention!): `evals`
+  * comparison with `knitr`
 
 ## Github pages
 
@@ -30,7 +31,7 @@
 ## General tasks
 
   * ~~**add controllable, global options**~~ `pander.option`
-  * **add ~~caption~~/other tweaks (sign. stars, emphasis etc.) to images/tables using `attrs`**
+  * **add caption/other tweaks (sign. stars, emphasis etc.) to images/tables using `attrs`**
 
 ## Evals
 

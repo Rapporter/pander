@@ -64,10 +64,10 @@ Of course there are more complex functions too. Besides verbatim texts, (image) 
 Which returns:
 
 ```
-<%%
+<%=
 l <- list("First list element", paste0(1:5, '. subelement'), "Second element", list('F', 'B', 'I', c('phone', 'pad', 'talics')))
-pandoc.list(l, 'roman')
-%%>
+pandoc.list.return(l, 'roman')
+%>
 ```
 
 `pandoc` can return **tables** in [three formats](http://johnmacfarlane.net/pandoc/README.html#tables):
@@ -77,45 +77,54 @@ pandoc.list(l, 'roman')
 ```rout
 > m <- mtcars[1:2, 1:3]
 > pandoc.table(m)
-<%%
-pandoc.table(mtcars[1:2, 1:3])
-%%>
+<%=
+pandoc.table.return(mtcars[1:2, 1:3])
+%>
 ```
 
   * `simple` tables do not support line breaks in cells:
 
 ```rout
 > pandoc.table(m, style = "simple")
-<%%
-pandoc.table(mtcars[1:2, 1:3], style = "simple")
-%%>
+<%=
+pandoc.table.return(mtcars[1:2, 1:3], style = "simple")
+%>
 ```
 
   * `grid` format are really handy for [emacs](http://emacswiki.org/emacs/TableMode) users but do support line breaks inside cells, but do not tolerate cell alignment:
 
 ```rout
 > pandoc.table(m, style = "grid")
-<%%
-pandoc.table(mtcars[1:2, 1:3], style = "grid")
-%%>
+<%=
+pandoc.table.return(mtcars[1:2, 1:3], style = "grid")
+%>
 ```
 
 Besides the `style` parameter there are several other ways to tweak the output like `decimal.mark` or `digits`. And of course it's really easy to add a **caption**:
 
 ```rout
 > pandoc.table(m, style = "grid", caption = "Hello caption!")
-<%%
-pandoc.table(mtcars[1:2, 1:3], style = "grid", caption = 'Hello caption!')
-%%>
+<%=
+pandoc.table.return(mtcars[1:2, 1:3], style = "grid", caption = 'Hello caption!')
+%>
 ```
 
 `pandoc.table`˙can deal with the problem of really **wide tables**. Ever had an issue in LaTeX or MS Word when tried to print a correlation matrix of 40 variables? Not a problem any more as `pandoc.table` splits up the table if wider then 80 characters and handles caption too:
 
 ```rout
 > pandoc.table(mtcars[1:2, ], style = "grid", caption = "Hello caption!")
-<%%
-pandoc.table(mtcars[1:2, ], style = "grid", caption = 'Hello caption!')
-%%>
+<%=
+pandoc.table.return(mtcars[1:2, ], style = "grid", caption = 'Hello caption!')
+%>
+```
+
+And too wide cells are also split by line breaks. E.g.:
+
+```rout
+> pandoc.table(data.frame(id=1:2, value=c('FOO', 'Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.')))
+<%=
+pandoc.table.return(data.frame(id=1:2, value=c('FOO', 'Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.')))
+%>
 ```
 
 # Generic pander method
@@ -126,7 +135,7 @@ Besides simple types (vectors, matrices, tables or data frames) lists might be i
 
 ```rout
 > pander(list(a=1, b=2, c=table(mtcars$am), x=list(myname=1,2), 56))
-<%%pander(list(a=1, b=2, c=table(mtcars$am), x=list(myname=1,2), 56))%%>
+<%=list(a=1, b=2, c=table(mtcars$am), x=list(myname=1,2), 56)%>
 ```
 
 A nested list can be seen above with a table and all (optional) list names inside. As a matter of fact `pander.list` is the default method of `pander` too, see:
@@ -135,11 +144,11 @@ A nested list can be seen above with a table and all (optional) list names insid
 > x <- chisq.test(table(mtcars$am, mtcars$gear))
 > class(x) <- "I've never heard of!"
 > pander(x)
-<%%
+<%=
 x <- chisq.test(table(mtcars$am, mtcars$gear))
 class(x) <- 'I\'ve never heard of!'
-pander(x)
-%%>
+x
+%>
 ```
 
 So `pander` showed a not known class in an (almost) user-friendly way. And we got some warnings too styled with [Pandoc **footnote**](http://johnmacfarlane.net/pandoc/README.html#footnotes)! If that document is exported to e.g. `HTML` or `pdf`, then the error/warning message could be found on the bottom of the page with a link. *Note*: there were two warnings in the above call - both captured and returned! Well, this is the feature of `Pandoc.brew`, see [below](#brew-to-pandoc).
@@ -148,13 +157,13 @@ The output of different **statistical methods** are tried to be prettyfied. Some
 
 ```rout
 > pander(ks.test(runif(50), runif(50)))
-<%%pander(ks.test(runif(50), runif(50)))%%>
+<%=ks.test(runif(50), runif(50))%>
 
 > pander(chisq.test(table(mtcars$am, mtcars$gear)))
-<%%pander(chisq.test(table(mtcars$am, mtcars$gear)))%%>
+<%=chisq.test(table(mtcars$am, mtcars$gear))%>
 
 > pander(t.test(extra ~ group, data = sleep))
-<%%pander(t.test(extra ~ group, data = sleep))%%>
+<%=t.test(extra ~ group, data = sleep)%>
 
 > ## Dobson (1990) Page 93: Randomized Controlled Trial (examples from: ?glm)
 > counts <- c(18,17,15,20,10,20,25,13,12)
@@ -162,26 +171,37 @@ The output of different **statistical methods** are tried to be prettyfied. Some
 > treatment <- gl(3,3)
 > m <- glm(counts ~ outcome + treatment, family=poisson())
 > pander(m)
-<%%
+<%=
 counts <- c(18,17,15,20,10,20,25,13,12)
 outcome <- gl(3,1,9)
 treatment <- gl(3,3)
 m <- glm(counts ~ outcome + treatment, family=poisson())
-pander(m)
-%%>
+m
+%>
 
 > pander(anova(m))
-<%%pander(anova(m))%%>
+<%=anova(m)%>
 
 > pander(aov(m))
-<%%pander(aov(m))%%>
+<%=aov(m)%>
 
 > pander(prcomp(USArrests))
-<%%pander(prcomp(USArrests))%%>
+<%=prcomp(USArrests)%>
 
 > pander(density(mtcars$hp))
-<%%pander(density(mtcars$hp))%%>
+<%=density(mtcars$hp)%>
 
+```
+
+And of course tables are formatted (e.g. auto add of line breaks and splitting up tables) nicely:
+
+```rout
+> set.caption('Foo Bar')
+> pander(data.frame(id=1:2, value=c('FOO', 'Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.')))
+<%=
+set.caption('Foo Bar')
+data.frame(id=1:2, value=c('FOO', 'Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.'))
+%>
 ```
 
 # Brew to Pandoc
@@ -197,7 +217,7 @@ Everyone knows and uses [brew](http://cran.r-project.org/web/packages/brew/index
 
 This latter tries to be smart in some ways:
 
-  * a block (R commands between the tags) could return a value in the middle of the block and do something else without any output in the rest (but only one returned value per block!)
+  * a block (R commands between the tags) could return values in any part of the block
   * plots and images are grabbed in the document, rendered to a `png` file and `pander` method would result in a Pandoc markdown formatted image link (so the image would be shown/included in the exported document).
   * all warnings/messages and errors are recorded in the blocks and returned in the document as a footnote
 
@@ -212,7 +232,7 @@ Pandoc.brew(system.file('README.brew', package='pander'))
 To export a brewed file to other then Pandoc's markdown, please use the `convert` parameter! For example (please disregard the backslash in front of the percent sign):
 
 ```r
-text <- paste('# Header', '', 'What a lovely list:\n<%=as.list(runif(10))%>', 'A wide table:\n<%=mtcars[1:3, ]%>', 'And a nice chart:\n\n<%=plot(1:10)%>', sep = '\n')
+text <- paste('# Header', '', 'What a lovely list:\n<\%=as.list(runif(10))\%>', 'A wide table:\n<\%=mtcars[1:3, ]\%>', 'And a nice chart:\n\n<\%=plot(1:10)\%>', sep = '\n')
 Pandoc.brew(text = text, output = tempfile(), convert = 'html')
 Pandoc.brew(text = text, output = tempfile(), convert = 'pdf')
 ```
@@ -318,7 +338,7 @@ I have created some simple LISP functions which would be handy if you are using 
   * `pander-region` (`C-c p r`): Run `pander` (after `eval`) on region and show results in *ess-output* while setting working directory to `tempdir()` temporary.
   * `pander-chunk` (`C-c p c`): Run `pander` (after `eval`) on current chunk (in which the pointer is) and show results in *ess-output* while setting working directory to `tempdir()` temporary. Chunk is **recognized** by opening and closing `brew` tags.
   * `pander-region-or-chunk` (`C-c p p`): IMHO the most useful function :)
-    
+
 	Run `pander` (after `eval`) on region **or** current chunk (if marker is not set) and show results in *ess-output* while setting working directory to `tempdir()` temporary. Chunk is recognized by opening and closing `brew` tags.
 
   * `pander-region-export` (`C-c p R`): Run `pander` (after `eval`) on region and convert results specified format in minibuffer with auto-complete.
@@ -326,3 +346,17 @@ I have created some simple LISP functions which would be handy if you are using 
   * `pander-region-or-chunk-export` (`C-c p P`): Run `pander` (after `eval`) on region **or** current chunk (if marker is not set) and convert results specified format in minibuffer with auto-complete. Chunk is recognized by opening and closing `brew` tags.
 
 These functions are rather a POC of what could be done with `pander` to speed up writing reports, but having great potentials - and besides that: doing a great job right now too (for me).
+
+## pander-mode
+
+The above functions are to be removed from `pander.el` as I am currently working on `pander-mode` with options and much useful functions. ATM there are only three of them:
+
+  * `pander-brew` (`C-c p b`): Run `Pandoc.brew` on current buffer or region (if mark is active), show results in *ess-output* and (optionally) copy results to clipboard while setting working directory to tempdir() temporary.
+  * `pander-brew-export` (`C-c p B`): Run `Pandoc.brew` on current buffer or region (if mark is active) and export results to specified (auto-complete in minibuffer) format. Also tries to open exported document.
+  * `pander-eval` (`C-c p e`): Run `pander` on (automatically evaluated) region *or* current chunk (if marker is not set), show results (of last returned R object) in `*ess-output*` and (optionally) copy those to clipboard while setting working directory to `tempdir()` temporary.
+
+And a few options: `M-x customize-group pander`
+
+  * `pander-clipboard`: If non-nil then the result of `pander-*` functions would be copied to clipboard.
+  * `pander-show-source`: If non-nil then the source of R commands would also show up in generated documents while running 'pander-eval'. This would not affect `brew` functions ATM.
+

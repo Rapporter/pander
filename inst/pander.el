@@ -134,7 +134,7 @@ are activated for pander functions."
 
 
 (defun pander-brew-export ()
-  "Run Pandoc.brew on current buffer or region (if mark is active) and export results. Also tries to open exported document."
+  "Run Pandoc.brew on current buffer or region (if mark is active) and export results to specified (auto-complete in minibuffer) format. Also tries to open exported document."
     (interactive)
     
     (save-excursion

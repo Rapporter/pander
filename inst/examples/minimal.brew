@@ -53,7 +53,17 @@ set.caption('Here goes the first two lines of USArrests')
 USArrests[1:2,]
 %>
 
-## It happens
+# Multiple results
+
+And the chunks can result in multiple R objects of course:
+
+<%=
+list(1:5)
+list(pi)
+list(mtcars$hp)
+%>
+
+# It happens
 
 <%=
 mean(unknown.R.object)
