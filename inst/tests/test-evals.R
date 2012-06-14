@@ -67,7 +67,7 @@ test_that('stdout', {
 })
 
 
-context('evals: no result generated')
+context('evals')
 
 test_that('Variable assignement', {
     expect_that(evals('x <- rnorm(100)')[[1]]$result, equals(NULL))
@@ -85,8 +85,6 @@ test_that('Comment & variable assignement', {
             expect_that(evals(list(c('## comment', 'y <- rnorm(10)')), parse = F)[[1]]$result, equals(NULL))
         })
 
-context('evals: basic R object output generated')
-
 test_that('Basic: numerics', {
             expect_that(evals('rnorm(100)')[[1]]$result, is_a('numeric'))
         })
@@ -102,8 +100,6 @@ test_that('Basic: list', {
 test_that('Basic: data.frame', {
             expect_that(evals('mtcars')[[1]]$result, is_a('data.frame'))
         })
-
-context('evals: plots/images generated')
 
 test_that('Plot: graphics package', {
             expect_that(evals('plot(1:10)')[[1]]$result, is_a('image'))
@@ -127,8 +123,6 @@ test_that('Plot: pdf without plotting', {
             expect_that(evals('runif(10)', graph.output = 'pdf')[[1]]$result, is_a('numeric'))
         })
 
-context('evals: no result')
-
 test_that('NULL', {
             expect_that(evals('rnorm(100); NULL')[[1]]$result, is_a('numeric'))
             expect_that(evals('rnorm(100); NULL')[[2]]$result, equals(NULL))
@@ -151,7 +145,6 @@ test_that('creating function', {
             expect_that(evals('rnorm(100);f <- function(x) mean(x)', parse = F)[[1]]$result, equals(NULL))
         })
 
-context('evals: multiple result (last is preserved)')
 
 test_that('string+num', {
             expect_that(evals('"X";rnorm(100)')[[2]]$result, is_a('numeric'))
@@ -162,8 +155,6 @@ test_that('string+num', {
 test_that('data.frame+num', {
             expect_that(evals(list(c('mtcars', 'rnorm(100)')), parse = FALSE)[[1]]$result, is_a('numeric'))
         })
-
-context('evals: error handling')
 
 test_that('simple error', {
             expect_that(evals('dadaffaSFA+A')[[1]]$msg$error, is_a('character'))
@@ -191,8 +182,6 @@ test_that('output+errors', {
 test_that('output+multiple errors', {
             expect_that(evals(list(c('no.R.object', 'Old MacDonald had a farm\\dots', 'pi')), parse = F)[[1]]$msg$error, is_a('character'))
         })
-
-context('evals: warnings handling')
 
 test_that('simple warning', {
             expect_that(evals('chisq.test(mtcars$gear, mtcars$hp)')[[1]]$msg$warning, is_a('character'))
