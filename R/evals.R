@@ -501,7 +501,14 @@ evals <- function(txt, parse = TRUE, classes = NULL, hooks = NULL, length = Inf,
             }
 
         ## add captured attributes
-        ## TODO
+        if (!is.null(pander:::storage$caption)) {
+
+            if (!is.null(result))
+                attr(result, 'caption') <- pander:::storage$caption
+
+            assign('caption', NULL , envir = pander:::storage)
+
+        }
 
         ## return list at last
         res <- list(src      = src,

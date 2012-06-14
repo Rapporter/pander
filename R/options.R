@@ -11,6 +11,8 @@
                 ))
 }
 
+## temporary storage for pander's stuff
+storage <- new.env()
 
 #' Querying/setting pander option
 #'

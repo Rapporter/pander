@@ -729,5 +729,5 @@ pandoc.table <- function(...)
 #' @param x string
 #' @export
 set.caption <- function(x) {
-    ## TODO
+    assign('caption', x , envir = pander:::storage)
 }

@@ -18,7 +18,7 @@ Depends:
     R (>= 2.15.0)
 Imports:
     brew,
-    evaluate
+    lattice
 Collate:
     'helpers.R'
     'S3.R'
