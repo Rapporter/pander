@@ -307,7 +307,7 @@ id   value
 ---------------------------------------------------
  Test statistic   P value   Alternative hypothesis 
 ---------------- --------- ------------------------
-      0.14         0.72           two-sided        
+      0.2          0.27           two-sided        
 ---------------------------------------------------
 
 Table: Two-sample Kolmogorov-Smirnov test: `runif(50)` and `runif(50)`
@@ -561,34 +561,23 @@ myReport$<span class="kw">export</span>(<span class="kw">tempfile</span>())
 ## You do not want to see the generated report after generation?
 myReport$<span class="kw">export</span>(<span class="dt">open =</span> <span class="ot">FALSE</span>)</code></pre>
 <h1 id="ess">ESS</h1>
-<p>I have created some simple LISP functions which would be handy if you are using the best damn IDE for R. These functions and default key-bindings are <a href="https://github.com/daroczig/pander/tree/master/inst/pander.el">shipped with the package</a>, feel free to personalize:</p>
-<ul>
-<li><code>pander-brew</code> (<code>C-c p b</code>): Run <code>Pandoc.brew</code> on current buffer and show results in <em>ess-output</em> while setting working directory to <code>tempdir()</code> temporary.</li>
-<li><code>pander-brew-to-HTML</code> (<code>C-c p B</code>): Like the above function but exporting results to HTML too (and opening that automatically in default browser).</li>
-<li><code>pander-evals-region</code> (<code>C-c p e</code>): Run <code>evals</code> on region and show results in <em>ess-output</em> while setting working directory to <code>tempdir()</code> temporary.</li>
-<li><code>pander-region</code> (<code>C-c p r</code>): Run <code>pander</code> (after <code>eval</code>) on region and show results in <em>ess-output</em> while setting working directory to <code>tempdir()</code> temporary.</li>
-<li><code>pander-chunk</code> (<code>C-c p c</code>): Run <code>pander</code> (after <code>eval</code>) on current chunk (in which the pointer is) and show results in <em>ess-output</em> while setting working directory to <code>tempdir()</code> temporary. Chunk is <strong>recognized</strong> by opening and closing <code>brew</code> tags.</li>
-<li><p><code>pander-region-or-chunk</code> (<code>C-c p p</code>): IMHO the most useful function :)</p>
-<p>Run <code>pander</code> (after <code>eval</code>) on region <strong>or</strong> current chunk (if marker is not set) and show results in <em>ess-output</em> while setting working directory to <code>tempdir()</code> temporary. Chunk is recognized by opening and closing <code>brew</code> tags.</p></li>
-<li><code>pander-region-export</code> (<code>C-c p R</code>): Run <code>pander</code> (after <code>eval</code>) on region and convert results specified format in minibuffer with auto-complete.</li>
-<li><code>pander-chunk-export</code> (<code>C-c p C</code>): Run <code>pander</code> (after <code>eval</code>) on current chunk (in which the pointer is) and convert results specified format in minibuffer. Chunk is <strong>recognized</strong> by opening and closing <code>brew</code> tags with auto-complete.</li>
-<li><p><code>pander-region-or-chunk-export</code> (<code>C-c p P</code>): Run <code>pander</code> (after <code>eval</code>) on region <strong>or</strong> current chunk (if marker is not set) and convert results specified format in minibuffer with auto-complete. Chunk is recognized by opening and closing <code>brew</code> tags.</p></li>
-</ul>
-<p>These functions are rather a POC of what could be done with <code>pander</code> to speed up writing reports, but having great potentials - and besides that: doing a great job right now too (for me).</p>
+<p>I have created some simple LISP functions which would be handy if you are using the best damn IDE for R. These functions and default key-bindings are <a href="https://github.com/daroczig/pander/tree/master/inst/pander.el">shipped with the package</a>, feel free to personalize.</p>
+<p>As time passed these small functions grew heavier (with my Emacs knowledge) so I ended up with a small library:</p>
 <h2 id="pander-mode">pander-mode</h2>
-<p>The above functions are to be removed from <code>pander.el</code> as I am currently working on <code>pander-mode</code> with options and much useful functions. ATM there are only three of them:</p>
+<p>I am currently working on <code>pander-mode</code> which is a small <em>minor-mode</em> for Emacs. There are a few (but useful) functions with default keybindings:</p>
 <ul>
-<li><code>pander-brew</code> (<code>C-c p b</code>): Run <code>Pandoc.brew</code> on current buffer or region (if mark is active), show results in <em>ess-output</em> and (optionally) copy results to clipboard while setting working directory to tempdir() temporary.</li>
+<li><code>pander-brew</code> (<code>C-c p b</code>): Run <code>Pandoc.brew</code> on current buffer or region (if mark is active), show results in <em>ess-output</em> and (optionally) copy results to clipboard while setting working directory to <code>tempdir()</code> temporary.</li>
 <li><code>pander-brew-export</code> (<code>C-c p B</code>): Run <code>Pandoc.brew</code> on current buffer or region (if mark is active) and export results to specified (auto-complete in minibuffer) format. Also tries to open exported document.</li>
 <li><code>pander-eval</code> (<code>C-c p e</code>): Run <code>pander</code> on (automatically evaluated) region <em>or</em> current chunk (if marker is not set), show results (of last returned R object) in <code>*ess-output*</code> and (optionally) copy those to clipboard while setting working directory to <code>tempdir()</code> temporary.</li>
 </ul>
-<p>And a few options: <code>M-x customize-group pander</code></p>
+<p>Few options of <code>pander-mode</code>: <code>M-x customize-group pander</code></p>
 <ul>
 <li><code>pander-clipboard</code>: If non-nil then the result of <code>pander-*</code> functions would be copied to clipboard.</li>
 <li><code>pander-show-source</code>: If non-nil then the source of R commands would also show up in generated documents while running 'pander-eval'. This would not affect <code>brew</code> functions ATM.</li>
 </ul>
+<p>To use this small lib, just type: <code>M-x pander-mode</code> on any document. It might be useful to add a hook to <code>markdown-mode</code> if you find this useful.</p>
 <hr />
-<p>This report was generated with <a href="http://www.r-project.org/">R</a> (2.15.0) and <a href="https://github.com/daroczig/pander">pander</a> (0.1) in 0.538 sec on x86_64-unknown-linux-gnu platform.</p>
+<p>This report was generated with <a href="http://www.r-project.org/">R</a> (2.15.0) and <a href="https://github.com/daroczig/pander">pander</a> (0.1) in 0.531 sec on x86_64-unknown-linux-gnu platform.</p>
 <p align="center">
   Design: <a href="http://rapport-package.info/"><i>rapport</i> Development Team</a> &copy; 2012 | Backend: <a href="https://github.com/daroczig/pander">pander</a> | License: <a href="http://www.gnu.org/licenses/agpl.html" target="_blank">AGPL3</a> | Styled with <a href="http://www.getskeleton.com/" target="_blank">skeleton</a>
 </p>
