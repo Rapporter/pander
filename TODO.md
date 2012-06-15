@@ -12,7 +12,7 @@
   * ~~remove `rapport` dependency~~
   * ~~add [ESS](http://ess.r-project.org/) functions~~
   * add: short documentation (or at least mention!): `evals`
-  * comparison with `knitr`
+  * ~~comparison with `knitr`~~
 
 ## Github pages
 
@@ -31,14 +31,16 @@
 ## General tasks
 
   * ~~**add controllable, global options**~~ `pander.option`
-  * **add caption/other tweaks (sign. stars, emphasis etc.) to images/tables using `attrs`**
+  * **add ~~caption~~/other tweaks (sign. stars, emphasis etc.) to images/tables using `attrs`**
 
 ## Evals
 
-  * cleanup code from repeating code (like: `suppressMessages(suppressWarnings(...)))`)
-  * remove `evaluate` dependency
-  * **grab multiple returned object/images in one chunk**
-  * add option: grab.images (render those to disk or return unprinted)
+  * ~~cleanup code from repeating code (like: `suppressMessages(suppressWarnings(...)))`)~~
+  * ~~remove `evaluate` dependency~~
+  * ~~grab multiple returned object/images in one chunk~~
+  * ~~add option: grab.images (render those to disk or return unprinted)~~ use `eval.msgs` instead
+  * ~~caching~~
+  * add: global options
 
 ## Helper functions
 

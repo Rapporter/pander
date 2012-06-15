@@ -153,7 +153,7 @@ eval.msgs <- function(src, env = NULL) {
 #'     \item \emph{stdout} - character vector of possibly printed texts to standard output (console)
 #' }
 #'
-#' As by default \code{evals} tries to cache result
+#' By default \code{evals} tries to \emph{cache} results. This means that if evaluation of some R commands take too much time (specified in \code{cache.time} parameter), then \code{evals} would save the results in a file and return from there on next exact R code's evaluation. This caching algorithm tries to be smart as checks not only the passed R sources, but all variables inside that and saves the hash of those. This is a quite secure way of caching, but if you would encounter any issues, just set \code{cache} to \code{FALSE} or tweak other cache parameters. While setting \code{cache.dir}, please do think about what you are doing and move your \code{graph.dir} accordingly, as \code{evals} might result in returning an image file path which is not found any more on your file system!
 #'
 #' Please check the examples carefully below to get a detailed overview of \code{\link{evals}}.
 #' @param txt a character vector containing R code. This could be a list/vector of lines of code or a simple string holding R code separated by \code{;} or \code{\\n}.
@@ -210,15 +210,6 @@ eval.msgs <- function(src, env = NULL) {
 #' evals(txt)
 #' ## but it would fail without parsing
 #' evals(txt, parse = FALSE)
-#' ## if you do not want to auto-parse the text, use the above list/vector method
-#'
-#' ## returning only a few classes
-#' txt <- readLines(textConnection('rnorm(100)
-#'   list(x = 10:1, y = "Godzilla!")
-#'   c(1,2,3)
-#'    matrix(0,3,5)'))
-#' evals(txt, classes = 'numeric')
-#' evals(txt, classes = c('numeric', 'list'))
 #'
 #' ## handling messages
 #' evals('message(20)')
@@ -264,6 +255,26 @@ eval.msgs <- function(src, env = NULL) {
 #' evals('plot(1:10)', graph.recordplot = TRUE)
 #' ## unprinted lattice plot
 #' evals('histogram(mtcars$hp)', graph.recordplot = TRUE)
+#'
+#' ## caching
+#' system.time(evals('plot(mtcars)'))
+#' system.time(evals('plot(mtcars)'))                   # running again to see the speed-up :)
+#' system.time(evals('plot(mtcars)', cache = FALSE))    # cache disabled
+#' ## caching mechanism does check what's inside a variable:
+#' x <- mtcars
+#' evals('plot(x)')
+#' x <- cbind(mtcars, mtcars)
+#' evals('plot(x)')
+#' x <- mtcars
+#' system.time(evals('plot(x)'))
+#'
+#' ## returning only a few classes
+#' txt <- readLines(textConnection('rnorm(100)
+#'   list(x = 10:1, y = "Godzilla!")
+#'   c(1,2,3)
+#'    matrix(0,3,5)'))
+#' evals(txt, classes = 'numeric')
+#' evals(txt, classes = c('numeric', 'list'))
 #'
 #' ## hooks
 #' txt <- 'runif(1:4); matrix(runif(25), 5, 5); 1:5'

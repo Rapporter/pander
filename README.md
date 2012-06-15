@@ -1,12 +1,12 @@
 % [pander: An R Pandoc writer](https://github.com/daroczig/pander)
 
-**pander** is an [R](http://r-project.org) package containing [helpers](#helper-functions) to return [Pandoc](http://johnmacfarlane.net/pandoc/) markdown of user specified format or *automatically* of several type of [**R objects**](#generic-pander-method).
+**pander** is an [R](http://r-project.org) package containing [helpers](#helper-functions) to return [Pandoc](http://johnmacfarlane.net/pandoc/)'s markdown of user specified format or *automatically* of several type of [**R objects**](#generic-pander-method).
 
 The package is also capable of exporting/converting complex Pandoc documents (reports) in three ways ATM:
 
   * create somehow a markdown text file (e.g. with `brew`, `knitr` or any scripts of yours, maybe with `Pandoc.brew` - see just below) and transform that to other formats (like HTML, odt, pdf, docx etc.) with `Pandoc.convert`
 
-  * users might write some reports in [brew](http://cran.r-project.org/web/packages/brew/index.html) syntax resulting in a pretty *Pandoc* document (where `cat`ed R object are transformed to table, list etc.) and also in a **bunch of formats** automatically.
+  * users might write some reports in [brew](http://cran.r-project.org/web/packages/brew/index.html) syntax resulting in a pretty *Pandoc* document (where each R object are transformed to nicely formatted table, list etc.) and also in a **bunch of formats** (like HTML, odt, pdf, docx etc.) automatically.
 
     *Example*: this [`README.md`](https://github.com/daroczig/pander/blob/master/README.md) is cooked with `Pandoc.brew` based on [`inst/README.brew`](https://github.com/daroczig/pander/blob/master/inst/README.brew) and also exported to [HTML](http://daroczig.github.com/pander/). Details can be found [below](#brew-to-pandoc) or head directly to [examples](#examples).
 
@@ -16,10 +16,10 @@ The package is also capable of exporting/converting complex Pandoc documents (re
 
 **How it is differ from Sweave, brew, knitr, R2HTML etc.?**
 
-  * `pander` results in Pandoc's *markdown* which can be converted to almost any text document format (like: pdf, HTML, odt, docx, textile etc.). Conversion can be done automatically after calling `pander` reporting functions ([Pander.brew](#brew-to-pandoc) or [Pandoc](#live-report-generation)).
-  * based on the above *no "traditional" R console output* is shown in the resulting document (nor in markdown, nor in exported docs) but **all R objects are transformed to tables, list etc**.
-  * *graphs/plots* are recognized in blocks of R commands without any special setting or marks around code block and saved to disk in a `png` file linked in the resulting document. This means if you create a report (e.g. `brew` a text file) and export it to pdf/docx etc. all the plots/images would be there.
-  * can use `brew`'s caching mechanism
+  * no need for calling `ascii`, `xtable`, `Hmisc`, `tables` etc. to transform an R object to `HTML`, `tex` etc. as `pander` results in Pandoc's *markdown* which can be converted to almost any text document format (like: pdf, HTML, odt, docx, textile, asciidoc, reStructuredText etc.). Conversion can be done automatically after calling `pander` reporting functions ([Pander.brew](#brew-to-pandoc) or [Pandoc](#live-report-generation)).
+  * based on the above *no "traditional" R console output* is shown in the resulting document (nor in markdown, nor in exported docs) but **all R objects are transformed to tables, list etc**. Well, there is an option (`show.src`) to show the original R commands before the formatted output, and `pander`˛calls can be also easily tweaked (just file an issue) to return `print`ed R objects - if you would need that in some strange situation - like writing an R tutorial. But **I really think that nor R code, nor raw R results have anything to do with an exported report** :)
+  * *graphs/plots* are recognized in blocks of R commands without any special setting or marks around code block and saved to disk in a `png` file linked in the resulting document. This means if you create a report (e.g. `brew` a text file) and export it to pdf/docx etc. all the plots/images would be there. There are some parameters to specify the resolution of the image and also the type (e.g. `jpg`, `svg` or `pdf`).
+  * `pander`˛uses its build in (IMHO quite decent) **caching**. This means that if evaluation of some R commands take too much time (which can be set by option/parameter), then the results are saved in a file and returned from there on next exact R code's evaluation. This caching algorithm tries to be **smart** as checks not only the passed R sources, but *all variables* inside that and saves the hash of those. This is a quite secure way of caching, but if you would encounter any issues, just switch off the cache. I've not seen any issues :)
   * `knitr` *support* is coming too, for details see my [TODO list](https://github.com/daroczig/pander/blob/master/TODO.md) **Update**: just use `knitr` to generate markdown and pass that to `Pandoc.convert`
 
 # Installation
@@ -39,7 +39,15 @@ Or download the [sources in a zip file](https://github.com/daroczig/pander/zipba
 
 `pander` heavily builds on [Pandoc](http://johnmacfarlane.net/pandoc) which should be **pre-installed** before trying to convert your reports to [different formats](http://johnmacfarlane.net/pandoc/). Although **main functions work without Pandoc**, e.g. you can generate a markdown formatted report via [Pandoc.brew](#brew-to-pandoc) or the custom [reference class](#live-report-generation), but I would really suggest to install that really great piece of software!
 
-~~And as `pander` and `rapport` are quite Siamese twins, you would need an **up-to-date** version of [rapport](http://rapport-package.info) most likely installed from [Github](https://github.com/aL3xa/rapport).~~ `pander` now can work independently from `rapport`. Now you would only need two cool packages ([brew](http://cran.r-project.org/web/packages/brew/index.html) and [evaluate](http://cran.r-project.org/web/packages/evaluate/index.html)) besides [R](http://www.r-project.org/).
+~~And as `pander` and `rapport` are quite Siamese twins, you would need an **up-to-date** version of [rapport](http://rapport-package.info) most likely installed from [Github](https://github.com/aL3xa/rapport).~~ `pander` now can work independently from `rapport`.
+
+Now you would only need a few cool packages from CRAN:
+
+  * [brew](http://cran.r-project.org/web/packages/brew/index.html) for literate programming,
+  * [digest](http://cran.r-project.org/web/packages/digest/index.html) to compute hashes while caching,
+  * [parser](http://cran.r-project.org/web/packages/parser/index.html) to identify variables in passed R commands,
+  * ~~[evaluate](http://cran.r-project.org/web/packages/evaluate/index.html)~~
+  * besides [R](http://www.r-project.org/) of course!
 
 # Helper functions
 
@@ -300,7 +308,7 @@ The output of different **statistical methods** are tried to be prettyfied. Some
 ---------------------------------------------------
  Test statistic   P value   Alternative hypothesis 
 ---------------- --------- ------------------------
-      0.16         0.55           two-sided        
+      0.14         0.72           two-sided        
 ---------------------------------------------------
 
 Table: Two-sample Kolmogorov-Smirnov test: `runif(50)` and `runif(50)`
@@ -462,20 +470,22 @@ Table: Foo Bar
 
 # Brew to Pandoc
 
-Everyone knows and uses [brew](http://cran.r-project.org/web/packages/brew/index.html) but if you would need some smack, the following links really worth visiting:
+Everyone knows and possibly uses [brew](http://cran.r-project.org/web/packages/brew/index.html) but if you would need some smack, the following links really worth visiting:
 
-  * TODO
+  * [slides on "Building a reporting sytem with BREW"](http://www.slideshare.net/xavierguardiola/building-a-reporting-sytem-with-brew)
+  * [learnr blogpost on brew](http://learnr.wordpress.com/2009/09/09/brew-creating-repetitive-reports/)
 
-**In short**: a `brew` document is a simple text file with some special tags. `Pandoc.brew` uses only two of them (sorry, no brew templates here):
+**In short**: a `brew` document is a simple text file with some special tags. `Pandoc.brew` uses only two of them internally - but of course you could use `brew templates` (`<\%\%...\%\%>`) too:
 
   * `<\% ... \%>` (without the backslash) stand for running R calls
-  * `<\%= ... \%>` (without the backslash) does pretty the same but applies `pander` to the returning R object (instead of `cat` like the original `brew` function does). So putting there any R object would return is a nice Pandoc markdown format.
+  * `<\%= ... \%>` (without the backslash) does pretty the same but applies `pander` to the returning R object (instead of `cat` like the original `brew` function does). So putting there any R object would return is a nice Pandoc markdown format with all possible messages etc.
 
 This latter tries to be smart in some ways:
 
   * a block (R commands between the tags) could return values in any part of the block
   * plots and images are grabbed in the document, rendered to a `png` file and `pander` method would result in a Pandoc markdown formatted image link (so the image would be shown/included in the exported document).
   * all warnings/messages and errors are recorded in the blocks and returned in the document as a footnote
+  * all heavy R commands (e.g. those taking more then 0.1 sec to evaluate) are **cached** so re`brew`ing a report would not result in a coffee break.
 
 This document was generated by `Pandoc.brew` based on [`inst/README.brew`](https://github.com/daroczig/pander/blob/master/inst/README.brew) so the above examples were generated automatically - which could be handy while writing some nifty statistical reports :)
 
@@ -485,7 +495,7 @@ Pandoc.brew(system.file('README.brew', package='pander'))
 
 `Pandoc.brew` could cook a file (default) or work with a character vector provided in the `text` argument. The output is set to `stdout` by default, it could be tweaked to write result to a text file and run Pandoc on that to create a `HTML`, `odt`, `docx` or other document.
 
-To export a brewed file to other then Pandoc's markdown, please use the `convert` parameter! For example (please disregard the backslash in front of the percent sign):
+To export a brewed file to other then Pandoc's markdown, please use the `convert` parameter. For example (please disregard the backslash in front of the percent sign):
 
 ```r
 text <- paste('# Header', '', 'What a lovely list:\n<\%=as.list(runif(10))\%>', 'A wide table:\n<\%=mtcars[1:3, ]\%>', 'And a nice chart:\n\n<\%=plot(1:10)\%>', sep = '\n')
@@ -493,7 +503,7 @@ Pandoc.brew(text = text, output = tempfile(), convert = 'html')
 Pandoc.brew(text = text, output = tempfile(), convert = 'pdf')
 ```
 
-Of course a text file could work as input (by default) the above example uses `text` parameter as a reproducible example. For example brewing this README with all R chunks run to html, please run:
+Of course a text file could work as input (by default) the above example uses `text` parameter as a reproducible example. For example brewing this README with all R chunks and converted  to html, please run:
 
 ```r
 Pandoc.brew(system.file('README.brew', package='pander'), output = tempfile(), convert = 'html')
@@ -618,4 +628,4 @@ And a few options: `M-x customize-group pander`
 
 
 -------
-This report was generated with [R](http://www.r-project.org/) (2.15.0) and [pander](https://github.com/daroczig/pander) (0.1) in 0.447 sec on x86_64-unknown-linux-gnu platform.
+This report was generated with [R](http://www.r-project.org/) (2.15.0) and [pander](https://github.com/daroczig/pander) (0.1) in 0.538 sec on x86_64-unknown-linux-gnu platform.
