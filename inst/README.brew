@@ -340,33 +340,21 @@ myReport$export(open = FALSE)
 
 # ESS
 
-I have created some simple LISP functions which would be handy if you are using the best damn IDE for R. These functions and default key-bindings are [shipped with the package](https://github.com/daroczig/pander/tree/master/inst/pander.el), feel free to personalize:
+I have created some simple LISP functions which would be handy if you are using the best damn IDE for R. These functions and default key-bindings are [shipped with the package](https://github.com/daroczig/pander/tree/master/inst/pander.el), feel free to personalize.
 
-  * `pander-brew` (`C-c p b`): Run `Pandoc.brew` on current buffer and show results in *ess-output* while setting working directory to `tempdir()` temporary.
-  * `pander-brew-to-HTML` (`C-c p B`): Like the above function but exporting results to HTML too (and opening that automatically in default browser).
-  * `pander-evals-region` (`C-c p e`): Run `evals` on region and show results in *ess-output* while setting working directory to `tempdir()` temporary.
-  * `pander-region` (`C-c p r`): Run `pander` (after `eval`) on region and show results in *ess-output* while setting working directory to `tempdir()` temporary.
-  * `pander-chunk` (`C-c p c`): Run `pander` (after `eval`) on current chunk (in which the pointer is) and show results in *ess-output* while setting working directory to `tempdir()` temporary. Chunk is **recognized** by opening and closing `brew` tags.
-  * `pander-region-or-chunk` (`C-c p p`): IMHO the most useful function :)
-
-	Run `pander` (after `eval`) on region **or** current chunk (if marker is not set) and show results in *ess-output* while setting working directory to `tempdir()` temporary. Chunk is recognized by opening and closing `brew` tags.
-
-  * `pander-region-export` (`C-c p R`): Run `pander` (after `eval`) on region and convert results specified format in minibuffer with auto-complete.
-  * `pander-chunk-export` (`C-c p C`): Run `pander` (after `eval`) on current chunk (in which the pointer is) and convert results specified format in minibuffer. Chunk is **recognized** by opening and closing `brew` tags with auto-complete.
-  * `pander-region-or-chunk-export` (`C-c p P`): Run `pander` (after `eval`) on region **or** current chunk (if marker is not set) and convert results specified format in minibuffer with auto-complete. Chunk is recognized by opening and closing `brew` tags.
-
-These functions are rather a POC of what could be done with `pander` to speed up writing reports, but having great potentials - and besides that: doing a great job right now too (for me).
+As time passed these small functions grew heavier (with my Emacs knowledge) so I ended up with a small library:
 
 ## pander-mode
 
-The above functions are to be removed from `pander.el` as I am currently working on `pander-mode` with options and much useful functions. ATM there are only three of them:
+I am currently working on `pander-mode` which is a small *minor-mode* for Emacs. There are a few (but useful) functions with default keybindings:
 
-  * `pander-brew` (`C-c p b`): Run `Pandoc.brew` on current buffer or region (if mark is active), show results in *ess-output* and (optionally) copy results to clipboard while setting working directory to tempdir() temporary.
+  * `pander-brew` (`C-c p b`): Run `Pandoc.brew` on current buffer or region (if mark is active), show results in *ess-output* and (optionally) copy results to clipboard while setting working directory to `tempdir()` temporary.
   * `pander-brew-export` (`C-c p B`): Run `Pandoc.brew` on current buffer or region (if mark is active) and export results to specified (auto-complete in minibuffer) format. Also tries to open exported document.
   * `pander-eval` (`C-c p e`): Run `pander` on (automatically evaluated) region *or* current chunk (if marker is not set), show results (of last returned R object) in `*ess-output*` and (optionally) copy those to clipboard while setting working directory to `tempdir()` temporary.
 
-And a few options: `M-x customize-group pander`
+Few options of `pander-mode`: `M-x customize-group pander`
 
   * `pander-clipboard`: If non-nil then the result of `pander-*` functions would be copied to clipboard.
   * `pander-show-source`: If non-nil then the source of R commands would also show up in generated documents while running 'pander-eval'. This would not affect `brew` functions ATM.
 
+To use this small lib, just type: `M-x pander-mode` on any document. It might be useful to add a hook to `markdown-mode` if you find this useful.
