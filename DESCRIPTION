@@ -18,7 +18,9 @@ Depends:
     R (>= 2.15.0)
 Imports:
     brew,
-    lattice
+    lattice,
+    parser,
+    digest
 Collate:
     'helpers.R'
     'S3.R'

@@ -153,9 +153,14 @@ eval.msgs <- function(src, env = NULL) {
 #'     \item \emph{stdout} - character vector of possibly printed texts to standard output (console)
 #' }
 #'
+#' As by default \code{evals} tries to cache result
+#'
 #' Please check the examples carefully below to get a detailed overview of \code{\link{evals}}.
 #' @param txt a character vector containing R code. This could be a list/vector of lines of code or a simple string holding R code separated by \code{;} or \code{\\n}.
 #' @param parse if \code{TRUE} the provided \code{txt} elements would be merged into one string and parsed to logical chunks. This is useful if you would want to get separate results of your code parts - not just the last returned value, but you are passing the whole script in one string. To manually lock lines to each other (e.g. calling a \code{plot} and on next line adding an \code{abline} or \code{text} to it), use a plus char (\code{+}) at the beginning of each line which should be evaluated with the previous one(s). If set to \code{FALSE}, \code{evals} would not try to parse R code, it would get evaluated in separate runs - as provided. Please see examples below.
+#' @param cache caching the result of R calls if set to \code{TRUE}
+#' @param cache.dir path to a directory holding cache files. Default set to \code{.cache} in current working directory.
+#' @param cache.time number of seconds to limit caching based on \code{proc.time}. If set to \code{0}, all R commands, if set to \code{Inf}, none is cached (despite the \code{cache} parameter).
 #' @param classes a vector or list of classes which should be returned. If set to \code{NULL} (by default) all R objects will be returned.
 #' @param hooks list of hooks to be run for given classes in the form of \code{list(class = fn)}. If you would also specify some parameters of the function, a list should be provided in the form of \code{list(fn, param1, param2=NULL)} etc. So the hooks would become \code{list(class1=list(fn, param1, param2=NULL), ...)}. See example below. A default hook can be specified too by setting the class to \code{'default'}. This can be handy if you do not want to define separate methods/functions to each possible class, but automatically apply the default hook to all classes not mentioned in the list. You may also specify only one element in the list like: \code{hooks=list('default' = pander.return)}. Please note, that nor error/warning messages, nor stdout is captured (so: updated) while running hooks!
 #' @param length any R object exceeding the specified length will not be returned. The default value (\code{Inf}) does not filter out any R objects.
@@ -163,7 +168,7 @@ eval.msgs <- function(src, env = NULL) {
 #' @param env environment where evaluation takes place. If not set (by default), a new temporary environment is created.
 #' @param graph.nomargin should \code{evals} try to keep plots' margins minimal?
 #' @param graph.name set the file name of saved plots which is \code{\link{tempfile}} by default. A simple character string might be provided where \code{\%d} would be replaced by the index of the generating \code{txt} source, \code{\%n} with an incremented integer in \code{graph.dir} with similar file names and \code{\%t} by some random characters. A function's name to be \code{eval}uated can be passed here too.
-#' @param graph.dir path to a directory where to place generated images. If the directory does not exist, \code{evals} try to create that. Default set to NULL as using \code{\link{tempfile}}s.
+#' @param graph.dir path to a directory where to place generated images. If the directory does not exist, \code{evals} try to create that. Default set to \code{plots} in current working directory.
 #' @param graph.output set the required file format of saved plots. Currently it could be any of  \code{grDevices}': \code{png}, \code{bmp}, \code{jpeg}, \code{jpg}, \code{tiff}, \code{svg} or \code{pdf}.
 #' @param width width of generated plot in pixels for even vector formats
 #' @param height height of generated plot in pixels for even vector formats
@@ -306,7 +311,9 @@ eval.msgs <- function(src, env = NULL) {
 #' evals('mean(x)')
 #' }
 #' @export
-evals <- function(txt, parse = TRUE, classes = NULL, hooks = NULL, length = Inf, output = c('all', 'src', 'result', 'output', 'type', 'msg', 'stdout'), env = NULL, graph.nomargin = TRUE, graph.name = '%t', graph.dir = tempdir(), graph.output = c('png', 'bmp', 'jpeg', 'jpg', 'tiff', 'svg', 'pdf'), width = 480, height = 480, res= 72, hi.res = FALSE, hi.res.width = 960, hi.res.height = 960*(height/width), hi.res.res = res*(hi.res.width/width), graph.env = FALSE, graph.recordplot = FALSE, ...){
+#' @importFrom parser parser
+#' @importFrom digest digest
+evals <- function(txt, parse = TRUE, cache = TRUE, cache.dir = '.cache', cache.time = 0.1, classes = NULL, hooks = NULL, length = Inf, output = c('all', 'src', 'result', 'output', 'type', 'msg', 'stdout'), env = NULL, graph.nomargin = TRUE, graph.name = '%t', graph.dir = 'plots', graph.output = c('png', 'bmp', 'jpeg', 'jpg', 'tiff', 'svg', 'pdf'), width = 480, height = 480, res= 72, hi.res = FALSE, hi.res.width = 960, hi.res.height = 960*(height/width), hi.res.res = res*(hi.res.width/width), graph.env = FALSE, graph.recordplot = FALSE, ...){
 
     if (missing(txt))
         stop('No R code provided to evaluate!')
@@ -316,8 +323,12 @@ evals <- function(txt, parse = TRUE, classes = NULL, hooks = NULL, length = Inf,
 
         txt.parsed <- tryCatch(parse(text = txt), error = function(e) e)
 
-        ## skip parsing on syntax error
-        if (!inherits(txt.parsed, 'error')) {
+        ## skip parsing on syntax error and disable cache
+        if (inherits(txt.parsed, 'error')) {
+
+            cache <- FALSE
+
+        } else {
 
             txt <- sapply(txt.parsed, function(x) paste(deparse(x), collapse = ' '))
             if (length(txt) == 0)
@@ -334,6 +345,9 @@ evals <- function(txt, parse = TRUE, classes = NULL, hooks = NULL, length = Inf,
     if (!identical(file.info(graph.dir)$isdir, TRUE))
         if (!dir.create(graph.dir, showWarnings = FALSE, recursive = TRUE))
             stop(sprintf('Something is definitely wrong with `graph.dir`: %s!', graph.dir))
+    if (!identical(file.info(cache.dir)$isdir, TRUE))
+        if (!dir.create(cache.dir, showWarnings = FALSE, recursive = TRUE))
+            stop(sprintf('Something is definitely wrong with `cache.dir`: %s!', cache.dir))
 
     output <- match.arg(output, several.ok = TRUE)
 
@@ -355,6 +369,30 @@ evals <- function(txt, parse = TRUE, classes = NULL, hooks = NULL, length = Inf,
 
     `%d` <- 0
     lapply(txt, function(src) {
+
+        ## checking cache
+        if (cache) {
+
+            vars   <- tryCatch(attr(parser(text = src), 'data'), error = function(e) e)
+
+            ## not parsed error would screw up cache
+            if (!inherits(vars, 'error')) {
+
+                vars   <- vars$text[which( vars$token.desc == 'SYMBOL')]
+                if (length(vars) > 0)
+                    vars <- mget(vars, env, inherits = TRUE, ifnotfound = NA)
+                cached <- digest(list(src, vars), 'sha256')
+                cached <- file.path(cache.dir, cached)
+                if (file.exists(cached))
+                    return(readRDS(cached))
+
+                ## starting timer
+                timer <- proc.time()
+
+            } else
+                cache <- FALSE
+
+        }
 
         `%d` <<- `%d` + 1
 
@@ -524,6 +562,12 @@ evals <- function(txt, parse = TRUE, classes = NULL, hooks = NULL, length = Inf,
 
         res <- res[output]
         class(res) <- 'evals'
+
+        ## save to cache
+        if (cache)
+            if (as.numeric(proc.time() - timer)[3] > cache.time)
+                saveRDS(res, file = cached)
+
         return(res)
 
     })

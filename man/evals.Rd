@@ -2,11 +2,12 @@
 \alias{evals}
 \title{Evaluate and Process R Code}
 \usage{
-  evals(txt, parse = TRUE, classes = NULL, hooks = NULL,
-    length = Inf,
+  evals(txt, parse = TRUE, cache = TRUE,
+    cache.dir = ".cache", cache.time = 0.1, classes = NULL,
+    hooks = NULL, length = Inf,
     output = c("all", "src", "result", "output", "type", "msg", "stdout"),
     env = NULL, graph.nomargin = TRUE, graph.name = "\%t",
-    graph.dir = tempdir(),
+    graph.dir = "plots",
     graph.output = c("png", "bmp", "jpeg", "jpg", "tiff", "svg", "pdf"),
     width = 480, height = 480, res = 72, hi.res = FALSE,
     hi.res.width = 960,
@@ -33,6 +34,18 @@
   \code{FALSE}, \code{evals} would not try to parse R code,
   it would get evaluated in separate runs - as provided.
   Please see examples below.}
+
+  \item{cache}{caching the result of R calls if set to
+  \code{TRUE}}
+
+  \item{cache.dir}{path to a directory holding cache files.
+  Default set to \code{.cache} in current working
+  directory.}
+
+  \item{cache.time}{number of seconds to limit caching
+  based on \code{proc.time}. If set to \code{0}, all R
+  commands, if set to \code{Inf}, none is cached (despite
+  the \code{cache} parameter).}
 
   \item{classes}{a vector or list of classes which should
   be returned. If set to \code{NULL} (by default) all R
@@ -82,8 +95,8 @@
 
   \item{graph.dir}{path to a directory where to place
   generated images. If the directory does not exist,
-  \code{evals} try to create that. Default set to NULL as
-  using \code{\link{tempfile}}s.}
+  \code{evals} try to create that. Default set to
+  \code{plots} in current working directory.}
 
   \item{graph.output}{set the required file format of saved
   plots. Currently it could be any of \code{grDevices}':
