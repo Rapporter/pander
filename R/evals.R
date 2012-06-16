@@ -153,7 +153,13 @@ eval.msgs <- function(src, env = NULL) {
 #'     \item \emph{stdout} - character vector of possibly printed texts to standard output (console)
 #' }
 #'
-#' By default \code{evals} tries to \emph{cache} results. This means that if evaluation of some R commands take too much time (specified in \code{cache.time} parameter), then \code{evals} would save the results in a file and return from there on next exact R code's evaluation. This caching algorithm tries to be smart as checks not only the passed R sources, but all variables inside that and saves the hash of those. This is a quite secure way of caching, but if you would encounter any issues, just set \code{cache} to \code{FALSE} or tweak other cache parameters. While setting \code{cache.dir}, please do think about what you are doing and move your \code{graph.dir} accordingly, as \code{evals} might result in returning an image file path which is not found any more on your file system!
+#' By default \code{evals} tries to \emph{cache} results. This means that if evaluation of some R commands take too much time (specified in \code{cache.time} parameter), then \code{evals} would save the results in a file and return from there on next exact R code's evaluation. This caching algorithm tries to be smart as checks not only the passed R sources, but all variables inside that and saves the hash of those.
+#'
+#' This is a quite secure way of caching, but if you would encounter any issues, just set \code{cache} to \code{FALSE} or tweak other cache parameters. While setting \code{cache.dir}, please do think about what you are doing and move your \code{graph.dir} accordingly, as \code{evals} might result in returning an image file path which is not found any more on your file system!
+#'
+#' Also, if you have generated a plot and rendered that to e.g. \code{png} before and later try to get e.g. \code{pdf} - it would fail with \code{cache} on. Similarly you cannot render a high resolution image of a cached image, but you have to (temporary) disable caching.
+#'
+#' The default \code{evals} options could be set globally with \code{\link{evals.option}}, e.g. to switch off the cache just run \code{evals.option('cache', FALSE)}.
 #'
 #' Please check the examples carefully below to get a detailed overview of \code{\link{evals}}.
 #' @param txt a character vector containing R code. This could be a list/vector of lines of code or a simple string holding R code separated by \code{;} or \code{\\n}.
@@ -168,7 +174,7 @@ eval.msgs <- function(src, env = NULL) {
 #' @param output a character vector of required returned values. This might be useful if you are only interested in the \code{result}, and do not want to save/see e.g. \code{messages} or \code{print}ed \code{output}. See examples below.
 #' @param env environment where evaluation takes place. If not set (by default), a new temporary environment is created.
 #' @param graph.nomargin should \code{evals} try to keep plots' margins minimal?
-#' @param graph.name set the file name of saved plots which is \code{\link{tempfile}} by default. A simple character string might be provided where \code{\%d} would be replaced by the index of the generating \code{txt} source, \code{\%n} with an incremented integer in \code{graph.dir} with similar file names and \code{\%t} by some random characters. A function's name to be \code{eval}uated can be passed here too.
+#' @param graph.name set the file name of saved plots which is \code{\link{tempfile}} by default. A simple character string might be provided where \code{\%d} would be replaced by the index of the generating \code{txt} source, \code{\%n} with an incremented integer in \code{graph.dir} with similar file names and \code{\%t} by some unique random characters. A function's name to be \code{eval}uated can be passed here too.
 #' @param graph.dir path to a directory where to place generated images. If the directory does not exist, \code{evals} try to create that. Default set to \code{plots} in current working directory.
 #' @param graph.output set the required file format of saved plots. Currently it could be any of  \code{grDevices}': \code{png}, \code{bmp}, \code{jpeg}, \code{jpg}, \code{tiff}, \code{svg} or \code{pdf}.
 #' @param width width of generated plot in pixels for even vector formats
@@ -179,10 +185,10 @@ eval.msgs <- function(src, env = NULL) {
 #' @param hi.res.height height of generated high resolution plot in pixels for even vector formats. This value can be left blank to be automatically calculated to match original plot aspect ratio.
 #' @param hi.res.res nominal resolution of high resolution plot in ppi. The height and width of vector plots will be calculated based in this. This value can be left blank to be automatically calculated to fit original plot scales.
 #' @param graph.env save the environments in which plots were generated to distinct files (based on \code{graph.name}) with \code{env} extension?
-#' @param graph.recordplot save the plot via \code{\link{recordPlot}} to distinct files (based on \code{graph.name}) with {recodplot} extension?
+#' @param graph.recordplot save the plot via \code{recordPlot} to distinct files (based on \code{graph.name}) with \code{recodplot} extension?
 #' @param ... optional parameters passed to graphics device (e.g. \code{bg}, \code{pointsize} etc.)
 #' @return a list of parsed elements each containing: \code{src} (the command run), \code{result} (R object: \code{NULL} if nothing returned, path to image file if a plot was generated), \code{print}ed \code{output}, \code{type} (class of returned object if any), informative/wawrning and error messages (if any returned by the command run, otherwise set to \code{NULL}) and possible \code{stdout}t value. See Details above.
-#' @seealso \code{\link{eval.msgs}}
+#' @seealso \code{\link{eval.msgs}} \code{\link{evals.option}}
 #' @examples \dontrun{
 #' # parsing several lines of R code
 #' txt <- readLines(textConnection('x <- rnorm(100)
@@ -268,6 +274,10 @@ eval.msgs <- function(src, env = NULL) {
 #' evals('plot(x)')
 #' x <- mtcars
 #' system.time(evals('plot(x)'))
+#' ## or switch off cache globally:
+#' evals.option('cache', FALSE)
+#' ## and switch on later
+#' evals.option('cache', TRUE)
 #'
 #' ## returning only a few classes
 #' txt <- readLines(textConnection('rnorm(100)
@@ -329,6 +339,13 @@ evals <- function(txt, parse = TRUE, cache = TRUE, cache.dir = '.cache', cache.t
 
     if (missing(txt))
         stop('No R code provided to evaluate!')
+
+    ## override missing parameters with options
+    mc <- match.call()
+    for (param in names(evals.option())) {
+        if (is.null(mc[[param]]))
+            assign(param, evals.option(param))
+    }
 
     ## parse provided code after concatenating
     if (parse) {

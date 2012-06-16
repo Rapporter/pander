@@ -11,8 +11,9 @@
   * ~~add absolute path to examples (as view from two locations)~~
   * ~~remove `rapport` dependency~~
   * ~~add [ESS](http://ess.r-project.org/) functions~~
-  * add: short documentation (or at least mention!): `evals`
+  * ~~add: short documentation (or at least mention!): `evals`~~
   * ~~comparison with `knitr`~~
+  * ~~add: options~~
 
 ## Github pages
 
@@ -40,7 +41,8 @@
   * ~~grab multiple returned object/images in one chunk~~
   * ~~add option: grab.images (render those to disk or return unprinted)~~ use `eval.msgs` instead
   * ~~caching~~
-  * add: global options
+  * ~~add: global options~~
+  * ~~add: option to copy images~~
 
 ## Helper functions
 

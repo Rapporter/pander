@@ -594,6 +594,46 @@ myReport$export(tempfile())
 myReport$export(open = FALSE)
 ```
 
+# Pander options
+
+`pander` comes with some globally adjustable options which would have an effect on the result of your reports. You can query and update these options with `pander.option()`:
+
+  * `digits`: numeric (default: `2`) passed to `format`
+  * `decimal.mark`: numeric (default: `.`) passed to `format`
+  * `round`: numeric (default: `Inf`) passed to `round`
+  * `list.style`: `'bullet'`, `'ordered'` or `'roman'`
+  * `table.style`: `'atx'` or `'setext'`
+
+Besides localization of numeric formats and table/list's styles there are some technical options too which would effect e.g. caching or the format of rendered image files. You can query/update those with `evals.option()` as the main backend of `pander` calls is a custom evaluation function called [`evals`](#evals).
+
+The list of possible options are:
+
+  * `parse`: if `TRUE` the provided `txt` elements would be merged into one string and parsed to logical chunks. This is useful if you would want to get separate results of your code parts - not just the last returned value, but you are passing the whole script in one string. To manually lock lines to each other (e.g. calling a `plot` and on next line adding an `abline` or `text` to it), use a plus char (`+`) at the beginning of each line which should be evaluated with the previous one(s). If set to `FALSE`, [`evals`](#evals) would not try to parse R code, it would get evaluated in separate runs - as provided. Please see the documenation of [`evals`](#evals).
+  * `cache`: caching the result of R calls if set to `TRUE`
+  * `cache.dir`: path to a directory holding cache files. Default set to `.cache` in current working directory.
+  * `cache.time`: number of seconds to limit caching based on `proc.time`. If set to `0`, all R commands, if set to `Inf`, none is cached (despite the `cache` parameter).
+  * `cache.copy.images`: copy images to new files if an image is returned from cache? If set to `FALSE` (default) the "old" path would be returned.
+  * `classes`: a vector or list of classes which should be returned. If set to `NULL` (by default) all R objects will be returned.
+  * `hooks`: list of hooks to be run for given classes in the form of `list(class = fn)`. If you would also specify some parameters of the function, a list should be provided in the form of `list(fn, param1, param2=NULL)` etc. So the hooks would become `list(class1=list(fn, param1, param2=NULL), ...)`. See example of [`evals`](#evals) for more details. A default hook can be specified too by setting the class to `'default'`. This can be handy if you do not want to define separate methods/functions to each possible class, but automatically apply the default hook to all classes not mentioned in the list. You may also specify only one element in the list like: `hooks=list('default' = pander.return)`. Please note, that nor error/warning messages, nor stdout is captured (so: updated) while running hooks!
+  * `length`: any R object exceeding the specified length will not be returned. The default value (`Inf`) does not filter out any R objects.
+  * `output`: a character vector of required returned values. This might be useful if you are only interested in the `result`, and do not want to save/see e.g. `messages` or `print`ed `output`. See examples of [`evals`](#evals).
+  * `env`: environment where evaluation takes place. If not set (by default), a new temporary environment is created.
+  * `graph.nomargin`: should [`evals`](#evals) try to keep plots' margins minimal?
+  * `graph.name`: set the file name of saved plots which is `%s` by default. A simple character string might be provided where `%d` would be replaced by the index of the generating `txt` source, `%n` with an incremented integer in `graph.dir` with similar file names and `%t` by some unique random characters. A function's name to be `eval`uated can be passed here too.
+  * `graph.dir`: path to a directory where to place generated images. If the directory does not exist, [`evals`](#evals) try to create that. Default set to `plots` in current working directory.
+  * `graph.output`: set the required file format of saved plots. Currently it could be any of  `grDevices`: `png`, `bmp`, `jpeg`, `jpg`, `tiff`, `svg` or `pdf`.
+  * `width`: width of generated plot in pixels for even vector formats
+  * `height`: height of generated plot in pixels for even vector formats
+  * `res`: nominal resolution in `ppi`. The height and width of vector images will be calculated based in this.
+  * `hi.res`: generate high resolution plots also? If set to `TRUE`, each R code parts resulting an image would be run twice.
+  * `hi.res.width`: width of generated high resolution plot in pixels for even vector formats. The `height` and `res` of high resolution image is automatically computed based on the above options to preserve original plot aspect ratio.
+  * `graph.env`: save the environments in which plots were generated to distinct files (based on `graph.name`) with `env` extension?
+  * `graph.recordplot`: save the plot via `recordPlot` to distinct files (based on `graph.name`) with `recodplot` extension?
+
+# Evals
+
+Sorry, no online documentation ATM. Please check: `?evals`
+
 # ESS
 
 I have created some simple LISP functions which would be handy if you are using the best damn IDE for R. These functions and default key-bindings are [shipped with the package](https://github.com/daroczig/pander/tree/master/inst/pander.el), feel free to personalize.
@@ -616,4 +656,4 @@ Few options of `pander-mode`: `M-x customize-group pander`
 To use this small lib, just type: `M-x pander-mode` on any document. It might be useful to add a hook to `markdown-mode` if you find this useful.
 
 -------
-This report was generated with [R](http://www.r-project.org/) (2.15.0) and [pander](https://github.com/daroczig/pander) (0.1) in 0.531 sec on x86_64-unknown-linux-gnu platform.
+This report was generated with [R](http://www.r-project.org/) (2.15.0) and [pander](https://github.com/daroczig/pander) (0.1) in 0.588 sec on x86_64-unknown-linux-gnu platform.

@@ -1,6 +1,7 @@
 export(add.blank.lines)
 export(eval.msgs)
 export(evals)
+export(evals.option)
 export(open.file.in.OS)
 export(pander)
 export(pander.option)
