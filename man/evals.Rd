@@ -95,7 +95,7 @@
   replaced by the index of the generating \code{txt}
   source, \code{\%n} with an incremented integer in
   \code{graph.dir} with similar file names and \code{\%t}
-  by some random characters. A function's name to be
+  by some unique random characters. A function's name to be
   \code{eval}uated can be passed here too.}
 
   \item{graph.dir}{path to a directory where to place
@@ -140,8 +140,8 @@
   \code{graph.name}) with \code{env} extension?}
 
   \item{graph.recordplot}{save the plot via
-  \code{\link{recordPlot}} to distinct files (based on
-  \code{graph.name}) with {recodplot} extension?}
+  \code{recordPlot} to distinct files (based on
+  \code{graph.name}) with \code{recodplot} extension?}
 
   \item{...}{optional parameters passed to graphics device
   (e.g. \code{bg}, \code{pointsize} etc.)}
@@ -228,14 +228,26 @@
   return from there on next exact R code's evaluation. This
   caching algorithm tries to be smart as checks not only
   the passed R sources, but all variables inside that and
-  saves the hash of those. This is a quite secure way of
-  caching, but if you would encounter any issues, just set
-  \code{cache} to \code{FALSE} or tweak other cache
-  parameters. While setting \code{cache.dir}, please do
-  think about what you are doing and move your
-  \code{graph.dir} accordingly, as \code{evals} might
-  result in returning an image file path which is not found
-  any more on your file system!
+  saves the hash of those.
+
+  This is a quite secure way of caching, but if you would
+  encounter any issues, just set \code{cache} to
+  \code{FALSE} or tweak other cache parameters. While
+  setting \code{cache.dir}, please do think about what you
+  are doing and move your \code{graph.dir} accordingly, as
+  \code{evals} might result in returning an image file path
+  which is not found any more on your file system!
+
+  Also, if you have generated a plot and rendered that to
+  e.g. \code{png} before and later try to get e.g.
+  \code{pdf} - it would fail with \code{cache} on.
+  Similarly you cannot render a high resolution image of a
+  cached image, but you have to (temporary) disable
+  caching.
+
+  The default \code{evals} options could be set globally
+  with \code{\link{evals.option}}, e.g. to switch off the
+  cache just run \code{evals.option('cache', FALSE)}.
 
   Please check the examples carefully below to get a
   detailed overview of \code{\link{evals}}.
@@ -326,6 +338,10 @@ x <- cbind(mtcars, mtcars)
 evals('plot(x)')
 x <- mtcars
 system.time(evals('plot(x)'))
+## or switch off cache globally:
+evals.option('cache', FALSE)
+## and switch on later
+evals.option('cache', TRUE)
 
 ## returning only a few classes
 txt <- readLines(textConnection('rnorm(100)
@@ -382,6 +398,6 @@ evals('mean(x)')
 }
 }
 \seealso{
-  \code{\link{eval.msgs}}
+  \code{\link{eval.msgs}} \code{\link{evals.option}}
 }
 

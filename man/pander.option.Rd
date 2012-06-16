@@ -32,4 +32,7 @@ pander.option()
 pander.option('digits')
 pander.option('digits', 5)
 }
+\seealso{
+  \code{\link{evals.option}}
+}
 
