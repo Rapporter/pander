@@ -74,7 +74,7 @@ code > span.er { color: #ff0000; font-weight: bold; }
 <li>no need for calling <code>ascii</code>, <code>xtable</code>, <code>Hmisc</code>, <code>tables</code> etc. to transform an R object to <code>HTML</code>, <code>tex</code> etc. as <code>pander</code> results in Pandoc's <em>markdown</em> which can be converted to almost any text document format (like: pdf, HTML, odt, docx, textile, asciidoc, reStructuredText etc.). Conversion can be done automatically after calling <code>pander</code> reporting functions (<a href="#brew-to-pandoc">Pander.brew</a> or <a href="#live-report-generation">Pandoc</a>).</li>
 <li>based on the above <em>no &quot;traditional&quot; R console output</em> is shown in the resulting document (nor in markdown, nor in exported docs) but <strong>all R objects are transformed to tables, list etc</strong>. Well, there is an option (<code>show.src</code>) to show the original R commands before the formatted output, and <code>pander</code>˛calls can be also easily tweaked (just file an issue) to return <code>print</code>ed R objects - if you would need that in some strange situation - like writing an R tutorial. But <strong>I really think that nor R code, nor raw R results have anything to do with an exported report</strong> :)</li>
 <li><em>graphs/plots</em> are recognized in blocks of R commands without any special setting or marks around code block and saved to disk in a <code>png</code> file linked in the resulting document. This means if you create a report (e.g. <code>brew</code> a text file) and export it to pdf/docx etc. all the plots/images would be there. There are some parameters to specify the resolution of the image and also the type (e.g. <code>jpg</code>, <code>svg</code> or <code>pdf</code>).</li>
-<li><code>pander</code>˛uses its build in (IMHO quite decent) <strong>caching</strong>. This means that if evaluation of some R commands take too much time (which can be set by option/parameter), then the results are saved in a file and returned from there on next exact R code's evaluation. This caching algorithm tries to be <strong>smart</strong> as checks not only the passed R sources, but <em>all variables</em> inside that and saves the hash of those. This is a quite secure way of caching, but if you would encounter any issues, just switch off the cache. I've not seen any issues :)</li>
+<li><code>pander</code>˛uses its build in (IMHO quite decent) <a href="#caching"><strong>caching</strong></a>. This means that if evaluation of some R commands take too much time (which can be set by option/parameter), then the results are saved in a file and returned from there on next exact R code's evaluation. This caching algorithm tries to be <strong>smart</strong> as checks not only the passed R sources, but <em>all variables and functions</em> inside that and saves the hash of those. This is a quite secure way of caching (see details <a href="#caching">below</a>), but if you would encounter any issues, just switch off the cache. I've not seen any issues :)</li>
 <li><code>knitr</code> <em>support</em> is coming too, for details see my <a href="https://github.com/daroczig/pander/blob/master/TODO.md">TODO list</a> <strong>Update</strong>: just use <code>knitr</code> to generate markdown and pass that to <code>Pandoc.convert</code></li>
 </ul>
 <h1 id="installation">Installation</h1>
@@ -88,9 +88,9 @@ install_github(&#39;pander&#39;, &#39;daroczig&#39;)</code></pre>
 <p><del>And as <code>pander</code> and <code>rapport</code> are quite Siamese twins, you would need an <strong>up-to-date</strong> version of <a href="http://rapport-package.info">rapport</a> most likely installed from <a href="https://github.com/aL3xa/rapport">Github</a>.</del> <code>pander</code> now can work independently from <code>rapport</code>.</p>
 <p>Now you would only need a few cool packages from CRAN:</p>
 <ul>
-<li><a href="http://cran.r-project.org/web/packages/brew/index.html">brew</a> for literate programming,</li>
-<li><a href="http://cran.r-project.org/web/packages/digest/index.html">digest</a> to compute hashes while caching,</li>
-<li><a href="http://cran.r-project.org/web/packages/parser/index.html">parser</a> to identify variables in passed R commands,</li>
+<li><a href="http://cran.r-project.org/web/packages/brew/index.html">brew</a> for literate programming</li>
+<li><a href="http://cran.r-project.org/web/packages/digest/index.html">digest</a> to compute hashes while caching</li>
+<li><del><a href="http://cran.r-project.org/web/packages/parser/index.html">parser</a> to identify variables in passed R commands</del></li>
 <li><del><a href="http://cran.r-project.org/web/packages/evaluate/index.html">evaluate</a></del></li>
 <li>besides <a href="http://www.r-project.org/">R</a> of course!</li>
 </ul>
@@ -307,7 +307,7 @@ id   value
 ---------------------------------------------------
  Test statistic   P value   Alternative hypothesis 
 ---------------- --------- ------------------------
-      0.2          0.27           two-sided        
+      0.14         0.72           two-sided        
 ---------------------------------------------------
 
 Table: Two-sample Kolmogorov-Smirnov test: `runif(50)` and `runif(50)`
@@ -477,7 +477,7 @@ Table: Foo Bar
 <li>a block (R commands between the tags) could return values in any part of the block</li>
 <li>plots and images are grabbed in the document, rendered to a <code>png</code> file and <code>pander</code> method would result in a Pandoc markdown formatted image link (so the image would be shown/included in the exported document).</li>
 <li>all warnings/messages and errors are recorded in the blocks and returned in the document as a footnote</li>
-<li>all heavy R commands (e.g. those taking more then 0.1 sec to evaluate) are <strong>cached</strong> so re<code>brew</code>ing a report would not result in a coffee break.</li>
+<li>all heavy R commands (e.g. those taking more then 0.1 sec to evaluate) are <a href="#caching"><strong>cached</strong></a> so re<code>brew</code>ing a report would not result in a coffee break.</li>
 </ul>
 <p>This document was generated by <code>Pandoc.brew</code> based on <a href="https://github.com/daroczig/pander/blob/master/inst/README.brew"><code>inst/README.brew</code></a> so the above examples were generated automatically - which could be handy while writing some nifty statistical reports :)</p>
 <pre><code>Pandoc.brew(system.file(&#39;README.brew&#39;, package=&#39;pander&#39;))</code></pre>
@@ -569,11 +569,11 @@ myReport$<span class="kw">export</span>(<span class="dt">open =</span> <span cla
 <li><code>list.style</code>: <code>'bullet'</code>, <code>'ordered'</code> or <code>'roman'</code></li>
 <li><code>table.style</code>: <code>'atx'</code> or <code>'setext'</code></li>
 </ul>
-<p>Besides localization of numeric formats and table/list's styles there are some technical options too which would effect e.g. caching or the format of rendered image files. You can query/update those with <code>evals.option()</code> as the main backend of <code>pander</code> calls is a custom evaluation function called <a href="#evals"><code>evals</code></a>.</p>
+<p>Besides localization of numeric formats and table/list's styles there are some technical options too which would effect e.g. <a href="#caching">caching</a> or the format of rendered image files. You can query/update those with <code>evals.option()</code> as the main backend of <code>pander</code> calls is a custom evaluation function called <a href="#evals"><code>evals</code></a>.</p>
 <p>The list of possible options are:</p>
 <ul>
 <li><code>parse</code>: if <code>TRUE</code> the provided <code>txt</code> elements would be merged into one string and parsed to logical chunks. This is useful if you would want to get separate results of your code parts - not just the last returned value, but you are passing the whole script in one string. To manually lock lines to each other (e.g. calling a <code>plot</code> and on next line adding an <code>abline</code> or <code>text</code> to it), use a plus char (<code>+</code>) at the beginning of each line which should be evaluated with the previous one(s). If set to <code>FALSE</code>, <a href="#evals"><code>evals</code></a> would not try to parse R code, it would get evaluated in separate runs - as provided. Please see the documenation of <a href="#evals"><code>evals</code></a>.</li>
-<li><code>cache</code>: caching the result of R calls if set to <code>TRUE</code></li>
+<li><code>cache</code>: <a href="#caching">caching</a> the result of R calls if set to <code>TRUE</code></li>
 <li><code>cache.dir</code>: path to a directory holding cache files. Default set to <code>.cache</code> in current working directory.</li>
 <li><code>cache.time</code>: number of seconds to limit caching based on <code>proc.time</code>. If set to <code>0</code>, all R commands, if set to <code>Inf</code>, none is cached (despite the <code>cache</code> parameter).</li>
 <li><code>cache.copy.images</code>: copy images to new files if an image is returned from cache? If set to <code>FALSE</code> (default) the &quot;old&quot; path would be returned.</li>
@@ -594,6 +594,40 @@ myReport$<span class="kw">export</span>(<span class="dt">open =</span> <span cla
 <li><code>graph.env</code>: save the environments in which plots were generated to distinct files (based on <code>graph.name</code>) with <code>env</code> extension?</li>
 <li><code>graph.recordplot</code>: save the plot via <code>recordPlot</code> to distinct files (based on <code>graph.name</code>) with <code>recodplot</code> extension?</li>
 </ul>
+<h1 id="caching">Caching</h1>
+<p>As <code>pander</code> is using a <strong>custom caching algorithm</strong>, it might be worthwhile to give a short summary of what is going on in the background.</p>
+<p>All evaluation of provided R commands (while running <a href="#brew-to-pandoc"><code>brew</code></a> or <a href="#live-report-generation">&quot;live report generation&quot;</a> is done by <a href="#evals"><code>evals</code></a> which is caching results (<em>besides</em> returned informative/warning/error messages, anything written to <code>stdout</code> etc. - see <a href="#evals">below</a>) <strong>line-by-line</strong> (to be more accurate: by single R commands) instead of caching chunks <strong>without any noticeable overhead</strong>.</p>
+<h2 id="theoretical-background">Theoretical background:</h2>
+<ul>
+<li>Each passed R chunk is <code>parse</code>d to single commands.</li>
+<li>Each parsed command's part (let it be a function, variable, constant etc.) <code>eval</code>uated separately to a <code>list</code>. This list describes the unique structure and the content of the passed R commands, and has some IMHO really great benefits (see below).</li>
+<li>The list is <code>serialize</code>d and an <code>SHA-1</code> hash is computed for that - which is unique and there is no real risk of collision.</li>
+<li>If <a href="#evals"><code>evals</code></a> can find the cached results in a file named to the computed hash, then it is returned on the spot.</li>
+<li>Otherwise the call is evaluated and the results are optionally saved to cache (e.g. if <code>cache</code> is active, if the <code>proc.time()</code> of the evaluation is higher then it is defined in <code>cache.time</code> etc. - see details in <a href="#pander-options">evals' options</a>).</li>
+</ul>
+<h2 id="in-practice">In practice:</h2>
+<p>As <code>pander</code> does not cache based on raw sources of chunks and there is no easy way of enabling/disabling caching on a chunk basis, the users have to live with some <em>great advantages</em> and some <em>minor tricky situations</em> - which latter cannot be solved theoretically in my opinion, but <a href="https://github.com/daroczig/pander/issues">I'd love to hear your feedback</a>.</p>
+<p>The caching hash is computed based on the structure and content of the R commands, so let us make some POC example to show the <strong>greatest asset</strong>:</p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">require</span>(lattice)
+<span class="kw">evals</span>(<span class="st">&#39;histogram(rep(mtcars$hp, 1e5))&#39;</span>)</code></pre>
+<p>It take a while, huh? :)</p>
+<p>Let us have some custom functions and variables:</p>
+<pre class="sourceCode r"><code class="sourceCode r">f &lt;- histogram
+g &lt;- rep
+A &lt;- mtcars$hp
+B &lt;- <span class="fl">1e5</span></code></pre>
+<p>And now try to run something like:</p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">evals</span>(<span class="st">&#39;f(g(mtcars$hp, B))&#39;</span>)</code></pre>
+<p>Yes, it was returned from cache!</p>
+<p>About the <strong>kickbacks</strong>:</p>
+<p>As <code>pander</code> (or rather: <code>evals</code>) does not really deal with what is written in the provided sources but rather checks what is <strong>inside that</strong>, there might be some tricky situations where you would expect the cache to work, but it would not. Short example: we are computing and saving to a variable something heavy in a chunk (please run these in a clean R session to avoid conflicts):</p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">evals</span>(<span class="st">&#39;x &lt;- sapply(rep(mtcars$hp, 1e3), mean)&#39;</span>)</code></pre>
+<p>It is cached, just run again, you will see.</p>
+<p>But if you would create <code>x</code> in your <em>global environment</em> with any value (which has nothing to do with the special environment of the report!) and <code>x</code> is was not defined in the report before this call (and you had no <code>x˛value in your global environment before), then the content of</code>x` would result in a new hash for the cache - so caching would not work. E.g.:</p>
+<pre class="sourceCode r"><code class="sourceCode r">x &lt;- <span class="st">&#39;foobar&#39;</span>
+<span class="kw">evals</span>(<span class="st">&#39;x &lt;- sapply(rep(mtcars$hp, 1e3), mean)&#39;</span>)</code></pre>
+<p>I really think this is a minor issue (with very special coincidences) which cannot be addressed cleverly - but <strong>could be avoided with some cautions</strong>. And after all: you loose nothing, just the cache would not work for that only line and only once in most of the cases.</p>
+<p><strong>Major issue</strong> with caching: as you can see above rerunning the <code>eval</code> line, a second (cached) call took a while too - it finished a lot faster then running it first, but no instant results. This is because <code>evals</code> does not recursively <code>parse</code> the passed R commands, so some part of complex commands would be <code>eval</code>uated anyway. <em>This is just a temporary issue, currently working on it</em>.</p>
 <h1 id="evals">Evals</h1>
 <p>Sorry, no online documentation ATM. Please check: <code>?evals</code></p>
 <h1 id="ess">ESS</h1>
@@ -613,7 +647,7 @@ myReport$<span class="kw">export</span>(<span class="dt">open =</span> <span cla
 </ul>
 <p>To use this small lib, just type: <code>M-x pander-mode</code> on any document. It might be useful to add a hook to <code>markdown-mode</code> if you find this useful.</p>
 <hr />
-<p>This report was generated with <a href="http://www.r-project.org/">R</a> (2.15.0) and <a href="https://github.com/daroczig/pander">pander</a> (0.1) in 0.588 sec on x86_64-unknown-linux-gnu platform.</p>
+<p>This report was generated with <a href="http://www.r-project.org/">R</a> (2.15.0) and <a href="https://github.com/daroczig/pander">pander</a> (0.1) in 0.655 sec on x86_64-unknown-linux-gnu platform.</p>
 <p align="center">
   Design: <a href="http://rapport-package.info/"><i>rapport</i> Development Team</a> &copy; 2012 | Backend: <a href="https://github.com/daroczig/pander">pander</a> | License: <a href="http://www.gnu.org/licenses/agpl.html" target="_blank">AGPL3</a> | Styled with <a href="http://www.getskeleton.com/" target="_blank">skeleton</a>
 </p>
