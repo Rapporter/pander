@@ -69,7 +69,7 @@ Pandoc.brew <- function(file = stdin(), output = stdout(), convert = FALSE, open
     ## text <- gsub('<%=(.*?)%>','<%%\\1%%>', text) # this idea failed as brew templates are evaluated at the end of the file so loops fails
 
     ## Pandoc.cat fn
-    Pandoc.evals <- function(..., envir = parent.frame()) {
+    Pandoc.evals <- function(..., envir = parent.frame(), cache = evals.option('cache')) {
         res <- evals(unlist(...), env = envir, graph.dir = graph.dir, graph.name = graph.name, hi.res = graph.hi.res)
         for (r in res)
             pander(r)
@@ -83,10 +83,10 @@ Pandoc.brew <- function(file = stdin(), output = stdout(), convert = FALSE, open
     brew.body[156] <- "code[codeLen + 1] <- paste(\"cat(Pandoc.evals(c(\", paste(sapply(text[textStart:textLen], deparse), collapse = \",\"), "
     brew.body[157] <- "\")))\", sep = \"\")"
     body(brew) <- parse(text = brew.body)
-    `.brew.cached` <- brew:::`.brew.cached`
-    b <- deparse(body(`.brew.cached`))
-    b[16] <- "ret <- Pandoc.evals(sapply(code, deparse), envir = envir)"
-    body(`.brew.cached`) <- parse(text = b)
+#    `.brew.cached` <- brew:::`.brew.cached`
+#    b <- deparse(body(`.brew.cached`))
+#    b[16] <- "ret <- Pandoc.evals(sapply(code, deparse), envir = envir, cache = FALSE)"
+#    body(`.brew.cached`) <- parse(text = b)
 
     res <- capture.output(brew(text = text, envir = envir))
 

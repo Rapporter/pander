@@ -441,7 +441,7 @@ evals <- function(txt, parse = TRUE, cache = TRUE, cache.dir = '.cache', cache.t
                 vars   <- vars$text[which( vars$token.desc == 'SYMBOL')]
                 if (length(vars) > 0)
                     vars <- mget(vars, env, inherits = TRUE, ifnotfound = NA)
-                cached <- digest(list(src, vars), 'sha256')
+                cached <- digest(list(src, vars), 'sha1')
                 cached <- file.path(cache.dir, cached)
 
                 if (file.exists(cached)) {
