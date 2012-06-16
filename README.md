@@ -19,7 +19,7 @@ The package is also capable of exporting/converting complex Pandoc documents (re
   * no need for calling `ascii`, `xtable`, `Hmisc`, `tables` etc. to transform an R object to `HTML`, `tex` etc. as `pander` results in Pandoc's *markdown* which can be converted to almost any text document format (like: pdf, HTML, odt, docx, textile, asciidoc, reStructuredText etc.). Conversion can be done automatically after calling `pander` reporting functions ([Pander.brew](#brew-to-pandoc) or [Pandoc](#live-report-generation)).
   * based on the above *no "traditional" R console output* is shown in the resulting document (nor in markdown, nor in exported docs) but **all R objects are transformed to tables, list etc**. Well, there is an option (`show.src`) to show the original R commands before the formatted output, and `pander`˛calls can be also easily tweaked (just file an issue) to return `print`ed R objects - if you would need that in some strange situation - like writing an R tutorial. But **I really think that nor R code, nor raw R results have anything to do with an exported report** :)
   * *graphs/plots* are recognized in blocks of R commands without any special setting or marks around code block and saved to disk in a `png` file linked in the resulting document. This means if you create a report (e.g. `brew` a text file) and export it to pdf/docx etc. all the plots/images would be there. There are some parameters to specify the resolution of the image and also the type (e.g. `jpg`, `svg` or `pdf`).
-  * `pander`˛uses its build in (IMHO quite decent) **caching**. This means that if evaluation of some R commands take too much time (which can be set by option/parameter), then the results are saved in a file and returned from there on next exact R code's evaluation. This caching algorithm tries to be **smart** as checks not only the passed R sources, but *all variables* inside that and saves the hash of those. This is a quite secure way of caching, but if you would encounter any issues, just switch off the cache. I've not seen any issues :)
+  * `pander`˛uses its build in (IMHO quite decent) [**caching**](#caching). This means that if evaluation of some R commands take too much time (which can be set by option/parameter), then the results are saved in a file and returned from there on next exact R code's evaluation. This caching algorithm tries to be **smart** as checks not only the passed R sources, but *all variables and functions* inside that and saves the hash of those. This is a quite secure way of caching (see details [below](#caching)), but if you would encounter any issues, just switch off the cache. I've not seen any issues :)
   * `knitr` *support* is coming too, for details see my [TODO list](https://github.com/daroczig/pander/blob/master/TODO.md) **Update**: just use `knitr` to generate markdown and pass that to `Pandoc.convert`
 
 # Installation
@@ -43,9 +43,9 @@ Or download the [sources in a zip file](https://github.com/daroczig/pander/zipba
 
 Now you would only need a few cool packages from CRAN:
 
-  * [brew](http://cran.r-project.org/web/packages/brew/index.html) for literate programming,
-  * [digest](http://cran.r-project.org/web/packages/digest/index.html) to compute hashes while caching,
-  * [parser](http://cran.r-project.org/web/packages/parser/index.html) to identify variables in passed R commands,
+  * [brew](http://cran.r-project.org/web/packages/brew/index.html) for literate programming
+  * [digest](http://cran.r-project.org/web/packages/digest/index.html) to compute hashes while caching
+  * ~~[parser](http://cran.r-project.org/web/packages/parser/index.html) to identify variables in passed R commands~~
   * ~~[evaluate](http://cran.r-project.org/web/packages/evaluate/index.html)~~
   * besides [R](http://www.r-project.org/) of course!
 
@@ -308,7 +308,7 @@ The output of different **statistical methods** are tried to be prettyfied. Some
 ---------------------------------------------------
  Test statistic   P value   Alternative hypothesis 
 ---------------- --------- ------------------------
-      0.2          0.27           two-sided        
+      0.14         0.72           two-sided        
 ---------------------------------------------------
 
 Table: Two-sample Kolmogorov-Smirnov test: `runif(50)` and `runif(50)`
@@ -485,7 +485,7 @@ This latter tries to be smart in some ways:
   * a block (R commands between the tags) could return values in any part of the block
   * plots and images are grabbed in the document, rendered to a `png` file and `pander` method would result in a Pandoc markdown formatted image link (so the image would be shown/included in the exported document).
   * all warnings/messages and errors are recorded in the blocks and returned in the document as a footnote
-  * all heavy R commands (e.g. those taking more then 0.1 sec to evaluate) are **cached** so re`brew`ing a report would not result in a coffee break.
+  * all heavy R commands (e.g. those taking more then 0.1 sec to evaluate) are [**cached**](#caching) so re`brew`ing a report would not result in a coffee break.
 
 This document was generated by `Pandoc.brew` based on [`inst/README.brew`](https://github.com/daroczig/pander/blob/master/inst/README.brew) so the above examples were generated automatically - which could be handy while writing some nifty statistical reports :)
 
@@ -604,12 +604,12 @@ myReport$export(open = FALSE)
   * `list.style`: `'bullet'`, `'ordered'` or `'roman'`
   * `table.style`: `'atx'` or `'setext'`
 
-Besides localization of numeric formats and table/list's styles there are some technical options too which would effect e.g. caching or the format of rendered image files. You can query/update those with `evals.option()` as the main backend of `pander` calls is a custom evaluation function called [`evals`](#evals).
+Besides localization of numeric formats and table/list's styles there are some technical options too which would effect e.g. [caching](#caching) or the format of rendered image files. You can query/update those with `evals.option()` as the main backend of `pander` calls is a custom evaluation function called [`evals`](#evals).
 
 The list of possible options are:
 
   * `parse`: if `TRUE` the provided `txt` elements would be merged into one string and parsed to logical chunks. This is useful if you would want to get separate results of your code parts - not just the last returned value, but you are passing the whole script in one string. To manually lock lines to each other (e.g. calling a `plot` and on next line adding an `abline` or `text` to it), use a plus char (`+`) at the beginning of each line which should be evaluated with the previous one(s). If set to `FALSE`, [`evals`](#evals) would not try to parse R code, it would get evaluated in separate runs - as provided. Please see the documenation of [`evals`](#evals).
-  * `cache`: caching the result of R calls if set to `TRUE`
+  * `cache`: [caching](#caching) the result of R calls if set to `TRUE`
   * `cache.dir`: path to a directory holding cache files. Default set to `.cache` in current working directory.
   * `cache.time`: number of seconds to limit caching based on `proc.time`. If set to `0`, all R commands, if set to `Inf`, none is cached (despite the `cache` parameter).
   * `cache.copy.images`: copy images to new files if an image is returned from cache? If set to `FALSE` (default) the "old" path would be returned.
@@ -629,6 +629,71 @@ The list of possible options are:
   * `hi.res.width`: width of generated high resolution plot in pixels for even vector formats. The `height` and `res` of high resolution image is automatically computed based on the above options to preserve original plot aspect ratio.
   * `graph.env`: save the environments in which plots were generated to distinct files (based on `graph.name`) with `env` extension?
   * `graph.recordplot`: save the plot via `recordPlot` to distinct files (based on `graph.name`) with `recodplot` extension?
+
+# Caching
+
+As `pander` is using a **custom caching algorithm**, it might be worthwhile to give a short summary of what is going on in the background.
+
+All evaluation of provided R commands (while running [`brew`](#brew-to-pandoc) or ["live report generation"](#live-report-generation) is done by [`evals`](#evals) which is caching results (*besides* returned informative/warning/error messages, anything written to `stdout` etc. - see [below](#evals)) **line-by-line** (to be more accurate: by single R commands) instead of caching chunks **without any noticeable overhead**.
+
+## Theoretical background:
+
+  * Each passed R chunk is `parse`d to single commands.
+  * Each parsed command's part (let it be a function, variable, constant etc.) `eval`uated separately to a `list`. This list describes the unique structure and the content of the passed R commands, and has some IMHO really great benefits (see below).
+  * The list is `serialize`d and an `SHA-1` hash is computed for that - which is unique and there is no real risk of collision.
+  * If [`evals`](#evals) can find the cached results in a file named to the computed hash, then it is returned on the spot.
+  * Otherwise the call is evaluated and the results are optionally saved to cache (e.g. if `cache` is active, if the `proc.time()` of the evaluation is higher then it is defined in `cache.time` etc. - see details in [evals' options](#pander-options)).
+
+## In practice:
+
+As `pander` does not cache based on raw sources of chunks and there is no easy way of enabling/disabling caching on a chunk basis, the users have to live with some *great advantages* and some *minor tricky situations* - which latter cannot be solved theoretically in my opinion, but [I'd love to hear your feedback](https://github.com/daroczig/pander/issues).
+
+The caching hash is computed based on the structure and content of the R commands, so let us make some POC example to show the **greatest asset**:
+
+```r
+require(lattice)
+evals('histogram(rep(mtcars$hp, 1e5))')
+```
+
+It take a while, huh? :)
+
+Let us have some custom functions and variables:
+
+```r
+f <- histogram
+g <- rep
+A <- mtcars$hp
+B <- 1e5
+```
+
+And now try to run something like:
+
+```r
+evals('f(g(mtcars$hp, B))')
+```
+
+Yes, it was returned from cache!
+
+About the **kickbacks**:
+
+As `pander` (or rather: `evals`) does not really deal with what is written in the provided sources but rather checks what is **inside that**, there might be some tricky situations where you would expect the cache to work, but it would not. Short example: we are computing and saving to a variable something heavy in a chunk (please run these in a clean R session to avoid conflicts):
+
+```r
+evals('x <- sapply(rep(mtcars$hp, 1e3), mean)')
+```
+
+It is cached, just run again, you will see.
+
+But if you would create `x` in your *global environment* with any value (which has nothing to do with the special environment of the report!) and `x` is was not defined in the report before this call (and you had no `x˛value in your global environment before), then the content of `x` would result in a new hash for the cache - so caching would not work. E.g.:
+
+```r
+x <- 'foobar'
+evals('x <- sapply(rep(mtcars$hp, 1e3), mean)')
+```
+
+I really think this is a minor issue (with very special coincidences) which cannot be addressed cleverly - but **could be avoided with some cautions**. And after all: you loose nothing, just the cache would not work for that only line and only once in most of the cases.
+
+**Major issue** with caching: as you can see above rerunning the `eval` line, a second (cached) call took a while too - it finished a lot faster then running it first, but no instant results. This is because `evals` does not recursively `parse` the passed R commands, so some part of complex commands would be `eval`uated anyway. *This is just a temporary issue, currently working on it*.
 
 # Evals
 
@@ -656,4 +721,4 @@ Few options of `pander-mode`: `M-x customize-group pander`
 To use this small lib, just type: `M-x pander-mode` on any document. It might be useful to add a hook to `markdown-mode` if you find this useful.
 
 -------
-This report was generated with [R](http://www.r-project.org/) (2.15.0) and [pander](https://github.com/daroczig/pander) (0.1) in 0.588 sec on x86_64-unknown-linux-gnu platform.
+This report was generated with [R](http://www.r-project.org/) (2.15.0) and [pander](https://github.com/daroczig/pander) (0.1) in 0.655 sec on x86_64-unknown-linux-gnu platform.
