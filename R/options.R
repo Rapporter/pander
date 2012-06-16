@@ -55,7 +55,7 @@ storage <- new.env()
 #' @param o option name (string). See below.
 #' @param value value to assign (optional)
 #' @export
-#' @seealso \code{\link{evals.option}
+#' @seealso \code{\link{evals.option}}
 #' @examples
 #' pander.option()
 #' pander.option('digits')
