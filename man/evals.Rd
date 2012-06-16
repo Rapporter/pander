@@ -3,7 +3,8 @@
 \title{Evaluate and Process R Code}
 \usage{
   evals(txt, parse = TRUE, cache = TRUE,
-    cache.dir = ".cache", cache.time = 0.1, classes = NULL,
+    cache.dir = ".cache", cache.time = 0.1,
+    cache.copy.images = FALSE, classes = NULL,
     hooks = NULL, length = Inf,
     output = c("all", "src", "result", "output", "type", "msg", "stdout"),
     env = NULL, graph.nomargin = TRUE, graph.name = "\%t",
@@ -46,6 +47,10 @@
   based on \code{proc.time}. If set to \code{0}, all R
   commands, if set to \code{Inf}, none is cached (despite
   the \code{cache} parameter).}
+
+  \item{cache.copy.images}{copy images to new files if an
+  image is returned from cache? If set to \code{FALSE}
+  (default) the "old" path would be returned.}
 
   \item{classes}{a vector or list of classes which should
   be returned. If set to \code{NULL} (by default) all R
