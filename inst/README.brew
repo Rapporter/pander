@@ -418,7 +418,7 @@ evals('f(g(mtcars$hp, B))')
 
 Yes, it was returned from cache!
 
-About the **kickbacks**:
+About the **kickback**:
 
 As `pander` (or rather: `evals`) does not really deal with what is written in the provided sources but rather checks what is **inside that**, there might be some tricky situations where you would expect the cache to work, but it would not. Short example: we are computing and saving to a variable something heavy in a chunk (please run these in a clean R session to avoid conflicts):
 
@@ -436,8 +436,6 @@ evals('x <- sapply(rep(mtcars$hp, 1e3), mean)')
 ```
 
 I really think this is a minor issue (with very special coincidences) which cannot be addressed cleverly - but **could be avoided with some cautions**. And after all: you loose nothing, just the cache would not work for that only line and only once in most of the cases.
-
-**Major issue** with caching: as you can see above rerunning the `eval` line, a second (cached) call took a while too - it finished a lot faster then running it first, but no instant results. This is because `evals` does not recursively `parse` the passed R commands, so some part of complex commands would be `eval`uated anyway. *This is just a temporary issue, currently working on it*.
 
 # Evals
 

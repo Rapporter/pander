@@ -636,7 +636,7 @@ As `pander` is using a **custom caching algorithm**, it might be worthwhile to g
 
 All evaluation of provided R commands (while running [`brew`](#brew-to-pandoc) or ["live report generation"](#live-report-generation) is done by [`evals`](#evals) which is caching results (*besides* returned informative/warning/error messages, anything written to `stdout` etc. - see [below](#evals)) **line-by-line** (to be more accurate: by single R commands) instead of caching chunks **without any noticeable overhead**.
 
-## Theoretical background:
+## Theoretical background
 
   * Each passed R chunk is `parse`d to single commands.
   * Each parsed command's part (let it be a function, variable, constant etc.) `eval`uated separately to a `list`. This list describes the unique structure and the content of the passed R commands, and has some IMHO really great benefits (see below).
@@ -644,7 +644,7 @@ All evaluation of provided R commands (while running [`brew`](#brew-to-pandoc) o
   * If [`evals`](#evals) can find the cached results in a file named to the computed hash, then it is returned on the spot.
   * Otherwise the call is evaluated and the results are optionally saved to cache (e.g. if `cache` is active, if the `proc.time()` of the evaluation is higher then it is defined in `cache.time` etc. - see details in [evals' options](#pander-options)).
 
-## In practice:
+## In practice
 
 As `pander` does not cache based on raw sources of chunks and there is no easy way of enabling/disabling caching on a chunk basis, the users have to live with some *great advantages* and some *minor tricky situations* - which latter cannot be solved theoretically in my opinion, but [I'd love to hear your feedback](https://github.com/daroczig/pander/issues).
 
@@ -674,7 +674,7 @@ evals('f(g(mtcars$hp, B))')
 
 Yes, it was returned from cache!
 
-About the **kickbacks**:
+About the **kickback**:
 
 As `pander` (or rather: `evals`) does not really deal with what is written in the provided sources but rather checks what is **inside that**, there might be some tricky situations where you would expect the cache to work, but it would not. Short example: we are computing and saving to a variable something heavy in a chunk (please run these in a clean R session to avoid conflicts):
 
@@ -692,8 +692,6 @@ evals('x <- sapply(rep(mtcars$hp, 1e3), mean)')
 ```
 
 I really think this is a minor issue (with very special coincidences) which cannot be addressed cleverly - but **could be avoided with some cautions**. And after all: you loose nothing, just the cache would not work for that only line and only once in most of the cases.
-
-**Major issue** with caching: as you can see above rerunning the `eval` line, a second (cached) call took a while too - it finished a lot faster then running it first, but no instant results. This is because `evals` does not recursively `parse` the passed R commands, so some part of complex commands would be `eval`uated anyway. *This is just a temporary issue, currently working on it*.
 
 # Evals
 
@@ -721,4 +719,4 @@ Few options of `pander-mode`: `M-x customize-group pander`
 To use this small lib, just type: `M-x pander-mode` on any document. It might be useful to add a hook to `markdown-mode` if you find this useful.
 
 -------
-This report was generated with [R](http://www.r-project.org/) (2.15.0) and [pander](https://github.com/daroczig/pander) (0.1) in 0.655 sec on x86_64-unknown-linux-gnu platform.
+This report was generated with [R](http://www.r-project.org/) (2.15.0) and [pander](https://github.com/daroczig/pander) (0.1) in 0.508 sec on x86_64-unknown-linux-gnu platform.

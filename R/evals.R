@@ -432,8 +432,15 @@ evals <- function(txt, parse = TRUE, cache = TRUE, cache.dir = '.cache', cache.t
         if (cache) {
 
             ## helper function extracting each function and variable from the call
-            getCallParts <- function(call)
-                lapply(call, function(x) lapply(x, function(x) tryCatch(eval(x, envir = env), error = function(e) NA)))
+            getCallParts <- function(call) {
+                lapply(call, function(x)
+                       lapply(x, function(x)
+                              switch(mode(x),
+                                     "name" = tryCatch(eval(x, envir = env), error = function(e) deparse(x)),
+                                     "call" = getCallParts(x),
+                                     deparse(x)
+                                     )))
+            }
 
             cached <- digest(getCallParts(txt.parsed), 'sha1')
             cached <- file.path(cache.dir, cached)
