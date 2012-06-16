@@ -37,7 +37,9 @@
   Please see examples below.}
 
   \item{cache}{caching the result of R calls if set to
-  \code{TRUE}}
+  \code{TRUE}. Please note the caching would not work if
+  \code{parse} set to \code{FALSE} or syntax error is to be
+  found.}
 
   \item{cache.dir}{path to a directory holding cache files.
   Default set to \code{.cache} in current working

@@ -164,7 +164,7 @@ eval.msgs <- function(src, env = NULL) {
 #' Please check the examples carefully below to get a detailed overview of \code{\link{evals}}.
 #' @param txt a character vector containing R code. This could be a list/vector of lines of code or a simple string holding R code separated by \code{;} or \code{\\n}.
 #' @param parse if \code{TRUE} the provided \code{txt} elements would be merged into one string and parsed to logical chunks. This is useful if you would want to get separate results of your code parts - not just the last returned value, but you are passing the whole script in one string. To manually lock lines to each other (e.g. calling a \code{plot} and on next line adding an \code{abline} or \code{text} to it), use a plus char (\code{+}) at the beginning of each line which should be evaluated with the previous one(s). If set to \code{FALSE}, \code{evals} would not try to parse R code, it would get evaluated in separate runs - as provided. Please see examples below.
-#' @param cache caching the result of R calls if set to \code{TRUE}
+#' @param cache caching the result of R calls if set to \code{TRUE}. Please note the caching would not work if \code{parse} set to \code{FALSE} or syntax error is to be found.
 #' @param cache.dir path to a directory holding cache files. Default set to \code{.cache} in current working directory.
 #' @param cache.time number of seconds to limit caching based on \code{proc.time}. If set to \code{0}, all R commands, if set to \code{Inf}, none is cached (despite the \code{cache} parameter).
 #' @param cache.copy.images copy images to new files if an image is returned from cache? If set to \code{FALSE} (default) the "old" path would be returned.
@@ -333,7 +333,6 @@ eval.msgs <- function(src, env = NULL) {
 #' evals('mean(x)')
 #' }
 #' @export
-#' @importFrom parser parser
 #' @importFrom digest digest
 evals <- function(txt, parse = TRUE, cache = TRUE, cache.dir = '.cache', cache.time = 0.1, cache.copy.images = FALSE, classes = NULL, hooks = NULL, length = Inf, output = c('all', 'src', 'result', 'output', 'type', 'msg', 'stdout'), env = NULL, graph.nomargin = TRUE, graph.name = '%t', graph.dir = 'plots', graph.output = c('png', 'bmp', 'jpeg', 'jpg', 'tiff', 'svg', 'pdf'), width = 480, height = 480, res= 72, hi.res = FALSE, hi.res.width = 960, hi.res.height = 960*(height/width), hi.res.res = res*(hi.res.width/width), graph.env = FALSE, graph.recordplot = FALSE, ...){
 
@@ -353,11 +352,9 @@ evals <- function(txt, parse = TRUE, cache = TRUE, cache.dir = '.cache', cache.t
         txt.parsed <- tryCatch(parse(text = txt), error = function(e) e)
 
         ## skip parsing on syntax error and disable cache
-        if (inherits(txt.parsed, 'error')) {
-
+        if (inherits(txt.parsed, 'error'))
             cache <- FALSE
-
-        } else {
+        else {
 
             txt <- sapply(txt.parsed, function(x) paste(deparse(x), collapse = ' '))
             if (length(txt) == 0)
@@ -369,7 +366,8 @@ evals <- function(txt, parse = TRUE, cache = TRUE, cache.dir = '.cache', cache.t
             txt <- rapply(txt, function(x) sub('^\\+', '', x), how = 'replace')
 
         }
-    }
+    } else
+        cache <- FALSE
 
     ## check provided dirs
     if (!identical(file.info(graph.dir)$isdir, TRUE))
@@ -433,33 +431,26 @@ evals <- function(txt, parse = TRUE, cache = TRUE, cache.dir = '.cache', cache.t
         ## checking cache
         if (cache) {
 
-            vars   <- tryCatch(attr(parser(text = src), 'data'), error = function(e) e)
+            ## helper function extracting each function and variable from the call
+            getCallParts <- function(call)
+                lapply(call, function(x) lapply(x, function(x) tryCatch(eval(x, envir = env), error = function(e) NA)))
 
-            ## not parsed error would screw up cache
-            if (!inherits(vars, 'error')) {
+            cached <- digest(getCallParts(txt.parsed), 'sha1')
+            cached <- file.path(cache.dir, cached)
 
-                vars   <- vars$text[which( vars$token.desc == 'SYMBOL')]
-                if (length(vars) > 0)
-                    vars <- mget(vars, env, inherits = TRUE, ifnotfound = NA)
-                cached <- digest(list(src, vars), 'sha1')
-                cached <- file.path(cache.dir, cached)
+            if (file.exists(cached)) {
+                res <- readRDS(cached)
+                if (cache.copy.images)
+                    if (inherits(res$result, 'image')) {
+                        file.copy(as.character(res$result), file)
+                        res$result <- file
+                        class(res$result) <- 'image'
+                    }
+                return(res)
+            }
 
-                if (file.exists(cached)) {
-                    res <- readRDS(cached)
-                    if (cache.copy.images)
-                        if (inherits(res$result, 'image')) {
-                            file.copy(as.character(res$result), file)
-                            res$result <- file
-                            class(res$result) <- 'image'
-                        }
-                    return(res)
-                }
-
-                ## starting timer
-                timer <- proc.time()
-
-            } else
-                cache <- FALSE
+            ## starting timer
+            timer <- proc.time()
 
         }
 

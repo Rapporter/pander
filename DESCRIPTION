@@ -19,7 +19,6 @@ Depends:
 Imports:
     brew,
     lattice,
-    parser,
     digest
 Collate:
     'helpers.R'
