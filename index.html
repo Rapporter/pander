@@ -307,7 +307,7 @@ id   value
 ---------------------------------------------------
  Test statistic   P value   Alternative hypothesis 
 ---------------- --------- ------------------------
-      0.2          0.27           two-sided        
+      0.12         0.87           two-sided        
 ---------------------------------------------------
 
 Table: Two-sample Kolmogorov-Smirnov test: `runif(50)` and `runif(50)`
@@ -566,8 +566,10 @@ myReport$<span class="kw">export</span>(<span class="dt">open =</span> <span cla
 <li><code>digits</code>: numeric (default: <code>2</code>) passed to <code>format</code></li>
 <li><code>decimal.mark</code>: numeric (default: <code>.</code>) passed to <code>format</code></li>
 <li><code>round</code>: numeric (default: <code>Inf</code>) passed to <code>round</code></li>
-<li><code>list.style</code>: <code>'bullet'</code>, <code>'ordered'</code> or <code>'roman'</code></li>
-<li><code>table.style</code>: <code>'atx'</code> or <code>'setext'</code></li>
+<li><code>list.style</code>: <code>'bullet'</code> (default), <code>'ordered'</code> or <code>'roman'</code> passed to <code>pandoc.list</code>. Please not that this has no effect on <code>pander</code> methods.</li>
+<li><code>table.style</code>: <code>'atx'</code> (default) or <code>'setext'</code> passed to <code>pandoc.table</code> and also affects <code>pander</code> methods.</li>
+<li><code>table.split.table</code>: numeric passed to <code>pandoc.table</code> and also affects <code>pander</code> methods. This option tells <code>pander</code> where to split too wide tables. The default value (<code>80</code>) suggests the conventional number of characters used in a line, feel free to change (e.g. to <code>Inf</code> to disable this feature) if you are not using a VT100 terminal any more :)</li>
+<li><code>table.split.cells</code>: numeric (default: <code>30</code>) passed to <code>pandoc.table</code> and also affects <code>pander</code> methods. This option tells <code>pander</code> where to split too wide cells with line breaks. Set <code>Inf</code> to disable.</li>
 </ul>
 <p>Besides localization of numeric formats and table/list's styles there are some technical options too which would effect e.g. <a href="#caching">caching</a> or the format of rendered image files. You can query/update those with <code>evals.option()</code> as the main backend of <code>pander</code> calls is a custom evaluation function called <a href="#evals"><code>evals</code></a>.</p>
 <p>The list of possible options are:</p>
@@ -647,7 +649,7 @@ B &lt;- <span class="fl">1e5</span></code></pre>
 </ul>
 <p>To use this small lib, just type: <code>M-x pander-mode</code> on any document. It might be useful to add a hook to <code>markdown-mode</code> if you find this useful.</p>
 <hr />
-<p>This report was generated with <a href="http://www.r-project.org/">R</a> (2.15.0) and <a href="https://github.com/daroczig/pander">pander</a> (0.1) in 0.597 sec on x86_64-unknown-linux-gnu platform.</p>
+<p>This report was generated with <a href="http://www.r-project.org/">R</a> (2.15.0) and <a href="https://github.com/daroczig/pander">pander</a> (0.1) in 0.526 sec on x86_64-unknown-linux-gnu platform.</p>
 <p align="center">
   Design: <a href="http://rapport-package.info/"><i>rapport</i> Development Team</a> &copy; 2012 | Backend: <a href="https://github.com/daroczig/pander">pander</a> | License: <a href="http://www.gnu.org/licenses/agpl.html" target="_blank">AGPL3</a> | Styled with <a href="http://www.getskeleton.com/" target="_blank">skeleton</a>
 </p>
