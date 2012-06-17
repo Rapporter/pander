@@ -307,7 +307,7 @@ id   value
 ---------------------------------------------------
  Test statistic   P value   Alternative hypothesis 
 ---------------- --------- ------------------------
-      0.14         0.72           two-sided        
+      0.2          0.27           two-sided        
 ---------------------------------------------------
 
 Table: Two-sample Kolmogorov-Smirnov test: `runif(50)` and `runif(50)`
@@ -572,7 +572,7 @@ myReport$<span class="kw">export</span>(<span class="dt">open =</span> <span cla
 <p>Besides localization of numeric formats and table/list's styles there are some technical options too which would effect e.g. <a href="#caching">caching</a> or the format of rendered image files. You can query/update those with <code>evals.option()</code> as the main backend of <code>pander</code> calls is a custom evaluation function called <a href="#evals"><code>evals</code></a>.</p>
 <p>The list of possible options are:</p>
 <ul>
-<li><code>parse</code>: if <code>TRUE</code> the provided <code>txt</code> elements would be merged into one string and parsed to logical chunks. This is useful if you would want to get separate results of your code parts - not just the last returned value, but you are passing the whole script in one string. To manually lock lines to each other (e.g. calling a <code>plot</code> and on next line adding an <code>abline</code> or <code>text</code> to it), use a plus char (<code>+</code>) at the beginning of each line which should be evaluated with the previous one(s). If set to <code>FALSE</code>, <a href="#evals"><code>evals</code></a> would not try to parse R code, it would get evaluated in separate runs - as provided. Please see the documenation of <a href="#evals"><code>evals</code></a>.</li>
+<li><code>parse</code>: if <code>TRUE</code> the provided <code>txt</code> elements would be merged into one string and parsed to logical chunks. This is useful if you would want to get separate results of your code parts - not just the last returned value, but you are passing the whole script in one string. To manually lock lines to each other (e.g. calling a <code>plot</code> and on next line adding an <code>abline</code> or <code>text</code> to it), use a plus char (<code>+</code>) at the beginning of each line which should be evaluated with the previous one(s). If set to <code>FALSE</code>, <a href="#evals"><code>evals</code></a> would not try to parse R code, it would get evaluated in separate runs - as provided. Please see the documentation of <a href="#evals"><code>evals</code></a>.</li>
 <li><code>cache</code>: <a href="#caching">caching</a> the result of R calls if set to <code>TRUE</code></li>
 <li><code>cache.dir</code>: path to a directory holding cache files. Default set to <code>.cache</code> in current working directory.</li>
 <li><code>cache.time</code>: number of seconds to limit caching based on <code>proc.time</code>. If set to <code>0</code>, all R commands, if set to <code>Inf</code>, none is cached (despite the <code>cache</code> parameter).</li>
@@ -597,29 +597,30 @@ myReport$<span class="kw">export</span>(<span class="dt">open =</span> <span cla
 <h1 id="caching">Caching</h1>
 <p>As <code>pander</code> is using a <strong>custom caching algorithm</strong>, it might be worthwhile to give a short summary of what is going on in the background.</p>
 <p>All evaluation of provided R commands (while running <a href="#brew-to-pandoc"><code>brew</code></a> or <a href="#live-report-generation">&quot;live report generation&quot;</a> is done by <a href="#evals"><code>evals</code></a> which is caching results (<em>besides</em> returned informative/warning/error messages, anything written to <code>stdout</code> etc. - see <a href="#evals">below</a>) <strong>line-by-line</strong> (to be more accurate: by single R commands) instead of caching chunks <strong>without any noticeable overhead</strong>.</p>
-<h2 id="theoretical-background">Theoretical background:</h2>
+<h2 id="theoretical-background">Theoretical background</h2>
 <ul>
 <li>Each passed R chunk is <code>parse</code>d to single commands.</li>
-<li>Each parsed command's part (let it be a function, variable, constant etc.) <code>eval</code>uated separately to a <code>list</code>. This list describes the unique structure and the content of the passed R commands, and has some IMHO really great benefits (see below).</li>
+<li>Each parsed command's <strong>part</strong> (let it be a function, variable, constant etc.) <code>eval</code>uated (as a <code>name</code>) separately to a <code>list</code>. This list describes the unique structure and the content of the passed R commands, and has some IMHO really great benefits (see below).</li>
+<li>A <strong>hash</strong> if computed to each list element and <em>cached</em> too in <code>pander</code>'s local environments. This is useful if you are using large data frames, just imagine: the caching algorithm would have to compute the hash for the same data frame each time it's touched! This way the hash is recomputed only if the R object with the given name is changed.</li>
 <li>The list is <code>serialize</code>d and an <code>SHA-1</code> hash is computed for that - which is unique and there is no real risk of collision.</li>
 <li>If <a href="#evals"><code>evals</code></a> can find the cached results in a file named to the computed hash, then it is returned on the spot.</li>
 <li>Otherwise the call is evaluated and the results are optionally saved to cache (e.g. if <code>cache</code> is active, if the <code>proc.time()</code> of the evaluation is higher then it is defined in <code>cache.time</code> etc. - see details in <a href="#pander-options">evals' options</a>).</li>
 </ul>
-<h2 id="in-practice">In practice:</h2>
+<h2 id="in-practice">In practice</h2>
 <p>As <code>pander</code> does not cache based on raw sources of chunks and there is no easy way of enabling/disabling caching on a chunk basis, the users have to live with some <em>great advantages</em> and some <em>minor tricky situations</em> - which latter cannot be solved theoretically in my opinion, but <a href="https://github.com/daroczig/pander/issues">I'd love to hear your feedback</a>.</p>
 <p>The caching hash is computed based on the structure and content of the R commands, so let us make some POC example to show the <strong>greatest asset</strong>:</p>
 <pre class="sourceCode r"><code class="sourceCode r"><span class="kw">require</span>(lattice)
 <span class="kw">evals</span>(<span class="st">&#39;histogram(rep(mtcars$hp, 1e5))&#39;</span>)</code></pre>
-<p>It take a while, huh? :)</p>
+<p>It took a while, huh? :)</p>
 <p>Let us have some custom functions and variables:</p>
 <pre class="sourceCode r"><code class="sourceCode r">f &lt;- histogram
 g &lt;- rep
 A &lt;- mtcars$hp
 B &lt;- <span class="fl">1e5</span></code></pre>
 <p>And now try to run something like:</p>
-<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">evals</span>(<span class="st">&#39;f(g(mtcars$hp, B))&#39;</span>)</code></pre>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">evals</span>(<span class="st">&#39;f(g(A, B))&#39;</span>)</code></pre>
 <p>Yes, it was returned from cache!</p>
-<p>About the <strong>kickbacks</strong>:</p>
+<p>About the <strong>kickback</strong>:</p>
 <p>As <code>pander</code> (or rather: <code>evals</code>) does not really deal with what is written in the provided sources but rather checks what is <strong>inside that</strong>, there might be some tricky situations where you would expect the cache to work, but it would not. Short example: we are computing and saving to a variable something heavy in a chunk (please run these in a clean R session to avoid conflicts):</p>
 <pre class="sourceCode r"><code class="sourceCode r"><span class="kw">evals</span>(<span class="st">&#39;x &lt;- sapply(rep(mtcars$hp, 1e3), mean)&#39;</span>)</code></pre>
 <p>It is cached, just run again, you will see.</p>
@@ -627,7 +628,6 @@ B &lt;- <span class="fl">1e5</span></code></pre>
 <pre class="sourceCode r"><code class="sourceCode r">x &lt;- <span class="st">&#39;foobar&#39;</span>
 <span class="kw">evals</span>(<span class="st">&#39;x &lt;- sapply(rep(mtcars$hp, 1e3), mean)&#39;</span>)</code></pre>
 <p>I really think this is a minor issue (with very special coincidences) which cannot be addressed cleverly - but <strong>could be avoided with some cautions</strong>. And after all: you loose nothing, just the cache would not work for that only line and only once in most of the cases.</p>
-<p><strong>Major issue</strong> with caching: as you can see above rerunning the <code>eval</code> line, a second (cached) call took a while too - it finished a lot faster then running it first, but no instant results. This is because <code>evals</code> does not recursively <code>parse</code> the passed R commands, so some part of complex commands would be <code>eval</code>uated anyway. <em>This is just a temporary issue, currently working on it</em>.</p>
 <h1 id="evals">Evals</h1>
 <p>Sorry, no online documentation ATM. Please check: <code>?evals</code></p>
 <h1 id="ess">ESS</h1>
@@ -647,7 +647,7 @@ B &lt;- <span class="fl">1e5</span></code></pre>
 </ul>
 <p>To use this small lib, just type: <code>M-x pander-mode</code> on any document. It might be useful to add a hook to <code>markdown-mode</code> if you find this useful.</p>
 <hr />
-<p>This report was generated with <a href="http://www.r-project.org/">R</a> (2.15.0) and <a href="https://github.com/daroczig/pander">pander</a> (0.1) in 0.655 sec on x86_64-unknown-linux-gnu platform.</p>
+<p>This report was generated with <a href="http://www.r-project.org/">R</a> (2.15.0) and <a href="https://github.com/daroczig/pander">pander</a> (0.1) in 0.597 sec on x86_64-unknown-linux-gnu platform.</p>
 <p align="center">
   Design: <a href="http://rapport-package.info/"><i>rapport</i> Development Team</a> &copy; 2012 | Backend: <a href="https://github.com/daroczig/pander">pander</a> | License: <a href="http://www.gnu.org/licenses/agpl.html" target="_blank">AGPL3</a> | Styled with <a href="http://www.getskeleton.com/" target="_blank">skeleton</a>
 </p>
