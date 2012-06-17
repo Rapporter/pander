@@ -8,7 +8,7 @@
     decimal.mark = pander.option("decimal.mark"),
     round = pander.option("round"), justify = "left",
     style = c("multiline", "grid", "simple"),
-    split.cells = 30)
+    split.tables = 80, split.cells = 30)
 }
 \arguments{
   \item{t}{data frame, matrix or table}
@@ -26,8 +26,15 @@
   \item{style}{which Pandoc style to use: \code{simple},
   \code{multiline} or grid}
 
+  \item{split.tables}{where to split wide tables to
+  separate tables. The default value (\code{80}) suggests
+  the conventional number of characters used in a line,
+  feel free to change (e.g. to \code{Inf} to disable this
+  feature) if you are not using a VT100 terminal any more
+  :)}
+
   \item{split.cells}{where to split cells' text with line
-  breaks. Default to \code{30}, to disbale set to
+  breaks. Default to \code{30}, to disable set to
   \code{Inf}.}
 }
 \value{
@@ -36,13 +43,17 @@
   then call the function ending in \code{.return}.
 }
 \description{
-  Creates a pandoc style "grid" table with optional
+  Creates a Pandoc's markdown style table with optional
   caption.
 }
 \details{
   This function will try to make pretty the provided R
   object's content like: rounding numbers, auto-recognizing
   if row names should be included etc.
+
+  And also tries to split cells with line breaks or even
+  the whole table to separate parts on demand. See the
+  parameters above.
 }
 \examples{
 pandoc.table(mtcars)

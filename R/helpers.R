@@ -465,9 +465,11 @@ pandoc.list <- function(...)
 
 #' Create a table
 #'
-#' Creates a pandoc style "grid" table with optional caption.
+#' Creates a Pandoc's markdown style table with optional caption.
 #'
 #' This function will try to make pretty the provided R object's content like: rounding numbers, auto-recognizing if row names should be included etc.
+#'
+#' And also tries to split cells with line breaks or even the whole table to separate parts on demand. See the parameters above.
 #' @param t data frame, matrix or table
 #' @param caption string
 #' @param digits passed to \code{format}
@@ -475,7 +477,8 @@ pandoc.list <- function(...)
 #' @param round passed to \code{round}
 #' @param justify see \code{prettyNum}
 #' @param style which Pandoc style to use: \code{simple}, \code{multiline} or grid
-#' @param split.cells where to split cells' text with line breaks. Default to \code{30}, to disbale set to \code{Inf}.
+#' @param split.tables where to split wide tables to separate tables. The default value (\code{80}) suggests the conventional number of characters used in a line, feel free to change (e.g. to \code{Inf} to disable this feature) if you are not using a VT100 terminal any more :)
+#' @param split.cells where to split cells' text with line breaks. Default to \code{30}, to disable set to \code{Inf}.
 #' @return By default this function outputs (see: \code{cat}) the result. If you would want to catch the result instead, then call the function ending in \code{.return}.
 #' @export
 #' @aliases pandoc.table
@@ -520,7 +523,7 @@ pandoc.list <- function(...)
 #' pandoc.table(t, style = "grid", split.cells = 5)
 #' pandoc.table(t, style = "simple")
 #' tryCatch(pandoc.table(t, style = "simple", split.cells = 5), error = function(e) 'Yeah, no newline support in simple tables')
-pandoc.table.return <- function(t, caption = NULL, digits = pander.option('digits'), decimal.mark = pander.option('decimal.mark'), round = pander.option('round'), justify = 'left', style = c('multiline', 'grid', 'simple'), split.cells = 30) {
+pandoc.table.return <- function(t, caption = NULL, digits = pander.option('digits'), decimal.mark = pander.option('decimal.mark'), round = pander.option('round'), justify = 'left', style = c('multiline', 'grid', 'simple'), split.tables = 80, split.cells = 30) {
 
     ## helper functions
     table.expand <- function(cells, cols.width, justify, sep.cols) {
@@ -629,9 +632,9 @@ pandoc.table.return <- function(t, caption = NULL, digits = pander.option('digit
     }
 
     ## split too wide tables
-    if (sum(t.width + 4) > 80) {
+    if (sum(t.width + 4) > split.tables) {
 
-        t.split <- which(cumsum(t.width + 4) > 80)[1]
+        t.split <- which(cumsum(t.width + 4) > split.tables)[1]
         t.col.n <- ifelse(length(dim(t)) > 1, ncol(t), length(t))
 
         ## do not make one column tables
