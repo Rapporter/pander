@@ -232,6 +232,30 @@
   the passed R sources, but all variables inside that and
   saves the hash of those.
 
+  Technical details of the caching algorithm: \itemize{
+  \item Each passed R chunk is \code{parse}d to single
+  commands.  \item Each parsed command's part (let it be a
+  function, variable, constant etc.) \code{eval}uated (as a
+  \code{name}) separately to a \code{list}. This list
+  describes the unique structure and the content of the
+  passed R commands, and has some IMHO really great
+  benefits (see examples below).  \item A hash if computed
+  to each list element and cached too in \code{pander}'s
+  local environments. This is useful if you are using large
+  data frames, just imagine: the caching algorithm would
+  have to compute the hash for the same data frame each
+  time it's touched! This way the hash is recomputed only
+  if the R object with the given name is changed.  \item
+  The list is \code{serialize}d and an \code{SHA-1} hash is
+  computed for that - which is unique and there is no real
+  risk of collision.  \item If \code{evals} can find the
+  cached results in a file named to the computed hash, then
+  it is returned on the spot.  \item Otherwise the call is
+  evaluated and the results are optionally saved to cache
+  (e.g. if \code{cache} is active, if the
+  \code{proc.time()} of the evaluation is higher then it is
+  defined in \code{cache.time} etc.). }
+
   This is a quite secure way of caching, but if you would
   encounter any issues, just set \code{cache} to
   \code{FALSE} or tweak other cache parameters. While
@@ -333,6 +357,7 @@ evals('histogram(mtcars$hp)', graph.recordplot = TRUE)
 system.time(evals('plot(mtcars)'))
 system.time(evals('plot(mtcars)'))                   # running again to see the speed-up :)
 system.time(evals('plot(mtcars)', cache = FALSE))    # cache disabled
+
 ## caching mechanism does check what's inside a variable:
 x <- mtcars
 evals('plot(x)')
@@ -340,6 +365,20 @@ x <- cbind(mtcars, mtcars)
 evals('plot(x)')
 x <- mtcars
 system.time(evals('plot(x)'))
+
+## stress your CPU - only once!
+evals('x <- sapply(rep(mtcars$hp, 1e3), mean)')      # run it again!
+
+## play with cache
+require(lattice)
+evals('histogram(rep(mtcars$hp, 1e5))')
+## nor run the below call - which would return the cached version of the above call :)
+f <- histogram
+g <- rep
+A <- mtcars$hp
+B <- 1e5
+evals('f(g(A, B))')#'
+
 ## or switch off cache globally:
 evals.option('cache', FALSE)
 ## and switch on later

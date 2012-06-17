@@ -352,7 +352,7 @@ Besides localization of numeric formats and table/list's styles there are some t
 
 The list of possible options are:
 
-  * `parse`: if `TRUE` the provided `txt` elements would be merged into one string and parsed to logical chunks. This is useful if you would want to get separate results of your code parts - not just the last returned value, but you are passing the whole script in one string. To manually lock lines to each other (e.g. calling a `plot` and on next line adding an `abline` or `text` to it), use a plus char (`+`) at the beginning of each line which should be evaluated with the previous one(s). If set to `FALSE`, [`evals`](#evals) would not try to parse R code, it would get evaluated in separate runs - as provided. Please see the documenation of [`evals`](#evals).
+  * `parse`: if `TRUE` the provided `txt` elements would be merged into one string and parsed to logical chunks. This is useful if you would want to get separate results of your code parts - not just the last returned value, but you are passing the whole script in one string. To manually lock lines to each other (e.g. calling a `plot` and on next line adding an `abline` or `text` to it), use a plus char (`+`) at the beginning of each line which should be evaluated with the previous one(s). If set to `FALSE`, [`evals`](#evals) would not try to parse R code, it would get evaluated in separate runs - as provided. Please see the documentation of [`evals`](#evals).
   * `cache`: [caching](#caching) the result of R calls if set to `TRUE`
   * `cache.dir`: path to a directory holding cache files. Default set to `.cache` in current working directory.
   * `cache.time`: number of seconds to limit caching based on `proc.time`. If set to `0`, all R commands, if set to `Inf`, none is cached (despite the `cache` parameter).
@@ -383,7 +383,8 @@ All evaluation of provided R commands (while running [`brew`](#brew-to-pandoc) o
 ## Theoretical background
 
   * Each passed R chunk is `parse`d to single commands.
-  * Each parsed command's part (let it be a function, variable, constant etc.) `eval`uated separately to a `list`. This list describes the unique structure and the content of the passed R commands, and has some IMHO really great benefits (see below).
+  * Each parsed command's **part** (let it be a function, variable, constant etc.) `eval`uated (as a `name`) separately to a `list`. This list describes the unique structure and the content of the passed R commands, and has some IMHO really great benefits (see below).
+  * A **hash** if computed to each list element and *cached* too in `pander`'s local environments. This is useful if you are using large data frames, just imagine: the caching algorithm would have to compute the hash for the same data frame each time it's touched! This way the hash is recomputed only if the R object with the given name is changed.
   * The list is `serialize`d and an `SHA-1` hash is computed for that - which is unique and there is no real risk of collision.
   * If [`evals`](#evals) can find the cached results in a file named to the computed hash, then it is returned on the spot.
   * Otherwise the call is evaluated and the results are optionally saved to cache (e.g. if `cache` is active, if the `proc.time()` of the evaluation is higher then it is defined in `cache.time` etc. - see details in [evals' options](#pander-options)).
@@ -399,7 +400,7 @@ require(lattice)
 evals('histogram(rep(mtcars$hp, 1e5))')
 ```
 
-It take a while, huh? :)
+It took a while, huh? :)
 
 Let us have some custom functions and variables:
 
@@ -413,7 +414,7 @@ B <- 1e5
 And now try to run something like:
 
 ```r
-evals('f(g(mtcars$hp, B))')
+evals('f(g(A, B))')
 ```
 
 Yes, it was returned from cache!
