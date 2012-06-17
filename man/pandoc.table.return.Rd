@@ -8,7 +8,8 @@
     decimal.mark = pander.option("decimal.mark"),
     round = pander.option("round"), justify = "left",
     style = c("multiline", "grid", "simple"),
-    split.tables = 80, split.cells = 30)
+    split.tables = pander.option("table.split.table"),
+    split.cells = pander.option("table.split.cells"))
 }
 \arguments{
   \item{t}{data frame, matrix or table}

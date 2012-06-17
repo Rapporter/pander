@@ -523,7 +523,7 @@ pandoc.list <- function(...)
 #' pandoc.table(t, style = "grid", split.cells = 5)
 #' pandoc.table(t, style = "simple")
 #' tryCatch(pandoc.table(t, style = "simple", split.cells = 5), error = function(e) 'Yeah, no newline support in simple tables')
-pandoc.table.return <- function(t, caption = NULL, digits = pander.option('digits'), decimal.mark = pander.option('decimal.mark'), round = pander.option('round'), justify = 'left', style = c('multiline', 'grid', 'simple'), split.tables = 80, split.cells = 30) {
+pandoc.table.return <- function(t, caption = NULL, digits = pander.option('digits'), decimal.mark = pander.option('decimal.mark'), round = pander.option('round'), justify = 'left', style = c('multiline', 'grid', 'simple'), split.tables = pander.option('table.split.table'), split.cells = pander.option('table.split.cells')) {
 
     ## helper functions
     table.expand <- function(cells, cols.width, justify, sep.cols) {
