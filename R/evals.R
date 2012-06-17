@@ -433,11 +433,18 @@ evals <- function(txt, parse = TRUE, cache = TRUE, cache.dir = '.cache', cache.t
 
             ## helper function extracting each function and variable from the call
             getCallParts <- function(call) {
+                evalOrDeparse <- function(x)
+                    tryCatch(eval(x, envir = env), error = function(e) deparse(x))
                 lapply(call, function(x)
                        lapply(x, function(x)
                               switch(mode(x),
-                                     "name" = tryCatch(eval(x, envir = env), error = function(e) deparse(x)),
-                                     "call" = getCallParts(x),
+                                     "name" = evalOrDeparse(x),
+                                     "call" = {
+                                         if (deparse(x[[1]]) %in% c('$', '[', '[['))
+                                             evalOrDeparse(x)
+                                         else
+                                             getCallParts(x)
+                                     },
                                      deparse(x)
                                      )))
             }
