@@ -431,22 +431,36 @@ evals <- function(txt, parse = TRUE, cache = TRUE, cache.dir = '.cache', cache.t
         ## checking cache
         if (cache) {
 
-            ## helper function extracting each function and variable from the call
+            ## helper functions extracting each function's and variable's hash from the call
             getCallParts <- function(call) {
-                evalOrDeparse <- function(x)
-                    tryCatch(eval(x, envir = env), error = function(e) deparse(x))
+
+                hashOfEvalOrDeparse <- function(x, x.deparse) {
+                    v <- tryCatch(eval(x, envir = env), error = function(e) e)
+                    if (inherits(v, 'error'))
+                        return(digest(x.deparse))
+                    hashFromCache(v, x.deparse)
+                }
+
+
+                hashFromCache <- function(x, x.deparse) {
+                    if (exists(x.deparse, envir = cached.obj, inherits = FALSE))
+                        if (identical(x, get(x.deparse, envir = cached.obj)))
+                            return(get(x.deparse, envir = cached.hash))
+                    x.hash <- digest(x, 'sha1')
+                    assign(x.deparse, x, envir = cached.obj)
+                    assign(x.deparse, x.hash, envir = cached.hash)
+                    return(x.hash)
+                }
+
                 lapply(call, function(x)
-                       lapply(x, function(x)
-                              switch(mode(x),
-                                     "name" = evalOrDeparse(x),
-                                     "call" = {
-                                         if (deparse(x[[1]]) %in% c('$', '[', '[['))
-                                             evalOrDeparse(x)
-                                         else
-                                             getCallParts(x)
-                                     },
-                                     deparse(x)
-                                     )))
+                       lapply(x, function(x) {
+                           x.deparse <- deparse(x)
+                           switch(mode(x),
+                                  "name" = hashOfEvalOrDeparse(x, x.deparse),
+                                  "call" = getCallParts(x),
+                                  digest(x.deparse, 'sha1')
+                                  )
+                          }))
             }
 
             cached <- digest(getCallParts(txt.parsed), 'sha1')

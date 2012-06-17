@@ -39,6 +39,10 @@
 ## temporary storage for pander's stuff
 storage <- new.env()
 
+## cache hash storage
+cached.obj  <- new.env()
+cached.hash <- new.env()
+
 #' Querying/setting pander option
 #'
 #' To list all \code{pander} options, just run this function without any parameters provided. To query only one value, pass the first parameter. To set that, use the \code{value} parameter too.
