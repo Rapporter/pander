@@ -39,6 +39,8 @@ Or download the [sources in a zip file](https://github.com/daroczig/pander/zipba
 
 `pander` heavily builds on [Pandoc](http://johnmacfarlane.net/pandoc) which should be **pre-installed** before trying to convert your reports to [different formats](http://johnmacfarlane.net/pandoc/). Although **main functions work without Pandoc**, e.g. you can generate a markdown formatted report via [Pandoc.brew](#brew-to-pandoc) or the custom [reference class](#live-report-generation), but I would really suggest to install that really great piece of software!
 
+The [installation process of Pandoc](http://johnmacfarlane.net/pandoc/installing.html) is quite straightforward on most operating systems: just download and run the binary (a few megabytes), and get a full-blown document converted in a few seconds/minutes. On different Linux distributions it might be a bit more complicated (as repositories tend to provide out-dated versions of Pandoc, so you would need `cabal-install` to [install from sources](https://github.com/jgm/pandoc/wiki/Installing-the-development-version-of-pandoc-1.9)). *Please do not forget to restart your R session to update your `PATH` after installation!*
+
 ~~And as `pander` and `rapport` are quite Siamese twins, you would need an **up-to-date** version of [rapport](http://rapport-package.info) most likely installed from [Github](https://github.com/aL3xa/rapport).~~ `pander` now can work independently from `rapport`.
 
 Now you would only need a few cool packages from CRAN:
@@ -158,25 +160,15 @@ Table: Hello caption!
 ```rout
 > pandoc.table(mtcars[1:2, ], style = "grid", caption = "Hello caption!")
 
-+-------------------+-------+-------+--------+------+--------+------+
-|                   | mpg   | cyl   | disp   | hp   | drat   | wt   |
-+===================+=======+=======+========+======+========+======+
-| **Mazda RX4**     | 21    | 6     | 160    | 110  | 3.9    | 2.6  |
-+-------------------+-------+-------+--------+------+--------+------+
-| **Mazda RX4 Wag** | 21    | 6     | 160    | 110  | 3.9    | 2.9  |
-+-------------------+-------+-------+--------+------+--------+------+
++-------------------+-------+-------+--------+------+--------+------+--------+------+------+--------+--------+
+|                   | mpg   | cyl   | disp   | hp   | drat   | wt   | qsec   | vs   | am   | gear   | carb   |
++===================+=======+=======+========+======+========+======+========+======+======+========+========+
+| **Mazda RX4**     | 21    | 6     | 160    | 110  | 3,9    | 2,6  | 16     | 0    | 1    | 4      | 4      |
++-------------------+-------+-------+--------+------+--------+------+--------+------+------+--------+--------+
+| **Mazda RX4 Wag** | 21    | 6     | 160    | 110  | 3,9    | 2,9  | 17     | 0    | 1    | 4      | 4      |
++-------------------+-------+-------+--------+------+--------+------+--------+------+------+--------+--------+
 
-Table: Hello caption! (continued below)
-
- 
-
-+-------------------+--------+------+------+--------+--------+
-|                   | qsec   | vs   | am   | gear   | carb   |
-+===================+========+======+======+========+========+
-| **Mazda RX4**     | 16     | 0    | 1    | 4      | 4      |
-+-------------------+--------+------+------+--------+--------+
-| **Mazda RX4 Wag** | 17     | 0    | 1    | 4      | 4      |
-+-------------------+--------+------+------+--------+--------+
+Table: Hello caption!
 
 ```
 
@@ -308,7 +300,7 @@ The output of different **statistical methods** are tried to be prettyfied. Some
 ---------------------------------------------------
  Test statistic   P value   Alternative hypothesis 
 ---------------- --------- ------------------------
-      0.2          0.27           two-sided        
+      0.18          0.4           two-sided        
 ---------------------------------------------------
 
 Table: Two-sample Kolmogorov-Smirnov test: `runif(50)` and `runif(50)`
@@ -601,8 +593,10 @@ myReport$export(open = FALSE)
   * `digits`: numeric (default: `2`) passed to `format`
   * `decimal.mark`: numeric (default: `.`) passed to `format`
   * `round`: numeric (default: `Inf`) passed to `round`
-  * `list.style`: `'bullet'`, `'ordered'` or `'roman'`
-  * `table.style`: `'atx'` or `'setext'`
+  * `list.style`: `'bullet'` (default), `'ordered'` or `'roman'` passed to `pandoc.list`. Please not that this has no effect on `pander` methods.
+  * `table.style`: `'atx'` (default) or `'setext'` passed to `pandoc.table` and also affects `pander` methods.
+  * `table.split.table`: numeric passed to `pandoc.table` and also affects `pander` methods. This option tells `pander` where to split too wide tables. The default value (`80`) suggests the conventional number of characters used in a line, feel free to change (e.g. to `Inf` to disable this feature) if you are not using a VT100 terminal any more :)
+  * `table.split.cells`: numeric (default: `30`) passed to `pandoc.table` and also affects `pander` methods. This option tells `pander` where to split too wide cells with line breaks. Set `Inf` to disable.
 
 Besides localization of numeric formats and table/list's styles there are some technical options too which would effect e.g. [caching](#caching) or the format of rendered image files. You can query/update those with `evals.option()` as the main backend of `pander` calls is a custom evaluation function called [`evals`](#evals).
 
@@ -720,4 +714,4 @@ Few options of `pander-mode`: `M-x customize-group pander`
 To use this small lib, just type: `M-x pander-mode` on any document. It might be useful to add a hook to `markdown-mode` if you find this useful.
 
 -------
-This report was generated with [R](http://www.r-project.org/) (2.15.0) and [pander](https://github.com/daroczig/pander) (0.1) in 0.597 sec on x86_64-unknown-linux-gnu platform.
+This report was generated with [R](http://www.r-project.org/) (2.15.0) and [pander](https://github.com/daroczig/pander) (0.1) in 0.498 sec on x86_64-unknown-linux-gnu platform.
