@@ -85,6 +85,7 @@ install_github(&#39;pander&#39;, &#39;daroczig&#39;)</code></pre>
 <p>Or download the <a href="https://github.com/daroczig/pander/zipball/master">sources in a zip file</a> and build manually. If you're running R on Windows, you need to install <a href="http://cran.stat.ucla.edu/bin/windows/Rtools/">Rtools</a>.</p>
 <h2 id="depends">Depends</h2>
 <p><code>pander</code> heavily builds on <a href="http://johnmacfarlane.net/pandoc">Pandoc</a> which should be <strong>pre-installed</strong> before trying to convert your reports to <a href="http://johnmacfarlane.net/pandoc/">different formats</a>. Although <strong>main functions work without Pandoc</strong>, e.g. you can generate a markdown formatted report via <a href="#brew-to-pandoc">Pandoc.brew</a> or the custom <a href="#live-report-generation">reference class</a>, but I would really suggest to install that really great piece of software!</p>
+<p>The <a href="http://johnmacfarlane.net/pandoc/installing.html">installation process of Pandoc</a> is quite straightforward on most operating systems: just download and run the binary (a few megabytes), and get a full-blown document converted in a few seconds/minutes. On different Linux distributions it might be a bit more complicated (as repositories tend to provide out-dated versions of Pandoc, so you would need <code>cabal-install</code> to <a href="https://github.com/jgm/pandoc/wiki/Installing-the-development-version-of-pandoc-1.9">install from sources</a>). <em>Please do not forget to restart your R session to update your <code>PATH</code> after installation!</em></p>
 <p><del>And as <code>pander</code> and <code>rapport</code> are quite Siamese twins, you would need an <strong>up-to-date</strong> version of <a href="http://rapport-package.info">rapport</a> most likely installed from <a href="https://github.com/aL3xa/rapport">Github</a>.</del> <code>pander</code> now can work independently from <code>rapport</code>.</p>
 <p>Now you would only need a few cool packages from CRAN:</p>
 <ul>
@@ -176,25 +177,15 @@ Table: Hello caption!
 <p><code>pandoc.table</code>˙can deal with the problem of really <strong>wide tables</strong>. Ever had an issue in LaTeX or MS Word when tried to print a correlation matrix of 40 variables? Not a problem any more as <code>pandoc.table</code> splits up the table if wider then 80 characters and handles caption too:</p>
 <pre class="rout"><code>&gt; pandoc.table(mtcars[1:2, ], style = &quot;grid&quot;, caption = &quot;Hello caption!&quot;)
 
-+-------------------+-------+-------+--------+------+--------+------+
-|                   | mpg   | cyl   | disp   | hp   | drat   | wt   |
-+===================+=======+=======+========+======+========+======+
-| **Mazda RX4**     | 21    | 6     | 160    | 110  | 3.9    | 2.6  |
-+-------------------+-------+-------+--------+------+--------+------+
-| **Mazda RX4 Wag** | 21    | 6     | 160    | 110  | 3.9    | 2.9  |
-+-------------------+-------+-------+--------+------+--------+------+
++-------------------+-------+-------+--------+------+--------+------+--------+------+------+--------+--------+
+|                   | mpg   | cyl   | disp   | hp   | drat   | wt   | qsec   | vs   | am   | gear   | carb   |
++===================+=======+=======+========+======+========+======+========+======+======+========+========+
+| **Mazda RX4**     | 21    | 6     | 160    | 110  | 3,9    | 2,6  | 16     | 0    | 1    | 4      | 4      |
++-------------------+-------+-------+--------+------+--------+------+--------+------+------+--------+--------+
+| **Mazda RX4 Wag** | 21    | 6     | 160    | 110  | 3,9    | 2,9  | 17     | 0    | 1    | 4      | 4      |
++-------------------+-------+-------+--------+------+--------+------+--------+------+------+--------+--------+
 
-Table: Hello caption! (continued below)
-
- 
-
-+-------------------+--------+------+------+--------+--------+
-|                   | qsec   | vs   | am   | gear   | carb   |
-+===================+========+======+======+========+========+
-| **Mazda RX4**     | 16     | 0    | 1    | 4      | 4      |
-+-------------------+--------+------+------+--------+--------+
-| **Mazda RX4 Wag** | 17     | 0    | 1    | 4      | 4      |
-+-------------------+--------+------+------+--------+--------+
+Table: Hello caption!
 </code></pre>
 <p>And too wide cells are also split by line breaks. E.g.:</p>
 <pre class="rout"><code>&gt; pandoc.table(data.frame(id=1:2, value=c(&#39;FOO&#39;, &#39;Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.&#39;)))
@@ -307,7 +298,7 @@ id   value
 ---------------------------------------------------
  Test statistic   P value   Alternative hypothesis 
 ---------------- --------- ------------------------
-      0.12         0.87           two-sided        
+      0.18          0.4           two-sided        
 ---------------------------------------------------
 
 Table: Two-sample Kolmogorov-Smirnov test: `runif(50)` and `runif(50)`
@@ -649,7 +640,7 @@ B &lt;- <span class="fl">1e5</span></code></pre>
 </ul>
 <p>To use this small lib, just type: <code>M-x pander-mode</code> on any document. It might be useful to add a hook to <code>markdown-mode</code> if you find this useful.</p>
 <hr />
-<p>This report was generated with <a href="http://www.r-project.org/">R</a> (2.15.0) and <a href="https://github.com/daroczig/pander">pander</a> (0.1) in 0.526 sec on x86_64-unknown-linux-gnu platform.</p>
+<p>This report was generated with <a href="http://www.r-project.org/">R</a> (2.15.0) and <a href="https://github.com/daroczig/pander">pander</a> (0.1) in 0.498 sec on x86_64-unknown-linux-gnu platform.</p>
 <p align="center">
   Design: <a href="http://rapport-package.info/"><i>rapport</i> Development Team</a> &copy; 2012 | Backend: <a href="https://github.com/daroczig/pander">pander</a> | License: <a href="http://www.gnu.org/licenses/agpl.html" target="_blank">AGPL3</a> | Styled with <a href="http://www.getskeleton.com/" target="_blank">skeleton</a>
 </p>
