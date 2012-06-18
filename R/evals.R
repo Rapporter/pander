@@ -79,7 +79,7 @@ eval.msgs <- function(src, env = NULL) {
 
         error <- result$message
 
-        if (grepl('unexpected symbol', error))
+        if (grepl('^<text>:[0-9]*:[0-9]: unexpected ', error))
             error <- sub('<text>:([0-9]*):([0-9]*): unexpected ([a-zA-Z ]*)\n.*[0-9]*:(.*)\n.*[ \t]*$', 'Unexpected \\3 at character \\2 in line \\1: `\\4`', error)
 
         result <- output <- NULL
