@@ -506,13 +506,21 @@ evals <- function(txt, parse = TRUE, cache = TRUE, cache.mode = c('environment',
                     cached.result <- get(cached, envir = cached.results)
 
             if (exists('cached.result')) {
-                if (cache.copy.images)
-                    if (inherits(cached.result$result, 'image')) {
-                        file.copy(as.character(cached.result$result), file)
-                        cached.result$result <- file
-                        class(cached.result$result) <- 'image'
+                if (inherits(cached.result$result, 'image')) {
+                    cached.image.file <- as.character(cached.result$result)
+                    if (!file.exists(cached.image.file)) {
+                        warning(sprintf('The image file referenced in cache (%s) is no longer available: the image is recreated (%s).', shQuote(cached.image.file), shQuote(file)), call. = FALSE)
+                        cached.result <- NA
+                    } else {
+                        if (cache.copy.images) {
+                            file.copy(cached.image.file, file)
+                            cached.result$result <- file
+                            class(cached.result$result) <- 'image'
+                        }
                     }
-                return(cached.result)
+                }
+                if (!identical(cached.result, NA))
+                    return(cached.result)
             } # cached result not found
 
             ## starting timer
