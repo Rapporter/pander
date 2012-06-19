@@ -177,15 +177,25 @@ Table: Hello caption!
 <p><code>pandoc.table</code>˙can deal with the problem of really <strong>wide tables</strong>. Ever had an issue in LaTeX or MS Word when tried to print a correlation matrix of 40 variables? Not a problem any more as <code>pandoc.table</code> splits up the table if wider then 80 characters and handles caption too:</p>
 <pre class="rout"><code>&gt; pandoc.table(mtcars[1:2, ], style = &quot;grid&quot;, caption = &quot;Hello caption!&quot;)
 
-+-------------------+-------+-------+--------+------+--------+------+--------+------+------+--------+--------+
-|                   | mpg   | cyl   | disp   | hp   | drat   | wt   | qsec   | vs   | am   | gear   | carb   |
-+===================+=======+=======+========+======+========+======+========+======+======+========+========+
-| **Mazda RX4**     | 21    | 6     | 160    | 110  | 3,9    | 2,6  | 16     | 0    | 1    | 4      | 4      |
-+-------------------+-------+-------+--------+------+--------+------+--------+------+------+--------+--------+
-| **Mazda RX4 Wag** | 21    | 6     | 160    | 110  | 3,9    | 2,9  | 17     | 0    | 1    | 4      | 4      |
-+-------------------+-------+-------+--------+------+--------+------+--------+------+------+--------+--------+
++-------------------+-------+-------+--------+------+--------+------+
+|                   | mpg   | cyl   | disp   | hp   | drat   | wt   |
++===================+=======+=======+========+======+========+======+
+| **Mazda RX4**     | 21    | 6     | 160    | 110  | 3.9    | 2.6  |
++-------------------+-------+-------+--------+------+--------+------+
+| **Mazda RX4 Wag** | 21    | 6     | 160    | 110  | 3.9    | 2.9  |
++-------------------+-------+-------+--------+------+--------+------+
 
-Table: Hello caption!
+Table: Hello caption! (continued below)
+
+ 
+
++-------------------+--------+------+------+--------+--------+
+|                   | qsec   | vs   | am   | gear   | carb   |
++===================+========+======+======+========+========+
+| **Mazda RX4**     | 16     | 0    | 1    | 4      | 4      |
++-------------------+--------+------+------+--------+--------+
+| **Mazda RX4 Wag** | 17     | 0    | 1    | 4      | 4      |
++-------------------+--------+------+------+--------+--------+
 </code></pre>
 <p>And too wide cells are also split by line breaks. E.g.:</p>
 <pre class="rout"><code>&gt; pandoc.table(data.frame(id=1:2, value=c(&#39;FOO&#39;, &#39;Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.&#39;)))
@@ -298,7 +308,7 @@ id   value
 ---------------------------------------------------
  Test statistic   P value   Alternative hypothesis 
 ---------------- --------- ------------------------
-      0.18          0.4           two-sided        
+      0.12         0.87           two-sided        
 ---------------------------------------------------
 
 Table: Two-sample Kolmogorov-Smirnov test: `runif(50)` and `runif(50)`
@@ -567,7 +577,8 @@ myReport$<span class="kw">export</span>(<span class="dt">open =</span> <span cla
 <ul>
 <li><code>parse</code>: if <code>TRUE</code> the provided <code>txt</code> elements would be merged into one string and parsed to logical chunks. This is useful if you would want to get separate results of your code parts - not just the last returned value, but you are passing the whole script in one string. To manually lock lines to each other (e.g. calling a <code>plot</code> and on next line adding an <code>abline</code> or <code>text</code> to it), use a plus char (<code>+</code>) at the beginning of each line which should be evaluated with the previous one(s). If set to <code>FALSE</code>, <a href="#evals"><code>evals</code></a> would not try to parse R code, it would get evaluated in separate runs - as provided. Please see the documentation of <a href="#evals"><code>evals</code></a>.</li>
 <li><code>cache</code>: <a href="#caching">caching</a> the result of R calls if set to <code>TRUE</code></li>
-<li><code>cache.dir</code>: path to a directory holding cache files. Default set to <code>.cache</code> in current working directory.</li>
+<li><code>cache.mode</code>: cached results could be stored in an <code>environment</code> in <em>current</em> R session or let it be permanent on <code>disk</code>.</li>
+<li><code>cache.dir</code>: path to a directory holding cache files if <code>cache.mode</code> set to <code>disk</code>. Default set to <code>.cache</code> in current working directory.</li>
 <li><code>cache.time</code>: number of seconds to limit caching based on <code>proc.time</code>. If set to <code>0</code>, all R commands, if set to <code>Inf</code>, none is cached (despite the <code>cache</code> parameter).</li>
 <li><code>cache.copy.images</code>: copy images to new files if an image is returned from cache? If set to <code>FALSE</code> (default) the &quot;old&quot; path would be returned.</li>
 <li><code>classes</code>: a vector or list of classes which should be returned. If set to <code>NULL</code> (by default) all R objects will be returned.</li>
@@ -592,11 +603,11 @@ myReport$<span class="kw">export</span>(<span class="dt">open =</span> <span cla
 <p>All evaluation of provided R commands (while running <a href="#brew-to-pandoc"><code>brew</code></a> or <a href="#live-report-generation">&quot;live report generation&quot;</a> is done by <a href="#evals"><code>evals</code></a> which is caching results (<em>besides</em> returned informative/warning/error messages, anything written to <code>stdout</code> etc. - see <a href="#evals">below</a>) <strong>line-by-line</strong> (to be more accurate: by single R commands) instead of caching chunks <strong>without any noticeable overhead</strong>.</p>
 <h2 id="theoretical-background">Theoretical background</h2>
 <ul>
-<li>Each passed R chunk is <code>parse</code>d to single commands.</li>
-<li>Each parsed command's <strong>part</strong> (let it be a function, variable, constant etc.) <code>eval</code>uated (as a <code>name</code>) separately to a <code>list</code>. This list describes the unique structure and the content of the passed R commands, and has some IMHO really great benefits (see below).</li>
+<li>Each passed R chunk is <code>parse</code>d to single commands (<code>expressions</code>).</li>
+<li>Each parsed expression's <strong>part</strong> (let it be a function, variable, constant etc.) <code>eval</code>uated (as a <code>name</code>) separately to a <code>list</code>. This list describes the unique structure and the content of the passed R expressions, and has some IMHO really great benefits (see below).</li>
 <li>A <strong>hash</strong> if computed to each list element and <em>cached</em> too in <code>pander</code>'s local environments. This is useful if you are using large data frames, just imagine: the caching algorithm would have to compute the hash for the same data frame each time it's touched! This way the hash is recomputed only if the R object with the given name is changed.</li>
 <li>The list is <code>serialize</code>d and an <code>SHA-1</code> hash is computed for that - which is unique and there is no real risk of collision.</li>
-<li>If <a href="#evals"><code>evals</code></a> can find the cached results in a file named to the computed hash, then it is returned on the spot.</li>
+<li>If <a href="#evals"><code>evals</code></a> can find the cached results in an evnironment of <code>pander</code>'s namespace (if <code>cache.mode</code> set to <code>enviroment</code> - see <a href="#pander-options">above</a>) or in a file named to the computed hash (if <code>ċache.mode</code> set to <code>disk</code>), then it is returned on the spot.</li>
 <li>Otherwise the call is evaluated and the results are optionally saved to cache (e.g. if <code>cache</code> is active, if the <code>proc.time()</code> of the evaluation is higher then it is defined in <code>cache.time</code> etc. - see details in <a href="#pander-options">evals' options</a>).</li>
 </ul>
 <h2 id="in-practice">In practice</h2>
@@ -617,10 +628,10 @@ B &lt;- <span class="fl">1e5</span></code></pre>
 <p>As <code>pander</code> (or rather: <code>evals</code>) does not really deal with what is written in the provided sources but rather checks what is <strong>inside that</strong>, there might be some tricky situations where you would expect the cache to work, but it would not. Short example: we are computing and saving to a variable something heavy in a chunk (please run these in a clean R session to avoid conflicts):</p>
 <pre class="sourceCode r"><code class="sourceCode r"><span class="kw">evals</span>(<span class="st">&#39;x &lt;- sapply(rep(mtcars$hp, 1e3), mean)&#39;</span>)</code></pre>
 <p>It is cached, just run again, you will see.</p>
-<p>But if you would create <code>x</code> in your <em>global environment</em> with any value (which has nothing to do with the special environment of the report!) and <code>x</code> is was not defined in the report before this call (and you had no <code>x˛value in your global environment before), then the content of</code>x` would result in a new hash for the cache - so caching would not work. E.g.:</p>
+<p>But if you would create <code>x</code> in your <em>global environment</em> with any value (which has nothing to do with the special environment of the report!) <strong>and</strong> <code>x</code> was not defined in the report before this call (<strong>and</strong> you had no <code>x</code> value in your global environment before), then the content of <code>x</code> would result in a new hash for the cache - so caching would not work. E.g.:</p>
 <pre class="sourceCode r"><code class="sourceCode r">x &lt;- <span class="st">&#39;foobar&#39;</span>
 <span class="kw">evals</span>(<span class="st">&#39;x &lt;- sapply(rep(mtcars$hp, 1e3), mean)&#39;</span>)</code></pre>
-<p>I really think this is a minor issue (with very special coincidences) which cannot be addressed cleverly - but <strong>could be avoided with some cautions</strong>. And after all: you loose nothing, just the cache would not work for that only line and only once in most of the cases.</p>
+<p>I really think this is a minor issue (with very special coincidences) which cannot be addressed cleverly - but <strong>could be avoided with some cautions</strong> (e.g. run <code>Pandoc.brew</code> in a clean R session like with <code>Rscript</code> or <a href="http://dirk.eddelbuettel.com/code/littler.html"><code>littler</code></a> - if you are really afraid of this issue). And after all: you loose nothing, just the cache would not work for that only line and only once in most of the cases.</p>
 <h1 id="evals">Evals</h1>
 <p>Sorry, no online documentation ATM. Please check: <code>?evals</code></p>
 <h1 id="ess">ESS</h1>
@@ -640,7 +651,7 @@ B &lt;- <span class="fl">1e5</span></code></pre>
 </ul>
 <p>To use this small lib, just type: <code>M-x pander-mode</code> on any document. It might be useful to add a hook to <code>markdown-mode</code> if you find this useful.</p>
 <hr />
-<p>This report was generated with <a href="http://www.r-project.org/">R</a> (2.15.0) and <a href="https://github.com/daroczig/pander">pander</a> (0.1) in 0.498 sec on x86_64-unknown-linux-gnu platform.</p>
+<p>This report was generated with <a href="http://www.r-project.org/">R</a> (2.15.0) and <a href="https://github.com/daroczig/pander">pander</a> (0.1) in 0.787 sec on x86_64-unknown-linux-gnu platform.</p>
 <p align="center">
   Design: <a href="http://rapport-package.info/"><i>rapport</i> Development Team</a> &copy; 2012 | Backend: <a href="https://github.com/daroczig/pander">pander</a> | License: <a href="http://www.gnu.org/licenses/agpl.html" target="_blank">AGPL3</a> | Styled with <a href="http://www.getskeleton.com/" target="_blank">skeleton</a>
 </p>
