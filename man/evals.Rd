@@ -3,6 +3,7 @@
 \title{Evaluate and Process R Code}
 \usage{
   evals(txt, parse = TRUE, cache = TRUE,
+    cache.mode = c("environment", "disk"),
     cache.dir = ".cache", cache.time = 0.1,
     cache.copy.images = FALSE, classes = NULL,
     hooks = NULL, length = Inf,
@@ -41,9 +42,13 @@
   \code{parse} set to \code{FALSE} or syntax error is to be
   found.}
 
-  \item{cache.dir}{path to a directory holding cache files.
-  Default set to \code{.cache} in current working
-  directory.}
+  \item{cache.mode}{cached results could be stored in an
+  \code{environment} in \emph{current} R session or let it
+  be permanent on \code{disk}.}
+
+  \item{cache.dir}{path to a directory holding cache files
+  if \code{cache.mode} set to \code{disk}. Default to
+  \code{.cache} in current working directory.}
 
   \item{cache.time}{number of seconds to limit caching
   based on \code{proc.time}. If set to \code{0}, all R

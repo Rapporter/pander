@@ -16,6 +16,7 @@
     options('evals' = list(
                 'parse'                 = TRUE,
                 'cache'                 = TRUE,
+                'cache.mode'            = 'environment',
                 'cache.dir'             = '.cache',
                 'cache.time'            = 0.1,
                 'cache.copy.images'     = FALSE,
@@ -38,8 +39,11 @@
                 ))
 }
 
-## temporary storage for pander's stuff
+## general (temporary) storage for pander's stuff
 storage <- new.env()
+
+## cache storage
+cached.results <- new.env()
 
 ## cache hash storage
 hash.cache.obj       <- new.env() # raw R objects of which hash was computed before

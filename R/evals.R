@@ -175,7 +175,8 @@ eval.msgs <- function(src, env = NULL) {
 #' @param txt a character vector containing R code. This could be a list/vector of lines of code or a simple string holding R code separated by \code{;} or \code{\\n}.
 #' @param parse if \code{TRUE} the provided \code{txt} elements would be merged into one string and parsed to logical chunks. This is useful if you would want to get separate results of your code parts - not just the last returned value, but you are passing the whole script in one string. To manually lock lines to each other (e.g. calling a \code{plot} and on next line adding an \code{abline} or \code{text} to it), use a plus char (\code{+}) at the beginning of each line which should be evaluated with the previous one(s). If set to \code{FALSE}, \code{evals} would not try to parse R code, it would get evaluated in separate runs - as provided. Please see examples below.
 #' @param cache caching the result of R calls if set to \code{TRUE}. Please note the caching would not work if \code{parse} set to \code{FALSE} or syntax error is to be found.
-#' @param cache.dir path to a directory holding cache files. Default set to \code{.cache} in current working directory.
+#' @param cache.mode cached results could be stored in an \code{environment} in \emph{current} R session or let it be permanent on \code{disk}.
+#' @param cache.dir path to a directory holding cache files if \code{cache.mode} set to \code{disk}. Default to \code{.cache} in current working directory.
 #' @param cache.time number of seconds to limit caching based on \code{proc.time}. If set to \code{0}, all R commands, if set to \code{Inf}, none is cached (despite the \code{cache} parameter).
 #' @param cache.copy.images copy images to new files if an image is returned from cache? If set to \code{FALSE} (default) the "old" path would be returned.
 #' @param classes a vector or list of classes which should be returned. If set to \code{NULL} (by default) all R objects will be returned.
@@ -359,7 +360,7 @@ eval.msgs <- function(src, env = NULL) {
 #' }
 #' @export
 #' @importFrom digest digest
-evals <- function(txt, parse = TRUE, cache = TRUE, cache.dir = '.cache', cache.time = 0.1, cache.copy.images = FALSE, classes = NULL, hooks = NULL, length = Inf, output = c('all', 'src', 'result', 'output', 'type', 'msg', 'stdout'), env = NULL, graph.nomargin = TRUE, graph.name = '%t', graph.dir = 'plots', graph.output = c('png', 'bmp', 'jpeg', 'jpg', 'tiff', 'svg', 'pdf'), width = 480, height = 480, res= 72, hi.res = FALSE, hi.res.width = 960, hi.res.height = 960*(height/width), hi.res.res = res*(hi.res.width/width), graph.env = FALSE, graph.recordplot = FALSE, ...){
+evals <- function(txt, parse = TRUE, cache = TRUE, cache.mode = c('environment', 'disk'), cache.dir = '.cache', cache.time = 0.1, cache.copy.images = FALSE, classes = NULL, hooks = NULL, length = Inf, output = c('all', 'src', 'result', 'output', 'type', 'msg', 'stdout'), env = NULL, graph.nomargin = TRUE, graph.name = '%t', graph.dir = 'plots', graph.output = c('png', 'bmp', 'jpeg', 'jpg', 'tiff', 'svg', 'pdf'), width = 480, height = 480, res= 72, hi.res = FALSE, hi.res.width = 960, hi.res.height = 960*(height/width), hi.res.res = res*(hi.res.width/width), graph.env = FALSE, graph.recordplot = FALSE, ...){
 
     if (missing(txt))
         stop('No R code provided to evaluate!')
@@ -493,18 +494,26 @@ evals <- function(txt, parse = TRUE, cache = TRUE, cache.dir = '.cache', cache.t
             }
 
             cached <- digest(getCallParts(txt.parsed), 'sha1')
-            cached <- file.path(cache.dir, cached)
 
-            if (file.exists(cached)) {
-                res <- readRDS(cached)
+            if (cache.mode == 'disk') {
+                cached <- file.path(cache.dir, cached)
+                if (file.exists(cached))
+                    cached.result <- readRDS(cached)
+
+            } else # cache is in environment
+
+                if (exists(cached, envir = cached.results, inherits = FALSE))
+                    cached.result <- get(cached, envir = cached.results)
+
+            if (exists('cached.result')) {
                 if (cache.copy.images)
-                    if (inherits(res$result, 'image')) {
-                        file.copy(as.character(res$result), file)
-                        res$result <- file
-                        class(res$result) <- 'image'
+                    if (inherits(cached.result$result, 'image')) {
+                        file.copy(as.character(cached.result$result), file)
+                        cached.result$result <- file
+                        class(cached.result$result) <- 'image'
                     }
-                return(res)
-            }
+                return(cached.result)
+            } # cached result not found
 
             ## starting timer
             timer <- proc.time()
@@ -654,8 +663,12 @@ evals <- function(txt, parse = TRUE, cache = TRUE, cache.dir = '.cache', cache.t
 
         ## save to cache
         if (cache)
-            if (as.numeric(proc.time() - timer)[3] > cache.time)
-                saveRDS(res, file = cached)
+            if (cache.mode == 'disk') {
+                if (as.numeric(proc.time() - timer)[3] > cache.time)
+                    saveRDS(res, file = cached)
+            } else
+                if (as.numeric(proc.time() - timer)[3] > cache.time)
+                    assign(cached, res, envir = cached.results)
 
         return(res)
 
