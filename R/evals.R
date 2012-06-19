@@ -459,6 +459,7 @@ evals <- function(txt, parse = TRUE, cache = TRUE, cache.dir = '.cache', cache.t
             ## helper functions extracting each function's and variable's hash from the call
             getCallParts <- function(call) {
 
+                ## compute the hash of the given 'name' by evaluating that or by deparsing if the prior would fail
                 hashOfEvalOrDeparse <- function(x, x.deparse) {
                     v <- tryCatch(eval(x, envir = env), error = function(e) e)
                     if (inherits(v, 'error'))
@@ -466,14 +467,14 @@ evals <- function(txt, parse = TRUE, cache = TRUE, cache.dir = '.cache', cache.t
                     hashFromCache(v, x.deparse)
                 }
 
-
+                ## get the hash of the object from local cache if possible, compute it and save to cache otherwise
                 hashFromCache <- function(x, x.deparse) {
-                    if (exists(x.deparse, envir = cached.obj, inherits = FALSE))
-                        if (identical(x, get(x.deparse, envir = cached.obj)))
-                            return(get(x.deparse, envir = cached.hash))
+                    if (exists(x.deparse, envir = hash.cache.obj, inherits = FALSE))
+                        if (identical(x, get(x.deparse, envir = hash.cache.obj)))
+                            return(get(x.deparse, envir = hash.cache.hash))
                     x.hash <- digest(x, 'sha1')
-                    assign(x.deparse, x, envir = cached.obj)
-                    assign(x.deparse, x.hash, envir = cached.hash)
+                    assign(x.deparse, x, envir = hash.cache.obj)
+                    assign(x.deparse, x.hash, envir = hash.cache.hash)
                     return(x.hash)
                 }
 

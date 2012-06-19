@@ -42,8 +42,8 @@
 storage <- new.env()
 
 ## cache hash storage
-cached.obj  <- new.env()
-cached.hash <- new.env()
+hash.cache.obj       <- new.env() # raw R objects of which hash was computed before
+hash.cache.hash      <- new.env() # the computed hash of the above R objects
 
 #' Querying/setting pander option
 #'
