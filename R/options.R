@@ -112,7 +112,8 @@ pander.option <- function(o, value) {
 #' \itemize{
 #'      \item \code{parse}: if \code{TRUE} the provided \code{txt} elements would be merged into one string and parsed to logical chunks. This is useful if you would want to get separate results of your code parts - not just the last returned value, but you are passing the whole script in one string. To manually lock lines to each other (e.g. calling a \code{plot} and on next line adding an \code{abline} or \code{text} to it), use a plus char (\code{+}) at the beginning of each line which should be evaluated with the previous one(s). If set to \code{FALSE}, \code{evals} would not try to parse R code, it would get evaluated in separate runs - as provided. Please see examples of \code{\link{evals}}.
 #'      \item \code{cache}: caching the result of R calls if set to \code{TRUE}
-#'      \item \code{cache.dir}: path to a directory holding cache files. Default set to \code{.cache} in current working directory.
+#'      \item \code{cache.mode}: cached results could be stored in an \code{environment} in \emph{current} R session or let it be permanent on \code{disk}.
+#'      \item \code{cache.dir}: path to a directory holding cache files if \code{cache.mode} set to \code{disk}. Default to \code{.cache} in current working directory.
 #'      \item \code{cache.time}: number of seconds to limit caching based on \code{proc.time}. If set to \code{0}, all R commands, if set to \code{Inf}, none is cached (despite the \code{cache} parameter).
 #'      \item \code{cache.copy.images}: copy images to new files if an image is returned from cache? If set to \code{FALSE} (default) the "old" path would be returned.
 #'      \item \code{classes}: a vector or list of classes which should be returned. If set to \code{NULL} (by default) all R objects will be returned.

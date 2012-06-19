@@ -513,6 +513,7 @@ evals <- function(txt, parse = TRUE, cache = TRUE, cache.mode = c('environment',
                         cached.result <- NA
                     } else {
                         if (cache.copy.images) {
+                            ## TODO: what if img file was altered? Should not we try to check for existing recordedPlot and just rerender the img (without actual `eval`) to overcome this issue?
                             file.copy(cached.image.file, file)
                             cached.result$result <- file
                             class(cached.result$result) <- 'image'

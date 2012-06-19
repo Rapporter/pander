@@ -43,6 +43,8 @@
   * ~~caching~~
   * ~~add: global options~~
   * ~~add: option to copy images~~
+  * ~~check if img file referenced in cached result really exists~~
+  *  What if img file referenced in cached result was altered? Should not we try to check for existing recordedPlot and just rerender the img (without actual `eval`) to overcome this issue?
 
 ## Helper functions
 

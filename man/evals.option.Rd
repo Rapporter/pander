@@ -32,57 +32,60 @@
   it would get evaluated in separate runs - as provided.
   Please see examples of \code{\link{evals}}.  \item
   \code{cache}: caching the result of R calls if set to
-  \code{TRUE} \item \code{cache.dir}: path to a directory
-  holding cache files. Default set to \code{.cache} in
-  current working directory.  \item \code{cache.time}:
-  number of seconds to limit caching based on
-  \code{proc.time}. If set to \code{0}, all R commands, if
-  set to \code{Inf}, none is cached (despite the
-  \code{cache} parameter).  \item \code{cache.copy.images}:
-  copy images to new files if an image is returned from
-  cache? If set to \code{FALSE} (default) the "old" path
-  would be returned.  \item \code{classes}: a vector or
-  list of classes which should be returned. If set to
-  \code{NULL} (by default) all R objects will be returned.
-  \item \code{hooks}: list of hooks to be run for given
-  classes in the form of \code{list(class = fn)}. If you
-  would also specify some parameters of the function, a
-  list should be provided in the form of \code{list(fn,
-  param1, param2=NULL)} etc. So the hooks would become
-  \code{list(class1=list(fn, param1, param2=NULL), ...)}.
-  See example below. A default hook can be specified too by
-  setting the class to \code{'default'}. This can be handy
-  if you do not want to define separate methods/functions
-  to each possible class, but automatically apply the
-  default hook to all classes not mentioned in the list.
-  You may also specify only one element in the list like:
-  \code{hooks=list('default' = pander.return)}. Please
-  note, that nor error/warning messages, nor stdout is
-  captured (so: updated) while running hooks!  \item
-  \code{length}: any R object exceeding the specified
-  length will not be returned. The default value
-  (\code{Inf}) does not filter out any R objects.  \item
-  \code{output}: a character vector of required returned
-  values. This might be useful if you are only interested
-  in the \code{result}, and do not want to save/see e.g.
-  \code{messages} or \code{print}ed \code{output}. See
-  examples of \code{\link{evals}}.  \item \code{env}:
-  environment where evaluation takes place. If not set (by
-  default), a new temporary environment is created.  \item
-  \code{graph.nomargin}: should \code{\link{evals}} try to
-  keep plots' margins minimal?  \item \code{graph.name}:
-  set the file name of saved plots which is
-  \code{\link{tempfile}} by default. A simple character
-  string might be provided where \code{\%d} would be
-  replaced by the index of the generating \code{txt}
-  source, \code{\%n} with an incremented integer in
-  \code{graph.dir} with similar file names and \code{\%t}
-  by some random characters. A function's name to be
-  \code{eval}uated can be passed here too.  \item
-  \code{graph.dir}: path to a directory where to place
-  generated images. If the directory does not exist,
-  \code{\link{evals}} try to create that. Default set to
-  \code{plots} in current working directory.  \item
+  \code{TRUE} \item \code{cache.mode}: cached results could
+  be stored in an \code{environment} in \emph{current} R
+  session or let it be permanent on \code{disk}.  \item
+  \code{cache.dir}: path to a directory holding cache files
+  if \code{cache.mode} set to \code{disk}. Default to
+  \code{.cache} in current working directory.  \item
+  \code{cache.time}: number of seconds to limit caching
+  based on \code{proc.time}. If set to \code{0}, all R
+  commands, if set to \code{Inf}, none is cached (despite
+  the \code{cache} parameter).  \item
+  \code{cache.copy.images}: copy images to new files if an
+  image is returned from cache? If set to \code{FALSE}
+  (default) the "old" path would be returned.  \item
+  \code{classes}: a vector or list of classes which should
+  be returned. If set to \code{NULL} (by default) all R
+  objects will be returned.  \item \code{hooks}: list of
+  hooks to be run for given classes in the form of
+  \code{list(class = fn)}. If you would also specify some
+  parameters of the function, a list should be provided in
+  the form of \code{list(fn, param1, param2=NULL)} etc. So
+  the hooks would become \code{list(class1=list(fn, param1,
+  param2=NULL), ...)}. See example below. A default hook
+  can be specified too by setting the class to
+  \code{'default'}. This can be handy if you do not want to
+  define separate methods/functions to each possible class,
+  but automatically apply the default hook to all classes
+  not mentioned in the list. You may also specify only one
+  element in the list like: \code{hooks=list('default' =
+  pander.return)}. Please note, that nor error/warning
+  messages, nor stdout is captured (so: updated) while
+  running hooks!  \item \code{length}: any R object
+  exceeding the specified length will not be returned. The
+  default value (\code{Inf}) does not filter out any R
+  objects.  \item \code{output}: a character vector of
+  required returned values. This might be useful if you are
+  only interested in the \code{result}, and do not want to
+  save/see e.g. \code{messages} or \code{print}ed
+  \code{output}. See examples of \code{\link{evals}}.
+  \item \code{env}: environment where evaluation takes
+  place. If not set (by default), a new temporary
+  environment is created.  \item \code{graph.nomargin}:
+  should \code{\link{evals}} try to keep plots' margins
+  minimal?  \item \code{graph.name}: set the file name of
+  saved plots which is \code{\link{tempfile}} by default. A
+  simple character string might be provided where
+  \code{\%d} would be replaced by the index of the
+  generating \code{txt} source, \code{\%n} with an
+  incremented integer in \code{graph.dir} with similar file
+  names and \code{\%t} by some random characters. A
+  function's name to be \code{eval}uated can be passed here
+  too.  \item \code{graph.dir}: path to a directory where
+  to place generated images. If the directory does not
+  exist, \code{\link{evals}} try to create that. Default
+  set to \code{plots} in current working directory.  \item
   \code{graph.output}: set the required file format of
   saved plots. Currently it could be any of
   \code{grDevices}: \code{png}, \code{bmp}, \code{jpeg},

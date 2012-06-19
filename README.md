@@ -160,15 +160,25 @@ Table: Hello caption!
 ```rout
 > pandoc.table(mtcars[1:2, ], style = "grid", caption = "Hello caption!")
 
-+-------------------+-------+-------+--------+------+--------+------+--------+------+------+--------+--------+
-|                   | mpg   | cyl   | disp   | hp   | drat   | wt   | qsec   | vs   | am   | gear   | carb   |
-+===================+=======+=======+========+======+========+======+========+======+======+========+========+
-| **Mazda RX4**     | 21    | 6     | 160    | 110  | 3,9    | 2,6  | 16     | 0    | 1    | 4      | 4      |
-+-------------------+-------+-------+--------+------+--------+------+--------+------+------+--------+--------+
-| **Mazda RX4 Wag** | 21    | 6     | 160    | 110  | 3,9    | 2,9  | 17     | 0    | 1    | 4      | 4      |
-+-------------------+-------+-------+--------+------+--------+------+--------+------+------+--------+--------+
++-------------------+-------+-------+--------+------+--------+------+
+|                   | mpg   | cyl   | disp   | hp   | drat   | wt   |
++===================+=======+=======+========+======+========+======+
+| **Mazda RX4**     | 21    | 6     | 160    | 110  | 3.9    | 2.6  |
++-------------------+-------+-------+--------+------+--------+------+
+| **Mazda RX4 Wag** | 21    | 6     | 160    | 110  | 3.9    | 2.9  |
++-------------------+-------+-------+--------+------+--------+------+
 
-Table: Hello caption!
+Table: Hello caption! (continued below)
+
+ 
+
++-------------------+--------+------+------+--------+--------+
+|                   | qsec   | vs   | am   | gear   | carb   |
++===================+========+======+======+========+========+
+| **Mazda RX4**     | 16     | 0    | 1    | 4      | 4      |
++-------------------+--------+------+------+--------+--------+
+| **Mazda RX4 Wag** | 17     | 0    | 1    | 4      | 4      |
++-------------------+--------+------+------+--------+--------+
 
 ```
 
@@ -300,7 +310,7 @@ The output of different **statistical methods** are tried to be prettyfied. Some
 ---------------------------------------------------
  Test statistic   P value   Alternative hypothesis 
 ---------------- --------- ------------------------
-      0.18          0.4           two-sided        
+      0.12         0.87           two-sided        
 ---------------------------------------------------
 
 Table: Two-sample Kolmogorov-Smirnov test: `runif(50)` and `runif(50)`
@@ -604,7 +614,8 @@ The list of possible options are:
 
   * `parse`: if `TRUE` the provided `txt` elements would be merged into one string and parsed to logical chunks. This is useful if you would want to get separate results of your code parts - not just the last returned value, but you are passing the whole script in one string. To manually lock lines to each other (e.g. calling a `plot` and on next line adding an `abline` or `text` to it), use a plus char (`+`) at the beginning of each line which should be evaluated with the previous one(s). If set to `FALSE`, [`evals`](#evals) would not try to parse R code, it would get evaluated in separate runs - as provided. Please see the documentation of [`evals`](#evals).
   * `cache`: [caching](#caching) the result of R calls if set to `TRUE`
-  * `cache.dir`: path to a directory holding cache files. Default set to `.cache` in current working directory.
+  * `cache.mode`: cached results could be stored in an `environment` in _current_ R session or let it be permanent on `disk`.
+  * `cache.dir`: path to a directory holding cache files if `cache.mode` set to `disk`. Default set to `.cache` in current working directory.
   * `cache.time`: number of seconds to limit caching based on `proc.time`. If set to `0`, all R commands, if set to `Inf`, none is cached (despite the `cache` parameter).
   * `cache.copy.images`: copy images to new files if an image is returned from cache? If set to `FALSE` (default) the "old" path would be returned.
   * `classes`: a vector or list of classes which should be returned. If set to `NULL` (by default) all R objects will be returned.
@@ -632,11 +643,11 @@ All evaluation of provided R commands (while running [`brew`](#brew-to-pandoc) o
 
 ## Theoretical background
 
-  * Each passed R chunk is `parse`d to single commands.
-  * Each parsed command's **part** (let it be a function, variable, constant etc.) `eval`uated (as a `name`) separately to a `list`. This list describes the unique structure and the content of the passed R commands, and has some IMHO really great benefits (see below).
+  * Each passed R chunk is `parse`d to single commands (`expressions`).
+  * Each parsed expression's **part** (let it be a function, variable, constant etc.) `eval`uated (as a `name`) separately to a `list`. This list describes the unique structure and the content of the passed R expressions, and has some IMHO really great benefits (see below).
   * A **hash** if computed to each list element and *cached* too in `pander`'s local environments. This is useful if you are using large data frames, just imagine: the caching algorithm would have to compute the hash for the same data frame each time it's touched! This way the hash is recomputed only if the R object with the given name is changed.
   * The list is `serialize`d and an `SHA-1` hash is computed for that - which is unique and there is no real risk of collision.
-  * If [`evals`](#evals) can find the cached results in a file named to the computed hash, then it is returned on the spot.
+  * If [`evals`](#evals) can find the cached results in an evnironment of `pander`'s namespace (if `cache.mode` set to `enviroment` - see [above](#pander-options)) or in a file named to the computed hash (if `ċache.mode` set to `disk`), then it is returned on the spot.
   * Otherwise the call is evaluated and the results are optionally saved to cache (e.g. if `cache` is active, if the `proc.time()` of the evaluation is higher then it is defined in `cache.time` etc. - see details in [evals' options](#pander-options)).
 
 ## In practice
@@ -679,14 +690,14 @@ evals('x <- sapply(rep(mtcars$hp, 1e3), mean)')
 
 It is cached, just run again, you will see.
 
-But if you would create `x` in your *global environment* with any value (which has nothing to do with the special environment of the report!) and `x` is was not defined in the report before this call (and you had no `x˛value in your global environment before), then the content of `x` would result in a new hash for the cache - so caching would not work. E.g.:
+But if you would create `x` in your *global environment* with any value (which has nothing to do with the special environment of the report!) **and** `x` was not defined in the report before this call (**and** you had no `x` value in your global environment before), then the content of `x` would result in a new hash for the cache - so caching would not work. E.g.:
 
 ```r
 x <- 'foobar'
 evals('x <- sapply(rep(mtcars$hp, 1e3), mean)')
 ```
 
-I really think this is a minor issue (with very special coincidences) which cannot be addressed cleverly - but **could be avoided with some cautions**. And after all: you loose nothing, just the cache would not work for that only line and only once in most of the cases.
+I really think this is a minor issue (with very special coincidences) which cannot be addressed cleverly - but **could be avoided with some cautions** (e.g. run `Pandoc.brew` in a clean R session like with `Rscript` or [`littler`](http://dirk.eddelbuettel.com/code/littler.html) - if you are really afraid of this issue). And after all: you loose nothing, just the cache would not work for that only line and only once in most of the cases.
 
 # Evals
 
@@ -714,4 +725,4 @@ Few options of `pander-mode`: `M-x customize-group pander`
 To use this small lib, just type: `M-x pander-mode` on any document. It might be useful to add a hook to `markdown-mode` if you find this useful.
 
 -------
-This report was generated with [R](http://www.r-project.org/) (2.15.0) and [pander](https://github.com/daroczig/pander) (0.1) in 0.498 sec on x86_64-unknown-linux-gnu platform.
+This report was generated with [R](http://www.r-project.org/) (2.15.0) and [pander](https://github.com/daroczig/pander) (0.1) in 0.787 sec on x86_64-unknown-linux-gnu platform.
