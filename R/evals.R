@@ -470,11 +470,14 @@ evals <- function(txt, parse = TRUE, cache = TRUE, cache.dir = '.cache', cache.t
                 ## get the hash of the object from local cache if possible, compute it and save to cache otherwise
                 hashFromCache <- function(x, x.deparse) {
                     if (exists(x.deparse, envir = hash.cache.obj, inherits = FALSE))
-                        if (identical(x, get(x.deparse, envir = hash.cache.obj)))
+                        if (identical(x, get(x.deparse, envir = hash.cache.obj))) {
+                            assign(x.deparse, as.integer(Sys.time()), envir = hash.cache.last.used)
                             return(get(x.deparse, envir = hash.cache.hash))
+                        }
                     x.hash <- digest(x, 'sha1')
                     assign(x.deparse, x, envir = hash.cache.obj)
                     assign(x.deparse, x.hash, envir = hash.cache.hash)
+                    assign(x.deparse, as.integer(Sys.time()), envir = hash.cache.last.used)
                     return(x.hash)
                 }
 

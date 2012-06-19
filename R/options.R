@@ -44,6 +44,7 @@ storage <- new.env()
 ## cache hash storage
 hash.cache.obj       <- new.env() # raw R objects of which hash was computed before
 hash.cache.hash      <- new.env() # the computed hash of the above R objects
+hash.cache.last.used <- new.env() # when was the hash last queried
 
 #' Querying/setting pander option
 #'
