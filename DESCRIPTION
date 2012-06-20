@@ -20,6 +20,7 @@ Imports:
     brew,
     lattice,
     digest
+SystemRequirements: Pandoc (http://johnmacfarlane.net/pandoc) for exporting markdown files to other formats.t
 Collate:
     'helpers.R'
     'S3.R'
