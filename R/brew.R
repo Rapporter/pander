@@ -114,22 +114,21 @@ DELIM[[BRTEMPLATE]] <- c("<%%","%%>")
 
 `.brew.cached` <- function(envir = parent.frame()) {
 
-	text <- get('text')
-	brew.cat <- function(from,to) cat(text[from:to],sep='',collapse='')
-	assign('.brew.cat',brew.cat, envir=envir)
+    text <- get('text')
+    brew.cat <- function(from,to) cat(text[from:to], sep = '', collapse = '')
+    assign('.brew.cat',brew.cat, envir = envir)
 
-	code <- get('code')
-	ret <- try(eval(code,envir=envir))
+    code <- get('code')
+    ret <- try(eval(code, envir = envir))
 
-	invisible(ret)
+    invisible(ret)
 }
 
-`brew` <- function(text = NULL, envir = parent.frame(),run=TRUE,parseCode=TRUE,tplParser=NULL,chdir=FALSE) {
+`brew` <- function(text = NULL, envir = parent.frame(), run = TRUE, parseCode = TRUE, tplParser = NULL, chdir = FALSE) {
 
     if (is.character(text) && nchar(text[1]) > 0)
         icon <- textConnection(text[1])
 
-    # Error check env
     if (!is.environment(envir)){
         warning('envir is not a valid environment')
         return(invisible(NULL))
@@ -141,145 +140,148 @@ DELIM[[BRTEMPLATE]] <- c("<%%","%%>")
     textStart <- as.integer(1)
     line <- ''
 
-	while(TRUE){
-		if (!nchar(line)){
-			line <- readLines(icon,1)
-		   	if (length(line) != 1) break
-			line <- paste(line,"\n",sep='')
-		}
-		if (state == BRTEXT){
+    while(TRUE){
+        if (!nchar(line)){
+            line <- readLines(icon,1)
+            if (length(line) != 1) break
+            line <- paste(line,"\n",sep='')
+        }
+        if (state == BRTEXT){
 
-			spl <- strsplit(line,DELIM[[BRCODE]],fixed=TRUE)[[1]]
+            spl <- strsplit(line,DELIM[[BRCODE]],fixed=TRUE)[[1]]
 
-			# Beginning markup found
-			if (length(spl) > 1){
+            # Beginning markup found
+            if (length(spl) > 1){
 
-				if (nchar(spl[1])) {
-					text[textLen+1] <- spl[1]
-					textLen <- textLen + 1
-				}
-				line <- paste(spl[-1],collapse='<%')
+                if (nchar(spl[1])) {
+                    text[textLen+1] <- spl[1]
+                    textLen <- textLen + 1
+                }
+                line <- paste(spl[-1],collapse='<%')
 
-				# We know we've found this so far, so go ahead and set up state.
-				state <- BRCODE
+                # We know we've found this so far, so go ahead and set up state.
+                state <- BRCODE
 
-				# Now let's search for additional markup.
-				if (regexpr('^=',spl[2]) > 0){
-					state <- BRCATCODE
-					line <- sub('^=','',line)
-				} else if (regexpr('^#',spl[2]) > 0){
-					state <- BRCOMMENT
-				} else if (regexpr('^%',spl[2]) > 0){
-					if (is.null(tplParser)){
-						text[textLen+1] <- '<%'
-						textLen <- textLen + 1
-					}
-					line <- sub('^%','',line)
-					state <- BRTEMPLATE
-					next
-				}
+                # Now let's search for additional markup.
+                if (regexpr('^=',spl[2]) > 0){
+                    state <- BRCATCODE
+                    line <- sub('^=','',line)
+                } else if (regexpr('^#',spl[2]) > 0){
+                    state <- BRCOMMENT
+                } else if (regexpr('^%',spl[2]) > 0){
+                    if (is.null(tplParser)){
+                        text[textLen+1] <- '<%'
+                        textLen <- textLen + 1
+                    }
+                    line <- sub('^%','',line)
+                    state <- BRTEMPLATE
+                    next
+                }
 
-				if (textStart <= textLen) {
-					code[codeLen+1] <- paste('.brew.cat(',textStart,',',textLen,')',sep='')
-					codeLen <- codeLen + 1
-					textStart <- textLen + 1
-				}
-			} else {
-				text[textLen+1] <- line
-				textLen <- textLen + 1
-				line <- ''
-			}
-		} else {
-			if (regexpr("%%>",line,perl=TRUE) > 0){
-				if (state != BRTEMPLATE)
-					stop("Oops! Someone forgot to close a tag. We saw: ",DELIM[[state]][1],' and we need ',DELIM[[state]][2])
-				spl <- strsplit(line,"%%>",fixed=TRUE)[[1]]
-				if (!is.null(tplParser)){
-					tpl[length(tpl)+1] <- spl[1]
-					# call template parser
-					tplBufList <- tplParser(tpl)
-					if (length(tplBufList)){
-						textBegin <- textLen + 1;
-						textEnd <- textBegin + length(tplBufList) - 1
-						textLen <- textEnd
-						text[textBegin:textEnd] <- tplBufList
-					}
-					tpl <- character()
-				} else {
-					text[textLen+1] <- paste(spl[1],'%>',sep='')
-					textLen <- textLen + 1
-				}
-				line <- paste(spl[-1],collapse='%%>')
-				state <- BRTEXT
-				next
-			}
-			if (regexpr("%>",line,perl=TRUE) > 0){
-				spl <- strsplit(line,"%>",fixed=TRUE)[[1]]
-				line <- paste(spl[-1],collapse='%>')
+                if (textStart <= textLen) {
+                    code[codeLen+1] <- paste('.brew.cat(',textStart,',',textLen,')',sep='')
+                    codeLen <- codeLen + 1
+                    textStart <- textLen + 1
+                }
+            } else {
+                text[textLen+1] <- line
+                textLen <- textLen + 1
+                line <- ''
+            }
+        } else {
+            if (regexpr("%%>",line,perl=TRUE) > 0){
+                if (state != BRTEMPLATE)
+                    stop("Oops! Someone forgot to close a tag. We saw: ",DELIM[[state]][1],' and we need ',DELIM[[state]][2])
+                spl <- strsplit(line,"%%>",fixed=TRUE)[[1]]
+                if (!is.null(tplParser)){
+                    tpl[length(tpl)+1] <- spl[1]
+                    # call template parser
+                    tplBufList <- tplParser(tpl)
+                    if (length(tplBufList)){
+                        textBegin <- textLen + 1;
+                        textEnd <- textBegin + length(tplBufList) - 1
+                        textLen <- textEnd
+                        text[textBegin:textEnd] <- tplBufList
+                    }
+                    tpl <- character()
+                } else {
+                    text[textLen+1] <- paste(spl[1],'%>',sep='')
+                    textLen <- textLen + 1
+                }
+                line <- paste(spl[-1],collapse='%%>')
+                state <- BRTEXT
+                next
+            }
+            if (regexpr("%>",line,perl=TRUE) > 0){
+                spl <- strsplit(line,"%>",fixed=TRUE)[[1]]
+                line <- paste(spl[-1],collapse='%>')
 
-				n <- nchar(spl[1])
-				# test  for '-' immediately preceding %> will strip trailing newline from line
-				if (n > 0) {
-					if (substr(spl[1],n,n) == '-') {
-						line <- substr(line,1,nchar(line)-1)
-						spl[1] <- substr(spl[1],1,n-1)
-					}
-					text[textLen+1] <- spl[1]
-					textLen <- textLen + 1
-				}
+                n <- nchar(spl[1])
+                # test  for '-' immediately preceding %> will strip trailing newline from line
+                if (n > 0) {
+                    if (substr(spl[1],n,n) == '-') {
+                        line <- substr(line,1,nchar(line)-1)
+                        spl[1] <- substr(spl[1],1,n-1)
+                    }
+                    text[textLen+1] <- spl[1]
+                    textLen <- textLen + 1
+                }
 
-				# We've found the end of a brew section, but we only care if the
-				# section is a BRCODE or BRCATCODE. We just implicitly drop BRCOMMENT sections
-				if (state == BRCODE){
-					code[codeLen+1] <- paste(text[textStart:textLen],collapse='')
-					codeLen <- codeLen + 1
-				} else if (state == BRCATCODE){
-					code[codeLen + 1] <- paste("cat(Pandoc.evals(c(", paste(sapply(text[textStart:textLen], deparse), collapse = ","),")))", sep = "")
-					codeLen <- codeLen + 1
-				}
-				textStart <- textLen + 1
-				state <- BRTEXT
-			} else if (regexpr("<%",line,perl=TRUE) > 0){
-				stop("Oops! Someone forgot to close a tag. We saw: ",DELIM[[state]][1],' and we need ',DELIM[[state]][2])
-			} else {
-				if (state == BRTEMPLATE && !is.null(tplParser))
-					tpl[length(tpl)+1] <- line
-				else {
-					text[textLen+1] <- line
-					textLen <- textLen + 1
-				}
-				line <- ''
-			}
-		}
-	}
-	if (state == BRTEXT){
-		if (textStart <= textLen) {
-			code[codeLen+1] <- paste('.brew.cat(',textStart,',',textLen,')',sep='')
-			codeLen <- codeLen + 1
-			textStart <- textLen + 1
-		}
-	} else {
-		stop("Oops! Someone forgot to close a tag. We saw: ",DELIM[[state]][1],' and we need ',DELIM[[state]][2])
-	}
+                # We've found the end of a brew section, but we only care if the
+                # section is a BRCODE or BRCATCODE. We just implicitly drop BRCOMMENT sections
+                if (state == BRCODE){
+                    code[codeLen+1] <- paste(text[textStart:textLen],collapse='')
+                    codeLen <- codeLen + 1
+                } else if (state == BRCATCODE){
+                    code[codeLen + 1] <- paste("cat(Pandoc.evals(c(", paste(sapply(text[textStart:textLen], deparse), collapse = ","),")))", sep = "")
+                    codeLen <- codeLen + 1
+                }
+                textStart <- textLen + 1
+                state <- BRTEXT
+            } else if (regexpr("<%",line,perl=TRUE) > 0){
+                stop("Oops! Someone forgot to close a tag. We saw: ",DELIM[[state]][1],' and we need ',DELIM[[state]][2])
+            } else {
+                if (state == BRTEMPLATE && !is.null(tplParser))
+                    tpl[length(tpl)+1] <- line
+                else {
+                    text[textLen+1] <- line
+                    textLen <- textLen + 1
+                }
+                line <- ''
+            }
+        }
+    }
+    if (state == BRTEXT){
+        if (textStart <= textLen) {
+            code[codeLen+1] <- paste('.brew.cat(',textStart,',',textLen,')',sep='')
+            codeLen <- codeLen + 1
+            textStart <- textLen + 1
+        }
+    } else {
+        stop("Oops! Someone forgot to close a tag. We saw: ",DELIM[[state]][1],' and we need ',DELIM[[state]][2])
+    }
 
-	if (run){
+    if (run){
 
-		brew.env <- new.env(parent=globalenv())
-		assign('text',text,brew.env)
-		assign('code',parse(text=code,srcfile=NULL),brew.env)
-		brew.cached <- .brew.cached
-		environment(brew.cached) <- brew.env
+        brew.env <- new.env(parent=globalenv())
+        assign('text',text,brew.env)
+        assign('code',parse(text=code,srcfile=NULL),brew.env)
+        brew.cached <- .brew.cached
+        environment(brew.cached) <- brew.env
+        return(brew.cached(envir=envir))
 
-                return(brew.cached(envir=envir))
+    } else if (parseCode){
 
-	} else if (parseCode){
-		brew.env <- new.env(parent=globalenv())
-		assign('text',text,brew.env)
-		assign('code',parse(text=code,srcfile=NULL),brew.env)
-		brew.cached <- .brew.cached
-		environment(brew.cached) <- brew.env
-		invisible(brew.cached)
-	} else {
-		invisible(list(text=text,code=code))
-	}
+        brew.env <- new.env(parent=globalenv())
+        assign('text',text,brew.env)
+        assign('code',parse(text=code,srcfile=NULL),brew.env)
+        brew.cached <- .brew.cached
+        environment(brew.cached) <- brew.env
+        invisible(brew.cached)
+
+    } else {
+
+        invisible(list(text=text,code=code))
+
+    }
 }
