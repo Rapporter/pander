@@ -71,7 +71,7 @@ code > span.er { color: #ff0000; font-weight: bold; }
 </ul>
 <p><strong>How it is differ from Sweave, brew, knitr, R2HTML etc.?</strong></p>
 <ul>
-<li>no need for calling <code>ascii</code>, <code>xtable</code>, <code>Hmisc</code>, <code>tables</code> etc. to transform an R object to <code>HTML</code>, <code>tex</code> etc. as <code>pander</code> results in Pandoc's <em>markdown</em> which can be converted to almost any text document format (like: pdf, HTML, odt, docx, textile, asciidoc, reStructuredText etc.). Conversion can be done automatically after calling <code>pander</code> reporting functions (<a href="#brew-to-pandoc">Pander.brew</a> or <a href="#live-report-generation">Pandoc</a>).</li>
+<li>no need for calling <code>ascii</code>, <code>xtable</code>, <code>Hmisc</code>, <code>tables</code> etc. to transform an R object to <code>HTML</code>, <code>tex</code> etc. as <code>pander</code> results in Pandoc's <em>markdown</em> which can (automatically) be converted to almost any text document format (like: pdf, HTML, odt, docx, textile, asciidoc, reStructuredText etc.). Conversion can be done automatically after calling <code>pander</code> reporting functions (<a href="#brew-to-pandoc">Pander.brew</a> or <a href="#live-report-generation">Pandoc</a>).</li>
 <li>based on the above <em>no &quot;traditional&quot; R console output</em> is shown in the resulting document (nor in markdown, nor in exported docs) but <strong>all R objects are transformed to tables, list etc</strong>. Well, there is an option (<code>show.src</code>) to show the original R commands before the formatted output, and <code>pander</code>˛calls can be also easily tweaked (just file an issue) to return <code>print</code>ed R objects - if you would need that in some strange situation - like writing an R tutorial. But <strong>I really think that nor R code, nor raw R results have anything to do with an exported report</strong> :)</li>
 <li><em>graphs/plots</em> are recognized in blocks of R commands without any special setting or marks around code block and saved to disk in a <code>png</code> file linked in the resulting document. This means if you create a report (e.g. <code>brew</code> a text file) and export it to pdf/docx etc. all the plots/images would be there. There are some parameters to specify the resolution of the image and also the type (e.g. <code>jpg</code>, <code>svg</code> or <code>pdf</code>).</li>
 <li><code>pander</code>˛uses its build in (IMHO quite decent) <a href="#caching"><strong>caching</strong></a>. This means that if evaluation of some R commands take too much time (which can be set by option/parameter), then the results are saved in a file and returned from there on next exact R code's evaluation. This caching algorithm tries to be <strong>smart</strong> as checks not only the passed R sources, but <em>all variables and functions</em> inside that and saves the hash of those. This is a quite secure way of caching (see details <a href="#caching">below</a>), but if you would encounter any issues, just switch off the cache. I've not seen any issues :)</li>
@@ -86,10 +86,11 @@ install_github(&#39;pander&#39;, &#39;daroczig&#39;)</code></pre>
 <h2 id="depends">Depends</h2>
 <p><code>pander</code> heavily builds on <a href="http://johnmacfarlane.net/pandoc">Pandoc</a> which should be <strong>pre-installed</strong> before trying to convert your reports to <a href="http://johnmacfarlane.net/pandoc/">different formats</a>. Although <strong>main functions work without Pandoc</strong>, e.g. you can generate a markdown formatted report via <a href="#brew-to-pandoc">Pandoc.brew</a> or the custom <a href="#live-report-generation">reference class</a>, but I would really suggest to install that really great piece of software!</p>
 <p>The <a href="http://johnmacfarlane.net/pandoc/installing.html">installation process of Pandoc</a> is quite straightforward on most operating systems: just download and run the binary (a few megabytes), and get a full-blown document converted in a few seconds/minutes. On different Linux distributions it might be a bit more complicated (as repositories tend to provide out-dated versions of Pandoc, so you would need <code>cabal-install</code> to <a href="https://github.com/jgm/pandoc/wiki/Installing-the-development-version-of-pandoc-1.9">install from sources</a>). <em>Please do not forget to restart your R session to update your <code>PATH</code> after installation!</em></p>
+<p>An alternative method (bypassing Pandoc dependency) would be to call the awesome <a href="http://cran.r-project.org/web/packages/markdown/index.html"><code>markdown</code></a> package to transform markdown (as far as I know: exclusively) to HTML.</p>
 <p><del>And as <code>pander</code> and <code>rapport</code> are quite Siamese twins, you would need an <strong>up-to-date</strong> version of <a href="http://rapport-package.info">rapport</a> most likely installed from <a href="https://github.com/aL3xa/rapport">Github</a>.</del> <code>pander</code> now can work independently from <code>rapport</code>.</p>
 <p>Now you would only need a few cool packages from CRAN:</p>
 <ul>
-<li><a href="http://cran.r-project.org/web/packages/brew/index.html">brew</a> for literate programming</li>
+<li><del><a href="http://cran.r-project.org/web/packages/brew/index.html">brew</a> for literate programming</del></li>
 <li><a href="http://cran.r-project.org/web/packages/digest/index.html">digest</a> to compute hashes while caching</li>
 <li><del><a href="http://cran.r-project.org/web/packages/parser/index.html">parser</a> to identify variables in passed R commands</del></li>
 <li><del><a href="http://cran.r-project.org/web/packages/evaluate/index.html">evaluate</a></del></li>
@@ -308,7 +309,7 @@ id   value
 ---------------------------------------------------
  Test statistic   P value   Alternative hypothesis 
 ---------------- --------- ------------------------
-      0.12         0.87           two-sided        
+      0.2          0.27           two-sided        
 ---------------------------------------------------
 
 Table: Two-sample Kolmogorov-Smirnov test: `runif(50)` and `runif(50)`
@@ -468,10 +469,10 @@ Table: Foo Bar
 <li><a href="http://www.slideshare.net/xavierguardiola/building-a-reporting-sytem-with-brew">slides on &quot;Building a reporting sytem with BREW&quot;</a></li>
 <li><a href="http://learnr.wordpress.com/2009/09/09/brew-creating-repetitive-reports/">learnr blogpost on brew</a></li>
 </ul>
-<p><strong>In short</strong>: a <code>brew</code> document is a simple text file with some special tags. <code>Pandoc.brew</code> uses only two of them internally - but of course you could use <code>brew templates</code> (<code>&lt;\%\%...\%\%&gt;</code>) too:</p>
+<p><strong>In short</strong>: a <code>brew</code> document is a simple text file with some special tags. <code>Pandoc.brew</code> uses only two of them (as building on a personalized version of Jeff's really great <code>brew</code> function):</p>
 <ul>
 <li><code>&lt;\% ... \%&gt;</code> (without the backslash) stand for running R calls</li>
-<li><code>&lt;\%= ... \%&gt;</code> (without the backslash) does pretty the same but applies <code>pander</code> to the returning R object (instead of <code>cat</code> like the original <code>brew</code> function does). So putting there any R object would return is a nice Pandoc markdown format with all possible messages etc.</li>
+<li><code>&lt;\%= ... \%&gt;</code> (without the backslash) does pretty the same but applies <code>pander</code> to the returning R object (instead of <code>cat</code> like the original <code>brew</code> function does). So putting there any R object would return is a nice Pandoc's markdown format with all possible messages etc.</li>
 </ul>
 <p>This latter tries to be smart in some ways:</p>
 <ul>
@@ -479,6 +480,11 @@ Table: Foo Bar
 <li>plots and images are grabbed in the document, rendered to a <code>png</code> file and <code>pander</code> method would result in a Pandoc markdown formatted image link (so the image would be shown/included in the exported document).</li>
 <li>all warnings/messages and errors are recorded in the blocks and returned in the document as a footnote</li>
 <li>all heavy R commands (e.g. those taking more then 0.1 sec to evaluate) are <a href="#caching"><strong>cached</strong></a> so re<code>brew</code>ing a report would not result in a coffee break.</li>
+</ul>
+<p>Besides this, the custom <code>brew</code> function can do more and also less compared to the original <a href="http://cran.r-project.org/web/packages/brew/index.html"><code>brew</code> package</a>. First of all the internal caching mechanism (and other, from <code>pander</code> package POV needless features) of <code>brew</code> is removed for some extra profits:</p>
+<ul>
+<li>multiple R expressions can be passed between <code>&lt;\%= ... \%&gt;</code> tags,</li>
+<li>the text of the file and also <strong>the evaluated R objects are (invisibly) returned in a structured list</strong>, which can be really useful while post-processing the results of <code>brew</code> (just try: <code>str(Pandoc.brew(text='Pi equals to &lt;\%=pi\%&gt;.\nAnd here are some random data:\n&lt;\%=runif(10)\%&gt;'))</code> - without the backslash in front of the percent signs).</li>
 </ul>
 <p>This document was generated by <code>Pandoc.brew</code> based on <a href="https://github.com/daroczig/pander/blob/master/inst/README.brew"><code>inst/README.brew</code></a> so the above examples were generated automatically - which could be handy while writing some nifty statistical reports :)</p>
 <pre><code>Pandoc.brew(system.file(&#39;README.brew&#39;, package=&#39;pander&#39;))</code></pre>
@@ -651,7 +657,7 @@ B &lt;- <span class="fl">1e5</span></code></pre>
 </ul>
 <p>To use this small lib, just type: <code>M-x pander-mode</code> on any document. It might be useful to add a hook to <code>markdown-mode</code> if you find this useful.</p>
 <hr />
-<p>This report was generated with <a href="http://www.r-project.org/">R</a> (2.15.0) and <a href="https://github.com/daroczig/pander">pander</a> (0.1) in 0.787 sec on x86_64-unknown-linux-gnu platform.</p>
+<p>This report was generated with <a href="http://www.r-project.org/">R</a> (2.15.0) and <a href="https://github.com/daroczig/pander">pander</a> (0.1) in 0.891 sec on x86_64-unknown-linux-gnu platform.</p>
 <p align="center">
   Design: <a href="http://rapport-package.info/"><i>rapport</i> Development Team</a> &copy; 2012 | Backend: <a href="https://github.com/daroczig/pander">pander</a> | License: <a href="http://www.gnu.org/licenses/agpl.html" target="_blank">AGPL3</a> | Styled with <a href="http://www.getskeleton.com/" target="_blank">skeleton</a>
 </p>
