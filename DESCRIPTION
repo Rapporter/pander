@@ -17,10 +17,10 @@ License: AGPL-3
 Depends:
     R (>= 2.15.0)
 Imports:
-    brew,
     lattice,
     digest
-SystemRequirements: Pandoc (http://johnmacfarlane.net/pandoc) for exporting markdown files to other formats.t
+SystemRequirements: Pandoc (http://johnmacfarlane.net/pandoc) for exporting
+    markdown files to other formats.t
 Collate:
     'helpers.R'
     'S3.R'
