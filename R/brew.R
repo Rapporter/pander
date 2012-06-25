@@ -38,6 +38,10 @@
 #' Pandoc.brew(system.file('examples/minimal.brew', package='pander'), output = tempfile(), convert = 'html')
 #' Pandoc.brew(system.file('examples/short-code-long-report.brew', package='pander'))
 #' Pandoc.brew(system.file('examples/short-code-long-report.brew', package='pander'), output = tempfile(), convert = 'html')
+#'
+#' ## brew returning R objects
+#' str(Pandoc.brew(text='Pi equals to <%=pi%>.\nAnd here are some random data:\n<%=runif(10)%>'))
+#' str(Pandoc.brew(text='# Header <%=1%>\nPi is <%=pi%> which is smaller then <%=2%>.\nfoo\nbar\n <%=3%>\n<%=mtcars[1:2,]%>'))
 #' }
 #' @importFrom brew brew
 Pandoc.brew <- function(file = stdin(), output = stdout(), convert = FALSE, open = TRUE, graph.hi.res = FALSE, text = NULL, envir = new.env()) {
@@ -108,14 +112,10 @@ Pandoc.brew <- function(file = stdin(), output = stdout(), convert = FALSE, open
 
 }
 
+
 ######################################################################################
 ## This is a forked/patched version of `brew` package made by Jeffrey Horner (c) 2007.
 ## Original sources can be found at: http://cran.r-project.org/web/packages/brew/
-######################################################################################
-## Changes:
-###########
-##  * `<%= ... %>` tags can multiple expressions
-##  * TODO: raw results are also returned not just `cat`ed
 ######################################################################################
 
 BRTEXT <- 1
@@ -128,6 +128,21 @@ DELIM[[BRCODE]] <- c("<%","%>")
 DELIM[[BRCOMMENT]] <- c("<%#","%>")
 DELIM[[BRCATCODE]] <- c("<%=","%>")
 
+#' Patched brew
+#'
+#' This is a forked/patched version of `brew` package made by Jeffrey Horner (c) 2007. See: \code{References} about the original version.
+#'
+#' This custom function can do more and also less compared to the original \code{brew} package. First of all the internal caching mechanism (and other, from \code{pander} package POV needless features) of `brew` is removed for some extra profits:
+#' \itemize{
+#'      \item multiple R expressions can be passed between \code{<\%= ... \%>} tags,
+#'      \item the text of the file and also the evaluated R objects are (invisibly) returned in a structured list, which can be really useful while post-processing the results of `brew`.
+#' }
+#' @param text character vector
+#' @param envir environment
+#' @return \code{brew}ed document to \code{stdout} and raw results while evaluating the \code{text} in a structured list.
+#' @note This function should be never called directly (use \code{brew::brew} instead) as being a helper function of \code{Pandoc.brew}.
+#' @seealso \code{\link{Pandoc.brew}}
+#' @references Jeffrey Horner (2011). _brew: Templating Framework for Report Generation._ \url{http://CRAN.R-project.org/package=brew}z
 #' @keywords internal
 `brew` <- function(text = NULL, envir = parent.frame()) {
 

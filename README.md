@@ -16,7 +16,7 @@ The package is also capable of exporting/converting complex Pandoc documents (re
 
 **How it is differ from Sweave, brew, knitr, R2HTML etc.?**
 
-  * no need for calling `ascii`, `xtable`, `Hmisc`, `tables` etc. to transform an R object to `HTML`, `tex` etc. as `pander` results in Pandoc's *markdown* which can be converted to almost any text document format (like: pdf, HTML, odt, docx, textile, asciidoc, reStructuredText etc.). Conversion can be done automatically after calling `pander` reporting functions ([Pander.brew](#brew-to-pandoc) or [Pandoc](#live-report-generation)).
+  * no need for calling `ascii`, `xtable`, `Hmisc`, `tables` etc. to transform an R object to `HTML`, `tex` etc. as `pander` results in Pandoc's *markdown* which can (automatically) be converted to almost any text document format (like: pdf, HTML, odt, docx, textile, asciidoc, reStructuredText etc.). Conversion can be done automatically after calling `pander` reporting functions ([Pander.brew](#brew-to-pandoc) or [Pandoc](#live-report-generation)).
   * based on the above *no "traditional" R console output* is shown in the resulting document (nor in markdown, nor in exported docs) but **all R objects are transformed to tables, list etc**. Well, there is an option (`show.src`) to show the original R commands before the formatted output, and `pander`˛calls can be also easily tweaked (just file an issue) to return `print`ed R objects - if you would need that in some strange situation - like writing an R tutorial. But **I really think that nor R code, nor raw R results have anything to do with an exported report** :)
   * *graphs/plots* are recognized in blocks of R commands without any special setting or marks around code block and saved to disk in a `png` file linked in the resulting document. This means if you create a report (e.g. `brew` a text file) and export it to pdf/docx etc. all the plots/images would be there. There are some parameters to specify the resolution of the image and also the type (e.g. `jpg`, `svg` or `pdf`).
   * `pander`˛uses its build in (IMHO quite decent) [**caching**](#caching). This means that if evaluation of some R commands take too much time (which can be set by option/parameter), then the results are saved in a file and returned from there on next exact R code's evaluation. This caching algorithm tries to be **smart** as checks not only the passed R sources, but *all variables and functions* inside that and saves the hash of those. This is a quite secure way of caching (see details [below](#caching)), but if you would encounter any issues, just switch off the cache. I've not seen any issues :)
@@ -41,11 +41,13 @@ Or download the [sources in a zip file](https://github.com/daroczig/pander/zipba
 
 The [installation process of Pandoc](http://johnmacfarlane.net/pandoc/installing.html) is quite straightforward on most operating systems: just download and run the binary (a few megabytes), and get a full-blown document converted in a few seconds/minutes. On different Linux distributions it might be a bit more complicated (as repositories tend to provide out-dated versions of Pandoc, so you would need `cabal-install` to [install from sources](https://github.com/jgm/pandoc/wiki/Installing-the-development-version-of-pandoc-1.9)). *Please do not forget to restart your R session to update your `PATH` after installation!*
 
+An alternative method (bypassing Pandoc dependency) would be to call the awesome [`markdown`](http://cran.r-project.org/web/packages/markdown/index.html) package to transform markdown (as far as I know: exclusively) to HTML.
+
 ~~And as `pander` and `rapport` are quite Siamese twins, you would need an **up-to-date** version of [rapport](http://rapport-package.info) most likely installed from [Github](https://github.com/aL3xa/rapport).~~ `pander` now can work independently from `rapport`.
 
 Now you would only need a few cool packages from CRAN:
 
-  * [brew](http://cran.r-project.org/web/packages/brew/index.html) for literate programming
+  * ~~[brew](http://cran.r-project.org/web/packages/brew/index.html) for literate programming~~
   * [digest](http://cran.r-project.org/web/packages/digest/index.html) to compute hashes while caching
   * ~~[parser](http://cran.r-project.org/web/packages/parser/index.html) to identify variables in passed R commands~~
   * ~~[evaluate](http://cran.r-project.org/web/packages/evaluate/index.html)~~
@@ -310,7 +312,7 @@ The output of different **statistical methods** are tried to be prettyfied. Some
 ---------------------------------------------------
  Test statistic   P value   Alternative hypothesis 
 ---------------- --------- ------------------------
-      0.12         0.87           two-sided        
+      0.2          0.27           two-sided        
 ---------------------------------------------------
 
 Table: Two-sample Kolmogorov-Smirnov test: `runif(50)` and `runif(50)`
@@ -477,10 +479,10 @@ Everyone knows and possibly uses [brew](http://cran.r-project.org/web/packages/b
   * [slides on "Building a reporting sytem with BREW"](http://www.slideshare.net/xavierguardiola/building-a-reporting-sytem-with-brew)
   * [learnr blogpost on brew](http://learnr.wordpress.com/2009/09/09/brew-creating-repetitive-reports/)
 
-**In short**: a `brew` document is a simple text file with some special tags. `Pandoc.brew` uses only two of them internally - but of course you could use `brew templates` (`<\%\%...\%\%>`) too:
+**In short**: a `brew` document is a simple text file with some special tags. `Pandoc.brew` uses only two of them (as building on a personalized version of Jeff's really great `brew` function):
 
   * `<\% ... \%>` (without the backslash) stand for running R calls
-  * `<\%= ... \%>` (without the backslash) does pretty the same but applies `pander` to the returning R object (instead of `cat` like the original `brew` function does). So putting there any R object would return is a nice Pandoc markdown format with all possible messages etc.
+  * `<\%= ... \%>` (without the backslash) does pretty the same but applies `pander` to the returning R object (instead of `cat` like the original `brew` function does). So putting there any R object would return is a nice Pandoc's markdown format with all possible messages etc.
 
 This latter tries to be smart in some ways:
 
@@ -488,6 +490,11 @@ This latter tries to be smart in some ways:
   * plots and images are grabbed in the document, rendered to a `png` file and `pander` method would result in a Pandoc markdown formatted image link (so the image would be shown/included in the exported document).
   * all warnings/messages and errors are recorded in the blocks and returned in the document as a footnote
   * all heavy R commands (e.g. those taking more then 0.1 sec to evaluate) are [**cached**](#caching) so re`brew`ing a report would not result in a coffee break.
+
+Besides this, the custom `brew` function can do more and also less compared to the original [`brew` package](http://cran.r-project.org/web/packages/brew/index.html). First of all the internal caching mechanism (and other, from `pander` package POV needless features) of `brew` is removed for some extra profits:
+
+  * multiple R expressions can be passed between `<\%= ... \%>` tags,
+  * the text of the file and also **the evaluated R objects are (invisibly) returned in a structured list**, which can be really useful while post-processing the results of `brew` (just try: `str(Pandoc.brew(text='Pi equals to <\%=pi\%>.\nAnd here are some random data:\n<\%=runif(10)\%>'))` - without the backslash in front of the percent signs).
 
 This document was generated by `Pandoc.brew` based on [`inst/README.brew`](https://github.com/daroczig/pander/blob/master/inst/README.brew) so the above examples were generated automatically - which could be handy while writing some nifty statistical reports :)
 
@@ -722,7 +729,8 @@ Few options of `pander-mode`: `M-x customize-group pander`
   * `pander-clipboard`: If non-nil then the result of `pander-*` functions would be copied to clipboard.
   * `pander-show-source`: If non-nil then the source of R commands would also show up in generated documents while running 'pander-eval'. This would not affect `brew` functions ATM.
 
-To use this small lib, just type: `M-x pander-mode` on any document. It might be useful to add a hook to `markdown-mode` if you find this useful.
+To use this small lib, just type: `M-x pander-mode` on any document. It might be useful to add a hook to `markdown-mode` if you find this useful. 
+
 
 -------
-This report was generated with [R](http://www.r-project.org/) (2.15.0) and [pander](https://github.com/daroczig/pander) (0.1) in 0.787 sec on x86_64-unknown-linux-gnu platform.
+This report was generated with [R](http://www.r-project.org/) (2.15.0) and [pander](https://github.com/daroczig/pander) (0.1) in 0.891 sec on x86_64-unknown-linux-gnu platform.

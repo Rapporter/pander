@@ -81,6 +81,10 @@ Pandoc.brew(system.file('examples/minimal.brew', package='pander'))
 Pandoc.brew(system.file('examples/minimal.brew', package='pander'), output = tempfile(), convert = 'html')
 Pandoc.brew(system.file('examples/short-code-long-report.brew', package='pander'))
 Pandoc.brew(system.file('examples/short-code-long-report.brew', package='pander'), output = tempfile(), convert = 'html')
+
+## brew returning R objects
+str(Pandoc.brew(text='Pi equals to <\%=pi\%>.\\nAnd here are some random data:\\n<\%=runif(10)\%>'))
+str(Pandoc.brew(text='# Header <\%=1\%>\\nPi is <\%=pi\%> which is smaller then <\%=2\%>.\\nfoo\\nbar\\n <\%=3\%>\\n<\%=mtcars[1:2,]\%>'))
 }
 }
 \references{

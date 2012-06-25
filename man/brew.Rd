@@ -1,0 +1,47 @@
+\name{brew}
+\alias{brew}
+\title{Patched brew}
+\usage{
+  brew(text = NULL, envir = parent.frame())
+}
+\arguments{
+  \item{text}{character vector}
+
+  \item{envir}{environment}
+}
+\value{
+  \code{brew}ed document to \code{stdout} and raw results
+  while evaluating the \code{text} in a structured list.
+}
+\description{
+  This is a forked/patched version of `brew` package made
+  by Jeffrey Horner (c) 2007. See: \code{References} about
+  the original version.
+}
+\details{
+  This custom function can do more and also less compared
+  to the original \code{brew} package. First of all the
+  internal caching mechanism (and other, from \code{pander}
+  package POV needless features) of `brew` is removed for
+  some extra profits: \itemize{ \item multiple R
+  expressions can be passed between \code{<\%= ... \%>}
+  tags, \item the text of the file and also the evaluated R
+  objects are (invisibly) returned in a structured list,
+  which can be really useful while post-processing the
+  results of `brew`. }
+}
+\note{
+  This function should be never called directly (use
+  \code{brew::brew} instead) as being a helper function of
+  \code{Pandoc.brew}.
+}
+\references{
+  Jeffrey Horner (2011). _brew: Templating Framework for
+  Report Generation._
+  \url{http://CRAN.R-project.org/package=brew}z
+}
+\seealso{
+  \code{\link{Pandoc.brew}}
+}
+\keyword{internal}
+
