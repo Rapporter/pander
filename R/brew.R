@@ -66,14 +66,15 @@ Pandoc.brew <- function(file = stdin(), output = stdout(), convert = FALSE, open
 
     if (is.null(text))
         text <- paste(readLines(file, warn = FALSE), collapse = '\n')
-    ## text <- gsub('<%=(.*?)%>','<%%\\1%%>', text) # this idea failed as brew templates are evaluated at the end of the file so loops fails
 
-    ## Pandoc.cat fn
-    Pandoc.evals <- function(..., envir = parent.frame(), cache = evals.option('cache')) {
+    ## helper fn
+    showCode <- function(..., envir = parent.frame(), cache = evals.option('cache')) {
         res <- evals(unlist(...), env = envir, graph.dir = graph.dir, graph.name = graph.name, hi.res = graph.hi.res)
-        for (r in res)
+        for (r in res) {
             pander(r)
+        }
     }
+    assign('showCode', showCode, envir = envir)
 
     res <- capture.output(brew(text = text, envir = envir))
 
@@ -107,19 +108,6 @@ DELIM[[BRTEXT]] <- c("","")
 DELIM[[BRCODE]] <- c("<%","%>")
 DELIM[[BRCOMMENT]] <- c("<%#","%>")
 DELIM[[BRCATCODE]] <- c("<%=","%>")
-
-#' @keywords internal
-`.brew.cached` <- function(envir = parent.frame()) {
-
-    text <- get('text')
-    brew.cat <- function(from,to) cat(text[from:to], sep = '', collapse = '')
-    assign('.brew.cat',brew.cat, envir = envir)
-
-    code <- get('code')
-    ret <- try(eval(code, envir = envir))
-
-    invisible(ret)
-}
 
 #' @keywords internal
 `brew` <- function(text = NULL, envir = parent.frame()) {
@@ -169,7 +157,7 @@ DELIM[[BRCATCODE]] <- c("<%=","%>")
                 }
 
                 if (textStart <= textLen) {
-                    code[codeLen+1] <- paste('.brew.cat(',textStart,',',textLen,')',sep='')
+                    code[codeLen+1] <- paste('showText(',textStart,',',textLen,')',sep='')
                     codeLen <- codeLen + 1
                     textStart <- textLen + 1
                 }
@@ -200,7 +188,7 @@ DELIM[[BRCATCODE]] <- c("<%=","%>")
                     code[codeLen+1] <- paste(text[textStart:textLen],collapse='')
                     codeLen <- codeLen + 1
                 } else if (state == BRCATCODE){
-                    code[codeLen + 1] <- paste("cat(Pandoc.evals(c(", paste(sapply(text[textStart:textLen], deparse), collapse = ","),")))", sep = "")
+                    code[codeLen + 1] <- paste("showCode(c(", paste(sapply(text[textStart:textLen], deparse), collapse = ","),"))", sep = "")
                     codeLen <- codeLen + 1
                 }
                 textStart <- textLen + 1
@@ -216,7 +204,7 @@ DELIM[[BRCATCODE]] <- c("<%=","%>")
     }
     if (state == BRTEXT){
         if (textStart <= textLen) {
-            code[codeLen+1] <- paste('.brew.cat(',textStart,',',textLen,')',sep='')
+            code[codeLen+1] <- paste('showText(',textStart,',',textLen,')',sep='')
             codeLen <- codeLen + 1
             textStart <- textLen + 1
         }
@@ -224,12 +212,11 @@ DELIM[[BRCATCODE]] <- c("<%=","%>")
         stop("Oops! Someone forgot to close a tag. We saw: ",DELIM[[state]][1],' and we need ',DELIM[[state]][2], call. = FALSE)
     }
 
-    brew.env <- new.env(parent = globalenv())
-    assign('text', text, brew.env)
-    assign('code', parse(text = code, srcfile = NULL), brew.env)
-    brew.cached <- .brew.cached
-    environment(brew.cached) <- brew.env
+    showText <- function(from, to)
+        cat(text[from:to], sep='', collapse='')
 
-    return(brew.cached(envir = envir))
+    assign('showText', showText, envir = envir)
+
+    eval(parse(text = code, srcfile = NULL), envir = envir)
 
 }
