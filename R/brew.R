@@ -71,8 +71,23 @@ Pandoc.brew <- function(file = stdin(), output = stdout(), convert = FALSE, open
     showCode <- function(..., envir = parent.frame(), cache = evals.option('cache')) {
         res <- evals(unlist(...), env = envir, graph.dir = graph.dir, graph.name = graph.name, hi.res = graph.hi.res)
         for (r in res) {
-            assign('brew', c(storage$brew, list(r)), envir = storage)
-            pander(r)
+
+            r.pander <- pander.return(r)
+            localstorage <- pander:::storage$brew
+            localstorage.last <- tail(localstorage, 1)[[1]]
+
+            if (is.character(localstorage.last$text$eval) & sum(grepl('\\n', localstorage.last$text$eval)) == 0) {
+
+                localstorage[[length(localstorage)]]$text <- list(raw = paste0(localstorage.last$text$raw, paste0('<%=', r$src, '%>')), eval = paste0(localstorage.last$text$eval, r.pander))
+                localstorage[[length(localstorage)]]$chunks <- list(raw = c(localstorage.last$chunks$raw, paste0('<%=', r$src, '%>')), eval = c(localstorage.last$chunks$eval, r.pander))
+                localstorage[[length(localstorage)]]$msg <- list(messages = c(localstorage.last$msg$messages, r$msg$messages), warnings = c(localstorage.last$msg$warnings, r$msg$warnings), errors = c(localstorage.last$msg$errors, r$msg$errors))
+
+            } else
+                localstorage <- c(storage$brew, list(list(type = 'block', robject = r)))
+
+            assign('brew', localstorage, envir = storage)
+            cat(r.pander)
+
         }
     }
     assign('showCode', showCode, envir = envir)
@@ -84,7 +99,7 @@ Pandoc.brew <- function(file = stdin(), output = stdout(), convert = FALSE, open
     if (!output.stdout)
         res <- gsub(sprintf(']\\(%s/', basedir), ']\\(', res)
 
-    cat(remove.extra.newlines(paste(res, collapse = '\n')), file = output)
+    cat(remove.extra.newlines(paste(res, collapse = '\n')), '\n', file = output)
 
     if (is.character(convert))
         Pandoc.convert(output, format = convert, open = open, proc.time = as.numeric(proc.time() - timer)[3])
@@ -218,12 +233,22 @@ DELIM[[BRCATCODE]] <- c("<%=","%>")
 
     showText <- function(from, to) {
 
-        localtext    <- text[from:to]
-        localstorage <- pander:::storage$brew
-        cat(localtext, sep='', collapse='')
-        assign('brew', c(localstorage, list(list(text = paste(localtext, collapse = '')))), envir = pander:::storage)
+        localtexts <- text[from:to]
+        for (localtext in localtexts) {
+            localstorage <- pander:::storage$brew
+            localstorage.last <- tail(localstorage, 1)[[1]]
+
+            if (is.character(localstorage.last$text$eval) & sum(grepl('\\n', localstorage.last$text$eval)) == 0)
+                localstorage[[length(localstorage)]]$text <- list(raw = paste0(localstorage.last$text$raw, localtext), eval = paste0(localstorage.last$text$eval, localtext))
+            else
+                localstorage <- c(localstorage, list(list(type = 'text', text = list(raw = localtext, eval = localtext), chunks = list(raw = NULL, eval = NULL), msg = list(messages = NULL, warnings = NULL, errors = NULL))))
+
+            assign('brew', localstorage, envir = storage)
+            cat(localtext)
+        }
 
     }
+
     assign('showText', showText, envir = envir)
 
     eval(parse(text = code, srcfile = NULL), envir = envir)
