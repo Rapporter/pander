@@ -71,11 +71,13 @@ Pandoc.brew <- function(file = stdin(), output = stdout(), convert = FALSE, open
     showCode <- function(..., envir = parent.frame(), cache = evals.option('cache')) {
         res <- evals(unlist(...), env = envir, graph.dir = graph.dir, graph.name = graph.name, hi.res = graph.hi.res)
         for (r in res) {
+            assign('brew', c(storage$brew, list(r)), envir = storage)
             pander(r)
         }
     }
     assign('showCode', showCode, envir = envir)
 
+    storage$brew <- NULL
     res <- capture.output(brew(text = text, envir = envir))
 
     ## remove absolute path from image links
@@ -86,6 +88,8 @@ Pandoc.brew <- function(file = stdin(), output = stdout(), convert = FALSE, open
 
     if (is.character(convert))
         Pandoc.convert(output, format = convert, open = open, proc.time = as.numeric(proc.time() - timer)[3])
+
+    invisible(storage$brew)
 
 }
 
@@ -212,9 +216,14 @@ DELIM[[BRCATCODE]] <- c("<%=","%>")
         stop("Oops! Someone forgot to close a tag. We saw: ",DELIM[[state]][1],' and we need ',DELIM[[state]][2], call. = FALSE)
     }
 
-    showText <- function(from, to)
-        cat(text[from:to], sep='', collapse='')
+    showText <- function(from, to) {
 
+        localtext    <- text[from:to]
+        localstorage <- pander:::storage$brew
+        cat(localtext, sep='', collapse='')
+        assign('brew', c(localstorage, list(list(text = paste(localtext, collapse = '')))), envir = pander:::storage)
+
+    }
     assign('showText', showText, envir = envir)
 
     eval(parse(text = code, srcfile = NULL), envir = envir)
