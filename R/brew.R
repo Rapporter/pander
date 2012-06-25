@@ -124,52 +124,22 @@ DELIM[[BRTEMPLATE]] <- c("<%%","%%>")
 	invisible(ret)
 }
 
-`brew` <-
-function(file=stdin(), text = NULL, envir = parent.frame(),run=TRUE,parseCode=TRUE,tplParser=NULL,chdir=FALSE){
+`brew` <- function(text = NULL, envir = parent.frame(),run=TRUE,parseCode=TRUE,tplParser=NULL,chdir=FALSE) {
 
-	file.mtime  <- isFile <- closeIcon <- FALSE
+    if (is.character(text) && nchar(text[1]) > 0)
+        icon <- textConnection(text[1])
 
-	# Error check input
-	if (is.character(file) && file.exists(file)){
-		isFile <- closeIcon <- TRUE
-		if (chdir || isTRUE(getOption('brew.chdir'))){
-			isURL <- length(grep("^(ftp|http|file)://", file)) > 0L
-			if(isURL)
-				warning("'chdir = TRUE' makes no sense for a URL")
-			if(!isURL && (path <- dirname(file)) != ".") {
-				owd <- getwd()
-				if(is.null(owd))
-					warning("cannot 'chdir' as current directory is unknown")
-				else on.exit(setwd(owd), add=TRUE)
-				setwd(path)
-				file <- basename(file)
-			}
-		}
+    # Error check env
+    if (!is.environment(envir)){
+        warning('envir is not a valid environment')
+        return(invisible(NULL))
+    }
 
-	} else if (is.character(text) && nchar(text[1]) > 0){
-		closeIcon <- TRUE
-		icon <- textConnection(text[1])
-	} else if (inherits(file,'connection') && summary(file)$"can read" == 'yes') {
-		icon <- file
-	} else {
-		stop('No valid input')
-		return(invisible(NULL))
-	}
-
-	# Error check env
-	if (!is.environment(envir)){
-		warning('envir is not a valid environment')
-		return(invisible(NULL))
-	}
-
-	# open input file if needed
-	if (isFile) icon <- file(file,open="rt")
-
-	state <- BRTEXT
-	text <- code <- tpl <- character(.bufLen)
-	textLen <- codeLen <- as.integer(0)
-	textStart <- as.integer(1)
-	line <- ''
+    state <- BRTEXT
+    text <- code <- tpl <- character(.bufLen)
+    textLen <- codeLen <- as.integer(0)
+    textStart <- as.integer(1)
+    line <- ''
 
 	while(TRUE){
 		if (!nchar(line)){
@@ -291,8 +261,6 @@ function(file=stdin(), text = NULL, envir = parent.frame(),run=TRUE,parseCode=TR
 	} else {
 		stop("Oops! Someone forgot to close a tag. We saw: ",DELIM[[state]][1],' and we need ',DELIM[[state]][2])
 	}
-
-	if (closeIcon) close(icon)
 
 	if (run){
 
