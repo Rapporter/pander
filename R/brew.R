@@ -95,7 +95,7 @@ Pandoc.brew <- function(file = stdin(), output = stdout(), convert = FALSE, open
 ## Changes:
 ###########
 ##  * `<%= ... %>` tags can multiple expressions
-##  * raw results are also returned not just `cat`ed
+##  * TODO: raw results are also returned not just `cat`ed
 ######################################################################################
 
 BRTEXT <- 1
@@ -108,8 +108,7 @@ DELIM[[BRCODE]] <- c("<%","%>")
 DELIM[[BRCOMMENT]] <- c("<%#","%>")
 DELIM[[BRCATCODE]] <- c("<%=","%>")
 
-.bufLen <- 0
-
+#' @keywords internal
 `.brew.cached` <- function(envir = parent.frame()) {
 
     text <- get('text')
@@ -122,6 +121,7 @@ DELIM[[BRCATCODE]] <- c("<%=","%>")
     invisible(ret)
 }
 
+#' @keywords internal
 `brew` <- function(text = NULL, envir = parent.frame()) {
 
     if (is.character(text) && nchar(text[1]) > 0)
@@ -133,7 +133,7 @@ DELIM[[BRCATCODE]] <- c("<%=","%>")
         stop('Invalid environment')
 
     state <- BRTEXT
-    text <- code <- tpl <- character(.bufLen)
+    text <- code <- tpl <- character(0)
     textLen <- codeLen <- as.integer(0)
     textStart <- as.integer(1)
     line <- ''
@@ -221,15 +221,15 @@ DELIM[[BRCATCODE]] <- c("<%=","%>")
             textStart <- textLen + 1
         }
     } else {
-        stop("Oops! Someone forgot to close a tag. We saw: ",DELIM[[state]][1],' and we need ',DELIM[[state]][2])
+        stop("Oops! Someone forgot to close a tag. We saw: ",DELIM[[state]][1],' and we need ',DELIM[[state]][2], call. = FALSE)
     }
 
-    brew.env <- new.env(parent=globalenv())
-    assign('text',text,brew.env)
-    assign('code',parse(text=code,srcfile=NULL),brew.env)
+    brew.env <- new.env(parent = globalenv())
+    assign('text', text, brew.env)
+    assign('code', parse(text = code, srcfile = NULL), brew.env)
     brew.cached <- .brew.cached
     environment(brew.cached) <- brew.env
 
-    return(brew.cached(envir=envir))
+    return(brew.cached(envir = envir))
 
 }
