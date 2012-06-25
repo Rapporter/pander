@@ -122,17 +122,15 @@ DELIM[[BRCATCODE]] <- c("<%=","%>")
     invisible(ret)
 }
 
-`brew` <- function(text = NULL, envir = parent.frame(), run = TRUE, parseCode = TRUE) {
+`brew` <- function(text = NULL, envir = parent.frame()) {
 
     if (is.character(text) && nchar(text[1]) > 0)
         icon <- textConnection(text[1])
     else
         stop('Invalid input.')
 
-    if (!is.environment(envir)){
-        warning('envir is not a valid environment')
-        return(invisible(NULL))
-    }
+    if (!is.environment(envir))
+        stop('Invalid environment')
 
     state <- BRTEXT
     text <- code <- tpl <- character(.bufLen)
@@ -226,27 +224,12 @@ DELIM[[BRCATCODE]] <- c("<%=","%>")
         stop("Oops! Someone forgot to close a tag. We saw: ",DELIM[[state]][1],' and we need ',DELIM[[state]][2])
     }
 
-    if (run){
+    brew.env <- new.env(parent=globalenv())
+    assign('text',text,brew.env)
+    assign('code',parse(text=code,srcfile=NULL),brew.env)
+    brew.cached <- .brew.cached
+    environment(brew.cached) <- brew.env
 
-        brew.env <- new.env(parent=globalenv())
-        assign('text',text,brew.env)
-        assign('code',parse(text=code,srcfile=NULL),brew.env)
-        brew.cached <- .brew.cached
-        environment(brew.cached) <- brew.env
-        return(brew.cached(envir=envir))
+    return(brew.cached(envir=envir))
 
-    } else if (parseCode){
-
-        brew.env <- new.env(parent=globalenv())
-        assign('text',text,brew.env)
-        assign('code',parse(text=code,srcfile=NULL),brew.env)
-        brew.cached <- .brew.cached
-        environment(brew.cached) <- brew.env
-        invisible(brew.cached)
-
-    } else {
-
-        invisible(list(text=text,code=code))
-
-    }
 }
