@@ -116,20 +116,10 @@ DELIM[[BRTEMPLATE]] <- c("<%%","%%>")
 
 	text <- get('text')
 	brew.cat <- function(from,to) cat(text[from:to],sep='',collapse='')
-	.prev.brew.cat <- NULL
-	if (exists('.brew.cat',envir=envir)){
-		.prev.brew.cat <- get('.brew.cat',pos=envir)
-	}
 	assign('.brew.cat',brew.cat, envir=envir)
 
 	code <- get('code')
 	ret <- try(eval(code,envir=envir))
-
-	if(!is.null(.prev.brew.cat)){
-		assign('.brew.cat',.prev.brew.cat,envir=envir)
-	} else {
-		rm('.brew.cat',envir=envir)
-	}
 
 	invisible(ret)
 }
