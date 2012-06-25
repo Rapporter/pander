@@ -26,12 +26,13 @@
 #'      \item John MacFarlane (2012): _Pandoc User's Guide_. \url{http://johnmacfarlane.net/pandoc/README.html}
 #' }
 #' @examples \dontrun{
-#' Pandoc.brew(text = 'string:<%="foobar"%>\nimage:<%=plot(1:10)%>\nerror:<%=mean(no.R.object.like.this)%>')
-#'
 #' text <- paste('# Header', '', 'What a lovely list:\n<%=as.list(runif(10))%>', 'A wide table:\n<%=mtcars[1:3, ]%>', 'And a nice chart:\n\n<%=plot(1:10)%>', sep = '\n')
 #' Pandoc.brew(text = text)
 #' Pandoc.brew(text = text, output = tempfile(), convert = 'html')
 #' Pandoc.brew(text = text, output = tempfile(), convert = 'pdf')
+#'
+#' ## pi is awesome
+#' Pandoc.brew(text='<%for (i in 1:5) {%>\n Pi has a lot (<%=i%>) of power: <%=pi^i%><%}%>')
 #'
 #' ## package bundled examples
 #' Pandoc.brew(system.file('examples/minimal.brew', package='pander'))
@@ -42,6 +43,7 @@
 #' ## brew returning R objects
 #' str(Pandoc.brew(text='Pi equals to <%=pi%>.\nAnd here are some random data:\n<%=runif(10)%>'))
 #' str(Pandoc.brew(text='# Header <%=1%>\nPi is <%=pi%> which is smaller then <%=2%>.\nfoo\nbar\n <%=3%>\n<%=mtcars[1:2,]%>'))
+#' str(Pandoc.brew(text='<%for (i in 1:5) {%>\n Pi has a lot (<%=i%>) of power: <%=pi^i%><%}%>'))
 #' }
 #' @importFrom brew brew
 Pandoc.brew <- function(file = stdin(), output = stdout(), convert = FALSE, open = TRUE, graph.hi.res = FALSE, text = NULL, envir = new.env()) {
@@ -90,7 +92,7 @@ Pandoc.brew <- function(file = stdin(), output = stdout(), convert = FALSE, open
                 localstorage <- c(storage$brew, list(list(type = 'block', robject = r)))
 
             assign('brew', localstorage, envir = storage)
-            cat(r.pander, sep = '\n')
+            cat(paste(r.pander, collapse = '\n'))
 
         }
     }
