@@ -86,7 +86,7 @@ Pandoc.brew <- function(file = stdin(), output = stdout(), convert = FALSE, open
                 localstorage <- c(storage$brew, list(list(type = 'block', robject = r)))
 
             assign('brew', localstorage, envir = storage)
-            cat(r.pander)
+            cat(r.pander, sep = '\n')
 
         }
     }
