@@ -102,13 +102,11 @@ BRTEXT <- 1
 BRCODE <- 2
 BRCOMMENT <- 3
 BRCATCODE <- 4
-BRTEMPLATE <- 5
 DELIM <- list()
 DELIM[[BRTEXT]] <- c("","")
 DELIM[[BRCODE]] <- c("<%","%>")
 DELIM[[BRCOMMENT]] <- c("<%#","%>")
 DELIM[[BRCATCODE]] <- c("<%=","%>")
-DELIM[[BRTEMPLATE]] <- c("<%%","%%>")
 
 .bufLen <- 0
 
@@ -124,10 +122,12 @@ DELIM[[BRTEMPLATE]] <- c("<%%","%%>")
     invisible(ret)
 }
 
-`brew` <- function(text = NULL, envir = parent.frame(), run = TRUE, parseCode = TRUE, tplParser = NULL, chdir = FALSE) {
+`brew` <- function(text = NULL, envir = parent.frame(), run = TRUE, parseCode = TRUE) {
 
     if (is.character(text) && nchar(text[1]) > 0)
         icon <- textConnection(text[1])
+    else
+        stop('Invalid input.')
 
     if (!is.environment(envir)){
         warning('envir is not a valid environment')
@@ -168,14 +168,6 @@ DELIM[[BRTEMPLATE]] <- c("<%%","%%>")
                     line <- sub('^=','',line)
                 } else if (regexpr('^#',spl[2]) > 0){
                     state <- BRCOMMENT
-                } else if (regexpr('^%',spl[2]) > 0){
-                    if (is.null(tplParser)){
-                        text[textLen+1] <- '<%'
-                        textLen <- textLen + 1
-                    }
-                    line <- sub('^%','',line)
-                    state <- BRTEMPLATE
-                    next
                 }
 
                 if (textStart <= textLen) {
@@ -189,29 +181,6 @@ DELIM[[BRTEMPLATE]] <- c("<%%","%%>")
                 line <- ''
             }
         } else {
-            if (regexpr("%%>",line,perl=TRUE) > 0){
-                if (state != BRTEMPLATE)
-                    stop("Oops! Someone forgot to close a tag. We saw: ",DELIM[[state]][1],' and we need ',DELIM[[state]][2])
-                spl <- strsplit(line,"%%>",fixed=TRUE)[[1]]
-                if (!is.null(tplParser)){
-                    tpl[length(tpl)+1] <- spl[1]
-                    # call template parser
-                    tplBufList <- tplParser(tpl)
-                    if (length(tplBufList)){
-                        textBegin <- textLen + 1;
-                        textEnd <- textBegin + length(tplBufList) - 1
-                        textLen <- textEnd
-                        text[textBegin:textEnd] <- tplBufList
-                    }
-                    tpl <- character()
-                } else {
-                    text[textLen+1] <- paste(spl[1],'%>',sep='')
-                    textLen <- textLen + 1
-                }
-                line <- paste(spl[-1],collapse='%%>')
-                state <- BRTEXT
-                next
-            }
             if (regexpr("%>",line,perl=TRUE) > 0){
                 spl <- strsplit(line,"%>",fixed=TRUE)[[1]]
                 line <- paste(spl[-1],collapse='%>')
@@ -241,12 +210,8 @@ DELIM[[BRTEMPLATE]] <- c("<%%","%%>")
             } else if (regexpr("<%",line,perl=TRUE) > 0){
                 stop("Oops! Someone forgot to close a tag. We saw: ",DELIM[[state]][1],' and we need ',DELIM[[state]][2])
             } else {
-                if (state == BRTEMPLATE && !is.null(tplParser))
-                    tpl[length(tpl)+1] <- line
-                else {
-                    text[textLen+1] <- line
-                    textLen <- textLen + 1
-                }
+                text[textLen+1] <- line
+                textLen <- textLen + 1
                 line <- ''
             }
         }
