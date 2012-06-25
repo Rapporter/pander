@@ -112,13 +112,7 @@ DELIM[[BRTEMPLATE]] <- c("<%%","%%>")
 
 .bufLen <- 0
 
-`.brew.cached` <- function(output=stdout(),envir=parent.frame()){
-	# Only sink if caller passed an argument
-	sunk <- FALSE
-	if (!missing(output)) {
-		sunk <- TRUE
-		sink(output)
-	}
+`.brew.cached` <- function(envir = parent.frame()) {
 
 	text <- get('text')
 	brew.cat <- function(from,to) cat(text[from:to],sep='',collapse='')
@@ -131,9 +125,6 @@ DELIM[[BRTEMPLATE]] <- c("<%%","%%>")
 	code <- get('code')
 	ret <- try(eval(code,envir=envir))
 
-	# sink() will warn if trying to end the real stdout diversion
-	if (sunk && unclass(output) != 1) sink()
-
 	if(!is.null(.prev.brew.cat)){
 		assign('.brew.cat',.prev.brew.cat,envir=envir)
 	} else {
@@ -144,7 +135,7 @@ DELIM[[BRTEMPLATE]] <- c("<%%","%%>")
 }
 
 `brew` <-
-function(file=stdin(),output=stdout(),text=NULL,envir=parent.frame(),run=TRUE,parseCode=TRUE,tplParser=NULL,chdir=FALSE){
+function(file=stdin(), text = NULL, envir = parent.frame(),run=TRUE,parseCode=TRUE,tplParser=NULL,chdir=FALSE){
 
 	file.mtime  <- isFile <- closeIcon <- FALSE
 
@@ -174,13 +165,6 @@ function(file=stdin(),output=stdout(),text=NULL,envir=parent.frame(),run=TRUE,pa
 		stop('No valid input')
 		return(invisible(NULL))
 	}
-
-	# Error check output
-	if (inherits(output,'connection')){
-		if (summary(output)$"can write" != 'yes')
-			stop('output connection is not writeable')
-	} else if ( !is.character(output) )
-		stop('No valid output')
 
 	# Error check env
 	if (!is.environment(envir)){
@@ -328,11 +312,8 @@ function(file=stdin(),output=stdout(),text=NULL,envir=parent.frame(),run=TRUE,pa
 		brew.cached <- .brew.cached
 		environment(brew.cached) <- brew.env
 
-		if (!missing(output)) {
-			return(brew.cached(output,envir))
-		} else {
-			return(brew.cached(envir=envir))
-		}
+                return(brew.cached(envir=envir))
+
 	} else if (parseCode){
 		brew.env <- new.env(parent=globalenv())
 		assign('text',text,brew.env)
