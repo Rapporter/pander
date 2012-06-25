@@ -111,23 +111,6 @@ DELIM[[BRCATCODE]] <- c("<%=","%>")
 DELIM[[BRTEMPLATE]] <- c("<%%","%%>")
 
 .bufLen <- 0
-.cache <- NULL
-
-# Experimental function for setting the size of internal buffers.
-# There's anecdotal evidence that suggests larger buffer sizes
-# means faster parsing.
-setBufLen <- function(len=0){
-	.bufLen <<- len
-	invisible(NULL)
-}
-
-brewCache     <- function(envir=NULL) {
-	if (missing(envir)) return(.cache)
-	.cache <<- envir
-	invisible(NULL)
-}
-brewCacheOn  <- function() brewCache(new.env(hash=TRUE,parent=globalenv()))
-brewCacheOff <- function() brewCache(NULL)
 
 `.brew.cached` <- function(output=stdout(),envir=parent.frame()){
 	# Only sink if caller passed an argument
@@ -163,8 +146,7 @@ brewCacheOff <- function() brewCache(NULL)
 `brew` <-
 function(file=stdin(),output=stdout(),text=NULL,envir=parent.frame(),run=TRUE,parseCode=TRUE,tplParser=NULL,chdir=FALSE){
 
-	file.mtime <- canCache <- isFile <- closeIcon <- FALSE
-	filekey <- file # we modify file when chdir=TRUE, so keep same cache key
+	file.mtime  <- isFile <- closeIcon <- FALSE
 
 	# Error check input
 	if (is.character(file) && file.exists(file)){
@@ -206,25 +188,7 @@ function(file=stdin(),output=stdout(),text=NULL,envir=parent.frame(),run=TRUE,pa
 		return(invisible(NULL))
 	}
 
-	# Can we use the cache
-	if (!is.null(.cache) && isFile && run && is.null(tplParser)){
-		canCache <- TRUE
-		if (exists(filekey,.cache)){
-			file.cache <- get(filekey,.cache)
-			file.mtime <- file.info(file)$mtime
-			if (file.cache$mtime >= file.mtime){
-				brew.cached <- .brew.cached
-				environment(brew.cached) <- file.cache$env
-				if (!missing(output)) {
-					return(brew.cached(output,envir))
-				} else {
-					return(brew.cached(envir=envir))
-				}
-			}
-		}
-	}
-
-	# Not using cache, open input file if needed
+	# open input file if needed
 	if (isFile) icon <- file(file,open="rt")
 
 	state <- BRTEXT
@@ -363,11 +327,6 @@ function(file=stdin(),output=stdout(),text=NULL,envir=parent.frame(),run=TRUE,pa
 		assign('code',parse(text=code,srcfile=NULL),brew.env)
 		brew.cached <- .brew.cached
 		environment(brew.cached) <- brew.env
-
-		if (canCache){
-			if (file.mtime == FALSE) file.mtime <- file.info(file)$mtime
-			assign(filekey,list(mtime=file.mtime,env=brew.env),.cache)
-		}
 
 		if (!missing(output)) {
 			return(brew.cached(output,envir))
