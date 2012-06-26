@@ -252,13 +252,24 @@ DELIM[[BRCATCODE]] <- c("<%=","%>")
 
         localtexts <- text[from:to]
         for (localtext in localtexts) {
+
+            if (grepl('^#+[ \t]+', localtext)) {
+                heading.level <- nchar(gsub("^(#{1,6})[ \t]+.*", "\\1", localtext))
+                localtext <- gsub('^#{1,6}[ \t]+', '', localtext)
+                type <- 'heading'
+            } else
+                type <- 'text'
+
             localstorage <- pander:::storage$brew
             localstorage.last <- tail(localstorage, 1)[[1]]
 
             if (is.character(localstorage.last$text$eval) & sum(grepl('\\n', localstorage.last$text$eval)) == 0)
                 localstorage[[length(localstorage)]]$text <- list(raw = paste0(localstorage.last$text$raw, localtext), eval = paste0(localstorage.last$text$eval, localtext))
             else
-                localstorage <- c(localstorage, list(list(type = 'text', text = list(raw = localtext, eval = localtext), chunks = list(raw = NULL, eval = NULL), msg = list(messages = NULL, warnings = NULL, errors = NULL))))
+                localstorage <- c(localstorage, list(list(type = type, text = list(raw = localtext, eval = localtext), chunks = list(raw = NULL, eval = NULL), msg = list(messages = NULL, warnings = NULL, errors = NULL))))
+
+            if (type == 'heading')
+                localstorage[[length(localstorage)]]$level <- heading.level
 
             assign('brew', localstorage, envir = storage)
             cat(localtext)
