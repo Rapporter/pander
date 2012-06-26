@@ -79,10 +79,16 @@ Pandoc.brew <- function(file = stdin(), output = stdout(), convert = FALSE, open
         for (r in res) {
 
             r.pander <- pander.return(r)
+
+            if ((r$type == 'image') | (length(r.pander) > 1))
+                type <- 'block'
+            else
+                type <- 'inline'
+
             localstorage <- pander:::storage$brew
             localstorage.last <- tail(localstorage, 1)[[1]]
 
-            if (is.character(localstorage.last$text$eval) & sum(grepl('\\n', localstorage.last$text$eval)) == 0) {
+            if (is.character(localstorage.last$text$eval) & (type == 'inline')) {
 
                 localstorage[[length(localstorage)]]$text <- list(raw = paste0(localstorage.last$text$raw, paste0('<%=', r$src, '%>')), eval = paste0(localstorage.last$text$eval, r.pander))
                 localstorage[[length(localstorage)]]$chunks <- list(raw = c(localstorage.last$chunks$raw, paste0('<%=', r$src, '%>')), eval = c(localstorage.last$chunks$eval, r.pander))
@@ -263,7 +269,7 @@ DELIM[[BRCATCODE]] <- c("<%=","%>")
             localstorage <- pander:::storage$brew
             localstorage.last <- tail(localstorage, 1)[[1]]
 
-            if (is.character(localstorage.last$text$eval) & sum(grepl('\\n', localstorage.last$text$eval)) == 0)
+            if (is.character(localstorage.last$text$eval) & (type == 'text'))
                 localstorage[[length(localstorage)]]$text <- list(raw = paste0(localstorage.last$text$raw, localtext), eval = paste0(localstorage.last$text$eval, localtext))
             else
                 localstorage <- c(localstorage, list(list(type = type, text = list(raw = localtext, eval = localtext), chunks = list(raw = NULL, eval = NULL), msg = list(messages = NULL, warnings = NULL, errors = NULL))))
