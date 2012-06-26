@@ -1,5 +1,10 @@
 ## test_file('test-evals.R')
 
+cache.dir <- evals.option('cache.dir')
+graph.dir <- evals.option('graph.dir')
+evals.option('cache.dir',  file.path(tempdir(), '.cache'))
+evals.option('graph.dir',  file.path(tempdir(), 'plot'))
+
 context('eval.msgs')
 
 test_that('returns', {
@@ -191,3 +196,6 @@ test_that('multiple warnings+output', {
             expect_that(evals(list(c('chisq.test(mtcars$gear, mtcars$am)', 'pi', 'chisq.test(mtcars$gear, mtcars$hp)')), parse = F)[[1]]$msg$warnings, is_a('character'))
             expect_that(evals('chisq.test(mtcars$gear, mtcars$am);pi;chisq.test(mtcars$gear, mtcars$hp)')[[1]]$msg$warnings, is_a('character'))
         })
+
+evals.option('cache.dir',  cache.dir)
+evals.option('graph.dir',  graph.dir)
