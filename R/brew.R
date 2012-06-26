@@ -79,6 +79,7 @@ Pandoc.brew <- function(file = stdin(), output = stdout(), convert = FALSE, open
         for (r in res) {
 
             r.pander <- pander.return(r)
+            cat(paste(r.pander, collapse = '\n'))
 
             if ((r$type == 'image') | (length(r.pander) > 1))
                 type <- 'block'
@@ -98,7 +99,6 @@ Pandoc.brew <- function(file = stdin(), output = stdout(), convert = FALSE, open
                 localstorage <- c(storage$brew, list(list(type = 'block', robject = r)))
 
             assign('brew', localstorage, envir = storage)
-            cat(paste(r.pander, collapse = '\n'))
 
         }
     }
@@ -259,6 +259,8 @@ DELIM[[BRCATCODE]] <- c("<%=","%>")
         localtexts <- text[from:to]
         for (localtext in localtexts) {
 
+            cat(localtext)
+
             if (grepl('^#+[ \t]+', localtext)) {
                 heading.level <- nchar(gsub("^(#{1,6})[ \t]+.*", "\\1", localtext))
                 localtext <- gsub('^#{1,6}[ \t]+', '', localtext)
@@ -278,7 +280,7 @@ DELIM[[BRCATCODE]] <- c("<%=","%>")
                 localstorage[[length(localstorage)]]$level <- heading.level
 
             assign('brew', localstorage, envir = storage)
-            cat(localtext)
+
         }
 
     }
