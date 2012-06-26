@@ -65,9 +65,11 @@ Pandoc.brew <- function(file = stdin(), output = stdout(), convert = FALSE, open
         basedir    <- dirname(output)
         graph.name <- paste0(basename(output), '-%n')
         graph.dir  <- file.path(basedir, 'plots')
+        cache.dir  <- file.path(basedir, '.cache')
     } else {
         graph.name <- '%t'
-        graph.dir  <- 'plots'
+        graph.dir  <- file.path(tempdir(), 'plots')
+        cache.dir  <- file.path(tempdir(), '.cache')
     }
 
     if (is.null(text))
@@ -75,7 +77,7 @@ Pandoc.brew <- function(file = stdin(), output = stdout(), convert = FALSE, open
 
     ## helper fn
     showCode <- function(..., envir = parent.frame(), cache = evals.option('cache')) {
-        res <- evals(unlist(...), env = envir, graph.dir = graph.dir, graph.name = graph.name, hi.res = graph.hi.res)
+        res <- evals(unlist(...), env = envir, cache.dir = cache.dir, graph.dir = graph.dir, graph.name = graph.name, hi.res = graph.hi.res)
         for (r in res) {
 
             r.pander <- pander.return(r)
