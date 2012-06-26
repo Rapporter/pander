@@ -118,6 +118,9 @@ Pandoc.brew <- function(file = stdin(), output = stdout(), convert = FALSE, open
     if (is.character(convert))
         Pandoc.convert(output, format = convert, open = open, proc.time = as.numeric(proc.time() - timer)[3])
 
+    if (tail(storage$brew, 1)[[1]]$text$eval == '\n')
+        assign('brew', head(storage$brew, -1), envir = storage)
+
     invisible(storage$brew)
 
 }
