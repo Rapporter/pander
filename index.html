@@ -309,7 +309,7 @@ id   value
 ---------------------------------------------------
  Test statistic   P value   Alternative hypothesis 
 ---------------- --------- ------------------------
-      0.2          0.27           two-sided        
+      0.3          0.022          two-sided        
 ---------------------------------------------------
 
 Table: Two-sample Kolmogorov-Smirnov test: `runif(50)` and `runif(50)`
@@ -429,6 +429,28 @@ Table: Principal Components Analysis
 **3rd Qu.**      306          4.1e-03     
 
    **Max.**      419          6.1e-03     
+------------------------------------------
+
+Table: Kernel density of *mtcars$hp* (bandwidth: 28.04104)
+
+&gt; ## Don&#39;t like scientific notation?
+&gt; pander.option(&#39;round&#39;, 2)
+&gt; pander(density(mtcars$hp))
+
+------------------------------------------
+             Coordinates   Density values 
+----------- ------------- ----------------
+   **Min.**      -32            0.00      
+
+**1st Qu.**      81             0.00      
+
+ **Median**      194            0.00      
+
+   **Mean**      194            0.00      
+
+**3rd Qu.**      306            0.00      
+
+   **Max.**      419            0.01      
 ------------------------------------------
 
 Table: Kernel density of *mtcars$hp* (bandwidth: 28.04104)
@@ -657,7 +679,7 @@ B &lt;- <span class="fl">1e5</span></code></pre>
 </ul>
 <p>To use this small lib, just type: <code>M-x pander-mode</code> on any document. It might be useful to add a hook to <code>markdown-mode</code> if you find this useful.</p>
 <hr />
-<p>This report was generated with <a href="http://www.r-project.org/">R</a> (2.15.0) and <a href="https://github.com/daroczig/pander">pander</a> (0.1) in 0.891 sec on x86_64-unknown-linux-gnu platform.</p>
+<p>This report was generated with <a href="http://www.r-project.org/">R</a> (2.15.0) and <a href="https://github.com/daroczig/pander">pander</a> (0.1) in 0.909 sec on x86_64-unknown-linux-gnu platform.</p>
 <p align="center">
   Design: <a href="http://rapport-package.info/"><i>rapport</i> Development Team</a> &copy; 2012 | Backend: <a href="https://github.com/daroczig/pander">pander</a> | License: <a href="http://www.gnu.org/licenses/agpl.html" target="_blank">AGPL3</a> | Styled with <a href="http://www.getskeleton.com/" target="_blank">skeleton</a>
 </p>
