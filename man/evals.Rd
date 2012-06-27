@@ -5,8 +5,8 @@
   evals(txt, parse = TRUE, cache = TRUE,
     cache.mode = c("environment", "disk"),
     cache.dir = ".cache", cache.time = 0.1,
-    cache.copy.images = FALSE, classes = NULL,
-    hooks = NULL, length = Inf,
+    cache.copy.images = FALSE, showInvisible = FALSE,
+    classes = NULL, hooks = NULL, length = Inf,
     output = c("all", "src", "result", "output", "type", "msg", "stdout"),
     env = NULL, graph.nomargin = TRUE, graph.name = "\%t",
     graph.dir = "plots",
@@ -58,6 +58,8 @@
   \item{cache.copy.images}{copy images to new files if an
   image is returned from cache? If set to \code{FALSE}
   (default) the "old" path would be returned.}
+
+  \item{showInvisible}{return \code{invisible} results?}
 
   \item{classes}{a vector or list of classes which should
   be returned. If set to \code{NULL} (by default) all R

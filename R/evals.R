@@ -18,6 +18,7 @@
 #' }
 #' @param src character values containing R code
 #' @param env environment where evaluation takes place. If not set (by default), a new temporary environment is created.
+#' @param showInvisible return \code{invisible} results?
 #' @return a list of parsed elements each containing: \code{src} (the command run), \code{result} (R object: \code{NULL} if nothing returned), \code{print}ed \code{output}, \code{type} (class of returned object if any), informative/wawrning and error messages (if any returned by the command run, otherwise set to \code{NULL}) and possible \code{stdout}t value. See Details above.
 #' @seealso \code{\link{evals}}
 #' @export
@@ -45,7 +46,7 @@
 #' eval.msgs('cat("writing to console")')
 #' eval.msgs('cat("writing to console");1:4')
 #' }
-eval.msgs <- function(src, env = NULL) {
+eval.msgs <- function(src, env = NULL, showInvisible = FALSE) {
 
     if (is.null(env))
         env <- new.env()
@@ -94,7 +95,7 @@ eval.msgs <- function(src, env = NULL) {
     ## check if printing is needed
     if (!is.null(result)) {
 
-        if (result$visible) {
+        if (result$visible | showInvisible) {
 
             output <- vector("character")
             con <- textConnection("output", "wr", local=TRUE)
@@ -179,6 +180,7 @@ eval.msgs <- function(src, env = NULL) {
 #' @param cache.dir path to a directory holding cache files if \code{cache.mode} set to \code{disk}. Default to \code{.cache} in current working directory.
 #' @param cache.time number of seconds to limit caching based on \code{proc.time}. If set to \code{0}, all R commands, if set to \code{Inf}, none is cached (despite the \code{cache} parameter).
 #' @param cache.copy.images copy images to new files if an image is returned from cache? If set to \code{FALSE} (default) the "old" path would be returned.
+#' @param showInvisible return \code{invisible} results?
 #' @param classes a vector or list of classes which should be returned. If set to \code{NULL} (by default) all R objects will be returned.
 #' @param hooks list of hooks to be run for given classes in the form of \code{list(class = fn)}. If you would also specify some parameters of the function, a list should be provided in the form of \code{list(fn, param1, param2=NULL)} etc. So the hooks would become \code{list(class1=list(fn, param1, param2=NULL), ...)}. See example below. A default hook can be specified too by setting the class to \code{'default'}. This can be handy if you do not want to define separate methods/functions to each possible class, but automatically apply the default hook to all classes not mentioned in the list. You may also specify only one element in the list like: \code{hooks=list('default' = pander.return)}. Please note, that nor error/warning messages, nor stdout is captured (so: updated) while running hooks!
 #' @param length any R object exceeding the specified length will not be returned. The default value (\code{Inf}) does not filter out any R objects.
@@ -360,7 +362,7 @@ eval.msgs <- function(src, env = NULL) {
 #' }
 #' @export
 #' @importFrom digest digest
-evals <- function(txt, parse = TRUE, cache = TRUE, cache.mode = c('environment', 'disk'), cache.dir = '.cache', cache.time = 0.1, cache.copy.images = FALSE, classes = NULL, hooks = NULL, length = Inf, output = c('all', 'src', 'result', 'output', 'type', 'msg', 'stdout'), env = NULL, graph.nomargin = TRUE, graph.name = '%t', graph.dir = 'plots', graph.output = c('png', 'bmp', 'jpeg', 'jpg', 'tiff', 'svg', 'pdf'), width = 480, height = 480, res= 72, hi.res = FALSE, hi.res.width = 960, hi.res.height = 960*(height/width), hi.res.res = res*(hi.res.width/width), graph.env = FALSE, graph.recordplot = FALSE, ...){
+evals <- function(txt, parse = TRUE, cache = TRUE, cache.mode = c('environment', 'disk'), cache.dir = '.cache', cache.time = 0.1, cache.copy.images = FALSE, showInvisible = FALSE, classes = NULL, hooks = NULL, length = Inf, output = c('all', 'src', 'result', 'output', 'type', 'msg', 'stdout'), env = NULL, graph.nomargin = TRUE, graph.name = '%t', graph.dir = 'plots', graph.output = c('png', 'bmp', 'jpeg', 'jpg', 'tiff', 'svg', 'pdf'), width = 480, height = 480, res= 72, hi.res = FALSE, hi.res.width = 960, hi.res.height = 960*(height/width), hi.res.res = res*(hi.res.width/width), graph.env = FALSE, graph.recordplot = FALSE, ...){
 
     if (missing(txt))
         stop('No R code provided to evaluate!')
@@ -558,7 +560,7 @@ evals <- function(txt, parse = TRUE, cache = TRUE, cache.mode = c('environment',
         dev.control(displaylist = "enable")
 
         ## eval
-        res <- eval.msgs(src, env = env)
+        res <- eval.msgs(src, env = env, showInvisible = showInvisible)
 
         ## grab recorded.plot
         if (!is.null(dev.list())) {

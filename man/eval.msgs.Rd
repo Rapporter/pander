@@ -2,7 +2,7 @@
 \alias{eval.msgs}
 \title{Evaluate with messages}
 \usage{
-  eval.msgs(src, env = NULL)
+  eval.msgs(src, env = NULL, showInvisible = FALSE)
 }
 \arguments{
   \item{src}{character values containing R code}
@@ -10,6 +10,8 @@
   \item{env}{environment where evaluation takes place. If
   not set (by default), a new temporary environment is
   created.}
+
+  \item{showInvisible}{return \code{invisible} results?}
 }
 \value{
   a list of parsed elements each containing: \code{src}
