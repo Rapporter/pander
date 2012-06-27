@@ -91,7 +91,7 @@ Pandoc.brew <- function(file = stdin(), output = stdout(), convert = FALSE, open
             localstorage <- pander:::storage$brew
             localstorage.last <- tail(localstorage, 1)[[1]]
 
-            if (is.character(localstorage.last$text$eval) & (type == 'inline')) {
+            if (is.character(localstorage.last$text$eval) & !identical(localstorage.last$text$eval, '\n') & (type == 'inline')) {
 
                 localstorage[[length(localstorage)]]$text <- list(raw = paste0(localstorage.last$text$raw, paste0('<%=', r$src, '%>')), eval = paste0(localstorage.last$text$eval, r.pander))
                 localstorage[[length(localstorage)]]$chunks <- list(raw = c(localstorage.last$chunks$raw, paste0('<%=', r$src, '%>')), eval = c(localstorage.last$chunks$eval, ifelse(length(r.pander) == 0, '', r.pander)))
