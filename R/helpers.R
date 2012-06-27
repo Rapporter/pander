@@ -559,12 +559,19 @@ pandoc.table.return <- function(t, caption = NULL, digits = pander.option('digit
         style <- match.arg(style)
 
     ## format numeric & convert to string
+    if (length(dim(t)) == 0) {  # named char
+        ## just numbers
+        t.n <- as.numeric(which(sapply(t, is.numeric)))
+        if (length(t.n) > 0)
+            t[t.n] <- round(t[t.n], round)
+    }
     if (length(dim(t)) == 1) {
         ## just numbers
         t.n <- as.numeric(which(apply(t, 1, is.numeric)))
         if (length(t.n) > 0)
             t[t.n] <- round(t[t.n], round)
-    } else {
+    }
+    if (length(dim(t)) == 2) {
         ## just numbers (not just column-wise to make it general)
         t.n <- as.numeric(which(apply(t, 2, is.numeric)))
         if (length(t.n) > 0)
@@ -575,9 +582,12 @@ pandoc.table.return <- function(t, caption = NULL, digits = pander.option('digit
     ## TODO: adding formatting (emphasis, strong etc.)
 
     ## helper variables & split too long (30+ chars) cells
-    if (length(dim(t)) == 1) {
+    if (length(dim(t)) < 2) {
 
-        t[1:dim(t)] <- split.large.cells(t)
+        if (length(dim(t)) == 0)
+            t[1:length(t)] <- split.large.cells(t)
+        else
+            t[1:dim(t)] <- split.large.cells(t)
 
         t.rownames  <- NULL
         t.colnames  <- names(t)
@@ -588,7 +598,10 @@ pandoc.table.return <- function(t, caption = NULL, digits = pander.option('digit
             t.colnames.width <- 0
         }
 
-        t.width <- as.numeric(apply(cbind(t.colnames.width, as.numeric(apply(t, 1, nchar))), 1, max))
+        if (length(dim(t)) == 0)
+            t.width <- as.numeric(apply(cbind(t.colnames.width, as.numeric(sapply(t, nchar))), 1, max))
+        else
+            t.width <- as.numeric(apply(cbind(t.colnames.width, as.numeric(apply(t, 1, nchar))), 1, max))
 
     } else {
 

@@ -54,7 +54,7 @@
   * ~~table: support cells with line breaks~~
   * ~~table: split too wide tables into multiple tables (global solution which can be handled in LaTeX, docx etc. separately)~~
   * ~~table: add strong emphasis to row names~~
-  * table: **fails** with one-column tables. E.g.: `pander(mtcars[1,])`
+  * ~~table: fails with one-column tables. E.g.: `pander(mtcars[1,])`~~
   * table: add more styling options (e.g. (strong) emphasizing custom cells)
   * table: add option to draw significance starts in cells
 
@@ -92,6 +92,7 @@
   * ~~prettify image names to `output` + index no.~~
   * ~~exporting features?~~
   * option to convert document to multiple formats at once (although with caching it's no so bad even now)
+  * ~~remove parse (to deal with syntax errors)~~
 
 ## R5
 
