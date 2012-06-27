@@ -292,6 +292,13 @@ DELIM[[BRCATCODE]] <- c("<%=","%>")
 
     assign('showText', showText, envir = envir)
 
-    eval(parse(text = code, srcfile = NULL), envir = envir)
+    e <- eval.msgs(code, env = envir)
+    assign('debug', e, envir=storage) # debug
+
+    if (!is.null(e$msg$errors)) {
+        stop(paste0(sub('.*([Uu]nexpected [a-zA-Z0-9\\(\\)\'\\{\\} ]*)( at character|\n).*', '\\1', e$msg$errors), ' in your BRCODEs: ', p(e$src[!grepl('^show',e$src)])), call. = FALSE)
+    }
+
+    cat(e$stdout, sep = '\n')
 
 }
