@@ -94,7 +94,7 @@ Pandoc.brew <- function(file = stdin(), output = stdout(), convert = FALSE, open
             if (is.character(localstorage.last$text$eval) & (type == 'inline')) {
 
                 localstorage[[length(localstorage)]]$text <- list(raw = paste0(localstorage.last$text$raw, paste0('<%=', r$src, '%>')), eval = paste0(localstorage.last$text$eval, r.pander))
-                localstorage[[length(localstorage)]]$chunks <- list(raw = c(localstorage.last$chunks$raw, paste0('<%=', r$src, '%>')), eval = c(localstorage.last$chunks$eval, r.pander))
+                localstorage[[length(localstorage)]]$chunks <- list(raw = c(localstorage.last$chunks$raw, paste0('<%=', r$src, '%>')), eval = c(localstorage.last$chunks$eval, ifelse(length(r.pander) == 0, '', r.pander)))
                 localstorage[[length(localstorage)]]$msg <- list(messages = c(localstorage.last$msg$messages, r$msg$messages), warnings = c(localstorage.last$msg$warnings, r$msg$warnings), errors = c(localstorage.last$msg$errors, r$msg$errors))
 
             } else
