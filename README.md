@@ -312,7 +312,7 @@ The output of different **statistical methods** are tried to be prettyfied. Some
 ---------------------------------------------------
  Test statistic   P value   Alternative hypothesis 
 ---------------- --------- ------------------------
-      0.2          0.27           two-sided        
+      0.3          0.022          two-sided        
 ---------------------------------------------------
 
 Table: Two-sample Kolmogorov-Smirnov test: `runif(50)` and `runif(50)`
@@ -432,6 +432,28 @@ Table: Principal Components Analysis
 **3rd Qu.**      306          4.1e-03     
 
    **Max.**      419          6.1e-03     
+------------------------------------------
+
+Table: Kernel density of *mtcars$hp* (bandwidth: 28.04104)
+
+> ## Don't like scientific notation?
+> pander.option('round', 2)
+> pander(density(mtcars$hp))
+
+------------------------------------------
+             Coordinates   Density values 
+----------- ------------- ----------------
+   **Min.**      -32            0.00      
+
+**1st Qu.**      81             0.00      
+
+ **Median**      194            0.00      
+
+   **Mean**      194            0.00      
+
+**3rd Qu.**      306            0.00      
+
+   **Max.**      419            0.01      
 ------------------------------------------
 
 Table: Kernel density of *mtcars$hp* (bandwidth: 28.04104)
@@ -733,4 +755,4 @@ To use this small lib, just type: `M-x pander-mode` on any document. It might be
 
 
 -------
-This report was generated with [R](http://www.r-project.org/) (2.15.0) and [pander](https://github.com/daroczig/pander) (0.1) in 0.891 sec on x86_64-unknown-linux-gnu platform.
+This report was generated with [R](http://www.r-project.org/) (2.15.0) and [pander](https://github.com/daroczig/pander) (0.1) in 0.909 sec on x86_64-unknown-linux-gnu platform.

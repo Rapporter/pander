@@ -203,6 +203,15 @@ m
 > pander(density(mtcars$hp))
 <%=density(mtcars$hp)%>
 
+> ## Don't like scientific notation?
+> pander.option('round', 2)
+> pander(density(mtcars$hp))
+<%
+pander.option('round', 2)
+pander(density(mtcars$hp))
+pander.option('round', Inf)
+%>
+
 ```
 
 And of course tables are formatted (e.g. auto add of line breaks and splitting up tables) nicely:
