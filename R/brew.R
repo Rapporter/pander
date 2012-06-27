@@ -83,7 +83,7 @@ Pandoc.brew <- function(file = stdin(), output = stdout(), convert = FALSE, open
             r.pander <- pander.return(r)
             cat(paste(r.pander, collapse = '\n'))
 
-            if ((r$type == 'image') | (length(r.pander) > 1))
+            if (('image' %in% r$type) | (length(r.pander) > 1))
                 type <- 'block'
             else
                 type <- 'inline'
@@ -235,7 +235,7 @@ DELIM[[BRCATCODE]] <- c("<%=","%>")
                     code[codeLen+1] <- paste(text[textStart:textLen],collapse='')
                     codeLen <- codeLen + 1
                 } else if (state == BRCATCODE){
-                    code[codeLen + 1] <- paste("showCode(c(", paste(sapply(text[textStart:textLen], deparse), collapse = ","),"))", sep = "")
+                    code[codeLen + 1] <- paste0("showCode(", deparse(paste(text[textStart:textLen], collapse = "\n")), ")")
                     codeLen <- codeLen + 1
                 }
                 textStart <- textLen + 1
@@ -295,7 +295,7 @@ DELIM[[BRCATCODE]] <- c("<%=","%>")
     assign('showText', showText, envir = envir)
 
     e <- eval.msgs(code, env = envir)
-    assign('debug', e, envir=storage) # debug
+    assign('debug', list(code = code, text = text, result = e), envir = storage) # debug
 
     if (!is.null(e$msg$errors)) {
         stop(paste0(sub('.*([Uu]nexpected [a-zA-Z0-9\\(\\)\'\\{\\} ]*)( at character|\n).*', '\\1', e$msg$errors), ' in your BRCODEs: ', p(e$src[!grepl('^show',e$src)])), call. = FALSE)

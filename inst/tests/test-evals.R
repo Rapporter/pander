@@ -197,5 +197,10 @@ test_that('multiple warnings+output', {
             expect_that(evals('chisq.test(mtcars$gear, mtcars$am);pi;chisq.test(mtcars$gear, mtcars$hp)')[[1]]$msg$warnings, is_a('character'))
         })
 
+test_that('long lines with line breaks', {
+    expect_that(evals('if (TRUE) {\nset.caption("FOO")\nplot(c(1,2,3,4,5,6,7,8,9,10,11,12))\n}')[[1]]$result, is_a('image'))
+    expect_that(length(evals('x <- "this is a very-very looooooooooong line which might be split on `parse`, but that is not a big deal at all"\nx\n1')), equals(3))
+})
+
 evals.option('cache.dir',  cache.dir)
 evals.option('graph.dir',  graph.dir)

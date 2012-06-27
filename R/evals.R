@@ -384,7 +384,7 @@ evals <- function(txt, parse = TRUE, cache = TRUE, cache.mode = c('environment',
             cache <- FALSE
         else {
 
-            txt <- sapply(txt.parsed, function(x) paste(deparse(x), collapse = ' '))
+            txt <- sapply(txt.parsed, function(x) paste(deparse(x), collapse = '\n'))
             if (length(txt) == 0)
                 stop('No R code provided to evaluate!')
 
