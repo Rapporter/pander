@@ -13,4 +13,7 @@ test_that('correct number of list elements', {
     expect_that(length(Pandoc.brew(text='## foo <%=mtcars[1:2,]%> bar <%=plot(1:10)%>', output = '/tmp/dev/null')), equals(4))
     expect_that(length(Pandoc.brew(text='## foo <%=1%> bar <%=pi%>', output = '/tmp/dev/null')), equals(1))
     expect_that(length(Pandoc.brew(text='<%for (i in 1:5){%>## foo<%}%>', output = '/tmp/dev/null')), equals(5))
+    expect_that(length(Pandoc.brew(text='# FOO <%=pi%> bar \n# sad', output = '/tmp/dev/null')), equals(2))
+    expect_that(length(Pandoc.brew(text='# FOO\n## bar<%=pi%> bar \n# sad', output = '/tmp/dev/null')), equals(3))
+    expect_that(length(Pandoc.brew(text='# FOO ## bar<%=pi%> barn# sad', output = '/tmp/dev/null')), equals(1))
 })

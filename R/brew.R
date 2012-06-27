@@ -275,9 +275,11 @@ DELIM[[BRCATCODE]] <- c("<%=","%>")
 
             localstorage <- pander:::storage$brew
             localstorage.last <- tail(localstorage, 1)[[1]]
+            localstorage.last.text <- localstorage.last$text$eval
+            localstorage.last.type <- ifelse(is.null(localstorage.last$type), '', localstorage.last$type)
 
-            if (is.character(localstorage.last$text$eval) & (type == 'text'))
-                localstorage[[length(localstorage)]]$text <- list(raw = paste0(localstorage.last$text$raw, localtext), eval = paste0(localstorage.last$text$eval, localtext))
+            if (is.character(localstorage.last.text) & (type == 'text') & ifelse(localstorage.last.type == 'heading', !grepl('\n', localstorage.last.text), TRUE))
+                localstorage[[length(localstorage)]]$text <- list(raw = paste0(localstorage.last$text$raw, localtext), eval = paste0(localstorage.last.text, localtext))
             else
                 localstorage <- c(localstorage, list(list(type = type, text = list(raw = localtext, eval = localtext), chunks = list(raw = NULL, eval = NULL), msg = list(messages = NULL, warnings = NULL, errors = NULL))))
 
