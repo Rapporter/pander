@@ -57,15 +57,24 @@ Pandoc <- setRefClass('Pandoc', fields = list('author' = 'character', 'title' = 
 
 Pandoc$methods(initialize = function(author = 'Anonymous', title = base::sprintf('%s\'s report', author), date = base::date(), format = 'pdf', ...) {
 
-    .self$author <- author
-    .self$title  <- title
-    .self$date   <- date
-    .self$format <- format
+    .self$author    <- author
+    .self$title     <- title
+    .self$date      <- date
+    .self$format    <- format
+    .self$proc.time <- 0
     callSuper(...)
 
 })
 
-Pandoc$methods(add = function(x) .self$body <- c(.self$body, evals(deparse(match.call()[[2]]))))
+Pandoc$methods(add = function(x) {
+
+    timer           <- proc.time()
+    res             <- evals(deparse(match.call()[[2]]))
+    .self$body      <- c(.self$body, res)
+    .self$proc.time <- .self$proc.time + as.numeric(proc.time() - timer)[3]
+
+})
+
 Pandoc$methods(add.paragraph = function(x) .self$body <- c(.self$body, list(list(result = pandoc.p.return(x)))))
 
 Pandoc$methods(show = function(x) {
@@ -85,9 +94,9 @@ Pandoc$methods(show = function(x) {
 
         lapply(.self$body, function(x) pander(x$result))
 
-        ## show proc.tim)
+        ## show proc.time
         cat(pandoc.horizontal.rule())
-        cat('\nProc. time: ', as.numeric(proc.time() - timer)[3], 'seconds. \n\n')
+        cat('\nProc. time: ', .self$proc.time + as.numeric(proc.time() - timer)[3], 'seconds. \n\n')
 
     } else
         cat('\n)')
@@ -112,7 +121,7 @@ Pandoc$methods(export = function(f, open = TRUE) {
     fe <- Pandoc.convert(fp, format = .self$format, open = open, proc.time = as.numeric(proc.time() - timer)[3])
 
     ## return
-    cat('\nExported to *', f, '.[md|', format, ']* under ', as.numeric(proc.time() - timer)[3], ' seconds.\n\n', sep = '')
+    cat('\nExported to *', f, '.[md|', format, ']* under ', .self$proc.time + as.numeric(proc.time() - timer)[3], ' seconds.\n\n', sep = '')
 
     if (open)
         open.file.in.OS(fe)
