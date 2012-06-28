@@ -228,3 +228,7 @@ pander.evals <- function(x, ...) {
     cat(o)
 
 }
+
+#' @S3method pander rapport
+pander.rapport <- function(x, ...)
+    print(x)
