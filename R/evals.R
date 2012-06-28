@@ -101,10 +101,12 @@ eval.msgs <- function(src, env = NULL, showInvisible = FALSE) {
             con <- textConnection("output", "wr", local=TRUE)
             sink(con, split = FALSE)
 
-            result <- print(result$value)
+            print(result$value)
 
             sink()
             close(con)
+
+            result <- result$value
 
         } else {
 
