@@ -88,7 +88,7 @@ Pandoc.brew <- function(file = stdin(), output = stdout(), convert = FALSE, open
             else
                 type <- 'inline'
 
-            localstorage <- pander:::storage$brew
+            localstorage <- get('.storage', envir = envir)
             localstorage.last <- tail(localstorage, 1)[[1]]
 
             if (is.character(localstorage.last$text$eval) & !identical(localstorage.last$text$eval, '\n') & (type == 'inline')) {
@@ -98,15 +98,15 @@ Pandoc.brew <- function(file = stdin(), output = stdout(), convert = FALSE, open
                 localstorage[[length(localstorage)]]$msg <- list(messages = c(localstorage.last$msg$messages, r$msg$messages), warnings = c(localstorage.last$msg$warnings, r$msg$warnings), errors = c(localstorage.last$msg$errors, r$msg$errors))
 
             } else
-                localstorage <- c(storage$brew, list(list(type = 'block', robject = r)))
+                localstorage <- c(localstorage, list(list(type = 'block', robject = r)))
 
-            assign('brew', localstorage, envir = storage)
+            assign('.storage', localstorage, envir = envir)
 
         }
     }
     assign('showCode', showCode, envir = envir)
 
-    storage$brew <- NULL
+    assign('.storage', NULL, envir = envir)
     res <- capture.output(brew(text = text, envir = envir))
 
     ## remove absolute path from image links
@@ -118,10 +118,11 @@ Pandoc.brew <- function(file = stdin(), output = stdout(), convert = FALSE, open
     if (is.character(convert))
         Pandoc.convert(output, format = convert, open = open, proc.time = as.numeric(proc.time() - timer)[3])
 
-    if (tail(storage$brew, 1)[[1]]$text$eval == '\n')
-        assign('brew', head(storage$brew, -1), envir = storage)
+    ## remove trailing line-break text
+    #if (tail(get('.storage', envir = envir), 1)[[1]]$text$eval == '\n')
+    #    assign('brew', head(get('.storage', envir = envir), -1), envir = envir)
 
-    invisible(storage$brew)
+    invisible(get('.storage', envir = envir))
 
 }
 
@@ -273,7 +274,7 @@ DELIM[[BRCATCODE]] <- c("<%=","%>")
             } else
                 type <- 'text'
 
-            localstorage <- pander:::storage$brew
+            localstorage <- get('.storage', envir = envir)
             localstorage.last <- tail(localstorage, 1)[[1]]
             localstorage.last.text <- localstorage.last$text$eval
             localstorage.last.type <- ifelse(is.null(localstorage.last$type), '', localstorage.last$type)
@@ -286,7 +287,7 @@ DELIM[[BRCATCODE]] <- c("<%=","%>")
             if (type == 'heading')
                 localstorage[[length(localstorage)]]$level <- heading.level
 
-            assign('brew', localstorage, envir = storage)
+            assign('.storage', localstorage, envir = envir)
 
         }
 
@@ -295,9 +296,10 @@ DELIM[[BRCATCODE]] <- c("<%=","%>")
     assign('showText', showText, envir = envir)
 
     e <- eval.msgs(code, env = envir)
-    assign('debug', list(code = code, text = text, result = e), envir = storage) # debug
+    assign('.debug', list(code = code, text = text, result = e), envir = storage) # debug
 
     if (!is.null(e$msg$errors)) {
+        return(envir)
         stop(paste0(sub('.*([Uu]nexpected [a-zA-Z0-9\\(\\)\'\\{\\} ]*)( at character|\n).*', '\\1', e$msg$errors), ' in your BRCODEs: ', p(e$src[!grepl('^show',e$src)])), call. = FALSE)
     }
 
