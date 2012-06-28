@@ -103,7 +103,7 @@ Pandoc$methods(show = function(x) {
 
 })
 
-Pandoc$methods(export = function(f, open = TRUE) {
+Pandoc$methods(export = function(f, open = TRUE, options = '') {
 
     if (missing(f))
         f <- tempfile('pander-', getwd())
@@ -118,7 +118,7 @@ Pandoc$methods(export = function(f, open = TRUE) {
     #cat(remove.extra.newlines(paste(readLines(fp, warn = FALSE), collapse = '\n')), file = fp)
 
     ## convert
-    fe <- Pandoc.convert(fp, format = .self$format, open = open, proc.time = as.numeric(proc.time() - timer)[3])
+    fe <- Pandoc.convert(fp, format = .self$format, open = open, proc.time = as.numeric(proc.time() - timer)[3], options = options)
 
     ## return
     cat('\nExported to *', f, '.[md|', format, ']* under ', .self$proc.time + as.numeric(proc.time() - timer)[3], ' seconds.\n\n', sep = '')
