@@ -35,6 +35,7 @@ open.file.in.OS <- function(f) {
 #' @param options optionally passed arguments to Pandoc (instead of \code{pander}'s default)
 #' @param footer add footer to document with meta-information
 #' @param proc.time optionally passed number in seconds which would be shown in the generated document's footer
+#' @param portable.html copy JS/CSS/images files to the HTML file's directory if converting to \code{HTML} without custom \code{options}
 #' @references John MacFarlane (2012): _Pandoc User's Guide_. \url{http://johnmacfarlane.net/pandoc/README.html}
 #' @note This function depends on \code{Pandoc} which should be pre-installed on user's machine. See the \code{INSTALL} file of the package.
 #' @return Converted file's path.
@@ -44,7 +45,7 @@ open.file.in.OS <- function(f) {
 #' Pandoc.convert('http://daroczig.github.com/pander/minimal.md')
 #' ## Note: the generated HTML is not showing images with relative path from the above file. Based on that `pdf`, `docx` etc. formats would not work! If you want to convert an online markdown file to other formats with this function, please pre-process the file to have absolute paths instead.
 #' }
-Pandoc.convert <- function(f, text, format = 'html', open = TRUE, options = '', footer = TRUE, proc.time) {
+Pandoc.convert <- function(f, text, format = 'html', open = TRUE, options = '', footer = TRUE, proc.time, portable.html = TRUE) {
 
     ## check for Pandoc
     if (paste(suppressWarnings(tryCatch(system('pandoc -v', intern=T), error=function(x) 'NOPANDOC')), collapse='\n') == 'NOPANDOC')
@@ -67,15 +68,19 @@ Pandoc.convert <- function(f, text, format = 'html', open = TRUE, options = '', 
 
     ## add nifty HTML/CSS/JS components
     if (format == 'html') {
-        portable.dirs <- c('fonts', 'images', 'javascripts', 'stylesheets')
-        for (portable.dir in portable.dirs)
-            file.copy(system.file(sprintf('includes/%s', portable.dir), package='pander'), f.dir, recursive  = TRUE)
+
+        if (portable.html & options == '') {
+            portable.dirs <- c('fonts', 'images', 'javascripts', 'stylesheets')
+            for (portable.dir in portable.dirs)
+                file.copy(system.file(sprintf('includes/%s', portable.dir), package='pander'), f.dir, recursive  = TRUE)
+        }
+
         if (options == '')
             options <- sprintf('-H "%s" -A "%s"', system.file('includes/html/header.html', package='pander'), system.file('includes/html/footer.html', package='pander'))
-    } else {
+
+    } else
         if (options == '')
             options <- '--toc'
-    }
 
     ## add other formats' templates
     ## TODO

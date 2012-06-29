@@ -3,7 +3,8 @@
 \title{Converts Pandoc to other format}
 \usage{
   Pandoc.convert(f, text, format = "html", open = TRUE,
-    options = "", footer = TRUE, proc.time)
+    options = "", footer = TRUE, proc.time,
+    portable.html = TRUE)
 }
 \arguments{
   \item{f}{Pandoc markdown format file path. If URL is
@@ -32,6 +33,10 @@
 
   \item{proc.time}{optionally passed number in seconds
   which would be shown in the generated document's footer}
+
+  \item{portable.html}{copy JS/CSS/images files to the HTML
+  file's directory if converting to \code{HTML} without
+  custom \code{options}}
 }
 \value{
   Converted file's path.
