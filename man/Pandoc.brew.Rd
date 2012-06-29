@@ -3,8 +3,8 @@
 \title{Brew in pandoc format}
 \usage{
   Pandoc.brew(file = stdin(), output = stdout(),
-    convert = FALSE, open = TRUE, graph.hi.res = FALSE,
-    text = NULL, envir = new.env())
+    convert = FALSE, open = TRUE, graph.name, graph.dir,
+    graph.hi.res = FALSE, text = NULL, envir = new.env())
 }
 \arguments{
   \item{file}{file path of the brew template. As this is
@@ -21,6 +21,16 @@
 
   \item{open}{try to open converted document with operating
   system's default program}
+
+  \item{graph.name}{character string (default to \code{\%t}
+  when \code{output} is set to \code{stdout} and
+  \code{paste0(basename(output), '-\%n')} otherwise) passed
+  to \code{\link{evals}}}
+
+  \item{graph.dir}{character string (default to
+  \code{tempdir()} when \code{output} is set to
+  \code{stdout} and \code{dirname(graph.name)} otherwise)
+  passed to \code{\link{evals}}}
 
   \item{graph.hi.res}{render high resolution images of
   plots? Default is \code{FALSE} except for HTML output.}

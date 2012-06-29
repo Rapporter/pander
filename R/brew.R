@@ -15,6 +15,8 @@
 #' @param output (optional) file path of the output file
 #' @param convert string: format of required output document (besides Pandoc's markdown). Pandoc is called if set via \code{Pandoc.convert} and the converted document could be also opened automatically (see below).
 #' @param open try to open converted document with operating system's default program
+#' @param graph.name character string (default to \code{\%t} when \code{output} is set to \code{stdout} and \code{paste0(basename(output), '-\%n')} otherwise) passed to \code{\link{evals}}
+#' @param graph.dir character string (default to \code{tempdir()} when \code{output} is set to \code{stdout} and \code{dirname(graph.name)} otherwise) passed to \code{\link{evals}}
 #' @param graph.hi.res render high resolution images of plots? Default is \code{FALSE} except for HTML output.
 #' @param text character vector (treated as the content of the \code{file}
 #' @param envir environment where to \code{brew} the template
@@ -46,7 +48,7 @@
 #' str(Pandoc.brew(text='<%for (i in 1:5) {%>\n Pi has a lot (<%=i%>) of power: <%=pi^i%><%}%>'))
 #' }
 #' @importFrom brew brew
-Pandoc.brew <- function(file = stdin(), output = stdout(), convert = FALSE, open = TRUE, graph.hi.res = FALSE, text = NULL, envir = new.env()) {
+Pandoc.brew <- function(file = stdin(), output = stdout(), convert = FALSE, open = TRUE, graph.name, graph.dir, graph.hi.res = FALSE, text = NULL, envir = new.env()) {
 
     timer <- proc.time()
     output.stdout <- deparse(substitute(output)) == 'stdout()'
@@ -63,12 +65,16 @@ Pandoc.brew <- function(file = stdin(), output = stdout(), convert = FALSE, open
 
     if (!output.stdout) {
         basedir    <- dirname(output)
-        graph.name <- paste0(basename(output), '-%n')
-        graph.dir  <- file.path(basedir, 'plots')
+        if (missing(graph.name))
+            graph.name <- paste0(basename(output), '-%n')
+        if (missing(graph.dir))
+            graph.dir  <- file.path(basedir, 'plots')
         cache.dir  <- file.path(basedir, '.cache')
     } else {
-        graph.name <- '%t'
-        graph.dir  <- file.path(tempdir(), 'plots')
+        if (missing(graph.name))
+            graph.name <- '%t'
+        if (missing(graph.dir))
+            graph.dir  <- file.path(tempdir(), 'plots')
         cache.dir  <- file.path(tempdir(), '.cache')
     }
 
