@@ -123,9 +123,6 @@ Pandoc$methods(export = function(f, open = TRUE, options = '', footer = TRUE) {
     ## return
     cat('\nExported to *', f, '.[md|', format, ']* under ', .self$proc.time + as.numeric(proc.time() - timer)[3], ' seconds.\n\n', sep = '')
 
-    if (open)
-        open.file.in.OS(fe)
-
     return(invisible(fe))
 
 })
