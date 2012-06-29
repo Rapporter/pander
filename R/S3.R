@@ -232,3 +232,11 @@ pander.evals <- function(x, ...) {
 #' @S3method pander rapport
 pander.rapport <- function(x, ...)
     print(x)
+
+#' @S3method pander POSIXct
+pander.POSIXct <- function(x, ...)
+    cat(format(x, pander.option('date')))
+
+#' @S3method pander POSIXt
+pander.POSIXt <- function(x, ...)
+    cat(format(x, pander.option('date')))
