@@ -10,7 +10,10 @@
                 'list.style'            = 'bullet',
                 'table.style'           = 'multiline',
                 'table.split.table'     = 80,
-                'table.split.cells'     = 30
+                'table.split.cells'     = 30,
+                'p.wrap'                = '_',
+                'p.sep'                 = ', ',
+                'p.copula'              = 'and'
                 ))
 
     ## evals options

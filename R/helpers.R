@@ -36,19 +36,60 @@ rep.char <- function(x, n, sep = '')
     paste(rep.int(x, n), collapse = sep)
 
 
-#' Pretty print vectors
-#' @param x vector
-#' @return character string
-#' @references Credit goes to Aleksandar Blagotić for the idea and implementation in rapport package. \url{http://github.com/aL3xa/rapport/blob/master/R/rp_helpers.R}
+#' Inline Printing
+#'
+#' \code{\link{p}} merges elements of a variable (see \code{\link{is.variable}}) in one string for the sake of pretty inline printing. Default parameters are read from appropriate \code{option} values (see argument description for details). This function allows you to put the results of an expression that yields a variable \emph{inline}, by wrapping the vector elements with the string provided in \code{wrap}, and separating elements by main and ending separator (\code{sep} and \code{copula}). In case of a two-length vector, value specified in \code{copula} will be used as a separator. You can also control the length of provided vector by altering an integer value specified in \code{limit} argument (defaults to \code{Inf}).
+#' @param x an atomic vector to get merged for inline printing
+#' @param wrap a string to wrap vector elements (uses value set in \code{p.wrap} option: \code{"_"} by default, which is a markdown-friendly wrapper and it puts the string in \emph{italic})
+#' @param sep a string with the main separator, i.e. the one that separates all vector elements but the last two (uses the value set in \code{p.sep} option - \code{","} by default)
+#' @param copula a string with ending separator - the one that separates the last two vector elements (uses the value set in \code{p.copula} option, \code{"and"} by default)
+#' @param limit maximum character length (defaults to \code{Inf}initive  elements)
+#' @return a string with concatenated vector contents
 #' @examples
-#' p(1:5)
-p <- function(x) {
+#' p(c("fee", "fi", "foo", "fam"))
+#' ## [1] "_fee_, _fi_, _foo_ and _fam_"
+#' p(1:3, wrap = "")
+#' ## [1] "1, 2 and 3"
+#' p(LETTERS[1:5], copula = "and the letter")
+#' ## [1] "_A_, _B_, _C_, _D_ and the letter _E_"
+#' p(c("Thelma", "Louise"), wrap = "", copula = "&")
+#' ## [1] "Thelma & Louise"
+#' @export
+#' @author Aleksandar Blagotić
+#' @references This function was moved from \code{rapport} package: \url{http://rapport-package.info/}.
+p <- function(x, wrap = pander.option('p.wrap'), sep = pander.option('p.sep'), copula = pander.option('p.copula'), limit = Inf){
 
-    if (length(x) > 1)
-        sprintf('%s and *%s*', paste(sprintf('*%s*', head(x, -1)), collapse = ', '), tail(x, 1))
+    stopifnot(is.vector(x))
+    stopifnot(all(sapply(list(wrap, sep, copula), function(x) is.character(x) && length(x) == 1)))
+    x.len <- length(x)
+    stopifnot(x.len > 0)
+    stopifnot(x.len <= limit)
+
+    if (x.len == 1)
+        wrap(x, wrap)
+    else if (x.len == 2)
+        paste(wrap(x, wrap), collapse = sprintf(' %s ', copula))
     else
-        sprintf('*%s*', x)
+        paste(paste(wrap(head(x, -1), wrap), collapse = sep), copula, wrap(tail(x, 1), wrap))
+}
 
+
+#' Wrap Vector Elements
+#'
+#' Wraps vector elements with string provided in \code{wrap} argument.
+#' @param x a vector to wrap
+#' @param wrap a string to wrap around vector elements
+#' @return a string with wrapped elements
+#' @examples \dontrun{
+#' wrap("foobar")
+#' wrap(c("fee", "fi", "foo", "fam"), "_")
+#' }
+#' @export
+#' @author Aleksandar Blagotić
+#' @references This function was moved from \code{rapport} package: \url{http://rapport-package.info/}.
+wrap <- function(x, wrap = '"'){
+    stopifnot(is.vector(x))
+    sprintf('%s%s%s', wrap, x, wrap)
 }
 
 
