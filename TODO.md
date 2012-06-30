@@ -55,6 +55,7 @@
   * ~~table: split too wide tables into multiple tables (global solution which can be handled in LaTeX, docx etc. separately)~~
   * ~~table: add strong emphasis to row names~~
   * ~~table: fails with one-column tables. E.g.: `pander(mtcars[1,])`~~
+  * table: **issue** with rounding numbers, just check: `pander(mtcars$mpg)` vs. `pander(mtcars$mpg)` -> this is based on low `digits` option
   * table: add more styling options (e.g. (strong) emphasizing custom cells)
   * table: add option to draw significance starts in cells
 

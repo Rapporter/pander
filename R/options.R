@@ -2,7 +2,7 @@
 {
     ## pander settings
     options('pander' = list(
-                'digits'                = 2,
+                'digits'                = 4,
                 'decimal.mark'          = '.',
                 'round'                 = Inf,
                 'date'                  = '%Y/%m/%d %X',
