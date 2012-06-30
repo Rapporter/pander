@@ -93,7 +93,7 @@ Pandoc.brew <- function(file = stdin(), output = stdout(), convert = FALSE, open
             localstorage.last <- tail(localstorage, 1)[[1]]
             localstorage.last.text <- ifelse(is.null(localstorage.last$text$eval), '', localstorage.last$text$eval)
 
-            if (('image' %in% r$type) | (length(r.pander) > 1) | grepl('\n', localstorage.last.text) | localstorage.last.text == '')
+            if (('image' %in% r$type) | (length(r.pander) > 1) | grepl('\n$', localstorage.last.text) | is.null(localstorage.last$text$eval))
                 type <- 'block'
             else
                 type <- 'inline'
