@@ -89,15 +89,16 @@ Pandoc.brew <- function(file = stdin(), output = stdout(), convert = FALSE, open
             r.pander <- pander.return(r)
             cat(paste(r.pander, collapse = '\n'))
 
-            if (('image' %in% r$type) | (length(r.pander) > 1))
+            localstorage <- get('.storage', envir = envir)
+            localstorage.last <- tail(localstorage, 1)[[1]]
+            localstorage.last.text <- ifelse(is.null(localstorage.last$text$eval), '', localstorage.last$text$eval)
+
+            if (('image' %in% r$type) | (length(r.pander) > 1) | grepl('\n', localstorage.last.text) | localstorage.last.text == '')
                 type <- 'block'
             else
                 type <- 'inline'
 
-            localstorage <- get('.storage', envir = envir)
-            localstorage.last <- tail(localstorage, 1)[[1]]
-
-            if (is.character(localstorage.last$text$eval) & !identical(localstorage.last$text$eval, '\n') & (type == 'inline')) {
+            if (type == 'inline') {
 
                 localstorage[[length(localstorage)]]$text <- list(raw = paste0(localstorage.last$text$raw, paste0('<%=', r$src, '%>')), eval = paste0(localstorage.last$text$eval, r.pander))
                 localstorage[[length(localstorage)]]$chunks <- list(raw = c(localstorage.last$chunks$raw, paste0('<%=', r$src, '%>')), eval = c(localstorage.last$chunks$eval, ifelse(length(r.pander) == 0, '', r.pander)))
@@ -284,6 +285,8 @@ DELIM[[BRCATCODE]] <- c("<%=","%>")
             localstorage.last <- tail(localstorage, 1)[[1]]
             localstorage.last.text <- localstorage.last$text$eval
             localstorage.last.type <- ifelse(is.null(localstorage.last$type), '', localstorage.last$type)
+
+#            if (localstorage.last.type == 'block')
 
             if (is.character(localstorage.last.text) & (type == 'text') & ifelse(localstorage.last.type == 'heading', !grepl('\n', localstorage.last.text), TRUE))
                 localstorage[[length(localstorage)]]$text <- list(raw = paste0(localstorage.last$text$raw, localtext), eval = paste0(localstorage.last.text, localtext))
