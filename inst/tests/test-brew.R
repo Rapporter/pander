@@ -17,3 +17,21 @@ test_that('correct number of list elements', {
     expect_that(length(Pandoc.brew(text='# FOO\n## bar<%=pi%> bar \n# sad', output = '/tmp/dev/null')), equals(3))
     expect_that(length(Pandoc.brew(text='# FOO ## bar<%=pi%> barn# sad', output = '/tmp/dev/null')), equals(1))
 })
+
+getChunkTypes <- function(x)
+    sapply(x, function(x) x$type)
+
+test_that('correct returned list element types', {
+    expect_that(getChunkTypes(Pandoc.brew(text='foo <%=1:10%>', output = '/tmp/dev/null')), equals('text'))
+    expect_that(getChunkTypes(Pandoc.brew(text='## foo <%=1:10%>', output = '/tmp/dev/null')), equals('heading'))
+    expect_that(getChunkTypes(Pandoc.brew(text='foo\n<%=1:10%>', output = '/tmp/dev/null')), equals(c('text', 'block', 'text')))
+    expect_that(getChunkTypes(Pandoc.brew(text='## foo\n<%=1:10%>', output = '/tmp/dev/null')), equals(c('heading', 'block', 'text')))
+    expect_that(getChunkTypes(Pandoc.brew(text='foo <%=list(1:10)%>', output = '/tmp/dev/null')), equals(c('text', 'block', 'text')))
+    expect_that(getChunkTypes(Pandoc.brew(text='## foo <%=mtcars%>', output = '/tmp/dev/null')), equals(c('heading', 'block', 'text')))
+    expect_that(getChunkTypes(Pandoc.brew(text='foo has <%=1%> apple and <%=3%> pears', output = '/tmp/dev/null')), equals('text'))
+    expect_that(getChunkTypes(Pandoc.brew(text='foo has \nsome neat apples. Exactly <%=5%>', output = '/tmp/dev/null')), equals('text'))
+    ## bugger:
+    ## expect_that(getChunkTypes(Pandoc.brew(text='<%=5%> apple, output = '/tmp/dev/null')), equals('text'))
+
+
+})
