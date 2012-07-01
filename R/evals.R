@@ -447,10 +447,10 @@ evals <- function(txt, parse = TRUE, cache = TRUE, cache.mode = c('environment',
         if (grepl('%n', file.name)) {
             if (length(strsplit(sprintf('placeholder%splaceholder', file.name), '%n')[[1]]) > 2)
                 stop('File name contains more then 1 "%n"!')
-            similar.files <- list.files(graph.dir, pattern = sprintf('^%s\\.(jpeg|tiff|png|svg|bmp)$', gsub('%t', '[a-z0-9]*', gsub('%d|%n|%D', '[[:digit:]]*', basename(file.name)))))
+            similar.files <- list.files(graph.dir, pattern = sprintf('^%s\\.(jpeg|tiff|png|svg|bmp)$', gsub('%t', '[a-z0-9]*', gsub('%d|%n', '[[:digit:]]*', basename(file.name)))))
             if (length(similar.files) > 0) {
                 similar.files <- sub('\\.(jpeg|tiff|png|svg|bmp)$', '', similar.files)
-                rep <- gsub('%t', '[a-z0-9]*', gsub('%d|%D', '[[:digit:]]*', strsplit(basename(file.name), '%n')[[1]]))
+                rep <- gsub('%t', '[a-z0-9]*', gsub('%d', '[[:digit:]]*', strsplit(basename(file.name), '%n')[[1]]))
                 `%n` <- max(as.numeric(gsub(paste(rep, collapse = '|'), '', similar.files))) + 1
             } else
                 `%n` <- 1
