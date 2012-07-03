@@ -286,12 +286,42 @@ DELIM[[BRCATCODE]] <- c("<%=","%>")
             localstorage.last.text <- localstorage.last$text$eval
             localstorage.last.type <- ifelse(is.null(localstorage.last$type), '', localstorage.last$type)
 
-#            if (localstorage.last.type == 'block')
+            if (localstorage.last.type == 'block' & type == 'text' & localtext != '\n') {
+                localstorage.last.pander  <- pander.return(localstorage.last$robject$result)
 
-            if (is.character(localstorage.last.text) & (type == 'text') & ifelse(localstorage.last.type == 'heading', !grepl('\n', localstorage.last.text), TRUE))
-                localstorage[[length(localstorage)]]$text <- list(raw = paste0(localstorage.last$text$raw, localtext), eval = paste0(localstorage.last.text, localtext))
-            else
-                localstorage <- c(localstorage, list(list(type = type, text = list(raw = localtext, eval = localtext), chunks = list(raw = NULL, eval = NULL), msg = list(messages = NULL, warnings = NULL, errors = NULL))))
+                ## we had an inline chunk in the beginning of the line converted to block
+                if (!('image' %in% localstorage.last$type) | (length(localstorage.last.pander) <= 1))
+                    localstorage <- c(localstorage[-length(localstorage)],
+                                      list(list(type = 'text',
+                                           text = list(
+                                               raw  = paste0('<%=', localstorage.last$robject$src,  '%>', localtext),
+                                               eval = paste0(localstorage.last.pander, localtext)),
+                                           chunks = list(
+                                               raw = paste0('<%=', localstorage.last$robject$src,  '%>'),
+                                               eval = localstorage.last.pander
+                                               ),
+                                           msg = list(
+                                               messages = localstorage.last$robject$msg$messages,
+                                               warnings = localstorage.last$robject$msg$warnings,
+                                               errors   = localstorage.last$robject$msg$errors
+                                               ))))
+
+                ## leave that block as is and add localtext as new
+                else
+
+                    localstorage <- c(localstorage, list(list(type = type, text = list(raw = localtext, eval = localtext), chunks = list(raw = NULL, eval = NULL), msg = list(messages = NULL, warnings = NULL, errors = NULL))))
+
+            } else {
+
+                ## text continues
+                if (is.character(localstorage.last.text) & (type == 'text') & ifelse(localstorage.last.type == 'heading', !grepl('\n', localstorage.last.text), TRUE))
+                    localstorage[[length(localstorage)]]$text <- list(raw = paste0(localstorage.last$text$raw, localtext), eval = paste0(localstorage.last.text, localtext))
+
+                ## new text starts here
+                else
+                    localstorage <- c(localstorage, list(list(type = type, text = list(raw = localtext, eval = localtext), chunks = list(raw = NULL, eval = NULL), msg = list(messages = NULL, warnings = NULL, errors = NULL))))
+
+            }
 
             if (type == 'heading')
                 localstorage[[length(localstorage)]]$level <- heading.level
