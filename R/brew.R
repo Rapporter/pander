@@ -87,6 +87,7 @@ Pandoc.brew <- function(file = stdin(), output = stdout(), convert = FALSE, open
         for (r in res) {
 
             r.pander <- pander.return(r)
+            r$output <- r.pander
             cat(paste(r.pander, collapse = '\n'))
 
             localstorage <- get('.storage', envir = envir)
@@ -287,7 +288,7 @@ DELIM[[BRCATCODE]] <- c("<%=","%>")
             localstorage.last.type <- ifelse(is.null(localstorage.last$type), '', localstorage.last$type)
 
             if (localstorage.last.type == 'block' & type == 'text' & localtext != '\n') {
-                localstorage.last.pander  <- pander.return(localstorage.last$robject$result)
+                localstorage.last.pander  <- localstorage.last$robject$output
 
                 ## we had an inline chunk in the beginning of the line converted to block
                 if (!('image' %in% localstorage.last$type) | (length(localstorage.last.pander) <= 1))
