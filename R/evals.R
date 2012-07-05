@@ -364,6 +364,7 @@ eval.msgs <- function(src, env = NULL, showInvisible = FALSE) {
 #' }
 #' @export
 #' @importFrom digest digest
+#' @importFrom lattice trellis.par.set
 evals <- function(txt, parse = TRUE, cache = TRUE, cache.mode = c('environment', 'disk'), cache.dir = '.cache', cache.time = 0.1, cache.copy.images = FALSE, showInvisible = FALSE, classes = NULL, hooks = NULL, length = Inf, output = c('all', 'src', 'result', 'output', 'type', 'msg', 'stdout'), env = NULL, graph.nomargin = TRUE, graph.name = '%t', graph.dir = 'plots', graph.output = c('png', 'bmp', 'jpeg', 'jpg', 'tiff', 'svg', 'pdf'), width = 480, height = 480, res= 72, hi.res = FALSE, hi.res.width = 960, hi.res.height = 960*(height/width), hi.res.res = res*(hi.res.width/width), graph.env = FALSE, graph.recordplot = FALSE, ...){
 
     if (missing(txt))
@@ -553,8 +554,7 @@ evals <- function(txt, parse = TRUE, cache = TRUE, cache.mode = c('environment',
 
         ## remove margins
         if (graph.nomargin) {
-            if (require(lattice, quietly = T))
-                lattice::trellis.par.set(layout.heights = list(top.padding = 0.1, bottom.padding = 0.1), layout.widths = list(right.padding = 0.1, left.padding = 0.4))
+            trellis.par.set(layout.heights = list(top.padding = 0.1, bottom.padding = 0.1), layout.widths = list(right.padding = 0.1, left.padding = 0.4))
             par(mar=c(4, 4, 2.1, 0.1))
         }
 

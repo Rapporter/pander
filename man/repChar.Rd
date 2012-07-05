@@ -1,8 +1,8 @@
-\name{rep.char}
-\alias{rep.char}
+\name{repChar}
+\alias{repChar}
 \title{Repeating chars}
 \usage{
-  rep.char(x, n, sep = "")
+  repChar(x, n, sep = "")
 }
 \arguments{
   \item{x}{string to repeat}

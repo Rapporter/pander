@@ -20,7 +20,7 @@ remove.extra.newlines <- function(x)
 #' @param x character vector
 #' @return character vector
 #' @export
-#' @seealso \code{\link{trim.space}}
+#' @seealso \code{trim.space} in \code{rapport} package
 trim.spaces <- function(x)
     gsub('^[[:space:]]+|[[:space:]]+$', '', x)
 
@@ -32,13 +32,13 @@ trim.spaces <- function(x)
 #' @param sep separator between repetitions
 #' @return character vector
 #' @export
-rep.char <- function(x, n, sep = '')
+repChar <- function(x, n, sep = '')
     paste(rep.int(x, n), collapse = sep)
 
 
 #' Inline Printing
 #'
-#' \code{\link{p}} merges elements of a variable (see \code{\link{is.variable}}) in one string for the sake of pretty inline printing. Default parameters are read from appropriate \code{option} values (see argument description for details). This function allows you to put the results of an expression that yields a variable \emph{inline}, by wrapping the vector elements with the string provided in \code{wrap}, and separating elements by main and ending separator (\code{sep} and \code{copula}). In case of a two-length vector, value specified in \code{copula} will be used as a separator. You can also control the length of provided vector by altering an integer value specified in \code{limit} argument (defaults to \code{Inf}).
+#' \code{\link{p}} merges elements of a vector in one string for the sake of pretty inline printing. Default parameters are read from appropriate \code{option} values (see argument description for details). This function allows you to put the results of an expression that yields a variable \emph{inline}, by wrapping the vector elements with the string provided in \code{wrap}, and separating elements by main and ending separator (\code{sep} and \code{copula}). In case of a two-length vector, value specified in \code{copula} will be used as a separator. You can also control the length of provided vector by altering an integer value specified in \code{limit} argument (defaults to \code{Inf}).
 #' @param x an atomic vector to get merged for inline printing
 #' @param wrap a string to wrap vector elements (uses value set in \code{p.wrap} option: \code{"_"} by default, which is a markdown-friendly wrapper and it puts the string in \emph{italic})
 #' @param sep a string with the main separator, i.e. the one that separates all vector elements but the last two (uses the value set in \code{p.sep} option - \code{","} by default)
@@ -107,7 +107,7 @@ pandoc.indent <- function(x, level = 0) {
 
     if (!is.character(x))
         stop('Only character strings are allowed.')
-    indent <- rep.char(' ', level * 4)
+    indent <- repChar(' ', level * 4)
     res <- paste0(indent, gsub('\n', paste0('\n', indent), x))
 
     ## remove wasted space
@@ -248,8 +248,8 @@ pandoc.verbatim.return <- function(x, style = c('inline', 'indent', 'delim'), at
 
     switch(style,
            'inline' = paste0('`', trim.spaces(paste(x, collapse = ' ')), '`'),
-           'indent' = sprintf('\n%s\n', paste(paste0(rep.char(' ', 4), unlist(strsplit(trim.spaces(x)), '\n'))), collapse = '\n'),
-           'delim'  = paste0('\n', rep.string('`', 7), ifelse(attrs == '', '', sprintf('{%s}', attrs)), '\n', paste(trim.spaces(x), collapse = '\n'), '\n', rep.string('`', 7), '\n')
+           'indent' = sprintf('\n%s\n', paste(paste0(repChar(' ', 4), unlist(strsplit(trim.spaces(x), '\n')), collapse = '\n'))),
+           'delim'  = paste0('\n', repChar('`', 7), ifelse(attrs == '', '', sprintf('{%s}', attrs)), '\n', paste(trim.spaces(x), collapse = '\n'), '\n', repChar('`', 7), '\n')
            )
 
 }
@@ -264,7 +264,7 @@ pandoc.verbatim <- function(...)
 #' @param text link text
 #' @return By default this function outputs (see: \code{cat}) the result. If you would want to catch the result instead, then call the function ending in \code{.return}.
 #' @export
-#' @aliases pandoc.link.return
+#' @aliases pandoc.link
 #' @examples
 #' pandoc.link('http://r-project.org')
 #' pandoc.link('http://r-project.org', 'R')
@@ -362,8 +362,8 @@ pandoc.header.return <- function(x, level = 1, style = c('atx', 'setext')) {
         stop('Too low level provided!')
 
     res <- switch(style,
-           'atx'    = paste(rep.char('#', level), x),
-           'setext' = paste(x, rep.char(ifelse(level == 1, '=', '-'), nchar(x)), sep = '\n')
+           'atx'    = paste(repChar('#', level), x),
+           'setext' = paste(x, repChar(ifelse(level == 1, '=', '-'), nchar(x)), sep = '\n')
            )
 
     add.blank.lines(res)
@@ -458,7 +458,7 @@ pandoc.title <- function(...)
 #' pandoc.list(letters[1:5], loose = TRUE)
 #'
 #' ## nested lists
-#' l <- list("First list element", rep(5, 'sub element'), "Second element", list('F', 'B', 'I', c('phone', 'pad', 'talics')))
+#' l <- list("First list element", rep.int('sub element', 5), "Second element", list('F', 'B', 'I', c('phone', 'pad', 'talics')))
 #' pandoc.list(l)
 #' pandoc.list(l, loose = TRUE)
 #' pandoc.list(l, 'roman')
@@ -721,15 +721,15 @@ pandoc.table.return <- function(t, caption = NULL, digits = pander.option('digit
 
         switch(style,
                'grid'      = {
-                   sep.row <- paste0('\n+', paste(sapply(t.width + 2, function(x) rep.char('-', x)), collapse = '+'), '+')
+                   sep.row <- paste0('\n+', paste(sapply(t.width + 2, function(x) repChar('-', x)), collapse = '+'), '+')
                    sep.top <- sep.row
                    sep.btn <- sep.row
-                   sep.hdr <- paste0('+', paste(sapply(t.width + 2, function(x) rep.char('=', x)), collapse = '+'), '+')
+                   sep.hdr <- paste0('+', paste(sapply(t.width + 2, function(x) repChar('=', x)), collapse = '+'), '+')
                    sep.col <- c('| ', ' | ', ' |')
                },
                'multiline' = {
                    sep.row <- '\n'
-                   sep.hdr <- paste(sapply(t.width, function(x) rep.char('-', x)), collapse = ' ')
+                   sep.hdr <- paste(sapply(t.width, function(x) repChar('-', x)), collapse = ' ')
                    sep.top <- gsub(' ', '-', sep.hdr)
                    sep.btn <- sep.top
                    sep.col <- c('', ' ', '')
@@ -738,7 +738,7 @@ pandoc.table.return <- function(t, caption = NULL, digits = pander.option('digit
                    sep.row <- ''
                    sep.top <- ''
                    sep.btn <- ''
-                   sep.hdr <- paste(sapply(t.width, function(x) rep.char('-', x)), collapse = ' ')
+                   sep.hdr <- paste(sapply(t.width, function(x) repChar('-', x)), collapse = ' ')
                    sep.col <- c('', ' ', '')
                })
 

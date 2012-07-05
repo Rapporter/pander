@@ -1,4 +1,5 @@
 \name{pandoc.link.return}
+\alias{pandoc.link}
 \alias{pandoc.link.return}
 \title{Create pandoc link}
 \usage{

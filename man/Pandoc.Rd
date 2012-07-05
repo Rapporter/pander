@@ -9,6 +9,7 @@
   documentation) is also possible, see examples below.
 }
 \examples{
+\dontrun{
 ## Initialize a new Pandoc object
 myReport <- Pandoc$new()
 
@@ -59,5 +60,6 @@ myReport$export(tempfile())
 
 ## You do not want to see the generated report after generation?
 myReport$export(open = FALSE)
+}
 }
 

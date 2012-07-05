@@ -14,6 +14,6 @@
   Trim leading and trailing spaces
 }
 \seealso{
-  \code{\link{trim.space}}
+  \code{trim.space} in \code{rapport} package
 }
 

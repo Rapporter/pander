@@ -1,0 +1,32 @@
+\name{wrap}
+\alias{wrap}
+\title{Wrap Vector Elements}
+\usage{
+  wrap(x, wrap = "\"")
+}
+\arguments{
+  \item{x}{a vector to wrap}
+
+  \item{wrap}{a string to wrap around vector elements}
+}
+\value{
+  a string with wrapped elements
+}
+\description{
+  Wraps vector elements with string provided in \code{wrap}
+  argument.
+}
+\examples{
+\dontrun{
+wrap("foobar")
+wrap(c("fee", "fi", "foo", "fam"), "_")
+}
+}
+\author{
+  Aleksandar Blagotić
+}
+\references{
+  This function was moved from \code{rapport} package:
+  \url{http://rapport-package.info/}.
+}
+

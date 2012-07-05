@@ -43,7 +43,7 @@
   passed to \code{\link{pandoc.table}} and also affects
   \code{pander} methods. This option tells \code{pander}
   where to split too wide cells with line breaks. Set
-  \code{Inf} to disable. }
+  \code{Inf} to disable.  \item \code{evals.messages}: }
 }
 \examples{
 pander.option()

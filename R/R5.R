@@ -2,7 +2,7 @@
 #'
 #' This \code{R5} reference class can hold bunch of elements (text or R objects) from which it tries to create a Pandoc-style markdown text file. Exporting the report to several formats (like: pdf, docx, odt etc. - see Pandoc's documentation) is also possible, see examples below.
 #' @export
-#' @examples
+#' @examples \dontrun{
 #' ## Initialize a new Pandoc object
 #' myReport <- Pandoc$new()
 #'
@@ -53,6 +53,7 @@
 #'
 #' ## You do not want to see the generated report after generation?
 #' myReport$export(open = FALSE)
+#' }
 Pandoc <- setRefClass('Pandoc', fields = list('author' = 'character', 'title' = 'character', 'date' = 'character', 'body' = 'list', 'format' = 'character'))
 
 Pandoc$methods(initialize = function(author = 'Anonymous', title = base::sprintf('%s\'s report', author), date = base::date(), format = 'pdf', ...) {

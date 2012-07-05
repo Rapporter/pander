@@ -4,7 +4,7 @@
 #' @param f file (with full path)
 #' @references This function is a fork of David Hajage's \code{convert} function: \url{https://github.com/eusebe/ascii/blob/master/R/export.r}
 #' @export
-open.file.in.OS <- function(f) {
+openFileInOS <- function(f) {
 
     if (missing(f))
         stop('No file to open!')
@@ -98,7 +98,7 @@ Pandoc.convert <- function(f, text, format = 'html', open = TRUE, options = '', 
 
     ## open
     if (open)
-        open.file.in.OS(f.out)
+        openFileInOS(f.out)
 
     if (length(res) == 0)
         return(f.out)

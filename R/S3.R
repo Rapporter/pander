@@ -176,21 +176,31 @@ pander.density <- function(x, ...) {
 }
 
 #' @S3method pander list
-pander.list <- function(l, indent = 0, ...) {
+pander.list <- function(x, ...) {
+
+    ## match call
+    mc <- match.call()
+    if (is.null(mc$indent))
+        indent <- 0
+    else
+        indent <- eval(mc$indent, parent.frame(1))
 
     ## grab elements name (if any)
-    x.names       <- sapply(names(l), function(x) ifelse(x == '', '  *', sprintf('  * **%s**:', x)))
+    x.names <- sapply(names(x), function(x) ifelse(x == '', '  *', sprintf('  * **%s**:', x)))
     if (length(x.names) == 0)
-        x.names <- rep('  *', length(l))
+        x.names <- rep('  *', length(x))
 
     ## capture pandoc output of list element
-    res <- paste(unlist(lapply(1:length(l), function(i) {
-        res.i <- paste(capture.output(pander(l[[i]], indent = indent + 1)), collapse = '\n')
+    res <- paste(unlist(lapply(1:length(x), function(i) {
+
+        res.i <- paste(capture.output(pander(x[[i]], indent = indent + 1)), collapse = '\n')
         if (grepl('\n', res.i) & !grepl('\n *\\* ', res.i)) {
             res.i <- sub('^\n', '\n\n', res.i)
             res.i <- pandoc.indent(res.i, 1)
         }
+
         paste(x.names[i], res.i)
+
     })), collapse = '\n')
 
     ## indent output

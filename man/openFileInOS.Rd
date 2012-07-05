@@ -1,8 +1,8 @@
-\name{open.file.in.OS}
-\alias{open.file.in.OS}
+\name{openFileInOS}
+\alias{openFileInOS}
 \title{Open file}
 \usage{
-  open.file.in.OS(f)
+  openFileInOS(f)
 }
 \arguments{
   \item{f}{file (with full path)}
