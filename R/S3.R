@@ -228,12 +228,14 @@ pander.evals <- function(x, ...) {
 
     o <- pander(x$result)
 
-    if (!is.null(x$msg$messages))
-        o <- paste0(o, ' **MESSAGE**', pandoc.footnote.return(x$msg$messages))
-    if (!is.null(x$msg$warnings))
-        o <- paste0(o, ' **WARNING**', pandoc.footnote.return(x$msg$warnings))
-    if (!is.null(x$msg$error))
-        o <- paste0(o, ' **ERROR**', pandoc.footnote.return(x$msg$errors))
+    if(panderOptions('evals.messages')) {
+        if (!is.null(x$msg$messages))
+            o <- paste0(o, ' **MESSAGE**', pandoc.footnote.return(x$msg$messages))
+        if (!is.null(x$msg$warnings))
+            o <- paste0(o, ' **WARNING**', pandoc.footnote.return(x$msg$warnings))
+        if (!is.null(x$msg$error))
+            o <- paste0(o, ' **ERROR**', pandoc.footnote.return(x$msg$errors))
+    }
 
     cat(o)
 

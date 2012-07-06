@@ -46,13 +46,15 @@
   affects \code{pander} methods. This option tells
   \code{pander} where to split too wide cells with line
   breaks. Set \code{Inf} to disable.  \item
-  \code{evals.messages}: TODO \item \code{p.wrap}: a string
-  (default: \code{'_'}) to wrap vector elements passed to
-  \code{p} function \item \code{p.sep}: a string (default:
-  \code{', '}) with the main separator passed to \code{p}
-  function \item \code{p.copula}: a string (default:
-  \code{'and'}) a string with ending separator passed to
-  \code{p} function }
+  \code{evals.messages}: boolean (default: \code{TRUE})
+  passed to \code{evals}' \code{pander} method specifying
+  if messages should be rendered \item \code{p.wrap}: a
+  string (default: \code{'_'}) to wrap vector elements
+  passed to \code{p} function \item \code{p.sep}: a string
+  (default: \code{', '}) with the main separator passed to
+  \code{p} function \item \code{p.copula}: a string
+  (default: \code{'and'}) a string with ending separator
+  passed to \code{p} function }
 }
 \note{
   \code{pander.option} is deprecated and is to be removed

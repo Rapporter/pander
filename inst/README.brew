@@ -369,7 +369,7 @@ myReport$export(open = FALSE)
   * `table.style`: `'multiline'`, `'grid'` or `'simple'` passed to `pandoc.table`
   * `table.split.table`: numeric passed to `pandoc.table` and also affects `pander` methods. This option tells `pander` where to split too wide tables. The default value (`80`) suggests the conventional number of characters used in a line, feel free to change (e.g. to `Inf` to disable this feature) if you are not using a VT100 terminal any more :)
   * `table.split.cells`: numeric (default: `30`) passed to `pandoc.table` and also affects `pander` methods. This option tells `pander` where to split too wide cells with line breaks. Set `Inf` to disable.
-  * `evals.messages`: TODO
+  * `evals.messages`: boolean (default: `TRUE`) passed to `evals`' `pander` method specifying if messages should be rendered
   * `p.wrap`: a string (default:`'_'`) to wrap vector elements passed to `p` function
   * `p.sep`: a string (default: `', '`) with the main separator passed to `p` function
   * `p.copula`: a string (default: `'and'`) a string with ending separator passed to `p` function
