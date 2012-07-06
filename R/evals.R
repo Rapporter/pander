@@ -499,7 +499,7 @@ evals <- function(txt, parse = TRUE, cache = TRUE, cache.mode = c('environment',
                           }))
             }
 
-            cached <- digest(getCallParts(txt.parsed), 'sha1')
+            cached <- digest(getCallParts(parse(text = src)), 'sha1')
 
             if (cache.mode == 'disk') {
                 cached <- file.path(cache.dir, cached)
