@@ -1,9 +1,9 @@
 ## test_file('test-evals.R')
 
-cache.dir <- evals.option('cache.dir')
-graph.dir <- evals.option('graph.dir')
-evals.option('cache.dir',  file.path(tempdir(), '.cache'))
-evals.option('graph.dir',  file.path(tempdir(), 'plot'))
+cache.dir <- evalsOptions('cache.dir')
+graph.dir <- evalsOptions('graph.dir')
+evalsOptions('cache.dir',  file.path(tempdir(), '.cache'))
+evalsOptions('graph.dir',  file.path(tempdir(), 'plots'))
 
 context('eval.msgs')
 
@@ -202,5 +202,5 @@ test_that('long lines with line breaks', {
     expect_that(length(evals('x <- "this is a very-very looooooooooong line which might be split on `parse`, but that is not a big deal at all"\nx\n1')), equals(3))
 })
 
-evals.option('cache.dir',  cache.dir)
-evals.option('graph.dir',  graph.dir)
+evalsOptions('cache.dir',  cache.dir)
+evalsOptions('graph.dir',  graph.dir)
