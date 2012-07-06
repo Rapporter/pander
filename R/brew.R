@@ -290,7 +290,7 @@ DELIM[[BRCATCODE]] <- c("<%=","%>")
                 localstorage.last.pander  <- localstorage.last$robject$output
 
                 ## we had an inline chunk in the beginning of the line converted to block
-                if (!('image' %in% localstorage.last$type) | (length(localstorage.last.pander) <= 1))
+                if (!('image' %in% localstorage.last$type) & (length(localstorage.last.pander) <= 1))
                     localstorage <- c(localstorage[-length(localstorage)],
                                       list(list(type = 'text',
                                            text = list(
