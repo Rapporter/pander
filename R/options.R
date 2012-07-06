@@ -76,11 +76,14 @@ hash.cache.last.used <- new.env() # when was the hash last queried
 #' @param value value to assign (optional)
 #' @export
 #' @seealso \code{\link{evals.option}}
-#' @examples
+#' @aliases pander.option
+#' @note \code{pander.option} is deprecated and is to be removed in future releases.
+#' @examples \dontrun{
 #' pander.option()
 #' pander.option('digits')
 #' pander.option('digits', 5)
-pander.option <- function(o, value) {
+#' }
+panderOptions <- function(o, value) {
 
     res <- getOption('pander')
 
@@ -109,6 +112,12 @@ pander.option <- function(o, value) {
 
 }
 
+#' @export
+pander.option <- function(x, ...) {
+    mc <- match.call(panderOptions)
+    mc[[1]] <- quote(panderOptions)
+    eval(mc)
+}
 
 #' Querying/setting evals option
 #'
@@ -143,12 +152,14 @@ pander.option <- function(o, value) {
 #' @param o option name (string). See below.
 #' @param value value to assign (optional)
 #' @export
-#' @seealso \code{\link{evals}} \code{\link{pander.option}}
+#' @seealso \code{\link{evals}} \code{\link{panderOptions}}
+#' @note \code{evals.option} is deprecated and is to be removed in future releases.
+#' @aliases evals.option
 #' @examples
-#' evals.option()
-#' evals.option('cache')
-#' evals.option('cache', FALSE)
-evals.option <- function(o, value) {
+#' evalsOptions()
+#' evalsOptions('cache')
+#' evalsOptions('cache', FALSE)
+evalsOptions <- function(o, value) {
 
     res <- getOption('evals')
 
@@ -176,3 +187,6 @@ evals.option <- function(o, value) {
     }
 
 }
+
+#' @export
+evals.option <- evalsOptions

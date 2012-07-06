@@ -1,8 +1,9 @@
-\name{evals.option}
+\name{evalsOptions}
 \alias{evals.option}
+\alias{evalsOptions}
 \title{Querying/setting evals option}
 \usage{
-  evals.option(o, value)
+  evalsOptions(o, value)
 }
 \arguments{
   \item{o}{option name (string). See below.}
@@ -109,12 +110,16 @@
   \code{recordPlot} to distinct files (based on
   \code{graph.name}) with \code{recodplot} extension? }
 }
+\note{
+  \code{evals.option} is deprecated and is to be removed in
+  future releases.
+}
 \examples{
-evals.option()
-evals.option('cache')
-evals.option('cache', FALSE)
+evalsOptions()
+evalsOptions('cache')
+evalsOptions('cache', FALSE)
 }
 \seealso{
-  \code{\link{evals}} \code{\link{pander.option}}
+  \code{\link{evals}} \code{\link{panderOptions}}
 }
 

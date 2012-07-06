@@ -1,8 +1,9 @@
-\name{pander.option}
+\name{panderOptions}
 \alias{pander.option}
+\alias{panderOptions}
 \title{Querying/setting pander option}
 \usage{
-  pander.option(o, value)
+  panderOptions(o, value)
 }
 \arguments{
   \item{o}{option name (string). See below.}
@@ -45,10 +46,16 @@
   where to split too wide cells with line breaks. Set
   \code{Inf} to disable.  \item \code{evals.messages}: }
 }
+\note{
+  \code{pander.option} is deprecated and is to be removed
+  in future releases.
+}
 \examples{
+\dontrun{
 pander.option()
 pander.option('digits')
 pander.option('digits', 5)
+}
 }
 \seealso{
   \code{\link{evals.option}}
