@@ -312,7 +312,7 @@ The output of different **statistical methods** are tried to be prettyfied. Some
 ---------------------------------------------------
  Test statistic   P value   Alternative hypothesis 
 ---------------- --------- ------------------------
-      0.18        0.3959          two-sided        
+      0.16        0.5487          two-sided        
 ---------------------------------------------------
 
 Table: Two-sample Kolmogorov-Smirnov test: `runif(50)` and `runif(50)`
@@ -652,7 +652,7 @@ The list of possible options are:
   * `cache.mode`: cached results could be stored in an `environment` in _current_ R session or let it be permanent on `disk`.
   * `cache.dir`: path to a directory holding cache files if `cache.mode` set to `disk`. Default set to `.cache` in current working directory.
   * `cache.time`: number of seconds to limit caching based on `proc.time`. If set to `0`, all R commands, if set to `Inf`, none is cached (despite the `cache` parameter).
-  * `cache.copy.images`: copy images to new files if an image is returned from cache? If set to `FALSE` (default) the "old" path would be returned.
+  * `cache.copy.images`: copy images to new file names if an image is returned from the *disk* cache? If set to `FALSE` (default), the cached path would be returned.
   * `classes`: a vector or list of classes which should be returned. If set to `NULL` (by default) all R objects will be returned.
   * `hooks`: list of hooks to be run for given classes in the form of `list(class = fn)`. If you would also specify some parameters of the function, a list should be provided in the form of `list(fn, param1, param2=NULL)` etc. So the hooks would become `list(class1=list(fn, param1, param2=NULL), ...)`. See example of [`evals`](#evals) for more details. A default hook can be specified too by setting the class to `'default'`. This can be handy if you do not want to define separate methods/functions to each possible class, but automatically apply the default hook to all classes not mentioned in the list. You may also specify only one element in the list like: `hooks=list('default' = pander.return)`. Please note, that nor error/warning messages, nor stdout is captured (so: updated) while running hooks!
   * `length`: any R object exceeding the specified length will not be returned. The default value (`Inf`) does not filter out any R objects.
@@ -762,4 +762,4 @@ To use this small lib, just type: `M-x pander-mode` on any document. It might be
 
 
 -------
-This report was generated with [R](http://www.r-project.org/) (2.15.1) and [pander](https://github.com/daroczig/pander) (0.1) in 0.818 sec on x86_64-unknown-linux-gnu platform.
+This report was generated with [R](http://www.r-project.org/) (2.15.1) and [pander](https://github.com/daroczig/pander) (0.1) in 0.794 sec on x86_64-unknown-linux-gnu platform.

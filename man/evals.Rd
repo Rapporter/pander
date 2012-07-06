@@ -56,9 +56,10 @@
   commands, if set to \code{Inf}, none is cached (despite
   the \code{cache} parameter).}
 
-  \item{cache.copy.images}{copy images to new files if an
-  image is returned from cache? If set to \code{FALSE}
-  (default) the "old" path would be returned.}
+  \item{cache.copy.images}{copy images to new file names if
+  an image is returned from the \emph{disk} cache? If set
+  to \code{FALSE} (default), the cached path would be
+  returned.}
 
   \item{showInvisible}{return \code{invisible} results?}
 

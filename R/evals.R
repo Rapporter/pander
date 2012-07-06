@@ -181,7 +181,7 @@ eval.msgs <- function(src, env = NULL, showInvisible = FALSE) {
 #' @param cache.mode cached results could be stored in an \code{environment} in \emph{current} R session or let it be permanent on \code{disk}.
 #' @param cache.dir path to a directory holding cache files if \code{cache.mode} set to \code{disk}. Default to \code{.cache} in current working directory.
 #' @param cache.time number of seconds to limit caching based on \code{proc.time}. If set to \code{0}, all R commands, if set to \code{Inf}, none is cached (despite the \code{cache} parameter).
-#' @param cache.copy.images copy images to new files if an image is returned from cache? If set to \code{FALSE} (default) the "old" path would be returned.
+#' @param cache.copy.images copy images to new file names if an image is returned from the \emph{disk} cache? If set to \code{FALSE} (default), the cached path would be returned.
 #' @param showInvisible return \code{invisible} results?
 #' @param classes a vector or list of classes which should be returned. If set to \code{NULL} (by default) all R objects will be returned.
 #' @param hooks list of hooks to be run for given classes in the form of \code{list(class = fn)}. If you would also specify some parameters of the function, a list should be provided in the form of \code{list(fn, param1, param2=NULL)} etc. So the hooks would become \code{list(class1=list(fn, param1, param2=NULL), ...)}. See example below. A default hook can be specified too by setting the class to \code{'default'}. This can be handy if you do not want to define separate methods/functions to each possible class, but automatically apply the default hook to all classes not mentioned in the list. You may also specify only one element in the list like: \code{hooks=list('default' = pander.return)}. Please note, that nor error/warning messages, nor stdout is captured (so: updated) while running hooks!
@@ -512,22 +512,40 @@ evals <- function(txt, parse = TRUE, cache = TRUE, cache.mode = c('environment',
                     cached.result <- get(cached, envir = cached.results)
 
             if (exists('cached.result')) {
+
                 if (inherits(cached.result$result, 'image')) {
-                    cached.image.file <- as.character(cached.result$result)
-                    if (!file.exists(cached.image.file)) {
-                        warning(sprintf('The image file referenced in cache (%s) is no longer available: the image is recreated (%s).', shQuote(cached.image.file), shQuote(file)), call. = FALSE)
-                        cached.result <- NA
+
+                    if (cache.copy.images & cache.mode == 'disk') {
+
+                        ## we are copying img file + possibly extra from cache dir
+                        file.copy(paste0(cached, '.', graph.output), file)
+                        if (graph.recordplot)
+                            file.copy(paste0(cached, '.recordedplot'), sprintf('%s.recordplot', file.name))
+                        if (graph.RDS)
+                            file.copy(paste0(cached, '.RDS'), sprintf('%s.RDS', file.name))
+                        if (graph.env)
+                            file.copy(paste0(cached, '.env'), sprintf('%s.env', file.name))
+                        if (hi.res)
+                            file.copy(paste0(cached, '-hires.', graph.output), sprintf('%s-hires.%s', file.name, graph.output))
+
+                        cached.result$result <- file
+                        class(cached.result$result) <- 'image'
+                        return(cached.result)
+
                     } else {
-                        if (cache.copy.images) {
-                            ## TODO: what if img file was altered? Should not we try to check for existing recordedPlot and just rerender the img (without actual `eval`) to overcome this issue?
-                            file.copy(cached.image.file, file)
-                            cached.result$result <- file
-                            class(cached.result$result) <- 'image'
-                        }
+
+                        ## we are checking in plots' dir if the img file exists
+                        cached.image.file <- as.character(cached.result$result)
+                        if (file.exists(cached.image.file))
+                            return(cached.result)
+                        else
+                            warning(sprintf('The image file referenced in cache (%s) is no longer available: the image is recreated (%s).', shQuote(cached.image.file), shQuote(file)), call. = FALSE)
+
                     }
-                }
-                if (!identical(cached.result, NA))
+
+                } else
                     return(cached.result)
+
             } # cached result not found
 
             ## starting timer
@@ -682,8 +700,24 @@ evals <- function(txt, parse = TRUE, cache = TRUE, cache.mode = c('environment',
         ## save to cache
         if (cache)
             if (cache.mode == 'disk') {
-                if (as.numeric(proc.time() - timer)[3] > cache.time)
+                if (as.numeric(proc.time() - timer)[3] > cache.time) {
                     saveRDS(res, file = cached)
+
+                    ## plot related files
+                    if (class(result) == 'image') {
+                        file.copy(file, paste0(cached, '.', graph.output))
+                        if (graph.recordplot)
+                            file.copy(sprintf('%s.recordplot', file.name), paste0(cached, '.recordedplot'))
+                        if (graph.RDS)
+                            if (!is.null(result))
+                                file.copy(sprintf('%s.RDS', file.name), paste0(cached, '.RDS'))
+                        if (graph.env)
+                            file.copy(sprintf('%s.env', file.name), paste0(cached, '.env'))
+                        if (hi.res)
+                            file.copy(sprintf('%s-hires.%s', file.name, graph.output), paste0(cached, '-hires.', graph.output))
+
+                    }
+                }
             } else
                 if (as.numeric(proc.time() - timer)[3] > cache.time)
                     assign(cached, res, envir = cached.results)
@@ -693,4 +727,19 @@ evals <- function(txt, parse = TRUE, cache = TRUE, cache.mode = c('environment',
     })
 }
 
-
+#' Redraws saved plot
+#'
+#' This function is a wrapper around \code{replayPlot} with some added tweaks (fixing memory address nullpointer issue) for compatibility.
+#' @param file path and name of file to read saved \code{recordPlot} object
+#' @references Thanks to Jeroen Ooms: \url{http://permalink.gmane.org/gmane.comp.lang.r.devel/29897}.
+#' @seealso \code{\link{evals}}
+#' @export
+redraw.recordedplot <- function(file) {
+    plot <- readRDS(file)
+    for(i in 1:length(plot[[1]])) {
+        if( "NativeSymbolInfo" %in% class(plot[[1]][[i]][[2]][[1]]) ){
+            plot[[1]][[i]][[2]][[1]] <- getNativeSymbolInfo(plot[[1]][[i]][[2]][[1]]$name);
+        }
+    }
+    replayPlot(plot)
+}
