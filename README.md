@@ -162,13 +162,13 @@ Table: Hello caption!
 ```rout
 > pandoc.table(mtcars[1:2, ], style = "grid", caption = "Hello caption!")
 
-+-------------------+-------+-------+--------+------+--------+------+
-|                   | mpg   | cyl   | disp   | hp   | drat   | wt   |
-+===================+=======+=======+========+======+========+======+
-| **Mazda RX4**     | 21    | 6     | 160    | 110  | 3.9    | 2.6  |
-+-------------------+-------+-------+--------+------+--------+------+
-| **Mazda RX4 Wag** | 21    | 6     | 160    | 110  | 3.9    | 2.9  |
-+-------------------+-------+-------+--------+------+--------+------+
++-------------------+-------+-------+--------+------+--------+-------+
+|                   | mpg   | cyl   | disp   | hp   | drat   | wt    |
++===================+=======+=======+========+======+========+=======+
+| **Mazda RX4**     | 21    | 6     | 160    | 110  | 3.9    | 2.620 |
++-------------------+-------+-------+--------+------+--------+-------+
+| **Mazda RX4 Wag** | 21    | 6     | 160    | 110  | 3.9    | 2.875 |
++-------------------+-------+-------+--------+------+--------+-------+
 
 Table: Hello caption! (continued below)
 
@@ -177,9 +177,9 @@ Table: Hello caption! (continued below)
 +-------------------+--------+------+------+--------+--------+
 |                   | qsec   | vs   | am   | gear   | carb   |
 +===================+========+======+======+========+========+
-| **Mazda RX4**     | 16     | 0    | 1    | 4      | 4      |
+| **Mazda RX4**     | 16.46  | 0    | 1    | 4      | 4      |
 +-------------------+--------+------+------+--------+--------+
-| **Mazda RX4 Wag** | 17     | 0    | 1    | 4      | 4      |
+| **Mazda RX4 Wag** | 17.02  | 0    | 1    | 4      | 4      |
 +-------------------+--------+------+------+--------+--------+
 
 ```
@@ -224,8 +224,8 @@ Besides simple types (vectors, matrices, tables or data frames) lists might be i
 ```rout
 > pander(list(a=1, b=2, c=table(mtcars$am), x=list(myname=1,2), 56))
 
-  * **a**: *1*
-  * **b**: *2*
+  * **a**: _1_
+  * **b**: _2_
   * **c**:
 
     -------
@@ -236,10 +236,10 @@ Besides simple types (vectors, matrices, tables or data frames) lists might be i
 
   * **x**:
 
-      * **myname**: *1*
-      * *2*
+      * **myname**: _1_
+      * _2_
 
-  * *56*
+  * _56_
 
 <!-- end of list -->
 
@@ -253,9 +253,9 @@ A nested list can be seen above with a table and all (optional) list names insid
 > pander(x)
  **WARNING**^[Chi-squared approximation may be incorrect]
 
-  * **statistic**: *21*
-  * **parameter**: *2*
-  * **p.value**: *2.8e-05*
+  * **statistic**: _20.94_
+  * **parameter**: _2_
+  * **p.value**: _2.831e-05_
   * **method**: Pearson's Chi-squared test
   * **data.name**: table(mtcars$am, mtcars$gear)
   * **observed**:
@@ -270,33 +270,33 @@ A nested list can be seen above with a table and all (optional) list names insid
 
   * **expected**:
 
-    -----------------
-          3   4   5
-    ----- --- --- ---
-    **0** 8.9 7.1 3.0
+    -----------------------
+          3     4     5
+    ----- ----- ----- -----
+    **0** 8.906 7.125 2.969
 
-    **1** 6.1 4.9 2.0
-    -----------------
+    **1** 6.094 4.875 2.031
+    -----------------------
 
   * **residuals**:
 
-    --------------------
-          3    4    5
-    ----- ---- ---- ----
-    **0** 2.0  -1.2 -1.7
+    --------------------------
+          3      4      5
+    ----- ------ ------ ------
+    **0** 2.042  -1.171 -1.723
 
-    **1** -2.5 1.4  2.1
-    --------------------
+    **1** -2.469 1.415  2.083
+    --------------------------
 
   * **stdres**:
 
-    --------------------
-          3    4    5
-    ----- ---- ---- ----
-    **0** 4.4  -2.3 -2.9
+    --------------------------
+          3      4      5
+    ----- ------ ------ ------
+    **0** 4.395  -2.323 -2.943
 
-    **1** -4.4 2.3  2.9
-    --------------------
+    **1** -4.395 2.323  2.943
+    --------------------------
 
 <!-- end of list -->
 
@@ -312,7 +312,7 @@ The output of different **statistical methods** are tried to be prettyfied. Some
 ---------------------------------------------------
  Test statistic   P value   Alternative hypothesis 
 ---------------- --------- ------------------------
-      0.2          0.27           two-sided        
+      0.2         0.2719          two-sided        
 ---------------------------------------------------
 
 Table: Two-sample Kolmogorov-Smirnov test: `runif(50)` and `runif(50)`
@@ -322,7 +322,7 @@ Table: Two-sample Kolmogorov-Smirnov test: `runif(50)` and `runif(50)`
 -------------------------------
  Test statistic   df   P value 
 ---------------- ---- ---------
-       21         2    2.8e-05 
+     20.94        2   2.831e-05
 -------------------------------
 
 Table: Pearson's Chi-squared test: `table(mtcars$am, mtcars$gear)`
@@ -331,11 +331,11 @@ Table: Pearson's Chi-squared test: `table(mtcars$am, mtcars$gear)`
 
 > pander(t.test(extra ~ group, data = sleep))
 
---------------------------------------------------------
- Test statistic   df   P value   Alternative hypothesis 
----------------- ---- --------- ------------------------
-      -1.9        18    0.079          two.sided        
---------------------------------------------------------
+---------------------------------------------------------
+ Test statistic   df    P value   Alternative hypothesis 
+---------------- ----- --------- ------------------------
+     -1.861      17.78  0.07939         two.sided        
+---------------------------------------------------------
 
 Table: Welch Two Sample t-test: `extra` by `group`
 
@@ -346,19 +346,19 @@ Table: Welch Two Sample t-test: `extra` by `group`
 > m <- glm(counts ~ outcome + treatment, family=poisson())
 > pander(m)
 
-------------------------------------------------------------
-                 Estimate   Std. Error   z value   Pr(>|z|) 
---------------- ---------- ------------ --------- ----------
-**(Intercept)**  3.0e+00     1.7e-01     1.8e+01   5.4e-71  
+-------------------------------------------------------------
+                 Estimate   Std. Error   z value    Pr(>|z|) 
+--------------- ---------- ------------ ---------- ----------
+**(Intercept)** 3.045e+00   1.709e-01   1.781e+01  5.427e-71 
 
-   **outcome2**  -4.5e-01    2.0e-01    -2.2e+00   2.5e-02  
+   **outcome2** -4.543e-01  2.022e-01   -2.247e+00 2.465e-02 
 
-   **outcome3**  -2.9e-01    1.9e-01    -1.5e+00   1.3e-01  
+   **outcome3** -2.930e-01  1.927e-01   -1.520e+00 1.285e-01 
 
- **treatment2**  1.3e-15     2.0e-01     6.7e-15   1.0e+00  
+ **treatment2** 1.338e-15   2.000e-01   6.690e-15  1.000e+00 
 
- **treatment3**  1.4e-15     2.0e-01     7.1e-15   1.0e+00  
-------------------------------------------------------------
+ **treatment3** 1.421e-15   2.000e-01   7.105e-15  1.000e+00 
+-------------------------------------------------------------
 
 Table: Fitting generalized (poisson/log) linear model: counts ~ outcome + treatment
 
@@ -367,93 +367,93 @@ Table: Fitting generalized (poisson/log) linear model: counts ~ outcome + treatm
 ------------------------------------------------------
                Df   Deviance   Resid. Df   Resid. Dev 
 ------------- ---- ---------- ----------- ------------
-     **NULL**  NA      NA          8          10.6    
+     **NULL**  NA      NA          8         10.581   
 
-  **outcome**  2    5.5e+00        6          5.1     
+  **outcome**  2   5.452e+00       6         5.129    
 
-**treatment**  2    2.7e-15        4          5.1     
+**treatment**  2   2.665e-15       4         5.129    
 ------------------------------------------------------
 
 Table: Analysis of Deviance Table
 
 > pander(aov(m))
 
---------------------------------------------------------
-               Df   Sum Sq   Mean Sq   F value   Pr(>F) 
-------------- ---- -------- --------- --------- --------
-  **outcome**  2   9.3e+01   4.6e+01   2.2e+00    0.22  
+---------------------------------------------------------
+               Df   Sum Sq    Mean Sq   F value   Pr(>F) 
+------------- ---- --------- --------- --------- --------
+  **outcome**  2   9.267e+01 4.633e+01 2.224e+00  0.2242 
 
-**treatment**  2   8.4e-31   4.2e-31   2.0e-32    1.00  
+**treatment**  2   8.382e-31 4.191e-31 2.012e-32  1.0000 
 
-**Residuals**  4   8.3e+01   2.1e+01     NA        NA   
---------------------------------------------------------
+**Residuals**  4   8.333e+01 2.083e+01    NA        NA   
+---------------------------------------------------------
 
 Table: Analysis of Variance Model
 
 > pander(prcomp(USArrests))
 
----------------------------------------
-             PC1   PC2    PC3    PC4   
------------- ----- ------ ------ ------
-**Murder**   0.042 -0.045 0.080  -0.995
+-----------------------------------------------
+             PC1     PC2      PC3      PC4     
+------------ ------- -------- -------- --------
+**Murder**   0.04170 -0.04482 0.07989  -0.99492
 
-**Assault**  0.995 -0.059 -0.068 0.039 
+**Assault**  0.99522 -0.05876 -0.06757 0.03894 
 
-**UrbanPop** 0.046 0.977  -0.201 -0.058
+**UrbanPop** 0.04634 0.97686  -0.20055 -0.05817
 
-**Rape**     0.075 0.201  0.974  0.072 
----------------------------------------
+**Rape**     0.07516 0.20072  0.97408  0.07233 
+-----------------------------------------------
 
 Table: Principal Components Analysis
 
-----------------------------------------------------------
-                           PC1     PC2     PC3     PC4    
--------------------------- ------- ------- ------- -------
-**Standard deviation**     8.4e+01 1.4e+01 6.5e+00 2.5e+00
+------------------------------------------------------------
+                           PC1      PC2      PC3     PC4    
+-------------------------- -------- -------- ------- -------
+**Standard deviation**     83.73240 14.21240 6.48943 2.48279
 
-**Proportion of Variance** 9.7e-01 2.8e-02 5.8e-03 8.5e-04
+**Proportion of Variance** 0.96553  0.02782  0.00580 0.00085
 
-**Cumulative Proportion**  9.7e-01 9.9e-01 1.0e+00 1.0e+00
-----------------------------------------------------------
+**Cumulative Proportion**  0.96553  0.99335  0.99915 1.00000
+------------------------------------------------------------
 
 > pander(density(mtcars$hp))
 
 ------------------------------------------
              Coordinates   Density values 
 ----------- ------------- ----------------
-   **Min.**      -32          5.0e-06     
+   **Min.**    -32.12        0.0000050    
 
-**1st Qu.**      81           4.1e-04     
+**1st Qu.**     80.69        0.0004068    
 
- **Median**      194          1.7e-03     
+ **Median**    193.50        0.0016650    
 
-   **Mean**      194          2.2e-03     
+   **Mean**    193.50        0.0022140    
 
-**3rd Qu.**      306          4.1e-03     
+**3rd Qu.**    306.30        0.0040900    
 
-   **Max.**      419          6.1e-03     
+   **Max.**    419.10        0.0060510    
 ------------------------------------------
 
 Table: Kernel density of *mtcars$hp* (bandwidth: 28.04104)
 
 > ## Don't like scientific notation?
-> pander.option('round', 2)
+> panderOptions('round', 2)
 > pander(density(mtcars$hp))
 
 ------------------------------------------
              Coordinates   Density values 
 ----------- ------------- ----------------
-   **Min.**      -32            0.00      
+   **Min.**    -32.12           0.00      
 
-**1st Qu.**      81             0.00      
+**1st Qu.**     80.69           0.00      
 
- **Median**      194            0.00      
+ **Median**    193.50           0.00      
 
-   **Mean**      194            0.00      
+   **Mean**    193.50           0.00      
 
-**3rd Qu.**      306            0.00      
+**3rd Qu.**    306.30           0.00      
 
-   **Max.**      419            0.01      
+   **Max.**    419.10           0.01      
 ------------------------------------------
 
 Table: Kernel density of *mtcars$hp* (bandwidth: 28.04104)
@@ -627,18 +627,23 @@ myReport$export(open = FALSE)
 
 # Pander options
 
-`pander` comes with some globally adjustable options which would have an effect on the result of your reports. You can query and update these options with `pander.option()`:
+`pander` comes with some globally adjustable options which would have an effect on the result of your reports. You can query and update these options with `panderOptions()`:
 
   * `digits`: numeric (default: `2`) passed to `format`
   * `decimal.mark`: numeric (default: `.`) passed to `format`
   * `round`: numeric (default: `Inf`) passed to `round`
   * `date`: string (default: `'%Y/%m/%d %X'`) passed to `format` when printing dates (`POSIXct` or `POSIXt`)
+  * `header.style`: `'atx'` or `'setext'` passed to `pandoc.header`
   * `list.style`: `'bullet'` (default), `'ordered'` or `'roman'` passed to `pandoc.list`. Please not that this has no effect on `pander` methods.
-  * `table.style`: `'atx'` (default) or `'setext'` passed to `pandoc.table` and also affects `pander` methods.
+  * `table.style`: `'multiline'`, `'grid'` or `'simple'` passed to `pandoc.table`
   * `table.split.table`: numeric passed to `pandoc.table` and also affects `pander` methods. This option tells `pander` where to split too wide tables. The default value (`80`) suggests the conventional number of characters used in a line, feel free to change (e.g. to `Inf` to disable this feature) if you are not using a VT100 terminal any more :)
   * `table.split.cells`: numeric (default: `30`) passed to `pandoc.table` and also affects `pander` methods. This option tells `pander` where to split too wide cells with line breaks. Set `Inf` to disable.
+  * `evals.messages`: TODO
+  * `p.wrap`: a string (default:`'_'`) to wrap vector elements passed to `p` function
+  * `p.sep`: a string (default: `', '`) with the main separator passed to `p` function
+  * `p.copula`: a string (default: `'and'`) a string with ending separator passed to `p` function
 
-Besides localization of numeric formats and table/list's styles there are some technical options too which would effect e.g. [caching](#caching) or the format of rendered image files. You can query/update those with `evals.option()` as the main backend of `pander` calls is a custom evaluation function called [`evals`](#evals).
+Besides localization of numeric formats and table/list's styles there are some technical options too which would effect e.g. [caching](#caching) or the format of rendered image files. You can query/update those with `evalsOptions()` as the main backend of `pander` calls is a custom evaluation function called [`evals`](#evals).
 
 The list of possible options are:
 
@@ -756,4 +761,4 @@ To use this small lib, just type: `M-x pander-mode` on any document. It might be
 
 
 -------
-This report was generated with [R](http://www.r-project.org/) (2.15.0) and [pander](https://github.com/daroczig/pander) (0.1) in 0.815 sec on x86_64-unknown-linux-gnu platform.
+This report was generated with [R](http://www.r-project.org/) (2.15.1) and [pander](https://github.com/daroczig/pander) (0.1) in 0.815 sec on x86_64-unknown-linux-gnu platform.
