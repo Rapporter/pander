@@ -201,6 +201,7 @@ eval.msgs <- function(src, env = NULL, showInvisible = FALSE) {
 #' @param hi.res.res nominal resolution of high resolution plot in ppi. The height and width of vector plots will be calculated based in this. This value can be left blank to be automatically calculated to fit original plot scales.
 #' @param graph.env save the environments in which plots were generated to distinct files (based on \code{graph.name}) with \code{env} extension?
 #' @param graph.recordplot save the plot via \code{recordPlot} to distinct files (based on \code{graph.name}) with \code{recodplot} extension?
+#' @param graph.RDS save the raw R object returned (usually with \code{lattice} or \code{ggplot2}) while generating the plots to distinct files (based on \code{graph.name}) with \code{RDS} extension?
 #' @param ... optional parameters passed to graphics device (e.g. \code{bg}, \code{pointsize} etc.)
 #' @return a list of parsed elements each containing: \code{src} (the command run), \code{result} (R object: \code{NULL} if nothing returned, path to image file if a plot was generated), \code{print}ed \code{output}, \code{type} (class of returned object if any), informative/wawrning and error messages (if any returned by the command run, otherwise set to \code{NULL}) and possible \code{stdout}t value. See Details above.
 #' @seealso \code{\link{eval.msgs}} \code{\link{evalsOptions}}
@@ -365,7 +366,7 @@ eval.msgs <- function(src, env = NULL, showInvisible = FALSE) {
 #' @export
 #' @importFrom digest digest
 #' @importFrom lattice trellis.par.set
-evals <- function(txt, parse = TRUE, cache = TRUE, cache.mode = c('environment', 'disk'), cache.dir = '.cache', cache.time = 0.1, cache.copy.images = FALSE, showInvisible = FALSE, classes = NULL, hooks = NULL, length = Inf, output = c('all', 'src', 'result', 'output', 'type', 'msg', 'stdout'), env = NULL, graph.nomargin = TRUE, graph.name = '%t', graph.dir = 'plots', graph.output = c('png', 'bmp', 'jpeg', 'jpg', 'tiff', 'svg', 'pdf'), width = 480, height = 480, res= 72, hi.res = FALSE, hi.res.width = 960, hi.res.height = 960*(height/width), hi.res.res = res*(hi.res.width/width), graph.env = FALSE, graph.recordplot = FALSE, ...){
+evals <- function(txt, parse = TRUE, cache = TRUE, cache.mode = c('environment', 'disk'), cache.dir = '.cache', cache.time = 0.1, cache.copy.images = FALSE, showInvisible = FALSE, classes = NULL, hooks = NULL, length = Inf, output = c('all', 'src', 'result', 'output', 'type', 'msg', 'stdout'), env = NULL, graph.nomargin = TRUE, graph.name = '%t', graph.dir = 'plots', graph.output = c('png', 'bmp', 'jpeg', 'jpg', 'tiff', 'svg', 'pdf'), width = 480, height = 480, res= 72, hi.res = FALSE, hi.res.width = 960, hi.res.height = 960*(height/width), hi.res.res = res*(hi.res.width/width), graph.env = FALSE, graph.recordplot = FALSE, graph.RDS = FALSE, ...){
 
     if (missing(txt))
         stop('No R code provided to evaluate!')
@@ -584,9 +585,13 @@ evals <- function(txt, parse = TRUE, cache = TRUE, cache.mode = c('environment',
         if (is.character(graph)) {
 
             ## save recorded plot on demand
-            if (graph.recordplot) {
+            if (graph.recordplot)
                 saveRDS(recorded.plot, file = sprintf('%s.recordplot', file.name))
-            }
+
+            ## save plot RDS on demand
+            if (graph.RDS)
+                if (!is.null(result))
+                    saveRDS(result, file = sprintf('%s.RDS', file.name))
 
             result <- graph
             class(result) <- "image"

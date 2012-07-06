@@ -15,7 +15,8 @@
     hi.res.width = 960,
     hi.res.height = 960 * (height/width),
     hi.res.res = res * (hi.res.width/width),
-    graph.env = FALSE, graph.recordplot = FALSE, ...)
+    graph.env = FALSE, graph.recordplot = FALSE,
+    graph.RDS = FALSE, ...)
 }
 \arguments{
   \item{txt}{a character vector containing R code. This
@@ -151,6 +152,11 @@
   \item{graph.recordplot}{save the plot via
   \code{recordPlot} to distinct files (based on
   \code{graph.name}) with \code{recodplot} extension?}
+
+  \item{graph.RDS}{save the raw R object returned (usually
+  with \code{lattice} or \code{ggplot2}) while generating
+  the plots to distinct files (based on \code{graph.name})
+  with \code{RDS} extension?}
 
   \item{...}{optional parameters passed to graphics device
   (e.g. \code{bg}, \code{pointsize} etc.)}

@@ -312,7 +312,7 @@ The output of different **statistical methods** are tried to be prettyfied. Some
 ---------------------------------------------------
  Test statistic   P value   Alternative hypothesis 
 ---------------- --------- ------------------------
-      0.1         0.9667          two-sided        
+      0.18        0.3959          two-sided        
 ---------------------------------------------------
 
 Table: Two-sample Kolmogorov-Smirnov test: `runif(50)` and `runif(50)`
@@ -669,6 +669,7 @@ The list of possible options are:
   * `hi.res.width`: width of generated high resolution plot in pixels for even vector formats. The `height` and `res` of high resolution image is automatically computed based on the above options to preserve original plot aspect ratio.
   * `graph.env`: save the environments in which plots were generated to distinct files (based on `graph.name`) with `env` extension?
   * `graph.recordplot`: save the plot via `recordPlot` to distinct files (based on `graph.name`) with `recodplot` extension?
+  * `graph.RDS` save the raw R object returned (usually with `lattice` or `ggplot2`) while generating the plots to distinct files (based on `graph.name`) with `RDS` extension?
 
 # Caching
 
@@ -761,4 +762,4 @@ To use this small lib, just type: `M-x pander-mode` on any document. It might be
 
 
 -------
-This report was generated with [R](http://www.r-project.org/) (2.15.1) and [pander](https://github.com/daroczig/pander) (0.1) in 0.807 sec on x86_64-unknown-linux-gnu platform.
+This report was generated with [R](http://www.r-project.org/) (2.15.1) and [pander](https://github.com/daroczig/pander) (0.1) in 0.818 sec on x86_64-unknown-linux-gnu platform.

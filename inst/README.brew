@@ -400,6 +400,7 @@ The list of possible options are:
   * `hi.res.width`: width of generated high resolution plot in pixels for even vector formats. The `height` and `res` of high resolution image is automatically computed based on the above options to preserve original plot aspect ratio.
   * `graph.env`: save the environments in which plots were generated to distinct files (based on `graph.name`) with `env` extension?
   * `graph.recordplot`: save the plot via `recordPlot` to distinct files (based on `graph.name`) with `recodplot` extension?
+  * `graph.RDS` save the raw R object returned (usually with `lattice` or `ggplot2`) while generating the plots to distinct files (based on `graph.name`) with `RDS` extension?
 
 # Caching
 

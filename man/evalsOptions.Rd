@@ -108,7 +108,11 @@
   \code{graph.name}) with \code{env} extension?  \item
   \code{graph.recordplot}: save the plot via
   \code{recordPlot} to distinct files (based on
-  \code{graph.name}) with \code{recodplot} extension? }
+  \code{graph.name}) with \code{recodplot} extension?
+  \item \code{graph.RDS}: save the raw R object returned
+  (usually with \code{lattice} or \code{ggplot2}) while
+  generating the plots to distinct files (based on
+  \code{graph.name}) with \code{RDS} extension? }
 }
 \note{
   \code{evals.option} is deprecated and is to be removed in

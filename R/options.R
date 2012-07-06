@@ -40,7 +40,8 @@
                 'hi.res'                = FALSE,
                 'hi.res.width'          = 960,
                 'graph.env'             = FALSE,
-                'graph.recordplot'      = FALSE
+                'graph.recordplot'      = FALSE,
+                'graph.RDS'             = FALSE
                 ))
 }
 
@@ -152,6 +153,7 @@ pander.option <- function(x, ...) {
 #'      \item \code{hi.res.width}: width of generated high resolution plot in pixels for even vector formats. The \code{height} and \code{res} of high resolution image is automatically computed based on the above options to preserve original plot aspect ratio.
 #'      \item \code{graph.env}: save the environments in which plots were generated to distinct files (based on \code{graph.name}) with \code{env} extension?
 #'      \item \code{graph.recordplot}: save the plot via \code{recordPlot} to distinct files (based on \code{graph.name}) with \code{recodplot} extension?
+#'      \item \code{graph.RDS}: save the raw R object returned (usually with \code{lattice} or \code{ggplot2}) while generating the plots to distinct files (based on \code{graph.name}) with \code{RDS} extension?
 #' }
 #' @param o option name (string). See below.
 #' @param value value to assign (optional)
