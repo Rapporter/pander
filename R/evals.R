@@ -172,7 +172,7 @@ eval.msgs <- function(src, env = NULL, showInvisible = FALSE) {
 #'
 #' Also, if you have generated a plot and rendered that to e.g. \code{png} before and later try to get e.g. \code{pdf} - it would fail with \code{cache} on. Similarly you cannot render a high resolution image of a cached image, but you have to (temporary) disable caching.
 #'
-#' The default \code{evals} options could be set globally with \code{\link{evals.option}}, e.g. to switch off the cache just run \code{evals.option('cache', FALSE)}.
+#' The default \code{evals} options could be set globally with \code{\link{evalsOptions}}, e.g. to switch off the cache just run \code{evalsOptions('cache', FALSE)}.
 #'
 #' Please check the examples carefully below to get a detailed overview of \code{\link{evals}}.
 #' @param txt a character vector containing R code. This could be a list/vector of lines of code or a simple string holding R code separated by \code{;} or \code{\\n}.
@@ -203,7 +203,7 @@ eval.msgs <- function(src, env = NULL, showInvisible = FALSE) {
 #' @param graph.recordplot save the plot via \code{recordPlot} to distinct files (based on \code{graph.name}) with \code{recodplot} extension?
 #' @param ... optional parameters passed to graphics device (e.g. \code{bg}, \code{pointsize} etc.)
 #' @return a list of parsed elements each containing: \code{src} (the command run), \code{result} (R object: \code{NULL} if nothing returned, path to image file if a plot was generated), \code{print}ed \code{output}, \code{type} (class of returned object if any), informative/wawrning and error messages (if any returned by the command run, otherwise set to \code{NULL}) and possible \code{stdout}t value. See Details above.
-#' @seealso \code{\link{eval.msgs}} \code{\link{evals.option}}
+#' @seealso \code{\link{eval.msgs}} \code{\link{evalsOptions}}
 #' @examples \dontrun{
 #' # parsing several lines of R code
 #' txt <- readLines(textConnection('x <- rnorm(100)
@@ -305,9 +305,9 @@ eval.msgs <- function(src, env = NULL, showInvisible = FALSE) {
 #' evals('f(g(A, B))')#'
 #'
 #' ## or switch off cache globally:
-#' evals.option('cache', FALSE)
+#' evalsOptions('cache', FALSE)
 #' ## and switch on later
-#' evals.option('cache', TRUE)
+#' evalsOptions('cache', TRUE)
 #'
 #' ## returning only a few classes
 #' txt <- readLines(textConnection('rnorm(100)
@@ -372,9 +372,9 @@ evals <- function(txt, parse = TRUE, cache = TRUE, cache.mode = c('environment',
 
     ## override missing parameters with options
     mc <- match.call()
-    for (param in names(evals.option())) {
+    for (param in names(evalsOptions())) {
         if (is.null(mc[[param]]))
-            assign(param, evals.option(param))
+            assign(param, evalsOptions(param))
     }
 
     ## parse provided code after concatenating

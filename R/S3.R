@@ -114,7 +114,7 @@ pander.matrix <- function(x, caption = attr(x, 'caption'), ...)
 
 #' @S3method pander numeric
 pander.numeric <- function(x, ...)
-    cat(p(format(round(x, pander.option('round')), trim = TRUE, digits = pander.option('digits'), decimal.mark = pander.option('decimal.mark'))))
+    cat(p(format(round(x, panderOptions('round')), trim = TRUE, digits = panderOptions('digits'), decimal.mark = panderOptions('decimal.mark'))))
 
 #' @S3method pander character
 pander.character <- function(x, ...)
@@ -245,8 +245,8 @@ pander.rapport <- function(x, ...)
 
 #' @S3method pander POSIXct
 pander.POSIXct <- function(x, ...)
-    cat(format(x, pander.option('date')))
+    cat(format(x, panderOptions('date')))
 
 #' @S3method pander POSIXt
 pander.POSIXt <- function(x, ...)
-    cat(format(x, pander.option('date')))
+    cat(format(x, panderOptions('date')))

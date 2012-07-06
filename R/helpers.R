@@ -57,7 +57,7 @@ repChar <- function(x, n, sep = '')
 #' @export
 #' @author Aleksandar Blagotić
 #' @references This function was moved from \code{rapport} package: \url{http://rapport-package.info/}.
-p <- function(x, wrap = pander.option('p.wrap'), sep = pander.option('p.sep'), copula = pander.option('p.copula'), limit = Inf){
+p <- function(x, wrap = panderOptions('p.wrap'), sep = panderOptions('p.sep'), copula = panderOptions('p.copula'), limit = Inf){
 
     stopifnot(is.vector(x))
     stopifnot(all(sapply(list(wrap, sep, copula), function(x) is.character(x) && length(x) == 1)))
@@ -350,7 +350,7 @@ pandoc.horizontal.rule <- function(...)
 pandoc.header.return <- function(x, level = 1, style = c('atx', 'setext')) {
 
     if (missing(style))
-        style <- pander.option('header.style')
+        style <- panderOptions('header.style')
     else
         style <- match.arg(style)
 
@@ -469,7 +469,7 @@ pandoc.list.return <- function(elements, style = c('bullet', 'ordered', 'roman')
         stop('Wrong argument provided: loose')
 
     if (missing(style))
-        style <- pander.option('list.style')
+        style <- panderOptions('list.style')
     else
         style <- match.arg(style)
 
@@ -564,7 +564,7 @@ pandoc.list <- function(...)
 #' pandoc.table(t, style = "grid", split.cells = 5)
 #' pandoc.table(t, style = "simple")
 #' tryCatch(pandoc.table(t, style = "simple", split.cells = 5), error = function(e) 'Yeah, no newline support in simple tables')
-pandoc.table.return <- function(t, caption = NULL, digits = pander.option('digits'), decimal.mark = pander.option('decimal.mark'), round = pander.option('round'), justify = 'left', style = c('multiline', 'grid', 'simple'), split.tables = pander.option('table.split.table'), split.cells = pander.option('table.split.cells')) {
+pandoc.table.return <- function(t, caption = NULL, digits = panderOptions('digits'), decimal.mark = panderOptions('decimal.mark'), round = panderOptions('round'), justify = 'left', style = c('multiline', 'grid', 'simple'), split.tables = panderOptions('table.split.table'), split.cells = panderOptions('table.split.cells')) {
 
     ## helper functions
     table.expand <- function(cells, cols.width, justify, sep.cols) {
@@ -595,7 +595,7 @@ pandoc.table.return <- function(t, caption = NULL, digits = pander.option('digit
     ## initializing
     res <- ''
     if (missing(style))
-        style <- pander.option('table.style')
+        style <- panderOptions('table.style')
     else
         style <- match.arg(style)
 

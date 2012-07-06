@@ -79,9 +79,9 @@ hash.cache.last.used <- new.env() # when was the hash last queried
 #' @aliases pander.option
 #' @note \code{pander.option} is deprecated and is to be removed in future releases.
 #' @examples \dontrun{
-#' pander.option()
-#' pander.option('digits')
-#' pander.option('digits', 5)
+#' panderOptions()
+#' panderOptions('digits')
+#' panderOptions('digits', 5)
 #' }
 panderOptions <- function(o, value) {
 

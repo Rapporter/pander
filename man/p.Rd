@@ -2,9 +2,9 @@
 \alias{p}
 \title{Inline Printing}
 \usage{
-  p(x, wrap = pander.option("p.wrap"),
-    sep = pander.option("p.sep"),
-    copula = pander.option("p.copula"), limit = Inf)
+  p(x, wrap = panderOptions("p.wrap"),
+    sep = panderOptions("p.sep"),
+    copula = panderOptions("p.copula"), limit = Inf)
 }
 \arguments{
   \item{x}{an atomic vector to get merged for inline

@@ -81,7 +81,7 @@ Pandoc.brew <- function(file = stdin(), output = stdout(), convert = FALSE, open
         text <- paste(readLines(file, warn = FALSE), collapse = '\n')
 
     ## helper fn
-    showCode <- function(..., envir = parent.frame(), cache = evals.option('cache')) {
+    showCode <- function(..., envir = parent.frame(), cache = evalsOptions('cache')) {
         res <- evals(unlist(...), env = envir, cache.dir = cache.dir, graph.dir = graph.dir, graph.name = graph.name, hi.res = graph.hi.res)
         for (r in res) {
 

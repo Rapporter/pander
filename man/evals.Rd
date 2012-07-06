@@ -279,8 +279,8 @@
   caching.
 
   The default \code{evals} options could be set globally
-  with \code{\link{evals.option}}, e.g. to switch off the
-  cache just run \code{evals.option('cache', FALSE)}.
+  with \code{\link{evalsOptions}}, e.g. to switch off the
+  cache just run \code{evalsOptions('cache', FALSE)}.
 
   Please check the examples carefully below to get a
   detailed overview of \code{\link{evals}}.
@@ -387,9 +387,9 @@ B <- 1e5
 evals('f(g(A, B))')#'
 
 ## or switch off cache globally:
-evals.option('cache', FALSE)
+evalsOptions('cache', FALSE)
 ## and switch on later
-evals.option('cache', TRUE)
+evalsOptions('cache', TRUE)
 
 ## returning only a few classes
 txt <- readLines(textConnection('rnorm(100)
@@ -446,6 +446,6 @@ evals('mean(x)')
 }
 }
 \seealso{
-  \code{\link{eval.msgs}} \code{\link{evals.option}}
+  \code{\link{eval.msgs}} \code{\link{evalsOptions}}
 }
 

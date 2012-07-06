@@ -52,9 +52,9 @@
 }
 \examples{
 \dontrun{
-pander.option()
-pander.option('digits')
-pander.option('digits', 5)
+panderOptions()
+panderOptions('digits')
+panderOptions('digits', 5)
 }
 }
 \seealso{

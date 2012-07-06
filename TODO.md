@@ -13,7 +13,7 @@
   * ~~add [ESS](http://ess.r-project.org/) functions~~
   * ~~add: short documentation (or at least mention!): `evals`~~
   * ~~comparison with `knitr`~~
-  * ~~add: options~~
+  * ~~add: options~~ + `p` options + `evals.messages` option
 
 ## Github pages
 
@@ -32,6 +32,8 @@
 ## General tasks
 
   * ~~**add controllable, global options**~~ `pander.option`
+  * ~~rename pander.options & eval.options not to conflict with S3 methods** `panderOptions` and `evalsOptions`
+  * ~~update package functions to use new naming scheme for options**
   * **add ~~caption~~/other tweaks (sign. stars, emphasis etc.) to images/tables using `attrs`**
 
 ## Evals
@@ -44,6 +46,8 @@
   * ~~add: global options~~
   * ~~add: option to copy images~~
   * ~~check if img file referenced in cached result really exists~~
+  * add: `evals.messages` option passed to `pander.evals` to possibly suppress messages
+  * add: optionally save img's R object (lattice & ggplot2) to RDA file
   *  What if img file referenced in cached result was altered? Should not we try to check for existing recordedPlot and just rerender the img (without actual `eval`) to overcome this issue?
 
 ## Helper functions

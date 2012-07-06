@@ -4,12 +4,12 @@
 \title{Create a table}
 \usage{
   pandoc.table.return(t, caption = NULL,
-    digits = pander.option("digits"),
-    decimal.mark = pander.option("decimal.mark"),
-    round = pander.option("round"), justify = "left",
+    digits = panderOptions("digits"),
+    decimal.mark = panderOptions("decimal.mark"),
+    round = panderOptions("round"), justify = "left",
     style = c("multiline", "grid", "simple"),
-    split.tables = pander.option("table.split.table"),
-    split.cells = pander.option("table.split.cells"))
+    split.tables = panderOptions("table.split.table"),
+    split.cells = panderOptions("table.split.cells"))
 }
 \arguments{
   \item{t}{data frame, matrix or table}
