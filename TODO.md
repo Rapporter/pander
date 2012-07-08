@@ -48,7 +48,8 @@
   * ~~check if img file referenced in cached result really exists~~
   * ~~add: `evals.messages` option passed to `pander.evals` to possibly suppress messages~~
   * ~~add: optionally save img's R object (lattice & ggplot2) to RDA file~~
-  *  What if img file referenced in cached result was altered? Should not we try to check for existing recordedPlot and just rerender the img (without actual `eval`) to overcome this issue?
+  *  ~~What if img file referenced in cached result was altered? Should not we try to check for existing recordedPlot and just rerender the img (without actual `eval`) to overcome this issue?~~: resolved with `cache.copy.images` and `cache.mode == "disk"`
+  * ~~run twice with `evalsOptions('cache.time', 0)`:  `evals('x<-1:21;histogram(x)')`~~: resolved by updating objects (while returning from cache) changed by cached code~~
 
 ## Helper functions
 

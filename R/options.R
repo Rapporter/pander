@@ -50,6 +50,7 @@ storage <- new.env()
 
 ## cache storage
 cached.results <- new.env()
+cached.environments <- new.env()
 
 ## cache hash storage
 hash.cache.obj       <- new.env() # raw R objects of which hash was computed before

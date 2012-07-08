@@ -463,31 +463,31 @@ evals <- function(txt, parse = TRUE, cache = TRUE, cache.mode = c('environment',
         ## checking cache
         if (cache) {
 
-            ## helper functions extracting each function's and variable's hash from the call
-            getCallParts <- function(call) {
-
+            ## helper functions
+            hashOfEvalOrDeparse <- function(x, x.deparse) {
                 ## compute the hash of the given 'name' by evaluating that or by deparsing if the prior would fail
-                hashOfEvalOrDeparse <- function(x, x.deparse) {
-                    v <- tryCatch(eval(x, envir = env), error = function(e) e)
-                    if (inherits(v, 'error'))
-                        return(digest(x.deparse))
-                    hashFromCache(v, x.deparse)
-                }
+                v <- tryCatch(eval(x, envir = env), error = function(e) e)
+                if (inherits(v, 'error'))
+                    return(digest(x.deparse))
+                hashFromCache(v, x.deparse)
+            }
 
+            hashFromCache <- function(x, x.deparse) {
                 ## get the hash of the object from local cache if possible, compute it and save to cache otherwise
-                hashFromCache <- function(x, x.deparse) {
-                    if (exists(x.deparse, envir = hash.cache.obj, inherits = FALSE))
-                        if (identical(x, get(x.deparse, envir = hash.cache.obj))) {
-                            assign(x.deparse, as.integer(Sys.time()), envir = hash.cache.last.used)
-                            return(get(x.deparse, envir = hash.cache.hash))
-                        }
-                    x.hash <- digest(x, 'sha1')
-                    assign(x.deparse, x, envir = hash.cache.obj)
-                    assign(x.deparse, x.hash, envir = hash.cache.hash)
-                    assign(x.deparse, as.integer(Sys.time()), envir = hash.cache.last.used)
-                    return(x.hash)
-                }
+                if (exists(x.deparse, envir = hash.cache.obj, inherits = FALSE))
+                    if (identical(x, get(x.deparse, envir = hash.cache.obj))) {
+                        assign(x.deparse, as.integer(Sys.time()), envir = hash.cache.last.used)
+                        return(get(x.deparse, envir = hash.cache.hash))
+                    }
+                x.hash <- digest(x, 'sha1')
+                assign(x.deparse, x, envir = hash.cache.obj)
+                assign(x.deparse, x.hash, envir = hash.cache.hash)
+                assign(x.deparse, as.integer(Sys.time()), envir = hash.cache.last.used)
+                return(x.hash)
+            }
 
+            getCallParts <- function(call) {
+                ## extracting each function's and variable's hash from the call
                 lapply(call, function(x)
                        lapply(x, function(x) {
                            x.deparse <- deparse(x)
@@ -499,17 +499,36 @@ evals <- function(txt, parse = TRUE, cache = TRUE, cache.mode = c('environment',
                           }))
             }
 
+            ## get the hash of the call based on the hash of all `names`
             cached <- digest(getCallParts(parse(text = src)), 'sha1')
 
             if (cache.mode == 'disk') {
+
                 cached <- file.path(cache.dir, cached)
+                cached.env <- paste0(cached, '.ENV')
+
+                ## load cached result
                 if (file.exists(cached))
                     cached.result <- readRDS(cached)
 
-            } else # cache is in environment
+                ## load the modified R objects of the cached code
+                if (file.exists(cached.env))
+                    load(file = cached.env, envir = env)
 
+            } else { # cache is in environment
+
+                ## load cached result
                 if (exists(cached, envir = cached.results, inherits = FALSE))
                     cached.result <- get(cached, envir = cached.results)
+
+                ## load the modified R objects of the cached code
+                if (exists(cached, envir = cached.environments, inherits = FALSE)) {
+                    cached.objs <- get(cached, envir = cached.environments)
+                    sapply(names(cached.objs), function(x)
+                           assign(x, cached.objs[[x]], envir = env))
+                }
+
+            }
 
             if (exists('cached.result')) {
 
@@ -579,6 +598,12 @@ evals <- function(txt, parse = TRUE, cache = TRUE, cache.mode = c('environment',
 
         ## start recordPlot
         dev.control(displaylist = "enable")
+
+        ## if caching: save the initial environment's objects' hashes
+        if (cache) {
+            objs <- ls(envir = env)
+            objs.hash <- sapply(objs, function(x) hashOfEvalOrDeparse(parse(text = x), x))
+        }
 
         ## eval
         res <- eval.msgs(src, env = env, showInvisible = showInvisible)
@@ -698,12 +723,29 @@ evals <- function(txt, parse = TRUE, cache = TRUE, cache.mode = c('environment',
         class(res) <- 'evals'
 
         ## save to cache
-        if (cache)
+        if (cache) {
+
+            ## comparing the resulting environment's objects' hashes with the original ones
+            objs.res      <- ls(envir = env)
+            objs.res.hash <- sapply(objs.res, function(x) hashOfEvalOrDeparse(parse(text = x), x))
+            change        <- setdiff(objs.res, objs)
+            common        <- intersect(objs.res, objs)
+            changed       <- c(change, unlist(sapply(common, function(x) {
+                if (objs.hash[[x]] != objs.res.hash[[x]])
+                    return(x)
+            }, USE.NAMES = FALSE)))
+
             if (cache.mode == 'disk') {
                 if (as.numeric(proc.time() - timer)[3] > cache.time) {
+
+                    ## save cached result
                     saveRDS(res, file = cached)
 
-                    ## plot related files
+                    ## save the modified R objects of the cached code
+                    if (length(changed) > 0)
+                        save(list = changed, envir = env, file = paste0(cached, '.ENV'))
+
+                    ## save plot related files
                     if (class(result) == 'image') {
                         file.copy(file, paste0(cached, '.', graph.output))
                         if (graph.recordplot)
@@ -718,9 +760,19 @@ evals <- function(txt, parse = TRUE, cache = TRUE, cache.mode = c('environment',
 
                     }
                 }
-            } else
+
+            } else {
+
+                ## save cached result
                 if (as.numeric(proc.time() - timer)[3] > cache.time)
                     assign(cached, res, envir = cached.results)
+
+                ## save the modified R objects of the cached code
+                if (length(changed) > 0)
+                    assign(cached, mget(changed, envir = env), envir = cached.environments)
+
+            }
+        }
 
         return(res)
 
