@@ -414,8 +414,8 @@ All evaluation of provided R commands (while running [`brew`](#brew-to-pandoc) o
   * Each parsed expression's **part** (let it be a function, variable, constant etc.) `eval`uated (as a `name`) separately to a `list`. This list describes the unique structure and the content of the passed R expressions, and has some IMHO really great benefits (see below).
   * A **hash** if computed to each list element and *cached* too in `pander`'s local environments. This is useful if you are using large data frames, just imagine: the caching algorithm would have to compute the hash for the same data frame each time it's touched! This way the hash is recomputed only if the R object with the given name is changed.
   * The list is `serialize`d and an `SHA-1` hash is computed for that - which is unique and there is no real risk of collision.
-  * If [`evals`](#evals) can find the cached results in an evnironment of `pander`'s namespace (if `cache.mode` set to `enviroment` - see [above](#pander-options)) or in a file named to the computed hash (if `ċache.mode` set to `disk`), then it is returned on the spot.
-  * Otherwise the call is evaluated and the results are optionally saved to cache (e.g. if `cache` is active, if the `proc.time()` of the evaluation is higher then it is defined in `cache.time` etc. - see details in [evals' options](#pander-options)).
+  * If [`evals`](#evals) can find the cached results in an evnironment of `pander`'s namespace (if `cache.mode` set to `enviroment` - see [above](#pander-options)) or in a file named to the computed hash (if `ċache.mode` set to `disk`), then it is returned on the spot. *The objects modified/created by the cached code are also updated.*
+  * Otherwise the call is evaluated and the results and the modified R objects of the environment are optionally saved to cache (e.g. if `cache` is active, if the `proc.time()` of the evaluation is higher then it is defined in `cache.time` etc. - see details in [evals' options](#pander-options)).
 
 ## In practice
 
