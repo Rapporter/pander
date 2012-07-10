@@ -602,7 +602,7 @@ evals <- function(txt, parse = TRUE, cache = TRUE, cache.mode = c('environment',
         ## if caching: save the initial environment's objects' hashes
         if (cache) {
             objs <- ls(envir = env)
-            objs.hash <- sapply(objs, function(x) hashOfEvalOrDeparse(parse(text = x), x))
+            objs.hash <- sapply(objs, function(x) hashOfEvalOrDeparse(as.name(x), x))
         }
 
         ## eval
@@ -727,7 +727,7 @@ evals <- function(txt, parse = TRUE, cache = TRUE, cache.mode = c('environment',
 
             ## comparing the resulting environment's objects' hashes with the original ones
             objs.res      <- ls(envir = env)
-            objs.res.hash <- sapply(objs.res, function(x) hashOfEvalOrDeparse(parse(text = x), x))
+            objs.res.hash <- sapply(objs.res, function(x) hashOfEvalOrDeparse(as.name(x), x))
             change        <- setdiff(objs.res, objs)
             common        <- intersect(objs.res, objs)
             changed       <- c(change, unlist(sapply(common, function(x) {
