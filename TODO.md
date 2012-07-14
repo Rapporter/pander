@@ -63,6 +63,7 @@
   * ~~table: **issue** with rounding numbers, just check: `pander(mtcars$mpg)` vs. `pander(mtcars$mpg)` -> this is based on low `digits` option~~
   * table: add more styling options (e.g. (strong) emphasizing custom cells)
   * table: add option to draw significance starts in cells
+  * table: @idea wrap header of tables to minimal (even in words!) to keep the table's width minimal
 
 ### Required helper functions
 
