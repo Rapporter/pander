@@ -51,6 +51,24 @@
   *  ~~What if img file referenced in cached result was altered? Should not we try to check for existing recordedPlot and just rerender the img (without actual `eval`) to overcome this issue?~~: resolved with `cache.copy.images` and `cache.mode == "disk"`
   * ~~run twice with `evalsOptions('cache.time', 0)`:  `evals('x<-1:21;histogram(x)')`~~: resolved by updating objects (while returning from cache) changed by cached code~~
 
+### Image options:
+
+Global options for: `lattice`, `ggplot2` and `base` plots
+
+  * plot margins
+  * font family
+  * font size:
+  
+      * main title
+	  * labs
+  
+  * background colors
+  * grid options
+  * foreground colors (discrete, continuous)
+  * others:
+      * lwd
+	  * symbols etc.
+
 ## Helper functions
 
   * ~~"p" from rapport: modify defaults, fork it~~
