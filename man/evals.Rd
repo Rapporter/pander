@@ -8,8 +8,8 @@
     cache.copy.images = FALSE, showInvisible = FALSE,
     classes = NULL, hooks = NULL, length = Inf,
     output = c("all", "src", "result", "output", "type", "msg", "stdout"),
-    env = NULL, graph.nomargin = TRUE, graph.name = "\%t",
-    graph.dir = "plots",
+    env = NULL, graph.unify = evalsOptions("graph.unify"),
+    graph.name = "\%t", graph.dir = "plots",
     graph.output = c("png", "bmp", "jpeg", "jpg", "tiff", "svg", "pdf"),
     width = 480, height = 480, res = 72, hi.res = FALSE,
     hi.res.width = 960,
@@ -97,8 +97,10 @@
   not set (by default), a new temporary environment is
   created.}
 
-  \item{graph.nomargin}{should \code{evals} try to keep
-  plots' margins minimal?}
+  \item{graph.unify}{should \code{evals} try to unify the
+  style of (\code{base}, \code{lattice} and \code{ggplot2})
+  plots? If set to \code{TRUE} (by default), some
+  \code{panderOptions()} would apply.}
 
   \item{graph.name}{set the file name of saved plots which
   is \code{\link{tempfile}} by default. A simple character
@@ -326,8 +328,10 @@ evals(txt, parse = FALSE)
 evals('message(20)')
 evals('message(20);message(20)', parse = FALSE)
 
-## adding a caption to a plot (`plot` is started with a `+`!)
-evals('set.caption("FOO"); +plot(1:10)')     # TODO
+## adding a caption to a plot
+evals('set.caption("FOO"); plot(1:10)')
+## `plot` is started with a `+` to eval the codes in the same chunk (no extra chunk with NULL result)
+evals('set.caption("FOO"); +plot(1:10)')
 
 ## handling warnings
 evals('chisq.test(mtcars$gear, mtcars$hp)')

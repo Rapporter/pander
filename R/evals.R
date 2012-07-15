@@ -19,6 +19,7 @@
 #' @param src character values containing R code
 #' @param env environment where evaluation takes place. If not set (by default), a new temporary environment is created.
 #' @param showInvisible return \code{invisible} results?
+#' @param graph.unify should \code{eval.msgs} try to unify the style of (\code{lattice} and \code{ggplot2}) plots? If set to \code{TRUE} (by default), some \code{panderOptions()} would apply. Please note that this argument has no effect on \code{base} plots, use \code{evals} instead.
 #' @return a list of parsed elements each containing: \code{src} (the command run), \code{result} (R object: \code{NULL} if nothing returned), \code{print}ed \code{output}, \code{type} (class of returned object if any), informative/wawrning and error messages (if any returned by the command run, otherwise set to \code{NULL}) and possible \code{stdout}t value. See Details above.
 #' @seealso \code{\link{evals}}
 #' @export
@@ -46,7 +47,7 @@
 #' eval.msgs('cat("writing to console")')
 #' eval.msgs('cat("writing to console");1:4')
 #' }
-eval.msgs <- function(src, env = NULL, showInvisible = FALSE) {
+eval.msgs <- function(src, env = NULL, showInvisible = FALSE, graph.unify = evalsOptions('graph.unify')) {
 
     if (is.null(env))
         env <- new.env()
@@ -96,17 +97,43 @@ eval.msgs <- function(src, env = NULL, showInvisible = FALSE) {
     if (!is.null(result)) {
 
         if (result$visible | showInvisible) {
+            rv <- result$value
 
+            ## unify images
+            if (graph.unify) {
+
+                ## lattice/trellis
+                if (class(rv) == 'trellis') {
+
+                    ## margin
+                    if (panderOptions('graph.nomargin')) {
+                        rv$par.settings$layout.heights <-  list(top.padding = 0.1, bottom.padding = 0.1)
+                        rv$par.settings$layout.widths <- list(right.padding = 0.1, left.padding = 0.4)
+                    }
+                }
+
+                ## ggplot2
+                if (class(rv) == 'ggplot') {
+
+                    ## margin
+                    if (panderOptions('graph.nomargin')) {
+                        rv$options$plot.margin <- unit(c(0.1, 0.1, 0.1, 0), "lines")
+                    }
+                }
+
+            }
+
+            ## grab output
             output <- vector("character")
             con <- textConnection("output", "wr", local=TRUE)
             sink(con, split = FALSE)
 
-            print(result$value)
+            print(rv)
 
             sink()
             close(con)
 
-            result <- result$value
+            result <- rv
 
         } else {
 
@@ -188,7 +215,7 @@ eval.msgs <- function(src, env = NULL, showInvisible = FALSE) {
 #' @param length any R object exceeding the specified length will not be returned. The default value (\code{Inf}) does not filter out any R objects.
 #' @param output a character vector of required returned values. This might be useful if you are only interested in the \code{result}, and do not want to save/see e.g. \code{messages} or \code{print}ed \code{output}. See examples below.
 #' @param env environment where evaluation takes place. If not set (by default), a new temporary environment is created.
-#' @param graph.nomargin should \code{evals} try to keep plots' margins minimal?
+#' @param graph.unify should \code{evals} try to unify the style of (\code{base}, \code{lattice} and \code{ggplot2}) plots? If set to \code{TRUE} (by default), some \code{panderOptions()} would apply.
 #' @param graph.name set the file name of saved plots which is \code{\link{tempfile}} by default. A simple character string might be provided where \code{\%d} would be replaced by the index of the generating \code{txt} source, \code{\%n} with an incremented integer in \code{graph.dir} with similar file names and \code{\%t} by some unique random characters. A function's name to be \code{eval}uated can be passed here too.
 #' @param graph.dir path to a directory where to place generated images. If the directory does not exist, \code{evals} try to create that. Default set to \code{plots} in current working directory.
 #' @param graph.output set the required file format of saved plots. Currently it could be any of  \code{grDevices}': \code{png}, \code{bmp}, \code{jpeg}, \code{jpg}, \code{tiff}, \code{svg} or \code{pdf}.
@@ -238,8 +265,10 @@ eval.msgs <- function(src, env = NULL, showInvisible = FALSE) {
 #' evals('message(20)')
 #' evals('message(20);message(20)', parse = FALSE)
 #'
-#' ## adding a caption to a plot (`plot` is started with a `+`!)
-#' evals('set.caption("FOO"); +plot(1:10)')     # TODO
+#' ## adding a caption to a plot
+#' evals('set.caption("FOO"); plot(1:10)')
+#' ## `plot` is started with a `+` to eval the codes in the same chunk (no extra chunk with NULL result)
+#' evals('set.caption("FOO"); +plot(1:10)')
 #'
 #' ## handling warnings
 #' evals('chisq.test(mtcars$gear, mtcars$hp)')
@@ -366,7 +395,7 @@ eval.msgs <- function(src, env = NULL, showInvisible = FALSE) {
 #' @export
 #' @importFrom digest digest
 #' @importFrom lattice trellis.par.set
-evals <- function(txt, parse = TRUE, cache = TRUE, cache.mode = c('environment', 'disk'), cache.dir = '.cache', cache.time = 0.1, cache.copy.images = FALSE, showInvisible = FALSE, classes = NULL, hooks = NULL, length = Inf, output = c('all', 'src', 'result', 'output', 'type', 'msg', 'stdout'), env = NULL, graph.nomargin = TRUE, graph.name = '%t', graph.dir = 'plots', graph.output = c('png', 'bmp', 'jpeg', 'jpg', 'tiff', 'svg', 'pdf'), width = 480, height = 480, res= 72, hi.res = FALSE, hi.res.width = 960, hi.res.height = 960*(height/width), hi.res.res = res*(hi.res.width/width), graph.env = FALSE, graph.recordplot = FALSE, graph.RDS = FALSE, ...){
+evals <- function(txt, parse = TRUE, cache = TRUE, cache.mode = c('environment', 'disk'), cache.dir = '.cache', cache.time = 0.1, cache.copy.images = FALSE, showInvisible = FALSE, classes = NULL, hooks = NULL, length = Inf, output = c('all', 'src', 'result', 'output', 'type', 'msg', 'stdout'), env = NULL, graph.unify = evalsOptions('graph.unify'), graph.name = '%t', graph.dir = 'plots', graph.output = c('png', 'bmp', 'jpeg', 'jpg', 'tiff', 'svg', 'pdf'), width = 480, height = 480, res= 72, hi.res = FALSE, hi.res.width = 960, hi.res.height = 960*(height/width), hi.res.res = res*(hi.res.width/width), graph.env = FALSE, graph.recordplot = FALSE, graph.RDS = FALSE, ...){
 
     if (missing(txt))
         stop('No R code provided to evaluate!')
@@ -590,11 +619,11 @@ evals <- function(txt, parse = TRUE, cache = TRUE, cache.mode = c('environment',
         if (graph.output == 'pdf')
             do.call('cairo_pdf', list(file, width = width/res, height = height/res, ...)) # TODO: font-family?
 
-        ## remove margins
-        if (graph.nomargin) {
-            trellis.par.set(layout.heights = list(top.padding = 0.1, bottom.padding = 0.1), layout.widths = list(right.padding = 0.1, left.padding = 0.4))
-            par(mar=c(4, 4, 2.1, 0.1))
+        ## remove margins for potential base plots
+        if (panderOptions('graph.nomargin')) {
+            par(mar=c(4.1, 4.1, 1.1, 0.1))
         }
+        ## TODO: add the same for hi-res images
 
         ## start recordPlot
         dev.control(displaylist = "enable")
@@ -606,7 +635,7 @@ evals <- function(txt, parse = TRUE, cache = TRUE, cache.mode = c('environment',
         }
 
         ## eval
-        res <- eval.msgs(src, env = env, showInvisible = showInvisible)
+        res <- eval.msgs(src, env = env, showInvisible = showInvisible, graph.unify = graph.unify)
 
         ## grab recorded.plot
         if (!is.null(dev.list())) {

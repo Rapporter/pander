@@ -54,7 +54,9 @@
   (default: \code{', '}) with the main separator passed to
   \code{p} function \item \code{p.copula}: a string
   (default: \code{'and'}) a string with ending separator
-  passed to \code{p} function }
+  passed to \code{p} function \item \code{graph.nomargin}:
+  boolean (default: \code{TRUE}) if trying to keep plots'
+  margins at minimal }
 }
 \note{
   \code{pander.option} is deprecated and is to be removed
