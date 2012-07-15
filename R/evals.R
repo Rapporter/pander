@@ -95,15 +95,16 @@ eval.msgs <- function(src, env = NULL, showInvisible = FALSE, graph.unify = eval
 
     ## check if printing is needed
     if (!is.null(result)) {
+        rv  <- result$value
+        rvc <- class(rv)
 
         if (result$visible | showInvisible) {
-            rv <- result$value
 
             ## unify images
             if (graph.unify) {
 
                 ## lattice/trellis
-                if (class(rv) == 'trellis') {
+                if (rvc == 'trellis') {
 
                     ## margin
                     if (panderOptions('graph.nomargin')) {
@@ -113,7 +114,7 @@ eval.msgs <- function(src, env = NULL, showInvisible = FALSE, graph.unify = eval
                 }
 
                 ## ggplot2
-                if (class(rv) == 'ggplot') {
+                if (rvc == 'ggplot') {
 
                     ## margin
                     if (panderOptions('graph.nomargin')) {
@@ -143,7 +144,7 @@ eval.msgs <- function(src, env = NULL, showInvisible = FALSE, graph.unify = eval
     }
 
     if (is.null(error))
-        type  <- class(result)
+        type  <- rvc
 
     ## return
     list(src    = src,
