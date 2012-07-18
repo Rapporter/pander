@@ -17,6 +17,7 @@ License: AGPL-3
 Depends:
     R (>= 2.15.0)
 Imports:
+    grid,
     lattice,
     latticeExtra,
     methods,
@@ -32,3 +33,4 @@ Collate:
     'evals.R'
     'ess-functions.R'
     'options.R'
+    'graph.R'

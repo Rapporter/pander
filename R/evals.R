@@ -23,7 +23,7 @@
 #' @return a list of parsed elements each containing: \code{src} (the command run), \code{result} (R object: \code{NULL} if nothing returned), \code{print}ed \code{output}, \code{type} (class of returned object if any), informative/wawrning and error messages (if any returned by the command run, otherwise set to \code{NULL}) and possible \code{stdout}t value. See Details above.
 #' @seealso \code{\link{evals}}
 #' @export
-#' @importFrom latticeExtra axis.grid
+#' @importFrom latticeExtra axis.grid xscale.components.subticks yscale.components.subticks
 #' @examples \dontrun{
 #' eval.msgs('1:5')
 #' eval.msgs('x <- 1:5')
@@ -127,8 +127,13 @@ eval.msgs <- function(src, env = NULL, showInvisible = FALSE, graph.unify = eval
                     rv$par.settings$strip.background$col <- rv$par.settings$strip.border$col <- 'transparent'
 
                     ## grid
-                    if (panderOptions('graph.grid'))
+                    if (panderOptions('graph.grid')) {
                         rv$axis <- axis.grid
+                        if (panderOptions('graph.grid.minor')) {
+                            rv$xscale.components = xscale.components.subticks
+                            rv$yscale.components = yscale.components.subticks
+                        }
+                    }
 
                 }
 
@@ -152,10 +157,12 @@ eval.msgs <- function(src, env = NULL, showInvisible = FALSE, graph.unify = eval
                     rv$options$legend.key <- rv$options$strip.background  <- theme_rect(colour = 'transparent', fill = 'transparent')
 
                     ## grid
-                    if (!panderOptions('graph.grid')) {
-                        rv$options$panel.grid.major <- theme_blank()
-                        rv$options$panel.grid.minor <- theme_blank()
-                    }
+                    if (!panderOptions('graph.grid'))
+                        rv$options$panel.grid.minor <- rv$options$panel.grid.major <- theme_blank()
+                    else
+                        if (!panderOptions('graph.grid.minor'))
+                            rv$options$panel.grid.minor <- theme_blank()
+
                 }
 
             }
@@ -698,8 +705,11 @@ evals <- function(txt, parse = TRUE, cache = TRUE, cache.mode = c('environment',
         graph  <- ifelse(exists('recorded.plot'), ifelse(is.null(recorded.plot[[1]]), FALSE, file), FALSE)
 
         ## add grids to base plots
-        if (is.character(graph) & is.null(res$result) & panderOptions('graph.grid'))
-            grid()
+        if (is.character(graph) & is.null(res$result) & panderOptions('graph.grid')) {
+            grid(lty = 'solid')
+            if (panderOptions('graph.grid.minor'))
+                add.minor.ticks(4, 4, grid = TRUE)
+        }
 
         ## close grDevice
         clear.devs()
