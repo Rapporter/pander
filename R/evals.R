@@ -106,6 +106,7 @@ eval.msgs <- function(src, env = NULL, showInvisible = FALSE, graph.unify = eval
                 fs <- panderOptions('graph.fontsize')
                 ff <- panderOptions('graph.fontfamily')
                 fc <- panderOptions('graph.fontcolor')
+                gc <- panderOptions('graph.grid.color')
 
                 ## lattice/trellis
                 if (rvc == 'trellis') {
@@ -123,12 +124,17 @@ eval.msgs <- function(src, env = NULL, showInvisible = FALSE, graph.unify = eval
                     ## no need for boxes
                     rv$par.settings$strip.background$col <- rv$par.settings$strip.border$col <- 'transparent'
 
+                    ## colors
+                    rv$par.settings$background$col       <- panderOptions('graph.background')
+                    rv$par.settings$panel.background$col <- panderOptions('graph.panel.background')
+                    rv$par.settings$axis.line$col <- gc
+
                     ## grid
                     if (panderOptions('graph.grid')) {
-                        rv$par.settings$reference.line$col <- panderOptions('graph.grid.color')
-                        rv$axis <- latticeExtra::axis.grid
+                        rv$par.settings$reference.line$col <- gc
+                        rv$axis <- add.lattice.grid
                         if (panderOptions('graph.grid.minor')) {
-                            rv$xscale.components = latticeExtra::xscale.components.subticks
+                            rv$xscale.components = latticeExtra::xscale.components.subticks # TODO: color
                             rv$yscale.components = latticeExtra::yscale.components.subticks
                         }
                     }
@@ -154,16 +160,22 @@ eval.msgs <- function(src, env = NULL, showInvisible = FALSE, graph.unify = eval
                     ## no need for boxes
                     rv$options$legend.key <- rv$options$strip.background <- ggplot2::theme_rect(col = 'transparent', fill = 'transparent')
 
+                    ## colors
+                    rv$options$plot.background  <- ggplot2::theme_rect(fill = panderOptions('graph.background'), colour = NA)
+                    rv$options$panel.background <- ggplot2::theme_rect(fill = panderOptions('graph.panel.background'), colour = gc)
+                    rv$options$axis.ticks       <- ggplot2::theme_segment(colour = gc, size = 0.5)
+                    rv$options$panel.border     <- ggplot2::theme_rect(fill = NA, colour = gc)
+
                     ## grid
                     if (!panderOptions('graph.grid'))
                         rv$options$panel.grid.minor <- rv$options$panel.grid.major <- ggplot2::theme_blank()
                     else
                         if (!panderOptions('graph.grid.minor')) {
-                            rv$options$panel.grid.major <- theme_line(colour = panderOptions('graph.grid.color'), size = 0.5)
+                            rv$options$panel.grid.major <- theme_line(colour = gc, size = 0.5)
                             rv$options$panel.grid.minor <- ggplot2::theme_blank()
                         } else {
-                            rv$options$panel.grid.minor <- theme_line(colour = panderOptions('graph.grid.color'), size = 0.2, linetype = 'dotted')
-                            rv$options$panel.grid.major <- theme_line(colour = panderOptions('graph.grid.color'), size = 0.5)
+                            rv$options$panel.grid.minor <- theme_line(colour = gc, size = 0.2)
+                            rv$options$panel.grid.major <- theme_line(colour = gc, size = 0.5)
                         }
 
 
@@ -676,8 +688,10 @@ evals <- function(txt, parse = TRUE, cache = TRUE, cache.mode = c('environment',
 
             par(family = panderOptions('graph.fontfamily'),
                 cex = cex, cex.axis = cex * 0.8, cex.lab = cex, cex.main = cex * 1.2, cex.sub = cex,
-                col.axis = fc, col.lab = fc, col.main = fc, col.sub = fc)
-                ## ps = fbs # not affecting `mar`
+                col.axis = fc, col.lab = fc, col.main = fc, col.sub = fc,
+                bg = panderOptions('graph.background'), # TODO: how could we color only the inner plot area globally? Not like: https://stat.ethz.ch/pipermail/r-help/2003-May/033971.html
+                fg = panderOptions('graph.grid.color')
+                )
 
             ## remove margins for potential base plots
             if (panderOptions('graph.nomargin')) {
@@ -712,7 +726,7 @@ evals <- function(txt, parse = TRUE, cache = TRUE, cache.mode = c('environment',
         if (is.character(graph) & is.null(res$result) & panderOptions('graph.grid')) {
             grid(lty = 'solid', col = panderOptions('graph.grid.color'))
             if (panderOptions('graph.grid.minor'))
-                add.minor.ticks(4, 4, grid = TRUE) # TODO: only one minor tick between major ticks
+                add.minor.ticks(1, 1, grid = TRUE) # TODO: only one minor tick between major ticks
         }
 
         ## close grDevice

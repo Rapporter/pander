@@ -21,7 +21,9 @@
                 'graph.fontsize'        = 12,
                 'graph.grid'            = TRUE,
                 'graph.grid.minor'      = TRUE,
-                'graph.grid.color'      = 'grey'
+                'graph.grid.color'      = 'grey',
+                'graph.background'      = 'white',
+                'graph.panel.background'= 'transparent'
                 ))
 
     ## evals options
