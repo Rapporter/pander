@@ -103,14 +103,25 @@ eval.msgs <- function(src, env = NULL, showInvisible = FALSE, graph.unify = eval
             ## unify images
             if (graph.unify) {
 
+                bfs <- panderOptions('graph.fontsize.base')
+                ff  <- panderOptions('graph.fontfamily')
+                fc  <- panderOptions('graph.fontcolor')
+                ## TODO: add docs:
+                ##  * main title: 1.2*bfs
+
                 ## lattice/trellis
                 if (rvc == 'trellis') {
 
                     ## margin
                     if (panderOptions('graph.nomargin')) {
-                        rv$par.settings$layout.heights <-  list(top.padding = 0.1, bottom.padding = 0.1)
-                        rv$par.settings$layout.widths <- list(right.padding = 0.1, left.padding = 0.4)
+                        rv$par.settings$layout.heights <- list(top.padding = 0.4, bottom.padding = 0,  main = 1.4, main.key.padding = -1)
+                        rv$par.settings$layout.widths  <- list(right.padding = -1, left.padding = 0.4)
                     }
+
+                    ## font family
+                    rv$par.settings$axis.text <- rv$par.settings$add.text <- rv$par.settings$par.xlab.text <- rv$par.settings$par.ylab.text <- rv$par.settings$par.zlab.text <- rv$par.settings$par.sub.text <- list(fontfamily = ff, col = fc, lineheight = 0)
+                    rv$par.settings$fontsize <- list(text = bfs, points = bfs * 0.8)
+
                 }
 
                 ## ggplot2
@@ -120,6 +131,15 @@ eval.msgs <- function(src, env = NULL, showInvisible = FALSE, graph.unify = eval
                     if (panderOptions('graph.nomargin')) {
                         rv$options$plot.margin <- unit(c(0.1, 0.1, 0.1, 0), "lines")
                     }
+
+                    ## font family
+                    rv$options$plot.title   <- theme_text(colour = fc, family = ff, face = "bold", size = bfs*1.2)
+                    rv$options$axis.text.x  <- rv$options$axis.text.y <- rv$options$legend.text <- theme_text(colour = fc, family = ff, face = 'italic', size = bfs*0.8)
+                    rv$options$axis.title.x <- rv$options$legend.title <- theme_text(colour = fc, family = ff, face = 'italic', size = bfs)
+                    rv$options$axis.title.y <- theme_text(colour = fc, family = ff, face = 'italic', size = bfs, angle = 90)
+                    rv$options$strip.text.x <- theme_text(colour = fc, family = ff, face = 'bold', size = bfs)
+                    rv$options$strip.text.y <- theme_text(colour = fc, family = ff, face = 'bold', size = bfs, angle = -90)
+
                 }
 
             }
@@ -620,9 +640,22 @@ evals <- function(txt, parse = TRUE, cache = TRUE, cache.mode = c('environment',
         if (graph.output == 'pdf')
             do.call('cairo_pdf', list(file, width = width/res, height = height/res, ...)) # TODO: font-family?
 
-        ## remove margins for potential base plots
-        if (panderOptions('graph.nomargin')) {
-            par(mar=c(4.1, 4.1, 1.1, 0.1))
+        if (graph.unify) {
+
+            fc  <- panderOptions('graph.fontcolor')
+            fbs <- panderOptions('graph.fontsize.base')
+            cex <- fbs/12
+
+            par(family = panderOptions('graph.fontfamily'),
+                cex = cex, cex.axis = cex * 0.8, cex.lab = cex, cex.main = cex * 1.2, cex.sub = cex,
+                col.axis = fc, col.lab = fc, col.main = fc, col.sub = fc)
+                ## ps = fbs # not affecting `mar`
+
+            ## remove margins for potential base plots
+            if (panderOptions('graph.nomargin')) {
+                par(mar = c(4.1, 4.3, 2.1, 0.1))
+            }
+
         }
         ## TODO: add the same for hi-res images
 

@@ -55,15 +55,15 @@
 
 Global options for: `lattice`, `ggplot2` and `base` plots
 
-  * plot margins
-  * font family
-  * font size:
-  
-      * main title
-	  * labs
-  
+  * ~~plot margins~~
+  * ~~font family~~
+  * ~~font size~~
   * background colors
-  * grid options
+  * grid options:
+  
+      * angle
+	  * grid lines
+	  
   * foreground colors (discrete, continuous)
   * others:
       * lwd
