@@ -18,7 +18,7 @@
                 'graph.nomargin'        = TRUE,
                 'graph.fontfamily'      = 'sans',
                 'graph.fontcolor'       = 'black',
-                'graph.fontsize.base'   = 20,
+                'graph.fontsize'        = 12,
                 'graph.grid'            = TRUE
                 ))
 

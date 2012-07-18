@@ -59,7 +59,7 @@ Global options for: `lattice`, `ggplot2` and `base` plots
   * ~~theme: font (family, base size, color)~~
   * theme: plotting area background colors -> bw, ggplot2like, custom?
   * theme: foreground colors (discrete, continuous)
-  * grid options: enabled/disabled, line type
+  * grid options: ~~enabled/disabled~~, line type
   * axes: angle
   * others:
       * lwd

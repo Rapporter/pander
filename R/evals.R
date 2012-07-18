@@ -104,11 +104,11 @@ eval.msgs <- function(src, env = NULL, showInvisible = FALSE, graph.unify = eval
             ## unify images
             if (graph.unify) {
 
-                bfs <- panderOptions('graph.fontsize.base')
+                fs <- panderOptions('graph.fontsize')
                 ff  <- panderOptions('graph.fontfamily')
                 fc  <- panderOptions('graph.fontcolor')
                 ## TODO: add docs:
-                ##  * main title: 1.2*bfs
+                ##  * main title: 1.2*fs
 
                 ## lattice/trellis
                 if (rvc == 'trellis') {
@@ -120,8 +120,8 @@ eval.msgs <- function(src, env = NULL, showInvisible = FALSE, graph.unify = eval
                     }
 
                     ## font family
-                    rv$par.settings$axis.text <- rv$par.settings$add.text <- rv$par.settings$par.xlab.text <- rv$par.settings$par.ylab.text <- rv$par.settings$par.zlab.text <- rv$par.settings$par.sub.text <- list(fontfamily = ff, col = fc, lineheight = 0)
-                    rv$par.settings$fontsize <- list(text = bfs, points = bfs * 0.8)
+                    rv$par.settings$axis.text <- rv$par.settings$add.text <- rv$par.settings$par.xlab.text <- rv$par.settings$par.ylab.text <- rv$par.settings$par.zlab.text <- rv$par.settings$par.sub.text <- rv$par.settings$par.main.text <- list(fontfamily = ff, col = fc)
+                    rv$par.settings$fontsize <- list(text = fs, points = fs * 0.8)
 
                     ## no need for boxes
                     rv$par.settings$strip.background$col <- rv$par.settings$strip.border$col <- 'transparent'
@@ -141,12 +141,12 @@ eval.msgs <- function(src, env = NULL, showInvisible = FALSE, graph.unify = eval
                     }
 
                     ## font family
-                    rv$options$plot.title   <- theme_text(colour = fc, family = ff, face = "bold", size = bfs*1.2)
-                    rv$options$axis.text.x  <- rv$options$axis.text.y <- rv$options$legend.text <- theme_text(colour = fc, family = ff, face = 'italic', size = bfs*0.8)
-                    rv$options$axis.title.x <- rv$options$legend.title <- theme_text(colour = fc, family = ff, face = 'italic', size = bfs)
-                    rv$options$axis.title.y <- theme_text(colour = fc, family = ff, face = 'italic', size = bfs, angle = 90)
-                    rv$options$strip.text.x <- theme_text(colour = fc, family = ff, face = 'bold', size = bfs)
-                    rv$options$strip.text.y <- theme_text(colour = fc, family = ff, face = 'bold', size = bfs, angle = -90)
+                    rv$options$plot.title   <- theme_text(colour = fc, family = ff, face = "bold", size = fs*1.2)
+                    rv$options$axis.text.x  <- rv$options$axis.text.y <- rv$options$legend.text <- theme_text(colour = fc, family = ff, face = 'italic', size = fs*0.8)
+                    rv$options$axis.title.x <- rv$options$legend.title <- theme_text(colour = fc, family = ff, face = 'italic', size = fs)
+                    rv$options$axis.title.y <- theme_text(colour = fc, family = ff, face = 'italic', size = fs, angle = 90)
+                    rv$options$strip.text.x <- theme_text(colour = fc, family = ff, face = 'bold', size = fs)
+                    rv$options$strip.text.y <- theme_text(colour = fc, family = ff, face = 'bold', size = fs, angle = -90)
 
                     ## no need for boxes
                     rv$options$legend.key <- rv$options$strip.background  <- theme_rect(colour = 'transparent', fill = 'transparent')
@@ -659,7 +659,7 @@ evals <- function(txt, parse = TRUE, cache = TRUE, cache.mode = c('environment',
         if (graph.unify) {
 
             fc  <- panderOptions('graph.fontcolor')
-            fbs <- panderOptions('graph.fontsize.base')
+            fbs <- panderOptions('graph.fontsize')
             cex <- fbs/12
 
             par(family = panderOptions('graph.fontfamily'),
