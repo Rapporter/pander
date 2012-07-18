@@ -471,9 +471,10 @@ evals <- function(txt, parse = TRUE, cache = TRUE, cache.mode = c('environment',
     if (!identical(file.info(graph.dir)$isdir, TRUE))
         if (!dir.create(graph.dir, showWarnings = FALSE, recursive = TRUE))
             stop(sprintf('Something is definitely wrong with `graph.dir`: %s!', graph.dir))
-    if (!identical(file.info(cache.dir)$isdir, TRUE))
-        if (!dir.create(cache.dir, showWarnings = FALSE, recursive = TRUE))
-            stop(sprintf('Something is definitely wrong with `cache.dir`: %s!', cache.dir))
+    if (cache.mode == 'disk')
+        if (!identical(file.info(cache.dir)$isdir, TRUE))
+            if (!dir.create(cache.dir, showWarnings = FALSE, recursive = TRUE))
+                stop(sprintf('Something is definitely wrong with `cache.dir`: %s!', cache.dir))
 
     ## check provided parameters
     output <- match.arg(output, several.ok = TRUE)
