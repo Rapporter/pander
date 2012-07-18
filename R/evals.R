@@ -122,6 +122,9 @@ eval.msgs <- function(src, env = NULL, showInvisible = FALSE, graph.unify = eval
                     rv$par.settings$axis.text <- rv$par.settings$add.text <- rv$par.settings$par.xlab.text <- rv$par.settings$par.ylab.text <- rv$par.settings$par.zlab.text <- rv$par.settings$par.sub.text <- list(fontfamily = ff, col = fc, lineheight = 0)
                     rv$par.settings$fontsize <- list(text = bfs, points = bfs * 0.8)
 
+                    ## no need for boxes
+                    rv$par.settings$strip.background$col <- rv$par.settings$strip.border$col <- 'transparent'
+
                 }
 
                 ## ggplot2
@@ -139,6 +142,9 @@ eval.msgs <- function(src, env = NULL, showInvisible = FALSE, graph.unify = eval
                     rv$options$axis.title.y <- theme_text(colour = fc, family = ff, face = 'italic', size = bfs, angle = 90)
                     rv$options$strip.text.x <- theme_text(colour = fc, family = ff, face = 'bold', size = bfs)
                     rv$options$strip.text.y <- theme_text(colour = fc, family = ff, face = 'bold', size = bfs, angle = -90)
+
+                    ## no need for boxes
+                    rv$options$legend.key <- rv$options$strip.background  <- theme_rect(colour = 'transparent', fill = 'transparent')
 
                 }
 
