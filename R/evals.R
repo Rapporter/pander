@@ -23,6 +23,7 @@
 #' @return a list of parsed elements each containing: \code{src} (the command run), \code{result} (R object: \code{NULL} if nothing returned), \code{print}ed \code{output}, \code{type} (class of returned object if any), informative/wawrning and error messages (if any returned by the command run, otherwise set to \code{NULL}) and possible \code{stdout}t value. See Details above.
 #' @seealso \code{\link{evals}}
 #' @export
+#' @importFrom latticeExtra axis.grid
 #' @examples \dontrun{
 #' eval.msgs('1:5')
 #' eval.msgs('x <- 1:5')
@@ -125,6 +126,10 @@ eval.msgs <- function(src, env = NULL, showInvisible = FALSE, graph.unify = eval
                     ## no need for boxes
                     rv$par.settings$strip.background$col <- rv$par.settings$strip.border$col <- 'transparent'
 
+                    ## grid
+                    if (panderOptions('graph.grid'))
+                        rv$axis <- axis.grid
+
                 }
 
                 ## ggplot2
@@ -146,6 +151,11 @@ eval.msgs <- function(src, env = NULL, showInvisible = FALSE, graph.unify = eval
                     ## no need for boxes
                     rv$options$legend.key <- rv$options$strip.background  <- theme_rect(colour = 'transparent', fill = 'transparent')
 
+                    ## grid
+                    if (!panderOptions('graph.grid')) {
+                        rv$options$panel.grid.major <- theme_blank()
+                        rv$options$panel.grid.minor <- theme_blank()
+                    }
                 }
 
             }
@@ -682,6 +692,15 @@ evals <- function(txt, parse = TRUE, cache = TRUE, cache.mode = c('environment',
             recorded.plot <- recordPlot()
             dev.control("inhibit")
         }
+
+        ## did we produce a plot?
+        graph  <- ifelse(exists('recorded.plot'), ifelse(is.null(recorded.plot[[1]]), FALSE, file), FALSE)
+
+        ## add grids to base plots
+        if (is.character(graph) & is.null(res$result) & panderOptions('graph.grid'))
+            grid()
+
+        ## close grDevice
         clear.devs()
 
         ## error handling
@@ -691,7 +710,6 @@ evals <- function(txt, parse = TRUE, cache = TRUE, cache.mode = c('environment',
         }
 
         result <- res$result
-        graph  <- ifelse(exists('recorded.plot'), ifelse(is.null(recorded.plot[[1]]), FALSE, file), FALSE)
 
         ## we have a graph
         if (is.character(graph)) {
