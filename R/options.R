@@ -20,7 +20,8 @@
                 'graph.fontcolor'       = 'black',
                 'graph.fontsize'        = 12,
                 'graph.grid'            = TRUE,
-                'graph.grid.minor'      = TRUE
+                'graph.grid.minor'      = TRUE,
+                'graph.grid.color'      = 'grey'
                 ))
 
     ## evals options

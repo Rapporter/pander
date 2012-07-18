@@ -59,18 +59,22 @@ Global options for: `lattice`, `ggplot2` and `base` plots
   * ~~theme: font (family, base size, color)~~
   * theme: plotting area background colors -> bw, ggplot2like, custom?
   * theme: foreground colors (discrete, continuous)
-  * grid options:
+  * ~~grid options:~~
   
     * ~~enabled/disabled~~
 	* ~~split enable/disable: major/minor~~
-	* line type
+	* ~~grid color~~
 	
-  * axes: angle
+  * axes:
+ 
+    * color
+	* angle
+
   * others:
       * lwd
 	  * symbols etc.
 
-  * remove dependencies: `ggplot2`, `latticeExtra` and build only on `grid`
+  * ~~remove dependencies: `ggplot2`, `latticeExtra` and build only on `grid`~~
 
 ## Helper functions
 

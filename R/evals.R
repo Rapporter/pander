@@ -125,9 +125,10 @@ eval.msgs <- function(src, env = NULL, showInvisible = FALSE, graph.unify = eval
 
                     ## grid
                     if (panderOptions('graph.grid')) {
+                        rv$par.settings$reference.line$col <- panderOptions('graph.grid.color')
                         rv$axis <- latticeExtra::axis.grid
                         if (panderOptions('graph.grid.minor')) {
-                            rv$xscale.components = latticeExtra::xscale.components.subticks ## TODO: only 1 minor tick between major ticks + remove dependency
+                            rv$xscale.components = latticeExtra::xscale.components.subticks
                             rv$yscale.components = latticeExtra::yscale.components.subticks
                         }
                     }
@@ -151,14 +152,21 @@ eval.msgs <- function(src, env = NULL, showInvisible = FALSE, graph.unify = eval
                     rv$options$strip.text.y <- ggplot2::theme_text(colour = fc, family = ff, face = 'bold', size = fs, angle = -90)
 
                     ## no need for boxes
-                    rv$options$legend.key <- rv$options$strip.background <- grid::rectGrob(0.5, 0.5, 1, 1, gp = gpar(lwd = 1 / 0.352777778, col = 'transparent', fill = 'transparent'))
+                    rv$options$legend.key <- rv$options$strip.background <- ggplot2::theme_rect(col = 'transparent', fill = 'transparent')
 
                     ## grid
                     if (!panderOptions('graph.grid'))
-                        rv$options$panel.grid.minor <- rv$options$panel.grid.major <- NULL
+                        rv$options$panel.grid.minor <- rv$options$panel.grid.major <- ggplot2::theme_blank()
                     else
-                        if (!panderOptions('graph.grid.minor'))
-                            rv$options$panel.grid.minor <- NULL
+                        if (!panderOptions('graph.grid.minor')) {
+                            rv$options$panel.grid.major <- theme_line(colour = panderOptions('graph.grid.color'), size = 0.5)
+                            rv$options$panel.grid.minor <- ggplot2::theme_blank()
+                        } else {
+                            rv$options$panel.grid.minor <- theme_line(colour = panderOptions('graph.grid.color'), size = 0.2, linetype = 'dotted')
+                            rv$options$panel.grid.major <- theme_line(colour = panderOptions('graph.grid.color'), size = 0.5)
+                        }
+
+
 
                 }
 
@@ -702,7 +710,7 @@ evals <- function(txt, parse = TRUE, cache = TRUE, cache.mode = c('environment',
 
         ## add grids to base plots
         if (is.character(graph) & is.null(res$result) & panderOptions('graph.grid')) {
-            grid(lty = 'solid')
+            grid(lty = 'solid', col = panderOptions('graph.grid.color'))
             if (panderOptions('graph.grid.minor'))
                 add.minor.ticks(4, 4, grid = TRUE) # TODO: only one minor tick between major ticks
         }
