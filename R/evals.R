@@ -23,7 +23,6 @@
 #' @return a list of parsed elements each containing: \code{src} (the command run), \code{result} (R object: \code{NULL} if nothing returned), \code{print}ed \code{output}, \code{type} (class of returned object if any), informative/wawrning and error messages (if any returned by the command run, otherwise set to \code{NULL}) and possible \code{stdout}t value. See Details above.
 #' @seealso \code{\link{evals}}
 #' @export
-#' @importFrom latticeExtra axis.grid xscale.components.subticks yscale.components.subticks
 #' @examples \dontrun{
 #' eval.msgs('1:5')
 #' eval.msgs('x <- 1:5')
@@ -105,10 +104,8 @@ eval.msgs <- function(src, env = NULL, showInvisible = FALSE, graph.unify = eval
             if (graph.unify) {
 
                 fs <- panderOptions('graph.fontsize')
-                ff  <- panderOptions('graph.fontfamily')
-                fc  <- panderOptions('graph.fontcolor')
-                ## TODO: add docs:
-                ##  * main title: 1.2*fs
+                ff <- panderOptions('graph.fontfamily')
+                fc <- panderOptions('graph.fontcolor')
 
                 ## lattice/trellis
                 if (rvc == 'trellis') {
@@ -128,10 +125,10 @@ eval.msgs <- function(src, env = NULL, showInvisible = FALSE, graph.unify = eval
 
                     ## grid
                     if (panderOptions('graph.grid')) {
-                        rv$axis <- axis.grid
+                        rv$axis <- latticeExtra::axis.grid
                         if (panderOptions('graph.grid.minor')) {
-                            rv$xscale.components = xscale.components.subticks
-                            rv$yscale.components = yscale.components.subticks
+                            rv$xscale.components = latticeExtra::xscale.components.subticks ## TODO: only 1 minor tick between major ticks + remove dependency
+                            rv$yscale.components = latticeExtra::yscale.components.subticks
                         }
                     }
 
@@ -142,26 +139,26 @@ eval.msgs <- function(src, env = NULL, showInvisible = FALSE, graph.unify = eval
 
                     ## margin
                     if (panderOptions('graph.nomargin')) {
-                        rv$options$plot.margin <- unit(c(0.1, 0.1, 0.1, 0), "lines")
+                        rv$options$plot.margin <- grid::unit(c(0.1, 0.1, 0.1, 0), "lines")
                     }
 
                     ## font family
-                    rv$options$plot.title   <- theme_text(colour = fc, family = ff, face = "bold", size = fs*1.2)
-                    rv$options$axis.text.x  <- rv$options$axis.text.y <- rv$options$legend.text <- theme_text(colour = fc, family = ff, face = 'italic', size = fs*0.8)
+                    rv$options$plot.title   <- ggplot2::theme_text(colour = fc, family = ff, face = "bold", size = fs*1.2)
+                    rv$options$axis.text.x  <- rv$options$axis.text.y <- rv$options$legend.text <- ggplot2::theme_text(colour = fc, family = ff, face = 'italic', size = fs*0.8)
                     rv$options$axis.title.x <- rv$options$legend.title <- theme_text(colour = fc, family = ff, face = 'italic', size = fs)
-                    rv$options$axis.title.y <- theme_text(colour = fc, family = ff, face = 'italic', size = fs, angle = 90)
-                    rv$options$strip.text.x <- theme_text(colour = fc, family = ff, face = 'bold', size = fs)
-                    rv$options$strip.text.y <- theme_text(colour = fc, family = ff, face = 'bold', size = fs, angle = -90)
+                    rv$options$axis.title.y <- ggplot2::theme_text(colour = fc, family = ff, face = 'italic', size = fs, angle = 90)
+                    rv$options$strip.text.x <- ggplot2::theme_text(colour = fc, family = ff, face = 'bold', size = fs)
+                    rv$options$strip.text.y <- ggplot2::theme_text(colour = fc, family = ff, face = 'bold', size = fs, angle = -90)
 
                     ## no need for boxes
-                    rv$options$legend.key <- rv$options$strip.background  <- theme_rect(colour = 'transparent', fill = 'transparent')
+                    rv$options$legend.key <- rv$options$strip.background <- grid::rectGrob(0.5, 0.5, 1, 1, gp = gpar(lwd = 1 / 0.352777778, col = 'transparent', fill = 'transparent'))
 
                     ## grid
                     if (!panderOptions('graph.grid'))
-                        rv$options$panel.grid.minor <- rv$options$panel.grid.major <- theme_blank()
+                        rv$options$panel.grid.minor <- rv$options$panel.grid.major <- NULL
                     else
                         if (!panderOptions('graph.grid.minor'))
-                            rv$options$panel.grid.minor <- theme_blank()
+                            rv$options$panel.grid.minor <- NULL
 
                 }
 
@@ -438,7 +435,6 @@ eval.msgs <- function(src, env = NULL, showInvisible = FALSE, graph.unify = eval
 #' }
 #' @export
 #' @importFrom digest digest
-#' @importFrom lattice trellis.par.set
 evals <- function(txt, parse = TRUE, cache = TRUE, cache.mode = c('environment', 'disk'), cache.dir = '.cache', cache.time = 0.1, cache.copy.images = FALSE, showInvisible = FALSE, classes = NULL, hooks = NULL, length = Inf, output = c('all', 'src', 'result', 'output', 'type', 'msg', 'stdout'), env = NULL, graph.unify = evalsOptions('graph.unify'), graph.name = '%t', graph.dir = 'plots', graph.output = c('png', 'bmp', 'jpeg', 'jpg', 'tiff', 'svg', 'pdf'), width = 480, height = 480, res= 72, hi.res = FALSE, hi.res.width = 960, hi.res.height = 960*(height/width), hi.res.res = res*(hi.res.width/width), graph.env = FALSE, graph.recordplot = FALSE, graph.RDS = FALSE, ...){
 
     if (missing(txt))
@@ -708,7 +704,7 @@ evals <- function(txt, parse = TRUE, cache = TRUE, cache.mode = c('environment',
         if (is.character(graph) & is.null(res$result) & panderOptions('graph.grid')) {
             grid(lty = 'solid')
             if (panderOptions('graph.grid.minor'))
-                add.minor.ticks(4, 4, grid = TRUE)
+                add.minor.ticks(4, 4, grid = TRUE) # TODO: only one minor tick between major ticks
         }
 
         ## close grDevice
