@@ -309,7 +309,7 @@ id   value
 ---------------------------------------------------
  Test statistic   P value   Alternative hypothesis 
 ---------------- --------- ------------------------
-      0.16        0.5487          two-sided        
+      0.12        0.8693          two-sided        
 ---------------------------------------------------
 
 Table: Two-sample Kolmogorov-Smirnov test: `runif(50)` and `runif(50)`
@@ -619,7 +619,6 @@ myReport$<span class="kw">export</span>(<span class="dt">open =</span> <span cla
 <li><code>hooks</code>: list of hooks to be run for given classes in the form of <code>list(class = fn)</code>. If you would also specify some parameters of the function, a list should be provided in the form of <code>list(fn, param1, param2=NULL)</code> etc. So the hooks would become <code>list(class1=list(fn, param1, param2=NULL), ...)</code>. See example of <a href="#evals"><code>evals</code></a> for more details. A default hook can be specified too by setting the class to <code>'default'</code>. This can be handy if you do not want to define separate methods/functions to each possible class, but automatically apply the default hook to all classes not mentioned in the list. You may also specify only one element in the list like: <code>hooks=list('default' = pander.return)</code>. Please note, that nor error/warning messages, nor stdout is captured (so: updated) while running hooks!</li>
 <li><code>length</code>: any R object exceeding the specified length will not be returned. The default value (<code>Inf</code>) does not filter out any R objects.</li>
 <li><code>output</code>: a character vector of required returned values. This might be useful if you are only interested in the <code>result</code>, and do not want to save/see e.g. <code>messages</code> or <code>print</code>ed <code>output</code>. See examples of <a href="#evals"><code>evals</code></a>.</li>
-<li><code>env</code>: environment where evaluation takes place. If not set (by default), a new temporary environment is created.</li>
 <li><code>graph.nomargin</code>: should <a href="#evals"><code>evals</code></a> try to keep plots' margins minimal?</li>
 <li><code>graph.name</code>: set the file name of saved plots which is <code>%s</code> by default. A simple character string might be provided where <code>%d</code> would be replaced by the index of the generating <code>txt</code> source, <code>%n</code> with an incremented integer in <code>graph.dir</code> with similar file names and <code>%t</code> by some unique random characters. A function's name to be <code>eval</code>uated can be passed here too.</li>
 <li><code>graph.dir</code>: path to a directory where to place generated images. If the directory does not exist, <a href="#evals"><code>evals</code></a> try to create that. Default set to <code>plots</code> in current working directory.</li>
@@ -686,7 +685,7 @@ B &lt;- <span class="fl">1e5</span></code></pre>
 </ul>
 <p>To use this small lib, just type: <code>M-x pander-mode</code> on any document. It might be useful to add a hook to <code>markdown-mode</code> if you find this useful.</p>
 <hr />
-<p>This report was generated with <a href="http://www.r-project.org/">R</a> (2.15.1) and <a href="https://github.com/daroczig/pander">pander</a> (0.1) in 0.544 sec on x86_64-unknown-linux-gnu platform.</p>
+<p>This report was generated with <a href="http://www.r-project.org/">R</a> (2.15.1) and <a href="https://github.com/daroczig/pander">pander</a> (0.1) in 0.893 sec on x86_64-unknown-linux-gnu platform.</p>
 <p align="center">
   Design: <a href="http://rapport-package.info/"><i>rapport</i> Development Team</a> &copy; 2012 | Backend: <a href="https://github.com/daroczig/pander">pander</a> | License: <a href="http://www.gnu.org/licenses/agpl.html" target="_blank">AGPL3</a> | Styled with <a href="http://www.getskeleton.com/" target="_blank">skeleton</a>
 </p>

@@ -39,19 +39,18 @@
 <div id="header">
 <h1 class="title">Gergely Daróczi</h1>
 <h2 class="author">Looong report</h2>
-<h3 class="date">Tue Jun 5 00:17:57 2012</h3>
+<h3 class="date">Fri Jul 20 12:17:28 2012</h3>
 </div>
 <p>I have written the below report in 10 mins :)</p>
 <h1 id="dataset">Dataset</h1>
 <p>Here I will do a pretty fast report on <code>mtcars</code> which is:</p>
 <table>
-<col width="27%" />
+<col width="33%" />
 <col width="8%" />
 <col width="8%" />
 <col width="9%" />
 <col width="6%" />
-<col width="9%" />
-<col width="5%" />
+<col width="8%" />
 <thead>
 <tr class="header">
 <th align="left"></th>
@@ -60,571 +59,678 @@
 <th align="left">disp</th>
 <th align="left">hp</th>
 <th align="left">drat</th>
-<th align="left">wt</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
-<td align="left">Mazda RX4</td>
-<td align="left">21</td>
+<td align="left"><strong>Mazda RX4</strong></td>
+<td align="left">21.0</td>
 <td align="left">6</td>
-<td align="left">160</td>
+<td align="left">160.0</td>
 <td align="left">110</td>
-<td align="left">3.9</td>
-<td align="left">2.6</td>
+<td align="left">3.90</td>
 </tr>
 <tr class="even">
-<td align="left">Mazda RX4 Wag</td>
-<td align="left">21</td>
+<td align="left"><strong>Mazda RX4 Wag</strong></td>
+<td align="left">21.0</td>
 <td align="left">6</td>
-<td align="left">160</td>
+<td align="left">160.0</td>
 <td align="left">110</td>
-<td align="left">3.9</td>
-<td align="left">2.9</td>
+<td align="left">3.90</td>
 </tr>
 <tr class="odd">
-<td align="left">Datsun 710</td>
-<td align="left">23</td>
+<td align="left"><strong>Datsun 710</strong></td>
+<td align="left">22.8</td>
 <td align="left">4</td>
-<td align="left">108</td>
+<td align="left">108.0</td>
 <td align="left">93</td>
-<td align="left">3.9</td>
-<td align="left">2.3</td>
+<td align="left">3.85</td>
 </tr>
 <tr class="even">
-<td align="left">Hornet 4 Drive</td>
-<td align="left">21</td>
+<td align="left"><strong>Hornet 4 Drive</strong></td>
+<td align="left">21.4</td>
 <td align="left">6</td>
-<td align="left">258</td>
+<td align="left">258.0</td>
 <td align="left">110</td>
-<td align="left">3.1</td>
-<td align="left">3.2</td>
+<td align="left">3.08</td>
 </tr>
 <tr class="odd">
-<td align="left">Hornet Sportabout</td>
-<td align="left">19</td>
+<td align="left"><strong>Hornet Sportabout</strong></td>
+<td align="left">18.7</td>
 <td align="left">8</td>
-<td align="left">360</td>
+<td align="left">360.0</td>
 <td align="left">175</td>
-<td align="left">3.1</td>
-<td align="left">3.4</td>
+<td align="left">3.15</td>
 </tr>
 <tr class="even">
-<td align="left">Valiant</td>
-<td align="left">18</td>
+<td align="left"><strong>Valiant</strong></td>
+<td align="left">18.1</td>
 <td align="left">6</td>
-<td align="left">225</td>
+<td align="left">225.0</td>
 <td align="left">105</td>
-<td align="left">2.8</td>
-<td align="left">3.5</td>
+<td align="left">2.76</td>
 </tr>
 <tr class="odd">
-<td align="left">Duster 360</td>
-<td align="left">14</td>
+<td align="left"><strong>Duster 360</strong></td>
+<td align="left">14.3</td>
 <td align="left">8</td>
-<td align="left">360</td>
+<td align="left">360.0</td>
 <td align="left">245</td>
-<td align="left">3.2</td>
-<td align="left">3.6</td>
+<td align="left">3.21</td>
 </tr>
 <tr class="even">
-<td align="left">Merc 240D</td>
-<td align="left">24</td>
+<td align="left"><strong>Merc 240D</strong></td>
+<td align="left">24.4</td>
 <td align="left">4</td>
-<td align="left">147</td>
+<td align="left">146.7</td>
 <td align="left">62</td>
-<td align="left">3.7</td>
-<td align="left">3.2</td>
+<td align="left">3.69</td>
 </tr>
 <tr class="odd">
-<td align="left">Merc 230</td>
-<td align="left">23</td>
+<td align="left"><strong>Merc 230</strong></td>
+<td align="left">22.8</td>
 <td align="left">4</td>
-<td align="left">141</td>
+<td align="left">140.8</td>
 <td align="left">95</td>
-<td align="left">3.9</td>
-<td align="left">3.1</td>
+<td align="left">3.92</td>
 </tr>
 <tr class="even">
-<td align="left">Merc 280</td>
-<td align="left">19</td>
+<td align="left"><strong>Merc 280</strong></td>
+<td align="left">19.2</td>
 <td align="left">6</td>
-<td align="left">168</td>
+<td align="left">167.6</td>
 <td align="left">123</td>
-<td align="left">3.9</td>
-<td align="left">3.4</td>
+<td align="left">3.92</td>
 </tr>
 <tr class="odd">
-<td align="left">Merc 280C</td>
-<td align="left">18</td>
+<td align="left"><strong>Merc 280C</strong></td>
+<td align="left">17.8</td>
 <td align="left">6</td>
-<td align="left">168</td>
+<td align="left">167.6</td>
 <td align="left">123</td>
-<td align="left">3.9</td>
-<td align="left">3.4</td>
+<td align="left">3.92</td>
 </tr>
 <tr class="even">
-<td align="left">Merc 450SE</td>
-<td align="left">16</td>
+<td align="left"><strong>Merc 450SE</strong></td>
+<td align="left">16.4</td>
 <td align="left">8</td>
-<td align="left">276</td>
+<td align="left">275.8</td>
 <td align="left">180</td>
-<td align="left">3.1</td>
-<td align="left">4.1</td>
+<td align="left">3.07</td>
 </tr>
 <tr class="odd">
-<td align="left">Merc 450SL</td>
-<td align="left">17</td>
+<td align="left"><strong>Merc 450SL</strong></td>
+<td align="left">17.3</td>
 <td align="left">8</td>
-<td align="left">276</td>
+<td align="left">275.8</td>
 <td align="left">180</td>
-<td align="left">3.1</td>
-<td align="left">3.7</td>
+<td align="left">3.07</td>
 </tr>
 <tr class="even">
-<td align="left">Merc 450SLC</td>
-<td align="left">15</td>
+<td align="left"><strong>Merc 450SLC</strong></td>
+<td align="left">15.2</td>
 <td align="left">8</td>
-<td align="left">276</td>
+<td align="left">275.8</td>
 <td align="left">180</td>
-<td align="left">3.1</td>
-<td align="left">3.8</td>
+<td align="left">3.07</td>
 </tr>
 <tr class="odd">
-<td align="left">Cadillac Fleetwood</td>
-<td align="left">10</td>
+<td align="left"><strong>Cadillac Fleetwood</strong></td>
+<td align="left">10.4</td>
 <td align="left">8</td>
-<td align="left">472</td>
+<td align="left">472.0</td>
 <td align="left">205</td>
-<td align="left">2.9</td>
-<td align="left">5.2</td>
+<td align="left">2.93</td>
 </tr>
 <tr class="even">
-<td align="left">Lincoln Continental</td>
-<td align="left">10</td>
+<td align="left"><strong>Lincoln Continental</strong></td>
+<td align="left">10.4</td>
 <td align="left">8</td>
-<td align="left">460</td>
+<td align="left">460.0</td>
 <td align="left">215</td>
-<td align="left">3.0</td>
-<td align="left">5.4</td>
+<td align="left">3.00</td>
 </tr>
 <tr class="odd">
-<td align="left">Chrysler Imperial</td>
-<td align="left">15</td>
+<td align="left"><strong>Chrysler Imperial</strong></td>
+<td align="left">14.7</td>
 <td align="left">8</td>
-<td align="left">440</td>
+<td align="left">440.0</td>
 <td align="left">230</td>
-<td align="left">3.2</td>
-<td align="left">5.3</td>
+<td align="left">3.23</td>
 </tr>
 <tr class="even">
-<td align="left">Fiat 128</td>
-<td align="left">32</td>
+<td align="left"><strong>Fiat 128</strong></td>
+<td align="left">32.4</td>
 <td align="left">4</td>
-<td align="left">79</td>
+<td align="left">78.7</td>
 <td align="left">66</td>
-<td align="left">4.1</td>
-<td align="left">2.2</td>
+<td align="left">4.08</td>
 </tr>
 <tr class="odd">
-<td align="left">Honda Civic</td>
-<td align="left">30</td>
+<td align="left"><strong>Honda Civic</strong></td>
+<td align="left">30.4</td>
 <td align="left">4</td>
-<td align="left">76</td>
+<td align="left">75.7</td>
 <td align="left">52</td>
-<td align="left">4.9</td>
-<td align="left">1.6</td>
+<td align="left">4.93</td>
 </tr>
 <tr class="even">
-<td align="left">Toyota Corolla</td>
-<td align="left">34</td>
+<td align="left"><strong>Toyota Corolla</strong></td>
+<td align="left">33.9</td>
 <td align="left">4</td>
-<td align="left">71</td>
+<td align="left">71.1</td>
 <td align="left">65</td>
-<td align="left">4.2</td>
-<td align="left">1.8</td>
+<td align="left">4.22</td>
 </tr>
 <tr class="odd">
-<td align="left">Toyota Corona</td>
-<td align="left">22</td>
+<td align="left"><strong>Toyota Corona</strong></td>
+<td align="left">21.5</td>
 <td align="left">4</td>
-<td align="left">120</td>
+<td align="left">120.1</td>
 <td align="left">97</td>
-<td align="left">3.7</td>
-<td align="left">2.5</td>
+<td align="left">3.70</td>
 </tr>
 <tr class="even">
-<td align="left">Dodge Challenger</td>
-<td align="left">16</td>
+<td align="left"><strong>Dodge Challenger</strong></td>
+<td align="left">15.5</td>
 <td align="left">8</td>
-<td align="left">318</td>
+<td align="left">318.0</td>
 <td align="left">150</td>
-<td align="left">2.8</td>
-<td align="left">3.5</td>
+<td align="left">2.76</td>
 </tr>
 <tr class="odd">
-<td align="left">AMC Javelin</td>
-<td align="left">15</td>
+<td align="left"><strong>AMC Javelin</strong></td>
+<td align="left">15.2</td>
 <td align="left">8</td>
-<td align="left">304</td>
+<td align="left">304.0</td>
 <td align="left">150</td>
-<td align="left">3.1</td>
-<td align="left">3.4</td>
+<td align="left">3.15</td>
 </tr>
 <tr class="even">
-<td align="left">Camaro Z28</td>
-<td align="left">13</td>
+<td align="left"><strong>Camaro Z28</strong></td>
+<td align="left">13.3</td>
 <td align="left">8</td>
-<td align="left">350</td>
+<td align="left">350.0</td>
 <td align="left">245</td>
-<td align="left">3.7</td>
-<td align="left">3.8</td>
+<td align="left">3.73</td>
 </tr>
 <tr class="odd">
-<td align="left">Pontiac Firebird</td>
-<td align="left">19</td>
+<td align="left"><strong>Pontiac Firebird</strong></td>
+<td align="left">19.2</td>
 <td align="left">8</td>
-<td align="left">400</td>
+<td align="left">400.0</td>
 <td align="left">175</td>
-<td align="left">3.1</td>
-<td align="left">3.8</td>
+<td align="left">3.08</td>
 </tr>
 <tr class="even">
-<td align="left">Fiat X1-9</td>
-<td align="left">27</td>
+<td align="left"><strong>Fiat X1-9</strong></td>
+<td align="left">27.3</td>
 <td align="left">4</td>
-<td align="left">79</td>
+<td align="left">79.0</td>
 <td align="left">66</td>
-<td align="left">4.1</td>
-<td align="left">1.9</td>
+<td align="left">4.08</td>
 </tr>
 <tr class="odd">
-<td align="left">Porsche 914-2</td>
-<td align="left">26</td>
+<td align="left"><strong>Porsche 914-2</strong></td>
+<td align="left">26.0</td>
 <td align="left">4</td>
-<td align="left">120</td>
+<td align="left">120.3</td>
 <td align="left">91</td>
-<td align="left">4.4</td>
-<td align="left">2.1</td>
+<td align="left">4.43</td>
 </tr>
 <tr class="even">
-<td align="left">Lotus Europa</td>
-<td align="left">30</td>
+<td align="left"><strong>Lotus Europa</strong></td>
+<td align="left">30.4</td>
 <td align="left">4</td>
-<td align="left">95</td>
+<td align="left">95.1</td>
 <td align="left">113</td>
-<td align="left">3.8</td>
-<td align="left">1.5</td>
+<td align="left">3.77</td>
 </tr>
 <tr class="odd">
-<td align="left">Ford Pantera L</td>
-<td align="left">16</td>
+<td align="left"><strong>Ford Pantera L</strong></td>
+<td align="left">15.8</td>
 <td align="left">8</td>
-<td align="left">351</td>
+<td align="left">351.0</td>
 <td align="left">264</td>
-<td align="left">4.2</td>
-<td align="left">3.2</td>
+<td align="left">4.22</td>
 </tr>
 <tr class="even">
-<td align="left">Ferrari Dino</td>
-<td align="left">20</td>
+<td align="left"><strong>Ferrari Dino</strong></td>
+<td align="left">19.7</td>
 <td align="left">6</td>
-<td align="left">145</td>
+<td align="left">145.0</td>
 <td align="left">175</td>
-<td align="left">3.6</td>
-<td align="left">2.8</td>
+<td align="left">3.62</td>
 </tr>
 <tr class="odd">
-<td align="left">Maserati Bora</td>
-<td align="left">15</td>
+<td align="left"><strong>Maserati Bora</strong></td>
+<td align="left">15.0</td>
 <td align="left">8</td>
-<td align="left">301</td>
+<td align="left">301.0</td>
 <td align="left">335</td>
-<td align="left">3.5</td>
-<td align="left">3.6</td>
+<td align="left">3.54</td>
 </tr>
 <tr class="even">
-<td align="left">Volvo 142E</td>
-<td align="left">21</td>
+<td align="left"><strong>Volvo 142E</strong></td>
+<td align="left">21.4</td>
 <td align="left">4</td>
-<td align="left">121</td>
+<td align="left">121.0</td>
 <td align="left">109</td>
-<td align="left">4.1</td>
-<td align="left">2.8</td>
+<td align="left">4.11</td>
 </tr>
 </tbody>
 </table>
 <table>
-<col width="27%" />
+<col width="33%" />
+<col width="8%" />
 <col width="9%" />
 <col width="6%" />
 <col width="6%" />
+<thead>
+<tr class="header">
+<th align="left"></th>
+<th align="left">wt</th>
+<th align="left">qsec</th>
+<th align="left">vs</th>
+<th align="left">am</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left"><strong>Mazda RX4</strong></td>
+<td align="left">2.620</td>
+<td align="left">16.46</td>
+<td align="left">0</td>
+<td align="left">1</td>
+</tr>
+<tr class="even">
+<td align="left"><strong>Mazda RX4 Wag</strong></td>
+<td align="left">2.875</td>
+<td align="left">17.02</td>
+<td align="left">0</td>
+<td align="left">1</td>
+</tr>
+<tr class="odd">
+<td align="left"><strong>Datsun 710</strong></td>
+<td align="left">2.320</td>
+<td align="left">18.61</td>
+<td align="left">1</td>
+<td align="left">1</td>
+</tr>
+<tr class="even">
+<td align="left"><strong>Hornet 4 Drive</strong></td>
+<td align="left">3.215</td>
+<td align="left">19.44</td>
+<td align="left">1</td>
+<td align="left">0</td>
+</tr>
+<tr class="odd">
+<td align="left"><strong>Hornet Sportabout</strong></td>
+<td align="left">3.440</td>
+<td align="left">17.02</td>
+<td align="left">0</td>
+<td align="left">0</td>
+</tr>
+<tr class="even">
+<td align="left"><strong>Valiant</strong></td>
+<td align="left">3.460</td>
+<td align="left">20.22</td>
+<td align="left">1</td>
+<td align="left">0</td>
+</tr>
+<tr class="odd">
+<td align="left"><strong>Duster 360</strong></td>
+<td align="left">3.570</td>
+<td align="left">15.84</td>
+<td align="left">0</td>
+<td align="left">0</td>
+</tr>
+<tr class="even">
+<td align="left"><strong>Merc 240D</strong></td>
+<td align="left">3.190</td>
+<td align="left">20.00</td>
+<td align="left">1</td>
+<td align="left">0</td>
+</tr>
+<tr class="odd">
+<td align="left"><strong>Merc 230</strong></td>
+<td align="left">3.150</td>
+<td align="left">22.90</td>
+<td align="left">1</td>
+<td align="left">0</td>
+</tr>
+<tr class="even">
+<td align="left"><strong>Merc 280</strong></td>
+<td align="left">3.440</td>
+<td align="left">18.30</td>
+<td align="left">1</td>
+<td align="left">0</td>
+</tr>
+<tr class="odd">
+<td align="left"><strong>Merc 280C</strong></td>
+<td align="left">3.440</td>
+<td align="left">18.90</td>
+<td align="left">1</td>
+<td align="left">0</td>
+</tr>
+<tr class="even">
+<td align="left"><strong>Merc 450SE</strong></td>
+<td align="left">4.070</td>
+<td align="left">17.40</td>
+<td align="left">0</td>
+<td align="left">0</td>
+</tr>
+<tr class="odd">
+<td align="left"><strong>Merc 450SL</strong></td>
+<td align="left">3.730</td>
+<td align="left">17.60</td>
+<td align="left">0</td>
+<td align="left">0</td>
+</tr>
+<tr class="even">
+<td align="left"><strong>Merc 450SLC</strong></td>
+<td align="left">3.780</td>
+<td align="left">18.00</td>
+<td align="left">0</td>
+<td align="left">0</td>
+</tr>
+<tr class="odd">
+<td align="left"><strong>Cadillac Fleetwood</strong></td>
+<td align="left">5.250</td>
+<td align="left">17.98</td>
+<td align="left">0</td>
+<td align="left">0</td>
+</tr>
+<tr class="even">
+<td align="left"><strong>Lincoln Continental</strong></td>
+<td align="left">5.424</td>
+<td align="left">17.82</td>
+<td align="left">0</td>
+<td align="left">0</td>
+</tr>
+<tr class="odd">
+<td align="left"><strong>Chrysler Imperial</strong></td>
+<td align="left">5.345</td>
+<td align="left">17.42</td>
+<td align="left">0</td>
+<td align="left">0</td>
+</tr>
+<tr class="even">
+<td align="left"><strong>Fiat 128</strong></td>
+<td align="left">2.200</td>
+<td align="left">19.47</td>
+<td align="left">1</td>
+<td align="left">1</td>
+</tr>
+<tr class="odd">
+<td align="left"><strong>Honda Civic</strong></td>
+<td align="left">1.615</td>
+<td align="left">18.52</td>
+<td align="left">1</td>
+<td align="left">1</td>
+</tr>
+<tr class="even">
+<td align="left"><strong>Toyota Corolla</strong></td>
+<td align="left">1.835</td>
+<td align="left">19.90</td>
+<td align="left">1</td>
+<td align="left">1</td>
+</tr>
+<tr class="odd">
+<td align="left"><strong>Toyota Corona</strong></td>
+<td align="left">2.465</td>
+<td align="left">20.01</td>
+<td align="left">1</td>
+<td align="left">0</td>
+</tr>
+<tr class="even">
+<td align="left"><strong>Dodge Challenger</strong></td>
+<td align="left">3.520</td>
+<td align="left">16.87</td>
+<td align="left">0</td>
+<td align="left">0</td>
+</tr>
+<tr class="odd">
+<td align="left"><strong>AMC Javelin</strong></td>
+<td align="left">3.435</td>
+<td align="left">17.30</td>
+<td align="left">0</td>
+<td align="left">0</td>
+</tr>
+<tr class="even">
+<td align="left"><strong>Camaro Z28</strong></td>
+<td align="left">3.840</td>
+<td align="left">15.41</td>
+<td align="left">0</td>
+<td align="left">0</td>
+</tr>
+<tr class="odd">
+<td align="left"><strong>Pontiac Firebird</strong></td>
+<td align="left">3.845</td>
+<td align="left">17.05</td>
+<td align="left">0</td>
+<td align="left">0</td>
+</tr>
+<tr class="even">
+<td align="left"><strong>Fiat X1-9</strong></td>
+<td align="left">1.935</td>
+<td align="left">18.90</td>
+<td align="left">1</td>
+<td align="left">1</td>
+</tr>
+<tr class="odd">
+<td align="left"><strong>Porsche 914-2</strong></td>
+<td align="left">2.140</td>
+<td align="left">16.70</td>
+<td align="left">0</td>
+<td align="left">1</td>
+</tr>
+<tr class="even">
+<td align="left"><strong>Lotus Europa</strong></td>
+<td align="left">1.513</td>
+<td align="left">16.90</td>
+<td align="left">1</td>
+<td align="left">1</td>
+</tr>
+<tr class="odd">
+<td align="left"><strong>Ford Pantera L</strong></td>
+<td align="left">3.170</td>
+<td align="left">14.50</td>
+<td align="left">0</td>
+<td align="left">1</td>
+</tr>
+<tr class="even">
+<td align="left"><strong>Ferrari Dino</strong></td>
+<td align="left">2.770</td>
+<td align="left">15.50</td>
+<td align="left">0</td>
+<td align="left">1</td>
+</tr>
+<tr class="odd">
+<td align="left"><strong>Maserati Bora</strong></td>
+<td align="left">3.570</td>
+<td align="left">14.60</td>
+<td align="left">0</td>
+<td align="left">1</td>
+</tr>
+<tr class="even">
+<td align="left"><strong>Volvo 142E</strong></td>
+<td align="left">2.780</td>
+<td align="left">18.60</td>
+<td align="left">1</td>
+<td align="left">1</td>
+</tr>
+</tbody>
+</table>
+<table>
+<col width="33%" />
 <col width="9%" />
 <col width="9%" />
 <thead>
 <tr class="header">
 <th align="left"></th>
-<th align="left">qsec</th>
-<th align="left">vs</th>
-<th align="left">am</th>
 <th align="left">gear</th>
 <th align="left">carb</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
-<td align="left">Mazda RX4</td>
-<td align="left">16</td>
-<td align="left">0</td>
-<td align="left">1</td>
+<td align="left"><strong>Mazda RX4</strong></td>
 <td align="left">4</td>
 <td align="left">4</td>
 </tr>
 <tr class="even">
-<td align="left">Mazda RX4 Wag</td>
-<td align="left">17</td>
-<td align="left">0</td>
-<td align="left">1</td>
+<td align="left"><strong>Mazda RX4 Wag</strong></td>
 <td align="left">4</td>
 <td align="left">4</td>
 </tr>
 <tr class="odd">
-<td align="left">Datsun 710</td>
-<td align="left">19</td>
-<td align="left">1</td>
-<td align="left">1</td>
+<td align="left"><strong>Datsun 710</strong></td>
 <td align="left">4</td>
 <td align="left">1</td>
 </tr>
 <tr class="even">
-<td align="left">Hornet 4 Drive</td>
-<td align="left">19</td>
-<td align="left">1</td>
-<td align="left">0</td>
+<td align="left"><strong>Hornet 4 Drive</strong></td>
 <td align="left">3</td>
 <td align="left">1</td>
 </tr>
 <tr class="odd">
-<td align="left">Hornet Sportabout</td>
-<td align="left">17</td>
-<td align="left">0</td>
-<td align="left">0</td>
+<td align="left"><strong>Hornet Sportabout</strong></td>
 <td align="left">3</td>
 <td align="left">2</td>
 </tr>
 <tr class="even">
-<td align="left">Valiant</td>
-<td align="left">20</td>
-<td align="left">1</td>
-<td align="left">0</td>
+<td align="left"><strong>Valiant</strong></td>
 <td align="left">3</td>
 <td align="left">1</td>
 </tr>
 <tr class="odd">
-<td align="left">Duster 360</td>
-<td align="left">16</td>
-<td align="left">0</td>
-<td align="left">0</td>
+<td align="left"><strong>Duster 360</strong></td>
 <td align="left">3</td>
 <td align="left">4</td>
 </tr>
 <tr class="even">
-<td align="left">Merc 240D</td>
-<td align="left">20</td>
-<td align="left">1</td>
-<td align="left">0</td>
+<td align="left"><strong>Merc 240D</strong></td>
 <td align="left">4</td>
 <td align="left">2</td>
 </tr>
 <tr class="odd">
-<td align="left">Merc 230</td>
-<td align="left">23</td>
-<td align="left">1</td>
-<td align="left">0</td>
+<td align="left"><strong>Merc 230</strong></td>
 <td align="left">4</td>
 <td align="left">2</td>
 </tr>
 <tr class="even">
-<td align="left">Merc 280</td>
-<td align="left">18</td>
-<td align="left">1</td>
-<td align="left">0</td>
+<td align="left"><strong>Merc 280</strong></td>
 <td align="left">4</td>
 <td align="left">4</td>
 </tr>
 <tr class="odd">
-<td align="left">Merc 280C</td>
-<td align="left">19</td>
-<td align="left">1</td>
-<td align="left">0</td>
+<td align="left"><strong>Merc 280C</strong></td>
 <td align="left">4</td>
 <td align="left">4</td>
 </tr>
 <tr class="even">
-<td align="left">Merc 450SE</td>
-<td align="left">17</td>
-<td align="left">0</td>
-<td align="left">0</td>
+<td align="left"><strong>Merc 450SE</strong></td>
 <td align="left">3</td>
 <td align="left">3</td>
 </tr>
 <tr class="odd">
-<td align="left">Merc 450SL</td>
-<td align="left">18</td>
-<td align="left">0</td>
-<td align="left">0</td>
+<td align="left"><strong>Merc 450SL</strong></td>
 <td align="left">3</td>
 <td align="left">3</td>
 </tr>
 <tr class="even">
-<td align="left">Merc 450SLC</td>
-<td align="left">18</td>
-<td align="left">0</td>
-<td align="left">0</td>
+<td align="left"><strong>Merc 450SLC</strong></td>
 <td align="left">3</td>
 <td align="left">3</td>
 </tr>
 <tr class="odd">
-<td align="left">Cadillac Fleetwood</td>
-<td align="left">18</td>
-<td align="left">0</td>
-<td align="left">0</td>
+<td align="left"><strong>Cadillac Fleetwood</strong></td>
 <td align="left">3</td>
 <td align="left">4</td>
 </tr>
 <tr class="even">
-<td align="left">Lincoln Continental</td>
-<td align="left">18</td>
-<td align="left">0</td>
-<td align="left">0</td>
+<td align="left"><strong>Lincoln Continental</strong></td>
 <td align="left">3</td>
 <td align="left">4</td>
 </tr>
 <tr class="odd">
-<td align="left">Chrysler Imperial</td>
-<td align="left">17</td>
-<td align="left">0</td>
-<td align="left">0</td>
+<td align="left"><strong>Chrysler Imperial</strong></td>
 <td align="left">3</td>
 <td align="left">4</td>
 </tr>
 <tr class="even">
-<td align="left">Fiat 128</td>
-<td align="left">19</td>
-<td align="left">1</td>
-<td align="left">1</td>
+<td align="left"><strong>Fiat 128</strong></td>
 <td align="left">4</td>
 <td align="left">1</td>
 </tr>
 <tr class="odd">
-<td align="left">Honda Civic</td>
-<td align="left">19</td>
-<td align="left">1</td>
-<td align="left">1</td>
+<td align="left"><strong>Honda Civic</strong></td>
 <td align="left">4</td>
 <td align="left">2</td>
 </tr>
 <tr class="even">
-<td align="left">Toyota Corolla</td>
-<td align="left">20</td>
-<td align="left">1</td>
-<td align="left">1</td>
+<td align="left"><strong>Toyota Corolla</strong></td>
 <td align="left">4</td>
 <td align="left">1</td>
 </tr>
 <tr class="odd">
-<td align="left">Toyota Corona</td>
-<td align="left">20</td>
-<td align="left">1</td>
-<td align="left">0</td>
+<td align="left"><strong>Toyota Corona</strong></td>
 <td align="left">3</td>
 <td align="left">1</td>
 </tr>
 <tr class="even">
-<td align="left">Dodge Challenger</td>
-<td align="left">17</td>
-<td align="left">0</td>
-<td align="left">0</td>
+<td align="left"><strong>Dodge Challenger</strong></td>
 <td align="left">3</td>
 <td align="left">2</td>
 </tr>
 <tr class="odd">
-<td align="left">AMC Javelin</td>
-<td align="left">17</td>
-<td align="left">0</td>
-<td align="left">0</td>
+<td align="left"><strong>AMC Javelin</strong></td>
 <td align="left">3</td>
 <td align="left">2</td>
 </tr>
 <tr class="even">
-<td align="left">Camaro Z28</td>
-<td align="left">15</td>
-<td align="left">0</td>
-<td align="left">0</td>
+<td align="left"><strong>Camaro Z28</strong></td>
 <td align="left">3</td>
 <td align="left">4</td>
 </tr>
 <tr class="odd">
-<td align="left">Pontiac Firebird</td>
-<td align="left">17</td>
-<td align="left">0</td>
-<td align="left">0</td>
+<td align="left"><strong>Pontiac Firebird</strong></td>
 <td align="left">3</td>
 <td align="left">2</td>
 </tr>
 <tr class="even">
-<td align="left">Fiat X1-9</td>
-<td align="left">19</td>
-<td align="left">1</td>
-<td align="left">1</td>
+<td align="left"><strong>Fiat X1-9</strong></td>
 <td align="left">4</td>
 <td align="left">1</td>
 </tr>
 <tr class="odd">
-<td align="left">Porsche 914-2</td>
-<td align="left">17</td>
-<td align="left">0</td>
-<td align="left">1</td>
+<td align="left"><strong>Porsche 914-2</strong></td>
 <td align="left">5</td>
 <td align="left">2</td>
 </tr>
 <tr class="even">
-<td align="left">Lotus Europa</td>
-<td align="left">17</td>
-<td align="left">1</td>
-<td align="left">1</td>
+<td align="left"><strong>Lotus Europa</strong></td>
 <td align="left">5</td>
 <td align="left">2</td>
 </tr>
 <tr class="odd">
-<td align="left">Ford Pantera L</td>
-<td align="left">14</td>
-<td align="left">0</td>
-<td align="left">1</td>
+<td align="left"><strong>Ford Pantera L</strong></td>
 <td align="left">5</td>
 <td align="left">4</td>
 </tr>
 <tr class="even">
-<td align="left">Ferrari Dino</td>
-<td align="left">16</td>
-<td align="left">0</td>
-<td align="left">1</td>
+<td align="left"><strong>Ferrari Dino</strong></td>
 <td align="left">5</td>
 <td align="left">6</td>
 </tr>
 <tr class="odd">
-<td align="left">Maserati Bora</td>
-<td align="left">15</td>
-<td align="left">0</td>
-<td align="left">1</td>
+<td align="left"><strong>Maserati Bora</strong></td>
 <td align="left">5</td>
 <td align="left">8</td>
 </tr>
 <tr class="even">
-<td align="left">Volvo 142E</td>
-<td align="left">19</td>
-<td align="left">1</td>
-<td align="left">1</td>
+<td align="left"><strong>Volvo 142E</strong></td>
 <td align="left">4</td>
 <td align="left">2</td>
 </tr>
@@ -632,7 +738,7 @@
 </table>
 <h1 id="descriptives">Descriptives</h1>
 <table>
-<col width="6%" />
+<col width="12%" />
 <col width="13%" />
 <col width="12%" />
 <col width="29%" />
@@ -648,89 +754,89 @@
 </thead>
 <tbody>
 <tr class="odd">
-<td align="left">mpg</td>
-<td align="left">20.09</td>
-<td align="left">19.2</td>
-<td align="left">6.03</td>
-<td align="left">3.6e+01</td>
+<td align="left"><strong>mpg</strong></td>
+<td align="left">20.0906</td>
+<td align="left">19.200</td>
+<td align="left">6.0269</td>
+<td align="left">3.632e+01</td>
 </tr>
 <tr class="even">
-<td align="left">cyl</td>
-<td align="left">6.19</td>
-<td align="left">6.0</td>
-<td align="left">1.79</td>
-<td align="left">3.2e+00</td>
+<td align="left"><strong>cyl</strong></td>
+<td align="left">6.1875</td>
+<td align="left">6.000</td>
+<td align="left">1.7859</td>
+<td align="left">3.190e+00</td>
 </tr>
 <tr class="odd">
-<td align="left">disp</td>
-<td align="left">230.72</td>
-<td align="left">196.3</td>
-<td align="left">123.94</td>
-<td align="left">1.5e+04</td>
+<td align="left"><strong>disp</strong></td>
+<td align="left">230.7219</td>
+<td align="left">196.300</td>
+<td align="left">123.9387</td>
+<td align="left">1.536e+04</td>
 </tr>
 <tr class="even">
-<td align="left">hp</td>
-<td align="left">146.69</td>
-<td align="left">123.0</td>
-<td align="left">68.56</td>
-<td align="left">4.7e+03</td>
+<td align="left"><strong>hp</strong></td>
+<td align="left">146.6875</td>
+<td align="left">123.000</td>
+<td align="left">68.5629</td>
+<td align="left">4.701e+03</td>
 </tr>
 <tr class="odd">
-<td align="left">drat</td>
-<td align="left">3.60</td>
-<td align="left">3.7</td>
-<td align="left">0.53</td>
-<td align="left">2.9e-01</td>
+<td align="left"><strong>drat</strong></td>
+<td align="left">3.5966</td>
+<td align="left">3.695</td>
+<td align="left">0.5347</td>
+<td align="left">2.859e-01</td>
 </tr>
 <tr class="even">
-<td align="left">wt</td>
-<td align="left">3.22</td>
-<td align="left">3.3</td>
-<td align="left">0.98</td>
-<td align="left">9.6e-01</td>
+<td align="left"><strong>wt</strong></td>
+<td align="left">3.2172</td>
+<td align="left">3.325</td>
+<td align="left">0.9785</td>
+<td align="left">9.574e-01</td>
 </tr>
 <tr class="odd">
-<td align="left">qsec</td>
-<td align="left">17.85</td>
-<td align="left">17.7</td>
-<td align="left">1.79</td>
-<td align="left">3.2e+00</td>
+<td align="left"><strong>qsec</strong></td>
+<td align="left">17.8487</td>
+<td align="left">17.710</td>
+<td align="left">1.7869</td>
+<td align="left">3.193e+00</td>
 </tr>
 <tr class="even">
-<td align="left">vs</td>
-<td align="left">0.44</td>
-<td align="left">0.0</td>
-<td align="left">0.50</td>
-<td align="left">2.5e-01</td>
+<td align="left"><strong>vs</strong></td>
+<td align="left">0.4375</td>
+<td align="left">0.000</td>
+<td align="left">0.5040</td>
+<td align="left">2.540e-01</td>
 </tr>
 <tr class="odd">
-<td align="left">am</td>
-<td align="left">0.41</td>
-<td align="left">0.0</td>
-<td align="left">0.50</td>
-<td align="left">2.5e-01</td>
+<td align="left"><strong>am</strong></td>
+<td align="left">0.4062</td>
+<td align="left">0.000</td>
+<td align="left">0.4990</td>
+<td align="left">2.490e-01</td>
 </tr>
 <tr class="even">
-<td align="left">gear</td>
-<td align="left">3.69</td>
-<td align="left">4.0</td>
-<td align="left">0.74</td>
-<td align="left">5.4e-01</td>
+<td align="left"><strong>gear</strong></td>
+<td align="left">3.6875</td>
+<td align="left">4.000</td>
+<td align="left">0.7378</td>
+<td align="left">5.444e-01</td>
 </tr>
 <tr class="odd">
-<td align="left">carb</td>
-<td align="left">2.81</td>
-<td align="left">2.0</td>
-<td align="left">1.62</td>
-<td align="left">2.6e+00</td>
+<td align="left"><strong>carb</strong></td>
+<td align="left">2.8125</td>
+<td align="left">2.000</td>
+<td align="left">1.6152</td>
+<td align="left">2.609e+00</td>
 </tr>
 </tbody>
 </table>
 <h2 id="in-details">In details</h2>
 <h3 id="mpg">mpg</h3>
 <p>We found the folloing values here:</p>
-<p><em>21</em>, <em>21</em>, <em>22.8</em>, <em>21.4</em>, <em>18.7</em>, <em>18.1</em>, <em>14.3</em>, <em>24.4</em>, <em>22.8</em>, <em>19.2</em>, <em>17.8</em>, <em>16.4</em>, <em>17.3</em>, <em>15.2</em>, <em>10.4</em>, <em>10.4</em>, <em>14.7</em>, <em>32.4</em>, <em>30.4</em>, <em>33.9</em>, <em>21.5</em>, <em>15.5</em>, <em>15.2</em>, <em>13.3</em>, <em>19.2</em>, <em>27.3</em>, <em>26</em>, <em>30.4</em>, <em>15.8</em>, <em>19.7</em>, <em>15</em> and <em>21.4</em></p>
-<p>The mean of mpg is <em>20.090625</em> while the standard deviation is: <em>6.0269480520891</em>. The most frequent value in mpg is 10.4, but let us check out the frequency table too:</p>
+<p><em>21.0</em>, <em>21.0</em>, <em>22.8</em>, <em>21.4</em>, <em>18.7</em>, <em>18.1</em>, <em>14.3</em>, <em>24.4</em>, <em>22.8</em>, <em>19.2</em>, <em>17.8</em>, <em>16.4</em>, <em>17.3</em>, <em>15.2</em>, <em>10.4</em>, <em>10.4</em>, <em>14.7</em>, <em>32.4</em>, <em>30.4</em>, <em>33.9</em>, <em>21.5</em>, <em>15.5</em>, <em>15.2</em>, <em>13.3</em>, <em>19.2</em>, <em>27.3</em>, <em>26.0</em>, <em>30.4</em>, <em>15.8</em>, <em>19.7</em>, <em>15.0</em> and <em>21.4</em></p>
+<p>The mean of mpg is <em>20.09</em> while the standard deviation is: <em>6.027</em>. The most frequent value in mpg is 10.4, but let us check out the frequency table too:</p>
 <table>
 <col width="9%" />
 <col width="9%" />
@@ -851,7 +957,7 @@
 <h3 id="cyl">cyl</h3>
 <p>We found the folloing values here:</p>
 <p><em>6</em>, <em>6</em>, <em>4</em>, <em>6</em>, <em>8</em>, <em>6</em>, <em>8</em>, <em>4</em>, <em>4</em>, <em>6</em>, <em>6</em>, <em>8</em>, <em>8</em>, <em>8</em>, <em>8</em>, <em>8</em>, <em>8</em>, <em>4</em>, <em>4</em>, <em>4</em>, <em>4</em>, <em>8</em>, <em>8</em>, <em>8</em>, <em>8</em>, <em>4</em>, <em>4</em>, <em>4</em>, <em>8</em>, <em>6</em>, <em>8</em> and <em>4</em></p>
-<p>The mean of cyl is <em>6.1875</em> while the standard deviation is: <em>1.78592164694654</em>. The most frequent value in cyl is 8, but let us check out the frequency table too:</p>
+<p>The mean of cyl is <em>6.188</em> while the standard deviation is: <em>1.786</em>. The most frequent value in cyl is 8, but let us check out the frequency table too:</p>
 <table>
 <col width="5%" />
 <col width="5%" />
@@ -875,8 +981,8 @@
 <p><a href="plots/short-code-long-report-2-hires.png"><img src="plots/short-code-long-report-2.png" /></a></p>
 <h3 id="disp">disp</h3>
 <p>We found the folloing values here:</p>
-<p><em>160</em>, <em>160</em>, <em>108</em>, <em>258</em>, <em>360</em>, <em>225</em>, <em>360</em>, <em>146.7</em>, <em>140.8</em>, <em>167.6</em>, <em>167.6</em>, <em>275.8</em>, <em>275.8</em>, <em>275.8</em>, <em>472</em>, <em>460</em>, <em>440</em>, <em>78.7</em>, <em>75.7</em>, <em>71.1</em>, <em>120.1</em>, <em>318</em>, <em>304</em>, <em>350</em>, <em>400</em>, <em>79</em>, <em>120.3</em>, <em>95.1</em>, <em>351</em>, <em>145</em>, <em>301</em> and <em>121</em></p>
-<p>The mean of disp is <em>230.721875</em> while the standard deviation is: <em>123.938693831382</em>. The most frequent value in disp is 275.8, but let us check out the frequency table too:</p>
+<p><em>160.0</em>, <em>160.0</em>, <em>108.0</em>, <em>258.0</em>, <em>360.0</em>, <em>225.0</em>, <em>360.0</em>, <em>146.7</em>, <em>140.8</em>, <em>167.6</em>, <em>167.6</em>, <em>275.8</em>, <em>275.8</em>, <em>275.8</em>, <em>472.0</em>, <em>460.0</em>, <em>440.0</em>, <em>78.7</em>, <em>75.7</em>, <em>71.1</em>, <em>120.1</em>, <em>318.0</em>, <em>304.0</em>, <em>350.0</em>, <em>400.0</em>, <em>79.0</em>, <em>120.3</em>, <em>95.1</em>, <em>351.0</em>, <em>145.0</em>, <em>301.0</em> and <em>121.0</em></p>
+<p>The mean of disp is <em>230.7</em> while the standard deviation is: <em>123.9</em>. The most frequent value in disp is 275.8, but let us check out the frequency table too:</p>
 <table>
 <col width="9%" />
 <col width="9%" />
@@ -1003,7 +1109,7 @@
 <h3 id="hp">hp</h3>
 <p>We found the folloing values here:</p>
 <p><em>110</em>, <em>110</em>, <em>93</em>, <em>110</em>, <em>175</em>, <em>105</em>, <em>245</em>, <em>62</em>, <em>95</em>, <em>123</em>, <em>123</em>, <em>180</em>, <em>180</em>, <em>180</em>, <em>205</em>, <em>215</em>, <em>230</em>, <em>66</em>, <em>52</em>, <em>65</em>, <em>97</em>, <em>150</em>, <em>150</em>, <em>245</em>, <em>175</em>, <em>66</em>, <em>91</em>, <em>113</em>, <em>264</em>, <em>175</em>, <em>335</em> and <em>109</em></p>
-<p>The mean of hp is <em>146.6875</em> while the standard deviation is: <em>68.5628684893206</em>. The most frequent value in hp is 110, but let us check out the frequency table too:</p>
+<p>The mean of hp is <em>146.7</em> while the standard deviation is: <em>68.56</em>. The most frequent value in hp is 110, but let us check out the frequency table too:</p>
 <table>
 <col width="6%" />
 <col width="6%" />
@@ -1104,8 +1210,8 @@
 <p><a href="plots/short-code-long-report-4-hires.png"><img src="plots/short-code-long-report-4.png" /></a></p>
 <h3 id="drat">drat</h3>
 <p>We found the folloing values here:</p>
-<p><em>3.9</em>, <em>3.9</em>, <em>3.85</em>, <em>3.08</em>, <em>3.15</em>, <em>2.76</em>, <em>3.21</em>, <em>3.69</em>, <em>3.92</em>, <em>3.92</em>, <em>3.92</em>, <em>3.07</em>, <em>3.07</em>, <em>3.07</em>, <em>2.93</em>, <em>3</em>, <em>3.23</em>, <em>4.08</em>, <em>4.93</em>, <em>4.22</em>, <em>3.7</em>, <em>2.76</em>, <em>3.15</em>, <em>3.73</em>, <em>3.08</em>, <em>4.08</em>, <em>4.43</em>, <em>3.77</em>, <em>4.22</em>, <em>3.62</em>, <em>3.54</em> and <em>4.11</em></p>
-<p>The mean of drat is <em>3.5965625</em> while the standard deviation is: <em>0.534678736070971</em>. The most frequent value in drat is 3.07, but let us check out the frequency table too:</p>
+<p><em>3.90</em>, <em>3.90</em>, <em>3.85</em>, <em>3.08</em>, <em>3.15</em>, <em>2.76</em>, <em>3.21</em>, <em>3.69</em>, <em>3.92</em>, <em>3.92</em>, <em>3.92</em>, <em>3.07</em>, <em>3.07</em>, <em>3.07</em>, <em>2.93</em>, <em>3.00</em>, <em>3.23</em>, <em>4.08</em>, <em>4.93</em>, <em>4.22</em>, <em>3.70</em>, <em>2.76</em>, <em>3.15</em>, <em>3.73</em>, <em>3.08</em>, <em>4.08</em>, <em>4.43</em>, <em>3.77</em>, <em>4.22</em>, <em>3.62</em>, <em>3.54</em> and <em>4.11</em></p>
+<p>The mean of drat is <em>3.597</em> while the standard deviation is: <em>0.5347</em>. The most frequent value in drat is 3.07, but let us check out the frequency table too:</p>
 <table>
 <col width="9%" />
 <col width="9%" />
@@ -1206,8 +1312,8 @@
 <p><a href="plots/short-code-long-report-5-hires.png"><img src="plots/short-code-long-report-5.png" /></a></p>
 <h3 id="wt">wt</h3>
 <p>We found the folloing values here:</p>
-<p><em>2.62</em>, <em>2.875</em>, <em>2.32</em>, <em>3.215</em>, <em>3.44</em>, <em>3.46</em>, <em>3.57</em>, <em>3.19</em>, <em>3.15</em>, <em>3.44</em>, <em>3.44</em>, <em>4.07</em>, <em>3.73</em>, <em>3.78</em>, <em>5.25</em>, <em>5.424</em>, <em>5.345</em>, <em>2.2</em>, <em>1.615</em>, <em>1.835</em>, <em>2.465</em>, <em>3.52</em>, <em>3.435</em>, <em>3.84</em>, <em>3.845</em>, <em>1.935</em>, <em>2.14</em>, <em>1.513</em>, <em>3.17</em>, <em>2.77</em>, <em>3.57</em> and <em>2.78</em></p>
-<p>The mean of wt is <em>3.21725</em> while the standard deviation is: <em>0.978457442989697</em>. The most frequent value in wt is 3.44, but let us check out the frequency table too:</p>
+<p><em>2.620</em>, <em>2.875</em>, <em>2.320</em>, <em>3.215</em>, <em>3.440</em>, <em>3.460</em>, <em>3.570</em>, <em>3.190</em>, <em>3.150</em>, <em>3.440</em>, <em>3.440</em>, <em>4.070</em>, <em>3.730</em>, <em>3.780</em>, <em>5.250</em>, <em>5.424</em>, <em>5.345</em>, <em>2.200</em>, <em>1.615</em>, <em>1.835</em>, <em>2.465</em>, <em>3.520</em>, <em>3.435</em>, <em>3.840</em>, <em>3.845</em>, <em>1.935</em>, <em>2.140</em>, <em>1.513</em>, <em>3.170</em>, <em>2.770</em>, <em>3.570</em> and <em>2.780</em></p>
+<p>The mean of wt is <em>3.217</em> while the standard deviation is: <em>0.9785</em>. The most frequent value in wt is 3.44, but let us check out the frequency table too:</p>
 <table>
 <col width="11%" />
 <col width="11%" />
@@ -1349,8 +1455,8 @@
 <p><a href="plots/short-code-long-report-6-hires.png"><img src="plots/short-code-long-report-6.png" /></a></p>
 <h3 id="qsec">qsec</h3>
 <p>We found the folloing values here:</p>
-<p><em>16.46</em>, <em>17.02</em>, <em>18.61</em>, <em>19.44</em>, <em>17.02</em>, <em>20.22</em>, <em>15.84</em>, <em>20</em>, <em>22.9</em>, <em>18.3</em>, <em>18.9</em>, <em>17.4</em>, <em>17.6</em>, <em>18</em>, <em>17.98</em>, <em>17.82</em>, <em>17.42</em>, <em>19.47</em>, <em>18.52</em>, <em>19.9</em>, <em>20.01</em>, <em>16.87</em>, <em>17.3</em>, <em>15.41</em>, <em>17.05</em>, <em>18.9</em>, <em>16.7</em>, <em>16.9</em>, <em>14.5</em>, <em>15.5</em>, <em>14.6</em> and <em>18.6</em></p>
-<p>The mean of qsec is <em>17.84875</em> while the standard deviation is: <em>1.78694323609684</em>. The most frequent value in qsec is 17.02, but let us check out the frequency table too:</p>
+<p><em>16.46</em>, <em>17.02</em>, <em>18.61</em>, <em>19.44</em>, <em>17.02</em>, <em>20.22</em>, <em>15.84</em>, <em>20.00</em>, <em>22.90</em>, <em>18.30</em>, <em>18.90</em>, <em>17.40</em>, <em>17.60</em>, <em>18.00</em>, <em>17.98</em>, <em>17.82</em>, <em>17.42</em>, <em>19.47</em>, <em>18.52</em>, <em>19.90</em>, <em>20.01</em>, <em>16.87</em>, <em>17.30</em>, <em>15.41</em>, <em>17.05</em>, <em>18.90</em>, <em>16.70</em>, <em>16.90</em>, <em>14.50</em>, <em>15.50</em>, <em>14.60</em> and <em>18.60</em></p>
+<p>The mean of qsec is <em>17.85</em> while the standard deviation is: <em>1.787</em>. The most frequent value in qsec is 17.02, but let us check out the frequency table too:</p>
 <table>
 <col width="9%" />
 <col width="9%" />
@@ -1496,7 +1602,7 @@
 <h3 id="vs">vs</h3>
 <p>We found the folloing values here:</p>
 <p><em>0</em>, <em>0</em>, <em>1</em>, <em>1</em>, <em>0</em>, <em>1</em>, <em>0</em>, <em>1</em>, <em>1</em>, <em>1</em>, <em>1</em>, <em>0</em>, <em>0</em>, <em>0</em>, <em>0</em>, <em>0</em>, <em>0</em>, <em>1</em>, <em>1</em>, <em>1</em>, <em>1</em>, <em>0</em>, <em>0</em>, <em>0</em>, <em>0</em>, <em>1</em>, <em>0</em>, <em>1</em>, <em>0</em>, <em>0</em>, <em>0</em> and <em>1</em></p>
-<p>The mean of vs is <em>0.4375</em> while the standard deviation is: <em>0.504016128774185</em>. The most frequent value in vs is 0, but let us check out the frequency table too:</p>
+<p>The mean of vs is <em>0.4375</em> while the standard deviation is: <em>0.504</em>. The most frequent value in vs is 0, but let us check out the frequency table too:</p>
 <table>
 <col width="5%" />
 <col width="5%" />
@@ -1518,7 +1624,7 @@
 <h3 id="am">am</h3>
 <p>We found the folloing values here:</p>
 <p><em>1</em>, <em>1</em>, <em>1</em>, <em>0</em>, <em>0</em>, <em>0</em>, <em>0</em>, <em>0</em>, <em>0</em>, <em>0</em>, <em>0</em>, <em>0</em>, <em>0</em>, <em>0</em>, <em>0</em>, <em>0</em>, <em>0</em>, <em>1</em>, <em>1</em>, <em>1</em>, <em>0</em>, <em>0</em>, <em>0</em>, <em>0</em>, <em>0</em>, <em>1</em>, <em>1</em>, <em>1</em>, <em>1</em>, <em>1</em>, <em>1</em> and <em>1</em></p>
-<p>The mean of am is <em>0.40625</em> while the standard deviation is: <em>0.498990917235846</em>. The most frequent value in am is 0, but let us check out the frequency table too:</p>
+<p>The mean of am is <em>0.4062</em> while the standard deviation is: <em>0.499</em>. The most frequent value in am is 0, but let us check out the frequency table too:</p>
 <table>
 <col width="5%" />
 <col width="5%" />
@@ -1540,7 +1646,7 @@
 <h3 id="gear">gear</h3>
 <p>We found the folloing values here:</p>
 <p><em>4</em>, <em>4</em>, <em>4</em>, <em>3</em>, <em>3</em>, <em>3</em>, <em>3</em>, <em>4</em>, <em>4</em>, <em>4</em>, <em>4</em>, <em>3</em>, <em>3</em>, <em>3</em>, <em>3</em>, <em>3</em>, <em>3</em>, <em>4</em>, <em>4</em>, <em>4</em>, <em>3</em>, <em>3</em>, <em>3</em>, <em>3</em>, <em>3</em>, <em>4</em>, <em>5</em>, <em>5</em>, <em>5</em>, <em>5</em>, <em>5</em> and <em>4</em></p>
-<p>The mean of gear is <em>3.6875</em> while the standard deviation is: <em>0.737804065256947</em>. The most frequent value in gear is 3, but let us check out the frequency table too:</p>
+<p>The mean of gear is <em>3.688</em> while the standard deviation is: <em>0.7378</em>. The most frequent value in gear is 3, but let us check out the frequency table too:</p>
 <table>
 <col width="5%" />
 <col width="5%" />
@@ -1565,7 +1671,7 @@
 <h3 id="carb">carb</h3>
 <p>We found the folloing values here:</p>
 <p><em>4</em>, <em>4</em>, <em>1</em>, <em>1</em>, <em>2</em>, <em>1</em>, <em>4</em>, <em>2</em>, <em>2</em>, <em>4</em>, <em>4</em>, <em>3</em>, <em>3</em>, <em>3</em>, <em>4</em>, <em>4</em>, <em>4</em>, <em>1</em>, <em>2</em>, <em>1</em>, <em>1</em>, <em>2</em>, <em>2</em>, <em>4</em>, <em>2</em>, <em>1</em>, <em>2</em>, <em>2</em>, <em>4</em>, <em>6</em>, <em>8</em> and <em>2</em></p>
-<p>The mean of carb is <em>2.8125</em> while the standard deviation is: <em>1.61519997763185</em>. The most frequent value in carb is 2, but let us check out the frequency table too:</p>
+<p>The mean of carb is <em>2.812</em> while the standard deviation is: <em>1.615</em>. The most frequent value in carb is 2, but let us check out the frequency table too:</p>
 <table>
 <col width="5%" />
 <col width="5%" />
@@ -1599,14 +1705,12 @@
 <h1 id="correlation">Correlation</h1>
 <p>And here goes a correlation table:</p>
 <table>
-<col width="6%" />
-<col width="9%" />
-<col width="9%" />
-<col width="9%" />
-<col width="9%" />
-<col width="9%" />
-<col width="9%" />
-<col width="9%" />
+<col width="12%" />
+<col width="12%" />
+<col width="12%" />
+<col width="12%" />
+<col width="12%" />
+<col width="12%" />
 <thead>
 <tr class="header">
 <th align="left"></th>
@@ -1615,215 +1719,260 @@
 <th align="left">disp</th>
 <th align="left">hp</th>
 <th align="left">drat</th>
-<th align="left">wt</th>
-<th align="left">qsec</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
-<td align="left">mpg</td>
-<td align="left">1.000</td>
-<td align="left">-0.852</td>
-<td align="left">-0.848</td>
-<td align="left">-0.776</td>
-<td align="left">0.681</td>
-<td align="left">-0.868</td>
-<td align="left">0.419</td>
+<td align="left"><strong>mpg</strong></td>
+<td align="left">1.00000</td>
+<td align="left">-0.85216</td>
+<td align="left">-0.84755</td>
+<td align="left">-0.77617</td>
+<td align="left">0.68117</td>
 </tr>
 <tr class="even">
-<td align="left">cyl</td>
-<td align="left">-0.852</td>
-<td align="left">1.000</td>
-<td align="left">0.902</td>
-<td align="left">0.832</td>
-<td align="left">-0.700</td>
-<td align="left">0.782</td>
-<td align="left">-0.591</td>
+<td align="left"><strong>cyl</strong></td>
+<td align="left">-0.85216</td>
+<td align="left">1.00000</td>
+<td align="left">0.90203</td>
+<td align="left">0.83245</td>
+<td align="left">-0.69994</td>
 </tr>
 <tr class="odd">
-<td align="left">disp</td>
-<td align="left">-0.848</td>
-<td align="left">0.902</td>
-<td align="left">1.000</td>
-<td align="left">0.791</td>
-<td align="left">-0.710</td>
-<td align="left">0.888</td>
-<td align="left">-0.434</td>
+<td align="left"><strong>disp</strong></td>
+<td align="left">-0.84755</td>
+<td align="left">0.90203</td>
+<td align="left">1.00000</td>
+<td align="left">0.79095</td>
+<td align="left">-0.71021</td>
 </tr>
 <tr class="even">
-<td align="left">hp</td>
-<td align="left">-0.776</td>
-<td align="left">0.832</td>
-<td align="left">0.791</td>
-<td align="left">1.000</td>
-<td align="left">-0.449</td>
-<td align="left">0.659</td>
-<td align="left">-0.708</td>
+<td align="left"><strong>hp</strong></td>
+<td align="left">-0.77617</td>
+<td align="left">0.83245</td>
+<td align="left">0.79095</td>
+<td align="left">1.00000</td>
+<td align="left">-0.44876</td>
 </tr>
 <tr class="odd">
-<td align="left">drat</td>
-<td align="left">0.681</td>
-<td align="left">-0.700</td>
-<td align="left">-0.710</td>
-<td align="left">-0.449</td>
-<td align="left">1.000</td>
-<td align="left">-0.712</td>
-<td align="left">0.091</td>
+<td align="left"><strong>drat</strong></td>
+<td align="left">0.68117</td>
+<td align="left">-0.69994</td>
+<td align="left">-0.71021</td>
+<td align="left">-0.44876</td>
+<td align="left">1.00000</td>
 </tr>
 <tr class="even">
-<td align="left">wt</td>
-<td align="left">-0.868</td>
-<td align="left">0.782</td>
-<td align="left">0.888</td>
-<td align="left">0.659</td>
-<td align="left">-0.712</td>
-<td align="left">1.000</td>
-<td align="left">-0.175</td>
+<td align="left"><strong>wt</strong></td>
+<td align="left">-0.86766</td>
+<td align="left">0.78250</td>
+<td align="left">0.88798</td>
+<td align="left">0.65875</td>
+<td align="left">-0.71244</td>
 </tr>
 <tr class="odd">
-<td align="left">qsec</td>
-<td align="left">0.419</td>
-<td align="left">-0.591</td>
-<td align="left">-0.434</td>
-<td align="left">-0.708</td>
-<td align="left">0.091</td>
-<td align="left">-0.175</td>
-<td align="left">1.000</td>
+<td align="left"><strong>qsec</strong></td>
+<td align="left">0.41868</td>
+<td align="left">-0.59124</td>
+<td align="left">-0.43370</td>
+<td align="left">-0.70822</td>
+<td align="left">0.09120</td>
 </tr>
 <tr class="even">
-<td align="left">vs</td>
-<td align="left">0.664</td>
-<td align="left">-0.811</td>
-<td align="left">-0.710</td>
-<td align="left">-0.723</td>
-<td align="left">0.440</td>
-<td align="left">-0.555</td>
-<td align="left">0.745</td>
+<td align="left"><strong>vs</strong></td>
+<td align="left">0.66404</td>
+<td align="left">-0.81081</td>
+<td align="left">-0.71042</td>
+<td align="left">-0.72310</td>
+<td align="left">0.44028</td>
 </tr>
 <tr class="odd">
-<td align="left">am</td>
-<td align="left">0.600</td>
-<td align="left">-0.523</td>
-<td align="left">-0.591</td>
-<td align="left">-0.243</td>
-<td align="left">0.713</td>
-<td align="left">-0.692</td>
-<td align="left">-0.230</td>
+<td align="left"><strong>am</strong></td>
+<td align="left">0.59983</td>
+<td align="left">-0.52261</td>
+<td align="left">-0.59123</td>
+<td align="left">-0.24320</td>
+<td align="left">0.71271</td>
 </tr>
 <tr class="even">
-<td align="left">gear</td>
-<td align="left">0.480</td>
-<td align="left">-0.493</td>
-<td align="left">-0.556</td>
-<td align="left">-0.126</td>
-<td align="left">0.700</td>
-<td align="left">-0.583</td>
-<td align="left">-0.213</td>
+<td align="left"><strong>gear</strong></td>
+<td align="left">0.48028</td>
+<td align="left">-0.49269</td>
+<td align="left">-0.55557</td>
+<td align="left">-0.12570</td>
+<td align="left">0.69961</td>
 </tr>
 <tr class="odd">
-<td align="left">carb</td>
-<td align="left">-0.551</td>
-<td align="left">0.527</td>
-<td align="left">0.395</td>
-<td align="left">0.750</td>
-<td align="left">-0.091</td>
-<td align="left">0.428</td>
-<td align="left">-0.656</td>
+<td align="left"><strong>carb</strong></td>
+<td align="left">-0.55093</td>
+<td align="left">0.52699</td>
+<td align="left">0.39498</td>
+<td align="left">0.74981</td>
+<td align="left">-0.09079</td>
 </tr>
 </tbody>
 </table>
 <table>
-<col width="6%" />
-<col width="9%" />
-<col width="9%" />
-<col width="9%" />
-<col width="9%" />
+<col width="12%" />
+<col width="12%" />
+<col width="12%" />
+<col width="12%" />
+<col width="12%" />
 <thead>
 <tr class="header">
 <th align="left"></th>
+<th align="left">wt</th>
+<th align="left">qsec</th>
 <th align="left">vs</th>
 <th align="left">am</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left"><strong>mpg</strong></td>
+<td align="left">-0.86766</td>
+<td align="left">0.41868</td>
+<td align="left">0.66404</td>
+<td align="left">0.59983</td>
+</tr>
+<tr class="even">
+<td align="left"><strong>cyl</strong></td>
+<td align="left">0.78250</td>
+<td align="left">-0.59124</td>
+<td align="left">-0.81081</td>
+<td align="left">-0.52261</td>
+</tr>
+<tr class="odd">
+<td align="left"><strong>disp</strong></td>
+<td align="left">0.88798</td>
+<td align="left">-0.43370</td>
+<td align="left">-0.71042</td>
+<td align="left">-0.59123</td>
+</tr>
+<tr class="even">
+<td align="left"><strong>hp</strong></td>
+<td align="left">0.65875</td>
+<td align="left">-0.70822</td>
+<td align="left">-0.72310</td>
+<td align="left">-0.24320</td>
+</tr>
+<tr class="odd">
+<td align="left"><strong>drat</strong></td>
+<td align="left">-0.71244</td>
+<td align="left">0.09120</td>
+<td align="left">0.44028</td>
+<td align="left">0.71271</td>
+</tr>
+<tr class="even">
+<td align="left"><strong>wt</strong></td>
+<td align="left">1.00000</td>
+<td align="left">-0.17472</td>
+<td align="left">-0.55492</td>
+<td align="left">-0.69250</td>
+</tr>
+<tr class="odd">
+<td align="left"><strong>qsec</strong></td>
+<td align="left">-0.17472</td>
+<td align="left">1.00000</td>
+<td align="left">0.74454</td>
+<td align="left">-0.22986</td>
+</tr>
+<tr class="even">
+<td align="left"><strong>vs</strong></td>
+<td align="left">-0.55492</td>
+<td align="left">0.74454</td>
+<td align="left">1.00000</td>
+<td align="left">0.16835</td>
+</tr>
+<tr class="odd">
+<td align="left"><strong>am</strong></td>
+<td align="left">-0.69250</td>
+<td align="left">-0.22986</td>
+<td align="left">0.16835</td>
+<td align="left">1.00000</td>
+</tr>
+<tr class="even">
+<td align="left"><strong>gear</strong></td>
+<td align="left">-0.58329</td>
+<td align="left">-0.21268</td>
+<td align="left">0.20602</td>
+<td align="left">0.79406</td>
+</tr>
+<tr class="odd">
+<td align="left"><strong>carb</strong></td>
+<td align="left">0.42761</td>
+<td align="left">-0.65625</td>
+<td align="left">-0.56961</td>
+<td align="left">0.05753</td>
+</tr>
+</tbody>
+</table>
+<table>
+<col width="12%" />
+<col width="12%" />
+<col width="12%" />
+<thead>
+<tr class="header">
+<th align="left"></th>
 <th align="left">gear</th>
 <th align="left">carb</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
-<td align="left">mpg</td>
-<td align="left">0.664</td>
-<td align="left">0.600</td>
-<td align="left">0.480</td>
-<td align="left">-0.551</td>
+<td align="left"><strong>mpg</strong></td>
+<td align="left">0.48028</td>
+<td align="left">-0.55093</td>
 </tr>
 <tr class="even">
-<td align="left">cyl</td>
-<td align="left">-0.811</td>
-<td align="left">-0.523</td>
-<td align="left">-0.493</td>
-<td align="left">0.527</td>
+<td align="left"><strong>cyl</strong></td>
+<td align="left">-0.49269</td>
+<td align="left">0.52699</td>
 </tr>
 <tr class="odd">
-<td align="left">disp</td>
-<td align="left">-0.710</td>
-<td align="left">-0.591</td>
-<td align="left">-0.556</td>
-<td align="left">0.395</td>
+<td align="left"><strong>disp</strong></td>
+<td align="left">-0.55557</td>
+<td align="left">0.39498</td>
 </tr>
 <tr class="even">
-<td align="left">hp</td>
-<td align="left">-0.723</td>
-<td align="left">-0.243</td>
-<td align="left">-0.126</td>
-<td align="left">0.750</td>
+<td align="left"><strong>hp</strong></td>
+<td align="left">-0.12570</td>
+<td align="left">0.74981</td>
 </tr>
 <tr class="odd">
-<td align="left">drat</td>
-<td align="left">0.440</td>
-<td align="left">0.713</td>
-<td align="left">0.700</td>
-<td align="left">-0.091</td>
+<td align="left"><strong>drat</strong></td>
+<td align="left">0.69961</td>
+<td align="left">-0.09079</td>
 </tr>
 <tr class="even">
-<td align="left">wt</td>
-<td align="left">-0.555</td>
-<td align="left">-0.692</td>
-<td align="left">-0.583</td>
-<td align="left">0.428</td>
+<td align="left"><strong>wt</strong></td>
+<td align="left">-0.58329</td>
+<td align="left">0.42761</td>
 </tr>
 <tr class="odd">
-<td align="left">qsec</td>
-<td align="left">0.745</td>
-<td align="left">-0.230</td>
-<td align="left">-0.213</td>
-<td align="left">-0.656</td>
+<td align="left"><strong>qsec</strong></td>
+<td align="left">-0.21268</td>
+<td align="left">-0.65625</td>
 </tr>
 <tr class="even">
-<td align="left">vs</td>
-<td align="left">1.000</td>
-<td align="left">0.168</td>
-<td align="left">0.206</td>
-<td align="left">-0.570</td>
+<td align="left"><strong>vs</strong></td>
+<td align="left">0.20602</td>
+<td align="left">-0.56961</td>
 </tr>
 <tr class="odd">
-<td align="left">am</td>
-<td align="left">0.168</td>
-<td align="left">1.000</td>
-<td align="left">0.794</td>
-<td align="left">0.058</td>
+<td align="left"><strong>am</strong></td>
+<td align="left">0.79406</td>
+<td align="left">0.05753</td>
 </tr>
 <tr class="even">
-<td align="left">gear</td>
-<td align="left">0.206</td>
-<td align="left">0.794</td>
-<td align="left">1.000</td>
-<td align="left">0.274</td>
+<td align="left"><strong>gear</strong></td>
+<td align="left">1.00000</td>
+<td align="left">0.27407</td>
 </tr>
 <tr class="odd">
-<td align="left">carb</td>
-<td align="left">-0.570</td>
-<td align="left">0.058</td>
-<td align="left">0.274</td>
-<td align="left">1.000</td>
+<td align="left"><strong>carb</strong></td>
+<td align="left">0.27407</td>
+<td align="left">1.00000</td>
 </tr>
 </tbody>
 </table>
@@ -1837,11 +1986,11 @@
 <p>A simple linear model: <code>mtcars$wt ~ mtcars$mpg</code></p>
 <table>
 <caption>Fitting linear model: mtcars$wt ~ Independent</caption>
-<col width="16%" />
+<col width="22%" />
 <col width="15%" />
 <col width="18%" />
-<col width="13%" />
-<col width="13%" />
+<col width="15%" />
+<col width="15%" />
 <thead>
 <tr class="header">
 <th align="left"></th>
@@ -1853,18 +2002,18 @@
 </thead>
 <tbody>
 <tr class="odd">
-<td align="left">(Intercept)</td>
-<td align="center">6.0e+00</td>
-<td align="center">3.1e-01</td>
-<td align="center">2.0e+01</td>
-<td align="center">1.2e-18</td>
+<td align="left"><strong>(Intercept)</strong></td>
+<td align="center">6.047e+00</td>
+<td align="center">3.087e-01</td>
+<td align="center">1.959e+01</td>
+<td align="center">1.204e-18</td>
 </tr>
 <tr class="even">
-<td align="left">Independent</td>
-<td align="center">-1.4e-01</td>
-<td align="center">1.5e-02</td>
-<td align="center">-9.6e+00</td>
-<td align="center">1.3e-10</td>
+<td align="left"><strong>Independent</strong></td>
+<td align="center">-1.409e-01</td>
+<td align="center">1.474e-02</td>
+<td align="center">-9.559e+00</td>
+<td align="center">1.294e-10</td>
 </tr>
 </tbody>
 </table>
@@ -1872,7 +2021,7 @@
 <p>A simple linear model: <code>mtcars$wt ~ mtcars$cyl</code></p>
 <table>
 <caption>Fitting linear model: mtcars$wt ~ Independent</caption>
-<col width="16%" />
+<col width="22%" />
 <col width="15%" />
 <col width="18%" />
 <col width="13%" />
@@ -1888,18 +2037,18 @@
 </thead>
 <tbody>
 <tr class="odd">
-<td align="left">(Intercept)</td>
-<td align="center">5.6e-01</td>
-<td align="center">4.0e-01</td>
-<td align="center">1.4e+00</td>
-<td align="center">1.7e-01</td>
+<td align="left"><strong>(Intercept)</strong></td>
+<td align="center">5.646e-01</td>
+<td align="center">4.006e-01</td>
+<td align="center">1.409e+00</td>
+<td align="center">1.690e-01</td>
 </tr>
 <tr class="even">
-<td align="left">Independent</td>
-<td align="center">4.3e-01</td>
-<td align="center">6.2e-02</td>
-<td align="center">6.9e+00</td>
-<td align="center">1.2e-07</td>
+<td align="left"><strong>Independent</strong></td>
+<td align="center">4.287e-01</td>
+<td align="center">6.228e-02</td>
+<td align="center">6.883e+00</td>
+<td align="center">1.218e-07</td>
 </tr>
 </tbody>
 </table>
@@ -1907,7 +2056,7 @@
 <p>A simple linear model: <code>mtcars$wt ~ mtcars$disp</code></p>
 <table>
 <caption>Fitting linear model: mtcars$wt ~ Independent</caption>
-<col width="16%" />
+<col width="22%" />
 <col width="15%" />
 <col width="18%" />
 <col width="13%" />
@@ -1923,18 +2072,18 @@
 </thead>
 <tbody>
 <tr class="odd">
-<td align="left">(Intercept)</td>
-<td align="center">1.6e+00</td>
-<td align="center">1.7e-01</td>
-<td align="center">9.2e+00</td>
-<td align="center">2.7e-10</td>
+<td align="left"><strong>(Intercept)</strong></td>
+<td align="center">1.600e+00</td>
+<td align="center">1.730e-01</td>
+<td align="center">9.248e+00</td>
+<td align="center">2.738e-10</td>
 </tr>
 <tr class="even">
-<td align="left">Independent</td>
-<td align="center">7.0e-03</td>
-<td align="center">6.6e-04</td>
-<td align="center">1.1e+01</td>
-<td align="center">1.2e-11</td>
+<td align="left"><strong>Independent</strong></td>
+<td align="center">7.010e-03</td>
+<td align="center">6.629e-04</td>
+<td align="center">1.058e+01</td>
+<td align="center">1.222e-11</td>
 </tr>
 </tbody>
 </table>
@@ -1942,7 +2091,7 @@
 <p>A simple linear model: <code>mtcars$wt ~ mtcars$hp</code></p>
 <table>
 <caption>Fitting linear model: mtcars$wt ~ Independent</caption>
-<col width="16%" />
+<col width="22%" />
 <col width="15%" />
 <col width="18%" />
 <col width="13%" />
@@ -1958,18 +2107,18 @@
 </thead>
 <tbody>
 <tr class="odd">
-<td align="left">(Intercept)</td>
-<td align="center">1.8e+00</td>
-<td align="center">3.2e-01</td>
-<td align="center">5.8e+00</td>
-<td align="center">2.4e-06</td>
+<td align="left"><strong>(Intercept)</strong></td>
+<td align="center">1.838e+00</td>
+<td align="center">3.165e-01</td>
+<td align="center">5.808e+00</td>
+<td align="center">2.389e-06</td>
 </tr>
 <tr class="even">
-<td align="left">Independent</td>
-<td align="center">9.4e-03</td>
-<td align="center">2.0e-03</td>
-<td align="center">4.8e+00</td>
-<td align="center">4.1e-05</td>
+<td align="left"><strong>Independent</strong></td>
+<td align="center">9.401e-03</td>
+<td align="center">1.960e-03</td>
+<td align="center">4.796e+00</td>
+<td align="center">4.146e-05</td>
 </tr>
 </tbody>
 </table>
@@ -1977,11 +2126,11 @@
 <p>A simple linear model: <code>mtcars$wt ~ mtcars$drat</code></p>
 <table>
 <caption>Fitting linear model: mtcars$wt ~ Independent</caption>
-<col width="16%" />
+<col width="22%" />
 <col width="15%" />
 <col width="18%" />
-<col width="13%" />
-<col width="13%" />
+<col width="15%" />
+<col width="15%" />
 <thead>
 <tr class="header">
 <th align="left"></th>
@@ -1993,18 +2142,18 @@
 </thead>
 <tbody>
 <tr class="odd">
-<td align="left">(Intercept)</td>
-<td align="center">7.9e+00</td>
-<td align="center">8.5e-01</td>
-<td align="center">9.3e+00</td>
-<td align="center">2.5e-10</td>
+<td align="left"><strong>(Intercept)</strong></td>
+<td align="center">7.906e+00</td>
+<td align="center">8.522e-01</td>
+<td align="center">9.277e+00</td>
+<td align="center">2.547e-10</td>
 </tr>
 <tr class="even">
-<td align="left">Independent</td>
-<td align="center">-1.3e+00</td>
-<td align="center">2.3e-01</td>
-<td align="center">-5.6e+00</td>
-<td align="center">4.8e-06</td>
+<td align="left"><strong>Independent</strong></td>
+<td align="center">-1.304e+00</td>
+<td align="center">2.345e-01</td>
+<td align="center">-5.561e+00</td>
+<td align="center">4.784e-06</td>
 </tr>
 </tbody>
 </table>
@@ -2012,7 +2161,7 @@
 <p>A simple linear model: <code>mtcars$wt ~ mtcars$qsec</code></p>
 <table>
 <caption>Fitting linear model: mtcars$wt ~ Independent</caption>
-<col width="16%" />
+<col width="22%" />
 <col width="15%" />
 <col width="18%" />
 <col width="13%" />
@@ -2028,18 +2177,18 @@
 </thead>
 <tbody>
 <tr class="odd">
-<td align="left">(Intercept)</td>
-<td align="center">4.9248</td>
-<td align="center">1.7654</td>
-<td align="center">2.7896</td>
-<td align="center">0.0091</td>
+<td align="left"><strong>(Intercept)</strong></td>
+<td align="center">4.924792</td>
+<td align="center">1.765407</td>
+<td align="center">2.789607</td>
+<td align="center">0.009081</td>
 </tr>
 <tr class="even">
-<td align="left">Independent</td>
-<td align="center">-0.0957</td>
-<td align="center">0.0984</td>
-<td align="center">-0.9719</td>
-<td align="center">0.3389</td>
+<td align="left"><strong>Independent</strong></td>
+<td align="center">-0.095667</td>
+<td align="center">0.098433</td>
+<td align="center">-0.971907</td>
+<td align="center">0.338868</td>
 </tr>
 </tbody>
 </table>
@@ -2047,11 +2196,11 @@
 <p>A simple linear model: <code>mtcars$wt ~ mtcars$vs</code></p>
 <table>
 <caption>Fitting linear model: mtcars$wt ~ Independent</caption>
-<col width="16%" />
+<col width="22%" />
 <col width="15%" />
 <col width="18%" />
-<col width="13%" />
-<col width="13%" />
+<col width="15%" />
+<col width="15%" />
 <thead>
 <tr class="header">
 <th align="left"></th>
@@ -2063,18 +2212,18 @@
 </thead>
 <tbody>
 <tr class="odd">
-<td align="left">(Intercept)</td>
-<td align="center">3.7e+00</td>
-<td align="center">2.0e-01</td>
-<td align="center">1.9e+01</td>
-<td align="center">3.2e-18</td>
+<td align="left"><strong>(Intercept)</strong></td>
+<td align="center">3.689e+00</td>
+<td align="center">1.950e-01</td>
+<td align="center">1.891e+01</td>
+<td align="center">3.203e-18</td>
 </tr>
 <tr class="even">
-<td align="left">Independent</td>
-<td align="center">-1.1e+00</td>
-<td align="center">2.9e-01</td>
-<td align="center">-3.7e+00</td>
-<td align="center">9.8e-04</td>
+<td align="left"><strong>Independent</strong></td>
+<td align="center">-1.077e+00</td>
+<td align="center">2.949e-01</td>
+<td align="center">-3.654e+00</td>
+<td align="center">9.798e-04</td>
 </tr>
 </tbody>
 </table>
@@ -2082,11 +2231,11 @@
 <p>A simple linear model: <code>mtcars$wt ~ mtcars$am</code></p>
 <table>
 <caption>Fitting linear model: mtcars$wt ~ Independent</caption>
-<col width="16%" />
+<col width="22%" />
 <col width="15%" />
 <col width="18%" />
-<col width="13%" />
-<col width="13%" />
+<col width="15%" />
+<col width="15%" />
 <thead>
 <tr class="header">
 <th align="left"></th>
@@ -2098,18 +2247,18 @@
 </thead>
 <tbody>
 <tr class="odd">
-<td align="left">(Intercept)</td>
-<td align="center">3.8e+00</td>
-<td align="center">1.6e-01</td>
-<td align="center">2.3e+01</td>
-<td align="center">1.5e-20</td>
+<td align="left"><strong>(Intercept)</strong></td>
+<td align="center">3.769e+00</td>
+<td align="center">1.646e-01</td>
+<td align="center">2.289e+01</td>
+<td align="center">1.490e-20</td>
 </tr>
 <tr class="even">
-<td align="left">Independent</td>
-<td align="center">-1.4e+00</td>
-<td align="center">2.6e-01</td>
-<td align="center">-5.3e+00</td>
-<td align="center">1.1e-05</td>
+<td align="left"><strong>Independent</strong></td>
+<td align="center">-1.358e+00</td>
+<td align="center">2.583e-01</td>
+<td align="center">-5.258e+00</td>
+<td align="center">1.125e-05</td>
 </tr>
 </tbody>
 </table>
@@ -2117,11 +2266,11 @@
 <p>A simple linear model: <code>mtcars$wt ~ mtcars$gear</code></p>
 <table>
 <caption>Fitting linear model: mtcars$wt ~ Independent</caption>
-<col width="16%" />
+<col width="22%" />
 <col width="15%" />
 <col width="18%" />
-<col width="13%" />
-<col width="13%" />
+<col width="15%" />
+<col width="15%" />
 <thead>
 <tr class="header">
 <th align="left"></th>
@@ -2133,18 +2282,18 @@
 </thead>
 <tbody>
 <tr class="odd">
-<td align="left">(Intercept)</td>
-<td align="center">6.1e+00</td>
-<td align="center">7.4e-01</td>
-<td align="center">8.2e+00</td>
-<td align="center">3.6e-09</td>
+<td align="left"><strong>(Intercept)</strong></td>
+<td align="center">6.070e+00</td>
+<td align="center">7.392e-01</td>
+<td align="center">8.212e+00</td>
+<td align="center">3.632e-09</td>
 </tr>
 <tr class="even">
-<td align="left">Independent</td>
-<td align="center">-7.7e-01</td>
-<td align="center">2.0e-01</td>
-<td align="center">-3.9e+00</td>
-<td align="center">4.6e-04</td>
+<td align="left"><strong>Independent</strong></td>
+<td align="center">-7.735e-01</td>
+<td align="center">1.967e-01</td>
+<td align="center">-3.933e+00</td>
+<td align="center">4.587e-04</td>
 </tr>
 </tbody>
 </table>
@@ -2152,7 +2301,7 @@
 <p>A simple linear model: <code>mtcars$wt ~ mtcars$carb</code></p>
 <table>
 <caption>Fitting linear model: mtcars$wt ~ Independent</caption>
-<col width="16%" />
+<col width="22%" />
 <col width="15%" />
 <col width="18%" />
 <col width="13%" />
@@ -2168,23 +2317,23 @@
 </thead>
 <tbody>
 <tr class="odd">
-<td align="left">(Intercept)</td>
-<td align="center">2.5e+00</td>
-<td align="center">3.2e-01</td>
-<td align="center">7.7e+00</td>
-<td align="center">1.4e-08</td>
+<td align="left"><strong>(Intercept)</strong></td>
+<td align="center">2.489e+00</td>
+<td align="center">3.230e-01</td>
+<td align="center">7.705e+00</td>
+<td align="center">1.353e-08</td>
 </tr>
 <tr class="even">
-<td align="left">Independent</td>
-<td align="center">2.6e-01</td>
-<td align="center">1.0e-01</td>
-<td align="center">2.6e+00</td>
-<td align="center">1.5e-02</td>
+<td align="left"><strong>Independent</strong></td>
+<td align="center">2.590e-01</td>
+<td align="center">9.998e-02</td>
+<td align="center">2.591e+00</td>
+<td align="center">1.464e-02</td>
 </tr>
 </tbody>
 </table>
 <hr />
-<p>This report was generated with <a href="http://www.r-project.org/">R</a> (2.15.0) and <a href="https://github.com/daroczig/pander">pander</a> (0.1) on x86_64-unknown-linux-gnu platform.</p>
+<p>This report was generated with <a href="http://www.r-project.org/">R</a> (2.15.1) and <a href="https://github.com/daroczig/pander">pander</a> (0.1) on x86_64-unknown-linux-gnu platform.</p>
 <p align="center">
   Design: <a href="http://rapport-package.info/"><i>rapport</i> Development Team</a> &copy; 2012 | Backend: <a href="https://github.com/daroczig/pander">pander</a> | License: <a href="http://www.gnu.org/licenses/agpl.html" target="_blank">AGPL3</a> | Styled with <a href="http://www.getskeleton.com/" target="_blank">skeleton</a>
 </p>

@@ -48,7 +48,7 @@
 </ul>
 <p>A third field could be there too: date. For details, please check out <a href="http://johnmacfarlane.net/pandoc/README.html#title-block">Pandoc's homepage</a> or just use <code>pandoc.title</code> function of this package.</p>
 <p>As you can see writing and formatting paragraphs cannot be easier :)</p>
-<p>But what about <a href="http://www.r-project.org/">R</a>? Let us return pi: <em>3.1</em></p>
+<p>But what about <a href="http://www.r-project.org/">R</a>? Let us return pi: <em>3.142</em></p>
 <h1 id="r-objects">R objects</h1>
 <p><code>Pander.brew</code> would transform any returned R object to Pandoc's markdown in each code block.</p>
 <p>For example <code>mtcars</code>'s first 5 cases look like:</p>
@@ -59,7 +59,7 @@
 <col width="9%" />
 <col width="6%" />
 <col width="9%" />
-<col width="5%" />
+<col width="9%" />
 <thead>
 <tr class="header">
 <th align="left"></th>
@@ -74,48 +74,48 @@
 <tbody>
 <tr class="odd">
 <td align="left"><strong>Mazda RX4</strong></td>
-<td align="left">21</td>
+<td align="left">21.0</td>
 <td align="left">6</td>
 <td align="left">160</td>
 <td align="left">110</td>
-<td align="left">3.9</td>
-<td align="left">2.6</td>
+<td align="left">3.90</td>
+<td align="left">2.620</td>
 </tr>
 <tr class="even">
 <td align="left"><strong>Mazda RX4 Wag</strong></td>
-<td align="left">21</td>
+<td align="left">21.0</td>
 <td align="left">6</td>
 <td align="left">160</td>
 <td align="left">110</td>
-<td align="left">3.9</td>
-<td align="left">2.9</td>
+<td align="left">3.90</td>
+<td align="left">2.875</td>
 </tr>
 <tr class="odd">
 <td align="left"><strong>Datsun 710</strong></td>
-<td align="left">23</td>
+<td align="left">22.8</td>
 <td align="left">4</td>
 <td align="left">108</td>
 <td align="left">93</td>
-<td align="left">3.9</td>
-<td align="left">2.3</td>
+<td align="left">3.85</td>
+<td align="left">2.320</td>
 </tr>
 <tr class="even">
 <td align="left"><strong>Hornet 4 Drive</strong></td>
-<td align="left">21</td>
+<td align="left">21.4</td>
 <td align="left">6</td>
 <td align="left">258</td>
 <td align="left">110</td>
-<td align="left">3.1</td>
-<td align="left">3.2</td>
+<td align="left">3.08</td>
+<td align="left">3.215</td>
 </tr>
 <tr class="odd">
 <td align="left"><strong>Hornet Sportabout</strong></td>
-<td align="left">19</td>
+<td align="left">18.7</td>
 <td align="left">8</td>
 <td align="left">360</td>
 <td align="left">175</td>
-<td align="left">3.1</td>
-<td align="left">3.4</td>
+<td align="left">3.15</td>
+<td align="left">3.440</td>
 </tr>
 </tbody>
 </table>
@@ -139,7 +139,7 @@
 <tbody>
 <tr class="odd">
 <td align="left"><strong>Mazda RX4</strong></td>
-<td align="left">16</td>
+<td align="left">16.46</td>
 <td align="left">0</td>
 <td align="left">1</td>
 <td align="left">4</td>
@@ -147,7 +147,7 @@
 </tr>
 <tr class="even">
 <td align="left"><strong>Mazda RX4 Wag</strong></td>
-<td align="left">17</td>
+<td align="left">17.02</td>
 <td align="left">0</td>
 <td align="left">1</td>
 <td align="left">4</td>
@@ -155,7 +155,7 @@
 </tr>
 <tr class="odd">
 <td align="left"><strong>Datsun 710</strong></td>
-<td align="left">19</td>
+<td align="left">18.61</td>
 <td align="left">1</td>
 <td align="left">1</td>
 <td align="left">4</td>
@@ -163,7 +163,7 @@
 </tr>
 <tr class="even">
 <td align="left"><strong>Hornet 4 Drive</strong></td>
-<td align="left">19</td>
+<td align="left">19.44</td>
 <td align="left">1</td>
 <td align="left">0</td>
 <td align="left">3</td>
@@ -171,7 +171,7 @@
 </tr>
 <tr class="odd">
 <td align="left"><strong>Hornet Sportabout</strong></td>
-<td align="left">17</td>
+<td align="left">17.02</td>
 <td align="left">0</td>
 <td align="left">0</td>
 <td align="left">3</td>
@@ -195,18 +195,18 @@
 </thead>
 <tbody>
 <tr class="odd">
-<td align="center">21</td>
+<td align="center">20.94</td>
 <td align="center">2</td>
-<td align="center">2.8e-05</td>
+<td align="center">2.831e-05</td>
 </tr>
 </tbody>
 </table>
 <p><strong>WARNING</strong><sup><a href="#fn1" class="footnoteRef" id="fnref1">1</a></sup></p>
 <h2 id="returning-plot">Returning plot</h2>
 <p>Plots are automatically grabbed between <code>brew</code> tags:</p>
-<p><a href="plots/minimal-3-hires.png"><img src="plots/minimal-3.png" /></a></p>
+<p><a href="plots/minimal-1-hires.png"><img src="plots/minimal-1.png" /></a></p>
 <p>And adding a caption is easy:</p>
-<p><a href="plots/minimal-4-hires.png"><img src="plots/minimal-4.png" alt="My second pander plot in red" /></a></p>
+<p><a href="plots/minimal-2-hires.png"><img src="plots/minimal-2.png" alt="My second pander plot in red" /></a></p>
 <h1 id="captions">Captions</h1>
 <p>Just like with tables:</p>
 <table>
@@ -228,17 +228,17 @@
 <tbody>
 <tr class="odd">
 <td align="left"><strong>Alabama</strong></td>
-<td align="left">13</td>
+<td align="left">13.2</td>
 <td align="left">236</td>
 <td align="left">58</td>
-<td align="left">21</td>
+<td align="left">21.2</td>
 </tr>
 <tr class="even">
 <td align="left"><strong>Alaska</strong></td>
-<td align="left">10</td>
+<td align="left">10.0</td>
 <td align="left">263</td>
 <td align="left">48</td>
-<td align="left">44</td>
+<td align="left">44.5</td>
 </tr>
 </tbody>
 </table>
@@ -250,7 +250,7 @@
 <!-- end of list -->
 
 <ul>
-<li><em>3.1</em></li>
+<li><em>3.142</em></li>
 </ul>
 <!-- end of list -->
 
@@ -262,7 +262,7 @@
 <h1 id="it-happens">It happens</h1>
 <p><strong>ERROR</strong><sup><a href="#fn2" class="footnoteRef" id="fnref2">2</a></sup></p>
 <hr />
-<p>This report was generated with <a href="http://www.r-project.org/">R</a> (2.15.0) and <a href="https://github.com/daroczig/pander">pander</a> (0.1) on x86_64-unknown-linux-gnu platform.</p>
+<p>This report was generated with <a href="http://www.r-project.org/">R</a> (2.15.1) and <a href="https://github.com/daroczig/pander">pander</a> (0.1) on x86_64-unknown-linux-gnu platform.</p>
 <div class="footnotes">
 <hr />
 <ol>

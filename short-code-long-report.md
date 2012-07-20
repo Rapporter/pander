@@ -1,6 +1,6 @@
 % Gergely Daróczi
 % Looong report
-% Tue Jun  5 00:17:57 2012
+% Fri Jul 20 12:17:28 2012
 
 I have written the below report in 10 mins :)
 
@@ -8,170 +8,239 @@ I have written the below report in 10 mins :)
 
 Here I will do a pretty fast report on `mtcars` which is:
 
--------------------------------------------------------
-                    mpg   cyl   disp   hp   drat   wt  
-------------------- ----- ----- ------ ---- ------ ----
-Mazda RX4           21    6     160    110  3.9    2.6 
+------------------------------------------------------
+                        mpg   cyl   disp   hp   drat  
+----------------------- ----- ----- ------ ---- ------
+**Mazda RX4**           21.0  6     160.0  110  3.90  
 
-Mazda RX4 Wag       21    6     160    110  3.9    2.9 
+**Mazda RX4 Wag**       21.0  6     160.0  110  3.90  
 
-Datsun 710          23    4     108    93   3.9    2.3 
+**Datsun 710**          22.8  4     108.0  93   3.85  
 
-Hornet 4 Drive      21    6     258    110  3.1    3.2 
+**Hornet 4 Drive**      21.4  6     258.0  110  3.08  
 
-Hornet Sportabout   19    8     360    175  3.1    3.4 
+**Hornet Sportabout**   18.7  8     360.0  175  3.15  
 
-Valiant             18    6     225    105  2.8    3.5 
+**Valiant**             18.1  6     225.0  105  2.76  
 
-Duster 360          14    8     360    245  3.2    3.6 
+**Duster 360**          14.3  8     360.0  245  3.21  
 
-Merc 240D           24    4     147    62   3.7    3.2 
+**Merc 240D**           24.4  4     146.7  62   3.69  
 
-Merc 230            23    4     141    95   3.9    3.1 
+**Merc 230**            22.8  4     140.8  95   3.92  
 
-Merc 280            19    6     168    123  3.9    3.4 
+**Merc 280**            19.2  6     167.6  123  3.92  
 
-Merc 280C           18    6     168    123  3.9    3.4 
+**Merc 280C**           17.8  6     167.6  123  3.92  
 
-Merc 450SE          16    8     276    180  3.1    4.1 
+**Merc 450SE**          16.4  8     275.8  180  3.07  
 
-Merc 450SL          17    8     276    180  3.1    3.7 
+**Merc 450SL**          17.3  8     275.8  180  3.07  
 
-Merc 450SLC         15    8     276    180  3.1    3.8 
+**Merc 450SLC**         15.2  8     275.8  180  3.07  
 
-Cadillac Fleetwood  10    8     472    205  2.9    5.2 
+**Cadillac Fleetwood**  10.4  8     472.0  205  2.93  
 
-Lincoln Continental 10    8     460    215  3.0    5.4 
+**Lincoln Continental** 10.4  8     460.0  215  3.00  
 
-Chrysler Imperial   15    8     440    230  3.2    5.3 
+**Chrysler Imperial**   14.7  8     440.0  230  3.23  
 
-Fiat 128            32    4     79     66   4.1    2.2 
+**Fiat 128**            32.4  4     78.7   66   4.08  
 
-Honda Civic         30    4     76     52   4.9    1.6 
+**Honda Civic**         30.4  4     75.7   52   4.93  
 
-Toyota Corolla      34    4     71     65   4.2    1.8 
+**Toyota Corolla**      33.9  4     71.1   65   4.22  
 
-Toyota Corona       22    4     120    97   3.7    2.5 
+**Toyota Corona**       21.5  4     120.1  97   3.70  
 
-Dodge Challenger    16    8     318    150  2.8    3.5 
+**Dodge Challenger**    15.5  8     318.0  150  2.76  
 
-AMC Javelin         15    8     304    150  3.1    3.4 
+**AMC Javelin**         15.2  8     304.0  150  3.15  
 
-Camaro Z28          13    8     350    245  3.7    3.8 
+**Camaro Z28**          13.3  8     350.0  245  3.73  
 
-Pontiac Firebird    19    8     400    175  3.1    3.8 
+**Pontiac Firebird**    19.2  8     400.0  175  3.08  
 
-Fiat X1-9           27    4     79     66   4.1    1.9 
+**Fiat X1-9**           27.3  4     79.0   66   4.08  
 
-Porsche 914-2       26    4     120    91   4.4    2.1 
+**Porsche 914-2**       26.0  4     120.3  91   4.43  
 
-Lotus Europa        30    4     95     113  3.8    1.5 
+**Lotus Europa**        30.4  4     95.1   113  3.77  
 
-Ford Pantera L      16    8     351    264  4.2    3.2 
+**Ford Pantera L**      15.8  8     351.0  264  4.22  
 
-Ferrari Dino        20    6     145    175  3.6    2.8 
+**Ferrari Dino**        19.7  6     145.0  175  3.62  
 
-Maserati Bora       15    8     301    335  3.5    3.6 
+**Maserati Bora**       15.0  8     301.0  335  3.54  
 
-Volvo 142E          21    4     121    109  4.1    2.8 
--------------------------------------------------------
+**Volvo 142E**          21.4  4     121.0  109  4.11  
+------------------------------------------------------
 
  
---------------------------------------------------
-                    qsec   vs   am   gear   carb  
-------------------- ------ ---- ---- ------ ------
-Mazda RX4           16     0    1    4      4     
+----------------------------------------------
+                        wt    qsec   vs   am  
+----------------------- ----- ------ ---- ----
+**Mazda RX4**           2.620 16.46  0    1   
 
-Mazda RX4 Wag       17     0    1    4      4     
+**Mazda RX4 Wag**       2.875 17.02  0    1   
 
-Datsun 710          19     1    1    4      1     
+**Datsun 710**          2.320 18.61  1    1   
 
-Hornet 4 Drive      19     1    0    3      1     
+**Hornet 4 Drive**      3.215 19.44  1    0   
 
-Hornet Sportabout   17     0    0    3      2     
+**Hornet Sportabout**   3.440 17.02  0    0   
 
-Valiant             20     1    0    3      1     
+**Valiant**             3.460 20.22  1    0   
 
-Duster 360          16     0    0    3      4     
+**Duster 360**          3.570 15.84  0    0   
 
-Merc 240D           20     1    0    4      2     
+**Merc 240D**           3.190 20.00  1    0   
 
-Merc 230            23     1    0    4      2     
+**Merc 230**            3.150 22.90  1    0   
 
-Merc 280            18     1    0    4      4     
+**Merc 280**            3.440 18.30  1    0   
 
-Merc 280C           19     1    0    4      4     
+**Merc 280C**           3.440 18.90  1    0   
 
-Merc 450SE          17     0    0    3      3     
+**Merc 450SE**          4.070 17.40  0    0   
 
-Merc 450SL          18     0    0    3      3     
+**Merc 450SL**          3.730 17.60  0    0   
 
-Merc 450SLC         18     0    0    3      3     
+**Merc 450SLC**         3.780 18.00  0    0   
 
-Cadillac Fleetwood  18     0    0    3      4     
+**Cadillac Fleetwood**  5.250 17.98  0    0   
 
-Lincoln Continental 18     0    0    3      4     
+**Lincoln Continental** 5.424 17.82  0    0   
 
-Chrysler Imperial   17     0    0    3      4     
+**Chrysler Imperial**   5.345 17.42  0    0   
 
-Fiat 128            19     1    1    4      1     
+**Fiat 128**            2.200 19.47  1    1   
 
-Honda Civic         19     1    1    4      2     
+**Honda Civic**         1.615 18.52  1    1   
 
-Toyota Corolla      20     1    1    4      1     
+**Toyota Corolla**      1.835 19.90  1    1   
 
-Toyota Corona       20     1    0    3      1     
+**Toyota Corona**       2.465 20.01  1    0   
 
-Dodge Challenger    17     0    0    3      2     
+**Dodge Challenger**    3.520 16.87  0    0   
 
-AMC Javelin         17     0    0    3      2     
+**AMC Javelin**         3.435 17.30  0    0   
 
-Camaro Z28          15     0    0    3      4     
+**Camaro Z28**          3.840 15.41  0    0   
 
-Pontiac Firebird    17     0    0    3      2     
+**Pontiac Firebird**    3.845 17.05  0    0   
 
-Fiat X1-9           19     1    1    4      1     
+**Fiat X1-9**           1.935 18.90  1    1   
 
-Porsche 914-2       17     0    1    5      2     
+**Porsche 914-2**       2.140 16.70  0    1   
 
-Lotus Europa        17     1    1    5      2     
+**Lotus Europa**        1.513 16.90  1    1   
 
-Ford Pantera L      14     0    1    5      4     
+**Ford Pantera L**      3.170 14.50  0    1   
 
-Ferrari Dino        16     0    1    5      6     
+**Ferrari Dino**        2.770 15.50  0    1   
 
-Maserati Bora       15     0    1    5      8     
+**Maserati Bora**       3.570 14.60  0    1   
 
-Volvo 142E          19     1    1    4      2     
---------------------------------------------------
+**Volvo 142E**          2.780 18.60  1    1   
+----------------------------------------------
+
+ 
+-------------------------------------
+                        gear   carb  
+----------------------- ------ ------
+**Mazda RX4**           4      4     
+
+**Mazda RX4 Wag**       4      4     
+
+**Datsun 710**          4      1     
+
+**Hornet 4 Drive**      3      1     
+
+**Hornet Sportabout**   3      2     
+
+**Valiant**             3      1     
+
+**Duster 360**          3      4     
+
+**Merc 240D**           4      2     
+
+**Merc 230**            4      2     
+
+**Merc 280**            4      4     
+
+**Merc 280C**           4      4     
+
+**Merc 450SE**          3      3     
+
+**Merc 450SL**          3      3     
+
+**Merc 450SLC**         3      3     
+
+**Cadillac Fleetwood**  3      4     
+
+**Lincoln Continental** 3      4     
+
+**Chrysler Imperial**   3      4     
+
+**Fiat 128**            4      1     
+
+**Honda Civic**         4      2     
+
+**Toyota Corolla**      4      1     
+
+**Toyota Corona**       3      1     
+
+**Dodge Challenger**    3      2     
+
+**AMC Javelin**         3      2     
+
+**Camaro Z28**          3      4     
+
+**Pontiac Firebird**    3      2     
+
+**Fiat X1-9**           4      1     
+
+**Porsche 914-2**       5      2     
+
+**Lotus Europa**        5      2     
+
+**Ford Pantera L**      5      4     
+
+**Ferrari Dino**        5      6     
+
+**Maserati Bora**       5      8     
+
+**Volvo 142E**          4      2     
+-------------------------------------
 
 # Descriptives
 
--------------------------------------------------------
-     Average   Median   Standard.deviation   Variance  
----- --------- -------- -------------------- ----------
-mpg  20.09     19.2     6.03                 3.6e+01   
+-----------------------------------------------------------
+         Average   Median   Standard.deviation   Variance  
+-------- --------- -------- -------------------- ----------
+**mpg**  20.0906   19.200   6.0269               3.632e+01 
 
-cyl  6.19      6.0      1.79                 3.2e+00   
+**cyl**  6.1875    6.000    1.7859               3.190e+00 
 
-disp 230.72    196.3    123.94               1.5e+04   
+**disp** 230.7219  196.300  123.9387             1.536e+04 
 
-hp   146.69    123.0    68.56                4.7e+03   
+**hp**   146.6875  123.000  68.5629              4.701e+03 
 
-drat 3.60      3.7      0.53                 2.9e-01   
+**drat** 3.5966    3.695    0.5347               2.859e-01 
 
-wt   3.22      3.3      0.98                 9.6e-01   
+**wt**   3.2172    3.325    0.9785               9.574e-01 
 
-qsec 17.85     17.7     1.79                 3.2e+00   
+**qsec** 17.8487   17.710   1.7869               3.193e+00 
 
-vs   0.44      0.0      0.50                 2.5e-01   
+**vs**   0.4375    0.000    0.5040               2.540e-01 
 
-am   0.41      0.0      0.50                 2.5e-01   
+**am**   0.4062    0.000    0.4990               2.490e-01 
 
-gear 3.69      4.0      0.74                 5.4e-01   
+**gear** 3.6875    4.000    0.7378               5.444e-01 
 
-carb 2.81      2.0      1.62                 2.6e+00   
--------------------------------------------------------
+**carb** 2.8125    2.000    1.6152               2.609e+00 
+-----------------------------------------------------------
 
 ## In details
 
@@ -179,9 +248,9 @@ carb 2.81      2.0      1.62                 2.6e+00
 
 We found the folloing values here:
 
-*21*, *21*, *22.8*, *21.4*, *18.7*, *18.1*, *14.3*, *24.4*, *22.8*, *19.2*, *17.8*, *16.4*, *17.3*, *15.2*, *10.4*, *10.4*, *14.7*, *32.4*, *30.4*, *33.9*, *21.5*, *15.5*, *15.2*, *13.3*, *19.2*, *27.3*, *26*, *30.4*, *15.8*, *19.7*, *15* and *21.4*
+_21.0_, _21.0_, _22.8_, _21.4_, _18.7_, _18.1_, _14.3_, _24.4_, _22.8_, _19.2_, _17.8_, _16.4_, _17.3_, _15.2_, _10.4_, _10.4_, _14.7_, _32.4_, _30.4_, _33.9_, _21.5_, _15.5_, _15.2_, _13.3_, _19.2_, _27.3_, _26.0_, _30.4_, _15.8_, _19.7_, _15.0_ and _21.4_
 
-The mean of mpg is *20.090625* while the standard deviation is: *6.0269480520891*. The most frequent value in mpg is 10.4, but let us check out the frequency table too:
+The mean of mpg is _20.09_ while the standard deviation is: _6.027_. The most frequent value in mpg is 10.4, but let us check out the frequency table too:
 
 -----------------------------------------------------
 10.4   13.3   14.3   14.7   15   15.2   15.5   15.8  
@@ -218,9 +287,9 @@ Tables are boring, let us show the same with a `histogram`:
 
 We found the folloing values here:
 
-*6*, *6*, *4*, *6*, *8*, *6*, *8*, *4*, *4*, *6*, *6*, *8*, *8*, *8*, *8*, *8*, *8*, *4*, *4*, *4*, *4*, *8*, *8*, *8*, *8*, *4*, *4*, *4*, *8*, *6*, *8* and *4*
+_6_, _6_, _4_, _6_, _8_, _6_, _8_, _4_, _4_, _6_, _6_, _8_, _8_, _8_, _8_, _8_, _8_, _4_, _4_, _4_, _4_, _8_, _8_, _8_, _8_, _4_, _4_, _4_, _8_, _6_, _8_ and _4_
 
-The mean of cyl is *6.1875* while the standard deviation is: *1.78592164694654*. The most frequent value in cyl is 8, but let us check out the frequency table too:
+The mean of cyl is _6.188_ while the standard deviation is: _1.786_. The most frequent value in cyl is 8, but let us check out the frequency table too:
 
 -----------
 4   6   8  
@@ -236,9 +305,9 @@ Tables are boring, let us show the same with a `histogram`:
 
 We found the folloing values here:
 
-*160*, *160*, *108*, *258*, *360*, *225*, *360*, *146.7*, *140.8*, *167.6*, *167.6*, *275.8*, *275.8*, *275.8*, *472*, *460*, *440*, *78.7*, *75.7*, *71.1*, *120.1*, *318*, *304*, *350*, *400*, *79*, *120.3*, *95.1*, *351*, *145*, *301* and *121*
+_160.0_, _160.0_, _108.0_, _258.0_, _360.0_, _225.0_, _360.0_, _146.7_, _140.8_, _167.6_, _167.6_, _275.8_, _275.8_, _275.8_, _472.0_, _460.0_, _440.0_, _78.7_, _75.7_, _71.1_, _120.1_, _318.0_, _304.0_, _350.0_, _400.0_, _79.0_, _120.3_, _95.1_, _351.0_, _145.0_, _301.0_ and _121.0_
 
-The mean of disp is *230.721875* while the standard deviation is: *123.938693831382*. The most frequent value in disp is 275.8, but let us check out the frequency table too:
+The mean of disp is _230.7_ while the standard deviation is: _123.9_. The most frequent value in disp is 275.8, but let us check out the frequency table too:
 
 ------------------------------------------------------
 71.1   75.7   78.7   79   95.1   108   120.1   120.3  
@@ -275,9 +344,9 @@ Tables are boring, let us show the same with a `histogram`:
 
 We found the folloing values here:
 
-*110*, *110*, *93*, *110*, *175*, *105*, *245*, *62*, *95*, *123*, *123*, *180*, *180*, *180*, *205*, *215*, *230*, *66*, *52*, *65*, *97*, *150*, *150*, *245*, *175*, *66*, *91*, *113*, *264*, *175*, *335* and *109*
+_110_, _110_, _93_, _110_, _175_, _105_, _245_, _62_, _95_, _123_, _123_, _180_, _180_, _180_, _205_, _215_, _230_, _66_, _52_, _65_, _97_, _150_, _150_, _245_, _175_, _66_, _91_, _113_, _264_, _175_, _335_ and _109_
 
-The mean of hp is *146.6875* while the standard deviation is: *68.5628684893206*. The most frequent value in hp is 110, but let us check out the frequency table too:
+The mean of hp is _146.7_ while the standard deviation is: _68.56_. The most frequent value in hp is 110, but let us check out the frequency table too:
 
 ---------------------------------------------
 52   62   65   66   91   93   95   97   105  
@@ -307,9 +376,9 @@ Tables are boring, let us show the same with a `histogram`:
 
 We found the folloing values here:
 
-*3.9*, *3.9*, *3.85*, *3.08*, *3.15*, *2.76*, *3.21*, *3.69*, *3.92*, *3.92*, *3.92*, *3.07*, *3.07*, *3.07*, *2.93*, *3*, *3.23*, *4.08*, *4.93*, *4.22*, *3.7*, *2.76*, *3.15*, *3.73*, *3.08*, *4.08*, *4.43*, *3.77*, *4.22*, *3.62*, *3.54* and *4.11*
+_3.90_, _3.90_, _3.85_, _3.08_, _3.15_, _2.76_, _3.21_, _3.69_, _3.92_, _3.92_, _3.92_, _3.07_, _3.07_, _3.07_, _2.93_, _3.00_, _3.23_, _4.08_, _4.93_, _4.22_, _3.70_, _2.76_, _3.15_, _3.73_, _3.08_, _4.08_, _4.43_, _3.77_, _4.22_, _3.62_, _3.54_ and _4.11_
 
-The mean of drat is *3.5965625* while the standard deviation is: *0.534678736070971*. The most frequent value in drat is 3.07, but let us check out the frequency table too:
+The mean of drat is _3.597_ while the standard deviation is: _0.5347_. The most frequent value in drat is 3.07, but let us check out the frequency table too:
 
 ----------------------------------------------------
 2.76   2.93   3   3.07   3.08   3.15   3.21   3.23  
@@ -339,9 +408,9 @@ Tables are boring, let us show the same with a `histogram`:
 
 We found the folloing values here:
 
-*2.62*, *2.875*, *2.32*, *3.215*, *3.44*, *3.46*, *3.57*, *3.19*, *3.15*, *3.44*, *3.44*, *4.07*, *3.73*, *3.78*, *5.25*, *5.424*, *5.345*, *2.2*, *1.615*, *1.835*, *2.465*, *3.52*, *3.435*, *3.84*, *3.845*, *1.935*, *2.14*, *1.513*, *3.17*, *2.77*, *3.57* and *2.78*
+_2.620_, _2.875_, _2.320_, _3.215_, _3.440_, _3.460_, _3.570_, _3.190_, _3.150_, _3.440_, _3.440_, _4.070_, _3.730_, _3.780_, _5.250_, _5.424_, _5.345_, _2.200_, _1.615_, _1.835_, _2.465_, _3.520_, _3.435_, _3.840_, _3.845_, _1.935_, _2.140_, _1.513_, _3.170_, _2.770_, _3.570_ and _2.780_
 
-The mean of wt is *3.21725* while the standard deviation is: *0.978457442989697*. The most frequent value in wt is 3.44, but let us check out the frequency table too:
+The mean of wt is _3.217_ while the standard deviation is: _0.9785_. The most frequent value in wt is 3.44, but let us check out the frequency table too:
 
 ---------------------------------------------------
 1.513   1.615   1.835   1.935   2.14   2.2   2.32  
@@ -385,9 +454,9 @@ Tables are boring, let us show the same with a `histogram`:
 
 We found the folloing values here:
 
-*16.46*, *17.02*, *18.61*, *19.44*, *17.02*, *20.22*, *15.84*, *20*, *22.9*, *18.3*, *18.9*, *17.4*, *17.6*, *18*, *17.98*, *17.82*, *17.42*, *19.47*, *18.52*, *19.9*, *20.01*, *16.87*, *17.3*, *15.41*, *17.05*, *18.9*, *16.7*, *16.9*, *14.5*, *15.5*, *14.6* and *18.6*
+_16.46_, _17.02_, _18.61_, _19.44_, _17.02_, _20.22_, _15.84_, _20.00_, _22.90_, _18.30_, _18.90_, _17.40_, _17.60_, _18.00_, _17.98_, _17.82_, _17.42_, _19.47_, _18.52_, _19.90_, _20.01_, _16.87_, _17.30_, _15.41_, _17.05_, _18.90_, _16.70_, _16.90_, _14.50_, _15.50_, _14.60_ and _18.60_
 
-The mean of qsec is *17.84875* while the standard deviation is: *1.78694323609684*. The most frequent value in qsec is 17.02, but let us check out the frequency table too:
+The mean of qsec is _17.85_ while the standard deviation is: _1.787_. The most frequent value in qsec is 17.02, but let us check out the frequency table too:
 
 ---------------------------------------------------
 14.5   14.6   15.41   15.5   15.84   16.46   16.7  
@@ -431,9 +500,9 @@ Tables are boring, let us show the same with a `histogram`:
 
 We found the folloing values here:
 
-*0*, *0*, *1*, *1*, *0*, *1*, *0*, *1*, *1*, *1*, *1*, *0*, *0*, *0*, *0*, *0*, *0*, *1*, *1*, *1*, *1*, *0*, *0*, *0*, *0*, *1*, *0*, *1*, *0*, *0*, *0* and *1*
+_0_, _0_, _1_, _1_, _0_, _1_, _0_, _1_, _1_, _1_, _1_, _0_, _0_, _0_, _0_, _0_, _0_, _1_, _1_, _1_, _1_, _0_, _0_, _0_, _0_, _1_, _0_, _1_, _0_, _0_, _0_ and _1_
 
-The mean of vs is *0.4375* while the standard deviation is: *0.504016128774185*. The most frequent value in vs is 0, but let us check out the frequency table too:
+The mean of vs is _0.4375_ while the standard deviation is: _0.504_. The most frequent value in vs is 0, but let us check out the frequency table too:
 
 -------
 0   1  
@@ -449,9 +518,9 @@ Tables are boring, let us show the same with a `histogram`:
 
 We found the folloing values here:
 
-*1*, *1*, *1*, *0*, *0*, *0*, *0*, *0*, *0*, *0*, *0*, *0*, *0*, *0*, *0*, *0*, *0*, *1*, *1*, *1*, *0*, *0*, *0*, *0*, *0*, *1*, *1*, *1*, *1*, *1*, *1* and *1*
+_1_, _1_, _1_, _0_, _0_, _0_, _0_, _0_, _0_, _0_, _0_, _0_, _0_, _0_, _0_, _0_, _0_, _1_, _1_, _1_, _0_, _0_, _0_, _0_, _0_, _1_, _1_, _1_, _1_, _1_, _1_ and _1_
 
-The mean of am is *0.40625* while the standard deviation is: *0.498990917235846*. The most frequent value in am is 0, but let us check out the frequency table too:
+The mean of am is _0.4062_ while the standard deviation is: _0.499_. The most frequent value in am is 0, but let us check out the frequency table too:
 
 -------
 0   1  
@@ -467,9 +536,9 @@ Tables are boring, let us show the same with a `histogram`:
 
 We found the folloing values here:
 
-*4*, *4*, *4*, *3*, *3*, *3*, *3*, *4*, *4*, *4*, *4*, *3*, *3*, *3*, *3*, *3*, *3*, *4*, *4*, *4*, *3*, *3*, *3*, *3*, *3*, *4*, *5*, *5*, *5*, *5*, *5* and *4*
+_4_, _4_, _4_, _3_, _3_, _3_, _3_, _4_, _4_, _4_, _4_, _3_, _3_, _3_, _3_, _3_, _3_, _4_, _4_, _4_, _3_, _3_, _3_, _3_, _3_, _4_, _5_, _5_, _5_, _5_, _5_ and _4_
 
-The mean of gear is *3.6875* while the standard deviation is: *0.737804065256947*. The most frequent value in gear is 3, but let us check out the frequency table too:
+The mean of gear is _3.688_ while the standard deviation is: _0.7378_. The most frequent value in gear is 3, but let us check out the frequency table too:
 
 -----------
 3   4   5  
@@ -485,9 +554,9 @@ Tables are boring, let us show the same with a `histogram`:
 
 We found the folloing values here:
 
-*4*, *4*, *1*, *1*, *2*, *1*, *4*, *2*, *2*, *4*, *4*, *3*, *3*, *3*, *4*, *4*, *4*, *1*, *2*, *1*, *1*, *2*, *2*, *4*, *2*, *1*, *2*, *2*, *4*, *6*, *8* and *2*
+_4_, _4_, _1_, _1_, _2_, _1_, _4_, _2_, _2_, _4_, _4_, _3_, _3_, _3_, _4_, _4_, _4_, _1_, _2_, _1_, _1_, _2_, _2_, _4_, _2_, _1_, _2_, _2_, _4_, _6_, _8_ and _2_
 
-The mean of carb is *2.8125* while the standard deviation is: *1.61519997763185*. The most frequent value in carb is 2, but let us check out the frequency table too:
+The mean of carb is _2.812_ while the standard deviation is: _1.615_. The most frequent value in carb is 2, but let us check out the frequency table too:
 
 -----------------------
 1   2   3   4   6   8  
@@ -504,57 +573,84 @@ Tables are boring, let us show the same with a `histogram`:
 And here goes a correlation table:
 
 -----------------------------------------------------
-     mpg    cyl    disp   hp     drat   wt     qsec  
----- ------ ------ ------ ------ ------ ------ ------
-mpg  1.000  -0.852 -0.848 -0.776 0.681  -0.868 0.419 
+         mpg      cyl      disp     hp       drat    
+-------- -------- -------- -------- -------- --------
+**mpg**  1.00000  -0.85216 -0.84755 -0.77617 0.68117 
 
-cyl  -0.852 1.000  0.902  0.832  -0.700 0.782  -0.591
+**cyl**  -0.85216 1.00000  0.90203  0.83245  -0.69994
 
-disp -0.848 0.902  1.000  0.791  -0.710 0.888  -0.434
+**disp** -0.84755 0.90203  1.00000  0.79095  -0.71021
 
-hp   -0.776 0.832  0.791  1.000  -0.449 0.659  -0.708
+**hp**   -0.77617 0.83245  0.79095  1.00000  -0.44876
 
-drat 0.681  -0.700 -0.710 -0.449 1.000  -0.712 0.091 
+**drat** 0.68117  -0.69994 -0.71021 -0.44876 1.00000 
 
-wt   -0.868 0.782  0.888  0.659  -0.712 1.000  -0.175
+**wt**   -0.86766 0.78250  0.88798  0.65875  -0.71244
 
-qsec 0.419  -0.591 -0.434 -0.708 0.091  -0.175 1.000 
+**qsec** 0.41868  -0.59124 -0.43370 -0.70822 0.09120 
 
-vs   0.664  -0.811 -0.710 -0.723 0.440  -0.555 0.745 
+**vs**   0.66404  -0.81081 -0.71042 -0.72310 0.44028 
 
-am   0.600  -0.523 -0.591 -0.243 0.713  -0.692 -0.230
+**am**   0.59983  -0.52261 -0.59123 -0.24320 0.71271 
 
-gear 0.480  -0.493 -0.556 -0.126 0.700  -0.583 -0.213
+**gear** 0.48028  -0.49269 -0.55557 -0.12570 0.69961 
 
-carb -0.551 0.527  0.395  0.750  -0.091 0.428  -0.656
+**carb** -0.55093 0.52699  0.39498  0.74981  -0.09079
 -----------------------------------------------------
 
  
---------------------------------
-     vs     am     gear   carb  
----- ------ ------ ------ ------
-mpg  0.664  0.600  0.480  -0.551
+--------------------------------------------
+         wt       qsec     vs       am      
+-------- -------- -------- -------- --------
+**mpg**  -0.86766 0.41868  0.66404  0.59983 
 
-cyl  -0.811 -0.523 -0.493 0.527 
+**cyl**  0.78250  -0.59124 -0.81081 -0.52261
 
-disp -0.710 -0.591 -0.556 0.395 
+**disp** 0.88798  -0.43370 -0.71042 -0.59123
 
-hp   -0.723 -0.243 -0.126 0.750 
+**hp**   0.65875  -0.70822 -0.72310 -0.24320
 
-drat 0.440  0.713  0.700  -0.091
+**drat** -0.71244 0.09120  0.44028  0.71271 
 
-wt   -0.555 -0.692 -0.583 0.428 
+**wt**   1.00000  -0.17472 -0.55492 -0.69250
 
-qsec 0.745  -0.230 -0.213 -0.656
+**qsec** -0.17472 1.00000  0.74454  -0.22986
 
-vs   1.000  0.168  0.206  -0.570
+**vs**   -0.55492 0.74454  1.00000  0.16835 
 
-am   0.168  1.000  0.794  0.058 
+**am**   -0.69250 -0.22986 0.16835  1.00000 
 
-gear 0.206  0.794  1.000  0.274 
+**gear** -0.58329 -0.21268 0.20602  0.79406 
 
-carb -0.570 0.058  0.274  1.000 
---------------------------------
+**carb** 0.42761  -0.65625 -0.56961 0.05753 
+--------------------------------------------
+
+ 
+--------------------------
+         gear     carb    
+-------- -------- --------
+**mpg**  0.48028  -0.55093
+
+**cyl**  -0.49269 0.52699 
+
+**disp** -0.55557 0.39498 
+
+**hp**   -0.12570 0.74981 
+
+**drat** 0.69961  -0.09079
+
+**wt**   -0.58329 0.42761 
+
+**qsec** -0.21268 -0.65625
+
+**vs**   0.20602  -0.56961
+
+**am**   0.79406  0.05753 
+
+**gear** 1.00000  0.27407 
+
+**carb** 0.27407  1.00000 
+--------------------------
 
 And the same on a graph:
 
@@ -572,13 +668,13 @@ Okay, let us find out how `weight` affects other variables:
 
 A simple linear model: `mtcars$wt ~ mtcars$mpg`
 
---------------------------------------------------------
-             Estimate   Std. Error   t value   Pr(>|t|) 
------------ ---------- ------------ --------- ----------
-(Intercept)  6.0e+00     3.1e-01     2.0e+01   1.2e-18  
+-------------------------------------------------------------
+                 Estimate   Std. Error   t value    Pr(>|t|) 
+--------------- ---------- ------------ ---------- ----------
+**(Intercept)** 6.047e+00   3.087e-01   1.959e+01  1.204e-18 
 
-Independent  -1.4e-01    1.5e-02    -9.6e+00   1.3e-10  
---------------------------------------------------------
+**Independent** -1.409e-01  1.474e-02   -9.559e+00 1.294e-10 
+-------------------------------------------------------------
 
 Table: Fitting linear model: mtcars$wt ~ Independent
 
@@ -586,13 +682,13 @@ Table: Fitting linear model: mtcars$wt ~ Independent
 
 A simple linear model: `mtcars$wt ~ mtcars$cyl`
 
---------------------------------------------------------
-             Estimate   Std. Error   t value   Pr(>|t|) 
------------ ---------- ------------ --------- ----------
-(Intercept)  5.6e-01     4.0e-01     1.4e+00   1.7e-01  
+------------------------------------------------------------
+                 Estimate   Std. Error   t value   Pr(>|t|) 
+--------------- ---------- ------------ --------- ----------
+**(Intercept)** 5.646e-01   4.006e-01   1.409e+00 1.690e-01 
 
-Independent  4.3e-01     6.2e-02     6.9e+00   1.2e-07  
---------------------------------------------------------
+**Independent** 4.287e-01   6.228e-02   6.883e+00 1.218e-07 
+------------------------------------------------------------
 
 Table: Fitting linear model: mtcars$wt ~ Independent
 
@@ -600,13 +696,13 @@ Table: Fitting linear model: mtcars$wt ~ Independent
 
 A simple linear model: `mtcars$wt ~ mtcars$disp`
 
---------------------------------------------------------
-             Estimate   Std. Error   t value   Pr(>|t|) 
------------ ---------- ------------ --------- ----------
-(Intercept)  1.6e+00     1.7e-01     9.2e+00   2.7e-10  
+------------------------------------------------------------
+                 Estimate   Std. Error   t value   Pr(>|t|) 
+--------------- ---------- ------------ --------- ----------
+**(Intercept)** 1.600e+00   1.730e-01   9.248e+00 2.738e-10 
 
-Independent  7.0e-03     6.6e-04     1.1e+01   1.2e-11  
---------------------------------------------------------
+**Independent** 7.010e-03   6.629e-04   1.058e+01 1.222e-11 
+------------------------------------------------------------
 
 Table: Fitting linear model: mtcars$wt ~ Independent
 
@@ -614,13 +710,13 @@ Table: Fitting linear model: mtcars$wt ~ Independent
 
 A simple linear model: `mtcars$wt ~ mtcars$hp`
 
---------------------------------------------------------
-             Estimate   Std. Error   t value   Pr(>|t|) 
------------ ---------- ------------ --------- ----------
-(Intercept)  1.8e+00     3.2e-01     5.8e+00   2.4e-06  
+------------------------------------------------------------
+                 Estimate   Std. Error   t value   Pr(>|t|) 
+--------------- ---------- ------------ --------- ----------
+**(Intercept)** 1.838e+00   3.165e-01   5.808e+00 2.389e-06 
 
-Independent  9.4e-03     2.0e-03     4.8e+00   4.1e-05  
---------------------------------------------------------
+**Independent** 9.401e-03   1.960e-03   4.796e+00 4.146e-05 
+------------------------------------------------------------
 
 Table: Fitting linear model: mtcars$wt ~ Independent
 
@@ -628,13 +724,13 @@ Table: Fitting linear model: mtcars$wt ~ Independent
 
 A simple linear model: `mtcars$wt ~ mtcars$drat`
 
---------------------------------------------------------
-             Estimate   Std. Error   t value   Pr(>|t|) 
------------ ---------- ------------ --------- ----------
-(Intercept)  7.9e+00     8.5e-01     9.3e+00   2.5e-10  
+-------------------------------------------------------------
+                 Estimate   Std. Error   t value    Pr(>|t|) 
+--------------- ---------- ------------ ---------- ----------
+**(Intercept)** 7.906e+00   8.522e-01   9.277e+00  2.547e-10 
 
-Independent  -1.3e+00    2.3e-01    -5.6e+00   4.8e-06  
---------------------------------------------------------
+**Independent** -1.304e+00  2.345e-01   -5.561e+00 4.784e-06 
+-------------------------------------------------------------
 
 Table: Fitting linear model: mtcars$wt ~ Independent
 
@@ -642,13 +738,13 @@ Table: Fitting linear model: mtcars$wt ~ Independent
 
 A simple linear model: `mtcars$wt ~ mtcars$qsec`
 
---------------------------------------------------------
-             Estimate   Std. Error   t value   Pr(>|t|) 
------------ ---------- ------------ --------- ----------
-(Intercept)   4.9248      1.7654     2.7896     0.0091  
+------------------------------------------------------------
+                 Estimate   Std. Error   t value   Pr(>|t|) 
+--------------- ---------- ------------ --------- ----------
+**(Intercept)**  4.924792    1.765407   2.789607   0.009081 
 
-Independent  -0.0957      0.0984     -0.9719    0.3389  
---------------------------------------------------------
+**Independent** -0.095667    0.098433   -0.971907  0.338868 
+------------------------------------------------------------
 
 Table: Fitting linear model: mtcars$wt ~ Independent
 
@@ -656,13 +752,13 @@ Table: Fitting linear model: mtcars$wt ~ Independent
 
 A simple linear model: `mtcars$wt ~ mtcars$vs`
 
---------------------------------------------------------
-             Estimate   Std. Error   t value   Pr(>|t|) 
------------ ---------- ------------ --------- ----------
-(Intercept)  3.7e+00     2.0e-01     1.9e+01   3.2e-18  
+-------------------------------------------------------------
+                 Estimate   Std. Error   t value    Pr(>|t|) 
+--------------- ---------- ------------ ---------- ----------
+**(Intercept)** 3.689e+00   1.950e-01   1.891e+01  3.203e-18 
 
-Independent  -1.1e+00    2.9e-01    -3.7e+00   9.8e-04  
---------------------------------------------------------
+**Independent** -1.077e+00  2.949e-01   -3.654e+00 9.798e-04 
+-------------------------------------------------------------
 
 Table: Fitting linear model: mtcars$wt ~ Independent
 
@@ -670,13 +766,13 @@ Table: Fitting linear model: mtcars$wt ~ Independent
 
 A simple linear model: `mtcars$wt ~ mtcars$am`
 
---------------------------------------------------------
-             Estimate   Std. Error   t value   Pr(>|t|) 
------------ ---------- ------------ --------- ----------
-(Intercept)  3.8e+00     1.6e-01     2.3e+01   1.5e-20  
+-------------------------------------------------------------
+                 Estimate   Std. Error   t value    Pr(>|t|) 
+--------------- ---------- ------------ ---------- ----------
+**(Intercept)** 3.769e+00   1.646e-01   2.289e+01  1.490e-20 
 
-Independent  -1.4e+00    2.6e-01    -5.3e+00   1.1e-05  
---------------------------------------------------------
+**Independent** -1.358e+00  2.583e-01   -5.258e+00 1.125e-05 
+-------------------------------------------------------------
 
 Table: Fitting linear model: mtcars$wt ~ Independent
 
@@ -684,13 +780,13 @@ Table: Fitting linear model: mtcars$wt ~ Independent
 
 A simple linear model: `mtcars$wt ~ mtcars$gear`
 
---------------------------------------------------------
-             Estimate   Std. Error   t value   Pr(>|t|) 
------------ ---------- ------------ --------- ----------
-(Intercept)  6.1e+00     7.4e-01     8.2e+00   3.6e-09  
+-------------------------------------------------------------
+                 Estimate   Std. Error   t value    Pr(>|t|) 
+--------------- ---------- ------------ ---------- ----------
+**(Intercept)** 6.070e+00   7.392e-01   8.212e+00  3.632e-09 
 
-Independent  -7.7e-01    2.0e-01    -3.9e+00   4.6e-04  
---------------------------------------------------------
+**Independent** -7.735e-01  1.967e-01   -3.933e+00 4.587e-04 
+-------------------------------------------------------------
 
 Table: Fitting linear model: mtcars$wt ~ Independent
 
@@ -698,15 +794,15 @@ Table: Fitting linear model: mtcars$wt ~ Independent
 
 A simple linear model: `mtcars$wt ~ mtcars$carb`
 
---------------------------------------------------------
-             Estimate   Std. Error   t value   Pr(>|t|) 
------------ ---------- ------------ --------- ----------
-(Intercept)  2.5e+00     3.2e-01     7.7e+00   1.4e-08  
+------------------------------------------------------------
+                 Estimate   Std. Error   t value   Pr(>|t|) 
+--------------- ---------- ------------ --------- ----------
+**(Intercept)** 2.489e+00   3.230e-01   7.705e+00 1.353e-08 
 
-Independent  2.6e-01     1.0e-01     2.6e+00   1.5e-02  
---------------------------------------------------------
+**Independent** 2.590e-01   9.998e-02   2.591e+00 1.464e-02 
+------------------------------------------------------------
 
 Table: Fitting linear model: mtcars$wt ~ Independent
 
 -------
-This report was generated with [R](http://www.r-project.org/) (2.15.0) and [pander](https://github.com/daroczig/pander) (0.1) on x86_64-unknown-linux-gnu platform.
+This report was generated with [R](http://www.r-project.org/) (2.15.1) and [pander](https://github.com/daroczig/pander) (0.1) on x86_64-unknown-linux-gnu platform. 
