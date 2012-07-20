@@ -69,7 +69,7 @@ eval.msgs <- function(src, env = NULL, showInvisible = FALSE, graph.unify = eval
     con <- textConnection("stdout", "wr", local=TRUE)
     sink(con, split = FALSE)
 
-    result <- suppressMessages(withCallingHandlers(tryCatch(withVisible(eval(parse(text=src), envir = env)), error = function(e) e), warning = warning.handler, message = message.handler))
+    result <- suppressMessages(withCallingHandlers(tryCatch(withVisible(eval(parse(text = src), envir = env)), error = function(e) e), warning = warning.handler, message = message.handler))
 
     sink()
     close(con)
@@ -107,6 +107,7 @@ eval.msgs <- function(src, env = NULL, showInvisible = FALSE, graph.unify = eval
                 ff <- panderOptions('graph.fontfamily')
                 fc <- panderOptions('graph.fontcolor')
                 gc <- panderOptions('graph.grid.color')
+                cs <- panderOptions('graph.colors')
 
                 ## lattice/trellis
                 if (rvc == 'trellis') {
@@ -128,6 +129,10 @@ eval.msgs <- function(src, env = NULL, showInvisible = FALSE, graph.unify = eval
                     rv$par.settings$background$col       <- panderOptions('graph.background')
                     rv$par.settings$panel.background$col <- panderOptions('graph.panel.background')
                     rv$par.settings$axis.line$col <- gc
+
+                    rv$par.settings$plot.polygon$col <- rv$par.settings$plot.symbol$fill <- rv$par.settings$plot.line$col <- rv$par.settings$box.rectangle$fill <- rv$par.settings$box.rectangle$col <- rv$par.settings$plot.symbol$fill <- rv$par.settings$plot.polygon$border <- cs[1]
+                    rv$par.settings$superpose.polygon$border <- rv$par.settings$superpose.polygon$col <- rv$par.settings$superpose.symbol$col <- cs
+
 
                     ## grid
                     if (panderOptions('graph.grid')) {
@@ -163,19 +168,28 @@ eval.msgs <- function(src, env = NULL, showInvisible = FALSE, graph.unify = eval
                     ## colors
                     rv$options$plot.background  <- ggplot2::theme_rect(fill = panderOptions('graph.background'), colour = NA)
                     rv$options$panel.background <- ggplot2::theme_rect(fill = panderOptions('graph.panel.background'), colour = gc)
-                    rv$options$axis.ticks       <- ggplot2::theme_segment(colour = gc, size = 0.5)
+                    rv$options$axis.ticks       <- ggplot2::theme_segment(colour = gc, size = 0.3)
                     rv$options$panel.border     <- ggplot2::theme_rect(fill = NA, colour = gc)
+                    if (is.null(rv$options$labels$colour) & is.null(rv$options$labels$fill)) {
+                        rv$layers[[1]]$geom_params$fill <- cs[1]
+                        rv$layers[[1]]$geom_params$colour <- cs[1]
+                    } else {
+                        if (is.null(rv$options$labels$colour))
+                            rv <- rv + scale_fill_manual(values = cs)
+                        else
+                            rv <- rv + scale_colour_manual(values = cs)
+                    }
 
                     ## grid
                     if (!panderOptions('graph.grid'))
                         rv$options$panel.grid.minor <- rv$options$panel.grid.major <- ggplot2::theme_blank()
                     else
                         if (!panderOptions('graph.grid.minor')) {
-                            rv$options$panel.grid.major <- theme_line(colour = gc, size = 0.5)
+                            rv$options$panel.grid.major <- theme_line(colour = gc, size = 0.3)
                             rv$options$panel.grid.minor <- ggplot2::theme_blank()
                         } else {
-                            rv$options$panel.grid.minor <- theme_line(colour = gc, size = 0.2)
-                            rv$options$panel.grid.major <- theme_line(colour = gc, size = 0.5)
+                            rv$options$panel.grid.minor <- theme_line(colour = gc, size = 0.15)
+                            rv$options$panel.grid.major <- theme_line(colour = gc, size = 0.3)
                         }
 
 
@@ -477,7 +491,18 @@ evals <- function(txt, parse = TRUE, cache = TRUE, cache.mode = c('environment',
             cache <- FALSE
         else {
 
-            txt <- sapply(txt.parsed, function(x) paste(deparse(x), collapse = '\n'))
+            txt <- sapply(txt.parsed, function(x) {
+
+                ## if we are parsing, then add default `col` to base plots :)
+                if (deparse(x[[1]]) %in% c('plot', 'barplot', 'lines', 'pie', 'boxplot', 'polygon', 'points','legend', 'hist'))
+                    if (is.null(x$col) & is.null(x$color))
+                        x$col <- panderOptions('graph.colors')[1]
+
+                ## return deparsed
+                paste(deparse(x), collapse = '\n')
+
+            })
+
             if (length(txt) == 0)
                 stop('No R code provided to evaluate!')
 
@@ -724,9 +749,9 @@ evals <- function(txt, parse = TRUE, cache = TRUE, cache.mode = c('environment',
 
         ## add grids to base plots
         if (is.character(graph) & is.null(res$result) & panderOptions('graph.grid')) {
-            grid(lty = 'solid', col = panderOptions('graph.grid.color'))
+            grid(lty = 'solid', col = panderOptions('graph.grid.color'), lwd = 0.5)
             if (panderOptions('graph.grid.minor'))
-                add.minor.ticks(1, 1, grid = TRUE) # TODO: only one minor tick between major ticks
+                add.minor.ticks(2, 2, grid = TRUE) # TODO: only one minor tick between major ticks
         }
 
         ## close grDevice
