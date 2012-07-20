@@ -32,8 +32,8 @@
 ## General tasks
 
   * ~~**add controllable, global options**~~ `pander.option`
-  * ~~rename pander.options & eval.options not to conflict with S3 methods** `panderOptions` and `evalsOptions`
-  * ~~update package functions to use new naming scheme for options**
+  * ~~rename pander.options & eval.options not to conflict with S3 methods** `panderOptions` and `evalsOptions`~~
+  * ~~update package functions to use new naming scheme for options~~
   * **add ~~caption~~/other tweaks (sign. stars, emphasis etc.) to images/tables using `attrs`**
 
 ## Evals
@@ -57,8 +57,14 @@ Global options for: `lattice`, `ggplot2` and `base` plots
 
   * ~~plot margins~~
   * ~~theme: font (family, base size, color)~~
-  * ~~theme: plotting area background colors -> bw, ggplot2like, custom?~~
-  * theme: foreground colors (discrete, continuous)
+  * ~~theme: plotting area background colors~~
+  
+      * known issues: not in `base` plots (just global `backgroung`)
+  
+  * ~~theme: foreground colors (discrete, continuous)~~
+  
+      * known issues: `base` plot solution is really ugly (overwriting calls' `col` parameter)
+	  
   * ~~grid options:~~
   
     * ~~enabled/disabled~~
@@ -68,7 +74,7 @@ Global options for: `lattice`, `ggplot2` and `base` plots
   * axes:
  
     * ~~color~~
-	* angle
+	* **angle**
 
   * others:
       * lwd
