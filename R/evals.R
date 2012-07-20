@@ -494,9 +494,10 @@ evals <- function(txt, parse = TRUE, cache = TRUE, cache.mode = c('environment',
             txt <- sapply(txt.parsed, function(x) {
 
                 ## if we are parsing, then add default `col` to base plots :)
-                if (deparse(x[[1]]) %in% c('plot', 'barplot', 'lines', 'pie', 'boxplot', 'polygon', 'points','legend', 'hist'))
-                    if (is.null(x$col) & is.null(x$color))
-                        x$col <- panderOptions('graph.colors')[1]
+                if (class(x) == 'language')
+                    if (deparse(x[[1]]) %in% c('plot', 'barplot', 'lines', 'pie', 'boxplot', 'polygon', 'points','legend', 'hist'))
+                        if (is.null(x$col) & is.null(x$color))
+                            x$col <- panderOptions('graph.colors')[1]
 
                 ## return deparsed
                 paste(deparse(x), collapse = '\n')
