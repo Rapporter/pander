@@ -33,7 +33,7 @@ We could try other R objects too, for example let us check `chisq.test` on some 
 Plots are automatically grabbed between `brew` tags:
 
 <%=
-require(lattice)
+require(lattice, quietly = TRUE)
 histogram(mtcars$hp)
 %>
 
