@@ -139,8 +139,8 @@ eval.msgs <- function(src, env = NULL, showInvisible = FALSE, graph.unify = eval
                         rv$par.settings$reference.line$col <- gc
                         rv$axis <- add.lattice.grid
                         if (panderOptions('graph.grid.minor')) {
-                            rv$xscale.components = latticeExtra::xscale.components.subticks # TODO: color
-                            rv$yscale.components = latticeExtra::yscale.components.subticks
+                            rv$xscale.components = add.lattice.xsubticks
+                            rv$yscale.components = add.lattice.ysubticks
                         }
                     }
 
