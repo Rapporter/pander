@@ -758,9 +758,13 @@ evals <- function(txt, parse = TRUE, cache = TRUE, cache.mode = c('environment',
 
         ## add grids to base plots
         if (is.character(graph) & is.null(res$result) & panderOptions('graph.grid')) {
-            grid(lty = 'solid', col = panderOptions('graph.grid.color'), lwd = 0.5)
-            if (panderOptions('graph.grid.minor'))
-                add.minor.ticks(2, 2, grid = TRUE)
+            g <- tryCatch(grid(lty = 'solid', col = panderOptions('graph.grid.color'), lwd = 0.5), error = function(e) e)
+            if (!inherits(g, 'error')) {
+                if (panderOptions('graph.grid.minor'))
+                    add.minor.ticks(2, 2, grid = TRUE)
+            } else {
+                res$msg$warnings <- c(res$msg$warnings, 'Printing `lattice`/`ggplot2` is not needed and it leads to missing your `panderOptions`!')
+            }
         }
 
         ## close grDevice
