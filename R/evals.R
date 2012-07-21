@@ -108,7 +108,11 @@ eval.msgs <- function(src, env = NULL, showInvisible = FALSE, graph.unify = eval
                 fc <- panderOptions('graph.fontcolor')
                 gc <- panderOptions('graph.grid.color')
                 cs <- panderOptions('graph.colors')
+                cb <- cs[1] # base color
                 aa <- panderOptions('graph.axis.angle')
+                bc <- panderOptions('graph.background')
+                pc <- panderOptions('graph.panel.background')
+                tc <- ifelse(pc == 'transparent', bc, pc) # "transparent" color
 
                 ## lattice/trellis
                 if (rvc == 'trellis') {
@@ -127,10 +131,10 @@ eval.msgs <- function(src, env = NULL, showInvisible = FALSE, graph.unify = eval
                     rv$par.settings$strip.background$col <- rv$par.settings$strip.border$col <- 'transparent'
 
                     ## colors
-                    rv$par.settings$background$col       <- panderOptions('graph.background')
-                    rv$par.settings$panel.background$col <- panderOptions('graph.panel.background')
-                    rv$par.settings$axis.line$col <- gc
-                    rv$par.settings$plot.polygon$col <- rv$par.settings$plot.symbol$fill <- rv$par.settings$plot.line$col <- rv$par.settings$box.rectangle$fill <- rv$par.settings$box.rectangle$col <- rv$par.settings$plot.symbol$fill <- rv$par.settings$plot.polygon$border <- cs[1]
+                    rv$par.settings$background$col           <- bc
+                    rv$par.settings$panel.background$col     <- pc
+                    rv$par.settings$axis.line$col            <- gc
+                    rv$par.settings$plot.polygon$col         <- rv$par.settings$plot.symbol$fill <- rv$par.settings$plot.line$col <- rv$par.settings$box.rectangle$fill <- rv$par.settings$box.rectangle$col <- rv$par.settings$plot.symbol$fill <- rv$par.settings$plot.polygon$border <- cb
                     rv$par.settings$superpose.polygon$border <- rv$par.settings$superpose.polygon$col <- rv$par.settings$superpose.symbol$col <- cs
 
                     ## grid
@@ -175,18 +179,30 @@ eval.msgs <- function(src, env = NULL, showInvisible = FALSE, graph.unify = eval
                     rv$options$legend.key <- rv$options$strip.background <- ggplot2::theme_rect(col = 'transparent', fill = 'transparent')
 
                     ## colors
-                    rv$options$plot.background  <- ggplot2::theme_rect(fill = panderOptions('graph.background'), colour = NA)
-                    rv$options$panel.background <- ggplot2::theme_rect(fill = panderOptions('graph.panel.background'), colour = gc)
+                    rv$options$plot.background  <- ggplot2::theme_rect(fill = bc, colour = NA)
+                    rv$options$panel.background <- ggplot2::theme_rect(fill = pc, colour = gc)
                     rv$options$axis.ticks       <- ggplot2::theme_segment(colour = gc, size = 0.3)
                     rv$options$panel.border     <- ggplot2::theme_rect(fill = NA, colour = gc)
                     if (is.null(rv$options$labels$colour) & is.null(rv$options$labels$fill)) {
-                        rv$layers[[1]]$geom_params$fill <- cs[1]
-                        rv$layers[[1]]$geom_params$colour <- cs[1]
+
+                        ## update layers with one color
+                        ## this is an ugly hack but `update_geom_defaults` is not reversible :(
+                        for (i in length(rv$layers)) {
+                            if (rv$layers[[i]]$geom$objname %in% c('histogram', 'bar')) {
+                                rv$layers[[i]]$geom_params$fill   <- cb
+                                rv$layers[[i]]$geom_params$colour <- tc
+                            } else
+                                rv$layers[[i]]$geom_params$colour <- cb
+                        }
+
                     } else {
+
+                        ## we have a color scale
                         if (is.null(rv$options$labels$colour))
                             rv <- rv + ggplot2::scale_fill_manual(values = cs)
                         else
                             rv <- rv + ggplot2::scale_colour_manual(values = cs)
+
                     }
 
                     ## grid
