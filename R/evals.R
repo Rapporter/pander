@@ -108,6 +108,7 @@ eval.msgs <- function(src, env = NULL, showInvisible = FALSE, graph.unify = eval
                 fc <- panderOptions('graph.fontcolor')
                 gc <- panderOptions('graph.grid.color')
                 cs <- panderOptions('graph.colors')
+                aa <- panderOptions('graph.axis.angle')
 
                 ## lattice/trellis
                 if (rvc == 'trellis') {
@@ -129,10 +130,8 @@ eval.msgs <- function(src, env = NULL, showInvisible = FALSE, graph.unify = eval
                     rv$par.settings$background$col       <- panderOptions('graph.background')
                     rv$par.settings$panel.background$col <- panderOptions('graph.panel.background')
                     rv$par.settings$axis.line$col <- gc
-
                     rv$par.settings$plot.polygon$col <- rv$par.settings$plot.symbol$fill <- rv$par.settings$plot.line$col <- rv$par.settings$box.rectangle$fill <- rv$par.settings$box.rectangle$col <- rv$par.settings$plot.symbol$fill <- rv$par.settings$plot.polygon$border <- cs[1]
                     rv$par.settings$superpose.polygon$border <- rv$par.settings$superpose.polygon$col <- rv$par.settings$superpose.symbol$col <- cs
-
 
                     ## grid
                     if (panderOptions('graph.grid')) {
@@ -143,6 +142,12 @@ eval.msgs <- function(src, env = NULL, showInvisible = FALSE, graph.unify = eval
                             rv$yscale.components = add.lattice.ysubticks
                         }
                     }
+
+                    ## axis angle
+                    if (aa == 0)
+                        x$y.scales$rot <- c(90)
+#                    if (aa == 1)
+                        # TODO:
 
                 }
 
@@ -713,12 +718,14 @@ evals <- function(txt, parse = TRUE, cache = TRUE, cache.mode = c('environment',
             fbs <- panderOptions('graph.fontsize')
             cex <- fbs/12
 
-            par(family = panderOptions('graph.fontfamily'),
-                cex = cex, cex.axis = cex * 0.8, cex.lab = cex, cex.main = cex * 1.2, cex.sub = cex,
-                col.axis = fc, col.lab = fc, col.main = fc, col.sub = fc,
-                bg = panderOptions('graph.background'), # TODO: how could we color only the inner plot area globally? Not like: https://stat.ethz.ch/pipermail/r-help/2003-May/033971.html
-                fg = panderOptions('graph.grid.color')
-                )
+            par(
+              family   = panderOptions('graph.fontfamily'),
+              cex      = cex, cex.axis = cex * 0.8, cex.lab = cex, cex.main = cex * 1.2, cex.sub = cex,
+              col.axis = fc, col.lab = fc, col.main = fc, col.sub = fc,
+              bg       = panderOptions('graph.background'), # TODO: how could we color only the inner plot area globally? Not like: https://stat.ethz.ch/pipermail/r-help/2003-May/033971.html
+              fg       = panderOptions('graph.grid.color'),
+              las      = panderOptions('graph.axis.angle')
+              )
 
             ## remove margins for potential base plots
             if (panderOptions('graph.nomargin')) {
@@ -753,7 +760,7 @@ evals <- function(txt, parse = TRUE, cache = TRUE, cache.mode = c('environment',
         if (is.character(graph) & is.null(res$result) & panderOptions('graph.grid')) {
             grid(lty = 'solid', col = panderOptions('graph.grid.color'), lwd = 0.5)
             if (panderOptions('graph.grid.minor'))
-                add.minor.ticks(2, 2, grid = TRUE) # TODO: only one minor tick between major ticks
+                add.minor.ticks(2, 2, grid = TRUE)
         }
 
         ## close grDevice
