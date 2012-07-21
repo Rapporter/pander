@@ -134,8 +134,9 @@ eval.msgs <- function(src, env = NULL, showInvisible = FALSE, graph.unify = eval
                     rv$par.settings$background$col           <- bc
                     rv$par.settings$panel.background$col     <- pc
                     rv$par.settings$axis.line$col            <- gc
-                    rv$par.settings$plot.polygon$col         <- rv$par.settings$plot.symbol$fill <- rv$par.settings$plot.line$col <- rv$par.settings$box.rectangle$fill <- rv$par.settings$box.rectangle$col <- rv$par.settings$plot.symbol$fill <- rv$par.settings$plot.polygon$border <- cb
-                    rv$par.settings$superpose.polygon$border <- rv$par.settings$superpose.polygon$col <- rv$par.settings$superpose.symbol$col <- cs
+                    rv$par.settings$plot.symbol$fill         <- rv$par.settings$plot.line$col <- rv$par.settings$box.rectangle$fill <- rv$par.settings$box.rectangle$col <- rv$par.settings$plot.symbol$fill <- rv$par.settings$plot.polygon$col <- cb
+                    rv$par.settings$superpose.polygon$col    <- rv$par.settings$superpose.symbol$col <- cs
+                    rv$par.settings$superpose.polygon$border <- rv$par.settings$plot.polygon$border <- tc
 
                     ## grid
                     if (panderOptions('graph.grid')) {
