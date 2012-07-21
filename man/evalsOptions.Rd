@@ -73,8 +73,9 @@
   \code{output}. See examples of \code{\link{evals}}.
   \item \code{graph.unify}: should \code{evals} try to
   unify the style of (\code{base}, \code{lattice} and
-  \code{ggplot2}) plots? If set to \code{TRUE} (by
-  default), some \code{panderOptions()} would apply.  \item
+  \code{ggplot2}) plots? If set to \code{TRUE}, some
+  \code{panderOptions()} would apply. By default this is
+  disabled not to freak out useRs :) \item
   \code{graph.name}: set the file name of saved plots which
   is \code{\link{tempfile}} by default. A simple character
   string might be provided where \code{\%d} would be

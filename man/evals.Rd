@@ -99,8 +99,9 @@
 
   \item{graph.unify}{should \code{evals} try to unify the
   style of (\code{base}, \code{lattice} and \code{ggplot2})
-  plots? If set to \code{TRUE} (by default), some
-  \code{panderOptions()} would apply.}
+  plots? If set to \code{TRUE}, some \code{panderOptions()}
+  would apply. By default this is disabled not to freak out
+  useRs :)}
 
   \item{graph.name}{set the file name of saved plots which
   is \code{\link{tempfile}} by default. A simple character
