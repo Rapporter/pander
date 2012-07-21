@@ -86,8 +86,24 @@ hash.cache.last.used <- new.env() # when was the hash last queried
 #'      \item \code{evals.messages}: boolean (default: \code{TRUE}) passed to \code{evals}' \code{pander} method specifying if messages should be rendered
 #'      \item \code{p.wrap}: a string (default: \code{'_'}) to wrap vector elements passed to \code{p} function
 #'      \item \code{p.sep}: a string (default: \code{', '}) with the main separator passed to \code{p} function
-#'      \item \code{p.copula}: a string (default: \code{'and'}) a string with ending separator passed to \code{p} function
+#'      \item \code{p.copula}: a string (default: \code{'and'}) with ending separator passed to \code{p} function
 #'      \item \code{graph.nomargin}: boolean (default: \code{TRUE}) if trying to keep plots' margins at minimal
+#'      \item \code{graph.fontfamily}: string (default: \code{'sans'}) specifying the font family to be used in images. Please note, that using a custom font on Windows requires \code{grDevices:::windowsFonts} first.
+#'      \item \code{graph.fontcolor}: string (default: \code{'black'}) specifying the default font color
+#'      \item \code{graph.fontsize}: numeric (default: \code{12}) specifying the \emph{base} font size in pixels. Main title is rendered with \code{1.2} and labels with \code{0.8} multiplier.
+#'      \item \code{graph.grid}: boolean (default: \code{TRUE}) if a grid should be added to the plot
+#'      \item \code{graph.grid.minor}: boolean (default: \code{TRUE}) if a miner grid should be also rendered
+#'      \item \code{graph.grid.color}: string (default: \code{'grey'}) specifying the color of the rendered grid
+#'      \item \code{graph.background}: string (default: \code{'white'}) specifying the plots main background's color
+#'      \item \code{graph.panel.background}: string (default: \code{'transparent'}) specifying the plot's main panel background. Please \emph{note}, that this option is not supported with \code{base} graphics.
+#'      \item \code{graph.color}: character vector of default color palette (defaults to a colorblind theme: \url{http://jfly.iam.u-tokyo.ac.jp/color/}). Please \emph{note} that this update work with \code{base} plots by appending the \code{col} argument to the call if not set.
+#'      \item \code{graph.axis.angle}: numeric (default: \code{1}) specifying the angle of axes' labels. The available options are based on \code{par(les)} and sets if the labels should be:
+#'      \itemize{
+#'              \item \code{1}: parallel to the axis,
+#'              \item \code{2}: horizontal,
+#'              \item \code{3}: perpendicular to the axis or
+#'              \item \code{4}: vertical.
+#' }
 #' }
 #' @param o option name (string). See below.
 #' @param value value to assign (optional)
