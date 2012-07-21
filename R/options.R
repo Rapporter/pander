@@ -38,7 +38,7 @@
                 'cache.copy.images'     = FALSE,
                 'classes'               = NULL,
                 'hooks'                 = NULL,
-                'lenght'                = Inf,
+                'length'                = Inf,
                 'output'                = 'all',
                 'graph.unify'           = TRUE,
                 'graph.name'            = '%t',
