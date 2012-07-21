@@ -145,9 +145,13 @@ eval.msgs <- function(src, env = NULL, showInvisible = FALSE, graph.unify = eval
 
                     ## axis angle
                     if (aa == 0)
-                        x$y.scales$rot <- c(90)
-#                    if (aa == 1)
-                        # TODO:
+                        rv$y.scales$rot <- c(90, 90)
+                    if (aa == 2)
+                        rv$x.scales$rot <- c(90, 90)
+                    if (aa == 3) {
+                        rv$y.scales$rot <- c(90, 90)
+                        rv$x.scales$rot <- c(90, 90)
+                    }
 
                 }
 
@@ -180,9 +184,9 @@ eval.msgs <- function(src, env = NULL, showInvisible = FALSE, graph.unify = eval
                         rv$layers[[1]]$geom_params$colour <- cs[1]
                     } else {
                         if (is.null(rv$options$labels$colour))
-                            rv <- rv + scale_fill_manual(values = cs)
+                            rv <- rv + ggplot2::scale_fill_manual(values = cs)
                         else
-                            rv <- rv + scale_colour_manual(values = cs)
+                            rv <- rv + ggplot2::scale_colour_manual(values = cs)
                     }
 
                     ## grid
@@ -190,14 +194,22 @@ eval.msgs <- function(src, env = NULL, showInvisible = FALSE, graph.unify = eval
                         rv$options$panel.grid.minor <- rv$options$panel.grid.major <- ggplot2::theme_blank()
                     else
                         if (!panderOptions('graph.grid.minor')) {
-                            rv$options$panel.grid.major <- theme_line(colour = gc, size = 0.3)
+                            rv$options$panel.grid.major <- ggplot2::theme_line(colour = gc, size = 0.3)
                             rv$options$panel.grid.minor <- ggplot2::theme_blank()
                         } else {
-                            rv$options$panel.grid.minor <- theme_line(colour = gc, size = 0.15)
-                            rv$options$panel.grid.major <- theme_line(colour = gc, size = 0.3)
+                            rv$options$panel.grid.minor <- ggplot2::theme_line(colour = gc, size = 0.15)
+                            rv$options$panel.grid.major <- ggplot2::theme_line(colour = gc, size = 0.3)
                         }
 
-
+                    ## axis angle
+                    if (aa == 0)
+                        rv$options$axis.text.y = ggplot2::theme_text(angle = 90)
+                    if (aa == 2)
+                        rv$options$axis.text.x = ggplot2::theme_text(angle = 90, hjust = 1)
+                    if (aa == 3) {
+                        rv$options$axis.text.y = ggplot2::theme_text(angle = 90)
+                        rv$options$axis.text.x = ggplot2::theme_text(angle = 90, hjust = 1)
+                    }
 
                 }
 
