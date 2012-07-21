@@ -724,7 +724,8 @@ evals <- function(txt, parse = TRUE, cache = TRUE, cache.mode = c('environment',
               col.axis = fc, col.lab = fc, col.main = fc, col.sub = fc,
               bg       = panderOptions('graph.background'), # TODO: how could we color only the inner plot area globally? Not like: https://stat.ethz.ch/pipermail/r-help/2003-May/033971.html
               fg       = panderOptions('graph.grid.color'),
-              las      = panderOptions('graph.axis.angle')
+              las      = panderOptions('graph.axis.angle'),
+              lwd      = 2
               )
 
             ## remove margins for potential base plots
