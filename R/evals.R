@@ -774,10 +774,10 @@ evals <- function(txt, parse = TRUE, cache = TRUE, cache.mode = c('environment',
             g <- tryCatch(grid(lty = 'solid', col = panderOptions('graph.grid.color'), lwd = 0.5), error = function(e) e)
             if (!inherits(g, 'error')) {
                 if (panderOptions('graph.grid.minor'))
-                    add.minor.ticks(2, 2, grid = TRUE)
-            } else {
-                res$msg$warnings <- c(res$msg$warnings, 'Printing `lattice`/`ggplot2` is not needed and it leads to missing your `panderOptions`!')
+                    g <- tryCatch(add.minor.ticks(2, 2, grid = TRUE), error = function(e) e)
             }
+            if (inherits(g, 'error'))
+                res$msg$warnings <- c(res$msg$warnings, 'Applying default formatting to image is somehow compromised (the result could differ from what you specified in `panderOptions`). Hints: printing `lattice`/`ggplot2` is not needed and tweaking `base` plots with `par` might have some side-effects!')
         }
 
         ## close grDevice
