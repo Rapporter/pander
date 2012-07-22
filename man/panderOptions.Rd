@@ -71,6 +71,10 @@
   \code{TRUE}) if a miner grid should be also rendered
   \item \code{graph.grid.color}: string (default:
   \code{'grey'}) specifying the color of the rendered grid
+  \item \code{graph.grid.lty}: string (default:
+  \code{'dashed}) specifying the line type of grid \item
+  \code{graph.boxes}: boolean (default: \code{FALSE}) if to
+  render a border around of plot (and e.g. around strip)
   \item \code{graph.background}: string (default:
   \code{'white'}) specifying the plots main background's
   color \item \code{graph.panel.background}: string

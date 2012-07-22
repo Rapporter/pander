@@ -74,6 +74,7 @@ Global options for: `lattice`, `ggplot2` and `base` plots
     * ~~enabled/disabled~~
 	* ~~split enable/disable: major/minor~~
 	* ~~grid color~~
+ 	* ~~grid line type~~
 	
   * axes:
  
@@ -83,7 +84,8 @@ Global options for: `lattice`, `ggplot2` and `base` plots
 
   * title: split if too long
   * others:
-      * lwd
+      * ~~border/box around plot/strip~~
+	  * ~~transparent border of histogram~~
 	  * symbols etc.
 
   * ~~remove dependencies: `ggplot2`, `latticeExtra` and build only on `grid`~~

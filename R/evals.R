@@ -126,9 +126,9 @@ eval.msgs <- function(src, env = NULL, showInvisible = FALSE, graph.unify = eval
 
                     ## font family
                     rv$par.settings$axis.text <- rv$par.settings$add.text <- rv$par.settings$par.xlab.text <- rv$par.settings$par.ylab.text <- rv$par.settings$par.zlab.text <- rv$par.settings$par.sub.text <- rv$par.settings$par.main.text <- list(fontfamily = ff, col = fc)
-                    rv$par.settings$fontsize <- list(text = fs, points = fs * 0.8)
+                    rv$par.settings$fontsize  <- list(text = fs, points = fs * 0.8)
 
-                    ## no need for boxes
+                    ## boxes
                     rv$par.settings$strip.background$col     <- 'transparent'
                     if (!panderOptions('graph.boxes')) {
                         rv$par.settings$strip.border$col     <- 'transparent'
@@ -151,8 +151,8 @@ eval.msgs <- function(src, env = NULL, showInvisible = FALSE, graph.unify = eval
                         rv$par.settings$reference.line$lty <- gl
                         rv$axis <- add.lattice.grid
                         if (panderOptions('graph.grid.minor')) {
-                            rv$xscale.components = add.lattice.xsubticks
-                            rv$yscale.components = add.lattice.ysubticks
+                            rv$xscale.components <- add.lattice.xsubticks
+                            rv$yscale.components <- add.lattice.ysubticks
                         }
                     }
 
@@ -184,7 +184,7 @@ eval.msgs <- function(src, env = NULL, showInvisible = FALSE, graph.unify = eval
                     rv$options$strip.text.x     <- ggplot2::theme_text(colour = fc, family = ff, face = 'bold', size = fs)
                     rv$options$strip.text.y     <- ggplot2::theme_text(colour = fc, family = ff, face = 'bold', size = fs, angle = -90)
 
-                    ## no need for boxes
+                    ## boxes
                     if (!panderOptions('graph.boxes')) {
                         rv$options$legend.key       <- rv$options$strip.background <- ggplot2::theme_rect(col = 'transparent', fill = 'transparent')
                         rv$options$panel.border     <- ggplot2::theme_rect(fill = NA, colour = tc)
@@ -234,12 +234,12 @@ eval.msgs <- function(src, env = NULL, showInvisible = FALSE, graph.unify = eval
 
                     ## axis angle
                     if (aa == 0)
-                        rv$options$axis.text.y = ggplot2::theme_text(angle = 90)
+                        rv$options$axis.text.y <- ggplot2::theme_text(angle = 90)
                     if (aa == 2)
-                        rv$options$axis.text.x = ggplot2::theme_text(angle = 90, hjust = 1)
+                        rv$options$axis.text.x <- ggplot2::theme_text(angle = 90, hjust = 1)
                     if (aa == 3) {
-                        rv$options$axis.text.y = ggplot2::theme_text(angle = 90)
-                        rv$options$axis.text.x = ggplot2::theme_text(angle = 90, hjust = 1)
+                        rv$options$axis.text.y <- ggplot2::theme_text(angle = 90)
+                        rv$options$axis.text.x <- ggplot2::theme_text(angle = 90, hjust = 1)
                     }
 
                 }
@@ -772,9 +772,10 @@ evals <- function(txt, parse = TRUE, cache = TRUE, cache.mode = c('environment',
               )
 
             if (panderOptions('graph.boxes'))
-                par(fg = gc, col.axis = fc, col.lab = fc, col.main = fc, col.sub = fc)
+                par(fg = gc)
             else
-                par(fg = bc, col.axis = fc, col.lab = fc, col.main = fc, col.sub = fc)
+                par(fg = bc)
+            par(col.axis = fc, col.lab = fc, col.main = fc, col.sub = fc)
 
             ## remove margins for potential base plots
             if (panderOptions('graph.nomargin')) {
@@ -805,8 +806,8 @@ evals <- function(txt, parse = TRUE, cache = TRUE, cache.mode = c('environment',
         ## did we produce a plot?
         graph  <- ifelse(exists('recorded.plot'), ifelse(is.null(recorded.plot[[1]]), FALSE, file), FALSE)
 
-        ## add grids to base plots
-        if (is.character(graph) & is.null(res$result) & panderOptions('graph.grid')) {
+        ## add grid to base plots
+        if (is.character(graph) & is.null(res$result) & all(par()$mfrow == 1) & panderOptions('graph.grid')) {
             g <- tryCatch(grid(lty = panderOptions('graph.grid.lty'), col = panderOptions('graph.grid.color'), lwd = 0.5), error = function(e) e)
             if (!inherits(g, 'error')) {
                 if (panderOptions('graph.grid.minor'))
