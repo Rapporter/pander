@@ -540,6 +540,9 @@ evals <- function(txt, parse = TRUE, cache = TRUE, cache.mode = c('environment',
             assign(param, evalsOptions(param))
     }
 
+    ## lame constant
+    doAddGrid <- TRUE
+
     ## parse provided code after concatenating
     if (parse) {
 
@@ -553,10 +556,17 @@ evals <- function(txt, parse = TRUE, cache = TRUE, cache.mode = c('environment',
             txt <- sapply(txt.parsed, function(x) {
 
                 ## if we are parsing, then add default `col` to base plots :)
-                if (class(x) == 'call')
-                    if (deparse(x[[1]]) %in% c('plot', 'barplot', 'lines', 'pie', 'boxplot', 'polygon', 'points','legend', 'hist'))
+                if (class(x) == 'call') {
+                    f <- deparse(x[[1]])
+                    if (f %in% c('plot', 'barplot', 'lines', 'pie', 'boxplot', 'polygon', 'points','legend', 'hist', 'pairs', 'stripchart')) {
                         if (is.null(x$col) & is.null(x$color))
                             x$col <- panderOptions('graph.colors')[1]
+
+                        ## and make a note for later: do not add grids!
+                        if (f %in% c('pairs', 'stripchart'))
+                            doAddGrid <<- FALSE
+                    }
+                }
 
                 ## return deparsed
                 paste(deparse(x), collapse = '\n')
@@ -782,7 +792,7 @@ evals <- function(txt, parse = TRUE, cache = TRUE, cache.mode = c('environment',
               lwd      = 2
               )
 
-            if (panderOptions('graph.boxes'))
+            if (panderOptions('graph.boxes') | !doAddGrid)
                 par(fg = gc)
             else
                 par(fg = bc)
@@ -818,8 +828,8 @@ evals <- function(txt, parse = TRUE, cache = TRUE, cache.mode = c('environment',
         graph  <- ifelse(exists('recorded.plot'), ifelse(is.null(recorded.plot[[1]]), FALSE, file), FALSE)
 
         ## add grid to base plots
-        if (is.character(graph) & is.null(res$result) & all(par()$mfrow == 1) & panderOptions('graph.grid')) {
-            ## TODO: do not add grid on: pairs, stripchart
+        if (is.character(graph) & is.null(res$result) & all(par()$mfrow == 1) & panderOptions('graph.grid') & doAddGrid) {
+
             g <- tryCatch(grid(lty = panderOptions('graph.grid.lty'), col = panderOptions('graph.grid.color'), lwd = 0.5), error = function(e) e)
             if (!inherits(g, 'error')) {
                 if (panderOptions('graph.grid.minor'))
@@ -827,6 +837,7 @@ evals <- function(txt, parse = TRUE, cache = TRUE, cache.mode = c('environment',
             }
             if (inherits(g, 'error'))
                 res$msg$warnings <- c(res$msg$warnings, 'Applying default formatting to image is somehow compromised (the result could differ from what you specified in `panderOptions`). Hints: printing `lattice`/`ggplot2` is not needed and tweaking `base` plots with `par` might have some side-effects!')
+
         }
 
         ## close grDevice
