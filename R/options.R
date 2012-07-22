@@ -24,6 +24,7 @@
                 'graph.grid.color'      = 'grey',
                 'graph.grid.lty'        = 'dashed',
                 'graph.boxes'           = FALSE,
+                'graph.legend.position' = 'right',
                 'graph.background'      = 'white',
                 'graph.panel.background'= 'transparent',
                 'graph.colors'          = c("#56B4E9", "#009E73", "#F0E442", "#0072B2", "#D55E00", "#CC79A7", "#999999", "#E69F00"),
@@ -98,6 +99,7 @@ hash.cache.last.used <- new.env() # when was the hash last queried
 #'      \item \code{graph.grid.color}: string (default: \code{'grey'}) specifying the color of the rendered grid
 #'      \item \code{graph.grid.lty}: string (default: \code{'dashed'}) specifying the line type of grid
 #'      \item \code{graph.boxes}: boolean (default: \code{FALSE}) if to render a border around of plot (and e.g. around strip)
+#'      \item \code{graph.legend.position}: string (default: \code{'right'}) specifying the position of the legend: 'top', 'right', 'bottom' or 'left'
 #'      \item \code{graph.background}: string (default: \code{'white'}) specifying the plots main background's color
 #'      \item \code{graph.panel.background}: string (default: \code{'transparent'}) specifying the plot's main panel background. Please \emph{note}, that this option is not supported with \code{base} graphics.
 #'      \item \code{graph.color}: character vector of default color palette (defaults to a colorblind theme: \url{http://jfly.iam.u-tokyo.ac.jp/color/}). Please \emph{note} that this update work with \code{base} plots by appending the \code{col} argument to the call if not set.

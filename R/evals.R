@@ -149,6 +149,7 @@ eval.msgs <- function(src, env = NULL, showInvisible = FALSE, graph.unify = eval
                     if (panderOptions('graph.grid')) {
                         rv$par.settings$reference.line$col <- gc
                         rv$par.settings$reference.line$lty <- gl
+                        rv$par.settings$reference.line$lwd <- 0.5
                         rv$axis <- add.lattice.grid
                         if (panderOptions('graph.grid.minor')) {
                             rv$xscale.components <- add.lattice.xsubticks
@@ -164,6 +165,13 @@ eval.msgs <- function(src, env = NULL, showInvisible = FALSE, graph.unify = eval
                     if (aa == 3) {
                         rv$y.scales$rot <- c(90, 90)
                         rv$x.scales$rot <- c(90, 90)
+                    }
+
+                    ## legend
+                    if (!is.null(rv$legend)) {
+                        l <- rv$legend[1]
+                        names(l) <- panderOptions('graph.legend.position')
+                        rv$legend <- l
                     }
 
                 }
@@ -197,7 +205,7 @@ eval.msgs <- function(src, env = NULL, showInvisible = FALSE, graph.unify = eval
 
                     ## colors
                     rv$options$plot.background  <- ggplot2::theme_rect(fill = bc, colour = NA)
-                    rv$options$axis.ticks       <- ggplot2::theme_segment(colour = gc, size = 0.3)
+                    rv$options$axis.ticks       <- ggplot2::theme_segment(colour = gc, size = 0.2)
                     if (is.null(rv$options$labels$colour) & is.null(rv$options$labels$fill)) {
 
                         ## update layers with one color
@@ -225,11 +233,11 @@ eval.msgs <- function(src, env = NULL, showInvisible = FALSE, graph.unify = eval
                         rv$options$panel.grid.minor <- rv$options$panel.grid.major <- ggplot2::theme_blank()
                     else
                         if (!panderOptions('graph.grid.minor')) {
-                            rv$options$panel.grid.major <- ggplot2::theme_line(colour = gc, size = 0.3, linetype = gl)
+                            rv$options$panel.grid.major <- ggplot2::theme_line(colour = gc, size = 0.2, linetype = gl)
                             rv$options$panel.grid.minor <- ggplot2::theme_blank()
                         } else {
-                            rv$options$panel.grid.minor <- ggplot2::theme_line(colour = gc, size = 0.15, linetype = gl)
-                            rv$options$panel.grid.major <- ggplot2::theme_line(colour = gc, size = 0.3, linetype = gl)
+                            rv$options$panel.grid.minor <- ggplot2::theme_line(colour = gc, size = 0.1, linetype = gl)
+                            rv$options$panel.grid.major <- ggplot2::theme_line(colour = gc, size = 0.2, linetype = gl)
                         }
 
                     ## axis angle
@@ -241,6 +249,9 @@ eval.msgs <- function(src, env = NULL, showInvisible = FALSE, graph.unify = eval
                         rv$options$axis.text.y <- ggplot2::theme_text(angle = 90)
                         rv$options$axis.text.x <- ggplot2::theme_text(angle = 90, hjust = 1)
                     }
+
+                    ## legend
+                    rv$options$legend.position <- panderOptions('graph.legend.position')
 
                 }
 
@@ -808,6 +819,7 @@ evals <- function(txt, parse = TRUE, cache = TRUE, cache.mode = c('environment',
 
         ## add grid to base plots
         if (is.character(graph) & is.null(res$result) & all(par()$mfrow == 1) & panderOptions('graph.grid')) {
+            ## TODO: do not add grid on: pairs, stripchart
             g <- tryCatch(grid(lty = panderOptions('graph.grid.lty'), col = panderOptions('graph.grid.color'), lwd = 0.5), error = function(e) e)
             if (!inherits(g, 'error')) {
                 if (panderOptions('graph.grid.minor'))
