@@ -105,18 +105,14 @@ add.lattice.grid <- function (side = c("top", "bottom", "left", "right"), ..., t
 #' @param lim see \code{latticeExtra::xscale.components.subticks}
 #' @param ... see \code{latticeExtra::xscale.components.subticks}
 #' @param n see \code{latticeExtra::xscale.components.subticks}
-#' @param n2 see \code{latticeExtra::xscale.components.subticks}
-#' @param min.n2 see \code{latticeExtra::xscale.components.subticks}
 #' @keywords internal
 #' @aliases add.lattice.ysubticks
-#' @references This is copied from \code{latticeExtra::xscale.components.subticks}.
-add.lattice.xsubticks <- function (lim, ..., n = 5, n2 = n * 5, min.n2 = n + 5) {
+#' @references This is a simplified verwion of \code{latticeExtra::xscale.components.subticks}.
+add.lattice.xsubticks <- function (lim, ..., n = 2) {
 
     ans    <- lattice::xscale.components.default(lim = lim, ..., n = n)
-    ans2   <- lattice::xscale.components.default(lim = lim, ..., n = n2, min.n = min.n2)
     ticks  <- ans$bottom$ticks$at
-    ticks2 <- ans2$bottom$ticks$at
-    ticks2 <- ticks2[!(ticks2 %in% ticks)]
+    ticks2 <- head(ticks, -1) + diff(head(ticks, 2))/2
     ans$bottom$ticks$at <- c(ticks, ticks2)
     ans$bottom$ticks$tck <- c(rep(1, length(ticks)), rep(0.5, length(ticks2)))
     ans$bottom$labels$at <- ans$bottom$ticks$at
@@ -127,13 +123,11 @@ add.lattice.xsubticks <- function (lim, ..., n = 5, n2 = n * 5, min.n2 = n + 5) 
 }
 
 #' @keywords internal
-add.lattice.ysubticks <- function (lim, ..., n = 5, n2 = n * 5, min.n2 = n + 5) {
+add.lattice.ysubticks <- function (lim, ..., n = 2) {
 
     ans    <- lattice::yscale.components.default(lim = lim, ..., n = n)
-    ans2   <- lattice::yscale.components.default(lim = lim, ..., n = n2, min.n = min.n2)
     ticks  <- ans$left$ticks$at
-    ticks2 <- ans2$left$ticks$at
-    ticks2 <- ticks2[!(ticks2 %in% ticks)]
+    ticks2 <- head(ticks, -1) + diff(head(ticks, 2))/2
     ans$left$ticks$at <- c(ticks, ticks2)
     ans$left$ticks$tck <- c(rep(1, length(ticks)), rep(0.5, length(ticks2)))
     ans$left$labels$at <- ans$left$ticks$at
