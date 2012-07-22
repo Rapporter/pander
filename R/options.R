@@ -22,6 +22,8 @@
                 'graph.grid'            = TRUE,
                 'graph.grid.minor'      = TRUE,
                 'graph.grid.color'      = 'grey',
+                'graph.grid.lty'        = 'dashed',
+                'graph.boxes'           = FALSE,
                 'graph.background'      = 'white',
                 'graph.panel.background'= 'transparent',
                 'graph.colors'          = c("#999999", "#E69F00", "#56B4E9", "#009E73", "#F0E442", "#0072B2", "#D55E00", "#CC79A7"),

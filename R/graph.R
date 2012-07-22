@@ -30,9 +30,9 @@ add.minor.ticks <- function (nx = 4, ny = 4, grid = TRUE) {
         else 2, ticks.at,
              labels = FALSE, tcl = par("tcl"))
         if (w == 'x')
-            abline(v = ticks.at, col = panderOptions('graph.grid.color'), lwd = 0.2)
+            abline(v = ticks.at, col = panderOptions('graph.grid.color'), lwd = 0.2, lty = panderOptions('graph.grid.lty'))
         else
-            abline(h = ticks.at, col = panderOptions('graph.grid.color'), lwd = 0.2)
+            abline(h = ticks.at, col = panderOptions('graph.grid.color'), lwd = 0.2, lty = panderOptions('graph.grid.lty'))
     }
 
     if (nx > 1)
@@ -60,8 +60,7 @@ add.lattice.grid <- function (side = c("top", "bottom", "left", "right"), ..., t
 
     side <- match.arg(side)
     ticks <- match.arg(ticks)
-    scales.tck <- switch(side, left = , bottom = scales$tck[1],
-        right = , top = scales$tck[2])
+    scales.tck <- switch(side, left = , bottom = scales$tck[1], right = , top = scales$tck[2])
     comps.major <- components
     mycomps <- components[[side]]
 
@@ -71,34 +70,31 @@ add.lattice.grid <- function (side = c("top", "bottom", "left", "right"), ..., t
             tck <- mycomps$ticks$tck
             if (any(tck * scales.tck != 0)) {
                 tck <- rep(tck, length = length(lab))
-                comps.major[[side]]$ticks$tck <- ifelse(lab ==
-                  "", NA, tck)
+                comps.major[[side]]$ticks$tck <- ifelse(lab == "", NA, tck)
             }
         }
     } else {
         ticks <- "no"
     }
 
-    axis.text <- trellis.par.get("axis.text")
-    axis.default(side, scales = scales, ticks = ticks, components = comps.major, ..., line.col = panderOptions('graph.grid.color'))
+    axis.text <- lattice::trellis.par.get("axis.text")
+    lattice::axis.default(side, scales = scales, ticks = ticks, components = comps.major, ..., line.col = panderOptions('graph.grid.color'))
 
     if (side %in% c("top", "left"))
         return()
     if (scales$draw == FALSE)
         return()
-    ref.line <- trellis.par.get("reference.line")
+    ref.line <- lattice::trellis.par.get("reference.line")
 
     if (side == "bottom") {
         tck <- abs(mycomps$ticks$tck)
-        panel.refline(v = mycomps$ticks$at, lwd = ref.line$lwd *
-            tck, alpha = ref.line$alpha * tck/max(tck, na.rm = TRUE))
+        lattice::panel.refline(v = mycomps$ticks$at, lwd = ref.line$lwd * tck, alpha = ref.line$alpha * tck/max(tck, na.rm = TRUE))
     }
     if (side == "right") {
         if (!is.list(mycomps))
             mycomps <- components[["left"]]
         tck <- abs(mycomps$ticks$tck)
-        panel.refline(h = mycomps$ticks$at, lwd = ref.line$lwd *
-            tck, alpha = ref.line$alpha * tck/max(tck, na.rm = TRUE))
+        lattice::panel.refline(h = mycomps$ticks$at, lwd = ref.line$lwd * tck, alpha = ref.line$alpha * tck/max(tck, na.rm = TRUE))
     }
 
 }
@@ -116,8 +112,8 @@ add.lattice.grid <- function (side = c("top", "bottom", "left", "right"), ..., t
 #' @references This is copied from \code{latticeExtra::xscale.components.subticks}.
 add.lattice.xsubticks <- function (lim, ..., n = 5, n2 = n * 5, min.n2 = n + 5) {
 
-    ans    <- xscale.components.default(lim = lim, ..., n = n)
-    ans2   <- xscale.components.default(lim = lim, ..., n = n2, min.n = min.n2)
+    ans    <- lattice::xscale.components.default(lim = lim, ..., n = n)
+    ans2   <- lattice::xscale.components.default(lim = lim, ..., n = n2, min.n = min.n2)
     ticks  <- ans$bottom$ticks$at
     ticks2 <- ans2$bottom$ticks$at
     ticks2 <- ticks2[!(ticks2 %in% ticks)]
@@ -133,8 +129,8 @@ add.lattice.xsubticks <- function (lim, ..., n = 5, n2 = n * 5, min.n2 = n + 5) 
 #' @keywords internal
 add.lattice.ysubticks <- function (lim, ..., n = 5, n2 = n * 5, min.n2 = n + 5) {
 
-    ans    <- yscale.components.default(lim = lim, ..., n = n)
-    ans2   <- yscale.components.default(lim = lim, ..., n = n2, min.n = min.n2)
+    ans    <- lattice::yscale.components.default(lim = lim, ..., n = n)
+    ans2   <- lattice::yscale.components.default(lim = lim, ..., n = n2, min.n = min.n2)
     ticks  <- ans$left$ticks$at
     ticks2 <- ans2$left$ticks$at
     ticks2 <- ticks2[!(ticks2 %in% ticks)]
