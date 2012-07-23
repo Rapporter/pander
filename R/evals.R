@@ -149,7 +149,7 @@ eval.msgs <- function(src, env = NULL, showInvisible = FALSE, graph.unify = eval
                     if (panderOptions('graph.grid')) {
                         rv$par.settings$reference.line$col <- gc
                         rv$par.settings$reference.line$lty <- gl
-                        rv$par.settings$reference.line$lwd <- 0.5
+                        rv$par.settings$reference.line$lwd <- 0.7
                         rv$axis <- add.lattice.grid
                         if (panderOptions('graph.grid.minor')) {
                             rv$xscale.components <- add.lattice.xsubticks
@@ -186,10 +186,11 @@ eval.msgs <- function(src, env = NULL, showInvisible = FALSE, graph.unify = eval
 
                     ## font family
                     rv$options$plot.title       <- ggplot2::theme_text(colour = fc, family = ff, face = "bold", size = fs*1.2)
-                    rv$options$axis.text.x      <- rv$options$axis.text.y <- rv$options$legend.text <- ggplot2::theme_text(colour = fc, family = ff, face = 'italic', size = fs*0.8)
-                    rv$options$axis.title.x     <- rv$options$legend.title <- theme_text(colour = fc, family = ff, face = 'italic', size = fs)
-                    rv$options$axis.title.y     <- ggplot2::theme_text(colour = fc, family = ff, face = 'italic', size = fs, angle = 90)
+                    rv$options$axis.text.x      <- rv$options$axis.text.y <- rv$options$legend.text <- ggplot2::theme_text(colour = fc, family = ff, face = 'plain', size = fs*0.8)
+                    rv$options$axis.title.x     <- theme_text(colour = fc, family = ff, face = 'plain', size = fs)
                     rv$options$strip.text.x     <- ggplot2::theme_text(colour = fc, family = ff, face = 'bold', size = fs)
+                    rv$options$axis.title.y     <- ggplot2::theme_text(colour = fc, family = ff, face = 'plain', size = fs, angle = 90)
+                    rv$options$legend.title <- theme_text(colour = fc, family = ff, face = 'italic', size = fs)
                     rv$options$strip.text.y     <- ggplot2::theme_text(colour = fc, family = ff, face = 'bold', size = fs, angle = -90)
 
                     ## boxes
@@ -778,33 +779,37 @@ evals <- function(txt, parse = TRUE, cache = TRUE, cache.mode = c('environment',
 
         if (graph.unify) {
 
-            fc  <- panderOptions('graph.fontcolor')
-            fbs <- panderOptions('graph.fontsize')
-            gc  <- panderOptions('graph.grid.color')
-            bc  <- panderOptions('graph.background')
-            cex <- fbs/12
+            ## helper fn
+            unify.base.pre <- function() {
 
-            par(
-              family   = panderOptions('graph.fontfamily'),
-              cex      = cex, cex.axis = cex * 0.8, cex.lab = cex, cex.main = cex * 1.2, cex.sub = cex,
-              bg       = bc, # TODO: how could we color only the inner plot area globally? Not like: https://stat.ethz.ch/pipermail/r-help/2003-May/033971.html
-              las      = panderOptions('graph.axis.angle'),
-              lwd      = 2
-              )
+                fc  <- panderOptions('graph.fontcolor')
+                fbs <- panderOptions('graph.fontsize')
+                gc  <- panderOptions('graph.grid.color')
+                bc  <- panderOptions('graph.background')
+                cex <- fbs/12
 
-            if (panderOptions('graph.boxes') | !doAddGrid)
-                par(fg = gc)
-            else
-                par(fg = bc)
-            par(col.axis = fc, col.lab = fc, col.main = fc, col.sub = fc)
+                par(
+                  family   = panderOptions('graph.fontfamily'),
+                  cex      = cex, cex.axis = cex * 0.8, cex.lab = cex, cex.main = cex * 1.2, cex.sub = cex,
+                  bg       = bc, # TODO: how could we color only the inner plot area globally? Not like: https://stat.ethz.ch/pipermail/r-help/2003-May/033971.html
+                  las      = panderOptions('graph.axis.angle'),
+                  lwd      = 2
+                  )
 
-            ## remove margins for potential base plots
-            if (panderOptions('graph.nomargin')) {
-                par(mar = c(4.1, 4.3, 2.1, 0.1))
+                if (panderOptions('graph.boxes') | !doAddGrid)
+                    par(fg = gc)
+                else
+                    par(fg = bc)
+                par(col.axis = fc, col.lab = fc, col.main = fc, col.sub = fc)
+
+                ## remove margins for potential base plots
+                if (panderOptions('graph.nomargin')) {
+                    par(mar = c(4.1, 4.3, 2.1, 0.1))
+                }
             }
 
+            unify.base.pre()
         }
-        ## TODO: add the same for hi-res images
 
         ## start recordPlot
         dev.control(displaylist = "enable")
@@ -828,17 +833,20 @@ evals <- function(txt, parse = TRUE, cache = TRUE, cache.mode = c('environment',
         graph  <- ifelse(exists('recorded.plot'), ifelse(is.null(recorded.plot[[1]]), FALSE, file), FALSE)
 
         ## add grid to base plots
-        if (is.character(graph) & is.null(res$result) & all(par()$mfrow == 1) & panderOptions('graph.grid') & doAddGrid) {
+        unify.base.post <- function() {
+            if (is.character(graph) & is.null(res$result) & all(par()$mfrow == 1) & panderOptions('graph.grid') & doAddGrid) {
 
-            g <- tryCatch(grid(lty = panderOptions('graph.grid.lty'), col = panderOptions('graph.grid.color'), lwd = 0.5), error = function(e) e)
-            if (!inherits(g, 'error')) {
-                if (panderOptions('graph.grid.minor'))
-                    g <- tryCatch(add.minor.ticks(2, 2, grid = TRUE), error = function(e) e)
+                g <- tryCatch(grid(lty = panderOptions('graph.grid.lty'), col = panderOptions('graph.grid.color'), lwd = 0.5), error = function(e) e)
+                if (!inherits(g, 'error')) {
+                    if (panderOptions('graph.grid.minor'))
+                        g <- tryCatch(add.minor.ticks(2, 2, grid = TRUE), error = function(e) e)
+                }
+                if (inherits(g, 'error'))
+                    res$msg$warnings <- c(res$msg$warnings, 'Applying default formatting to image is somehow compromised (the result could differ from what you specified in `panderOptions`). Hints: printing `lattice`/`ggplot2` is not needed and tweaking `base` plots with `par` might have some side-effects!')
+
             }
-            if (inherits(g, 'error'))
-                res$msg$warnings <- c(res$msg$warnings, 'Applying default formatting to image is somehow compromised (the result could differ from what you specified in `panderOptions`). Hints: printing `lattice`/`ggplot2` is not needed and tweaking `base` plots with `par` might have some side-effects!')
-
         }
+        unify.base.post()
 
         ## close grDevice
         clear.devs()
@@ -888,7 +896,9 @@ evals <- function(txt, parse = TRUE, cache = TRUE, cache.mode = c('environment',
 
                 ## render high resolution image (if needed)
                 if ((graph.output %in% c('bmp', 'jpeg', 'png', 'tiff')) | (.Platform$OS.type != 'unix')) {
+                    unify.base.pre()
                     eval.msgs(src, env = env.hires)      # we need eval.msgs() here instead of simple eval() to prevent unprinted lattice/ggplot2 objects' issues
+                    unify.base.post()
                     clear.devs()
                 }
 
