@@ -109,6 +109,8 @@ eval.msgs <- function(src, env = NULL, showInvisible = FALSE, graph.unify = eval
                 gc <- panderOptions('graph.grid.color')
                 gl <- panderOptions('graph.grid.lty')
                 cs <- panderOptions('graph.colors')
+                if (panderOptions('graph.color.rnd'))
+                    cs <- sample(cs)
                 cb <- cs[1] # base color
                 aa <- panderOptions('graph.axis.angle')
                 bc <- panderOptions('graph.background')
@@ -587,7 +589,10 @@ evals <- function(txt, parse = TRUE, cache = TRUE, cache.mode = c('environment',
                 ## if we are parsing, then add default `col` to base plots :)
                 if (class(x) == 'call') {
                     f <- deparse(x[[1]])
-                    gc <- panderOptions('graph.colors')[1]
+                    cs <- panderOptions('graph.colors')
+                    if (panderOptions('graph.color.rnd'))
+                        cs <- sample(cs)
+                    gc <- cs[1]
                     if (f %in% c('plot', 'barplot', 'lines', 'pie', 'boxplot', 'polygon', 'points','legend', 'hist', 'pairs', 'stripchart')) {
                         if (is.null(x$col) & is.null(x$color))
                             x$col <- gc

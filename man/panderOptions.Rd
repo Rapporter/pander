@@ -84,15 +84,18 @@
   \code{'transparent'}) specifying the plot's main panel
   background. Please \emph{note}, that this option is not
   supported with \code{base} graphics.  \item
-  \code{graph.color}: character vector of default color
+  \code{graph.colors}: character vector of default color
   palette (defaults to a colorblind theme:
   \url{http://jfly.iam.u-tokyo.ac.jp/color/}). Please
   \emph{note} that this update work with \code{base} plots
   by appending the \code{col} argument to the call if not
-  set.  \item \code{graph.axis.angle}: numeric (default:
-  \code{1}) specifying the angle of axes' labels. The
-  available options are based on \code{par(les)} and sets
-  if the labels should be: \itemize{ \item \code{1}:
+  set.  \item \code{graph.color.rnd}: boolean (dafault:
+  \code{FALSE}) specifying if the palette should be
+  reordered randomly before rendering each plot to get
+  colorful images \item \code{graph.axis.angle}: numeric
+  (default: \code{1}) specifying the angle of axes' labels.
+  The available options are based on \code{par(les)} and
+  sets if the labels should be: \itemize{ \item \code{1}:
   parallel to the axis, \item \code{2}: horizontal, \item
   \code{3}: perpendicular to the axis or \item \code{4}:
   vertical.  } \item \code{graph.symbol}: numeric (default:

@@ -28,6 +28,7 @@
                 'graph.background'      = 'white',
                 'graph.panel.background'= 'transparent',
                 'graph.colors'          = c("#56B4E9", "#009E73", "#F0E442", "#0072B2", "#D55E00", "#CC79A7", "#999999", "#E69F00"),
+                'graph.color.rnd'       = FALSE,
                 'graph.axis.angle'      = 1,
                 'graph.symbol'          = 1
                 ))
@@ -103,7 +104,8 @@ hash.cache.last.used <- new.env() # when was the hash last queried
 #'      \item \code{graph.legend.position}: string (default: \code{'right'}) specifying the position of the legend: 'top', 'right', 'bottom' or 'left'
 #'      \item \code{graph.background}: string (default: \code{'white'}) specifying the plots main background's color
 #'      \item \code{graph.panel.background}: string (default: \code{'transparent'}) specifying the plot's main panel background. Please \emph{note}, that this option is not supported with \code{base} graphics.
-#'      \item \code{graph.color}: character vector of default color palette (defaults to a colorblind theme: \url{http://jfly.iam.u-tokyo.ac.jp/color/}). Please \emph{note} that this update work with \code{base} plots by appending the \code{col} argument to the call if not set.
+#'      \item \code{graph.colors}: character vector of default color palette (defaults to a colorblind theme: \url{http://jfly.iam.u-tokyo.ac.jp/color/}). Please \emph{note} that this update work with \code{base} plots by appending the \code{col} argument to the call if not set.
+#'      \item \code{graph.color.rnd}: boolean (dafault: \code{FALSE}) specifying if the palette should be reordered randomly before rendering each plot to get colorful images
 #'      \item \code{graph.axis.angle}: numeric (default: \code{1}) specifying the angle of axes' labels. The available options are based on \code{par(les)} and sets if the labels should be:
 #'      \itemize{
 #'              \item \code{1}: parallel to the axis,
