@@ -95,7 +95,9 @@
   if the labels should be: \itemize{ \item \code{1}:
   parallel to the axis, \item \code{2}: horizontal, \item
   \code{3}: perpendicular to the axis or \item \code{4}:
-  vertical. } }
+  vertical.  } \item \code{graph.symbol}: numeric (default:
+  \code{1}) specifying a symbol (see the \code{pch}
+  parameter of \code{par}) }
 }
 \note{
   \code{pander.option} is deprecated and is to be removed

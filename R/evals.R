@@ -114,6 +114,7 @@ eval.msgs <- function(src, env = NULL, showInvisible = FALSE, graph.unify = eval
                 bc <- panderOptions('graph.background')
                 pc <- panderOptions('graph.panel.background')
                 tc <- ifelse(pc == 'transparent', bc, pc) # "transparent" color
+                gs <- panderOptions('graph.symbol')
 
                 ## lattice/trellis
                 if (rvc == 'trellis') {
@@ -142,11 +143,17 @@ eval.msgs <- function(src, env = NULL, showInvisible = FALSE, graph.unify = eval
                     ## colors
                     rv$par.settings$background$col           <- bc
                     rv$par.settings$panel.background$col     <- pc
-                    rv$par.settings$plot.symbol$col          <- rv$par.settings$plot.line$col <- rv$par.settings$box.rectangle$fill <- rv$par.settings$box.rectangle$col <- rv$par.settings$plot.symbol$fill <- rv$par.settings$plot.polygon$col <- cb
-                    rv$par.settings$superpose.polygon$col    <- rv$par.settings$superpose.symbol$col <- rv$par.settings$superpose.symbol$col <- cs
+                    rv$par.settings$plot.line$col            <- rv$par.settings$box.rectangle$fill <- rv$par.settings$box.rectangle$col <- rv$par.settings$plot.polygon$col <- cb
+                    rv$par.settings$superpose.symbol$col     <- rv$par.settings$superpose.symbol$col <- cs
                     rv$par.settings$superpose.polygon$border <- rv$par.settings$plot.polygon$border <- tc
                     rv$par.settings$box.umbrella             <- list(col = 'black', lty = 'solid', lwd = 2)
                     rv$par.settings$plot.line$lwd            <- 2
+                    ## pch
+                    rv$par.settings$plot.symbol$pch          <- rv$par.settings$superpose.symbol$pch <- gs
+                    ##if (gs > 20 & gs <= 25 ) {}
+                    rv$par.settings$plot.symbol$col          <- cb
+                    rv$par.settings$superpose.symbol$col     <- cs
+                    rv$par.settings$plot.symbol$fill         <- rv$par.settings$superpose.symbol$fill <- tc
 
                     ## grid
                     if (panderOptions('graph.grid')) {
@@ -214,7 +221,7 @@ eval.msgs <- function(src, env = NULL, showInvisible = FALSE, graph.unify = eval
                     for (i in length(rv$layers))
                         if (rv$layers[[i]]$geom$objname %in% c('point')) {
                             rv$layers[[i]]$geom_params$size   <- 3
-                            rv$layers[[i]]$geom_params$shape  <- 21
+                            rv$layers[[i]]$geom_params$shape  <- gs
                         }
                     ## geom colors
                     if (is.null(rv$options$labels$colour) & is.null(rv$options$labels$fill)) {
@@ -819,7 +826,8 @@ evals <- function(txt, parse = TRUE, cache = TRUE, cache.mode = c('environment',
                   cex      = cex, cex.axis = cex * 0.8, cex.lab = cex, cex.main = cex * 1.2, cex.sub = cex,
                   bg       = bc, # TODO: how could we color only the inner plot area globally? Not like: https://stat.ethz.ch/pipermail/r-help/2003-May/033971.html
                   las      = panderOptions('graph.axis.angle'),
-                  lwd      = 2
+                  lwd      = 2,
+                  pch      = panderOptions('graph.symbol')
                   )
 
                 if (panderOptions('graph.boxes') | !updateFg)

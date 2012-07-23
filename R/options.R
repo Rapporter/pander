@@ -28,7 +28,8 @@
                 'graph.background'      = 'white',
                 'graph.panel.background'= 'transparent',
                 'graph.colors'          = c("#56B4E9", "#009E73", "#F0E442", "#0072B2", "#D55E00", "#CC79A7", "#999999", "#E69F00"),
-                'graph.axis.angle'      = 1
+                'graph.axis.angle'      = 1,
+                'graph.symbol'          = 1
                 ))
 
     ## evals options
@@ -109,7 +110,8 @@ hash.cache.last.used <- new.env() # when was the hash last queried
 #'              \item \code{2}: horizontal,
 #'              \item \code{3}: perpendicular to the axis or
 #'              \item \code{4}: vertical.
-#' }
+#'      }
+#'      \item \code{graph.symbol}: numeric (default: \code{1}) specifying a symbol (see the \code{pch} parameter of \code{par})
 #' }
 #' @param o option name (string). See below.
 #' @param value value to assign (optional)
