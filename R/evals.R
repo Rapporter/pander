@@ -120,7 +120,7 @@ eval.msgs <- function(src, env = NULL, showInvisible = FALSE, graph.unify = eval
 
                     ## margin
                     if (panderOptions('graph.nomargin')) {
-                        rv$par.settings$layout.heights <- list(top.padding = 0.4, bottom.padding = 0,  main = 1.4, main.key.padding = -1)
+                        rv$par.settings$layout.heights <- list(top.padding = 0.4, bottom.padding = 0,  main = 1.4, main.key.padding = 0)
                         rv$par.settings$layout.widths  <- list(right.padding = -1, left.padding = 0.4)
                     }
 
@@ -142,8 +142,8 @@ eval.msgs <- function(src, env = NULL, showInvisible = FALSE, graph.unify = eval
                     ## colors
                     rv$par.settings$background$col           <- bc
                     rv$par.settings$panel.background$col     <- pc
-                    rv$par.settings$plot.symbol$fill         <- rv$par.settings$plot.line$col <- rv$par.settings$box.rectangle$fill <- rv$par.settings$box.rectangle$col <- rv$par.settings$plot.symbol$fill <- rv$par.settings$plot.polygon$col <- cb
-                    rv$par.settings$superpose.polygon$col    <- rv$par.settings$superpose.symbol$col <- cs
+                    rv$par.settings$plot.symbol$col          <- rv$par.settings$plot.line$col <- rv$par.settings$box.rectangle$fill <- rv$par.settings$box.rectangle$col <- rv$par.settings$plot.symbol$fill <- rv$par.settings$plot.polygon$col <- cb
+                    rv$par.settings$superpose.polygon$col    <- rv$par.settings$superpose.symbol$col <- rv$par.settings$superpose.symbol$col <- cs
                     rv$par.settings$superpose.polygon$border <- rv$par.settings$plot.polygon$border <- tc
                     rv$par.settings$box.umbrella             <- list(col = 'black', lty = 'solid', lwd = 2)
                     rv$par.settings$plot.line$lwd            <- 2
@@ -188,12 +188,12 @@ eval.msgs <- function(src, env = NULL, showInvisible = FALSE, graph.unify = eval
                     }
 
                     ## font family
-                    rv$options$plot.title       <- ggplot2::theme_text(colour = fc, family = ff, face = "bold", size = fs*1.2)
-                    rv$options$axis.text.x      <- rv$options$axis.text.y <- rv$options$legend.text <- ggplot2::theme_text(colour = fc, family = ff, face = 'plain', size = fs*0.8)
-                    rv$options$axis.title.x     <- theme_text(colour = fc, family = ff, face = 'plain', size = fs)
+                    rv$options$plot.title       <- ggplot2::theme_text(colour = fc, family = ff, face = "bold", size = fs * 1.2)
+                    rv$options$axis.text.x      <- rv$options$axis.text.y <- rv$options$legend.text <- ggplot2::theme_text(colour = fc, family = ff, face = 'plain', size = fs * 0.8)
+                    rv$options$axis.title.x     <- ggplot2::theme_text(colour = fc, family = ff, face = 'plain', size = fs)
                     rv$options$strip.text.x     <- ggplot2::theme_text(colour = fc, family = ff, face = 'plain', size = fs)
                     rv$options$axis.title.y     <- ggplot2::theme_text(colour = fc, family = ff, face = 'plain', size = fs, angle = 90)
-                    rv$options$legend.title <- theme_text(colour = fc, family = ff, face = 'italic', size = fs)
+                    rv$options$legend.title     <- ggplot2::theme_text(colour = fc, family = ff, face = 'italic', size = fs)
                     rv$options$strip.text.y     <- ggplot2::theme_text(colour = fc, family = ff, face = 'plain', size = fs, angle = -90)
 
                     ## boxes
@@ -210,6 +210,13 @@ eval.msgs <- function(src, env = NULL, showInvisible = FALSE, graph.unify = eval
                     ## colors
                     rv$options$plot.background  <- ggplot2::theme_rect(fill = bc, colour = NA)
                     rv$options$axis.ticks       <- ggplot2::theme_segment(colour = gc, size = 0.2)
+                    ## point shape still has to be updated
+                    for (i in length(rv$layers))
+                        if (rv$layers[[i]]$geom$objname %in% c('point')) {
+                            rv$layers[[i]]$geom_params$size   <- 3
+                            rv$layers[[i]]$geom_params$shape  <- 21
+                        }
+                    ## geom colors
                     if (is.null(rv$options$labels$colour) & is.null(rv$options$labels$fill)) {
 
                         ## update layers with one color
@@ -222,8 +229,13 @@ eval.msgs <- function(src, env = NULL, showInvisible = FALSE, graph.unify = eval
                                 if (rv$layers[[i]]$geom$objname %in% c('boxplot')) {
                                     rv$layers[[i]]$geom_params$fill   <- cb
                                     rv$layers[[i]]$geom_params$colour <- 'black'
-                                } else
-                                    rv$layers[[i]]$geom_params$colour <- cb
+                                } else {
+                                    if (rv$layers[[i]]$geom$objname %in% c('point')) {
+                                        rv$layers[[i]]$geom_params$fill   <- tc
+                                        rv$layers[[i]]$geom_params$colour <- cb
+                                    } else
+                                        rv$layers[[i]]$geom_params$colour <- cb
+                                }
                             }
                         }
 
@@ -231,9 +243,9 @@ eval.msgs <- function(src, env = NULL, showInvisible = FALSE, graph.unify = eval
 
                         ## we have a color scale
                         if (is.null(rv$options$labels$colour))
-                            rv <- rv + ggplot2::scale_fill_manual(values = cs)
+                            rv <- rv + ggplot2::scale_fill_manual(values = cs) + ggplot2::scale_shape(solid = FALSE)
                         else
-                            rv <- rv + ggplot2::scale_colour_manual(values = cs)
+                            rv <- rv + ggplot2::scale_colour_manual(values = cs) + ggplot2::scale_shape(solid = FALSE)
 
                     }
 
@@ -251,12 +263,12 @@ eval.msgs <- function(src, env = NULL, showInvisible = FALSE, graph.unify = eval
 
                     ## axis angle
                     if (aa == 0)
-                        rv$options$axis.text.y <- ggplot2::theme_text(angle = 90)
+                        rv$options$axis.text.y <- ggplot2::theme_text(colour = fc, family = ff, face = 'plain', size = fs * 0.8, angle = 90)
                     if (aa == 2)
-                        rv$options$axis.text.x <- ggplot2::theme_text(angle = 90, hjust = 1)
+                        rv$options$axis.text.x <- ggplot2::theme_text(colour = fc, family = ff, face = 'plain', size = fs * 0.8, angle = 90, hjust = 1)
                     if (aa == 3) {
-                        rv$options$axis.text.y <- ggplot2::theme_text(angle = 90)
-                        rv$options$axis.text.x <- ggplot2::theme_text(angle = 90, hjust = 1)
+                        rv$options$axis.text.y <- ggplot2::theme_text(colour = fc, family = ff, face = 'plain', size = fs * 0.8, angle = 90)
+                        rv$options$axis.text.x <- ggplot2::theme_text(colour = fc, family = ff, face = 'plain', size = fs * 0.8, angle = 90, hjust = 1)
                     }
 
                     ## legend
