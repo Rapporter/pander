@@ -137,6 +137,7 @@ eval.msgs <- function(src, env = NULL, showInvisible = FALSE, graph.unify = eval
                         rv$par.settings$strip.border$col     <- gc
                         rv$par.settings$axis.line$col        <- gc
                     }
+                    rv$par.settings$between                  <- list(x = 0.4, y = 0.4)
 
                     ## colors
                     rv$par.settings$background$col           <- bc
@@ -144,6 +145,8 @@ eval.msgs <- function(src, env = NULL, showInvisible = FALSE, graph.unify = eval
                     rv$par.settings$plot.symbol$fill         <- rv$par.settings$plot.line$col <- rv$par.settings$box.rectangle$fill <- rv$par.settings$box.rectangle$col <- rv$par.settings$plot.symbol$fill <- rv$par.settings$plot.polygon$col <- cb
                     rv$par.settings$superpose.polygon$col    <- rv$par.settings$superpose.symbol$col <- cs
                     rv$par.settings$superpose.polygon$border <- rv$par.settings$plot.polygon$border <- tc
+                    rv$par.settings$box.umbrella             <- list(col = 'black', lty = 'solid', lwd = 2)
+                    rv$par.settings$plot.line$lwd            <- 2
 
                     ## grid
                     if (panderOptions('graph.grid')) {
@@ -188,10 +191,10 @@ eval.msgs <- function(src, env = NULL, showInvisible = FALSE, graph.unify = eval
                     rv$options$plot.title       <- ggplot2::theme_text(colour = fc, family = ff, face = "bold", size = fs*1.2)
                     rv$options$axis.text.x      <- rv$options$axis.text.y <- rv$options$legend.text <- ggplot2::theme_text(colour = fc, family = ff, face = 'plain', size = fs*0.8)
                     rv$options$axis.title.x     <- theme_text(colour = fc, family = ff, face = 'plain', size = fs)
-                    rv$options$strip.text.x     <- ggplot2::theme_text(colour = fc, family = ff, face = 'bold', size = fs)
+                    rv$options$strip.text.x     <- ggplot2::theme_text(colour = fc, family = ff, face = 'plain', size = fs)
                     rv$options$axis.title.y     <- ggplot2::theme_text(colour = fc, family = ff, face = 'plain', size = fs, angle = 90)
                     rv$options$legend.title <- theme_text(colour = fc, family = ff, face = 'italic', size = fs)
-                    rv$options$strip.text.y     <- ggplot2::theme_text(colour = fc, family = ff, face = 'bold', size = fs, angle = -90)
+                    rv$options$strip.text.y     <- ggplot2::theme_text(colour = fc, family = ff, face = 'plain', size = fs, angle = -90)
 
                     ## boxes
                     if (!panderOptions('graph.boxes')) {
@@ -215,8 +218,13 @@ eval.msgs <- function(src, env = NULL, showInvisible = FALSE, graph.unify = eval
                             if (rv$layers[[i]]$geom$objname %in% c('histogram', 'bar')) {
                                 rv$layers[[i]]$geom_params$fill   <- cb
                                 rv$layers[[i]]$geom_params$colour <- tc
-                            } else
-                                rv$layers[[i]]$geom_params$colour <- cb
+                            } else {
+                                if (rv$layers[[i]]$geom$objname %in% c('boxplot')) {
+                                    rv$layers[[i]]$geom_params$fill   <- cb
+                                    rv$layers[[i]]$geom_params$colour <- 'black'
+                                } else
+                                    rv$layers[[i]]$geom_params$colour <- cb
+                            }
                         }
 
                     } else {
@@ -541,8 +549,9 @@ evals <- function(txt, parse = TRUE, cache = TRUE, cache.mode = c('environment',
             assign(param, evalsOptions(param))
     }
 
-    ## lame constant
+    ## lame constants
     doAddGrid <- TRUE
+    updateFg  <- TRUE
 
     ## parse provided code after concatenating
     if (parse) {
@@ -559,13 +568,18 @@ evals <- function(txt, parse = TRUE, cache = TRUE, cache.mode = c('environment',
                 ## if we are parsing, then add default `col` to base plots :)
                 if (class(x) == 'call') {
                     f <- deparse(x[[1]])
+                    gc <- panderOptions('graph.colors')[1]
                     if (f %in% c('plot', 'barplot', 'lines', 'pie', 'boxplot', 'polygon', 'points','legend', 'hist', 'pairs', 'stripchart')) {
                         if (is.null(x$col) & is.null(x$color))
-                            x$col <- panderOptions('graph.colors')[1]
+                            x$col <- gc
 
                         ## and make a note for later: do not add grids!
-                        if (f %in% c('pairs', 'stripchart'))
+                        if (f %in% c('pairs', 'stripchart')) {
                             doAddGrid <<- FALSE
+                            updateFg  <<- FALSE
+                        }
+                        if (f %in% c('boxplot'))
+                            x$border <- 'black'
                     }
                 }
 
@@ -796,7 +810,7 @@ evals <- function(txt, parse = TRUE, cache = TRUE, cache.mode = c('environment',
                   lwd      = 2
                   )
 
-                if (panderOptions('graph.boxes') | !doAddGrid)
+                if (panderOptions('graph.boxes') | !updateFg)
                     par(fg = gc)
                 else
                     par(fg = bc)
