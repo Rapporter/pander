@@ -86,9 +86,11 @@ Global options for: `lattice`, `ggplot2` and `base` plots
   * others:
       * ~~border/box around plot/strip~~
 	  * ~~transparent border of histogram~~
-	  * symbols etc.
+	  * ~~symbols~~
 
   * ~~remove dependencies: `ggplot2`, `latticeExtra` and build only on `grid`~~
+
+**Add demo to GH page!**: `inst/examples/graph.brew`
 
 ## Helper functions
 
