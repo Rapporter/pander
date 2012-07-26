@@ -18,7 +18,7 @@ The package is also capable of exporting/converting complex Pandoc documents (re
 
   * no need for calling `ascii`, `xtable`, `Hmisc`, `tables` etc. to transform an R object to `HTML`, `tex` etc. as `pander` results in Pandoc's *markdown* which can (automatically) be converted to almost any text document format (like: pdf, HTML, odt, docx, textile, asciidoc, reStructuredText etc.). Conversion can be done automatically after calling `pander` reporting functions ([Pander.brew](#brew-to-pandoc) or [Pandoc](#live-report-generation)).
   * based on the above *no "traditional" R console output* is shown in the resulting document (nor in markdown, nor in exported docs) but **all R objects are transformed to tables, list etc**. Well, there is an option (`show.src`) to show the original R commands before the formatted output, and `pander`˛calls can be also easily tweaked (just file an issue) to return `print`ed R objects - if you would need that in some strange situation - like writing an R tutorial. But **I really think that nor R code, nor raw R results have anything to do with an exported report** :)
-  * *graphs/plots* are recognized in blocks of R commands without any special setting or marks around code block and saved to disk in a `png` file linked in the resulting document. This means if you create a report (e.g. `brew` a text file) and export it to pdf/docx etc. all the plots/images would be there. There are some parameters to specify the resolution of the image and also the type (e.g. `jpg`, `svg` or `pdf`).
+  * *graphs/plots* are recognized in blocks of R commands without any special setting or marks around code block and saved to disk in a `png` file linked in the resulting document. This means if you create a report (e.g. `brew` a text file) and export it to pdf/docx etc. all the plots/images would be there. There are some parameters to specify the resolution of the image and also the type (e.g. `jpg`, `svg` or `pdf`) besides a **wide variety of [theme options](#pander-options)**. About the latter, please check out `graphs.brew` [below](#examples).
   * `pander`˛uses its build in (IMHO quite decent) [**caching**](#caching). This means that if evaluation of some R commands take too much time (which can be set by option/parameter), then the results are saved in a file and returned from there on next exact R code's evaluation. This caching algorithm tries to be **smart** as checks not only the passed R sources, but *all variables and functions* inside that and saves the hash of those. This is a quite secure way of caching (see details [below](#caching)), but if you would encounter any issues, just switch off the cache. I've not seen any issues :)
   * `knitr` *support* is coming too, for details see my [TODO list](https://github.com/daroczig/pander/blob/master/TODO.md) **Update**: just use `knitr` to generate markdown and pass that to `Pandoc.convert`
 
@@ -47,8 +47,8 @@ An alternative method (bypassing Pandoc dependency) would be to call the awesome
 
 Now you would only need a few cool packages from CRAN:
 
-  * ~~[brew](http://cran.r-project.org/web/packages/brew/index.html) for literate programming~~
   * [digest](http://cran.r-project.org/web/packages/digest/index.html) to compute hashes while caching
+  * ~~[brew](http://cran.r-project.org/web/packages/brew/index.html) for literate programming~~
   * ~~[parser](http://cran.r-project.org/web/packages/parser/index.html) to identify variables in passed R commands~~
   * ~~[evaluate](http://cran.r-project.org/web/packages/evaluate/index.html)~~
   * besides [R](http://www.r-project.org/) of course!
@@ -312,7 +312,7 @@ The output of different **statistical methods** are tried to be prettyfied. Some
 ---------------------------------------------------
  Test statistic   P value   Alternative hypothesis 
 ---------------- --------- ------------------------
-      0.16        0.5487          two-sided        
+      0.1         0.9667          two-sided        
 ---------------------------------------------------
 
 Table: Two-sample Kolmogorov-Smirnov test: `runif(50)` and `runif(50)`
@@ -548,6 +548,7 @@ The package comes bundled with some examples for `Pandoc.brew` to let users chec
 
   * [minimal.brew](https://github.com/daroczig/pander/blob/master/inst/examples/minimal.brew)
   * [short-code-long-report.brew](https://github.com/daroczig/pander/blob/master/inst/examples/short-code-long-report.brew)
+  * [graphs.brew](https://github.com/daroczig/pander/blob/master/inst/examples/graphs.brew)
 
 To `brew` these examples on your machine try to run the followings.:
 
@@ -557,12 +558,16 @@ Pandoc.brew(system.file('examples/minimal.brew', package='pander'), output = tem
 
 Pandoc.brew(system.file('examples/short-code-long-report.brew', package='pander'))
 Pandoc.brew(system.file('examples/short-code-long-report.brew', package='pander'), output = tempfile(), convert = 'html')
+
+Pandoc.brew(system.file('examples/graphs.brew', package='pander'))
+Pandoc.brew(system.file('examples/graphs.brew', package='pander'), output = tempfile(), convert = 'html')
 ```
 
 For easy access I have uploaded some exported documents of the above examples:
 
-  * minimal.brew: [markdown](minimal.md) [html](http://daroczig.github.com/pander/minimal.html) [pdf](http://daroczig.github.com/pander/minimal.pdf) [odt](http://daroczig.github.com/pander/minimal.odt) [docx](http://daroczig.github.com/pander/minimal.docx)
+  * minimal.brew: [markdown](http://daroczig.github.com/pander/minimal.md) [html](http://daroczig.github.com/pander/minimal.html) [pdf](http://daroczig.github.com/pander/minimal.pdf) [odt](http://daroczig.github.com/pander/minimal.odt) [docx](http://daroczig.github.com/pander/minimal.docx)
   * short-code-long-report.brew: [markdown](http://daroczig.github.com/pander/short-code-long-report.md) [html](http://daroczig.github.com/pander/short-code-long-report.html) [pdf](http://daroczig.github.com/pander/short-code-long-report.pdf) [odt](http://daroczig.github.com/pander/short-code-long-report.odt) [docx](http://daroczig.github.com/pander/short-code-long-report.docx)
+  * graphs.brew: [markdown](http://daroczig.github.com/pander/graphs.md) [html](http://daroczig.github.com/pander/graphs.html) [pdf](http://daroczig.github.com/pander/graphs.pdf) [odt](http://daroczig.github.com/pander/graphs.odt) [docx](http://daroczig.github.com/pander/graphs.docx)
 
 Please check out `pdf`, `docx`, `odt` and other formats (changing the above `convert` option) on your machine too and do not forget to [give some feedback](https://github.com/daroczig/pander/issues)!
 
@@ -642,8 +647,30 @@ myReport$export(open = FALSE)
   * `p.wrap`: a string (default:`'_'`) to wrap vector elements passed to `p` function
   * `p.sep`: a string (default: `', '`) with the main separator passed to `p` function
   * `p.copula`: a string (default: `'and'`) a string with ending separator passed to `p` function
+  * `graph.nomargin`: boolean (default: `TRUE`) if trying to keep plots' margins at minimal
+  * `graph.fontfamily`: string (default: `'sans'`) specifying the font family to be used in images. Please note, that using a custom font on Windows requires `grDevices:::windowsFonts` first.
+  * `graph.fontcolor`: string (default: `'black'`) specifying the default font color
+  * `graph.fontsize`: numeric (default: `12`) specifying the *base* font size in pixels. Main title is rendered with `1.2` and labels with `0.8` multiplier.
+  * `graph.grid`: boolean (default: `TRUE`) if a grid should be added to the plot
+  * `graph.grid.minor`: boolean (default: `TRUE`) if a miner grid should be also rendered
+  * `graph.grid.color`: string (default: `'grey'`) specifying the color of the rendered grid
+  * `graph.grid.lty`: string (default: `'dashed'`) specifying the line type of grid
+  * `graph.boxes`: boolean (default: `FALSE`) if to render a border around of plot (and e.g. around strip)
+  * `graph.legend.position`: string (default: `'right'`) specifying the position of the legend: 'top', 'right', 'bottom' or 'left'
+  * `graph.background`: string (default: `'white'`) specifying the plots main background's color
+  * `graph.panel.background`: string (default: `'transparent'`) specifying the plot's main panel background. Please *note*, that this option is not supported with `base` graphics.
+  * `graph.colors`: character vector of default color palette (defaults to a [colorblind theme](http://jfly.iam.u-tokyo.ac.jp/color/)). Please *note* that this update work with `base` plots by appending the `col` argument to the call if not set.
+  * `graph.color.rnd`: boolean (dafault: `FALSE`) specifying if the palette should be reordered randomly before rendering each plot to get colorful images
+  * `graph.axis.angle`: numeric (default: `1`) specifying the angle of axes' labels. The available options are based on `par(les)` and sets if the labels should be:
 
-Besides localization of numeric formats and table/list's styles there are some technical options too which would effect e.g. [caching](#caching) or the format of rendered image files. You can query/update those with `evalsOptions()` as the main backend of `pander` calls is a custom evaluation function called [`evals`](#evals).
+      *  `1`: parallel to the axis,
+      *  `2`: horizontal,
+      *  `3`: perpendicular to the axis or
+      *  `4`: vertical.
+
+  *  `graph.symbol`: numeric (default: `1`) specifying a symbol (see the `pch` parameter of `par`)
+
+Besides localization of numeric formats, table/list's and plots' styles there are some technical options too which would effect e.g. [caching](#caching) or the format of rendered image files. You can query/update those with `evalsOptions()` as the main backend of `pander` calls is a custom evaluation function called [`evals`](#evals).
 
 The list of possible options are:
 
@@ -657,7 +684,7 @@ The list of possible options are:
   * `hooks`: list of hooks to be run for given classes in the form of `list(class = fn)`. If you would also specify some parameters of the function, a list should be provided in the form of `list(fn, param1, param2=NULL)` etc. So the hooks would become `list(class1=list(fn, param1, param2=NULL), ...)`. See example of [`evals`](#evals) for more details. A default hook can be specified too by setting the class to `'default'`. This can be handy if you do not want to define separate methods/functions to each possible class, but automatically apply the default hook to all classes not mentioned in the list. You may also specify only one element in the list like: `hooks=list('default' = pander.return)`. Please note, that nor error/warning messages, nor stdout is captured (so: updated) while running hooks!
   * `length`: any R object exceeding the specified length will not be returned. The default value (`Inf`) does not filter out any R objects.
   * `output`: a character vector of required returned values. This might be useful if you are only interested in the `result`, and do not want to save/see e.g. `messages` or `print`ed `output`. See examples of [`evals`](#evals).
-  * `graph.nomargin`: should [`evals`](#evals) try to keep plots' margins minimal?
+  * `graph.unify`: should `evals` try to unify the style of (`base`, `lattice` and `ggplot2`) plots? If set to `TRUE`, some `panderOptions()` would apply. By default this is disabled not to freak out useRs :)
   * `graph.name`: set the file name of saved plots which is `%s` by default. A simple character string might be provided where `%d` would be replaced by the index of the generating `txt` source, `%n` with an incremented integer in `graph.dir` with similar file names and `%t` by some unique random characters. A function's name to be `eval`uated can be passed here too.
   * `graph.dir`: path to a directory where to place generated images. If the directory does not exist, [`evals`](#evals) try to create that. Default set to `plots` in current working directory.
   * `graph.output`: set the required file format of saved plots. Currently it could be any of  `grDevices`: `png`, `bmp`, `jpeg`, `jpg`, `tiff`, `svg` or `pdf`.
@@ -682,7 +709,7 @@ All evaluation of provided R commands (while running [`brew`](#brew-to-pandoc) o
   * Each parsed expression's **part** (let it be a function, variable, constant etc.) `eval`uated (as a `name`) separately to a `list`. This list describes the unique structure and the content of the passed R expressions, and has some IMHO really great benefits (see below).
   * A **hash** if computed to each list element and *cached* too in `pander`'s local environments. This is useful if you are using large data frames, just imagine: the caching algorithm would have to compute the hash for the same data frame each time it's touched! This way the hash is recomputed only if the R object with the given name is changed.
   * The list is `serialize`d and an `SHA-1` hash is computed for that - which is unique and there is no real risk of collision.
-  * If [`evals`](#evals) can find the cached results in an evnironment of `pander`'s namespace (if `cache.mode` set to `enviroment` - see [above](#pander-options)) or in a file named to the computed hash (if `ċache.mode` set to `disk`), then it is returned on the spot. *The objects modified/created by the cached code are also updated.*
+  * If [`evals`](#evals) can find the cached results in an environment of `pander`'s namespace (if `cache.mode` set to `enviroment` - see [above](#pander-options)) or in a file named to the computed hash (if `ċache.mode` set to `disk`), then it is returned on the spot. *The objects modified/created by the cached code are also updated.*
   * Otherwise the call is evaluated and the results and the modified R objects of the environment are optionally saved to cache (e.g. if `cache` is active, if the `proc.time()` of the evaluation is higher then it is defined in `cache.time` etc. - see details in [evals' options](#pander-options)).
 
 ## In practice
@@ -761,4 +788,4 @@ To use this small lib, just type: `M-x pander-mode` on any document. It might be
 
 
 -------
-This report was generated with [R](http://www.r-project.org/) (2.15.1) and [pander](https://github.com/daroczig/pander) (0.1) in 0.831 sec on x86_64-unknown-linux-gnu platform.
+This report was generated with [R](http://www.r-project.org/) (2.15.1) and [pander](https://github.com/daroczig/pander) (0.1) in 0.955 sec on x86_64-unknown-linux-gnu platform.
