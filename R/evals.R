@@ -889,7 +889,8 @@ evals <- function(txt, parse = TRUE, cache = TRUE, cache.mode = c('environment',
         clear.devs()
 
         ## removing injected base::plot fns
-        rm(list = c('plot', 'barplot', 'lines', 'pie', 'boxplot', 'polygon', 'points','legend', 'hist', 'pairs', 'stripchart'), envir = env)
+        if (graph.unify)
+            rm(list = c('plot', 'barplot', 'lines', 'pie', 'boxplot', 'polygon', 'points','legend', 'hist', 'pairs', 'stripchart'), envir = env)
 
         ## error handling
         if (!is.null(res$msg$errors)) {
