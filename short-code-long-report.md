@@ -1,6 +1,6 @@
 % Gergely Daróczi
 % Looong report
-% Fri Jul 20 12:17:28 2012
+% Thu Jul 26 13:33:30 2012
 
 I have written the below report in 10 mins :)
 
@@ -804,5 +804,8 @@ A simple linear model: `mtcars$wt ~ mtcars$carb`
 
 Table: Fitting linear model: mtcars$wt ~ Independent
 
+ 
+
+
 -------
-This report was generated with [R](http://www.r-project.org/) (2.15.1) and [pander](https://github.com/daroczig/pander) (0.1) on x86_64-unknown-linux-gnu platform. 
+This report was generated with [R](http://www.r-project.org/) (2.15.1) and [pander](https://github.com/daroczig/pander) (0.1) in 6.304 sec on x86_64-unknown-linux-gnu platform.

@@ -49,7 +49,7 @@ For example `mtcars`'s first 5 cases look like:
 **Hornet Sportabout** 17.02  0    0    3      2     
 ----------------------------------------------------
 
-As you can see some formatting was added to the returned table and was also split up as the original table would have been too wide.
+As you can see some formatting was added to the returned table and was also split up as the original table would have been too wide to fit on the screen (any `pander`er still using a VT100 terminal?) or standard paper. If you do not like that split up, just set the according [`panderOption`](http://daroczig.github.com/pander/#pander-options_link)!
 
 We could try other R objects too, for example let us check `chisq.test` on some variables of `mtcars`:
 
@@ -63,15 +63,27 @@ Table: Pearson's Chi-squared test: `mtcars$am` and `mtcars$gear`
 
  **WARNING**^[Chi-squared approximation may be incorrect]
 
+And we got a warning above!
+
 ## Returning plot
 
-Plots are automatically grabbed between `brew` tags:
+Plots are automatically grabbed between `brew` tags and some custom formatting applied (if `evalsOptions('graph.unify')` is set to `TRUE`):
 
 [![](plots/minimal-1.png)](plots/minimal-1-hires.png)
 
-And adding a caption is easy:
+The above `lattice` looks (IMHO) pretty cool, but what about using `base` plot?
 
-[![My second `pander` plot in red](plots/minimal-2.png)](plots/minimal-2-hires.png)
+[![](plots/minimal-2.png)](plots/minimal-2-hires.png)
+
+This should be quite similar by my intention :)
+
+What about `ggplot2`?
+
+[![](plots/minimal-3.png)](plots/minimal-3-hires.png)
+
+And adding a caption is easy with even some modified `panderOptions`:
+
+[![This is a caption, right?](plots/minimal-4.png)](plots/minimal-4-hires.png)
 
 # Captions
 
@@ -105,7 +117,8 @@ And the chunks can result in multiple R objects of course:
 
 # It happens
 
- **ERROR**^[object 'unknown.R.object' not found]
+ **ERROR**^[object 'unknown.R.object' not found] 
+
 
 -------
-This report was generated with [R](http://www.r-project.org/) (2.15.1) and [pander](https://github.com/daroczig/pander) (0.1) on x86_64-unknown-linux-gnu platform. 
+This report was generated with [R](http://www.r-project.org/) (2.15.1) and [pander](https://github.com/daroczig/pander) (0.1) in 1.341 sec on x86_64-unknown-linux-gnu platform.

@@ -179,7 +179,7 @@
 </tr>
 </tbody>
 </table>
-<p>As you can see some formatting was added to the returned table and was also split up as the original table would have been too wide.</p>
+<p>As you can see some formatting was added to the returned table and was also split up as the original table would have been too wide to fit on the screen (any <code>pander</code>er still using a VT100 terminal?) or standard paper. If you do not like that split up, just set the according <a href="http://daroczig.github.com/pander/#pander-options_link"><code>panderOption</code></a>!</p>
 <p>We could try other R objects too, for example let us check <code>chisq.test</code> on some variables of <code>mtcars</code>:</p>
 <table>
 <caption>Pearson's Chi-squared test: <code>mtcars$am</code> and <code>mtcars$gear</code></caption>
@@ -202,11 +202,17 @@
 </tbody>
 </table>
 <p><strong>WARNING</strong><sup><a href="#fn1" class="footnoteRef" id="fnref1">1</a></sup></p>
+<p>And we got a warning above!</p>
 <h2 id="returning-plot">Returning plot</h2>
-<p>Plots are automatically grabbed between <code>brew</code> tags:</p>
+<p>Plots are automatically grabbed between <code>brew</code> tags and some custom formatting applied (if <code>evalsOptions('graph.unify')</code> is set to <code>TRUE</code>):</p>
 <p><a href="plots/minimal-1-hires.png"><img src="plots/minimal-1.png" /></a></p>
-<p>And adding a caption is easy:</p>
-<p><a href="plots/minimal-2-hires.png"><img src="plots/minimal-2.png" alt="My second pander plot in red" /></a></p>
+<p>The above <code>lattice</code> looks (IMHO) pretty cool, but what about using <code>base</code> plot?</p>
+<p><a href="plots/minimal-2-hires.png"><img src="plots/minimal-2.png" /></a></p>
+<p>This should be quite similar by my intention :)</p>
+<p>What about <code>ggplot2</code>?</p>
+<p><a href="plots/minimal-3-hires.png"><img src="plots/minimal-3.png" /></a></p>
+<p>And adding a caption is easy with even some modified <code>panderOptions</code>:</p>
+<p><a href="plots/minimal-4-hires.png"><img src="plots/minimal-4.png" alt="This is a caption, right?" /></a></p>
 <h1 id="captions">Captions</h1>
 <p>Just like with tables:</p>
 <table>
@@ -262,7 +268,7 @@
 <h1 id="it-happens">It happens</h1>
 <p><strong>ERROR</strong><sup><a href="#fn2" class="footnoteRef" id="fnref2">2</a></sup></p>
 <hr />
-<p>This report was generated with <a href="http://www.r-project.org/">R</a> (2.15.1) and <a href="https://github.com/daroczig/pander">pander</a> (0.1) on x86_64-unknown-linux-gnu platform.</p>
+<p>This report was generated with <a href="http://www.r-project.org/">R</a> (2.15.1) and <a href="https://github.com/daroczig/pander">pander</a> (0.1) in 1.341 sec on x86_64-unknown-linux-gnu platform.</p>
 <div class="footnotes">
 <hr />
 <ol>

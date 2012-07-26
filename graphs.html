@@ -1,0 +1,209 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="generator" content="pandoc" />
+  <meta name="author" content="Unified plots" />
+  <title>Gergely Daróczi</title>
+  <style type="text/css">
+table.sourceCode, tr.sourceCode, td.lineNumbers, td.sourceCode {
+  margin: 0; padding: 0; vertical-align: baseline; border: none; }
+table.sourceCode { width: 100%; }
+td.lineNumbers { text-align: right; padding-right: 4px; padding-left: 4px; color: #aaaaaa; border-right: 1px solid #aaaaaa; }
+td.sourceCode { padding-left: 5px; }
+code > span.kw { color: #007020; font-weight: bold; }
+code > span.dt { color: #902000; }
+code > span.dv { color: #40a070; }
+code > span.bn { color: #40a070; }
+code > span.fl { color: #40a070; }
+code > span.ch { color: #4070a0; }
+code > span.st { color: #4070a0; }
+code > span.co { color: #60a0b0; font-style: italic; }
+code > span.ot { color: #007020; }
+code > span.al { color: #ff0000; font-weight: bold; }
+code > span.fu { color: #06287e; }
+code > span.er { color: #ff0000; font-weight: bold; }
+  </style>
+  <!--[if lt IE 9]>
+      <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+      <![endif]-->
+  
+  <link rel="stylesheet" href="stylesheets/base.css" />
+  <link rel="stylesheet" href="stylesheets/skeleton.css" />
+  <link rel="stylesheet" href="stylesheets/layout.css" />
+  <link rel="stylesheet" href="stylesheets/fonts.css" />
+  <link rel="stylesheet" href="stylesheets/slimbox2.css" />
+  <link rel="stylesheet" href="stylesheets/custom.css" />
+  <link rel="stylesheet" href="stylesheets/caption.css"/>
+  
+  <link rel="shortcut icon" href="images/favicon.gif" />
+  <link rel="apple-touch-icon" href="images/apple-touch-icon.png" />
+  <link rel="apple-touch-icon" sizes="72x72" href="images/apple-touch-icon-72x72.png" />
+  <link rel="apple-touch-icon" sizes="114x114" href="images/apple-touch-icon-114x114.png" />
+  
+  <script type="text/javascript" src="javascripts/jquery-1.7.2.min.js"></script>
+  <script type="text/javascript" src="javascripts/tabs.js"></script>  <!--remove-->
+  <script type="text/javascript" src="javascripts/custom.js"></script>
+  <script type="text/javascript" src="javascripts/slimbox2.js"></script>
+  <script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+    tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]}
+    });
+  </script>
+  <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_HTML"></script>
+  <script type="text/javascript" src="javascripts/jcaption.min.js" /></script>
+</head>
+<body>
+<div id="header">
+<h1 class="title">Gergely Daróczi</h1>
+<h2 class="author">Unified plots</h2>
+</div>
+<p>This document demonstrates the features of unifying plots in <code>pander</code>. First, if you do not want to deal with styling each of your images, just activate it: <code>evalsOptions('graph.unify', TRUE)</code>.</p>
+<p><em>Note</em>: please install <code>lattice</code> and <code>ggplot2</code> on your computer prior to trying to run all examples of this document.</p>
+<h1 id="options">Options</h1>
+<p>There are a bunch of options you might want to check out, these are:</p>
+<ul>
+<li>graph.nomargin</li>
+<li>graph.fontfamily</li>
+<li>graph.fontcolor</li>
+<li>graph.fontsize</li>
+<li>graph.grid</li>
+<li>graph.grid.minor</li>
+<li>graph.grid.color</li>
+<li>graph.grid.lty</li>
+<li>graph.boxes</li>
+<li>graph.legend.position</li>
+<li>graph.background</li>
+<li>graph.panel.background</li>
+<li>graph.colors</li>
+<li>graph.color.rnd</li>
+<li>graph.axis.angle</li>
+<li>graph.symbol</li>
+</ul>
+<!-- end of list -->
+
+<p>Find more details on <a href="http://daroczig.github.com/pander/#pander-options_link"><code>pander</code>'s homepage</a>.</p>
+<h1 id="default-options">Default options</h1>
+<p>Not touching the above ones, let us check out how different plots look like by calling <code>base</code> R graphing function, <code>lattice</code> or <code>ggplot2</code>!</p>
+<h2 id="histogram">Histogram</h2>
+<h3 id="base-r-plot">Base R plot</h3>
+<p><a href="plots/graphs-1-hires.png"><img src="plots/graphs-1.png" /></a></p>
+<h3 id="lattice">lattice</h3>
+<p><a href="plots/graphs-2-hires.png"><img src="plots/graphs-2.png" /></a></p>
+<h3 id="ggplot2">ggplot2</h3>
+<p><a href="plots/graphs-3-hires.png"><img src="plots/graphs-3.png" /></a></p>
+<h2 id="barplot">Barplot</h2>
+<h3 id="base-r-plot-1">Base R plot</h3>
+<p><a href="plots/graphs-4-hires.png"><img src="plots/graphs-4.png" /></a></p>
+<h3 id="lattice-1">lattice</h3>
+<p><a href="plots/graphs-5-hires.png"><img src="plots/graphs-5.png" /></a></p>
+<h3 id="ggplot2-1">ggplot2</h3>
+<p><a href="plots/graphs-6-hires.png"><img src="plots/graphs-6.png" /></a></p>
+<h2 id="points">Points</h2>
+<h3 id="base-r-plot-2">Base R plot</h3>
+<p><a href="plots/graphs-7-hires.png"><img src="plots/graphs-7.png" /></a></p>
+<h3 id="lattice-2">lattice</h3>
+<p><a href="plots/graphs-8-hires.png"><img src="plots/graphs-8.png" /></a></p>
+<h3 id="ggplot2-2">ggplot2</h3>
+<p><a href="plots/graphs-9-hires.png"><img src="plots/graphs-9.png" /></a></p>
+<h2 id="grouped-plot">Grouped plot</h2>
+<h3 id="base-r-plot-3">Base R plot</h3>
+<p>I have no idea how to do that besides manually adding <code>points</code>.</p>
+<h3 id="lattice-3">lattice</h3>
+<p><a href="plots/graphs-10-hires.png"><img src="plots/graphs-10.png" /></a></p>
+<h3 id="ggplot2-3">ggplot2</h3>
+<p><a href="plots/graphs-11-hires.png"><img src="plots/graphs-11.png" /></a></p>
+<h2 id="facets">Facets</h2>
+<h3 id="base-r-plot-4">Base R plot</h3>
+<p>I have no idea how to do that besides <code>par(mfrow=c(foo, bar))</code>.</p>
+<h3 id="lattice-4">lattice</h3>
+<p><a href="plots/graphs-12-hires.png"><img src="plots/graphs-12.png" /></a></p>
+<h3 id="ggplot2-4">ggplot2</h3>
+<p><a href="plots/graphs-13-hires.png"><img src="plots/graphs-13.png" /></a></p>
+<h2 id="boxplot">Boxplot</h2>
+<h3 id="base-r-plot-5">Base R plot</h3>
+<p><a href="plots/graphs-14-hires.png"><img src="plots/graphs-14.png" /></a></p>
+<h3 id="lattice-5">lattice</h3>
+<p><a href="plots/graphs-15-hires.png"><img src="plots/graphs-15.png" /></a></p>
+<h3 id="ggplot2-5">ggplot2</h3>
+<p><a href="plots/graphs-16-hires.png"><img src="plots/graphs-16.png" /></a></p>
+<h2 id="lines">Lines</h2>
+<h3 id="base-r-plot-6">Base R plot</h3>
+<p><a href="plots/graphs-17-hires.png"><img src="plots/graphs-17.png" /></a></p>
+<h3 id="lattice-6">lattice</h3>
+<p><a href="plots/graphs-18-hires.png"><img src="plots/graphs-18.png" /></a></p>
+<h3 id="ggplot2-6">ggplot2</h3>
+<p><a href="plots/graphs-19-hires.png"><img src="plots/graphs-19.png" /></a></p>
+<h1 id="custom-options">Custom options</h1>
+<p>Below you can find some images generated by the exact same commands but with some modified <code>panderOptions</code>:</p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">panderOptions</span>(<span class="st">&#39;graph.fontfamily&#39;</span>, <span class="st">&quot;Comic Sans MS&quot;</span>)
+<span class="kw">panderOptions</span>(<span class="st">&#39;graph.fontsize&#39;</span>, <span class="dv">18</span>)
+<span class="kw">panderOptions</span>(<span class="st">&#39;graph.fontcolor&#39;</span>, <span class="st">&#39;blue&#39;</span>)
+<span class="kw">panderOptions</span>(<span class="st">&#39;graph.grid.color&#39;</span>, <span class="st">&#39;blue&#39;</span>)
+<span class="kw">panderOptions</span>(<span class="st">&#39;graph.axis.angle&#39;</span>, <span class="dv">3</span>)
+<span class="kw">panderOptions</span>(<span class="st">&#39;graph.boxes&#39;</span>, T)
+<span class="kw">panderOptions</span>(<span class="st">&#39;graph.legend.position&#39;</span>, <span class="st">&#39;top&#39;</span>)
+<span class="kw">panderOptions</span>(<span class="st">&#39;graph.colors&#39;</span>, <span class="kw">rainbow</span>(<span class="dv">5</span>))
+<span class="kw">panderOptions</span>(<span class="st">&#39;graph.grid&#39;</span>, <span class="ot">FALSE</span>)
+<span class="kw">panderOptions</span>(<span class="st">&#39;graph.symbol&#39;</span>, <span class="dv">22</span>)</code></pre>
+<h2 id="histogram-1">Histogram</h2>
+<h3 id="base-r-plot-7">Base R plot</h3>
+<p><a href="plots/graphs-20-hires.png"><img src="plots/graphs-20.png" /></a></p>
+<h3 id="lattice-7">lattice</h3>
+<p><a href="plots/graphs-21-hires.png"><img src="plots/graphs-21.png" /></a></p>
+<h3 id="ggplot2-7">ggplot2</h3>
+<p><a href="plots/graphs-22-hires.png"><img src="plots/graphs-22.png" /></a></p>
+<h2 id="barplot-1">Barplot</h2>
+<h3 id="base-r-plot-8">Base R plot</h3>
+<p><a href="plots/graphs-23-hires.png"><img src="plots/graphs-23.png" /></a></p>
+<p>Yeah, the &quot;Foo bar&quot; label is cropped. We need a custom <code>mar</code> option here:</p>
+<p><a href="plots/graphs-24-hires.png"><img src="plots/graphs-24.png" /></a></p>
+<p>But wait, we lost the color! Right: unfortunately coloring base R plots is really hackish, <code>pander</code> is adding the <code>col</code> attribute to the calls. If you start to tweak <code>par</code> in a chunk, you should prepare to some unwanted side-effects. Solution:</p>
+<p><a href="plots/graphs-25-hires.png"><img src="plots/graphs-25.png" /></a></p>
+<h3 id="lattice-8">lattice</h3>
+<p><a href="plots/graphs-26-hires.png"><img src="plots/graphs-26.png" /></a></p>
+<h3 id="ggplot2-8">ggplot2</h3>
+<p><a href="plots/graphs-27-hires.png"><img src="plots/graphs-27.png" /></a></p>
+<h2 id="points-1">Points</h2>
+<h3 id="base-r-plot-9">Base R plot</h3>
+<p><a href="plots/graphs-28-hires.png"><img src="plots/graphs-28.png" /></a></p>
+<h3 id="lattice-9">lattice</h3>
+<p><a href="plots/graphs-29-hires.png"><img src="plots/graphs-29.png" /></a></p>
+<h3 id="ggplot2-9">ggplot2</h3>
+<p><a href="plots/graphs-30-hires.png"><img src="plots/graphs-30.png" /></a></p>
+<h2 id="grouped-plot-1">Grouped plot</h2>
+<h3 id="base-r-plot-10">Base R plot</h3>
+<p>I have no idea how to do that besides manually adding <code>points</code>.</p>
+<h3 id="lattice-10">lattice</h3>
+<p><a href="plots/graphs-31-hires.png"><img src="plots/graphs-31.png" /></a></p>
+<h3 id="ggplot2-10">ggplot2</h3>
+<p><a href="plots/graphs-32-hires.png"><img src="plots/graphs-32.png" /></a></p>
+<h2 id="facets-1">Facets</h2>
+<h3 id="base-r-plot-11">Base R plot</h3>
+<p>I have no idea how to do that besides <code>par(mfrow=c(foo, bar))</code>.</p>
+<h3 id="lattice-11">lattice</h3>
+<p><a href="plots/graphs-33-hires.png"><img src="plots/graphs-33.png" /></a></p>
+<h3 id="ggplot2-11">ggplot2</h3>
+<p><a href="plots/graphs-34-hires.png"><img src="plots/graphs-34.png" /></a></p>
+<h2 id="boxplot-1">Boxplot</h2>
+<h3 id="base-r-plot-12">Base R plot</h3>
+<p><a href="plots/graphs-35-hires.png"><img src="plots/graphs-35.png" /></a></p>
+<h3 id="lattice-12">lattice</h3>
+<p><a href="plots/graphs-36-hires.png"><img src="plots/graphs-36.png" /></a></p>
+<h3 id="ggplot2-12">ggplot2</h3>
+<p><a href="plots/graphs-37-hires.png"><img src="plots/graphs-37.png" /></a></p>
+<h2 id="lines-1">Lines</h2>
+<h3 id="base-r-plot-13">Base R plot</h3>
+<p><a href="plots/graphs-38-hires.png"><img src="plots/graphs-38.png" /></a></p>
+<h3 id="lattice-13">lattice</h3>
+<p><a href="plots/graphs-39-hires.png"><img src="plots/graphs-39.png" /></a></p>
+<h3 id="ggplot2-13">ggplot2</h3>
+<p><a href="plots/graphs-40-hires.png"><img src="plots/graphs-40.png" /></a></p>
+<hr />
+<p>This report was generated with <a href="http://www.r-project.org/">R</a> (2.15.1) and <a href="https://github.com/daroczig/pander">pander</a> (0.1) in 14.144 sec on x86_64-unknown-linux-gnu platform.</p>
+<p align="center">
+  Design: <a href="http://rapport-package.info/"><i>rapport</i> Development Team</a> &copy; 2012 | Backend: <a href="https://github.com/daroczig/pander">pander</a> | License: <a href="http://www.gnu.org/licenses/agpl.html" target="_blank">AGPL3</a> | Styled with <a href="http://www.getskeleton.com/" target="_blank">skeleton</a>
+</p>
+</body>
+</html>

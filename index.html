@@ -73,7 +73,7 @@ code > span.er { color: #ff0000; font-weight: bold; }
 <ul>
 <li>no need for calling <code>ascii</code>, <code>xtable</code>, <code>Hmisc</code>, <code>tables</code> etc. to transform an R object to <code>HTML</code>, <code>tex</code> etc. as <code>pander</code> results in Pandoc's <em>markdown</em> which can (automatically) be converted to almost any text document format (like: pdf, HTML, odt, docx, textile, asciidoc, reStructuredText etc.). Conversion can be done automatically after calling <code>pander</code> reporting functions (<a href="#brew-to-pandoc">Pander.brew</a> or <a href="#live-report-generation">Pandoc</a>).</li>
 <li>based on the above <em>no &quot;traditional&quot; R console output</em> is shown in the resulting document (nor in markdown, nor in exported docs) but <strong>all R objects are transformed to tables, list etc</strong>. Well, there is an option (<code>show.src</code>) to show the original R commands before the formatted output, and <code>pander</code>˛calls can be also easily tweaked (just file an issue) to return <code>print</code>ed R objects - if you would need that in some strange situation - like writing an R tutorial. But <strong>I really think that nor R code, nor raw R results have anything to do with an exported report</strong> :)</li>
-<li><em>graphs/plots</em> are recognized in blocks of R commands without any special setting or marks around code block and saved to disk in a <code>png</code> file linked in the resulting document. This means if you create a report (e.g. <code>brew</code> a text file) and export it to pdf/docx etc. all the plots/images would be there. There are some parameters to specify the resolution of the image and also the type (e.g. <code>jpg</code>, <code>svg</code> or <code>pdf</code>).</li>
+<li><em>graphs/plots</em> are recognized in blocks of R commands without any special setting or marks around code block and saved to disk in a <code>png</code> file linked in the resulting document. This means if you create a report (e.g. <code>brew</code> a text file) and export it to pdf/docx etc. all the plots/images would be there. There are some parameters to specify the resolution of the image and also the type (e.g. <code>jpg</code>, <code>svg</code> or <code>pdf</code>) besides a <strong>wide variety of <a href="#pander-options">theme options</a></strong>. About the latter, please check out <code>graphs.brew</code> <a href="#examples">below</a>.</li>
 <li><code>pander</code>˛uses its build in (IMHO quite decent) <a href="#caching"><strong>caching</strong></a>. This means that if evaluation of some R commands take too much time (which can be set by option/parameter), then the results are saved in a file and returned from there on next exact R code's evaluation. This caching algorithm tries to be <strong>smart</strong> as checks not only the passed R sources, but <em>all variables and functions</em> inside that and saves the hash of those. This is a quite secure way of caching (see details <a href="#caching">below</a>), but if you would encounter any issues, just switch off the cache. I've not seen any issues :)</li>
 <li><code>knitr</code> <em>support</em> is coming too, for details see my <a href="https://github.com/daroczig/pander/blob/master/TODO.md">TODO list</a> <strong>Update</strong>: just use <code>knitr</code> to generate markdown and pass that to <code>Pandoc.convert</code></li>
 </ul>
@@ -90,8 +90,8 @@ install_github(&#39;pander&#39;, &#39;daroczig&#39;)</code></pre>
 <p><del>And as <code>pander</code> and <code>rapport</code> are quite Siamese twins, you would need an <strong>up-to-date</strong> version of <a href="http://rapport-package.info">rapport</a> most likely installed from <a href="https://github.com/aL3xa/rapport">Github</a>.</del> <code>pander</code> now can work independently from <code>rapport</code>.</p>
 <p>Now you would only need a few cool packages from CRAN:</p>
 <ul>
-<li><del><a href="http://cran.r-project.org/web/packages/brew/index.html">brew</a> for literate programming</del></li>
 <li><a href="http://cran.r-project.org/web/packages/digest/index.html">digest</a> to compute hashes while caching</li>
+<li><del><a href="http://cran.r-project.org/web/packages/brew/index.html">brew</a> for literate programming</del></li>
 <li><del><a href="http://cran.r-project.org/web/packages/parser/index.html">parser</a> to identify variables in passed R commands</del></li>
 <li><del><a href="http://cran.r-project.org/web/packages/evaluate/index.html">evaluate</a></del></li>
 <li>besides <a href="http://www.r-project.org/">R</a> of course!</li>
@@ -309,7 +309,7 @@ id   value
 ---------------------------------------------------
  Test statistic   P value   Alternative hypothesis 
 ---------------- --------- ------------------------
-      0.12        0.8693          two-sided        
+      0.1         0.9667          two-sided        
 ---------------------------------------------------
 
 Table: Two-sample Kolmogorov-Smirnov test: `runif(50)` and `runif(50)`
@@ -523,17 +523,22 @@ Table: Foo Bar
 <ul>
 <li><a href="https://github.com/daroczig/pander/blob/master/inst/examples/minimal.brew">minimal.brew</a></li>
 <li><a href="https://github.com/daroczig/pander/blob/master/inst/examples/short-code-long-report.brew">short-code-long-report.brew</a></li>
+<li><a href="https://github.com/daroczig/pander/blob/master/inst/examples/graphs.brew">graphs.brew</a></li>
 </ul>
 <p>To <code>brew</code> these examples on your machine try to run the followings.:</p>
 <pre class="sourceCode r"><code class="sourceCode r"><span class="kw">Pandoc.brew</span>(<span class="kw">system.file</span>(<span class="st">&#39;examples/minimal.brew&#39;</span>, <span class="dt">package=</span><span class="st">&#39;pander&#39;</span>))
 <span class="kw">Pandoc.brew</span>(<span class="kw">system.file</span>(<span class="st">&#39;examples/minimal.brew&#39;</span>, <span class="dt">package=</span><span class="st">&#39;pander&#39;</span>), <span class="dt">output =</span> <span class="kw">tempfile</span>(), <span class="dt">convert =</span> <span class="st">&#39;html&#39;</span>)
 
 <span class="kw">Pandoc.brew</span>(<span class="kw">system.file</span>(<span class="st">&#39;examples/short-code-long-report.brew&#39;</span>, <span class="dt">package=</span><span class="st">&#39;pander&#39;</span>))
-<span class="kw">Pandoc.brew</span>(<span class="kw">system.file</span>(<span class="st">&#39;examples/short-code-long-report.brew&#39;</span>, <span class="dt">package=</span><span class="st">&#39;pander&#39;</span>), <span class="dt">output =</span> <span class="kw">tempfile</span>(), <span class="dt">convert =</span> <span class="st">&#39;html&#39;</span>)</code></pre>
+<span class="kw">Pandoc.brew</span>(<span class="kw">system.file</span>(<span class="st">&#39;examples/short-code-long-report.brew&#39;</span>, <span class="dt">package=</span><span class="st">&#39;pander&#39;</span>), <span class="dt">output =</span> <span class="kw">tempfile</span>(), <span class="dt">convert =</span> <span class="st">&#39;html&#39;</span>)
+
+<span class="kw">Pandoc.brew</span>(<span class="kw">system.file</span>(<span class="st">&#39;examples/graphs.brew&#39;</span>, <span class="dt">package=</span><span class="st">&#39;pander&#39;</span>))
+<span class="kw">Pandoc.brew</span>(<span class="kw">system.file</span>(<span class="st">&#39;examples/graphs.brew&#39;</span>, <span class="dt">package=</span><span class="st">&#39;pander&#39;</span>), <span class="dt">output =</span> <span class="kw">tempfile</span>(), <span class="dt">convert =</span> <span class="st">&#39;html&#39;</span>)</code></pre>
 <p>For easy access I have uploaded some exported documents of the above examples:</p>
 <ul>
-<li>minimal.brew: <a href="minimal.md">markdown</a> <a href="http://daroczig.github.com/pander/minimal.html">html</a> <a href="http://daroczig.github.com/pander/minimal.pdf">pdf</a> <a href="http://daroczig.github.com/pander/minimal.odt">odt</a> <a href="http://daroczig.github.com/pander/minimal.docx">docx</a></li>
+<li>minimal.brew: <a href="http://daroczig.github.com/pander/minimal.md">markdown</a> <a href="http://daroczig.github.com/pander/minimal.html">html</a> <a href="http://daroczig.github.com/pander/minimal.pdf">pdf</a> <a href="http://daroczig.github.com/pander/minimal.odt">odt</a> <a href="http://daroczig.github.com/pander/minimal.docx">docx</a></li>
 <li>short-code-long-report.brew: <a href="http://daroczig.github.com/pander/short-code-long-report.md">markdown</a> <a href="http://daroczig.github.com/pander/short-code-long-report.html">html</a> <a href="http://daroczig.github.com/pander/short-code-long-report.pdf">pdf</a> <a href="http://daroczig.github.com/pander/short-code-long-report.odt">odt</a> <a href="http://daroczig.github.com/pander/short-code-long-report.docx">docx</a></li>
+<li>graphs.brew: <a href="http://daroczig.github.com/pander/graphs.md">markdown</a> <a href="http://daroczig.github.com/pander/graphs.html">html</a> <a href="http://daroczig.github.com/pander/graphs.pdf">pdf</a> <a href="http://daroczig.github.com/pander/graphs.odt">odt</a> <a href="http://daroczig.github.com/pander/graphs.docx">docx</a></li>
 </ul>
 <p>Please check out <code>pdf</code>, <code>docx</code>, <code>odt</code> and other formats (changing the above <code>convert</code> option) on your machine too and do not forget to <a href="https://github.com/daroczig/pander/issues">give some feedback</a>!</p>
 <h1 id="live-report-generation">Live report generation</h1>
@@ -605,8 +610,30 @@ myReport$<span class="kw">export</span>(<span class="dt">open =</span> <span cla
 <li><code>p.wrap</code>: a string (default:<code>'_'</code>) to wrap vector elements passed to <code>p</code> function</li>
 <li><code>p.sep</code>: a string (default: <code>', '</code>) with the main separator passed to <code>p</code> function</li>
 <li><code>p.copula</code>: a string (default: <code>'and'</code>) a string with ending separator passed to <code>p</code> function</li>
+<li><code>graph.nomargin</code>: boolean (default: <code>TRUE</code>) if trying to keep plots' margins at minimal</li>
+<li><code>graph.fontfamily</code>: string (default: <code>'sans'</code>) specifying the font family to be used in images. Please note, that using a custom font on Windows requires <code>grDevices:::windowsFonts</code> first.</li>
+<li><code>graph.fontcolor</code>: string (default: <code>'black'</code>) specifying the default font color</li>
+<li><code>graph.fontsize</code>: numeric (default: <code>12</code>) specifying the <em>base</em> font size in pixels. Main title is rendered with <code>1.2</code> and labels with <code>0.8</code> multiplier.</li>
+<li><code>graph.grid</code>: boolean (default: <code>TRUE</code>) if a grid should be added to the plot</li>
+<li><code>graph.grid.minor</code>: boolean (default: <code>TRUE</code>) if a miner grid should be also rendered</li>
+<li><code>graph.grid.color</code>: string (default: <code>'grey'</code>) specifying the color of the rendered grid</li>
+<li><code>graph.grid.lty</code>: string (default: <code>'dashed'</code>) specifying the line type of grid</li>
+<li><code>graph.boxes</code>: boolean (default: <code>FALSE</code>) if to render a border around of plot (and e.g. around strip)</li>
+<li><code>graph.legend.position</code>: string (default: <code>'right'</code>) specifying the position of the legend: 'top', 'right', 'bottom' or 'left'</li>
+<li><code>graph.background</code>: string (default: <code>'white'</code>) specifying the plots main background's color</li>
+<li><code>graph.panel.background</code>: string (default: <code>'transparent'</code>) specifying the plot's main panel background. Please <em>note</em>, that this option is not supported with <code>base</code> graphics.</li>
+<li><code>graph.colors</code>: character vector of default color palette (defaults to a <a href="http://jfly.iam.u-tokyo.ac.jp/color/">colorblind theme</a>). Please <em>note</em> that this update work with <code>base</code> plots by appending the <code>col</code> argument to the call if not set.</li>
+<li><code>graph.color.rnd</code>: boolean (dafault: <code>FALSE</code>) specifying if the palette should be reordered randomly before rendering each plot to get colorful images</li>
+<li><p><code>graph.axis.angle</code>: numeric (default: <code>1</code>) specifying the angle of axes' labels. The available options are based on <code>par(les)</code> and sets if the labels should be:</p>
+<ul>
+<li><code>1</code>: parallel to the axis,</li>
+<li><code>2</code>: horizontal,</li>
+<li><code>3</code>: perpendicular to the axis or</li>
+<li><code>4</code>: vertical.</li>
+</ul></li>
+<li><p><code>graph.symbol</code>: numeric (default: <code>1</code>) specifying a symbol (see the <code>pch</code> parameter of <code>par</code>)</p></li>
 </ul>
-<p>Besides localization of numeric formats and table/list's styles there are some technical options too which would effect e.g. <a href="#caching">caching</a> or the format of rendered image files. You can query/update those with <code>evalsOptions()</code> as the main backend of <code>pander</code> calls is a custom evaluation function called <a href="#evals"><code>evals</code></a>.</p>
+<p>Besides localization of numeric formats, table/list's and plots' styles there are some technical options too which would effect e.g. <a href="#caching">caching</a> or the format of rendered image files. You can query/update those with <code>evalsOptions()</code> as the main backend of <code>pander</code> calls is a custom evaluation function called <a href="#evals"><code>evals</code></a>.</p>
 <p>The list of possible options are:</p>
 <ul>
 <li><code>parse</code>: if <code>TRUE</code> the provided <code>txt</code> elements would be merged into one string and parsed to logical chunks. This is useful if you would want to get separate results of your code parts - not just the last returned value, but you are passing the whole script in one string. To manually lock lines to each other (e.g. calling a <code>plot</code> and on next line adding an <code>abline</code> or <code>text</code> to it), use a plus char (<code>+</code>) at the beginning of each line which should be evaluated with the previous one(s). If set to <code>FALSE</code>, <a href="#evals"><code>evals</code></a> would not try to parse R code, it would get evaluated in separate runs - as provided. Please see the documentation of <a href="#evals"><code>evals</code></a>.</li>
@@ -619,7 +646,7 @@ myReport$<span class="kw">export</span>(<span class="dt">open =</span> <span cla
 <li><code>hooks</code>: list of hooks to be run for given classes in the form of <code>list(class = fn)</code>. If you would also specify some parameters of the function, a list should be provided in the form of <code>list(fn, param1, param2=NULL)</code> etc. So the hooks would become <code>list(class1=list(fn, param1, param2=NULL), ...)</code>. See example of <a href="#evals"><code>evals</code></a> for more details. A default hook can be specified too by setting the class to <code>'default'</code>. This can be handy if you do not want to define separate methods/functions to each possible class, but automatically apply the default hook to all classes not mentioned in the list. You may also specify only one element in the list like: <code>hooks=list('default' = pander.return)</code>. Please note, that nor error/warning messages, nor stdout is captured (so: updated) while running hooks!</li>
 <li><code>length</code>: any R object exceeding the specified length will not be returned. The default value (<code>Inf</code>) does not filter out any R objects.</li>
 <li><code>output</code>: a character vector of required returned values. This might be useful if you are only interested in the <code>result</code>, and do not want to save/see e.g. <code>messages</code> or <code>print</code>ed <code>output</code>. See examples of <a href="#evals"><code>evals</code></a>.</li>
-<li><code>graph.nomargin</code>: should <a href="#evals"><code>evals</code></a> try to keep plots' margins minimal?</li>
+<li><code>graph.unify</code>: should <code>evals</code> try to unify the style of (<code>base</code>, <code>lattice</code> and <code>ggplot2</code>) plots? If set to <code>TRUE</code>, some <code>panderOptions()</code> would apply. By default this is disabled not to freak out useRs :)</li>
 <li><code>graph.name</code>: set the file name of saved plots which is <code>%s</code> by default. A simple character string might be provided where <code>%d</code> would be replaced by the index of the generating <code>txt</code> source, <code>%n</code> with an incremented integer in <code>graph.dir</code> with similar file names and <code>%t</code> by some unique random characters. A function's name to be <code>eval</code>uated can be passed here too.</li>
 <li><code>graph.dir</code>: path to a directory where to place generated images. If the directory does not exist, <a href="#evals"><code>evals</code></a> try to create that. Default set to <code>plots</code> in current working directory.</li>
 <li><code>graph.output</code>: set the required file format of saved plots. Currently it could be any of <code>grDevices</code>: <code>png</code>, <code>bmp</code>, <code>jpeg</code>, <code>jpg</code>, <code>tiff</code>, <code>svg</code> or <code>pdf</code>.</li>
@@ -641,7 +668,7 @@ myReport$<span class="kw">export</span>(<span class="dt">open =</span> <span cla
 <li>Each parsed expression's <strong>part</strong> (let it be a function, variable, constant etc.) <code>eval</code>uated (as a <code>name</code>) separately to a <code>list</code>. This list describes the unique structure and the content of the passed R expressions, and has some IMHO really great benefits (see below).</li>
 <li>A <strong>hash</strong> if computed to each list element and <em>cached</em> too in <code>pander</code>'s local environments. This is useful if you are using large data frames, just imagine: the caching algorithm would have to compute the hash for the same data frame each time it's touched! This way the hash is recomputed only if the R object with the given name is changed.</li>
 <li>The list is <code>serialize</code>d and an <code>SHA-1</code> hash is computed for that - which is unique and there is no real risk of collision.</li>
-<li>If <a href="#evals"><code>evals</code></a> can find the cached results in an evnironment of <code>pander</code>'s namespace (if <code>cache.mode</code> set to <code>enviroment</code> - see <a href="#pander-options">above</a>) or in a file named to the computed hash (if <code>ċache.mode</code> set to <code>disk</code>), then it is returned on the spot. <em>The objects modified/created by the cached code are also updated.</em></li>
+<li>If <a href="#evals"><code>evals</code></a> can find the cached results in an environment of <code>pander</code>'s namespace (if <code>cache.mode</code> set to <code>enviroment</code> - see <a href="#pander-options">above</a>) or in a file named to the computed hash (if <code>ċache.mode</code> set to <code>disk</code>), then it is returned on the spot. <em>The objects modified/created by the cached code are also updated.</em></li>
 <li>Otherwise the call is evaluated and the results and the modified R objects of the environment are optionally saved to cache (e.g. if <code>cache</code> is active, if the <code>proc.time()</code> of the evaluation is higher then it is defined in <code>cache.time</code> etc. - see details in <a href="#pander-options">evals' options</a>).</li>
 </ul>
 <h2 id="in-practice">In practice</h2>
@@ -685,7 +712,7 @@ B &lt;- <span class="fl">1e5</span></code></pre>
 </ul>
 <p>To use this small lib, just type: <code>M-x pander-mode</code> on any document. It might be useful to add a hook to <code>markdown-mode</code> if you find this useful.</p>
 <hr />
-<p>This report was generated with <a href="http://www.r-project.org/">R</a> (2.15.1) and <a href="https://github.com/daroczig/pander">pander</a> (0.1) in 0.893 sec on x86_64-unknown-linux-gnu platform.</p>
+<p>This report was generated with <a href="http://www.r-project.org/">R</a> (2.15.1) and <a href="https://github.com/daroczig/pander">pander</a> (0.1) in 0.955 sec on x86_64-unknown-linux-gnu platform.</p>
 <p align="center">
   Design: <a href="http://rapport-package.info/"><i>rapport</i> Development Team</a> &copy; 2012 | Backend: <a href="https://github.com/daroczig/pander">pander</a> | License: <a href="http://www.gnu.org/licenses/agpl.html" target="_blank">AGPL3</a> | Styled with <a href="http://www.getskeleton.com/" target="_blank">skeleton</a>
 </p>
