@@ -32,7 +32,7 @@ And we got a warning above!
 
 ## Returning plot
 
-Plots are automatically grabbed between `brew` tags and some custom formatting applied:
+Plots are automatically grabbed between `brew` tags and some custom formatting applied (if `evalsOptions('graph.unify')` is set to `TRUE`):
 
 <%=
 if (require(lattice, quietly = TRUE)) {
