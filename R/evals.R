@@ -584,39 +584,12 @@ evals <- function(txt, parse = TRUE, cache = TRUE, cache.mode = c('environment',
             cache <- FALSE
         else {
 
-            txt <- sapply(txt.parsed, function(x) {
-
-                ## if we are parsing, then add default `col` to base plots :)
-                if (class(x) == 'call') {
-                    f <- deparse(x[[1]])
-                    cs <- panderOptions('graph.colors')
-                    if (panderOptions('graph.color.rnd'))
-                        cs <- sample(cs)
-                    gc <- cs[1]
-                    if (f %in% c('plot', 'barplot', 'lines', 'pie', 'boxplot', 'polygon', 'points','legend', 'hist', 'pairs', 'stripchart')) {
-                        if (is.null(x$col) & is.null(x$color))
-                            x$col <- gc
-
-                        ## and make a note for later: do not add grids!
-                        if (f %in% c('pairs', 'stripchart')) {
-                            doAddGrid <<- FALSE
-                            updateFg  <<- FALSE
-                        }
-                        if (f %in% c('boxplot'))
-                            x$border <- 'black'
-                    }
-                }
-
-                ## return deparsed
-                paste(deparse(x), collapse = '\n')
-
-
-            })
+            txt <- sapply(txt.parsed, function(x) paste(deparse(x), collapse = '\n'))
 
             if (length(txt) == 0)
                 stop('No R code provided to evaluate!')
 
-            ## (re)merge lines on demand (based on `+` at the beginning of file)
+            ## (re)merge lines on demand (based on `+` at the beginning of line)
             txt.sep <- c(which(!grepl('^\\+', txt)), length(txt)+1)
             txt <-  lapply(1:(length(txt.sep)-1), function(i) txt[txt.sep[i]:(txt.sep[i+1]-1)])
             txt <- rapply(txt, function(x) sub('^\\+', '', x), how = 'replace')
@@ -646,11 +619,14 @@ evals <- function(txt, parse = TRUE, cache = TRUE, cache.mode = c('environment',
     if (graph.output == 'jpg')
         graph.output <- 'jpeg'
 
-    ## env for running all lines of code -> eval()
+    ## env for running all lines of code
     if (is.null(env))
         env <- new.env()
     if (!is.environment(env))
         stop('Wrong env parameter (not an environment) provided!')
+    for (p in c('plot', 'barplot', 'lines', 'pie', 'boxplot', 'polygon', 'points','legend', 'hist', 'pairs', 'stripchart'))
+        if (exists(p, envir = env, inherits = FALSE))
+            stop(paste0('Using a reserved word as variable: `', p, '`'))
 
     `%d` <- 0
 
@@ -797,7 +773,7 @@ evals <- function(txt, parse = TRUE, cache = TRUE, cache.mode = c('environment',
 
         }
 
-        ## helper fn
+        ## clear graphics device (if there would be any open)
         clear.devs <- function()
             while (!is.null(dev.list()))
                 dev.off(as.numeric(dev.list()[1]))
@@ -815,48 +791,86 @@ evals <- function(txt, parse = TRUE, cache = TRUE, cache.mode = c('environment',
         if (graph.output == 'pdf')
             do.call('cairo_pdf', list(file, width = width/res, height = height/res, ...)) # TODO: font-family?
 
-        if (graph.unify) {
-
-            ## helper fn
-            unify.base.pre <- function() {
-
-                fc  <- panderOptions('graph.fontcolor')
-                fbs <- panderOptions('graph.fontsize')
-                gc  <- panderOptions('graph.grid.color')
-                bc  <- panderOptions('graph.background')
-                cex <- fbs/12
-
-                par(
-                  family   = panderOptions('graph.fontfamily'),
-                  cex      = cex, cex.axis = cex * 0.8, cex.lab = cex, cex.main = cex * 1.2, cex.sub = cex,
-                  bg       = bc, # TODO: how could we color only the inner plot area globally? Not like: https://stat.ethz.ch/pipermail/r-help/2003-May/033971.html
-                  las      = panderOptions('graph.axis.angle'),
-                  lwd      = 2,
-                  pch      = panderOptions('graph.symbol')
-                  )
-
-                if (panderOptions('graph.boxes') | !updateFg)
-                    par(fg = gc)
-                else
-                    par(fg = bc)
-                par(col.axis = fc, col.lab = fc, col.main = fc, col.sub = fc)
-
-                ## remove margins for potential base plots
-                if (panderOptions('graph.nomargin')) {
-                    par(mar = c(4.1, 4.3, 2.1, 0.1))
-                }
-            }
-
-            unify.base.pre()
-        }
-
         ## start recordPlot
         dev.control(displaylist = "enable")
 
         ## if caching: save the initial environment's objects' hashes
         if (cache) {
             objs <- ls(envir = env)
+            objs <- setdiff(objs, c('.storage', 'showCode', 'showText'))
             objs.hash <- sapply(objs, function(x) hashOfEvalOrDeparse(as.name(x), x))
+        }
+
+        ## add modified base plot functions to update colors
+        if (graph.unify) {
+
+            env$plot <- env$barplot <- env$lines <- env$pie <- env$boxplot <- env$polygon <- env$points <- env$legend <- env$hist <- env$pairs <- env$stripchart <- function (...) {
+
+                mc <- match.call()
+                fn <- deparse(mc[[1]])
+
+                ## pander options
+                fc  <- panderOptions('graph.fontcolor')
+                fbs <- panderOptions('graph.fontsize')
+                bc  <- panderOptions('graph.background')
+                gc  <- panderOptions('graph.grid.color')
+                cex <- fbs/12
+                cs <- panderOptions('graph.colors')
+                if (panderOptions('graph.color.rnd'))
+                    cs <- sample(cs)
+                cb <- cs[1]
+
+                ## global par update
+                par(
+                  family   = panderOptions('graph.fontfamily'),
+                  cex      = cex, cex.axis = cex * 0.8, cex.lab = cex, cex.main = cex * 1.2, cex.sub = cex,
+                  bg       = bc, # TODO: how could we color only the inner plot area globally? Not like: https://stat.ethz.ch/pipermail/r-help/2003-May/033971.html
+                  las      = panderOptions('graph.axis.angle'),
+                  lwd      = 2,
+                  pch      = panderOptions('graph.symbol'),
+                  col.axis = fc, col.lab = fc, col.main = fc, col.sub = fc)
+
+                ## remove margins
+                if (panderOptions('graph.nomargin')) {
+                    par(mar = c(4.1, 4.3, 2.1, 0.1))
+                }
+
+                ## default: grid is added to all plots
+                doAddGrid <- TRUE
+
+                ## update colors
+                if (is.null(mc$col) & is.null(mc$color))
+                    mc$col <- cb
+                if (fn == 'boxplot')
+                    mc$border <- 'black'
+                if (fn %in% c('pairs', 'stripchart')) {
+                    doAddGrid <- FALSE
+                    par(fg = fc)
+                } else {
+                    if (panderOptions('graph.boxes'))
+                        par(fg = gc)
+                    else
+                        par(fg = bc)
+                }
+
+                ## call
+                mc[[1]] <- parse(text = paste0('graphics::', deparse(mc[[1]])))[[1]]
+                eval(mc, envir = env)
+
+                ## grid
+                if (all(par()$mfrow == 1) & panderOptions('graph.grid') & doAddGrid) {
+
+                    g <- tryCatch(grid(lty = panderOptions('graph.grid.lty'), col = panderOptions('graph.grid.color'), lwd = 0.5), error = function(e) e)
+                    if (!inherits(g, 'error')) {
+                        if (panderOptions('graph.grid.minor'))
+                            g <- tryCatch(add.minor.ticks(2, 2, grid = TRUE), error = function(e) e)
+                    }
+                    if (inherits(g, 'error'))
+                        warning('Applying default formatting to image is somehow compromised (the result could differ from what you specified in `panderOptions`). Hints: printing `lattice`/`ggplot2` is not needed and tweaking `base` plots with `par` might have some side-effects!')
+
+                }
+            }
+
         }
 
         ## eval
@@ -871,24 +885,11 @@ evals <- function(txt, parse = TRUE, cache = TRUE, cache.mode = c('environment',
         ## did we produce a plot?
         graph  <- ifelse(exists('recorded.plot'), ifelse(is.null(recorded.plot[[1]]), FALSE, file), FALSE)
 
-        ## add grid to base plots
-        unify.base.post <- function() {
-            if (is.character(graph) & is.null(res$result) & all(par()$mfrow == 1) & panderOptions('graph.grid') & doAddGrid) {
-
-                g <- tryCatch(grid(lty = panderOptions('graph.grid.lty'), col = panderOptions('graph.grid.color'), lwd = 0.5), error = function(e) e)
-                if (!inherits(g, 'error')) {
-                    if (panderOptions('graph.grid.minor'))
-                        g <- tryCatch(add.minor.ticks(2, 2, grid = TRUE), error = function(e) e)
-                }
-                if (inherits(g, 'error'))
-                    res$msg$warnings <- c(res$msg$warnings, 'Applying default formatting to image is somehow compromised (the result could differ from what you specified in `panderOptions`). Hints: printing `lattice`/`ggplot2` is not needed and tweaking `base` plots with `par` might have some side-effects!')
-
-            }
-        }
-        unify.base.post()
-
         ## close grDevice
         clear.devs()
+
+        ## removing injected base::plot fns
+        rm(list = c('plot', 'barplot', 'lines', 'pie', 'boxplot', 'polygon', 'points','legend', 'hist', 'pairs', 'stripchart'), envir = env)
 
         ## error handling
         if (!is.null(res$msg$errors)) {
@@ -935,9 +936,7 @@ evals <- function(txt, parse = TRUE, cache = TRUE, cache.mode = c('environment',
 
                 ## render high resolution image (if needed)
                 if ((graph.output %in% c('bmp', 'jpeg', 'png', 'tiff')) | (.Platform$OS.type != 'unix')) {
-                    unify.base.pre()
                     eval.msgs(src, env = env.hires)      # we need eval.msgs() here instead of simple eval() to prevent unprinted lattice/ggplot2 objects' issues
-                    unify.base.post()
                     clear.devs()
                 }
 
@@ -1003,6 +1002,7 @@ evals <- function(txt, parse = TRUE, cache = TRUE, cache.mode = c('environment',
 
             ## comparing the resulting environment's objects' hashes with the original ones
             objs.res      <- ls(envir = env)
+            objs.res      <- setdiff(objs.res, c('.storage', 'showCode', 'showText', '.graph.dir', '.graph.name'))
             objs.res.hash <- sapply(objs.res, function(x) hashOfEvalOrDeparse(as.name(x), x))
             change        <- setdiff(objs.res, objs)
             common        <- intersect(objs.res, objs)
