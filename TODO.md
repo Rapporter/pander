@@ -32,8 +32,8 @@
 ## General tasks
 
   * ~~**add controllable, global options**~~ `pander.option`
-  * ~~rename pander.options & eval.options not to conflict with S3 methods** `panderOptions` and `evalsOptions`
-  * ~~update package functions to use new naming scheme for options**
+  * ~~rename pander.options & eval.options not to conflict with S3 methods** `panderOptions` and `evalsOptions`~~
+  * ~~update package functions to use new naming scheme for options~~
   * **add ~~caption~~/other tweaks (sign. stars, emphasis etc.) to images/tables using `attrs`**
 
 ## Evals
@@ -50,6 +50,47 @@
   * ~~add: optionally save img's R object (lattice & ggplot2) to RDA file~~
   *  ~~What if img file referenced in cached result was altered? Should not we try to check for existing recordedPlot and just rerender the img (without actual `eval`) to overcome this issue?~~: resolved with `cache.copy.images` and `cache.mode == "disk"`
   * ~~run twice with `evalsOptions('cache.time', 0)`:  `evals('x<-1:21;histogram(x)')`~~: resolved by updating objects (while returning from cache) changed by cached code~~
+  * add option to run code in sandbox:
+
+  	  * RAppArmor: https://github.com/jeroenooms/RAppArmor
+      * sandboxR: https://github.com/daroczig/sandboxR
+
+### Image options:
+
+Global options for: `lattice`, `ggplot2` and `base` plots
+
+  * ~~plot margins~~
+  * ~~theme: font (family, base size, color)~~
+  * ~~theme: plotting area background colors~~
+  
+      * known issues: not in `base` plots (just global `backgroung`)
+  
+  * ~~theme: foreground colors (discrete, continuous)~~
+  
+      * known issues: `base` plot solution is really ugly (overwriting calls' `col` parameter)
+	  
+  * ~~grid options:~~
+  
+    * ~~enabled/disabled~~
+	* ~~split enable/disable: major/minor~~
+	* ~~grid color~~
+ 	* ~~grid line type~~
+	
+  * axes:
+ 
+    * ~~color~~
+	* ~~angle~~
+	* split long labels
+
+  * title: split if too long
+  * others:
+      * ~~border/box around plot/strip~~
+	  * ~~transparent border of histogram~~
+	  * ~~symbols~~
+
+  * ~~remove dependencies: `ggplot2`, `latticeExtra` and build only on `grid`~~
+
+**Add demo to GH page!**: `inst/examples/graph.brew`
 
 ## Helper functions
 
