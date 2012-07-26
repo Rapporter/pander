@@ -14,7 +14,23 @@
                 'evals.messages'        = TRUE,
                 'p.wrap'                = '_',
                 'p.sep'                 = ', ',
-                'p.copula'              = 'and'
+                'p.copula'              = 'and',
+                'graph.nomargin'        = TRUE,
+                'graph.fontfamily'      = 'sans',
+                'graph.fontcolor'       = 'black',
+                'graph.fontsize'        = 12,
+                'graph.grid'            = TRUE,
+                'graph.grid.minor'      = TRUE,
+                'graph.grid.color'      = 'grey',
+                'graph.grid.lty'        = 'dashed',
+                'graph.boxes'           = FALSE,
+                'graph.legend.position' = 'right',
+                'graph.background'      = 'white',
+                'graph.panel.background'= 'transparent',
+                'graph.colors'          = c("#56B4E9", "#009E73", "#F0E442", "#0072B2", "#D55E00", "#CC79A7", "#999999", "#E69F00"),
+                'graph.color.rnd'       = FALSE,
+                'graph.axis.angle'      = 1,
+                'graph.symbol'          = 1
                 ))
 
     ## evals options
@@ -27,9 +43,9 @@
                 'cache.copy.images'     = FALSE,
                 'classes'               = NULL,
                 'hooks'                 = NULL,
-                'lenght'                = Inf,
+                'length'                = Inf,
                 'output'                = 'all',
-                'graph.nomargin'        = FALSE,
+                'graph.unify'           = FALSE,
                 'graph.name'            = '%t',
                 'graph.dir'             = 'plots',
                 'graph.output'          = 'png',
@@ -75,7 +91,29 @@ hash.cache.last.used <- new.env() # when was the hash last queried
 #'      \item \code{evals.messages}: boolean (default: \code{TRUE}) passed to \code{evals}' \code{pander} method specifying if messages should be rendered
 #'      \item \code{p.wrap}: a string (default: \code{'_'}) to wrap vector elements passed to \code{p} function
 #'      \item \code{p.sep}: a string (default: \code{', '}) with the main separator passed to \code{p} function
-#'      \item \code{p.copula}: a string (default: \code{'and'}) a string with ending separator passed to \code{p} function
+#'      \item \code{p.copula}: a string (default: \code{'and'}) with ending separator passed to \code{p} function
+#'      \item \code{graph.nomargin}: boolean (default: \code{TRUE}) if trying to keep plots' margins at minimal
+#'      \item \code{graph.fontfamily}: string (default: \code{'sans'}) specifying the font family to be used in images. Please note, that using a custom font on Windows requires \code{grDevices:::windowsFonts} first.
+#'      \item \code{graph.fontcolor}: string (default: \code{'black'}) specifying the default font color
+#'      \item \code{graph.fontsize}: numeric (default: \code{12}) specifying the \emph{base} font size in pixels. Main title is rendered with \code{1.2} and labels with \code{0.8} multiplier.
+#'      \item \code{graph.grid}: boolean (default: \code{TRUE}) if a grid should be added to the plot
+#'      \item \code{graph.grid.minor}: boolean (default: \code{TRUE}) if a miner grid should be also rendered
+#'      \item \code{graph.grid.color}: string (default: \code{'grey'}) specifying the color of the rendered grid
+#'      \item \code{graph.grid.lty}: string (default: \code{'dashed'}) specifying the line type of grid
+#'      \item \code{graph.boxes}: boolean (default: \code{FALSE}) if to render a border around of plot (and e.g. around strip)
+#'      \item \code{graph.legend.position}: string (default: \code{'right'}) specifying the position of the legend: 'top', 'right', 'bottom' or 'left'
+#'      \item \code{graph.background}: string (default: \code{'white'}) specifying the plots main background's color
+#'      \item \code{graph.panel.background}: string (default: \code{'transparent'}) specifying the plot's main panel background. Please \emph{note}, that this option is not supported with \code{base} graphics.
+#'      \item \code{graph.colors}: character vector of default color palette (defaults to a colorblind theme: \url{http://jfly.iam.u-tokyo.ac.jp/color/}). Please \emph{note} that this update work with \code{base} plots by appending the \code{col} argument to the call if not set.
+#'      \item \code{graph.color.rnd}: boolean (dafault: \code{FALSE}) specifying if the palette should be reordered randomly before rendering each plot to get colorful images
+#'      \item \code{graph.axis.angle}: numeric (default: \code{1}) specifying the angle of axes' labels. The available options are based on \code{par(les)} and sets if the labels should be:
+#'      \itemize{
+#'              \item \code{1}: parallel to the axis,
+#'              \item \code{2}: horizontal,
+#'              \item \code{3}: perpendicular to the axis or
+#'              \item \code{4}: vertical.
+#'      }
+#'      \item \code{graph.symbol}: numeric (default: \code{1}) specifying a symbol (see the \code{pch} parameter of \code{par})
 #' }
 #' @param o option name (string). See below.
 #' @param value value to assign (optional)
@@ -141,7 +179,7 @@ pander.option <- function(x, ...) {
 #'      \item \code{hooks}: list of hooks to be run for given classes in the form of \code{list(class = fn)}. If you would also specify some parameters of the function, a list should be provided in the form of \code{list(fn, param1, param2=NULL)} etc. So the hooks would become \code{list(class1=list(fn, param1, param2=NULL), ...)}. See example below. A default hook can be specified too by setting the class to \code{'default'}. This can be handy if you do not want to define separate methods/functions to each possible class, but automatically apply the default hook to all classes not mentioned in the list. You may also specify only one element in the list like: \code{hooks=list('default' = pander.return)}. Please note, that nor error/warning messages, nor stdout is captured (so: updated) while running hooks!
 #'      \item \code{length}: any R object exceeding the specified length will not be returned. The default value (\code{Inf}) does not filter out any R objects.
 #'      \item \code{output}: a character vector of required returned values. This might be useful if you are only interested in the \code{result}, and do not want to save/see e.g. \code{messages} or \code{print}ed \code{output}. See examples of \code{\link{evals}}.
-#'      \item \code{graph.nomargin}: should \code{\link{evals}} try to keep plots' margins minimal?
+#'      \item \code{graph.unify}: should \code{evals} try to unify the style of (\code{base}, \code{lattice} and \code{ggplot2}) plots? If set to \code{TRUE}, some \code{panderOptions()} would apply. By default this is disabled not to freak out useRs :)
 #'      \item \code{graph.name}: set the file name of saved plots which is \code{\link{tempfile}} by default. A simple character string might be provided where \code{\%d} would be replaced by the index of the generating \code{txt} source, \code{\%n} with an incremented integer in \code{graph.dir} with similar file names and \code{\%t} by some random characters. A function's name to be \code{eval}uated can be passed here too.
 #'      \item \code{graph.dir}: path to a directory where to place generated images. If the directory does not exist, \code{\link{evals}} try to create that. Default set to \code{plots} in current working directory.
 #'      \item \code{graph.output}: set the required file format of saved plots. Currently it could be any of  \code{grDevices}: \code{png}, \code{bmp}, \code{jpeg}, \code{jpg}, \code{tiff}, \code{svg} or \code{pdf}.

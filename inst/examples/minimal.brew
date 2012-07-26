@@ -22,26 +22,48 @@ For example `mtcars`'s first 5 cases look like:
 
 <%=mtcars[1:5, ]%>
 
-As you can see some formatting was added to the returned table and was also split up as the original table would have been too wide.
+As you can see some formatting was added to the returned table and was also split up as the original table would have been too wide to fit on the screen (any `pander`er still using a VT100 terminal?) or standard paper. If you do not like that split up, just set the according [`panderOption`](http://daroczig.github.com/pander/#pander-options_link)!
 
 We could try other R objects too, for example let us check `chisq.test` on some variables of `mtcars`:
 
 <%=chisq.test(mtcars$am, mtcars$gear)%>
 
+And we got a warning above!
+
 ## Returning plot
 
-Plots are automatically grabbed between `brew` tags:
+Plots are automatically grabbed between `brew` tags and some custom formatting applied (if `evalsOptions('graph.unify')` is set to `TRUE`):
 
 <%=
-require(lattice, quietly = TRUE)
-histogram(mtcars$hp)
+if (require(lattice, quietly = TRUE)) {
+    histogram(mtcars$hp)
+}
 %>
 
-And adding a caption is easy:
+The above `lattice` looks (IMHO) pretty cool, but what about using `base` plot?
 
 <%=
-set.caption('My second `pander` plot in red')
-histogram(mtcars$hp, col = 'red')
+hist(mtcars$hp)
+%>
+
+This should be quite similar by my intention :)
+
+What about `ggplot2`?
+
+<%=
+if (require(ggplot2, quietly = TRUE)) {
+    ggplot(mtcars) + geom_histogram(aes(x = hp))
+}
+%>
+
+And adding a caption is easy with even some modified `panderOptions`:
+
+<%=
+temp <- panderOptions('graph.grid.color')
+panderOptions('graph.grid.color', 'red')
+set.caption('This is a caption, right?')
+histogram(mtcars$hp)
+panderOptions('graph.grid.color', temp)
 %>
 
 # Captions

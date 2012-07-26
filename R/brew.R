@@ -336,11 +336,19 @@ DELIM[[BRCATCODE]] <- c("<%=","%>")
     assign('.debug', list(code = code, text = text, result = e), envir = storage) # debug
 
     if (!is.null(e$msg$errors)) {
-        brcodes <- p(e$src[!grepl('^show',e$src)], wrap = '`')
-        if (grepl('[Uu]nexpected', e$msg$errors))
-            stop(paste0('`', sub('.*([Uu]nexpected [a-zA-Z0-9\\(\\)\'\\{\\} ]*)( at character|\n).*', '\\1', e$msg$errors), '` in your BRCODEs: ', brcodes), call. = FALSE)
-        else
-            stop(sprintf('Error (`%s`) in your BRCODEs: %s', e$msg$errors, brcodes), call. = FALSE)
+
+        brcodes <- e$src[!grepl('^show',e$src)]
+
+        if (length(brcodes) > 0) {
+            brcodes <- p(brcodes, wrap = '`')
+            if (grepl('[Uu]nexpected', e$msg$errors))
+                stop(paste0('`', sub('.*([Uu]nexpected [a-zA-Z0-9\\(\\)\'\\{\\} ]*)( at character|\n).*', '\\1', e$msg$errors), '` in your BRCODEs: ', brcodes), call. = FALSE)
+            else
+                stop(sprintf('Error (`%s`) in your BRCODEs: %s', e$msg$errors, brcodes), call. = FALSE)
+        } else
+
+            stop(paste0('Error: ', p(e$msg$errors, wrap = '`')), call. = FALSE)
+
     }
 
     cat(e$stdout, sep = '\n')

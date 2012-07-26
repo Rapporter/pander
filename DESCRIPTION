@@ -17,9 +17,12 @@ License: AGPL-3
 Depends:
     R (>= 2.15.0)
 Imports:
-    lattice,
     methods,
     digest
+Suggests:
+    grid,
+    lattice,
+    ggplot2
 SystemRequirements: Pandoc (http://johnmacfarlane.net/pandoc) for exporting
     markdown files to other formats.t
 Collate:
@@ -31,3 +34,4 @@ Collate:
     'evals.R'
     'ess-functions.R'
     'options.R'
+    'graph.R'

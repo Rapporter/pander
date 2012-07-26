@@ -2,7 +2,8 @@
 \alias{eval.msgs}
 \title{Evaluate with messages}
 \usage{
-  eval.msgs(src, env = NULL, showInvisible = FALSE)
+  eval.msgs(src, env = NULL, showInvisible = FALSE,
+    graph.unify = evalsOptions("graph.unify"))
 }
 \arguments{
   \item{src}{character values containing R code}
@@ -12,6 +13,13 @@
   created.}
 
   \item{showInvisible}{return \code{invisible} results?}
+
+  \item{graph.unify}{should \code{eval.msgs} try to unify
+  the style of (\code{lattice} and \code{ggplot2}) plots?
+  If set to \code{TRUE} (by default), some
+  \code{panderOptions()} would apply. Please note that this
+  argument has no effect on \code{base} plots, use
+  \code{evals} instead.}
 }
 \value{
   a list of parsed elements each containing: \code{src}

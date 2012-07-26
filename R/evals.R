@@ -19,6 +19,7 @@
 #' @param src character values containing R code
 #' @param env environment where evaluation takes place. If not set (by default), a new temporary environment is created.
 #' @param showInvisible return \code{invisible} results?
+#' @param graph.unify should \code{eval.msgs} try to unify the style of (\code{lattice} and \code{ggplot2}) plots? If set to \code{TRUE} (by default), some \code{panderOptions()} would apply. Please note that this argument has no effect on \code{base} plots, use \code{evals} instead.
 #' @return a list of parsed elements each containing: \code{src} (the command run), \code{result} (R object: \code{NULL} if nothing returned), \code{print}ed \code{output}, \code{type} (class of returned object if any), informative/wawrning and error messages (if any returned by the command run, otherwise set to \code{NULL}) and possible \code{stdout}t value. See Details above.
 #' @seealso \code{\link{evals}}
 #' @export
@@ -46,7 +47,7 @@
 #' eval.msgs('cat("writing to console")')
 #' eval.msgs('cat("writing to console");1:4')
 #' }
-eval.msgs <- function(src, env = NULL, showInvisible = FALSE) {
+eval.msgs <- function(src, env = NULL, showInvisible = FALSE, graph.unify = evalsOptions('graph.unify')) {
 
     if (is.null(env))
         env <- new.env()
@@ -68,7 +69,7 @@ eval.msgs <- function(src, env = NULL, showInvisible = FALSE) {
     con <- textConnection("stdout", "wr", local=TRUE)
     sink(con, split = FALSE)
 
-    result <- suppressMessages(withCallingHandlers(tryCatch(withVisible(eval(parse(text=src), envir = env)), error = function(e) e), warning = warning.handler, message = message.handler))
+    result <- suppressMessages(withCallingHandlers(tryCatch(withVisible(eval(parse(text = src), envir = env)), error = function(e) e), warning = warning.handler, message = message.handler))
 
     sink()
     close(con)
@@ -94,19 +95,209 @@ eval.msgs <- function(src, env = NULL, showInvisible = FALSE) {
 
     ## check if printing is needed
     if (!is.null(result)) {
+        rv  <- result$value
+        rvc <- class(rv)
 
         if (result$visible | showInvisible) {
 
+            ## unify images
+            if (graph.unify) {
+
+                fs <- panderOptions('graph.fontsize')
+                ff <- panderOptions('graph.fontfamily')
+                fc <- panderOptions('graph.fontcolor')
+                gc <- panderOptions('graph.grid.color')
+                gl <- panderOptions('graph.grid.lty')
+                cs <- panderOptions('graph.colors')
+                if (panderOptions('graph.color.rnd'))
+                    cs <- sample(cs)
+                cb <- cs[1] # base color
+                aa <- panderOptions('graph.axis.angle')
+                bc <- panderOptions('graph.background')
+                pc <- panderOptions('graph.panel.background')
+                tc <- ifelse(pc == 'transparent', bc, pc) # "transparent" color
+                gs <- panderOptions('graph.symbol')
+
+                ## lattice/trellis
+                if (rvc == 'trellis') {
+
+                    ## margin
+                    if (panderOptions('graph.nomargin')) {
+                        rv$par.settings$layout.heights <- list(top.padding = 0.4, bottom.padding = 0,  main = 1.4, main.key.padding = 0)
+                        rv$par.settings$layout.widths  <- list(right.padding = -1, left.padding = 0.4)
+                    }
+
+                    ## font family
+                    rv$par.settings$axis.text <- rv$par.settings$add.text <- rv$par.settings$par.xlab.text <- rv$par.settings$par.ylab.text <- rv$par.settings$par.zlab.text <- rv$par.settings$par.sub.text <- rv$par.settings$par.main.text <- list(fontfamily = ff, col = fc)
+                    rv$par.settings$fontsize  <- list(text = fs, points = fs * 0.8)
+
+                    ## boxes
+                    rv$par.settings$strip.background$col     <- 'transparent'
+                    if (!panderOptions('graph.boxes')) {
+                        rv$par.settings$strip.border$col     <- 'transparent'
+                        rv$par.settings$axis.line$col        <- 'transparent'
+                    } else {
+                        rv$par.settings$strip.border$col     <- gc
+                        rv$par.settings$axis.line$col        <- gc
+                    }
+                    rv$par.settings$between                  <- list(x = 0.4, y = 0.4)
+
+                    ## colors
+                    rv$par.settings$background$col           <- bc
+                    rv$par.settings$panel.background$col     <- pc
+                    rv$par.settings$plot.line$col            <- rv$par.settings$box.rectangle$fill <- rv$par.settings$box.rectangle$col <- rv$par.settings$plot.polygon$col <- cb
+                    rv$par.settings$superpose.symbol$col     <- rv$par.settings$superpose.symbol$col <- cs
+                    rv$par.settings$superpose.polygon$border <- rv$par.settings$plot.polygon$border <- tc
+                    rv$par.settings$box.umbrella             <- list(col = 'black', lty = 'solid', lwd = 2)
+                    rv$par.settings$plot.line$lwd            <- 2
+                    ## pch
+                    rv$par.settings$plot.symbol$pch          <- rv$par.settings$superpose.symbol$pch <- gs
+                    ##if (gs > 20 & gs <= 25 ) {}
+                    rv$par.settings$plot.symbol$col          <- cb
+                    rv$par.settings$superpose.symbol$col     <- cs
+                    rv$par.settings$plot.symbol$fill         <- rv$par.settings$superpose.symbol$fill <- tc
+
+                    ## grid
+                    if (panderOptions('graph.grid')) {
+                        rv$par.settings$reference.line$col <- gc
+                        rv$par.settings$reference.line$lty <- gl
+                        rv$par.settings$reference.line$lwd <- 0.7
+                        rv$axis <- add.lattice.grid
+                        if (panderOptions('graph.grid.minor')) {
+                            rv$xscale.components <- add.lattice.xsubticks
+                            rv$yscale.components <- add.lattice.ysubticks
+                        }
+                    }
+
+                    ## axis angle
+                    if (aa == 0)
+                        rv$y.scales$rot <- c(90, 90)
+                    if (aa == 2)
+                        rv$x.scales$rot <- c(90, 90)
+                    if (aa == 3) {
+                        rv$y.scales$rot <- c(90, 90)
+                        rv$x.scales$rot <- c(90, 90)
+                    }
+
+                    ## legend
+                    if (!is.null(rv$legend)) {
+                        l <- rv$legend[1]
+                        names(l) <- panderOptions('graph.legend.position')
+                        rv$legend <- l
+                    }
+
+                }
+
+                ## ggplot2
+                if (rvc == 'ggplot') {
+
+                    ## margin
+                    if (panderOptions('graph.nomargin')) {
+                        rv$options$plot.margin  <- grid::unit(c(0.1, 0.1, 0.1, 0), "lines")
+                    }
+
+                    ## font family
+                    rv$options$plot.title       <- ggplot2::theme_text(colour = fc, family = ff, face = "bold", size = fs * 1.2)
+                    rv$options$axis.text.x      <- rv$options$axis.text.y <- rv$options$legend.text <- ggplot2::theme_text(colour = fc, family = ff, face = 'plain', size = fs * 0.8)
+                    rv$options$axis.title.x     <- ggplot2::theme_text(colour = fc, family = ff, face = 'plain', size = fs)
+                    rv$options$strip.text.x     <- ggplot2::theme_text(colour = fc, family = ff, face = 'plain', size = fs)
+                    rv$options$axis.title.y     <- ggplot2::theme_text(colour = fc, family = ff, face = 'plain', size = fs, angle = 90)
+                    rv$options$legend.title     <- ggplot2::theme_text(colour = fc, family = ff, face = 'italic', size = fs)
+                    rv$options$strip.text.y     <- ggplot2::theme_text(colour = fc, family = ff, face = 'plain', size = fs, angle = -90)
+
+                    ## boxes
+                    if (!panderOptions('graph.boxes')) {
+                        rv$options$legend.key       <- rv$options$strip.background <- ggplot2::theme_rect(col = 'transparent', fill = 'transparent')
+                        rv$options$panel.border     <- ggplot2::theme_rect(fill = NA, colour = tc)
+                        rv$options$panel.background <- ggplot2::theme_rect(fill = pc, colour = tc)
+                    } else {
+                        rv$options$legend.key       <- rv$options$strip.background <- ggplot2::theme_rect(col = gc, fill = 'transparent')
+                        rv$options$panel.border     <- ggplot2::theme_rect(fill = NA, colour = gc)
+                        rv$options$panel.background <- ggplot2::theme_rect(fill = pc, colour = gc)
+                    }
+
+                    ## colors
+                    rv$options$plot.background  <- ggplot2::theme_rect(fill = bc, colour = NA)
+                    rv$options$axis.ticks       <- ggplot2::theme_segment(colour = gc, size = 0.2)
+                    ## point shape still has to be updated
+                    for (i in length(rv$layers))
+                        if (rv$layers[[i]]$geom$objname %in% c('point')) {
+                            rv$layers[[i]]$geom_params$size   <- 3
+                            rv$layers[[i]]$geom_params$shape  <- gs
+                        }
+                    ## geom colors
+                    if (is.null(rv$options$labels$colour) & is.null(rv$options$labels$fill)) {
+
+                        ## update layers with one color
+                        ## this is an ugly hack but `update_geom_defaults` is not reversible :(
+                        for (i in length(rv$layers)) {
+                            if (rv$layers[[i]]$geom$objname %in% c('histogram', 'bar')) {
+                                rv$layers[[i]]$geom_params$fill   <- cb
+                                rv$layers[[i]]$geom_params$colour <- tc
+                            } else {
+                                if (rv$layers[[i]]$geom$objname %in% c('boxplot')) {
+                                    rv$layers[[i]]$geom_params$fill   <- cb
+                                    rv$layers[[i]]$geom_params$colour <- 'black'
+                                } else {
+                                    if (rv$layers[[i]]$geom$objname %in% c('point')) {
+                                        rv$layers[[i]]$geom_params$fill   <- tc
+                                        rv$layers[[i]]$geom_params$colour <- cb
+                                    } else
+                                        rv$layers[[i]]$geom_params$colour <- cb
+                                }
+                            }
+                        }
+
+                    } else {
+
+                        ## we have a color scale
+                        if (is.null(rv$options$labels$colour))
+                            rv <- rv + ggplot2::scale_fill_manual(values = cs) + ggplot2::scale_shape(solid = FALSE)
+                        else
+                            rv <- rv + ggplot2::scale_colour_manual(values = cs) + ggplot2::scale_shape(solid = FALSE)
+
+                    }
+
+                    ## grid
+                    if (!panderOptions('graph.grid'))
+                        rv$options$panel.grid.minor <- rv$options$panel.grid.major <- ggplot2::theme_blank()
+                    else
+                        if (!panderOptions('graph.grid.minor')) {
+                            rv$options$panel.grid.major <- ggplot2::theme_line(colour = gc, size = 0.2, linetype = gl)
+                            rv$options$panel.grid.minor <- ggplot2::theme_blank()
+                        } else {
+                            rv$options$panel.grid.minor <- ggplot2::theme_line(colour = gc, size = 0.1, linetype = gl)
+                            rv$options$panel.grid.major <- ggplot2::theme_line(colour = gc, size = 0.2, linetype = gl)
+                        }
+
+                    ## axis angle
+                    if (aa == 0)
+                        rv$options$axis.text.y <- ggplot2::theme_text(colour = fc, family = ff, face = 'plain', size = fs * 0.8, angle = 90)
+                    if (aa == 2)
+                        rv$options$axis.text.x <- ggplot2::theme_text(colour = fc, family = ff, face = 'plain', size = fs * 0.8, angle = 90, hjust = 1)
+                    if (aa == 3) {
+                        rv$options$axis.text.y <- ggplot2::theme_text(colour = fc, family = ff, face = 'plain', size = fs * 0.8, angle = 90)
+                        rv$options$axis.text.x <- ggplot2::theme_text(colour = fc, family = ff, face = 'plain', size = fs * 0.8, angle = 90, hjust = 1)
+                    }
+
+                    ## legend
+                    rv$options$legend.position <- panderOptions('graph.legend.position')
+
+                }
+
+            }
+
+            ## grab output
             output <- vector("character")
             con <- textConnection("output", "wr", local=TRUE)
             sink(con, split = FALSE)
 
-            print(result$value)
+            print(rv)
 
             sink()
             close(con)
 
-            result <- result$value
+            result <- rv
 
         } else {
 
@@ -116,7 +307,7 @@ eval.msgs <- function(src, env = NULL, showInvisible = FALSE) {
     }
 
     if (is.null(error))
-        type  <- class(result)
+        type  <- rvc
 
     ## return
     list(src    = src,
@@ -188,7 +379,7 @@ eval.msgs <- function(src, env = NULL, showInvisible = FALSE) {
 #' @param length any R object exceeding the specified length will not be returned. The default value (\code{Inf}) does not filter out any R objects.
 #' @param output a character vector of required returned values. This might be useful if you are only interested in the \code{result}, and do not want to save/see e.g. \code{messages} or \code{print}ed \code{output}. See examples below.
 #' @param env environment where evaluation takes place. If not set (by default), a new temporary environment is created.
-#' @param graph.nomargin should \code{evals} try to keep plots' margins minimal?
+#' @param graph.unify should \code{evals} try to unify the style of (\code{base}, \code{lattice} and \code{ggplot2}) plots? If set to \code{TRUE}, some \code{panderOptions()} would apply. By default this is disabled not to freak out useRs :)
 #' @param graph.name set the file name of saved plots which is \code{\link{tempfile}} by default. A simple character string might be provided where \code{\%d} would be replaced by the index of the generating \code{txt} source, \code{\%n} with an incremented integer in \code{graph.dir} with similar file names and \code{\%t} by some unique random characters. A function's name to be \code{eval}uated can be passed here too.
 #' @param graph.dir path to a directory where to place generated images. If the directory does not exist, \code{evals} try to create that. Default set to \code{plots} in current working directory.
 #' @param graph.output set the required file format of saved plots. Currently it could be any of  \code{grDevices}': \code{png}, \code{bmp}, \code{jpeg}, \code{jpg}, \code{tiff}, \code{svg} or \code{pdf}.
@@ -238,8 +429,10 @@ eval.msgs <- function(src, env = NULL, showInvisible = FALSE) {
 #' evals('message(20)')
 #' evals('message(20);message(20)', parse = FALSE)
 #'
-#' ## adding a caption to a plot (`plot` is started with a `+`!)
-#' evals('set.caption("FOO"); +plot(1:10)')     # TODO
+#' ## adding a caption to a plot
+#' evals('set.caption("FOO"); plot(1:10)')
+#' ## `plot` is started with a `+` to eval the codes in the same chunk (no extra chunk with NULL result)
+#' evals('set.caption("FOO"); +plot(1:10)')
 #'
 #' ## handling warnings
 #' evals('chisq.test(mtcars$gear, mtcars$hp)')
@@ -365,8 +558,7 @@ eval.msgs <- function(src, env = NULL, showInvisible = FALSE) {
 #' }
 #' @export
 #' @importFrom digest digest
-#' @importFrom lattice trellis.par.set
-evals <- function(txt, parse = TRUE, cache = TRUE, cache.mode = c('environment', 'disk'), cache.dir = '.cache', cache.time = 0.1, cache.copy.images = FALSE, showInvisible = FALSE, classes = NULL, hooks = NULL, length = Inf, output = c('all', 'src', 'result', 'output', 'type', 'msg', 'stdout'), env = NULL, graph.nomargin = TRUE, graph.name = '%t', graph.dir = 'plots', graph.output = c('png', 'bmp', 'jpeg', 'jpg', 'tiff', 'svg', 'pdf'), width = 480, height = 480, res= 72, hi.res = FALSE, hi.res.width = 960, hi.res.height = 960*(height/width), hi.res.res = res*(hi.res.width/width), graph.env = FALSE, graph.recordplot = FALSE, graph.RDS = FALSE, ...){
+evals <- function(txt, parse = TRUE, cache = TRUE, cache.mode = c('environment', 'disk'), cache.dir = '.cache', cache.time = 0.1, cache.copy.images = FALSE, showInvisible = FALSE, classes = NULL, hooks = NULL, length = Inf, output = c('all', 'src', 'result', 'output', 'type', 'msg', 'stdout'), env = NULL, graph.unify = evalsOptions('graph.unify'), graph.name = '%t', graph.dir = 'plots', graph.output = c('png', 'bmp', 'jpeg', 'jpg', 'tiff', 'svg', 'pdf'), width = 480, height = 480, res= 72, hi.res = FALSE, hi.res.width = 960, hi.res.height = 960*(height/width), hi.res.res = res*(hi.res.width/width), graph.env = FALSE, graph.recordplot = FALSE, graph.RDS = FALSE, ...){
 
     if (missing(txt))
         stop('No R code provided to evaluate!')
@@ -377,6 +569,10 @@ evals <- function(txt, parse = TRUE, cache = TRUE, cache.mode = c('environment',
         if (is.null(mc[[param]]))
             assign(param, evalsOptions(param))
     }
+
+    ## lame constants
+    doAddGrid <- TRUE
+    updateFg  <- TRUE
 
     ## parse provided code after concatenating
     if (parse) {
@@ -389,10 +585,11 @@ evals <- function(txt, parse = TRUE, cache = TRUE, cache.mode = c('environment',
         else {
 
             txt <- sapply(txt.parsed, function(x) paste(deparse(x), collapse = '\n'))
+
             if (length(txt) == 0)
                 stop('No R code provided to evaluate!')
 
-            ## (re)merge lines on demand (based on `+` at the beginning of file)
+            ## (re)merge lines on demand (based on `+` at the beginning of line)
             txt.sep <- c(which(!grepl('^\\+', txt)), length(txt)+1)
             txt <-  lapply(1:(length(txt.sep)-1), function(i) txt[txt.sep[i]:(txt.sep[i+1]-1)])
             txt <- rapply(txt, function(x) sub('^\\+', '', x), how = 'replace')
@@ -405,9 +602,10 @@ evals <- function(txt, parse = TRUE, cache = TRUE, cache.mode = c('environment',
     if (!identical(file.info(graph.dir)$isdir, TRUE))
         if (!dir.create(graph.dir, showWarnings = FALSE, recursive = TRUE))
             stop(sprintf('Something is definitely wrong with `graph.dir`: %s!', graph.dir))
-    if (!identical(file.info(cache.dir)$isdir, TRUE))
-        if (!dir.create(cache.dir, showWarnings = FALSE, recursive = TRUE))
-            stop(sprintf('Something is definitely wrong with `cache.dir`: %s!', cache.dir))
+    if (cache.mode == 'disk')
+        if (!identical(file.info(cache.dir)$isdir, TRUE))
+            if (!dir.create(cache.dir, showWarnings = FALSE, recursive = TRUE))
+                stop(sprintf('Something is definitely wrong with `cache.dir`: %s!', cache.dir))
 
     ## check provided parameters
     output <- match.arg(output, several.ok = TRUE)
@@ -421,11 +619,14 @@ evals <- function(txt, parse = TRUE, cache = TRUE, cache.mode = c('environment',
     if (graph.output == 'jpg')
         graph.output <- 'jpeg'
 
-    ## env for running all lines of code -> eval()
+    ## env for running all lines of code
     if (is.null(env))
         env <- new.env()
     if (!is.environment(env))
         stop('Wrong env parameter (not an environment) provided!')
+    for (p in c('plot', 'barplot', 'lines', 'pie', 'boxplot', 'polygon', 'points','legend', 'hist', 'pairs', 'stripchart'))
+        if (exists(p, envir = env, inherits = FALSE))
+            stop(paste0('Using a reserved word as variable: `', p, '`'))
 
     `%d` <- 0
 
@@ -572,7 +773,7 @@ evals <- function(txt, parse = TRUE, cache = TRUE, cache.mode = c('environment',
 
         }
 
-        ## helper fn
+        ## clear graphics device (if there would be any open)
         clear.devs <- function()
             while (!is.null(dev.list()))
                 dev.off(as.numeric(dev.list()[1]))
@@ -590,30 +791,105 @@ evals <- function(txt, parse = TRUE, cache = TRUE, cache.mode = c('environment',
         if (graph.output == 'pdf')
             do.call('cairo_pdf', list(file, width = width/res, height = height/res, ...)) # TODO: font-family?
 
-        ## remove margins
-        if (graph.nomargin) {
-            trellis.par.set(layout.heights = list(top.padding = 0.1, bottom.padding = 0.1), layout.widths = list(right.padding = 0.1, left.padding = 0.4))
-            par(mar=c(4, 4, 2.1, 0.1))
-        }
-
         ## start recordPlot
         dev.control(displaylist = "enable")
 
         ## if caching: save the initial environment's objects' hashes
         if (cache) {
             objs <- ls(envir = env)
+            objs <- setdiff(objs, c('.storage', 'showCode', 'showText'))
             objs.hash <- sapply(objs, function(x) hashOfEvalOrDeparse(as.name(x), x))
         }
 
+        ## add modified base plot functions to update colors
+        if (graph.unify) {
+
+            env$plot <- env$barplot <- env$lines <- env$pie <- env$boxplot <- env$polygon <- env$points <- env$legend <- env$hist <- env$pairs <- env$stripchart <- function (...) {
+
+                mc <- match.call()
+                fn <- deparse(mc[[1]])
+
+                ## pander options
+                fc  <- panderOptions('graph.fontcolor')
+                fbs <- panderOptions('graph.fontsize')
+                bc  <- panderOptions('graph.background')
+                gc  <- panderOptions('graph.grid.color')
+                cex <- fbs/12
+                cs <- panderOptions('graph.colors')
+                if (panderOptions('graph.color.rnd'))
+                    cs <- sample(cs)
+                cb <- cs[1]
+
+                ## global par update
+                par(
+                  family   = panderOptions('graph.fontfamily'),
+                  cex      = cex, cex.axis = cex * 0.8, cex.lab = cex, cex.main = cex * 1.2, cex.sub = cex,
+                  bg       = bc, # TODO: how could we color only the inner plot area globally? Not like: https://stat.ethz.ch/pipermail/r-help/2003-May/033971.html
+                  las      = panderOptions('graph.axis.angle'),
+                  lwd      = 2,
+                  pch      = panderOptions('graph.symbol'),
+                  col.axis = fc, col.lab = fc, col.main = fc, col.sub = fc)
+
+                ## remove margins
+                if (panderOptions('graph.nomargin')) {
+                    par(mar = c(4.1, 4.3, 2.1, 0.1))
+                }
+
+                ## default: grid is added to all plots
+                doAddGrid <- TRUE
+
+                ## update colors
+                if (is.null(mc$col) & is.null(mc$color))
+                    mc$col <- cb
+                if (fn == 'boxplot')
+                    mc$border <- 'black'
+                if (fn %in% c('pairs', 'stripchart')) {
+                    doAddGrid <- FALSE
+                    par(fg = fc)
+                } else {
+                    if (panderOptions('graph.boxes'))
+                        par(fg = gc)
+                    else
+                        par(fg = bc)
+                }
+
+                ## call
+                mc[[1]] <- parse(text = paste0('graphics::', deparse(mc[[1]])))[[1]]
+                eval(mc, envir = env)
+
+                ## grid
+                if (all(par()$mfrow == 1) & panderOptions('graph.grid') & doAddGrid) {
+
+                    g <- tryCatch(grid(lty = panderOptions('graph.grid.lty'), col = panderOptions('graph.grid.color'), lwd = 0.5), error = function(e) e)
+                    if (!inherits(g, 'error')) {
+                        if (panderOptions('graph.grid.minor'))
+                            g <- tryCatch(add.minor.ticks(2, 2, grid = TRUE), error = function(e) e)
+                    }
+                    if (inherits(g, 'error'))
+                        warning('Applying default formatting to image is somehow compromised (the result could differ from what you specified in `panderOptions`). Hints: printing `lattice`/`ggplot2` is not needed and tweaking `base` plots with `par` might have some side-effects!')
+
+                }
+            }
+
+        }
+
         ## eval
-        res <- eval.msgs(src, env = env, showInvisible = showInvisible)
+        res <- eval.msgs(src, env = env, showInvisible = showInvisible, graph.unify = graph.unify)
 
         ## grab recorded.plot
         if (!is.null(dev.list())) {
             recorded.plot <- recordPlot()
             dev.control("inhibit")
         }
+
+        ## did we produce a plot?
+        graph  <- ifelse(exists('recorded.plot'), ifelse(is.null(recorded.plot[[1]]), FALSE, file), FALSE)
+
+        ## close grDevice
         clear.devs()
+
+        ## removing injected base::plot fns
+        rm(list = c('plot', 'barplot', 'lines', 'pie', 'boxplot', 'polygon', 'points','legend', 'hist', 'pairs', 'stripchart'), envir = env)
 
         ## error handling
         if (!is.null(res$msg$errors)) {
@@ -622,7 +898,6 @@ evals <- function(txt, parse = TRUE, cache = TRUE, cache.mode = c('environment',
         }
 
         result <- res$result
-        graph  <- ifelse(exists('recorded.plot'), ifelse(is.null(recorded.plot[[1]]), FALSE, file), FALSE)
 
         ## we have a graph
         if (is.character(graph)) {
@@ -727,6 +1002,7 @@ evals <- function(txt, parse = TRUE, cache = TRUE, cache.mode = c('environment',
 
             ## comparing the resulting environment's objects' hashes with the original ones
             objs.res      <- ls(envir = env)
+            objs.res      <- setdiff(objs.res, c('.storage', 'showCode', 'showText', '.graph.dir', '.graph.name'))
             objs.res.hash <- sapply(objs.res, function(x) hashOfEvalOrDeparse(as.name(x), x))
             change        <- setdiff(objs.res, objs)
             common        <- intersect(objs.res, objs)
