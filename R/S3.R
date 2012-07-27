@@ -97,20 +97,29 @@ pander.image <- function(x, caption = attr(x, 'caption'), href = attr(x, 'href')
 }
 
 #' @S3method pander table
-pander.table <- function(x, caption = attr(x, 'caption'), ...)
-    pandoc.table(x, caption = caption)
+pander.table <- function(x, caption = attr(x, 'caption'), justify = attr(x, 'alignment'), ...) {
+    if (is.null(justify))
+        justify <- 'left'
+    pandoc.table(x, caption = caption, justify = justify)
+}
 
 #' @S3method pander data.frame
-pander.data.frame <- function(x, caption = attr(x, 'caption'), ...)
-    pandoc.table(x, caption = caption)
+pander.data.frame <- function(x, caption = attr(x, 'caption'), justify = attr(x, 'alignment'), ...) {
+    if (is.null(justify))
+        justify <- 'left'
+    pandoc.table(x, caption = caption, justify = justify)
+}
+
+#' @S3method pander matrix
+pander.matrix <- function(x, caption = attr(x, 'caption'),justify = attr(x, 'alignment'),  ...) {
+    if (is.null(justify))
+        justify <- 'left'
+    pandoc.table(x, caption = caption, justify = justify)
+}
 
 #' @S3method pander cast_df
 pander.cast_df<- function(x, caption = attr(x, 'caption'), ...)
-    pandoc.table(as.data.frame(x), caption = caption)
-
-#' @S3method pander matrix
-pander.matrix <- function(x, caption = attr(x, 'caption'), ...)
-    pandoc.table(x, caption = caption)
+    pandoc.table(as.data.frame(x), caption = caption, justify = justify)
 
 #' @S3method pander numeric
 pander.numeric <- function(x, ...)

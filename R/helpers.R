@@ -782,9 +782,17 @@ pandoc.table <- function(...)
 
 #' Adds caption in current block
 #'
-#' This is a helper function to be used inside brew blocks to add a caption to the returning image/table.
+#' This is a helper function to be used \emph{inside brew blocks} to add a caption to the returning image/table.
 #' @param x string
 #' @export
-set.caption <- function(x) {
+set.caption <- function(x)
     assign('caption', x , envir = pander:::storage)
-}
+
+
+#' Sets alignment for tables
+#'
+#' This is a helper function to be used \emph{inside brew blocks} to update the alignment (\code{justify} parameter of \code{pandoc.table}) of the returning table.
+#' @param x character vector which length equals to one (would be repeated \code{n} times) ot \code{n} - where \code{n} equals to the number of columns in the following table
+#' @export
+set.alignment <- function(align = 'center', row.names = 'left')
+    assign('alignment', list(align = align, row.names = row.names) , envir = pander:::storage)

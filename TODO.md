@@ -34,7 +34,7 @@
   * ~~**add controllable, global options**~~ `pander.option`
   * ~~rename pander.options & eval.options not to conflict with S3 methods** `panderOptions` and `evalsOptions`~~
   * ~~update package functions to use new naming scheme for options~~
-  * **add ~~caption~~/other tweaks (sign. stars, emphasis etc.) to images/tables using `attrs`**
+  * **add ~~caption~~/other tweaks (~~alignment~~, sign. stars, emphasis etc.) to images/tables using `attrs`**
 
 ## Evals
 
@@ -102,7 +102,7 @@ Global options for: `lattice`, `ggplot2` and `base` plots
   * ~~table: add strong emphasis to row names~~
   * ~~table: fails with one-column tables. E.g.: `pander(mtcars[1,])`~~
   * ~~table: **issue** with rounding numbers, just check: `pander(mtcars$mpg)` vs. `pander(mtcars$mpg)` -> this is based on low `digits` option~~
-  * table: add more styling options (e.g. (strong) emphasizing custom cells)
+  * table: add more styling options (e.g. (strong) emphasizing custom cells, ~~alignment~~)
   * table: add option to draw significance starts in cells
   * table: @idea wrap header of tables to minimal (even in words!) to keep the table's width minimal
 

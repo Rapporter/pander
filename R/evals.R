@@ -982,6 +982,27 @@ evals <- function(txt, parse = TRUE, cache = TRUE, cache.mode = c('environment',
             assign('caption', NULL , envir = pander:::storage)
 
         }
+        ## alignment of tables
+        if (!is.null(pander:::storage$alignment) & !is.null(result)) {
+
+            a <- pander:::storage$alignment
+            if (length(dim(result)) == 0) {
+                w <- length(result)
+                n <- NULL
+            } else {
+                w <- ncol(result)
+                n <- rownames(result)
+                if (all(n == 1:nrow(result)))
+                    n <- NULL
+            }
+            if (is.null(n))
+                attr(result, 'alignment') <- rep(a$align, length.out = w)
+            else
+                attr(result, 'alignment') <- c(a$row.names, rep(a$align, length.out = w))
+            assign('alignment', NULL , envir = pander:::storage)
+
+        }
+
 
         ## return list at last
         res <- list(src      = src,
