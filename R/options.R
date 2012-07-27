@@ -62,6 +62,7 @@
 
 ## general (temporary) storage for pander's stuff
 storage <- new.env()
+debug   <- new.env()
 
 ## cache storage
 cached.results <- new.env()

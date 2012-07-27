@@ -333,7 +333,7 @@ DELIM[[BRCATCODE]] <- c("<%=","%>")
     assign('showText', showText, envir = envir)
 
     e <- eval.msgs(code, env = envir)
-    assign('.debug', list(code = code, text = text, result = e), envir = storage) # debug
+    assign('last', list(code = code, text = text, result = e), envir = debug) # debug
 
     if (!is.null(e$msg$errors)) {
 
