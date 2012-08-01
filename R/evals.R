@@ -890,12 +890,13 @@ evals <- function(txt, parse = TRUE, cache = TRUE, cache.mode = c('environment',
         ## close grDevice
         clear.devs()
 
-        ## removing injected base::plot fns
-        if (graph.unify)
-            rm(list = c('plot', 'barplot', 'lines', 'pie', 'boxplot', 'polygon', 'points','legend', 'hist', 'pairs', 'stripchart'), envir = env)
-
         ## error handling
         if (!is.null(res$msg$errors)) {
+
+            ## removing injected base::plot fns
+            if (graph.unify)
+                rm(list = c('plot', 'barplot', 'lines', 'pie', 'boxplot', 'polygon', 'points','legend', 'hist', 'pairs', 'stripchart'), envir = env)
+
             class(res) <- 'evals'
             return(res)
         }
@@ -1020,6 +1021,10 @@ evals <- function(txt, parse = TRUE, cache = TRUE, cache.mode = c('environment',
 
         res <- res[output]
         class(res) <- 'evals'
+
+        ## removing injected base::plot fns
+        if (graph.unify)
+            rm(list = c('plot', 'barplot', 'lines', 'pie', 'boxplot', 'polygon', 'points','legend', 'hist', 'pairs', 'stripchart'), envir = env)
 
         ## save to cache
         if (cache) {
