@@ -252,9 +252,11 @@ eval.msgs <- function(src, env = NULL, showInvisible = FALSE, graph.unify = eval
 
                         ## we have a color scale
                         if (is.null(rv$options$labels$colour))
-                            rv <- rv + ggplot2::scale_fill_manual(values = cs) + ggplot2::scale_shape(solid = FALSE)
+                            if (length(rv$scales$scales) == 0)
+                                rv <- rv + ggplot2::scale_fill_manual(values = cs) + ggplot2::scale_shape(solid = FALSE)
                         else
-                            rv <- rv + ggplot2::scale_colour_manual(values = cs) + ggplot2::scale_shape(solid = FALSE)
+                            if (length(rv$scales$scales) == 0)
+                                rv <- rv + ggplot2::scale_colour_manual(values = cs) + ggplot2::scale_shape(solid = FALSE)
 
                     }
 
