@@ -90,19 +90,23 @@ Pandoc.convert <- function(f, text, format = 'html', open = TRUE, options = '', 
         if (!grepl('This report was generated', tail(readLines(f, warn = FALSE), 1)))
             cat(sprintf('\n\n-------\nThis report was generated with [R](http://www.r-project.org/) (%s) and [pander](https://github.com/daroczig/pander) (%s)%son %s platform.', sprintf('%s.%s', R.version$major, R.version$minor), packageDescription("pander")$Version, ifelse(missing(proc.time), ' ', sprintf(' in %s sec ', format(proc.time))), R.version$platform), file = f, append = TRUE)
 
-    ## call Pandoc in specified dir and reset wd
+    ## set specified dir
     wd <- getwd()
     setwd(f.dir)
-    res <- suppressWarnings(tryCatch(system(sprintf('pandoc -f markdown -s %s %s -o %s', options, shQuote(f), shQuote(f.out)), intern=T), error=function(e) e))
+
+    ## call Pandoc
+    res <- suppressWarnings(tryCatch(system(sprintf('pandoc -f markdown -s %s %s -o %s', options, shQuote(f), shQuote(f.out)), intern = TRUE), error = function(e) e))
+
+    ## revert settings
     setwd(wd)
 
-    ## open
-    if (open)
-        openFileInOS(f.out)
-
-    if (length(res) == 0)
+    ## return
+    if (!is.null(attr(res, "status"))) {
+        warning(paste0('Pandoc had some problems while converting to ', format, ': \n', res))
+    } else {
+        if (open)
+            openFileInOS(f.out)
         return(f.out)
-    else
-        stop(res)
+    }
 
 }
