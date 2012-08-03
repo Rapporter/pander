@@ -79,19 +79,14 @@ eval.msgs <- function(src, env = NULL, showInvisible = FALSE, graph.unify = eval
     ## error handling
     if (inherits(result, 'error')) {
 
-        error <- result$message
+        error  <- result$message
+        result <- NULL
 
         if (grepl('^<text>:[0-9]*:[0-9]: unexpected ', error))
             error <- sub('<text>:([0-9]*):([0-9]*): unexpected ([a-zA-Z ]*)\n.*[0-9]*:(.*)\n.*[ \t]*$', 'Unexpected \\3 at character \\2 in line \\1: `\\4`', error)
 
-        result <- output <- NULL
-        type   <- 'error'
-
-    } else {
-
+    } else
         error <- NULL
-
-    }
 
     ## check if printing is needed
     if (!is.null(result)) {
@@ -297,15 +292,13 @@ eval.msgs <- function(src, env = NULL, showInvisible = FALSE, graph.unify = eval
             p.result <- tryCatch(print(rv), error = function(e) e)
 
             ## error while printing
-            if(inherits(p.result, 'error')) {
-                error <- p.result$message
-                type  <- 'error'
-            }
+            if(inherits(p.result, 'error'))
+                error  <- p.result$message
+
+            result <- rv
 
             sink()
             close(con)
-
-            result <- rv
 
         } else {
 
@@ -315,7 +308,15 @@ eval.msgs <- function(src, env = NULL, showInvisible = FALSE, graph.unify = eval
     }
 
     if (is.null(error))
+
         type  <- rvc
+
+    else {
+
+        result <- output <- NULL
+        type   <- 'error'
+
+    }
 
     ## return
     list(src    = src,
