@@ -294,7 +294,13 @@ eval.msgs <- function(src, env = NULL, showInvisible = FALSE, graph.unify = eval
             con <- textConnection("output", "wr", local=TRUE)
             sink(con, split = FALSE)
 
-            print(rv)
+            p.result <- tryCatch(print(rv), error = function(e) e)
+
+            ## error while printing
+            if(inherits(p.result, 'error')) {
+                error <- p.result$message
+                type  <- 'error'
+            }
 
             sink()
             close(con)
