@@ -82,7 +82,7 @@ Global options for: `lattice`, `ggplot2` and `base` plots
 	* ~~angle~~
 	* split long labels
 
-  * title: split if too long
+  * title: split if too long (strwidth, strheight)
   * others:
       * ~~border/box around plot/strip~~
 	  * ~~transparent border of histogram~~

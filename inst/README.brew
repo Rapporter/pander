@@ -1,4 +1,4 @@
-% [pander: An R Pandoc writer](https://github.com/daroczig/pander)
+% [pander: An R Pandoc writer](https://github.com/Rapporter/pander)
 
 **pander** is an [R](http://r-project.org) package containing [helpers](#helper-functions) to return [Pandoc](http://johnmacfarlane.net/pandoc/)'s markdown of user specified format or *automatically* of several type of [**R objects**](#generic-pander-method).
 
@@ -8,7 +8,7 @@ The package is also capable of exporting/converting complex Pandoc documents (re
 
   * users might write some reports in [brew](http://cran.r-project.org/web/packages/brew/index.html) syntax resulting in a pretty *Pandoc* document (where each R object are transformed to nicely formatted table, list etc.) and also in a **bunch of formats** (like HTML, odt, pdf, docx etc.) automatically.
 
-    *Example*: this [`README.md`](https://github.com/daroczig/pander/blob/master/README.md) is cooked with `Pandoc.brew` based on [`inst/README.brew`](https://github.com/daroczig/pander/blob/master/inst/README.brew) and also exported to [HTML](http://daroczig.github.com/pander/). Details can be found [below](#brew-to-pandoc) or head directly to [examples](#examples).
+    *Example*: this [`README.md`](https://github.com/Rapporter/pander/blob/master/README.md) is cooked with `Pandoc.brew` based on [`inst/README.brew`](https://github.com/Rapporter/pander/blob/master/inst/README.brew) and also exported to [HTML](http://rapporter.github.com/pander/). Details can be found [below](#brew-to-pandoc) or head directly to [examples](#examples).
 
 <!-- endlist -->
 
@@ -20,20 +20,20 @@ The package is also capable of exporting/converting complex Pandoc documents (re
   * based on the above *no "traditional" R console output* is shown in the resulting document (nor in markdown, nor in exported docs) but **all R objects are transformed to tables, list etc**. Well, there is an option (`show.src`) to show the original R commands before the formatted output, and `pander`˛calls can be also easily tweaked (just file an issue) to return `print`ed R objects - if you would need that in some strange situation - like writing an R tutorial. But **I really think that nor R code, nor raw R results have anything to do with an exported report** :)
   * *graphs/plots* are recognized in blocks of R commands without any special setting or marks around code block and saved to disk in a `png` file linked in the resulting document. This means if you create a report (e.g. `brew` a text file) and export it to pdf/docx etc. all the plots/images would be there. There are some parameters to specify the resolution of the image and also the type (e.g. `jpg`, `svg` or `pdf`) besides a **wide variety of [theme options](#pander-options)**. About the latter, please check out `graphs.brew` [below](#examples).
   * `pander`˛uses its build in (IMHO quite decent) [**caching**](#caching). This means that if evaluation of some R commands take too much time (which can be set by option/parameter), then the results are saved in a file and returned from there on next exact R code's evaluation. This caching algorithm tries to be **smart** as checks not only the passed R sources, but *all variables and functions* inside that and saves the hash of those. This is a quite secure way of caching (see details [below](#caching)), but if you would encounter any issues, just switch off the cache. I've not seen any issues :)
-  * `knitr` *support* is coming too, for details see my [TODO list](https://github.com/daroczig/pander/blob/master/TODO.md) **Update**: just use `knitr` to generate markdown and pass that to `Pandoc.convert`
+  * `knitr` *support* is coming too, for details see my [TODO list](https://github.com/Rapporter/pander/blob/master/TODO.md) **Update**: just use `knitr` to generate markdown and pass that to `Pandoc.convert`
 
 # Installation
 
-Currently, this package is hosted only on [GitHub](https://github.com/daroczig/pander).
+Currently, this package is hosted only on [GitHub](https://github.com/Rapporter/pander).
 
 Until this gets on [CRAN](cran.r-project.org), you can install it via nifty function from `devtools` package:
 
 ```
 library(devtools)
-install_github('pander', 'daroczig')
+install_github('pander', 'Rapporter')
 ```
 
-Or download the [sources in a zip file](https://github.com/daroczig/pander/zipball/master) and build manually. If you're running R on Windows, you need to install [Rtools](http://cran.stat.ucla.edu/bin/windows/Rtools/).
+Or download the [sources in a zip file](https://github.com/Rapporter/pander/zipball/master) and build manually. If you're running R on Windows, you need to install [Rtools](http://cran.stat.ucla.edu/bin/windows/Rtools/).
 
 ## Depends
 
@@ -249,7 +249,7 @@ Besides this, the custom `brew` function can do more and also less compared to t
   * multiple R expressions can be passed between `<\%= ... \%>` tags,
   * the text of the file and also **the evaluated R objects are (invisibly) returned in a structured list**, which can be really useful while post-processing the results of `brew` (just try: `str(Pandoc.brew(text='Pi equals to <\%=pi\%>.\nAnd here are some random data:\n<\%=runif(10)\%>'))` - without the backslash in front of the percent signs).
 
-This document was generated by `Pandoc.brew` based on [`inst/README.brew`](https://github.com/daroczig/pander/blob/master/inst/README.brew) so the above examples were generated automatically - which could be handy while writing some nifty statistical reports :)
+This document was generated by `Pandoc.brew` based on [`inst/README.brew`](https://github.com/Rapporter/pander/blob/master/inst/README.brew) so the above examples were generated automatically - which could be handy while writing some nifty statistical reports :)
 
 ```
 Pandoc.brew(system.file('README.brew', package='pander'))
@@ -277,9 +277,9 @@ And there are some package bundled examples too.
 
 The package comes bundled with some examples for `Pandoc.brew` to let users check out its features pretty fast. These are:
 
-  * [minimal.brew](https://github.com/daroczig/pander/blob/master/inst/examples/minimal.brew)
-  * [short-code-long-report.brew](https://github.com/daroczig/pander/blob/master/inst/examples/short-code-long-report.brew)
-  * [graphs.brew](https://github.com/daroczig/pander/blob/master/inst/examples/graphs.brew)
+  * [minimal.brew](https://github.com/Rapporter/pander/blob/master/inst/examples/minimal.brew)
+  * [short-code-long-report.brew](https://github.com/Rapporter/pander/blob/master/inst/examples/short-code-long-report.brew)
+  * [graphs.brew](https://github.com/Rapporter/pander/blob/master/inst/examples/graphs.brew)
 
 To `brew` these examples on your machine try to run the followings.:
 
@@ -296,11 +296,11 @@ Pandoc.brew(system.file('examples/graphs.brew', package='pander'), output = temp
 
 For easy access I have uploaded some exported documents of the above examples:
 
-  * minimal.brew: [markdown](http://daroczig.github.com/pander/minimal.md) [html](http://daroczig.github.com/pander/minimal.html) [pdf](http://daroczig.github.com/pander/minimal.pdf) [odt](http://daroczig.github.com/pander/minimal.odt) [docx](http://daroczig.github.com/pander/minimal.docx)
-  * short-code-long-report.brew: [markdown](http://daroczig.github.com/pander/short-code-long-report.md) [html](http://daroczig.github.com/pander/short-code-long-report.html) [pdf](http://daroczig.github.com/pander/short-code-long-report.pdf) [odt](http://daroczig.github.com/pander/short-code-long-report.odt) [docx](http://daroczig.github.com/pander/short-code-long-report.docx)
-  * graphs.brew: [markdown](http://daroczig.github.com/pander/graphs.md) [html](http://daroczig.github.com/pander/graphs.html) [pdf](http://daroczig.github.com/pander/graphs.pdf) [odt](http://daroczig.github.com/pander/graphs.odt) [docx](http://daroczig.github.com/pander/graphs.docx)
+  * minimal.brew: [markdown](http://rapporter.github.com/pander/minimal.md) [html](http://rapporter.github.com/pander/minimal.html) [pdf](http://rapporter.github.com/pander/minimal.pdf) [odt](http://rapporter.github.com/pander/minimal.odt) [docx](http://rapporter.github.com/pander/minimal.docx)
+  * short-code-long-report.brew: [markdown](http://rapporter.github.com/pander/short-code-long-report.md) [html](http://rapporter.github.com/pander/short-code-long-report.html) [pdf](http://rapporter.github.com/pander/short-code-long-report.pdf) [odt](http://rapporter.github.com/pander/short-code-long-report.odt) [docx](http://rapporter.github.com/pander/short-code-long-report.docx)
+  * graphs.brew: [markdown](http://rapporter.github.com/pander/graphs.md) [html](http://rapporter.github.com/pander/graphs.html) [pdf](http://rapporter.github.com/pander/graphs.pdf) [odt](http://rapporter.github.com/pander/graphs.odt) [docx](http://rapporter.github.com/pander/graphs.docx)
 
-Please check out `pdf`, `docx`, `odt` and other formats (changing the above `convert` option) on your machine too and do not forget to [give some feedback](https://github.com/daroczig/pander/issues)!
+Please check out `pdf`, `docx`, `odt` and other formats (changing the above `convert` option) on your machine too and do not forget to [give some feedback](https://github.com/Rapporter/pander/issues)!
 
 # Live report generation
 
@@ -445,7 +445,7 @@ All evaluation of provided R commands (while running [`brew`](#brew-to-pandoc) o
 
 ## In practice
 
-As `pander` does not cache based on raw sources of chunks and there is no easy way of enabling/disabling caching on a chunk basis, the users have to live with some *great advantages* and some *minor tricky situations* - which latter cannot be solved theoretically in my opinion, but [I'd love to hear your feedback](https://github.com/daroczig/pander/issues).
+As `pander` does not cache based on raw sources of chunks and there is no easy way of enabling/disabling caching on a chunk basis, the users have to live with some *great advantages* and some *minor tricky situations* - which latter cannot be solved theoretically in my opinion, but [I'd love to hear your feedback](https://github.com/Rapporter/pander/issues).
 
 The caching hash is computed based on the structure and content of the R commands, so let us make some POC example to show the **greatest asset**:
 
@@ -498,7 +498,7 @@ Sorry, no online documentation ATM. Please check: `?evals`
 
 # ESS
 
-I have created some simple LISP functions which would be handy if you are using the best damn IDE for R. These functions and default key-bindings are [shipped with the package](https://github.com/daroczig/pander/tree/master/inst/pander.el), feel free to personalize.
+I have created some simple LISP functions which would be handy if you are using the best damn IDE for R. These functions and default key-bindings are [shipped with the package](https://github.com/Rapporter/pander/tree/master/inst/pander.el), feel free to personalize.
 
 As time passed these small functions grew heavier (with my Emacs knowledge) so I ended up with a small library:
 

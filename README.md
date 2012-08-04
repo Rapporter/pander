@@ -1,4 +1,4 @@
-% [pander: An R Pandoc writer](https://github.com/daroczig/pander)
+% [pander: An R Pandoc writer](https://github.com/Rapporter/pander)
 
 **pander** is an [R](http://r-project.org) package containing [helpers](#helper-functions) to return [Pandoc](http://johnmacfarlane.net/pandoc/)'s markdown of user specified format or *automatically* of several type of [**R objects**](#generic-pander-method).
 
@@ -8,7 +8,7 @@ The package is also capable of exporting/converting complex Pandoc documents (re
 
   * users might write some reports in [brew](http://cran.r-project.org/web/packages/brew/index.html) syntax resulting in a pretty *Pandoc* document (where each R object are transformed to nicely formatted table, list etc.) and also in a **bunch of formats** (like HTML, odt, pdf, docx etc.) automatically.
 
-    *Example*: this [`README.md`](https://github.com/daroczig/pander/blob/master/README.md) is cooked with `Pandoc.brew` based on [`inst/README.brew`](https://github.com/daroczig/pander/blob/master/inst/README.brew) and also exported to [HTML](http://daroczig.github.com/pander/). Details can be found [below](#brew-to-pandoc) or head directly to [examples](#examples).
+    *Example*: this [`README.md`](https://github.com/Rapporter/pander/blob/master/README.md) is cooked with `Pandoc.brew` based on [`inst/README.brew`](https://github.com/Rapporter/pander/blob/master/inst/README.brew) and also exported to [HTML](http://rapporter.github.com/pander/). Details can be found [below](#brew-to-pandoc) or head directly to [examples](#examples).
 
 <!-- endlist -->
 
@@ -20,20 +20,20 @@ The package is also capable of exporting/converting complex Pandoc documents (re
   * based on the above *no "traditional" R console output* is shown in the resulting document (nor in markdown, nor in exported docs) but **all R objects are transformed to tables, list etc**. Well, there is an option (`show.src`) to show the original R commands before the formatted output, and `pander`˛calls can be also easily tweaked (just file an issue) to return `print`ed R objects - if you would need that in some strange situation - like writing an R tutorial. But **I really think that nor R code, nor raw R results have anything to do with an exported report** :)
   * *graphs/plots* are recognized in blocks of R commands without any special setting or marks around code block and saved to disk in a `png` file linked in the resulting document. This means if you create a report (e.g. `brew` a text file) and export it to pdf/docx etc. all the plots/images would be there. There are some parameters to specify the resolution of the image and also the type (e.g. `jpg`, `svg` or `pdf`) besides a **wide variety of [theme options](#pander-options)**. About the latter, please check out `graphs.brew` [below](#examples).
   * `pander`˛uses its build in (IMHO quite decent) [**caching**](#caching). This means that if evaluation of some R commands take too much time (which can be set by option/parameter), then the results are saved in a file and returned from there on next exact R code's evaluation. This caching algorithm tries to be **smart** as checks not only the passed R sources, but *all variables and functions* inside that and saves the hash of those. This is a quite secure way of caching (see details [below](#caching)), but if you would encounter any issues, just switch off the cache. I've not seen any issues :)
-  * `knitr` *support* is coming too, for details see my [TODO list](https://github.com/daroczig/pander/blob/master/TODO.md) **Update**: just use `knitr` to generate markdown and pass that to `Pandoc.convert`
+  * `knitr` *support* is coming too, for details see my [TODO list](https://github.com/Rapporter/pander/blob/master/TODO.md) **Update**: just use `knitr` to generate markdown and pass that to `Pandoc.convert`
 
 # Installation
 
-Currently, this package is hosted only on [GitHub](https://github.com/daroczig/pander).
+Currently, this package is hosted only on [GitHub](https://github.com/Rapporter/pander).
 
 Until this gets on [CRAN](cran.r-project.org), you can install it via nifty function from `devtools` package:
 
 ```
 library(devtools)
-install_github('pander', 'daroczig')
+install_github('pander', 'Rapporter')
 ```
 
-Or download the [sources in a zip file](https://github.com/daroczig/pander/zipball/master) and build manually. If you're running R on Windows, you need to install [Rtools](http://cran.stat.ucla.edu/bin/windows/Rtools/).
+Or download the [sources in a zip file](https://github.com/Rapporter/pander/zipball/master) and build manually. If you're running R on Windows, you need to install [Rtools](http://cran.stat.ucla.edu/bin/windows/Rtools/).
 
 ## Depends
 
@@ -103,13 +103,13 @@ II. Second element
 > m <- mtcars[1:2, 1:3]
 > pandoc.table(m)
 
-------------------------------------
-                  mpg   cyl   disp  
------------------ ----- ----- ------
-**Mazda RX4**     21    6     160   
+--------------------------------------
+&nbsp;              mpg   cyl   disp  
+------------------- ----- ----- ------
+**Mazda RX4**       21    6     160   
 
-**Mazda RX4 Wag** 21    6     160   
-------------------------------------
+**Mazda RX4 Wag**   21    6     160   
+--------------------------------------
 
 ```
 
@@ -118,10 +118,10 @@ II. Second element
 ```rout
 > pandoc.table(m, style = "simple")
 
-                  mpg   cyl   disp  
------------------ ----- ----- ------
-**Mazda RX4**     21    6     160   
-**Mazda RX4 Wag** 21    6     160   
+&nbsp;              mpg   cyl   disp  
+------------------- ----- ----- ------
+**Mazda RX4**       21    6     160   
+**Mazda RX4 Wag**   21    6     160   
 
 ```
 
@@ -130,13 +130,13 @@ II. Second element
 ```rout
 > pandoc.table(m, style = "grid")
 
-+-------------------+-------+-------+--------+
-|                   | mpg   | cyl   | disp   |
-+===================+=======+=======+========+
-| **Mazda RX4**     | 21    | 6     | 160    |
-+-------------------+-------+-------+--------+
-| **Mazda RX4 Wag** | 21    | 6     | 160    |
-+-------------------+-------+-------+--------+
++---------------------+-------+-------+--------+
+| &nbsp;              | mpg   | cyl   | disp   |
++=====================+=======+=======+========+
+| **Mazda RX4**       | 21    | 6     | 160    |
++---------------------+-------+-------+--------+
+| **Mazda RX4 Wag**   | 21    | 6     | 160    |
++---------------------+-------+-------+--------+
 
 ```
 
@@ -145,13 +145,13 @@ Besides the `style` parameter there are several other ways to tweak the output l
 ```rout
 > pandoc.table(m, style = "grid", caption = "Hello caption!")
 
-+-------------------+-------+-------+--------+
-|                   | mpg   | cyl   | disp   |
-+===================+=======+=======+========+
-| **Mazda RX4**     | 21    | 6     | 160    |
-+-------------------+-------+-------+--------+
-| **Mazda RX4 Wag** | 21    | 6     | 160    |
-+-------------------+-------+-------+--------+
++---------------------+-------+-------+--------+
+| &nbsp;              | mpg   | cyl   | disp   |
++=====================+=======+=======+========+
+| **Mazda RX4**       | 21    | 6     | 160    |
++---------------------+-------+-------+--------+
+| **Mazda RX4 Wag**   | 21    | 6     | 160    |
++---------------------+-------+-------+--------+
 
 Table: Hello caption!
 
@@ -162,25 +162,25 @@ Table: Hello caption!
 ```rout
 > pandoc.table(mtcars[1:2, ], style = "grid", caption = "Hello caption!")
 
-+-------------------+-------+-------+--------+------+--------+-------+
-|                   | mpg   | cyl   | disp   | hp   | drat   | wt    |
-+===================+=======+=======+========+======+========+=======+
-| **Mazda RX4**     | 21    | 6     | 160    | 110  | 3.9    | 2.620 |
-+-------------------+-------+-------+--------+------+--------+-------+
-| **Mazda RX4 Wag** | 21    | 6     | 160    | 110  | 3.9    | 2.875 |
-+-------------------+-------+-------+--------+------+--------+-------+
++---------------------+-------+-------+--------+------+--------+-------+
+| &nbsp;              | mpg   | cyl   | disp   | hp   | drat   | wt    |
++=====================+=======+=======+========+======+========+=======+
+| **Mazda RX4**       | 21    | 6     | 160    | 110  | 3.9    | 2.620 |
++---------------------+-------+-------+--------+------+--------+-------+
+| **Mazda RX4 Wag**   | 21    | 6     | 160    | 110  | 3.9    | 2.875 |
++---------------------+-------+-------+--------+------+--------+-------+
 
 Table: Hello caption! (continued below)
 
  
 
-+-------------------+--------+------+------+--------+--------+
-|                   | qsec   | vs   | am   | gear   | carb   |
-+===================+========+======+======+========+========+
-| **Mazda RX4**     | 16.46  | 0    | 1    | 4      | 4      |
-+-------------------+--------+------+------+--------+--------+
-| **Mazda RX4 Wag** | 17.02  | 0    | 1    | 4      | 4      |
-+-------------------+--------+------+------+--------+--------+
++---------------------+--------+------+------+--------+--------+
+| &nbsp;              | qsec   | vs   | am   | gear   | carb   |
++=====================+========+======+======+========+========+
+| **Mazda RX4**       | 16.46  | 0    | 1    | 4      | 4      |
++---------------------+--------+------+------+--------+--------+
+| **Mazda RX4 Wag**   | 17.02  | 0    | 1    | 4      | 4      |
++---------------------+--------+------+------+--------+--------+
 
 ```
 
@@ -260,43 +260,43 @@ A nested list can be seen above with a table and all (optional) list names insid
   * **data.name**: table(mtcars$am, mtcars$gear)
   * **observed**:
 
-    -----------------
-          3   4   5
-    ----- --- --- ---
-    **0** 15  4   0
+    -------------------
+    &nbsp;  3   4   5
+    ------- --- --- ---
+    **0**   15  4   0
 
-    **1** 0   8   5
-    -----------------
+    **1**   0   8   5
+    -------------------
 
   * **expected**:
 
-    -----------------------
-          3     4     5
-    ----- ----- ----- -----
-    **0** 8.906 7.125 2.969
+    -------------------------
+    &nbsp;  3     4     5
+    ------- ----- ----- -----
+    **0**   8.906 7.125 2.969
 
-    **1** 6.094 4.875 2.031
-    -----------------------
+    **1**   6.094 4.875 2.031
+    -------------------------
 
   * **residuals**:
 
-    --------------------------
-          3      4      5
-    ----- ------ ------ ------
-    **0** 2.042  -1.171 -1.723
+    ----------------------------
+    &nbsp;  3      4      5
+    ------- ------ ------ ------
+    **0**   2.042  -1.171 -1.723
 
-    **1** -2.469 1.415  2.083
-    --------------------------
+    **1**   -2.469 1.415  2.083
+    ----------------------------
 
   * **stdres**:
 
-    --------------------------
-          3      4      5
-    ----- ------ ------ ------
-    **0** 4.395  -2.323 -2.943
+    ----------------------------
+    &nbsp;  3      4      5
+    ------- ------ ------ ------
+    **0**   4.395  -2.323 -2.943
 
-    **1** -4.395 2.323  2.943
-    --------------------------
+    **1**   -4.395 2.323  2.943
+    ----------------------------
 
 <!-- end of list -->
 
@@ -346,93 +346,93 @@ Table: Welch Two Sample t-test: `extra` by `group`
 > m <- glm(counts ~ outcome + treatment, family=poisson())
 > pander(m)
 
--------------------------------------------------------------
-                 Estimate   Std. Error   z value    Pr(>|z|) 
---------------- ---------- ------------ ---------- ----------
-**(Intercept)** 3.045e+00   1.709e-01   1.781e+01  5.427e-71 
+---------------------------------------------------------------
+           &nbsp;  Estimate   Std. Error   z value    Pr(>|z|) 
+----------------- ---------- ------------ ---------- ----------
+  **(Intercept)** 3.045e+00   1.709e-01   1.781e+01  5.427e-71 
 
-   **outcome2** -4.543e-01  2.022e-01   -2.247e+00 2.465e-02 
+     **outcome2** -4.543e-01  2.022e-01   -2.247e+00 2.465e-02 
 
-   **outcome3** -2.930e-01  1.927e-01   -1.520e+00 1.285e-01 
+     **outcome3** -2.930e-01  1.927e-01   -1.520e+00 1.285e-01 
 
- **treatment2** 1.338e-15   2.000e-01   6.690e-15  1.000e+00 
+   **treatment2** 1.338e-15   2.000e-01   6.690e-15  1.000e+00 
 
- **treatment3** 1.421e-15   2.000e-01   7.105e-15  1.000e+00 
--------------------------------------------------------------
+   **treatment3** 1.421e-15   2.000e-01   7.105e-15  1.000e+00 
+---------------------------------------------------------------
 
 Table: Fitting generalized (poisson/log) linear model: counts ~ outcome + treatment
 
 > pander(anova(m))
 
-------------------------------------------------------
-               Df   Deviance   Resid. Df   Resid. Dev 
-------------- ---- ---------- ----------- ------------
-     **NULL**  NA      NA          8         10.581   
+--------------------------------------------------------
+         &nbsp;  Df   Deviance   Resid. Df   Resid. Dev 
+--------------- ---- ---------- ----------- ------------
+       **NULL**  NA      NA          8         10.581   
 
-  **outcome**  2   5.452e+00       6         5.129    
+    **outcome**  2   5.452e+00       6         5.129    
 
-**treatment**  2   2.665e-15       4         5.129    
-------------------------------------------------------
+  **treatment**  2   2.665e-15       4         5.129    
+--------------------------------------------------------
 
 Table: Analysis of Deviance Table
 
 > pander(aov(m))
 
----------------------------------------------------------
-               Df   Sum Sq    Mean Sq   F value   Pr(>F) 
-------------- ---- --------- --------- --------- --------
-  **outcome**  2   9.267e+01 4.633e+01 2.224e+00  0.2242 
+-----------------------------------------------------------
+         &nbsp;  Df   Sum Sq    Mean Sq   F value   Pr(>F) 
+--------------- ---- --------- --------- --------- --------
+    **outcome**  2   9.267e+01 4.633e+01 2.224e+00  0.2242 
 
-**treatment**  2   8.382e-31 4.191e-31 2.012e-32  1.0000 
+  **treatment**  2   8.382e-31 4.191e-31 2.012e-32  1.0000 
 
-**Residuals**  4   8.333e+01 2.083e+01    NA        NA   
----------------------------------------------------------
+  **Residuals**  4   8.333e+01 2.083e+01    NA        NA   
+-----------------------------------------------------------
 
 Table: Analysis of Variance Model
 
 > pander(prcomp(USArrests))
 
------------------------------------------------
-             PC1     PC2      PC3      PC4     
------------- ------- -------- -------- --------
-**Murder**   0.04170 -0.04482 0.07989  -0.99492
+-------------------------------------------------
+&nbsp;         PC1     PC2      PC3      PC4     
+-------------- ------- -------- -------- --------
+**Murder**     0.04170 -0.04482 0.07989  -0.99492
 
-**Assault**  0.99522 -0.05876 -0.06757 0.03894 
+**Assault**    0.99522 -0.05876 -0.06757 0.03894 
 
-**UrbanPop** 0.04634 0.97686  -0.20055 -0.05817
+**UrbanPop**   0.04634 0.97686  -0.20055 -0.05817
 
-**Rape**     0.07516 0.20072  0.97408  0.07233 
------------------------------------------------
+**Rape**       0.07516 0.20072  0.97408  0.07233 
+-------------------------------------------------
 
 Table: Principal Components Analysis
 
-------------------------------------------------------------
-                           PC1      PC2      PC3     PC4    
--------------------------- -------- -------- ------- -------
-**Standard deviation**     83.73240 14.21240 6.48943 2.48279
+--------------------------------------------------------------
+&nbsp;                       PC1      PC2      PC3     PC4    
+---------------------------- -------- -------- ------- -------
+**Standard deviation**       83.73240 14.21240 6.48943 2.48279
 
-**Proportion of Variance** 0.96553  0.02782  0.00580 0.00085
+**Proportion of Variance**   0.96553  0.02782  0.00580 0.00085
 
-**Cumulative Proportion**  0.96553  0.99335  0.99915 1.00000
-------------------------------------------------------------
+**Cumulative Proportion**    0.96553  0.99335  0.99915 1.00000
+--------------------------------------------------------------
 
 > pander(density(mtcars$hp))
 
-------------------------------------------
-             Coordinates   Density values 
------------ ------------- ----------------
-   **Min.**    -32.12        0.0000050    
+--------------------------------------------
+       &nbsp;  Coordinates   Density values 
+------------- ------------- ----------------
+     **Min.**    -32.12        0.0000050    
 
-**1st Qu.**     80.69        0.0004068    
+  **1st Qu.**     80.69        0.0004068    
 
- **Median**    193.50        0.0016650    
+   **Median**    193.50        0.0016650    
 
-   **Mean**    193.50        0.0022140    
+     **Mean**    193.50        0.0022140    
 
-**3rd Qu.**    306.30        0.0040900    
+  **3rd Qu.**    306.30        0.0040900    
 
-   **Max.**    419.10        0.0060510    
-------------------------------------------
+     **Max.**    419.10        0.0060510    
+--------------------------------------------
 
 Table: Kernel density of *mtcars$hp* (bandwidth: 28.04104)
 
@@ -440,21 +440,21 @@ Table: Kernel density of *mtcars$hp* (bandwidth: 28.04104)
 > panderOptions('round', 2)
 > pander(density(mtcars$hp))
 
-------------------------------------------
-             Coordinates   Density values 
------------ ------------- ----------------
-   **Min.**    -32.12           0.00      
+--------------------------------------------
+       &nbsp;  Coordinates   Density values 
+------------- ------------- ----------------
+     **Min.**    -32.12           0.00      
 
-**1st Qu.**     80.69           0.00      
+  **1st Qu.**     80.69           0.00      
 
- **Median**    193.50           0.00      
+   **Median**    193.50           0.00      
 
-   **Mean**    193.50           0.00      
+     **Mean**    193.50           0.00      
 
-**3rd Qu.**    306.30           0.00      
+  **3rd Qu.**    306.30           0.00      
 
-   **Max.**    419.10           0.01      
-------------------------------------------
+     **Max.**    419.10           0.01      
+--------------------------------------------
 
 Table: Kernel density of *mtcars$hp* (bandwidth: 28.04104)
 
@@ -518,7 +518,7 @@ Besides this, the custom `brew` function can do more and also less compared to t
   * multiple R expressions can be passed between `<\%= ... \%>` tags,
   * the text of the file and also **the evaluated R objects are (invisibly) returned in a structured list**, which can be really useful while post-processing the results of `brew` (just try: `str(Pandoc.brew(text='Pi equals to <\%=pi\%>.\nAnd here are some random data:\n<\%=runif(10)\%>'))` - without the backslash in front of the percent signs).
 
-This document was generated by `Pandoc.brew` based on [`inst/README.brew`](https://github.com/daroczig/pander/blob/master/inst/README.brew) so the above examples were generated automatically - which could be handy while writing some nifty statistical reports :)
+This document was generated by `Pandoc.brew` based on [`inst/README.brew`](https://github.com/Rapporter/pander/blob/master/inst/README.brew) so the above examples were generated automatically - which could be handy while writing some nifty statistical reports :)
 
 ```
 Pandoc.brew(system.file('README.brew', package='pander'))
@@ -546,9 +546,9 @@ And there are some package bundled examples too.
 
 The package comes bundled with some examples for `Pandoc.brew` to let users check out its features pretty fast. These are:
 
-  * [minimal.brew](https://github.com/daroczig/pander/blob/master/inst/examples/minimal.brew)
-  * [short-code-long-report.brew](https://github.com/daroczig/pander/blob/master/inst/examples/short-code-long-report.brew)
-  * [graphs.brew](https://github.com/daroczig/pander/blob/master/inst/examples/graphs.brew)
+  * [minimal.brew](https://github.com/Rapporter/pander/blob/master/inst/examples/minimal.brew)
+  * [short-code-long-report.brew](https://github.com/Rapporter/pander/blob/master/inst/examples/short-code-long-report.brew)
+  * [graphs.brew](https://github.com/Rapporter/pander/blob/master/inst/examples/graphs.brew)
 
 To `brew` these examples on your machine try to run the followings.:
 
@@ -565,11 +565,11 @@ Pandoc.brew(system.file('examples/graphs.brew', package='pander'), output = temp
 
 For easy access I have uploaded some exported documents of the above examples:
 
-  * minimal.brew: [markdown](http://daroczig.github.com/pander/minimal.md) [html](http://daroczig.github.com/pander/minimal.html) [pdf](http://daroczig.github.com/pander/minimal.pdf) [odt](http://daroczig.github.com/pander/minimal.odt) [docx](http://daroczig.github.com/pander/minimal.docx)
-  * short-code-long-report.brew: [markdown](http://daroczig.github.com/pander/short-code-long-report.md) [html](http://daroczig.github.com/pander/short-code-long-report.html) [pdf](http://daroczig.github.com/pander/short-code-long-report.pdf) [odt](http://daroczig.github.com/pander/short-code-long-report.odt) [docx](http://daroczig.github.com/pander/short-code-long-report.docx)
-  * graphs.brew: [markdown](http://daroczig.github.com/pander/graphs.md) [html](http://daroczig.github.com/pander/graphs.html) [pdf](http://daroczig.github.com/pander/graphs.pdf) [odt](http://daroczig.github.com/pander/graphs.odt) [docx](http://daroczig.github.com/pander/graphs.docx)
+  * minimal.brew: [markdown](http://rapporter.github.com/pander/minimal.md) [html](http://rapporter.github.com/pander/minimal.html) [pdf](http://rapporter.github.com/pander/minimal.pdf) [odt](http://rapporter.github.com/pander/minimal.odt) [docx](http://rapporter.github.com/pander/minimal.docx)
+  * short-code-long-report.brew: [markdown](http://rapporter.github.com/pander/short-code-long-report.md) [html](http://rapporter.github.com/pander/short-code-long-report.html) [pdf](http://rapporter.github.com/pander/short-code-long-report.pdf) [odt](http://rapporter.github.com/pander/short-code-long-report.odt) [docx](http://rapporter.github.com/pander/short-code-long-report.docx)
+  * graphs.brew: [markdown](http://rapporter.github.com/pander/graphs.md) [html](http://rapporter.github.com/pander/graphs.html) [pdf](http://rapporter.github.com/pander/graphs.pdf) [odt](http://rapporter.github.com/pander/graphs.odt) [docx](http://rapporter.github.com/pander/graphs.docx)
 
-Please check out `pdf`, `docx`, `odt` and other formats (changing the above `convert` option) on your machine too and do not forget to [give some feedback](https://github.com/daroczig/pander/issues)!
+Please check out `pdf`, `docx`, `odt` and other formats (changing the above `convert` option) on your machine too and do not forget to [give some feedback](https://github.com/Rapporter/pander/issues)!
 
 # Live report generation
 
@@ -714,7 +714,7 @@ All evaluation of provided R commands (while running [`brew`](#brew-to-pandoc) o
 
 ## In practice
 
-As `pander` does not cache based on raw sources of chunks and there is no easy way of enabling/disabling caching on a chunk basis, the users have to live with some *great advantages* and some *minor tricky situations* - which latter cannot be solved theoretically in my opinion, but [I'd love to hear your feedback](https://github.com/daroczig/pander/issues).
+As `pander` does not cache based on raw sources of chunks and there is no easy way of enabling/disabling caching on a chunk basis, the users have to live with some *great advantages* and some *minor tricky situations* - which latter cannot be solved theoretically in my opinion, but [I'd love to hear your feedback](https://github.com/Rapporter/pander/issues).
 
 The caching hash is computed based on the structure and content of the R commands, so let us make some POC example to show the **greatest asset**:
 
@@ -767,7 +767,7 @@ Sorry, no online documentation ATM. Please check: `?evals`
 
 # ESS
 
-I have created some simple LISP functions which would be handy if you are using the best damn IDE for R. These functions and default key-bindings are [shipped with the package](https://github.com/daroczig/pander/tree/master/inst/pander.el), feel free to personalize.
+I have created some simple LISP functions which would be handy if you are using the best damn IDE for R. These functions and default key-bindings are [shipped with the package](https://github.com/Rapporter/pander/tree/master/inst/pander.el), feel free to personalize.
 
 As time passed these small functions grew heavier (with my Emacs knowledge) so I ended up with a small library:
 
@@ -788,4 +788,4 @@ To use this small lib, just type: `M-x pander-mode` on any document. It might be
 
 
 -------
-This report was generated with [R](http://www.r-project.org/) (2.15.1) and [pander](https://github.com/daroczig/pander) (0.1) in 0.955 sec on x86_64-unknown-linux-gnu platform.
+This report was generated with [R](http://www.r-project.org/) (2.15.1) and [pander](https://github.com/daroczig/pander) (0.1) in 0.792 sec on x86_64-unknown-linux-gnu platform.
