@@ -111,14 +111,14 @@ pander.data.frame <- function(x, caption = attr(x, 'caption'), justify = attr(x,
 }
 
 #' @S3method pander matrix
-pander.matrix <- function(x, caption = attr(x, 'caption'),justify = attr(x, 'alignment'),  ...) {
+pander.matrix <- function(x, caption = attr(x, 'caption'), justify = attr(x, 'alignment'),  ...) {
     if (is.null(justify))
         justify <- 'left'
     pandoc.table(x, caption = caption, justify = justify)
 }
 
 #' @S3method pander cast_df
-pander.cast_df<- function(x, caption = attr(x, 'caption'), ...)
+pander.cast_df<- function(x, caption = attr(x, 'caption'), justify = attr(x, 'alignment'), ...)
     pandoc.table(as.data.frame(x), caption = caption, justify = justify)
 
 #' @S3method pander numeric
