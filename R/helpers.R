@@ -703,9 +703,9 @@ pandoc.table.return <- function(t, caption = NULL, digits = panderOptions('digit
         ## split
         if (length(t.rownames) != 0) {
             t.split <- t.split - 1
-            justify <- c(justify[1:(t.split - 1)], justify[c(1, t.split:length(t.width))])
+            justify <- list(justify[1:(t.split)], justify[c(1, (t.split + 1):length(t.width))])
         } else {
-            justify <- c(justify[1:(t.split - 1)], justify[c(t.split:length(t.width))])
+            justify <- list(justify[1:(t.split)], justify[c((t.split + 1):length(t.width))])
         }
 
         if (length(dim(t)) > 1)
@@ -714,7 +714,7 @@ pandoc.table.return <- function(t, caption = NULL, digits = panderOptions('digit
             res <- list(t[1:(t.split-1)], t[t.split:length(t)])
 
         ## recursive call
-        res <- paste(pandoc.table.return(res[[1]], caption = caption, digits = digits, decimal.mark = decimal.mark, round = round, justify = justify[1], style = style), pandoc.table.return(res[[2]], caption = NULL, digits = digits, decimal.mark = decimal.mark, round = round, justify = justify[2], style = style))
+        res <- paste(pandoc.table.return(res[[1]], caption = caption, digits = digits, decimal.mark = decimal.mark, round = round, justify = justify[[1]], style = style), pandoc.table.return(res[[2]], caption = NULL, digits = digits, decimal.mark = decimal.mark, round = round, justify = justify[[2]], style = style))
 
         return(res)
 
