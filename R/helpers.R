@@ -703,9 +703,9 @@ pandoc.table.return <- function(t, caption = NULL, digits = panderOptions('digit
         ## split
         if (length(t.rownames) != 0) {
             t.split <- t.split - 1
-            justify <- list(justify[1:(t.split)], justify[c(1, (t.split + 1):length(t.width))])
+            justify <- list(justify[1:t.split], justify[c(1, (t.split + 1):length(t.width))])
         } else {
-            justify <- list(justify[1:(t.split)], justify[c((t.split + 1):length(t.width))])
+            justify <- list(justify[1:(t.split - 1)], justify[c(t.split:length(t.width))])
         }
 
         if (length(dim(t)) > 1)
