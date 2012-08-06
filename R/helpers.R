@@ -699,6 +699,8 @@ pandoc.table.return <- function(t, caption = NULL, digits = panderOptions('digit
         ## update caption
         if (!is.null(caption))
             caption <- paste(caption, '(continued below)')
+        else
+            caption <- 'Table continues below'
 
         ## split
         if (length(t.rownames) != 0) {
