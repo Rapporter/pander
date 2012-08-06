@@ -57,6 +57,14 @@ Pandoc.convert <- function(f, text, format = 'html', open = TRUE, options = '', 
         cat(text, file = f, sep = '\n')
     }
 
+    ## force UTF-8 encoding
+    if (!grepl('utf', Sys.getlocale())) {
+        text <- iconv(readLines(f, warn = FALSE), from = '', to = 'UTF-8')
+        con <- file(f, 'w', encoding = 'UTF-8')
+        cat(text, file = con, sep = '\n')
+        close(con)
+    }
+
     ## dealing with URLs
     if (grepl('^https*://.*', f)) {
         f.dir <- tempdir()
