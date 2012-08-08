@@ -710,7 +710,7 @@ evals <- function(txt, parse = TRUE, cache = TRUE, cache.mode = c('environment',
             }
 
             ## get the hash of the call based on the hash of all `names`
-            cached <- digest(getCallParts(parse(text = src)), 'sha1')
+            cached <- digest(list(call = getCallParts(parse(text = src)), storage = digest(pander:::storage)), 'sha1')
 
             if (cache.mode == 'disk') {
 
