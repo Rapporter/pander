@@ -624,6 +624,9 @@ evals <- function(txt, parse = TRUE, cache = TRUE, cache.mode = c('environment',
     if (!any(is.list(hooks), is.null(hooks)))
         stop('Wrong list of hooks provided!')
 
+    if (!is.character(graph.name))
+        stop('Wrong graph.name (!character) specified!')
+
     graph.output <- match.arg(graph.output)
     if (graph.output == 'jpg')
         graph.output <- 'jpeg'
@@ -644,7 +647,7 @@ evals <- function(txt, parse = TRUE, cache = TRUE, cache.mode = c('environment',
 
         ## get image file name
         `%d` <<- `%d` + 1
-        file.name <- gsub('%d', `%d`, eval(graph.name), fixed = TRUE)
+        file.name <- gsub('%d', `%d`, graph.name, fixed = TRUE)
         file <- sprintf('%s.%s', file.name, graph.output)
         if (grepl('%t', graph.name)) {
             if (length(strsplit(sprintf('placeholder%splaceholder', file.name), '%t')[[1]]) > 2)
