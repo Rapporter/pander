@@ -138,22 +138,39 @@ pander.list <- function(x, ...)
     pandoc.list(x)
 
 #' @S3method pander lm
-pander.lm <- function(x, ...)
-    pandoc.table(summary(x)$coeff, caption = sprintf('Fitting linear model: %s', deparse(x$call$formula)), justify = c('right', rep('centre', 4)))
+pander.lm <- function(x, caption = attr(x, 'caption'), ...) {
+
+    if (is.null(caption))
+        caption <- sprintf('Fitting linear model: %s', deparse(x$call$formula))
+
+    pandoc.table(summary(x)$coeff, caption = caption, justify = c('right', rep('centre', 4)))
+}
 
 #' @S3method pander glm
-pander.glm <- function(x, ...)
-    pandoc.table(summary(x)$coeff, caption = sprintf('Fitting generalized (%s) linear model: %s', paste(x$family$family, x$family$link, sep = '/'), deparse(x$call$formula)), justify = c('right', rep('centre', 4)))
+pander.glm <- function(x, caption = attr(x, 'caption'), ...) {
+
+    if (is.null(caption))
+        caption <- sprintf('Fitting generalized (%s) linear model: %s', paste(x$family$family, x$family$link, sep = '/'), deparse(x$call$formula))
+
+    pandoc.table(summary(x)$coeff, caption = caption, justify = c('right', rep('centre', 4)))
+}
 
 #' @S3method pander aov
-pander.aov <- function(x, ...) {
+pander.aov <- function(x, caption = attr(x, 'caption'), ...) {
+
     res <- unclass(summary(x))[[1]]
-    pandoc.table(res, caption = 'Analysis of Variance Model', justify = c('right', rep('centre', ncol(res))))
+    if (is.null(caption))
+        caption <- 'Analysis of Variance Model'
+
+    pandoc.table(res, caption = caption, justify = c('right', rep('centre', ncol(res))))
 }
 
 #' @S3method pander anova
-pander.anova <- function(x, ...)
-    pandoc.table(x, caption = strsplit(attr(x, 'heading'), '\n')[[1]][1], justify = c('right', rep('centre', ncol(x))))
+pander.anova <- function(x, caption = attr(x, 'caption'), ...) {
+    if (is.null(caption))
+        caption <- strsplit(attr(x, 'heading'), '\n')[[1]][1]
+    pandoc.table(x, caption = caption, justify = c('right', rep('centre', ncol(x))))
+}
 
 #' @S3method pander htest
 pander.htest <- function(x, ...) {
@@ -171,17 +188,25 @@ pander.htest <- function(x, ...) {
 }
 
 #' @S3method pander prcomp
-pander.prcomp <- function(x, ...) {
-    pandoc.table(x$rotation, caption = 'Principal Components Analysis')
+pander.prcomp <- function(x, caption = attr(x, 'caption'), ...) {
+
+    if (is.null(caption))
+        caption <- 'Principal Components Analysis'
+
+    pandoc.table(x$rotation, caption = caption)
     pandoc.table(summary(x)$importance)
 }
 
 #' @S3method pander density
-pander.density <- function(x, ...) {
+pander.density <- function(x, caption = attr(x, 'caption'), ...) {
+
+    if (is.null(caption))
+        caption <- sprintf('Kernel density of *%s* (bandwidth: %s)', x$data.name, format(x$bw))
 
     res <- data.frame(Coordinates = as.numeric(summary(x$x)), 'Density values' = as.numeric(summary(x$y)), check.names = FALSE)
     rownames(res) <- names(summary(1))
-    pandoc.table(res, caption = sprintf('Kernel density of *%s* (bandwidth: %s)', x$data.name, format(x$bw)), justify = c('right', 'centre', 'centre'))
+
+    pandoc.table(res, caption = caption, justify = c('right', 'centre', 'centre'))
 }
 
 #' @S3method pander list
