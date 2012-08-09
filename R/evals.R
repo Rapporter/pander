@@ -791,10 +791,6 @@ evals <- function(txt, parse = TRUE, cache = TRUE, cache.mode = c('environment',
                 dev.off(as.numeric(dev.list()[1]))
         clear.devs()
 
-        ## env for optional high resolution images
-        if (hi.res)
-            env.hires <- env
-
         ## init (potential) img file
         if (graph.output %in% c('bmp', 'jpeg', 'png', 'tiff'))
             do.call(graph.output, list(file, width = width, height = height, res = res, bg = panderOptions('graph.background'), ...))
@@ -884,6 +880,10 @@ evals <- function(txt, parse = TRUE, cache = TRUE, cache.mode = c('environment',
             }
 
         }
+
+        ## env for optional high resolution images
+        if (hi.res)
+            env.hires <- env
 
         ## eval
         res <- eval.msgs(src, env = env, showInvisible = showInvisible, graph.unify = graph.unify)
