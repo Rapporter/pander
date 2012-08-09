@@ -114,7 +114,7 @@ eval.msgs <- function(src, env = NULL, showInvisible = FALSE, graph.unify = eval
                 gs <- panderOptions('graph.symbol')
 
                 ## lattice/trellis
-                if (rvc == 'trellis') {
+                if ('trellis' %in% rvc) {
 
                     ## margin
                     if (panderOptions('graph.nomargin')) {
@@ -184,7 +184,7 @@ eval.msgs <- function(src, env = NULL, showInvisible = FALSE, graph.unify = eval
                 }
 
                 ## ggplot2
-                if (rvc == 'ggplot') {
+                if ('ggplot' %in% rvc) {
 
                     ## margin
                     if (panderOptions('graph.nomargin')) {
