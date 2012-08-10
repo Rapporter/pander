@@ -53,7 +53,7 @@
   * add option to run code in sandbox:
 
   	  * RAppArmor: https://github.com/jeroenooms/RAppArmor
-      * sandboxR: https://github.com/daroczig/sandboxR
+      * ~~sandboxR: https://github.com/daroczig/sandboxR~~: just provide a sandboxed environment
 
 ### Image options:
 
