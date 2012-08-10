@@ -65,6 +65,12 @@ p <- function(x, wrap = panderOptions('p.wrap'), sep = panderOptions('p.sep'), c
     stopifnot(x.len > 0)
     stopifnot(x.len <= limit)
 
+    ## prettify numbers
+    if (is.numeric(x)) {
+        x <- round(x, panderOptions('round'))
+        x <- format(x, trim = TRUE, digits = panderOptions('digits'), decimal.mark = panderOptions('decimal.mark'))
+    }
+
     if (x.len == 1)
         wrap(x, wrap)
     else if (x.len == 2)
