@@ -183,8 +183,8 @@ pander.htest <- function(x, ...) {
         res$'Test statistic' = as.numeric(x$statistic)
     if (!is.null(x$parameter))
         res[names(x$parameter)] = x$parameter
-    if (!is.null(x$p.value))    # TODO: add significance stars
-        res$'P value' = x$p.value
+    if (!is.null(x$p.value))
+        res$'P value' = add.significance.stars(x$p.value)
     if (!is.null(x$alternative))
         res['Alternative hypothesis'] = x$alternative
 
