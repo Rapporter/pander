@@ -175,7 +175,12 @@ pander.anova <- function(x, caption = attr(x, 'caption'), ...) {
 #' @S3method pander htest
 pander.htest <- function(x, ...) {
 
-    res <- data.frame('Test statistic' = as.numeric(x$statistic), check.names = FALSE)
+    ## we do not know which values are provided
+    res <- data.frame(placeholder = 'FOO')
+
+    ## add what we know
+    if (!is.null(x$statistic))
+        res$'Test statistic' = as.numeric(x$statistic)
     if (!is.null(x$parameter))
         res[names(x$parameter)] = x$parameter
     if (!is.null(x$p.value))    # TODO: add significance stars
@@ -183,6 +188,10 @@ pander.htest <- function(x, ...) {
     if (!is.null(x$alternative))
         res['Alternative hypothesis'] = x$alternative
 
+    ## drop placeholder
+    res$placeholder <- NULL
+
+    ## return
     pandoc.table(res, caption = paste0(x$method, ': `', gsub('( and | by )', '`\\1`', x$data.name), '`'), justify = 'centre')
 
 }
