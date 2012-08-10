@@ -800,3 +800,24 @@ set.caption <- function(x)
 #' @export
 set.alignment <- function(align = 'centre', row.names = 'left')
     assign('alignment', list(align = align, row.names = row.names) , envir = pander:::storage)
+
+
+#' Add significance stars
+#'
+#' This function adds significance stars to passed \code{p} value(s) as: one star for value below \code{0.05}, two for \code{0.01} and three for \code{0.001}.
+#' @param p numeric vector or tabular data
+#' @return character vector
+#' @export
+add.significance.stars <- function(p) {
+
+    if (inherits(p, c("matrix", "data.frame")) && length(dim(x)) == 2) {
+        apply(p, c(1,2), add.significance.stars)
+    } else {
+        if (length(p) > 1) {
+            sapply(p, add.significance.stars)
+        } else {
+            s <- ifelse(p > 0.05, '', ifelse(p > 0.01, ' *', ifelse(p > 0.001, ' * *', ' * * *')))
+            paste0(p(p), s)
+        }
+    }
+}
