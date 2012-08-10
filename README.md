@@ -312,7 +312,7 @@ The output of different **statistical methods** are tried to be prettyfied. Some
 ---------------------------------------------------
  Test statistic   P value   Alternative hypothesis 
 ---------------- --------- ------------------------
-      0.1         0.9667          two-sided        
+      0.14        0.7166          two-sided        
 ---------------------------------------------------
 
 Table: Two-sample Kolmogorov-Smirnov test: `runif(50)` and `runif(50)`
@@ -784,8 +784,10 @@ Few options of `pander-mode`: `M-x customize-group pander`
   * `pander-clipboard`: If non-nil then the result of `pander-*` functions would be copied to clipboard.
   * `pander-show-source`: If non-nil then the source of R commands would also show up in generated documents while running 'pander-eval'. This would not affect `brew` functions ATM.
 
-To use this small lib, just type: `M-x pander-mode` on any document. It might be useful to add a hook to `markdown-mode` if you find this useful. 
+To use this small lib, just type: `M-x pander-mode` on any document. It might be useful to add a hook to `markdown-mode` if you find this useful.
+
+[![githalytics.com alpha](https://cruel-carlota.pagodabox.com/9dfac0c1da37bd83d1848289630631fd "githalytics.com")](http://githalytics.com/Rapporter/pander) 
 
 
 -------
-This report was generated with [R](http://www.r-project.org/) (2.15.1) and [pander](https://github.com/daroczig/pander) (0.1) in 0.792 sec on x86_64-unknown-linux-gnu platform.
+This report was generated with [R](http://www.r-project.org/) (2.15.1) and [pander](https://github.com/daroczig/pander) (0.1) in 1.282 sec on x86_64-unknown-linux-gnu platform.
