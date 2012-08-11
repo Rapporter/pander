@@ -278,7 +278,9 @@ eval.msgs <- function(src, env = NULL, showInvisible = FALSE, graph.unify = eval
                     }
 
                     ## legend
-                    rv$options$legend.position <- panderOptions('graph.legend.position')
+                    if (!is.null(rv$options$legend.position))
+                        if (rv$options$legend.position != 'none')
+                            rv$options$legend.position <- panderOptions('graph.legend.position')
 
                 }
 
