@@ -245,14 +245,15 @@ eval.msgs <- function(src, env = NULL, showInvisible = FALSE, graph.unify = eval
 
                     } else {
 
-                        ## we have a possible color scale
+                        ## we have a possible color scale (only dealing with discrete scales)
                         if (is.null(rv$options$labels$colour)) {
 
                             if (length(rv$scales$scales) == 0) {
                                 rv <- rv + ggplot2::scale_fill_manual(values = cs)
                             } else {
-                                ## we have something without a guide
-                                rv <- rv + ggplot2::scale_fill_manual(values = cs, guide = FALSE)
+                                ## we still might have something without a guide
+                                if (!'continuous' %in% unlist(lapply(rv$scales$scales, class)))
+                                    rv <- rv + ggplot2::scale_fill_manual(values = cs, guide = FALSE)
                             }
 
                         } else {
@@ -260,8 +261,9 @@ eval.msgs <- function(src, env = NULL, showInvisible = FALSE, graph.unify = eval
                             if (length(rv$scales$scales) == 0) {
                                 rv <- rv + ggplot2::scale_colour_manual(values = cs)
                             } else {
-                                ## we have something without a guide
-                                rv <- rv + ggplot2::scale_colour_manual(values = cs, guide = FALSE)
+                                ## we still might have something without a guide
+                                if (!'continuous' %in% unlist(lapply(rv$scales$scales, class)))
+                                    rv <- rv + ggplot2::scale_colour_manual(values = cs, guide = FALSE)
                             }
 
                         }
