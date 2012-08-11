@@ -245,13 +245,29 @@ eval.msgs <- function(src, env = NULL, showInvisible = FALSE, graph.unify = eval
 
                     } else {
 
-                        ## we have a color scale
-                        if (is.null(rv$options$labels$colour))
-                            if (length(rv$scales$scales) == 0)
-                                rv <- rv + ggplot2::scale_fill_manual(values = cs) + ggplot2::scale_shape(solid = FALSE)
-                        else
-                            if (length(rv$scales$scales) == 0)
-                                rv <- rv + ggplot2::scale_colour_manual(values = cs) + ggplot2::scale_shape(solid = FALSE)
+                        ## we have a possible color scale
+                        if (is.null(rv$options$labels$colour)) {
+
+                            if (length(rv$scales$scales) == 0) {
+                                rv <- rv + ggplot2::scale_fill_manual(values = cs)
+                            } else {
+                                ## we have something without a guide
+                                rv <- rv + ggplot2::scale_fill_manual(values = cs, guide = FALSE)
+                            }
+
+                        } else {
+
+                            if (length(rv$scales$scales) == 0) {
+                                rv <- rv + ggplot2::scale_colour_manual(values = cs)
+                            } else {
+                                ## we have something without a guide
+                                rv <- rv + ggplot2::scale_colour_manual(values = cs, guide = FALSE)
+                            }
+
+                        }
+
+                        ## no solid shapes
+                        rv <- rv + ggplot2::scale_shape(solid = FALSE)
 
                     }
 
