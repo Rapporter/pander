@@ -353,4 +353,7 @@ DELIM[[BRCATCODE]] <- c("<%=","%>")
 
     cat(e$stdout, sep = '\n')
 
+    ## safety check: not leaving any `sink` open
+    while (!inherits(tryCatch(sink(), warning = function(w) w), 'warning')) TRUE
+
 }
