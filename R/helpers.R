@@ -822,7 +822,7 @@ set.alignment <- function(align = 'centre', row.names = 'left')
 #' @export
 add.significance.stars <- function(p) {
 
-    if (inherits(p, c("matrix", "data.frame")) && length(dim(x)) == 2) {
+    if (inherits(p, c("matrix", "data.frame")) && length(dim(p)) == 2) {
         apply(p, c(1,2), add.significance.stars)
     } else {
         if (length(p) > 1) {
