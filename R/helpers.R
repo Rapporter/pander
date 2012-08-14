@@ -596,7 +596,13 @@ pandoc.table.return <- function(t, caption = NULL, digits = panderOptions('digit
 
     }
     split.large.cells <- function(cells)
-        sapply(cells, function(x) paste(strwrap(x, width = split.cells), collapse = '\n'), USE.NAMES = FALSE)
+        sapply(cells, function(x) {
+            x <- paste(strwrap(x, width = split.cells), collapse = '\n')
+            if (x == 'NA')
+                ''
+            else
+                x
+        }, USE.NAMES = FALSE)
 
     ## initializing
     res <- ''
