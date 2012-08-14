@@ -54,7 +54,7 @@
 #' ## You do not want to see the generated report after generation?
 #' myReport$export(open = FALSE)
 #' }
-Pandoc <- setRefClass('Pandoc', fields = list('author' = 'character', 'title' = 'character', 'date' = 'character', 'body' = 'list', 'format' = 'character'))
+Pandoc <- setRefClass('Pandoc', fields = list('author' = 'character', 'title' = 'character', 'date' = 'character', 'body' = 'list', 'format' = 'character', 'proc.time' = 'numeric'))
 
 Pandoc$methods(initialize = function(author = 'Anonymous', title = base::sprintf('%s\'s report', author), date = base::date(), format = 'pdf', ...) {
 
