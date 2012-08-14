@@ -332,28 +332,31 @@ DELIM[[BRCATCODE]] <- c("<%=","%>")
 
     assign('showText', showText, envir = envir)
 
-    e <- eval.msgs(code, env = envir)
-    assign('last', list(code = code, text = text, result = e), envir = debug) # debug
+    e <- tryCatch(eval(parse(text = code), envir = envir), error = function(e) e)
 
-    if (!is.null(e$msg$errors)) {
+    if (inherits(e, 'error')) {
 
-        brcodes <- e$src[!grepl('^show',e$src)]
+        msg <- e$message
+        assign('last', list(code = code, text = text, error = msg), envir = debug) # debug
 
+        brcodes <- code[!grepl('^show', code)]
         if (length(brcodes) > 0) {
             brcodes <- p(brcodes, wrap = '`')
-            if (grepl('[Uu]nexpected', e$msg$errors))
-                stop(paste0('`', sub('.*([Uu]nexpected [a-zA-Z0-9\\(\\)\'\\{\\} ]*)( at character|\n).*', '\\1', e$msg$errors), '` in your BRCODEs: ', brcodes), call. = FALSE)
+            if (grepl('[Uu]nexpected', msg))
+                stop(paste0('`', sub('.*([Uu]nexpected [a-zA-Z0-9\\(\\)\'\\{\\} ]*)( at character|\n).*', '\\1', msg), '` in your BRCODEs: ', brcodes), call. = FALSE)
             else
-                stop(sprintf('Error (`%s`) in your BRCODEs: %s', e$msg$errors, brcodes), call. = FALSE)
+                stop(sprintf('Error (`%s`) in your BRCODEs: %s', msg, brcodes), call. = FALSE)
         } else
 
-            stop(paste0('Error: ', p(e$msg$errors, wrap = '`')), call. = FALSE)
+            stop(paste0('Error: ', p(msg, wrap = '`')), call. = FALSE)
 
-    }
-
-    cat(e$stdout, sep = '\n')
+    } else
+        assign('last', list(code = code, text = text, result = e), envir = debug) # debug
 
     ## safety check: not leaving any `sink` open
-    while (!inherits(tryCatch(sink(), warning = function(w) w), 'warning')) TRUE
+    while (sink.number() != 0)
+        sink()
+
+    invisible()
 
 }
