@@ -354,8 +354,8 @@ DELIM[[BRCATCODE]] <- c("<%=","%>")
         assign('last', list(code = code, text = text, result = e), envir = debug) # debug
 
     ## safety check: not leaving any `sink` open
-    while (sink.number() != 0)
-        sink()
+    ## while (sink.number() != 0)
+    ##     sink()
 
     invisible()
 
