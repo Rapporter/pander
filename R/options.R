@@ -79,9 +79,11 @@ hash.cache.last.used <- new.env() # when was the hash last queried
 masked.plots <- new.env()
 masked.plots$plot <- masked.plots$barplot <- masked.plots$lines <- masked.plots$pie <- masked.plots$boxplot <- masked.plots$polygon <- masked.plots$points <- masked.plots$legend <- masked.plots$hist <- masked.plots$pairs <- masked.plots$stripchart <- masked.plots$clusplot <- function (...) {
 
-    mc     <- match.call()
-    fn     <- deparse(mc[[1]])
-    fn.pkg <- gsub('.*library/|/help.*', '', help(fn)[1])
+    mc      <- match.call()
+    fn      <- deparse(mc[[1]])
+    fn.pkg  <- gsub('.*library/|/help.*', '', help(fn)[1])
+    fn.orig <- parse(text = paste0(fn.pkg, '::', fn))[[1]]
+    mc      <- match.call(get(fn, envir = .GlobalEnv))
 
     ## pander options
     fc  <- panderOptions('graph.fontcolor')
@@ -141,7 +143,7 @@ masked.plots$plot <- masked.plots$barplot <- masked.plots$lines <- masked.plots$
     }
 
     ## call
-    mc[[1]] <- parse(text = paste0(fn.pkg, '::', fn))[[1]]
+    mc[[1]] <- fn.orig
     eval(mc, envir = parent.frame())
 
     ## grid
