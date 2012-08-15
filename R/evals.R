@@ -831,78 +831,11 @@ evals <- function(txt, parse = TRUE, cache = TRUE, cache.mode = c('environment',
             objs.hash <- sapply(objs, function(x) hashOfEvalOrDeparse(as.name(x), x))
         }
 
-        ## add modified base plot functions to update colors
-        if (graph.unify) {
-
-            env$plot <- env$barplot <- env$lines <- env$pie <- env$boxplot <- env$polygon <- env$points <- env$legend <- env$hist <- env$pairs <- env$stripchart <- function (...) {
-
-                mc     <- match.call()
-                fn     <- deparse(mc[[1]])
-                fn.pkg <- gsub('.*library/|/help.*', '', help(fn)[1])
-
-                ## pander options
-                fc  <- panderOptions('graph.fontcolor')
-                fbs <- panderOptions('graph.fontsize')
-                bc  <- panderOptions('graph.background')
-                gc  <- panderOptions('graph.grid.color')
-                cex <- fbs/12
-                cs <- panderOptions('graph.colors')
-                if (panderOptions('graph.color.rnd'))
-                    cs <- sample(cs)
-                cb <- cs[1]
-
-                ## global par update
-                par(
-                  family   = panderOptions('graph.fontfamily'),
-                  cex      = cex, cex.axis = cex * 0.8, cex.lab = cex, cex.main = cex * 1.2, cex.sub = cex,
-                  bg       = bc, # TODO: how could we color only the inner plot area globally? Not like: https://stat.ethz.ch/pipermail/r-help/2003-May/033971.html
-                  las      = panderOptions('graph.axis.angle'),
-                  lwd      = 2,
-                  pch      = panderOptions('graph.symbol'),
-                  col.axis = fc, col.lab = fc, col.main = fc, col.sub = fc)
-
-                ## remove margins
-                if (panderOptions('graph.nomargin')) {
-                    par(mar = c(4.1, 4.3, 2.1, 0.1))
-                }
-
-                ## default: grid is added to all plots
-                doAddGrid <- TRUE
-
-                ## update colors
-                if (is.null(mc$col) & is.null(mc$color))
-                    mc$col <- cb
-                if (fn == 'boxplot')
-                    mc$border <- 'black'
-                if (fn %in% c('pairs', 'stripchart')) {
-                    doAddGrid <- FALSE
-                    par(fg = fc)
-                } else {
-                    if (panderOptions('graph.boxes'))
-                        par(fg = gc)
-                    else
-                        par(fg = bc)
-                }
-
-                ## call
-                mc[[1]] <- parse(text = paste0(fn.pkg, fn))[[1]]
-                eval(mc, envir = env)
-
-                ## grid
-                if (all(par()$mfrow == 1) & panderOptions('graph.grid') & doAddGrid) {
-
-                    g <- tryCatch(grid(lty = panderOptions('graph.grid.lty'), col = panderOptions('graph.grid.color'), lwd = 0.5), error = function(e) e)
-                    if (!inherits(g, 'error')) {
-                        if (panderOptions('graph.grid.minor'))
-                            g <- tryCatch(add.minor.ticks(2, 2, grid = TRUE), error = function(e) e)
-                    }
-                    if (inherits(g, 'error'))
-                        warning('Applying default formatting to image is somehow compromised (the result could differ from what you specified in `panderOptions`). Hints: printing `lattice`/`ggplot2` is not needed and tweaking `base` plots with `par` might have some side-effects!')
-
-                }
-            }
-
-        }
+        ## add modified base plot functions to update colors, `par` settings and adding a grid
+        if (graph.unify)
+            sapply(ls(envir = masked.plots), function(x) {
+                assign(x, get(x, envir = masked.plots, inherits = FALSE), envir = env)
+            })
 
         ## env for optional high resolution images
         if (hi.res)
@@ -1039,7 +972,6 @@ evals <- function(txt, parse = TRUE, cache = TRUE, cache.mode = c('environment',
 
         }
 
-
         ## return list at last
         res <- list(src      = src,
                     result   = result,
@@ -1057,7 +989,7 @@ evals <- function(txt, parse = TRUE, cache = TRUE, cache.mode = c('environment',
 
         ## removing injected base::plot fns
         if (graph.unify)
-            rm(list = c('plot', 'barplot', 'lines', 'pie', 'boxplot', 'polygon', 'points','legend', 'hist', 'pairs', 'stripchart'), envir = env)
+            rm(list = ls(envir = masked.plots), envir = env)
 
         ## save to cache
         if (cache) {
