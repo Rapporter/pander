@@ -77,7 +77,7 @@ hash.cache.last.used <- new.env() # when was the hash last queried
 
 ## masked plots
 masked.plots <- new.env()
-masked.plots$plot <- masked.plots$barplot <- masked.plots$lines <- masked.plots$pie <- masked.plots$boxplot <- masked.plots$polygon <- masked.plots$points <- masked.plots$legend <- masked.plots$hist <- masked.plots$pairs <- masked.plots$stripchart <- function (...) {
+masked.plots$plot <- masked.plots$barplot <- masked.plots$lines <- masked.plots$pie <- masked.plots$boxplot <- masked.plots$polygon <- masked.plots$points <- masked.plots$legend <- masked.plots$hist <- masked.plots$pairs <- masked.plots$stripchart <- masked.plots$clusplot <- function (...) {
 
     mc     <- match.call()
     fn     <- deparse(mc[[1]])
@@ -117,6 +117,19 @@ masked.plots$plot <- masked.plots$barplot <- masked.plots$lines <- masked.plots$
         mc$col <- cb
     if (fn == 'boxplot')
         mc$border <- 'black'
+    if (fn == 'clusplot') {
+        mc$col <- NULL
+        if (is.null(mc$color))
+            mc$color <- TRUE
+        if (is.null(mc$shade))
+            mc$shade <- TRUE
+        if (is.null(mc$labels))
+            mc$labels <- 4
+        if (is.null(mc$col.p))
+            mc$col.p <- 'black'
+        if (is.null(mc$col.clus))
+            mc$col.clus <- cs
+    }
     if (fn %in% c('pairs', 'stripchart')) {
         doAddGrid <- FALSE
         par(fg = fc)
