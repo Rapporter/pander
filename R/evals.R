@@ -836,8 +836,9 @@ evals <- function(txt, parse = TRUE, cache = TRUE, cache.mode = c('environment',
 
             env$plot <- env$barplot <- env$lines <- env$pie <- env$boxplot <- env$polygon <- env$points <- env$legend <- env$hist <- env$pairs <- env$stripchart <- function (...) {
 
-                mc <- match.call()
-                fn <- deparse(mc[[1]])
+                mc     <- match.call()
+                fn     <- deparse(mc[[1]])
+                fn.pkg <- gsub('.*library/|/help.*', '', help(fn)[1])
 
                 ## pander options
                 fc  <- panderOptions('graph.fontcolor')
@@ -884,7 +885,7 @@ evals <- function(txt, parse = TRUE, cache = TRUE, cache.mode = c('environment',
                 }
 
                 ## call
-                mc[[1]] <- parse(text = paste0('graphics::', deparse(mc[[1]])))[[1]]
+                mc[[1]] <- parse(text = paste0(fn.pkg, fn))[[1]]
                 eval(mc, envir = env)
 
                 ## grid
