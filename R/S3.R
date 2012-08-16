@@ -1,6 +1,6 @@
 #' Generic pander method
 #'
-#' Prints an R object in pandoc style markdown.
+#' Prints an R object in Pandoc's markdown.
 #' @param x an R object
 #' @param ... optional parameters
 #' @return By default this function outputs (see: \code{cat}) the result. If you would want to catch the result instead, then call the function ending in \code{.return}.
@@ -9,7 +9,6 @@
 #' \item John MacFarlane (2012): _Pandoc User's Guide_. \url{http://johnmacfarlane.net/pandoc/README.html}
 #' \item David Hajage (2011): _ascii. Export R objects to several markup languages._ \url{http://CRAN.R-project.org/package=ascii}
 #' }
-#' @author Gergely Daróczi
 #' @export
 #' @aliases pander pander.return pandoc pandoc.return
 #' @usage

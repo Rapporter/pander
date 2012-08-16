@@ -6,7 +6,7 @@
 ;; Version: 0.1
 ;; Package-Requires: ((ess))
 ;; Keywords: ESS, R, report
-;; X-URL: http://daroczig.github.com/pander/
+;; X-URL: http://rapporter.github.com/pander/
 
 ;; This file is not part of GNU Emacs.
 
@@ -39,7 +39,7 @@
 ;; This minor-mode is under heavy development. Any suggestion/feedback
 ;; really welcomed at GH issue tracker:
 ;; 
-;;	http://daroczig.github.com/pander/issues
+;;	http://rapporter.github.com/pander/issues
 
 ;;; TODO:
 

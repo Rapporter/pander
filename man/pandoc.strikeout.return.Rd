@@ -14,8 +14,8 @@
   then call the function ending in \code{.return}.
 }
 \description{
-  Pandoc style strikeout format (e.g. \code{~~FOO~~}) is
-  added to character string.
+  Pandoc's markdown strikeout format (e.g. \code{~~FOO~~})
+  is added to character string.
 }
 \examples{
 pandoc.strikeout('FOO')

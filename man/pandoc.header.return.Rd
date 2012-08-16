@@ -19,7 +19,8 @@
   then call the function ending in \code{.return}.
 }
 \description{
-  Creates a pandoc/markdown style header with given level.
+  Creates a (Pandoc's) markdown style header with given
+  level.
 }
 \examples{
 pandoc.header('Foo!', 4)

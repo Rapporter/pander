@@ -114,6 +114,6 @@ panderOptions('digits', 5)
 }
 }
 \seealso{
-  \code{\link{evals.option}}
+  \code{\link{evalsOptions}}
 }
 

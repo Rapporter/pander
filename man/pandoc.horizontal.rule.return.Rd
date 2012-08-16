@@ -11,8 +11,8 @@
   then call the function ending in \code{.return}.
 }
 \description{
-  Creates a pandoc style horizontal line with trailing and
-  leading newlines.
+  Creates a Pandoc's markdown format horizontal line with
+  trailing and leading newlines.
 }
 \references{
   John MacFarlane (2012): _Pandoc User's Guide_.

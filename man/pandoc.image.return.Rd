@@ -16,7 +16,7 @@
   then call the function ending in \code{.return}.
 }
 \description{
-  Creates a pandoc style image hyperlink.
+  Creates a Pandoc's markdown format image hyperlink.
 }
 \examples{
 pandoc.image('foo.png')

@@ -1,7 +1,8 @@
 \name{pandoc.link.return}
 \alias{pandoc.link}
 \alias{pandoc.link.return}
-\title{Create pandoc link}
+\title{Create pandoc link
+Pandoc's markdown format link.}
 \usage{
   pandoc.link.return(url, text = url)
 }
@@ -16,7 +17,7 @@
   then call the function ending in \code{.return}.
 }
 \description{
-  Create pandoc link
+  Create pandoc link Pandoc's markdown format link.
 }
 \examples{
 pandoc.link('http://r-project.org')

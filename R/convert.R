@@ -28,8 +28,8 @@ openFileInOS <- function(f) {
 #' Converts Pandoc to other format
 #'
 #' Calling John MacFarlane's great program to convert specified file (see \code{f} parameter below) or character vector {see \code{text} paramater} to other formats like \code{HTML}, \code{pdf}, \code{docx}, \code{odt} etc.
-#' @param f Pandoc markdown format file path. If URL is provided then the generated file's path is \code{tempfile()} but please bear in mind that this way only images with absolute path would shown up in the document.
-#' @param text Pandoc markdown format character vector. Treated as the content of \code{f} file - so the \code{f} parameter is ignored. The generated file's path is \code{tempfile()}.
+#' @param f Pandoc's markdown format file path. If URL is provided then the generated file's path is \code{tempfile()} but please bear in mind that this way only images with absolute path would shown up in the document.
+#' @param text Pandoc's markdown format character vector. Treated as the content of \code{f} file - so the \code{f} parameter is ignored. The generated file's path is \code{tempfile()}.
 #' @param format required output format. For all possible values here check out Pandoc homepage: \url{http://johnmacfarlane.net/pandoc/}
 #' @param open try to open converted document with operating system's default program
 #' @param options optionally passed arguments to Pandoc (instead of \code{pander}'s default)
@@ -42,7 +42,7 @@ openFileInOS <- function(f) {
 #' @export
 #' @examples \dontrun{
 #' Pandoc.convert(text = c('# Demo', 'with a paragraph'))
-#' Pandoc.convert('http://daroczig.github.com/pander/minimal.md')
+#' Pandoc.convert('http://rapporter.github.com/pander/minimal.md')
 #' ## Note: the generated HTML is not showing images with relative path from the above file. Based on that `pdf`, `docx` etc. formats would not work! If you want to convert an online markdown file to other formats with this function, please pre-process the file to have absolute paths instead.
 #' }
 Pandoc.convert <- function(f, text, format = 'html', open = TRUE, options = '', footer = TRUE, proc.time, portable.html = TRUE) {
@@ -96,7 +96,7 @@ Pandoc.convert <- function(f, text, format = 'html', open = TRUE, options = '', 
     ## add footer to file
     if (footer)
         if (!grepl('This report was generated', tail(readLines(f, warn = FALSE), 1)))
-            cat(sprintf('\n\n-------\nThis report was generated with [R](http://www.r-project.org/) (%s) and [pander](https://github.com/daroczig/pander) (%s)%son %s platform.', sprintf('%s.%s', R.version$major, R.version$minor), packageDescription("pander")$Version, ifelse(missing(proc.time), ' ', sprintf(' in %s sec ', format(proc.time))), R.version$platform), file = f, append = TRUE)
+            cat(sprintf('\n\n-------\nThis report was generated with [R](http://www.r-project.org/) (%s) and [pander](https://github.com/rapporter/pander) (%s)%son %s platform.', sprintf('%s.%s', R.version$major, R.version$minor), packageDescription("pander")$Version, ifelse(missing(proc.time), ' ', sprintf(' in %s sec ', format(proc.time))), R.version$platform), file = f, append = TRUE)
 
     ## set specified dir
     wd <- getwd()

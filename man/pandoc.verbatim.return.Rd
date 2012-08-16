@@ -21,8 +21,8 @@
   then call the function ending in \code{.return}.
 }
 \description{
-  Pandoc style verbatim format (e.g. \code{`FOO`}) is added
-  to character string.
+  Pandoc's markdown verbatim format (e.g. \code{`FOO`}) is
+  added to character string.
 }
 \examples{
 ## different styles/formats

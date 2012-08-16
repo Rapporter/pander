@@ -53,7 +53,7 @@
   * add option to run code in sandbox:
 
   	  * RAppArmor: https://github.com/jeroenooms/RAppArmor
-      * ~~sandboxR: https://github.com/daroczig/sandboxR~~: just provide a sandboxed environment
+      * ~~sandboxR: https://github.com/rapporter/sandboxR~~: just provide a sandboxed environment
 
 ### Image options:
 
@@ -108,7 +108,7 @@ Global options for: `lattice`, `ggplot2` and `base` plots
 
 ### Required helper functions
 
-  * add significance stars
+  * ~~add significance stars~~
   * ~~indent concatenated strings~~: `pandoc.indent`
 
 ### Calling Pandoc (converting docs)
@@ -156,8 +156,9 @@ Global options for: `lattice`, `ggplot2` and `base` plots
 
 ### Tests
 
-  * **Do that at last!**
+  * ~~Do that at last!~~
   * ~~evals~~
+  * ~~brew~~
   * helper functions
 
 # HTML/JS/CSS issues
@@ -166,7 +167,7 @@ Global options for: `lattice`, `ggplot2` and `base` plots
 
 # ESS
 
-  * integrate (add some Lisp functions/optional key-bindings) `evals`/`pander`/`Pander.brew` - thanks for great ideas [*Michael Lawrence* @ [ESS] mail list](https://stat.ethz.ch/pipermail/ess-help/attachments/20120602/554dfb2f/attachment.pl)
+  * ~~integrate (add some Lisp functions/optional key-bindings) `evals`/`pander`/`Pander.brew` - thanks for great ideas [*Michael Lawrence* @ [ESS] mail list](https://stat.ethz.ch/pipermail/ess-help/attachments/20120602/554dfb2f/attachment.pl)~~: http://rapporter.github.com/pander/#ess
 
 # Great ideas
 

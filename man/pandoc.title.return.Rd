@@ -20,8 +20,8 @@
   then call the function ending in \code{.return}.
 }
 \description{
-  Creates a pandoc style title block with optional author,
-  title and date fields.
+  Creates a Pandoc's markdown style title block with
+  optional author, title and date fields.
 }
 \examples{
 pandoc.title('Gergely Daróczi', 'Render pandoc in R', '2012-05-16')

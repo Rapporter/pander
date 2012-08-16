@@ -29,8 +29,8 @@
   then call the function ending in \code{.return}.
 }
 \description{
-  Creates a pandoc style list from provided character
-  vector/list.
+  Creates a Pandoc's markdown format list from provided
+  character vector/list.
 }
 \examples{
 ## basic lists

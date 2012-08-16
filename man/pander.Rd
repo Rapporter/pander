@@ -20,7 +20,7 @@
   then call the function ending in \code{.return}.
 }
 \description{
-  Prints an R object in pandoc style markdown.
+  Prints an R object in Pandoc's markdown.
 }
 \note{
   This function can be called by \code{pander} and
@@ -77,9 +77,6 @@ pander(density(mtcars$hp))
 x <- chisq.test(table(mtcars$am, mtcars$gear))
 class(x) <- 'I heave never heard of!'
 pander(x)
-}
-\author{
-  Gergely Daróczi
 }
 \references{
   \itemize{ \item John MacFarlane (2012): _Pandoc User's

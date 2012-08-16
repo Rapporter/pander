@@ -8,7 +8,7 @@
   \item{x}{character vector}
 }
 \description{
-  Adds a line break before *and* after the character
+  Adds a line break before \emph{and} after the character
   string(s).
 }
 

@@ -1,6 +1,6 @@
 #' Add trailing and leading blank line
 #'
-#' Adds a line break before *and* after the character string(s).
+#' Adds a line break before \emph{and} after the character string(s).
 #' @param x character vector
 #' @export
 add.blank.lines <- function(x)
@@ -126,7 +126,7 @@ pandoc.indent <- function(x, level = 0) {
 
 #' Paragraphs
 #'
-#' Pandoc style paragraph.
+#' Pandoc's markdown paragraph.
 #' @param x character vector
 #' @return By default this function outputs (see: \code{cat}) the result. If you would want to catch the result instead, then call the function ending in \code{.return}.
 #' @export
@@ -162,7 +162,7 @@ pandoc.add.formatting <- function(x, f) {
 
 #' Strong emphasis
 #'
-#' Pandoc style strong emphasis format (e.g. \code{**FOO**}) is added to character string.
+#' Pandoc's markdown strong emphasis format (e.g. \code{**FOO**}) is added to character string.
 #' @param x character vector
 #' @return By default this function outputs (see: \code{cat}) the result. If you would want to catch the result instead, then call the function ending in \code{.return}.
 #' @export
@@ -183,7 +183,7 @@ pandoc.strong <- function(...)
 
 #' Emphasis
 #'
-#' Pandoc style emphasis format (e.g. \code{*FOO*}) is added to character string.
+#' Pandoc's markdown emphasis format (e.g. \code{*FOO*}) is added to character string.
 #' @param x character vector
 #' @return By default this function outputs (see: \code{cat}) the result. If you would want to catch the result instead, then call the function ending in \code{.return}.
 #' @export
@@ -204,7 +204,7 @@ pandoc.emphasis <- function(...)
 
 #' Add strikeout
 #'
-#' Pandoc style strikeout format (e.g. \code{~~FOO~~}) is added to character string.
+#' Pandoc's markdown strikeout format (e.g. \code{~~FOO~~}) is added to character string.
 #' @param x character vector
 #' @return By default this function outputs (see: \code{cat}) the result. If you would want to catch the result instead, then call the function ending in \code{.return}.
 #' @export
@@ -225,7 +225,7 @@ pandoc.strikeout <- function(...)
 
 #' Add verbatim
 #'
-#' Pandoc style verbatim format (e.g. \code{`FOO`}) is added to character string.
+#' Pandoc's markdown verbatim format (e.g. \code{`FOO`}) is added to character string.
 #' @param x character vector
 #' @param style show code \code{inline} or in a separate (\code{indent}ed or \code{delim}ited) block
 #' @param attrs (optionally) pass ID, classes and any attribute to the \code{delimited} block
@@ -266,6 +266,7 @@ pandoc.verbatim <- function(...)
 
 
 #' Create pandoc link
+#' Pandoc's markdown format link.
 #' @param url hyperlink
 #' @param text link text
 #' @return By default this function outputs (see: \code{cat}) the result. If you would want to catch the result instead, then call the function ending in \code{.return}.
@@ -285,7 +286,7 @@ pandoc.link <- function(...)
 
 #' Create pandoc image tags
 #'
-#' Creates a pandoc style image hyperlink.
+#' Creates a Pandoc's markdown format image hyperlink.
 #' @param img image path
 #' @param caption text
 #' @return By default this function outputs (see: \code{cat}) the result. If you would want to catch the result instead, then call the function ending in \code{.return}.
@@ -308,7 +309,7 @@ pandoc.image <- function(...)
 
 #' Footnote
 #'
-#' Creates a pandoc style footnote.
+#' Creates a Pandoc's markdown format footnote.
 #' @param x character vector
 #' @return By default this function outputs (see: \code{cat}) the result. If you would want to catch the result instead, then call the function ending in \code{.return}.
 #' @export
@@ -326,7 +327,7 @@ pandoc.footnote <- function(...)
 
 #' Create horizontal rule
 #'
-#' Creates a pandoc style horizontal line with trailing and leading newlines.
+#' Creates a Pandoc's markdown format horizontal line with trailing and leading newlines.
 #' @return By default this function outputs (see: \code{cat}) the result. If you would want to catch the result instead, then call the function ending in \code{.return}.
 #' @export
 #' @aliases pandoc.horizontal.rule
@@ -341,7 +342,7 @@ pandoc.horizontal.rule <- function(...)
 
 #' Create header
 #'
-#' Creates a pandoc/markdown style header with given level.
+#' Creates a (Pandoc's) markdown style header with given level.
 #' @param x character vector
 #' @param level integer
 #' @param style atx or setext type of heading
@@ -383,7 +384,7 @@ pandoc.header <- function(...)
 
 #' Create title block
 #'
-#' Creates a pandoc style title block with optional author, title and date fields.
+#' Creates a Pandoc's markdown style title block with optional author, title and date fields.
 #' @param author character vector or semicolon delimited list of authors without line break
 #' @param title character vector of lines of title or multiline string with \code{\\n} separators
 #' @param date any string fit in one line
@@ -444,7 +445,7 @@ pandoc.title <- function(...)
 
 #' Create a list
 #'
-#' Creates a pandoc style list from provided character vector/list.
+#' Creates a Pandoc's markdown format list from provided character vector/list.
 #' @param elements character vector of strings
 #' @param style the required style of the list
 #' @param loose adding a newline between elements

@@ -4,7 +4,7 @@
 \description{
   This \code{R5} reference class can hold bunch of elements
   (text or R objects) from which it tries to create a
-  Pandoc-style markdown text file. Exporting the report to
+  Pandoc's markdown text file. Exporting the report to
   several formats (like: pdf, docx, odt etc. - see Pandoc's
   documentation) is also possible, see examples below.
 }

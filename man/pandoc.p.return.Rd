@@ -14,7 +14,7 @@
   then call the function ending in \code{.return}.
 }
 \description{
-  Pandoc style paragraph.
+  Pandoc's markdown paragraph.
 }
 \examples{
 pandoc.p('FOO')

@@ -7,13 +7,13 @@
     portable.html = TRUE)
 }
 \arguments{
-  \item{f}{Pandoc markdown format file path. If URL is
+  \item{f}{Pandoc's markdown format file path. If URL is
   provided then the generated file's path is
   \code{tempfile()} but please bear in mind that this way
   only images with absolute path would shown up in the
   document.}
 
-  \item{text}{Pandoc markdown format character vector.
+  \item{text}{Pandoc's markdown format character vector.
   Treated as the content of \code{f} file - so the \code{f}
   parameter is ignored. The generated file's path is
   \code{tempfile()}.}
@@ -56,7 +56,7 @@
 \examples{
 \dontrun{
 Pandoc.convert(text = c('# Demo', 'with a paragraph'))
-Pandoc.convert('http://daroczig.github.com/pander/minimal.md')
+Pandoc.convert('http://rapporter.github.com/pander/minimal.md')
 ## Note: the generated HTML is not showing images with relative path from the above file. Based on that `pdf`, `docx` etc. formats would not work! If you want to convert an online markdown file to other formats with this function, please pre-process the file to have absolute paths instead.
 }
 }

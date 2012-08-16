@@ -14,8 +14,8 @@
   then call the function ending in \code{.return}.
 }
 \description{
-  Pandoc style strong emphasis format (e.g. \code{**FOO**})
-  is added to character string.
+  Pandoc's markdown strong emphasis format (e.g.
+  \code{**FOO**}) is added to character string.
 }
 \examples{
 pandoc.strong('FOO')

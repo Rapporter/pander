@@ -15,12 +15,12 @@ Development version of pander
 
 As `pander` is under heavy development I would suggest to try out an up-to-date version, as I would not bother CRAN with frequent releases:
 
-    https://github.com/daroczig/pander
+    https://github.com/rapporter/pander
 
 Installation from GitHub is easy with `devtools` useful function:
 
     library(devtools)
-    install_github('pander', 'daroczig')
+    install_github('pander', 'rapporter')
 
 To compile/install from sources on Windows, you would need to install Rtools:
 

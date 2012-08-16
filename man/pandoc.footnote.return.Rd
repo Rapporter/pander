@@ -14,7 +14,7 @@
   then call the function ending in \code{.return}.
 }
 \description{
-  Creates a pandoc style footnote.
+  Creates a Pandoc's markdown format footnote.
 }
 \examples{
 pandoc.footnote('Automatically numbered footnote, right?')

@@ -1,16 +1,16 @@
 #' Brew in pandoc format
 #'
-#' This function behaves just like \code{brew} except for the \code{<\%=...\%>} tags, where \code{Pandoc.brew} first translate the R object found between the tags to Pandoc markdown before passing to the \code{cat} function.
+#' This function behaves just like \code{brew} except for the \code{<\%=...\%>} tags, where \code{Pandoc.brew} first translate the R object found between the tags to Pandoc's markdown before passing to the \code{cat} function.
 #'
 #' This parser tries to be smart in some ways:
 #'
 #' \itemize{
-#'      \item a block (R commands between the tags) could return a value in the middle of the block and do something else without any output in the rest (but only one returned value per block!)
-#'      \item plots and images are grabbed in the document, rendered to a png file and pander method would result in a Pandoc markdown formatted image link (so the image would be shown/included in the exported document). The images' are put in \code{plots} directory in current \code{getwd()} or to the specified \code{output} file's directory.
+#'      \item a block (R commands between the tags) could return any value at any part of the block and there are no restrictions about the number of returned R objects
+#'      \item plots and images are grabbed in the document, rendered to a png file and \code{pander} method would result in a Pandoc's markdown formatted image link (so the image would be shown/included in the exported document). The images are put in \code{plots} directory in current \code{getwd()} or to the specified \code{output} file's directory.
 #'      \item all warnings/messages and errors are recorded in the blocks and returned in the document as a footnote
 #' }
 #'
-#' Please see my Github page for details (\url{http://daroczig.github.com/pander/#brew-to-pandoc}) and examples (\url{http://daroczig.github.com/pander/#examples}).
+#' Please see my Github page for details (\url{http://rapporter.github.com/pander/#brew-to-pandoc}) and examples (\url{http://rapporter.github.com/pander/#examples}).
 #' @param file file path of the brew template. As this is passed to \code{readLines}, \code{file} could be an URL too, but not over SSL (for that latter \code{RCurl} would be needed).
 #' @param output (optional) file path of the output file
 #' @param convert string: format of required output document (besides Pandoc's markdown). Pandoc is called if set via \code{Pandoc.convert} and the converted document could be also opened automatically (see below).
