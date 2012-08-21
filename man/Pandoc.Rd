@@ -14,11 +14,11 @@
 myReport <- Pandoc$new()
 
 ## Add author, title and date of document
-myReport$author <- 'Gergely Daróczi'
+myReport$author <- 'Anonymous'
 myReport$title  <- 'Demo'
 
 ## Or it could be done while initializing
-myReport <- Pandoc$new('Gergely Daróczi', 'Demo')
+myReport <- Pandoc$new('Anonymous', 'Demo')
 
 ## Add some free text
 myReport$add.paragraph('Hello there, this is a really short tutorial!')

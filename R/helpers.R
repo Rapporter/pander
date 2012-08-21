@@ -393,7 +393,7 @@ pandoc.header <- function(...)
 #' @aliases pandoc.title
 #' @references John MacFarlane (2012): _Pandoc User's Guide_. \url{http://johnmacfarlane.net/pandoc/README.html}
 #' @examples
-#' pandoc.title('Gergely Daróczi', 'Render pandoc in R', '2012-05-16')
+#' pandoc.title('Tom', 'Render pandoc in R', '2012-05-16')
 #' pandoc.title(c('Tom', 'Jerry'), 'Render pandoc in R', '2012-05-16')
 #' pandoc.title('Tom; Jerry', 'Render pandoc in R', '2012-05-16')
 #' pandoc.title('Tom; Jerry', c('Render', 'pandoc', 'in R'), '2012-05-16')
