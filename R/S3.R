@@ -101,6 +101,12 @@ pander.image <- function(x, caption = attr(x, 'caption'), href = attr(x, 'href')
 #' @S3method pander table
 pander.table <- function(x, caption = attr(x, 'caption'), justify = attr(x, 'alignment'), ...) {
 
+    if (is.null(caption))
+        if (!is.null(storage$caption)) {
+            caption <- storage$caption
+            storage$caption <- NULL
+        }
+
     if (is.null(justify))
         justify <- 'left'
 
@@ -111,6 +117,12 @@ pander.table <- function(x, caption = attr(x, 'caption'), justify = attr(x, 'ali
 #' @S3method pander data.frame
 pander.data.frame <- function(x, caption = attr(x, 'caption'), justify = attr(x, 'alignment'), ...) {
 
+    if (is.null(caption))
+        if (!is.null(storage$caption)) {
+            caption <- storage$caption
+            storage$caption <- NULL
+        }
+
     if (is.null(justify))
         justify <- 'left'
 
@@ -120,6 +132,12 @@ pander.data.frame <- function(x, caption = attr(x, 'caption'), justify = attr(x,
 
 #' @S3method pander matrix
 pander.matrix <- function(x, caption = attr(x, 'caption'), justify = attr(x, 'alignment'),  ...) {
+
+    if (is.null(caption))
+        if (!is.null(storage$caption)) {
+            caption <- storage$caption
+            storage$caption <- NULL
+        }
 
     if (is.null(justify))
         justify <- 'left'
