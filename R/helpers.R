@@ -784,10 +784,9 @@ pandoc.table.return <- function(t, caption = NULL, digits = panderOptions('digit
             res <- paste0(res, '\n\n')
 
         ## (optional) caption
-        if (caption == '')
-            caption <- NULL
         if (!is.null(caption))
-            res <- sprintf('%sTable: %s\n\n', res, caption)
+            if (caption != '')
+                res <- sprintf('%sTable: %s\n\n', res, caption)
 
         return(res)
 
