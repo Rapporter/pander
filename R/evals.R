@@ -735,7 +735,7 @@ evals <- function(txt, parse = TRUE, cache = TRUE, cache.mode = c('environment',
             }
 
             ## get the hash of the call based on the hash of all `names`
-            cached <- digest(list(call = getCallParts(parse(text = src)), storage = digest(pander:::storage)), 'sha1')
+            cached <- digest(list(call = getCallParts(parse(text = src)), storage = digest(storage)), 'sha1')
 
             if (cache.mode == 'disk') {
 
@@ -945,16 +945,16 @@ evals <- function(txt, parse = TRUE, cache = TRUE, cache.mode = c('environment',
             }
 
         ## add captured attributes
-        if (!is.null(pander:::storage$caption) & !is.null(result)) {
+        if (!is.null(storage$caption) & !is.null(result)) {
 
-            attr(result, 'caption') <- pander:::storage$caption
-            assign('caption', NULL , envir = pander:::storage)
+            attr(result, 'caption') <- storage$caption
+            assign('caption', NULL , envir = storage)
 
         }
         ## alignment of tables
-        if (!is.null(pander:::storage$alignment) & !is.null(result)) {
+        if (!is.null(storage$alignment) & !is.null(result)) {
 
-            a <- pander:::storage$alignment
+            a <- storage$alignment
             if (length(dim(result)) == 0) {
                 w <- length(result)
                 n <- NULL
@@ -968,7 +968,7 @@ evals <- function(txt, parse = TRUE, cache = TRUE, cache.mode = c('environment',
                 attr(result, 'alignment') <- rep(a$align, length.out = w)
             else
                 attr(result, 'alignment') <- c(a$row.names, rep(a$align, length.out = w))
-            assign('alignment', NULL , envir = pander:::storage)
+            assign('alignment', NULL , envir = storage)
 
         }
 
