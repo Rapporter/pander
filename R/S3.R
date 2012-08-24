@@ -172,7 +172,10 @@ pander.anova <- function(x, caption = attr(x, 'caption'), ...) {
 }
 
 #' @S3method pander htest
-pander.htest <- function(x, ...) {
+pander.htest <- function(x, caption = attr(x, 'caption'), ...) {
+
+    if (is.null(caption)) {
+            caption <- paste0(x$method, ': `', gsub('( and | by )', '`\\1`', x$data.name), '`')
 
     ## we do not know which values are provided
     res <- data.frame(placeholder = 'FOO')
@@ -191,7 +194,7 @@ pander.htest <- function(x, ...) {
     res$placeholder <- NULL
 
     ## return
-    pandoc.table(res, caption = paste0(x$method, ': `', gsub('( and | by )', '`\\1`', x$data.name), '`'), justify = 'centre')
+    pandoc.table(res, caption = caption, justify = 'centre')
 
 }
 
