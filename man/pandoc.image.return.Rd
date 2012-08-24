@@ -3,7 +3,7 @@
 \alias{pandoc.image.return}
 \title{Create pandoc image tags}
 \usage{
-  pandoc.image.return(img, caption = NULL)
+  pandoc.image.return(img, caption = storage$caption)
 }
 \arguments{
   \item{img}{image path}
@@ -18,6 +18,11 @@
 \description{
   Creates a Pandoc's markdown format image hyperlink.
 }
+\note{
+  The \code{caption} text is read from an internal buffer
+  which defaults to \code{NULL}. To update that, call
+  \code{link{set.caption}} before.
+}
 \examples{
 pandoc.image('foo.png')
 pandoc.image('foo.png', 'Nice image, huh?')
@@ -25,5 +30,8 @@ pandoc.image('foo.png', 'Nice image, huh?')
 \references{
   John MacFarlane (2012): _Pandoc User's Guide_.
   \url{http://johnmacfarlane.net/pandoc/README.html}
+}
+\seealso{
+  \code{\link{set.caption}}
 }
 

@@ -292,14 +292,23 @@ pandoc.link <- function(...)
 #' @return By default this function outputs (see: \code{cat}) the result. If you would want to catch the result instead, then call the function ending in \code{.return}.
 #' @export
 #' @aliases pandoc.image
+#' @seealso \code{\link{set.caption}}
+#' @note The \code{caption} text is read from an internal buffer which defaults to \code{NULL}. To update that, call \code{link{set.caption}} before.
 #' @examples
 #' pandoc.image('foo.png')
 #' pandoc.image('foo.png', 'Nice image, huh?')
 #' @references John MacFarlane (2012): _Pandoc User's Guide_. \url{http://johnmacfarlane.net/pandoc/README.html}
-pandoc.image.return <- function(img, caption = NULL) {
+pandoc.image.return <- function(img, caption = storage$caption) {
+
     if (is.null(caption))
         caption <- ''
+
+    ## truncating caption buffer if needed
+    if (!is.null(storage$caption))
+        storage$caption <- NULL
+
     sprintf('![%s](%s)', caption, img)
+
 }
 
 #' @export
@@ -530,6 +539,8 @@ pandoc.list <- function(...)
 #' @return By default this function outputs (see: \code{cat}) the result. If you would want to catch the result instead, then call the function ending in \code{.return}.
 #' @export
 #' @aliases pandoc.table
+#' @seealso \code{\link{set.caption}}
+#' @note The \code{caption} text is read from an internal buffer which defaults to \code{NULL}. To update that, call \code{link{set.caption}} before.
 #' @references John MacFarlane (2012): _Pandoc User's Guide_. \url{http://johnmacfarlane.net/pandoc/README.html}
 #' @examples
 #' pandoc.table(mtcars)
@@ -571,7 +582,7 @@ pandoc.list <- function(...)
 #' pandoc.table(t, style = "grid", split.cells = 5)
 #' pandoc.table(t, style = "simple")
 #' tryCatch(pandoc.table(t, style = "simple", split.cells = 5), error = function(e) 'Yeah, no newline support in simple tables')
-pandoc.table.return <- function(t, caption = NULL, digits = panderOptions('digits'), decimal.mark = panderOptions('decimal.mark'), round = panderOptions('round'), justify = 'left', style = c('multiline', 'grid', 'simple'), split.tables = panderOptions('table.split.table'), split.cells = panderOptions('table.split.cells')) {
+pandoc.table.return <- function(t, caption = storage$caption, digits = panderOptions('digits'), decimal.mark = panderOptions('decimal.mark'), round = panderOptions('round'), justify = 'left', style = c('multiline', 'grid', 'simple'), split.tables = panderOptions('table.split.table'), split.cells = panderOptions('table.split.cells')) {
 
     ## helper functions
     table.expand <- function(cells, cols.width, justify, sep.cols) {
@@ -788,6 +799,10 @@ pandoc.table.return <- function(t, caption = NULL, digits = panderOptions('digit
             if (caption != '')
                 res <- sprintf('%sTable: %s\n\n', res, caption)
 
+        ## truncating caption buffer if needed
+        if (!is.null(storage$caption))
+            storage$caption <- NULL
+
         return(res)
 
     }
@@ -799,11 +814,11 @@ pandoc.table <- function(...)
 
 #' Adds caption in current block
 #'
-#' This is a helper function to be used \emph{inside brew blocks} to add a caption to the returning image/table.
+#' This is a helper function to add a caption to the returning image/table.
 #' @param x string
 #' @export
 set.caption <- function(x)
-    assign('caption', x , envir = pander:::storage)
+    assign('caption', x , envir = storage)
 
 
 #' Sets alignment for tables
@@ -813,7 +828,7 @@ set.caption <- function(x)
 #' @param row.names string holding the alignment of the (optional) row names
 #' @export
 set.alignment <- function(align = 'centre', row.names = 'left')
-    assign('alignment', list(align = align, row.names = row.names) , envir = pander:::storage)
+    assign('alignment', list(align = align, row.names = row.names) , envir = storage)
 
 
 #' Add significance stars

@@ -8,7 +8,7 @@
   \item{x}{string}
 }
 \description{
-  This is a helper function to be used \emph{inside brew
-  blocks} to add a caption to the returning image/table.
+  This is a helper function to add a caption to the
+  returning image/table.
 }
 

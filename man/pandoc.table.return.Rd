@@ -3,7 +3,7 @@
 \alias{pandoc.table.return}
 \title{Create a table}
 \usage{
-  pandoc.table.return(t, caption = NULL,
+  pandoc.table.return(t, caption = storage$caption,
     digits = panderOptions("digits"),
     decimal.mark = panderOptions("decimal.mark"),
     round = panderOptions("round"), justify = "left",
@@ -56,6 +56,11 @@
   the whole table to separate parts on demand. See the
   parameters above.
 }
+\note{
+  The \code{caption} text is read from an internal buffer
+  which defaults to \code{NULL}. To update that, call
+  \code{link{set.caption}} before.
+}
 \examples{
 pandoc.table(mtcars)
 
@@ -100,5 +105,8 @@ tryCatch(pandoc.table(t, style = "simple", split.cells = 5), error = function(e)
 \references{
   John MacFarlane (2012): _Pandoc User's Guide_.
   \url{http://johnmacfarlane.net/pandoc/README.html}
+}
+\seealso{
+  \code{\link{set.caption}}
 }
 
