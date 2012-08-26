@@ -593,6 +593,7 @@ evals <- function(txt, parse = TRUE, cache = TRUE, cache.mode = c('environment',
 
     if (missing(txt))
         stop('No R code provided to evaluate!')
+    txt.original <- paste(txt, collapse = '\n')
 
     ## override missing parameters with options
     mc <- match.call()
@@ -613,12 +614,23 @@ evals <- function(txt, parse = TRUE, cache = TRUE, cache.mode = c('environment',
         ## skip parsing on syntax error and disable cache
         if (inherits(txt.parsed, 'error'))
             cache <- FALSE
+
         else {
 
             txt <- sapply(txt.parsed, function(x) paste(deparse(x), collapse = '\n'))
 
+            ## return NULL on missing R code (e.g. comments)
             if (length(txt) == 0)
-                stop('No R code provided to evaluate!')
+                return(list(structure(list(src      = txt.original,
+                                           result   = NULL,
+                                           output   = NULL,
+                                           type     = NULL,
+                                           msg      = list(
+                                               messages = NULL,
+                                               warnings = NULL,
+                                               errors   = NULL),
+                                           stdout   = NULL
+                                           ), 'class' = 'evals')))
 
             ## (re)merge lines on demand (based on `+` at the beginning of line)
             txt.sep <- c(which(!grepl('^\\+', txt)), length(txt)+1)
