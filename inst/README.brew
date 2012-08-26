@@ -391,7 +391,7 @@ myReport$export(open = FALSE)
   * `graph.background`: string (default: `'white'`) specifying the plots main background's color
   * `graph.panel.background`: string (default: `'transparent'`) specifying the plot's main panel background. Please *note*, that this option is not supported with `base` graphics.
   * `graph.colors`: character vector of default color palette (defaults to a [colorblind theme](http://jfly.iam.u-tokyo.ac.jp/color/)). Please *note* that this update work with `base` plots by appending the `col` argument to the call if not set.
-  * `graph.color.rnd`: boolean (dafault: `FALSE`) specifying if the palette should be reordered randomly before rendering each plot to get colorful images
+  * `graph.color.rnd`: boolean (default: `FALSE`) specifying if the palette should be reordered randomly before rendering each plot to get colorful images
   * `graph.axis.angle`: numeric (default: `1`) specifying the angle of axes' labels. The available options are based on `par(les)` and sets if the labels should be:
 
       *  `1`: parallel to the axis,

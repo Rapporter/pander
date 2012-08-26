@@ -89,7 +89,7 @@
   \url{http://jfly.iam.u-tokyo.ac.jp/color/}). Please
   \emph{note} that this update work with \code{base} plots
   by appending the \code{col} argument to the call if not
-  set.  \item \code{graph.color.rnd}: boolean (dafault:
+  set.  \item \code{graph.color.rnd}: boolean (default:
   \code{FALSE}) specifying if the palette should be
   reordered randomly before rendering each plot to get
   colorful images \item \code{graph.axis.angle}: numeric
