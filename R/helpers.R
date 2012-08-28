@@ -735,9 +735,9 @@ pandoc.table.return <- function(t, caption = storage$caption, digits = panderOpt
         }
 
         if (length(dim(t)) > 1)
-            res <- list(t[, 1:(t.split-1)], t[, t.split:ncol(t)])
+            res <- list(t[, 1:(t.split-1), drop = FALSE], t[, t.split:ncol(t), drop = FALSE])
         else
-            res <- list(t[1:(t.split-1)], t[t.split:length(t)])
+            res <- list(t[1:(t.split-1), drop = FALSE], t[t.split:length(t), drop = FALSE])
 
         ## recursive call
         res <- paste(pandoc.table.return(res[[1]], caption = caption, digits = digits, decimal.mark = decimal.mark, round = round, justify = justify[[1]], style = style), pandoc.table.return(res[[2]], caption = NULL, digits = digits, decimal.mark = decimal.mark, round = round, justify = justify[[2]], style = style))
