@@ -747,7 +747,7 @@ evals <- function(txt, parse = TRUE, cache = TRUE, cache.mode = c('environment',
             }
 
             ## get the hash of the call based on the hash of all `names`
-            cached <- digest(list(call = getCallParts(parse(text = src)), storage = digest(storage)), 'sha1')
+            cached <- digest(list(call = getCallParts(parse(text = src)), storage = digest(list(storage, panderOptions(), evalsOptions()), 'sha1')), 'sha1')
 
             if (cache.mode == 'disk') {
 
