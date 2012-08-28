@@ -83,7 +83,9 @@ Pandoc.brew <- function(file = stdin(), output = stdout(), convert = FALSE, open
         res <- evals(unlist(...), env = envir, graph.dir = graph.dir, graph.name = graph.name, hi.res = graph.hi.res)
         for (r in res) {
 
-            r.pander <- pander.return(r)
+            r.pander <- tryCatch(pander.return(r), error = function(e) e)
+            if (inherits(r.pander, 'error'))
+                r.pander <- paste0('Internal `pander` error: `', r.pander$message, '`\n\nPlease [report the issue](https://github.com/Rapporter/pander/issues/new) with a reproducible example to help developers fix this ASAP.')
             r$output <- r.pander
             cat(paste(r.pander, collapse = '\n'))
 
