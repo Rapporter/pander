@@ -411,7 +411,7 @@ eval.msgs <- function(src, env = NULL, showInvisible = FALSE, graph.unify = eval
 #' @param output a character vector of required returned values. This might be useful if you are only interested in the \code{result}, and do not want to save/see e.g. \code{messages} or \code{print}ed \code{output}. See examples below.
 #' @param env environment where evaluation takes place. If not set (by default), a new temporary environment is created.
 #' @param graph.unify should \code{evals} try to unify the style of (\code{base}, \code{lattice} and \code{ggplot2}) plots? If set to \code{TRUE}, some \code{panderOptions()} would apply. By default this is disabled not to freak out useRs :)
-#' @param graph.name set the file name of saved plots which is \code{\link{tempfile}} by default. A simple character string might be provided where \code{\%d} would be replaced by the index of the generating \code{txt} source, \code{\%n} with an incremented integer in \code{graph.dir} with similar file names and \code{\%t} by some unique random characters. A function's name to be \code{eval}uated can be passed here too.
+#' @param graph.name set the file name of saved plots which is \code{\link{tempfile}} by default. A simple character string might be provided where \code{\%d} would be replaced by the index of the generating \code{txt} source, \code{\%n} with an incremented integer in \code{graph.dir} with similar file names and \code{\%t} by some unique random characters.
 #' @param graph.dir path to a directory where to place generated images. If the directory does not exist, \code{evals} try to create that. Default set to \code{plots} in current working directory.
 #' @param graph.output set the required file format of saved plots. Currently it could be any of  \code{grDevices}': \code{png}, \code{bmp}, \code{jpeg}, \code{jpg}, \code{tiff}, \code{svg} or \code{pdf}.
 #' @param width width of generated plot in pixels for even vector formats
@@ -682,6 +682,7 @@ evals <- function(txt, parse = TRUE, cache = TRUE, cache.mode = c('environment',
         ## get image file name
         `%d` <<- `%d` + 1
         file.name <- gsub('%d', `%d`, graph.name, fixed = TRUE)
+        file.name <- gsub('%i', debug$chunkID, file.name, fixed = TRUE)
         file <- sprintf('%s.%s', file.name, graph.output)
         if (grepl('%t', graph.name)) {
             if (length(strsplit(sprintf('placeholder%splaceholder', file.name), '%t')[[1]]) > 2)
@@ -696,10 +697,10 @@ evals <- function(txt, parse = TRUE, cache = TRUE, cache.mode = c('environment',
         if (grepl('%n', file.name)) {
             if (length(strsplit(sprintf('placeholder%splaceholder', file.name), '%n')[[1]]) > 2)
                 stop('File name contains more then 1 "%n"!')
-            similar.files <- list.files(graph.dir, pattern = sprintf('^%s\\.(jpeg|tiff|png|svg|bmp)$', gsub('%t', '[a-z0-9]*', gsub('%d|%n', '[[:digit:]]*', basename(file.name)))))
+            similar.files <- list.files(graph.dir, pattern = sprintf('^%s\\.(jpeg|tiff|png|svg|bmp)$', gsub('%t', '[a-z0-9]*', gsub('%d|%n|%i', '[[:digit:]]*', basename(file.name)))))
             if (length(similar.files) > 0) {
                 similar.files <- sub('\\.(jpeg|tiff|png|svg|bmp)$', '', similar.files)
-                rep <- gsub('%t', '[a-z0-9]*', gsub('%d', '[[:digit:]]*', strsplit(basename(file.name), '%n')[[1]]))
+                rep <- gsub('%t', '[a-z0-9]*', gsub('%d|%i', '[[:digit:]]*', strsplit(basename(file.name), '%n')[[1]]))
                 `%n` <- max(as.numeric(gsub(paste(rep, collapse = '|'), '', similar.files))) + 1
             } else
                 `%n` <- 1

@@ -109,8 +109,7 @@
   replaced by the index of the generating \code{txt}
   source, \code{\%n} with an incremented integer in
   \code{graph.dir} with similar file names and \code{\%t}
-  by some unique random characters. A function's name to be
-  \code{eval}uated can be passed here too.}
+  by some unique random characters.}
 
   \item{graph.dir}{path to a directory where to place
   generated images. If the directory does not exist,

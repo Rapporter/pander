@@ -15,7 +15,7 @@
 #' @param output (optional) file path of the output file
 #' @param convert string: format of required output document (besides Pandoc's markdown). Pandoc is called if set via \code{Pandoc.convert} and the converted document could be also opened automatically (see below).
 #' @param open try to open converted document with operating system's default program
-#' @param graph.name character string (default to \code{\%t} when \code{output} is set to \code{stdout} and \code{paste0(basename(output), '-\%n')} otherwise) passed to \code{\link{evals}}
+#' @param graph.name character string (default to \code{\%t} when \code{output} is set to \code{stdout} and \code{paste0(basename(output), '-\%n')} otherwise) passed to \code{\link{evals}}.  Besides \code{\link{evals}}'s possible tags \code{\%i} is also available which would be replaced by the chunk number.
 #' @param graph.dir character string (default to \code{tempdir()} when \code{output} is set to \code{stdout} and \code{dirname(graph.name)} otherwise) passed to \code{\link{evals}}
 #' @param graph.hi.res render high resolution images of plots? Default is \code{FALSE} except for HTML output.
 #' @param text character vector (treated as the content of the \code{file}
@@ -78,9 +78,19 @@ Pandoc.brew <- function(file = stdin(), output = stdout(), convert = FALSE, open
     if (is.null(text))
         text <- paste(readLines(file, warn = FALSE), collapse = '\n')
 
+    ## id of chunk
+    assign('chunkID', 0, envir = debug)
+
     ## helper fn
     showCode <- function(..., envir = parent.frame(), cache = evalsOptions('cache')) {
+
+        ## increment chunk ID
+        assign('chunkID', debug$chunkID + 1, envir = debug)
+
+        ## evaluate chunk
         res <- evals(unlist(...), env = envir, graph.dir = graph.dir, graph.name = graph.name, hi.res = graph.hi.res)
+
+        ## format 'em
         for (r in res) {
 
             r.pander <- tryCatch(pander.return(r), error = function(e) e)

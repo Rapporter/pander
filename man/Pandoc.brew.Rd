@@ -26,7 +26,9 @@
   \item{graph.name}{character string (default to \code{\%t}
   when \code{output} is set to \code{stdout} and
   \code{paste0(basename(output), '-\%n')} otherwise) passed
-  to \code{\link{evals}}}
+  to \code{\link{evals}}.  Besides \code{\link{evals}}'s
+  possible tags \code{\%i} is also available which would be
+  replaced by the chunk number.}
 
   \item{graph.dir}{character string (default to
   \code{tempdir()} when \code{output} is set to
