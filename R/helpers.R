@@ -69,6 +69,7 @@ p <- function(x, wrap = panderOptions('p.wrap'), sep = panderOptions('p.sep'), c
     if (is.numeric(x)) {
         x <- round(x, panderOptions('round'))
         x <- format(x, trim = TRUE, digits = panderOptions('digits'), decimal.mark = panderOptions('decimal.mark'))
+        x <- sub('[\\.,]+0*$', '', x) # removing trailing zeros
     }
 
     if (x.len == 1)
@@ -609,7 +610,14 @@ pandoc.table.return <- function(t, caption = storage$caption, digits = panderOpt
     }
     split.large.cells <- function(cells)
         sapply(cells, function(x) {
+
+            ## remove trailing zeros
+            x <- sub('[\\.,]+0*$', '', x)
+
+            ## split
             x <- paste(strwrap(x, width = split.cells), collapse = '\n')
+
+            ## return
             if (x == 'NA')
                 ''
             else
@@ -642,6 +650,8 @@ pandoc.table.return <- function(t, caption = storage$caption, digits = panderOpt
         if (length(t.n) > 0)
             t[, t.n] <- round(t[, t.n], round)
     }
+
+    ## apply decimal.mark
     t <- format(t, trim = TRUE, digits = digits, decimal.mark = decimal.mark)
 
     ## TODO: adding formatting (emphasis, strong etc.)

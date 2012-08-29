@@ -152,7 +152,7 @@ pander.cast_df<- function(x, caption = attr(x, 'caption'), justify = attr(x, 'al
 
 #' @S3method pander numeric
 pander.numeric <- function(x, ...)
-    cat(p(format(round(x, panderOptions('round')), trim = TRUE, digits = panderOptions('digits'), decimal.mark = panderOptions('decimal.mark'))))
+    cat(p(x))
 
 #' @S3method pander character
 pander.character <- function(x, ...)
