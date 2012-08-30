@@ -680,6 +680,10 @@ pandoc.table.return <- function(t, caption = storage$caption, digits = panderOpt
 
     } else {
 
+        ## checking for empty data frames
+        if (dim(t)[1] == 0)
+            t[1, ] <- NA
+
         t <- apply(t, c(1,2), split.large.cells)
 
         t.rownames  <- rownames(t)
