@@ -95,7 +95,7 @@ Pandoc.brew <- function(file = stdin(), output = stdout(), convert = FALSE, open
 
             r.pander <- tryCatch(pander.return(r), error = function(e) e)
             if (inherits(r.pander, 'error'))
-                r.pander <- paste0('Internal `pander` error: `', r.pander$message, '`\n\nPlease [report the issue](https://github.com/Rapporter/pander/issues/new) with a reproducible example to help developers fix this ASAP.')
+                r.pander <- paste0('Internal `pander` error: `', r.pander$message, '` while running: `', r$src,'`\n\nPlease [report the issue](https://github.com/Rapporter/pander/issues/new) with a reproducible example to help developers fix this ASAP.')
             r$output <- r.pander
             cat(paste(r.pander, collapse = '\n'))
 
