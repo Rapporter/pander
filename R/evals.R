@@ -1029,7 +1029,7 @@ evals <- function(txt, parse = TRUE, cache = TRUE, cache.mode = c('environment',
                         save(list = changed, envir = env, file = paste0(cached, '.ENV'))
 
                     ## save plot related files
-                    if (class(result) == 'image') {
+                    if ('image' %in% class(result)) {
                         file.copy(file, paste0(cached, '.', graph.output))
                         if (graph.recordplot)
                             file.copy(sprintf('%s.recordplot', file.name), paste0(cached, '.recordedplot'))
