@@ -1046,14 +1046,16 @@ evals <- function(txt, parse = TRUE, cache = TRUE, cache.mode = c('environment',
 
             } else {
 
-                ## save cached result
-                if (as.numeric(proc.time() - timer)[3] > cache.time)
+                if (as.numeric(proc.time() - timer)[3] > cache.time) {
+
+                    ## save cached result
                     assign(cached, res, envir = cached.results)
 
-                ## save the modified R objects of the cached code
-                if (length(changed) > 0)
-                    assign(cached, mget(changed, envir = env), envir = cached.environments)
+                    ## save the modified R objects of the cached code
+                    if (length(changed) > 0)
+                        assign(cached, mget(changed, envir = env), envir = cached.environments)
 
+                }
             }
         }
 
