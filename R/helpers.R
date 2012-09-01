@@ -725,14 +725,16 @@ pandoc.table.return <- function(t, caption = storage$caption, digits = panderOpt
     }
 
     ## split too wide tables
-    if (sum(t.width + 4) > split.tables) {
+    if (sum(t.width + 4) > split.tables & length(t.width) > 1 + (length(t.rownames) != 0)) {
 
-        t.split <- which(cumsum(t.width + 4) > split.tables)[1]
-        t.col.n <- ifelse(length(dim(t)) > 1, ncol(t), length(t))
+        t.split <- max(which(cumsum(t.width + 4) > split.tables)[1] - 1, 1)
+        if (t.split == 1 & length(t.rownames) != 0)
+            t.split <- 2
 
-        ## do not make one column tables
-        if (t.split >= t.col.n)
-            t.split <- t.split - 1
+        #### do not make one column tables
+        ## t.col.n <- ifelse(length(dim(t)) > 1, ncol(t), length(t))
+        ## if (t.split >= t.col.n)
+        ##     t.split <- t.split - 1
 
         ## update caption
         if (!is.null(caption))
@@ -742,16 +744,16 @@ pandoc.table.return <- function(t, caption = storage$caption, digits = panderOpt
 
         ## split
         if (length(t.rownames) != 0) {
-            t.split <- t.split - 1
             justify <- list(justify[1:t.split], justify[c(1, (t.split + 1):length(t.width))])
+            t.split <- t.split - 1
         } else {
-            justify <- list(justify[1:(t.split - 1)], justify[c(t.split:length(t.width))])
+            justify <- list(justify[1:(t.split)], justify[c((t.split + 1):length(t.width))])
         }
 
         if (length(dim(t)) > 1)
-            res <- list(t[, 1:(t.split-1), drop = FALSE], t[, t.split:ncol(t), drop = FALSE])
+            res <- list(t[, 1:(t.split), drop = FALSE], t[, (t.split + 1):ncol(t), drop = FALSE])
         else
-            res <- list(t[1:(t.split-1), drop = FALSE], t[t.split:length(t), drop = FALSE])
+            res <- list(t[1:t.split, drop = FALSE], t[(t.split + 1):length(t), drop = FALSE])
 
         ## recursive call
         res <- paste(pandoc.table.return(res[[1]], caption = caption, digits = digits, decimal.mark = decimal.mark, round = round, justify = justify[[1]], style = style), pandoc.table.return(res[[2]], caption = NULL, digits = digits, decimal.mark = decimal.mark, round = round, justify = justify[[2]], style = style))
