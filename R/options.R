@@ -141,6 +141,8 @@ masked.plots$plot <- masked.plots$barplot <- masked.plots$lines <- masked.plots$
         else
             par(fg = bc)
     }
+    if (fn == 'pie')
+        mc$col <- cs
 
     ## call
     mc[[1]] <- fn.orig
