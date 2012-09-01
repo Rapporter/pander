@@ -47,7 +47,7 @@
 #' str(Pandoc.brew(text='# Header <%=1%>\nPi is <%=pi%> which is smaller then <%=2%>.\nfoo\nbar\n <%=3%>\n<%=mtcars[1:2,]%>'))
 #' str(Pandoc.brew(text='<%for (i in 1:5) {%>\n Pi has a lot (<%=i%>) of power: <%=pi^i%><%}%>'))
 #' }
-Pandoc.brew <- function(file = stdin(), output = stdout(), convert = FALSE, open = TRUE, graph.name, graph.dir, graph.hi.res = FALSE, text = NULL, envir = new.env()) {
+Pandoc.brew <- function(file = stdin(), output = stdout(), convert = FALSE, open = TRUE, graph.name, graph.dir, graph.hi.res = FALSE, text = NULL, envir = parent.frame()) {
 
     timer <- proc.time()
     output.stdout <- deparse(substitute(output)) == 'stdout()'

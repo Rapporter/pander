@@ -4,7 +4,8 @@
 \usage{
   Pandoc.brew(file = stdin(), output = stdout(),
     convert = FALSE, open = TRUE, graph.name, graph.dir,
-    graph.hi.res = FALSE, text = NULL, envir = new.env())
+    graph.hi.res = FALSE, text = NULL,
+    envir = parent.frame())
 }
 \arguments{
   \item{file}{file path of the brew template. As this is
