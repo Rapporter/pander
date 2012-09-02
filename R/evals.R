@@ -682,7 +682,8 @@ evals <- function(txt, parse = TRUE, cache = TRUE, cache.mode = c('environment',
         ## get image file name
         `%d` <<- `%d` + 1
         file.name <- gsub('%d', `%d`, graph.name, fixed = TRUE)
-        file.name <- gsub('%i', debug$chunkID, file.name, fixed = TRUE)
+        if (!is.null(debug$chunkID))
+            file.name <- gsub('%i', debug$chunkID, file.name, fixed = TRUE)
         file <- sprintf('%s.%s', file.name, graph.output)
         if (grepl('%t', graph.name)) {
             if (length(strsplit(sprintf('placeholder%splaceholder', file.name), '%t')[[1]]) > 2)
