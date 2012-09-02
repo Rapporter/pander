@@ -827,12 +827,16 @@ evals <- function(txt, parse = TRUE, cache = TRUE, cache.mode = c('environment',
         clear.devs()
 
         ## init (potential) img file
+        if (evalsOptions('graph.unify'))
+            pbg <- panderOptions('graph.background')
+        else
+            pbg <- 'white'
         if (graph.output %in% c('bmp', 'jpeg', 'png', 'tiff'))
-            do.call(graph.output, list(file, width = width, height = height, res = res, bg = panderOptions('graph.background'), ...))
+            do.call(graph.output, list(file, width = width, height = height, res = res, bg = pbg, ...))
         if (graph.output == 'svg')
-            do.call(graph.output, list(file, width = width/res, height = height/res, bg = panderOptions('graph.background'), ...)) # TODO: font-family?
+            do.call(graph.output, list(file, width = width/res, height = height/res, bg = pbg, ...)) # TODO: font-family?
         if (graph.output == 'pdf')
-            do.call('cairo_pdf', list(file, width = width/res, height = height/res, bg = panderOptions('graph.background'),...)) # TODO: font-family?
+            do.call('cairo_pdf', list(file, width = width/res, height = height/res, bg = pbg,...)) # TODO: font-family?
 
         ## start recordPlot
         dev.control(displaylist = "enable")
@@ -908,13 +912,13 @@ evals <- function(txt, parse = TRUE, cache = TRUE, cache.mode = c('environment',
 
                 ## initialize high resolution image file
                 if (graph.output %in% c('bmp', 'jpeg', 'png', 'tiff')) {
-                    do.call(graph.output, list(file.hi.res, width = hi.res.width, height = hi.res.height, res = hi.res.res, bg = panderOptions('graph.background'), ...))
+                    do.call(graph.output, list(file.hi.res, width = hi.res.width, height = hi.res.height, res = hi.res.res, bg = pbg, ...))
                 } else {
 
                     if (.Platform$OS.type == 'unix')    # a symlink would be fine for vector formats on a unix-like OS
                         file.symlink(file, file.hi.res)
                     else                                # we have no option to do so on Windows (to be backward compatible)
-                        do.call(graph.output, list(file.hi.res, width = hi.res.width/hi.res.res, height = hi.res.height/hi.res.res, bg = panderOptions('graph.background'), ...)) # TODO: font-family?
+                        do.call(graph.output, list(file.hi.res, width = hi.res.width/hi.res.res, height = hi.res.height/hi.res.res, bg = pbg, ...)) # TODO: font-family?
                 }
 
                 ## render high resolution image (if needed)
