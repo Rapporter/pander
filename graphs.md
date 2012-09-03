@@ -28,7 +28,7 @@ There are a bunch of options you might want to check out, these are:
 
 <!-- end of list -->
 
-Find more details on [`pander`'s homepage](http://daroczig.github.com/pander/#pander-options_link).
+Find more details on [`pander`'s homepage](http://rapporter.github.com/pander/#pander-options).
 
 # Default options
 
@@ -259,4 +259,4 @@ I have no idea how to do that besides `par(mfrow=c(foo, bar))`.
 
 
 -------
-This report was generated with [R](http://www.r-project.org/) (2.15.1) and [pander](https://github.com/daroczig/pander) (0.1) in 14.144 sec on x86_64-unknown-linux-gnu platform.
+This report was generated with [R](http://www.r-project.org/) (2.15.1) and [pander](https://github.com/rapporter/pander) (0.2) in 14.579 sec on x86_64-unknown-linux-gnu platform.

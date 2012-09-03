@@ -53,42 +53,39 @@
 <p><code>Pander.brew</code> would transform any returned R object to Pandoc's markdown in each code block.</p>
 <p>For example <code>mtcars</code>'s first 5 cases look like:</p>
 <table>
-<col width="30%" />
+<caption>Table continues below</caption>
+<col width="33%" />
 <col width="8%" />
 <col width="8%" />
 <col width="9%" />
 <col width="6%" />
-<col width="9%" />
-<col width="9%" />
+<col width="8%" />
 <thead>
 <tr class="header">
-<th align="left"></th>
+<th align="left"> </th>
 <th align="left">mpg</th>
 <th align="left">cyl</th>
 <th align="left">disp</th>
 <th align="left">hp</th>
 <th align="left">drat</th>
-<th align="left">wt</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
 <td align="left"><strong>Mazda RX4</strong></td>
-<td align="left">21.0</td>
+<td align="left">21</td>
 <td align="left">6</td>
 <td align="left">160</td>
 <td align="left">110</td>
 <td align="left">3.90</td>
-<td align="left">2.620</td>
 </tr>
 <tr class="even">
 <td align="left"><strong>Mazda RX4 Wag</strong></td>
-<td align="left">21.0</td>
+<td align="left">21</td>
 <td align="left">6</td>
 <td align="left">160</td>
 <td align="left">110</td>
 <td align="left">3.90</td>
-<td align="left">2.875</td>
 </tr>
 <tr class="odd">
 <td align="left"><strong>Datsun 710</strong></td>
@@ -97,7 +94,6 @@
 <td align="left">108</td>
 <td align="left">93</td>
 <td align="left">3.85</td>
-<td align="left">2.320</td>
 </tr>
 <tr class="even">
 <td align="left"><strong>Hornet 4 Drive</strong></td>
@@ -106,7 +102,6 @@
 <td align="left">258</td>
 <td align="left">110</td>
 <td align="left">3.08</td>
-<td align="left">3.215</td>
 </tr>
 <tr class="odd">
 <td align="left"><strong>Hornet Sportabout</strong></td>
@@ -115,77 +110,109 @@
 <td align="left">360</td>
 <td align="left">175</td>
 <td align="left">3.15</td>
-<td align="left">3.440</td>
 </tr>
 </tbody>
 </table>
 <table>
-<col width="30%" />
+<caption>Table continues below</caption>
+<col width="33%" />
+<col width="8%" />
 <col width="9%" />
 <col width="6%" />
 <col width="6%" />
-<col width="9%" />
-<col width="9%" />
+<col width="8%" />
 <thead>
 <tr class="header">
-<th align="left"></th>
+<th align="left"> </th>
+<th align="left">wt</th>
 <th align="left">qsec</th>
 <th align="left">vs</th>
 <th align="left">am</th>
 <th align="left">gear</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left"><strong>Mazda RX4</strong></td>
+<td align="left">2.620</td>
+<td align="left">16.46</td>
+<td align="left">0</td>
+<td align="left">1</td>
+<td align="left">4</td>
+</tr>
+<tr class="even">
+<td align="left"><strong>Mazda RX4 Wag</strong></td>
+<td align="left">2.875</td>
+<td align="left">17.02</td>
+<td align="left">0</td>
+<td align="left">1</td>
+<td align="left">4</td>
+</tr>
+<tr class="odd">
+<td align="left"><strong>Datsun 710</strong></td>
+<td align="left">2.320</td>
+<td align="left">18.61</td>
+<td align="left">1</td>
+<td align="left">1</td>
+<td align="left">4</td>
+</tr>
+<tr class="even">
+<td align="left"><strong>Hornet 4 Drive</strong></td>
+<td align="left">3.215</td>
+<td align="left">19.44</td>
+<td align="left">1</td>
+<td align="left">0</td>
+<td align="left">3</td>
+</tr>
+<tr class="odd">
+<td align="left"><strong>Hornet Sportabout</strong></td>
+<td align="left">3.440</td>
+<td align="left">17.02</td>
+<td align="left">0</td>
+<td align="left">0</td>
+<td align="left">3</td>
+</tr>
+</tbody>
+</table>
+<table>
+<col width="33%" />
+<col width="8%" />
+<thead>
+<tr class="header">
+<th align="left"> </th>
 <th align="left">carb</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
 <td align="left"><strong>Mazda RX4</strong></td>
-<td align="left">16.46</td>
-<td align="left">0</td>
-<td align="left">1</td>
-<td align="left">4</td>
 <td align="left">4</td>
 </tr>
 <tr class="even">
 <td align="left"><strong>Mazda RX4 Wag</strong></td>
-<td align="left">17.02</td>
-<td align="left">0</td>
-<td align="left">1</td>
-<td align="left">4</td>
 <td align="left">4</td>
 </tr>
 <tr class="odd">
 <td align="left"><strong>Datsun 710</strong></td>
-<td align="left">18.61</td>
-<td align="left">1</td>
-<td align="left">1</td>
-<td align="left">4</td>
 <td align="left">1</td>
 </tr>
 <tr class="even">
 <td align="left"><strong>Hornet 4 Drive</strong></td>
-<td align="left">19.44</td>
-<td align="left">1</td>
-<td align="left">0</td>
-<td align="left">3</td>
 <td align="left">1</td>
 </tr>
 <tr class="odd">
 <td align="left"><strong>Hornet Sportabout</strong></td>
-<td align="left">17.02</td>
-<td align="left">0</td>
-<td align="left">0</td>
-<td align="left">3</td>
 <td align="left">2</td>
 </tr>
 </tbody>
 </table>
-<p>As you can see some formatting was added to the returned table and was also split up as the original table would have been too wide to fit on the screen (any <code>pander</code>er still using a VT100 terminal?) or standard paper. If you do not like that split up, just set the according <a href="http://daroczig.github.com/pander/#pander-options_link"><code>panderOption</code></a>!</p>
+<p>As you can see some formatting was added to the returned table and was also split up as the original table would have been too wide to fit on the screen (any <code>pander</code>er still using a VT100 terminal?) or standard paper. If you do not like that split up, just set the according <a href="http://rapporter.github.com/pander/#pander-options"><code>panderOption</code></a>!</p>
 <p>We could try other R objects too, for example let us check <code>chisq.test</code> on some variables of <code>mtcars</code>:</p>
 <table>
 <caption>Pearson's Chi-squared test: <code>mtcars$am</code> and <code>mtcars$gear</code></caption>
 <col width="23%" />
 <col width="6%" />
-<col width="12%" />
+<col width="23%" />
 <thead>
 <tr class="header">
 <th align="center">Test statistic</th>
@@ -197,7 +224,7 @@
 <tr class="odd">
 <td align="center">20.94</td>
 <td align="center">2</td>
-<td align="center">2.831e-05</td>
+<td align="center"><em>2.831e-05</em> * * *</td>
 </tr>
 </tbody>
 </table>
@@ -217,14 +244,14 @@
 <p>Just like with tables:</p>
 <table>
 <caption>Here goes the first two lines of USArrests</caption>
-<col width="16%" />
+<col width="19%" />
 <col width="12%" />
 <col width="13%" />
 <col width="15%" />
 <col width="8%" />
 <thead>
 <tr class="header">
-<th align="left"></th>
+<th align="left"> </th>
 <th align="left">Murder</th>
 <th align="left">Assault</th>
 <th align="left">UrbanPop</th>
@@ -241,7 +268,7 @@
 </tr>
 <tr class="even">
 <td align="left"><strong>Alaska</strong></td>
-<td align="left">10.0</td>
+<td align="left">10</td>
 <td align="left">263</td>
 <td align="left">48</td>
 <td align="left">44.5</td>
@@ -268,7 +295,7 @@
 <h1 id="it-happens">It happens</h1>
 <p><strong>ERROR</strong><sup><a href="#fn2" class="footnoteRef" id="fnref2">2</a></sup></p>
 <hr />
-<p>This report was generated with <a href="http://www.r-project.org/">R</a> (2.15.1) and <a href="https://github.com/daroczig/pander">pander</a> (0.1) in 1.341 sec on x86_64-unknown-linux-gnu platform.</p>
+<p>This report was generated with <a href="http://www.r-project.org/">R</a> (2.15.1) and <a href="https://github.com/rapporter/pander">pander</a> (0.2) in 1.471 sec on x86_64-unknown-linux-gnu platform.</p>
 <div class="footnotes">
 <hr />
 <ol>
@@ -277,7 +304,7 @@
 </ol>
 </div>
 <p align="center">
-  Design: <a href="http://rapport-package.info/"><i>rapport</i> Development Team</a> &copy; 2012 | Backend: <a href="https://github.com/daroczig/pander">pander</a> | License: <a href="http://www.gnu.org/licenses/agpl.html" target="_blank">AGPL3</a> | Styled with <a href="http://www.getskeleton.com/" target="_blank">skeleton</a>
+  Design: <a href="http://rapport-package.info/"><i>rapport</i> Development Team</a> &copy; 2012 | Backend: <a href="https://github.com/rapporter/pander">pander</a> | License: <a href="http://www.gnu.org/licenses/agpl.html" target="_blank">AGPL3</a> | Styled with <a href="http://www.getskeleton.com/" target="_blank">skeleton</a>
 </p>
 </body>
 </html>

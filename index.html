@@ -222,7 +222,7 @@ id   value
      occaecat cupidatat non       
      proident, sunt in culpa qui  
      officia deserunt mollit anim 
-     id est laborum.              
+     id est laborum               
 ----------------------------------
 </code></pre>
 <h1 id="generic-pander-method">Generic pander method</h1>
@@ -309,18 +309,18 @@ id   value
 ---------------------------------------------------
  Test statistic   P value   Alternative hypothesis 
 ---------------- --------- ------------------------
-      0.1         0.9667          two-sided        
+      0.24       _0.1124_         two-sided        
 ---------------------------------------------------
 
 Table: Two-sample Kolmogorov-Smirnov test: `runif(50)` and `runif(50)`
 
 &gt; pander(chisq.test(table(mtcars$am, mtcars$gear)))
 
--------------------------------
- Test statistic   df   P value 
----------------- ---- ---------
-     20.94        2   2.831e-05
--------------------------------
+---------------------------------------
+ Test statistic   df       P value     
+---------------- ---- -----------------
+     20.94        2   _2.831e-05_ * * *
+---------------------------------------
 
 Table: Pearson&#39;s Chi-squared test: `table(mtcars$am, mtcars$gear)`
 
@@ -331,7 +331,7 @@ Table: Pearson&#39;s Chi-squared test: `table(mtcars$am, mtcars$gear)`
 ---------------------------------------------------------
  Test statistic   df    P value   Alternative hypothesis 
 ---------------- ----- --------- ------------------------
-     -1.861      17.78  0.07939         two.sided        
+     -1.861      17.78 _0.07939_        two.sided        
 ---------------------------------------------------------
 
 Table: Welch Two Sample t-test: `extra` by `group`
@@ -364,7 +364,7 @@ Table: Fitting generalized (poisson/log) linear model: counts ~ outcome + treatm
 --------------------------------------------------------
          &amp;nbsp;  Df   Deviance   Resid. Df   Resid. Dev 
 --------------- ---- ---------- ----------- ------------
-       **NULL**  NA      NA          8         10.581   
+       **NULL**                      8         10.581   
 
     **outcome**  2   5.452e+00       6         5.129    
 
@@ -380,9 +380,9 @@ Table: Analysis of Deviance Table
 --------------- ---- --------- --------- --------- --------
     **outcome**  2   9.267e+01 4.633e+01 2.224e+00  0.2242 
 
-  **treatment**  2   8.382e-31 4.191e-31 2.012e-32  1.0000 
+  **treatment**  2   8.382e-31 4.191e-31 2.012e-32    1    
 
-  **Residuals**  4   8.333e+01 2.083e+01    NA        NA   
+  **Residuals**  4   8.333e+01 2.083e+01                   
 -----------------------------------------------------------
 
 Table: Analysis of Variance Model
@@ -410,7 +410,7 @@ Table: Principal Components Analysis
 
 **Proportion of Variance**   0.96553  0.02782  0.00580 0.00085
 
-**Cumulative Proportion**    0.96553  0.99335  0.99915 1.00000
+**Cumulative Proportion**    0.96553  0.99335  0.99915 1      
 --------------------------------------------------------------
 
 &gt; pander(density(mtcars$hp))
@@ -440,15 +440,15 @@ Table: Kernel density of *mtcars$hp* (bandwidth: 28.04104)
 --------------------------------------------
        &amp;nbsp;  Coordinates   Density values 
 ------------- ------------- ----------------
-     **Min.**    -32.12           0.00      
+     **Min.**    -32.12            0        
 
-  **1st Qu.**     80.69           0.00      
+  **1st Qu.**     80.69            0        
 
-   **Median**    193.50           0.00      
+   **Median**    193.50            0        
 
-     **Mean**    193.50           0.00      
+     **Mean**    193.50            0        
 
-  **3rd Qu.**    306.30           0.00      
+  **3rd Qu.**    306.30            0        
 
      **Max.**    419.10           0.01      
 --------------------------------------------
@@ -480,7 +480,7 @@ id   value
      occaecat cupidatat non       
      proident, sunt in culpa qui  
      officia deserunt mollit anim 
-     id est laborum.              
+     id est laborum               
 ----------------------------------
 
 Table: Foo Bar
@@ -623,7 +623,7 @@ myReport$<span class="kw">export</span>(<span class="dt">open =</span> <span cla
 <li><code>graph.background</code>: string (default: <code>'white'</code>) specifying the plots main background's color</li>
 <li><code>graph.panel.background</code>: string (default: <code>'transparent'</code>) specifying the plot's main panel background. Please <em>note</em>, that this option is not supported with <code>base</code> graphics.</li>
 <li><code>graph.colors</code>: character vector of default color palette (defaults to a <a href="http://jfly.iam.u-tokyo.ac.jp/color/">colorblind theme</a>). Please <em>note</em> that this update work with <code>base</code> plots by appending the <code>col</code> argument to the call if not set.</li>
-<li><code>graph.color.rnd</code>: boolean (dafault: <code>FALSE</code>) specifying if the palette should be reordered randomly before rendering each plot to get colorful images</li>
+<li><code>graph.color.rnd</code>: boolean (default: <code>FALSE</code>) specifying if the palette should be reordered randomly before rendering each plot to get colorful images</li>
 <li><p><code>graph.axis.angle</code>: numeric (default: <code>1</code>) specifying the angle of axes' labels. The available options are based on <code>par(les)</code> and sets if the labels should be:</p>
 <ul>
 <li><code>1</code>: parallel to the axis,</li>
@@ -647,7 +647,7 @@ myReport$<span class="kw">export</span>(<span class="dt">open =</span> <span cla
 <li><code>length</code>: any R object exceeding the specified length will not be returned. The default value (<code>Inf</code>) does not filter out any R objects.</li>
 <li><code>output</code>: a character vector of required returned values. This might be useful if you are only interested in the <code>result</code>, and do not want to save/see e.g. <code>messages</code> or <code>print</code>ed <code>output</code>. See examples of <a href="#evals"><code>evals</code></a>.</li>
 <li><code>graph.unify</code>: should <code>evals</code> try to unify the style of (<code>base</code>, <code>lattice</code> and <code>ggplot2</code>) plots? If set to <code>TRUE</code>, some <code>panderOptions()</code> would apply. By default this is disabled not to freak out useRs :)</li>
-<li><code>graph.name</code>: set the file name of saved plots which is <code>%s</code> by default. A simple character string might be provided where <code>%d</code> would be replaced by the index of the generating <code>txt</code> source, <code>%n</code> with an incremented integer in <code>graph.dir</code> with similar file names and <code>%t</code> by some unique random characters. A function's name to be <code>eval</code>uated can be passed here too.</li>
+<li><code>graph.name</code>: set the file name of saved plots which is <code>%s</code> by default. A simple character string might be provided where <code>%d</code> would be replaced by the index of the generating <code>txt</code> source, <code>%n</code> with an incremented integer in <code>graph.dir</code> with similar file names and <code>%t</code> by some unique random characters. When used in a <code>brew</code> file, <code>%i</code> is also available which would be replaced by the chunk number.</li>
 <li><code>graph.dir</code>: path to a directory where to place generated images. If the directory does not exist, <a href="#evals"><code>evals</code></a> try to create that. Default set to <code>plots</code> in current working directory.</li>
 <li><code>graph.output</code>: set the required file format of saved plots. Currently it could be any of <code>grDevices</code>: <code>png</code>, <code>bmp</code>, <code>jpeg</code>, <code>jpg</code>, <code>tiff</code>, <code>svg</code> or <code>pdf</code>.</li>
 <li><code>width</code>: width of generated plot in pixels for even vector formats</li>
@@ -711,10 +711,11 @@ B &lt;- <span class="fl">1e5</span></code></pre>
 <li><code>pander-show-source</code>: If non-nil then the source of R commands would also show up in generated documents while running 'pander-eval'. This would not affect <code>brew</code> functions ATM.</li>
 </ul>
 <p>To use this small lib, just type: <code>M-x pander-mode</code> on any document. It might be useful to add a hook to <code>markdown-mode</code> if you find this useful.</p>
+<a href="http://githalytics.com/Rapporter/pander"><img style="border:none;" src="https://cruel-carlota.pagodabox.com/9dfac0c1da37bd83d1848289630631fd"/></a>
 <hr />
-<p>This report was generated with <a href="http://www.r-project.org/">R</a> (2.15.1) and <a href="https://github.com/daroczig/pander">pander</a> (0.1) in 0.792 sec on x86_64-unknown-linux-gnu platform.</p>
+<p>This report was generated with <a href="http://www.r-project.org/">R</a> (2.15.1) and <a href="https://github.com/rapporter/pander">pander</a> (0.2) in 0.974 sec on x86_64-unknown-linux-gnu platform.</p>
 <p align="center">
-  Design: <a href="http://rapport-package.info/"><i>rapport</i> Development Team</a> &copy; 2012 | Backend: <a href="https://github.com/daroczig/pander">pander</a> | License: <a href="http://www.gnu.org/licenses/agpl.html" target="_blank">AGPL3</a> | Styled with <a href="http://www.getskeleton.com/" target="_blank">skeleton</a>
+  Design: <a href="http://rapport-package.info/"><i>rapport</i> Development Team</a> &copy; 2012 | Backend: <a href="https://github.com/rapporter/pander">pander</a> | License: <a href="http://www.gnu.org/licenses/agpl.html" target="_blank">AGPL3</a> | Styled with <a href="http://www.getskeleton.com/" target="_blank">skeleton</a>
 </p>
 </body>
 </html>
