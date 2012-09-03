@@ -127,7 +127,7 @@ plotPredictions <- function(df, models) {
     plot(Y, R, ylim = c(min(allvalues), max(allvalues)), xlim = c(min(Y), 2012), xaxt = "n", yaxt= "n", xlab = "", ylab = "", cex.lab = 2, cex.main = 2, cex.axis = 2, cex = 2, pch = 16, bg = "transparent", family = ff, font = 4)
 
     ## title
-    mtext(paste0("Our predictions for the ", df$Event[1]), line = 1, side = 3, family = ff, cex=2.5, font=4, col ='black')
+    mtext(paste0("Our predictions for the ", df$Event[1]), line = 1, side = 3, family = ff, cex=2, font=4, col ='black')
 
     ## get y axis's ticks
     ylime <- trunc(c(min(R), max(R)))
@@ -156,13 +156,14 @@ plotPredictions <- function(df, models) {
         lines(Y2012, get(paste0(m, '.predict')), col = gc[which(m == models)])
         lines(Y2012, get(paste0(m, '.predict')), lwd = get(paste0(m, '.width')), col = paste0(gc[which(m == models)], '44'))
         points(2012, tail(get(paste0(m, '.predict')), 1), pch = 19, col = gc[which(m == models)], cex = 3.5)
-        yy <- 2012 - round((2012-min(Y)) / 25) * (2 - which(m == models))
-        xx <- tail(get(paste0(m, '.predict')), 1) + (yperiod/7 * (which(m == models) - 1))
-        text(yy, xx, ms(tail(get(paste0(m, '.predict')), 1), resultInTime), col = gc[which(m == models)], cex = 2)
+        yy  <- tail(get(paste0(m, '.predict')), 1)
+        ys  <- ms(yy, resultInTime)
+        xx  <- 2012 - strwidth(ys, cex = 1.5)
+        text(xx, yy, ys, col = gc[which(m == models)], cex = 1.5)
     }
 
     ## add a custom legend
-    l.pos <- ifelse(xx < mean(R), 'topright', 'bottomright')
+    l.pos <- ifelse(yy < mean(R), 'topright', 'bottomright')
     mnames <- unlist(mget(paste0(models, '.name'), envir = parent.frame()), use.names = FALSE)
     legend(l.pos, mnames, lty = rep(1, times = length(models)), pch = rep(19, times = length(models)), col = rep(gc[1:length(models)], times = 2), adj = c(0, .6), cex = 2, text.col = 'black', text.width = strwidth(paste(mnames, collapse = ' ')) * 1.1)
 }
