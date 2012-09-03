@@ -1,0 +1,399 @@
+% Rapporter Development Team
+% Predictions about Olympics
+% 2012
+
+<%=
+## ---------------------------------------------------------------
+##
+## INTRODUCTION
+## ============
+##
+## This brew file is a POC demo of integrating `pander` in web
+## applications. Online demo available at:
+##
+##     http://demo.rapporter.net
+##
+## MANUAL USAGE
+## ============
+##
+## Set `u` and `weight` parameter before running this `brew` file!
+##
+## Example
+## -------
+##
+##    u      <- "ATH-220"
+##    weight <- TRUE
+##
+## ---------------------------------------------------------------
+
+## loading required packages
+suppressPackageStartupMessages(library(XML))
+suppressWarnings(suppressPackageStartupMessages(library(ggplot2)))
+suppressPackageStartupMessages(library(gvlma))
+
+## set options
+eO <- evalsOptions()
+pO <- panderOptions()
+evalsOptions('width', 800)
+evalsOptions('height', 600)
+evalsOptions('graph.unify', TRUE)
+panderOptions('table.split.table', Inf)
+panderOptions('graph.symbol', 19)
+panderOptions('graph.legend.position', 'top')
+if (grepl("w|W", .Platform$OS.type))
+    windowsFonts("Trebuchet MS" = windowsFont("Trebuchet MS"))
+panderOptions('graph.fontfamily', "Trebuchet MS")
+panderOptions('graph.background', 'transparent')
+
+#' Pretty time printing
+#' @param sec integer
+#' @param transform if set to FALSE the input will be returned without any tweaks
+#' @return character in \code{hours:minutes:seconds} format
+ms <- function(sec, transform = TRUE) {
+    sapply(sec, function(sec) {
+        if (transform) {
+            if (sec < 60) {
+                msec <- sec %% 1
+                if (msec == 0)
+                    msec <- ''
+                else
+                    msec <- paste0('.', round(msec, 2) * 100)
+            } else
+                msec <- ''
+            sec <- round(sec)
+            minute <- sec %/% 60
+            if (minute > 59) {
+                sec    <- sprintf("%02d", sec - minute * 60)
+                hours  <- minute %/% 60
+                minute <- sprintf("%02d", minute - hours * 60)
+                paste0(paste(hours, minute, sec, sep=":"), msec)
+            } else {
+                sec <- sprintf("%02d", sec - minute * 60)
+                paste0(paste(minute, sec, sep=":"), msec)
+            }
+        } else
+            round(sec, 2)
+    })
+}
+
+#' Revert pretty time printing
+#' @param text character in \code{hours:minutes:seconds} format
+#' @param transform if set to FALSE the input will be returned without any tweaks
+#' @return numeric
+rms <- function(text, transform = TRUE) {
+    sapply(text, function(x) {
+        if (transform) {
+            x <- as.numeric(strsplit(x, ':')[[1]])
+            if (length(x) == 1)
+                return(x)
+            if (length(x) == 2)
+                return(x[1] * 60 + x[2])
+            if (length(x) == 3)
+                return(x[1] * 60^2 + x[2] * 60 + x[3])
+        } else
+            round(as.numeric(x), 2)
+    }, USE.NAMES = FALSE)
+}
+
+#' Plot predictions
+#' @param df a data frame with Year, Result columns
+#' @param models predefined models' names to plot
+plotPredictions <- function(df, models) {
+
+    ## custom options
+    panderOptions('graph.fontfamily', "Trebuchet MS")
+
+    ## custom variables - satisfying our DRY needs
+    Y         <- df[, 'Year']
+    Y2012     <- c(Y, 2012)
+    R         <- df[, 'Result']
+    allvalues <- unlist(c(R, mget(paste0(models, '.predict'), envir = parent.frame())))
+    ff        <- panderOptions('graph.fontfamily')
+    fc        <- panderOptions('graph.fontcolor')
+    gc        <- panderOptions('graph.colors')
+    gt        <- panderOptions('graph.grid.lty')
+    gcc       <- panderOptions('graph.grid.color')
+    mn        <- mget(paste0(models, '.name'), envir = parent.frame())
+
+    ## custom par settings
+    par(
+      family   = ff,
+      lwd      = 2,
+      pch      = panderOptions('graph.symbol'),
+      col.axis = fc, col.lab = fc, col.main = fc, col.sub = fc,
+      mar = c(3,4,3,3), family = ff, font = 4)
+
+    ## results
+    plot(Y, R, ylim = c(min(allvalues), max(allvalues)), xlim = c(min(Y), 2012), xaxt = "n", yaxt= "n", xlab = "", ylab = "", cex.lab = 2, cex.main = 2, cex.axis = 2, cex = 2, pch = 16, bg = "transparent", family = ff, font = 4)
+
+    ## title
+    mtext(paste0("Our predictions for the ", df$Event[1]), line = 1, side = 3, family = ff, cex=2.5, font=4, col ='black')
+
+    ## get y axis's ticks
+    ylime <- trunc(c(min(R), max(R)))
+    yperiod <- trunc(diff(ylime)/5)
+    if (diff(ylime) < 5) {
+        ylime   <- round(c(max(R), min(R)), 2)
+        yperiod <- round(diff(ylime) / 5, 2)
+    }
+    ylime   <- c(ylime[1], ylime[1] + 1:5 * yperiod)
+
+    ## draw x axis
+    axis(1, at = Y2012, Y2012, cex = 2, family = ff, font=4)
+    for (y in Y2012)
+        abline(v = y, lty = gt, col = gcc, lwd = 0.5)
+
+    ## draw y axis
+    par(las = 1, family = ff)
+    axis(2, at = ylime, ms(ylime, resultInTime), cex = 2, family = ff, font=4)
+    for (y in ylime)
+        abline(h = y, lty = gt, col = gcc, lwd = 0.5)
+
+    points(Y, R)
+
+    ## plotting models' lines & text
+    for (m in models) {
+        lines(Y2012, get(paste0(m, '.predict')), col = gc[which(m == models)])
+        lines(Y2012, get(paste0(m, '.predict')), lwd = get(paste0(m, '.width')), col = paste0(gc[which(m == models)], '44'))
+        points(2012, tail(get(paste0(m, '.predict')), 1), pch = 19, col = gc[which(m == models)], cex = 3.5)
+        yy <- 2012 - round((2012-min(Y)) / 25) * (2 - which(m == models))
+        xx <- tail(get(paste0(m, '.predict')), 1) + (yperiod/7 * (which(m == models) - 1))
+        text(yy, xx, ms(tail(get(paste0(m, '.predict')), 1), resultInTime), col = gc[which(m == models)], cex = 2)
+    }
+
+    ## add a custom legend
+    l.pos <- ifelse(xx < mean(R), 'topright', 'bottomright')
+    mnames <- unlist(mget(paste0(models, '.name'), envir = parent.frame()), use.names = FALSE)
+    legend(l.pos, mnames, lty = rep(1, times = length(models)), pch = rep(19, times = length(models)), col = rep(gc[1:length(models)], times = 2), adj = c(0, .6), cex = 2, text.col = 'black', text.width = strwidth(paste(mnames, collapse = ' ')) * 1.1)
+}
+%>
+
+<%=
+    ## datafile store
+    dir.create(file.path(getwd(), 'reports', 'data'), recursive = TRUE, showWarnings = FALSE)
+    datafile <- file.path(getwd(), 'reports', 'data', u)
+
+    ## url should be set before calling this `brew` file in a format like: `SWI-240`
+    uri <- strsplit(u, '-', fixed = TRUE)[[1]]
+    url <- paste0('http://www.databaseolympics.com/sport/sportevent.htm?sp=', uri[1], '&enum=', uri[2])
+
+    ## fetching data from \url{databaseolympics.com} if not cached
+    if (!file.exists(datafile)) {
+        d <- readHTMLTable(readLines(url, warn = FALSE), which = 2, header = TRUE)
+        saveRDS(d, file = datafile)
+    } else {
+        d <- readRDS(datafile)
+    }
+%>
+
+<%=
+    ## defining events which seem to be invalid
+    dEvents         <- tail(as.character(d$Event[d$Event != '']), 1)
+    dEvents.invalid <- which(d$Event != dEvents)
+%>
+
+<%
+if (exists('d')) {
+%>
+
+## Welcome!
+
+You have selected **<%=dEvents %>** in this demo without any additional parameters, so we try to guess what are you up to. Let us fit some statistical models on previous results in **<%=dEvents %>** and try to predict the results in 2012 *if we assume* that the performance of the winners, so the forthcoming results also fit the historical data.
+
+### Historical data
+
+We have fetched some data from [databaseolympics.com](<%=url%>):
+
+<%=d%>
+
+<%=
+    ## removing events which seem to be invalid
+    if (length(dEvents.invalid) > 0)
+        d <- d[-dEvents.invalid, ]
+
+    ## just dealing with the winners ATM
+    golddata <- subset(d, Medal %in% "GOLD")
+
+    ## removing duplicated rows (we just need the Results)
+    if (any(table(golddata['Year']) > 1))
+        golddata <- golddata[-which(duplicated(golddata['Year'])), ]
+
+    ## are we dealing with time results?
+    resultInTime <- any(grepl(':', golddata$Result))
+
+    ## transforming data
+    d$Event            <- as.character(d$Event)
+    golddata$Year      <- as.numeric(as.character(golddata$Year))
+    years              <- c(as.numeric(as.character(sort(unique(golddata$Year)))), 2012)
+    golddata$Result    <- rms(as.character(golddata$Result), resultInTime)
+    rownames(golddata) <- NULL
+%>
+
+And applied some filters and data transformation on the above database to let us create a data set ready for the below analysis:
+
+<%=
+if (weight)
+    golddata$weight <- (golddata$Year - min(golddata$Year) + 4) / sum(golddata$Year - min(golddata$Year) + 4) * length(golddata$Year)
+golddata
+%>
+
+<%
+if (nrow(golddata) > 5) {
+%>
+
+We do not even need all columns of this table, we will deal only with *Year* and the *Result* below which is eligible to build some simple statistical models to predict the expected results in 2012.
+
+Please note that the below estimates are not based on any causal model, nor we claim it could be accomplished. We just demonstrate: these numbers can be expected leaning solely on prior Olympic records.
+
+<%=
+    ## fitting a non-linear model
+    if (weight) {
+        nonLin     <- suppressWarnings(lm(Result ~ poly(Year, 4), weights = weight, data = golddata))
+    } else {
+        nonLin     <- suppressWarnings(lm(Result ~ poly(Year, 4), data = golddata))
+    }
+    nonLin.name    <- 'power prediction'
+    nonLin.predict <- suppressWarnings(predict(nonLin, newdata = data.frame(Year = years)))
+    nonLin.width   <- (100 - ((1 - mean(summary(nonLin)$coefficients[, "Pr(>|t|)"]))^2 * 100)) + (1 - summary(nonLin)$adj.r.squared) * 100
+    golddata2012   <- rbind(golddata, c(2012, rep(NA, times = ncol(golddata)-1)))
+    golddata2012$nonLin <- nonLin.predict
+    names(nonLin$coefficients )[1:5] <- c('Intercept', 'Year', 'Year^2', 'Year^3', 'Year^4')
+
+    ## fitting a log-linear model
+    if (weight) {
+        logLin      <- lm(log(Result) ~ Year, weights = weight, data = golddata)
+    } else {
+        logLin      <- lm(log(Result) ~ Year, data = golddata)
+    }
+    logLin.name     <- 'simple prediction'
+    logLin.predict  <- exp(predict(logLin, newdata = data.frame(Year = years)))
+    logLin.width    <- (100 - ((1 - mean(summary(logLin)$coefficients[, "Pr(>|t|)"]))^2 * 100)) + (1 - summary(logLin)$adj.r.squared) * 100
+    golddata2012$logLin <- logLin.predict
+%>
+
+### Visualized models and predictions
+
+We have built two different models: a log-linear (*simple*) and a non-linear (*power*) one. Weights were <%=ifelse(weight, '', 'not')%> applied.
+
+Both models on a complex plot build with `base` R (actually with `graphics` functions):
+
+<%=
+    ## saving options as tweaking some internals
+    evalsOptions('graph.unify', FALSE)
+%><%=
+    ## plotting
+    models <- c('nonLin', 'logLin')
+    plotPredictions(golddata, models)
+%><%=
+    ## reset graph unify option
+    evalsOptions('graph.unify', TRUE)
+%>
+
+Another quick plot themed by our [back-end](http://daroczig.github.com/pander/) building on `ggplot2`:
+
+<%=
+g <- ggplot(golddata2012) + geom_point(aes(x=Year, y=Result)) + geom_smooth(aes(x=Year, y=nonLin), alpha=0.2) + geom_smooth(aes(x=Year, y=logLin, col = "#56B4E9"), alpha=0.2, col = "#009E73") + opts(title = d$Event[1]) + ylab("") + xlab("") + theme_bw() + opts(legend.position = "none")
+if (resultInTime)
+    g <- g + scale_y_continuous(labels = ms)
+g
+%>
+
+## The models in more details
+
+### Non-linear model
+
+Fitting a non-linear model on the winning times cannot be easier from a client's point of view with Rapporter:
+
+<%=
+    ## printing
+    nonLin
+%>
+
+#### Validations of the Model Assumptions
+
+And checking the assumptions of the fitted model could be also useful: <%=
+a <- summary(gvlma(nonLin))
+ifelse(any(a$Decision == 'Assumptions NOT satisfied!'), 'it seems that some assumptions of the model was *not* satisfied!', 'all the assumptions of the model were satisfied!')
+%>
+
+In details:
+
+<%=
+pandoc.table.return(a, split.tables = Inf)
+%>
+
+#### Diagnostic plots
+
+Professional users might find the diagnostic plots of R helpful too. Here you can find a default plot with Rapporter's automatically applied theme:
+
+<%=
+par(mfrow = c(2, 2))
++plot(nonLin)
+%>
+
+But back to the model: the adjusted R-squared equals to <%=summary(nonLin)$adj.r.squared%> with a p-value of <%=round(anova(nonLin)$'Pr(>F)'[1], 5)%>.
+
+<%=anova(nonLin)%>
+
+### Log-linear model
+
+And our log-linear model looks like:
+
+<%=
+    ## printing
+    logLin
+%>
+
+#### Validations of the Model Assumptions
+
+Where <%=
+a <- summary(gvlma(logLin))
+ifelse(any(a$Decision == 'Assumptions NOT satisfied!'), 'some assumptions were *not* satisfied:', 'the assumptions were satisfied:')
+%>
+
+<%=
+pandoc.table.return(a, split.tables = Inf)
+%>
+
+#### Diagnostic plots
+
+And the diagnostic plots again:
+
+<%=
+par(mfrow = c(2, 2))
++plot(logLin)
+%>
+
+Where the adjusted R-squared equals to <%=summary(logLin)$adj.r.squared%> with a p-value of <%=round(anova(logLin)$'Pr(>F)'[1], 5)%>.
+
+<%=anova(logLin)%>
+
+#### We really hope that you like this short demo, please do not forget to [sign up for our forthcoming next-generation web application](http://rapporter.net) to create your own report!
+
+## Bye!
+
+<% } else { %>
+
+We are really sorry, but we cannot build a model from only *<%=nrow(golddata)%>* result<%=ifelse(nrow(golddata) > 1, 's', '')%> at the Olympics.
+
+**Please try another sport event!**
+
+<% } %>
+
+<% } else { %>
+
+### ERROR
+
+`Database not found.`
+
+Please try again later and report this issue at feedback@rapporter.net.
+
+<% } %>
+
+<%=
+    ## resetting options
+    for (o in names(eO))
+        evalsOptions(o, eO[[o]])
+    for (o in names(pO))
+        panderOptions(o, pO[[o]])
+%>

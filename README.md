@@ -210,7 +210,7 @@ id   value
      occaecat cupidatat non       
      proident, sunt in culpa qui  
      officia deserunt mollit anim 
-     id est laborum.              
+     id est laborum               
 ----------------------------------
 
 ```
@@ -312,18 +312,18 @@ The output of different **statistical methods** are tried to be prettyfied. Some
 ---------------------------------------------------
  Test statistic   P value   Alternative hypothesis 
 ---------------- --------- ------------------------
-      0.14        0.7166          two-sided        
+      0.24       _0.1124_         two-sided        
 ---------------------------------------------------
 
 Table: Two-sample Kolmogorov-Smirnov test: `runif(50)` and `runif(50)`
 
 > pander(chisq.test(table(mtcars$am, mtcars$gear)))
 
--------------------------------
- Test statistic   df   P value 
----------------- ---- ---------
-     20.94        2   2.831e-05
--------------------------------
+---------------------------------------
+ Test statistic   df       P value     
+---------------- ---- -----------------
+     20.94        2   _2.831e-05_ * * *
+---------------------------------------
 
 Table: Pearson's Chi-squared test: `table(mtcars$am, mtcars$gear)`
 
@@ -334,7 +334,7 @@ Table: Pearson's Chi-squared test: `table(mtcars$am, mtcars$gear)`
 ---------------------------------------------------------
  Test statistic   df    P value   Alternative hypothesis 
 ---------------- ----- --------- ------------------------
-     -1.861      17.78  0.07939         two.sided        
+     -1.861      17.78 _0.07939_        two.sided        
 ---------------------------------------------------------
 
 Table: Welch Two Sample t-test: `extra` by `group`
@@ -367,7 +367,7 @@ Table: Fitting generalized (poisson/log) linear model: counts ~ outcome + treatm
 --------------------------------------------------------
          &nbsp;  Df   Deviance   Resid. Df   Resid. Dev 
 --------------- ---- ---------- ----------- ------------
-       **NULL**  NA      NA          8         10.581   
+       **NULL**                      8         10.581   
 
     **outcome**  2   5.452e+00       6         5.129    
 
@@ -383,9 +383,9 @@ Table: Analysis of Deviance Table
 --------------- ---- --------- --------- --------- --------
     **outcome**  2   9.267e+01 4.633e+01 2.224e+00  0.2242 
 
-  **treatment**  2   8.382e-31 4.191e-31 2.012e-32  1.0000 
+  **treatment**  2   8.382e-31 4.191e-31 2.012e-32    1    
 
-  **Residuals**  4   8.333e+01 2.083e+01    NA        NA   
+  **Residuals**  4   8.333e+01 2.083e+01                   
 -----------------------------------------------------------
 
 Table: Analysis of Variance Model
@@ -413,7 +413,7 @@ Table: Principal Components Analysis
 
 **Proportion of Variance**   0.96553  0.02782  0.00580 0.00085
 
-**Cumulative Proportion**    0.96553  0.99335  0.99915 1.00000
+**Cumulative Proportion**    0.96553  0.99335  0.99915 1      
 --------------------------------------------------------------
 
 > pander(density(mtcars$hp))
@@ -443,15 +443,15 @@ Table: Kernel density of *mtcars$hp* (bandwidth: 28.04104)
 --------------------------------------------
        &nbsp;  Coordinates   Density values 
 ------------- ------------- ----------------
-     **Min.**    -32.12           0.00      
+     **Min.**    -32.12            0        
 
-  **1st Qu.**     80.69           0.00      
+  **1st Qu.**     80.69            0        
 
-   **Median**    193.50           0.00      
+   **Median**    193.50            0        
 
-     **Mean**    193.50           0.00      
+     **Mean**    193.50            0        
 
-  **3rd Qu.**    306.30           0.00      
+  **3rd Qu.**    306.30            0        
 
      **Max.**    419.10           0.01      
 --------------------------------------------
@@ -487,7 +487,7 @@ id   value
      occaecat cupidatat non       
      proident, sunt in culpa qui  
      officia deserunt mollit anim 
-     id est laborum.              
+     id est laborum               
 ----------------------------------
 
 Table: Foo Bar
@@ -660,7 +660,7 @@ myReport$export(open = FALSE)
   * `graph.background`: string (default: `'white'`) specifying the plots main background's color
   * `graph.panel.background`: string (default: `'transparent'`) specifying the plot's main panel background. Please *note*, that this option is not supported with `base` graphics.
   * `graph.colors`: character vector of default color palette (defaults to a [colorblind theme](http://jfly.iam.u-tokyo.ac.jp/color/)). Please *note* that this update work with `base` plots by appending the `col` argument to the call if not set.
-  * `graph.color.rnd`: boolean (dafault: `FALSE`) specifying if the palette should be reordered randomly before rendering each plot to get colorful images
+  * `graph.color.rnd`: boolean (default: `FALSE`) specifying if the palette should be reordered randomly before rendering each plot to get colorful images
   * `graph.axis.angle`: numeric (default: `1`) specifying the angle of axes' labels. The available options are based on `par(les)` and sets if the labels should be:
 
       *  `1`: parallel to the axis,
@@ -685,7 +685,7 @@ The list of possible options are:
   * `length`: any R object exceeding the specified length will not be returned. The default value (`Inf`) does not filter out any R objects.
   * `output`: a character vector of required returned values. This might be useful if you are only interested in the `result`, and do not want to save/see e.g. `messages` or `print`ed `output`. See examples of [`evals`](#evals).
   * `graph.unify`: should `evals` try to unify the style of (`base`, `lattice` and `ggplot2`) plots? If set to `TRUE`, some `panderOptions()` would apply. By default this is disabled not to freak out useRs :)
-  * `graph.name`: set the file name of saved plots which is `%s` by default. A simple character string might be provided where `%d` would be replaced by the index of the generating `txt` source, `%n` with an incremented integer in `graph.dir` with similar file names and `%t` by some unique random characters. A function's name to be `eval`uated can be passed here too.
+  * `graph.name`: set the file name of saved plots which is `%s` by default. A simple character string might be provided where `%d` would be replaced by the index of the generating `txt` source, `%n` with an incremented integer in `graph.dir` with similar file names and `%t` by some unique random characters. When used in a `brew` file, `%i` is also available which would be replaced by the chunk number.
   * `graph.dir`: path to a directory where to place generated images. If the directory does not exist, [`evals`](#evals) try to create that. Default set to `plots` in current working directory.
   * `graph.output`: set the required file format of saved plots. Currently it could be any of  `grDevices`: `png`, `bmp`, `jpeg`, `jpg`, `tiff`, `svg` or `pdf`.
   * `width`: width of generated plot in pixels for even vector formats
@@ -790,4 +790,4 @@ To use this small lib, just type: `M-x pander-mode` on any document. It might be
 
 
 -------
-This report was generated with [R](http://www.r-project.org/) (2.15.1) and [pander](https://github.com/rapporter/pander) (0.1) in 1.282 sec on x86_64-unknown-linux-gnu platform.
+This report was generated with [R](http://www.r-project.org/) (2.15.1) and [pander](https://github.com/rapporter/pander) (0.2) in 0.974 sec on x86_64-unknown-linux-gnu platform.
