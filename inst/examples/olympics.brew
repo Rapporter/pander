@@ -329,7 +329,7 @@ Professional users might find the diagnostic plots of R helpful too. Here you ca
 
 <%=
 par(mfrow = c(2, 2))
-+plot(nonLin)
++suppressWarnings(plot(nonLin))
 %>
 
 But back to the model: the adjusted R-squared equals to <%=summary(nonLin)$adj.r.squared%> with a p-value of <%=round(anova(nonLin)$'Pr(>F)'[1], 5)%>.
@@ -362,7 +362,7 @@ And the diagnostic plots again:
 
 <%=
 par(mfrow = c(2, 2))
-+plot(logLin)
++suppressWarnings(plot(logLin))
 %>
 
 Where the adjusted R-squared equals to <%=summary(logLin)$adj.r.squared%> with a p-value of <%=round(anova(logLin)$'Pr(>F)'[1], 5)%>.
