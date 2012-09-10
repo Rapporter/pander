@@ -225,7 +225,7 @@ eval.msgs <- function(src, env = NULL, showInvisible = FALSE, graph.unify = eval
 
                         ## update layers with one color
                         ## this is an ugly hack but `update_geom_defaults` is not reversible :(
-                        for (i in length(rv$layers)) {
+                        for (i in 1:length(rv$layers)) {
                             if (rv$layers[[i]]$geom$objname %in% c('histogram', 'bar')) {
                                 rv$layers[[i]]$geom_params$fill   <- cb
                                 rv$layers[[i]]$geom_params$colour <- tc
