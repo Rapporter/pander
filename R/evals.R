@@ -221,7 +221,7 @@ eval.msgs <- function(src, env = NULL, showInvisible = FALSE, graph.unify = eval
                             rv$layers[[i]]$geom_params$shape  <- gs
                         }
                     ## geom colors
-                    if (is.null(rv$theme$labels$colour) & is.null(rv$theme$labels$fill)) {
+                    if (is.null(rv$labels$colour) & is.null(rv$labels$fill)) {
 
                         ## update layers with one color
                         ## this is an ugly hack but `update_geom_defaults` is not reversible :(
@@ -246,7 +246,7 @@ eval.msgs <- function(src, env = NULL, showInvisible = FALSE, graph.unify = eval
                     } else {
 
                         ## we have a possible color scale (only dealing with discrete scales)
-                        if (is.null(rv$theme$labels$colour)) {
+                        if (is.null(rv$labels$colour)) {
 
                             if (length(rv$scales$scales) == 0) {
                                 rv <- rv + ggplot2::scale_fill_manual(values = cs)
