@@ -227,18 +227,18 @@ eval.msgs <- function(src, env = NULL, showInvisible = FALSE, graph.unify = eval
                         ## this is an ugly hack but `update_geom_defaults` is not reversible :(
                         for (i in 1:length(rv$layers)) {
                             if (rv$layers[[i]]$geom$objname %in% c('histogram', 'bar')) {
-                                rv$layers[[i]]$geom_params$fill   <- cb
+                                rv$layers[[i]]$geom_params$fill   <- cs[i]
                                 rv$layers[[i]]$geom_params$colour <- tc
                             } else {
                                 if (rv$layers[[i]]$geom$objname %in% c('boxplot')) {
-                                    rv$layers[[i]]$geom_params$fill   <- cb
+                                    rv$layers[[i]]$geom_params$fill   <- cs[i]
                                     rv$layers[[i]]$geom_params$colour <- 'black'
                                 } else {
                                     if (rv$layers[[i]]$geom$objname %in% c('point')) {
                                         rv$layers[[i]]$geom_params$fill   <- tc
-                                        rv$layers[[i]]$geom_params$colour <- cb
+                                        rv$layers[[i]]$geom_params$colour <- cs[i]
                                     } else
-                                        rv$layers[[i]]$geom_params$colour <- cb
+                                        rv$layers[[i]]$geom_params$colour <- cs[i]
                                 }
                             }
                         }
