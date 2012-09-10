@@ -188,32 +188,32 @@ eval.msgs <- function(src, env = NULL, showInvisible = FALSE, graph.unify = eval
 
                     ## margin
                     if (panderOptions('graph.nomargin')) {
-                        rv$options$plot.margin  <- grid::unit(c(0.1, 0.1, 0.1, 0), "lines")
+                        rv$theme$plot.margin  <- grid::unit(c(0.1, 0.1, 0.1, 0), "lines")
                     }
 
                     ## font family
-                    rv$options$plot.title       <- ggplot2::theme_text(colour = fc, family = ff, face = "bold", size = fs * 1.2)
-                    rv$options$axis.text.x      <- rv$options$axis.text.y <- rv$options$legend.text <- ggplot2::theme_text(colour = fc, family = ff, face = 'plain', size = fs * 0.8)
-                    rv$options$axis.title.x     <- ggplot2::theme_text(colour = fc, family = ff, face = 'plain', size = fs)
-                    rv$options$strip.text.x     <- ggplot2::theme_text(colour = fc, family = ff, face = 'plain', size = fs)
-                    rv$options$axis.title.y     <- ggplot2::theme_text(colour = fc, family = ff, face = 'plain', size = fs, angle = 90)
-                    rv$options$legend.title     <- ggplot2::theme_text(colour = fc, family = ff, face = 'italic', size = fs)
-                    rv$options$strip.text.y     <- ggplot2::theme_text(colour = fc, family = ff, face = 'plain', size = fs, angle = -90)
+                    rv$theme$plot.title       <- ggplot2::element_text(colour = fc, family = ff, face = "bold", size = fs * 1.2)
+                    rv$theme$axis.text.x      <- rv$theme$axis.text.y <- rv$theme$legend.text <- ggplot2::element_text(colour = fc, family = ff, face = 'plain', size = fs * 0.8)
+                    rv$theme$axis.title.x     <- ggplot2::element_text(colour = fc, family = ff, face = 'plain', size = fs)
+                    rv$theme$strip.text.x     <- ggplot2::element_text(colour = fc, family = ff, face = 'plain', size = fs)
+                    rv$theme$axis.title.y     <- ggplot2::element_text(colour = fc, family = ff, face = 'plain', size = fs, angle = 90)
+                    rv$theme$legend.title     <- ggplot2::element_text(colour = fc, family = ff, face = 'italic', size = fs)
+                    rv$theme$strip.text.y     <- ggplot2::element_text(colour = fc, family = ff, face = 'plain', size = fs, angle = -90)
 
                     ## boxes
                     if (!panderOptions('graph.boxes')) {
-                        rv$options$legend.key       <- rv$options$strip.background <- ggplot2::theme_rect(col = 'transparent', fill = 'transparent')
-                        rv$options$panel.border     <- ggplot2::theme_rect(fill = NA, colour = tc)
-                        rv$options$panel.background <- ggplot2::theme_rect(fill = pc, colour = tc)
+                        rv$theme$legend.key       <- rv$theme$strip.background <- ggplot2::element_rect(colour = 'transparent', fill = 'transparent')
+                        rv$theme$panel.border     <- ggplot2::element_rect(fill = NA, colour = tc)
+                        rv$theme$panel.background <- ggplot2::element_rect(fill = pc, colour = tc)
                     } else {
-                        rv$options$legend.key       <- rv$options$strip.background <- ggplot2::theme_rect(col = gc, fill = 'transparent')
-                        rv$options$panel.border     <- ggplot2::theme_rect(fill = NA, colour = gc)
-                        rv$options$panel.background <- ggplot2::theme_rect(fill = pc, colour = gc)
+                        rv$theme$legend.key       <- rv$theme$strip.background <- ggplot2::element_rect(col = gc, fill = 'transparent')
+                        rv$theme$panel.border     <- ggplot2::element_rect(fill = NA, colour = gc)
+                        rv$theme$panel.background <- ggplot2::element_rect(fill = pc, colour = gc)
                     }
 
                     ## colors
-                    rv$options$plot.background  <- ggplot2::theme_rect(fill = bc, colour = NA)
-                    rv$options$axis.ticks       <- ggplot2::theme_segment(colour = gc, size = 0.2)
+                    rv$theme$plot.background  <- ggplot2::element_rect(fill = bc, colour = NA)
+                    rv$theme$axis.ticks       <- ggplot2::element_line(colour = gc, size = 0.2)
                     ## point shape still has to be updated
                     for (i in length(rv$layers))
                         if (rv$layers[[i]]$geom$objname %in% c('point')) {
@@ -221,7 +221,7 @@ eval.msgs <- function(src, env = NULL, showInvisible = FALSE, graph.unify = eval
                             rv$layers[[i]]$geom_params$shape  <- gs
                         }
                     ## geom colors
-                    if (is.null(rv$options$labels$colour) & is.null(rv$options$labels$fill)) {
+                    if (is.null(rv$theme$labels$colour) & is.null(rv$theme$labels$fill)) {
 
                         ## update layers with one color
                         ## this is an ugly hack but `update_geom_defaults` is not reversible :(
@@ -246,7 +246,7 @@ eval.msgs <- function(src, env = NULL, showInvisible = FALSE, graph.unify = eval
                     } else {
 
                         ## we have a possible color scale (only dealing with discrete scales)
-                        if (is.null(rv$options$labels$colour)) {
+                        if (is.null(rv$theme$labels$colour)) {
 
                             if (length(rv$scales$scales) == 0) {
                                 rv <- rv + ggplot2::scale_fill_manual(values = cs)
@@ -275,32 +275,32 @@ eval.msgs <- function(src, env = NULL, showInvisible = FALSE, graph.unify = eval
 
                     ## grid
                     if (!panderOptions('graph.grid'))
-                        rv$options$panel.grid.minor <- rv$options$panel.grid.major <- ggplot2::theme_blank()
+                        rv$theme$panel.grid.minor <- rv$theme$panel.grid.major <- ggplot2::element_blank()
                     else
                         if (!panderOptions('graph.grid.minor')) {
-                            rv$options$panel.grid.major <- ggplot2::theme_line(colour = gc, size = 0.2, linetype = gl)
-                            rv$options$panel.grid.minor <- ggplot2::theme_blank()
+                            rv$theme$panel.grid.major <- ggplot2::element_line(colour = gc, size = 0.2, linetype = gl)
+                            rv$theme$panel.grid.minor <- ggplot2::element_blank()
                         } else {
-                            rv$options$panel.grid.minor <- ggplot2::theme_line(colour = gc, size = 0.1, linetype = gl)
-                            rv$options$panel.grid.major <- ggplot2::theme_line(colour = gc, size = 0.2, linetype = gl)
+                            rv$theme$panel.grid.minor <- ggplot2::element_line(colour = gc, size = 0.1, linetype = gl)
+                            rv$theme$panel.grid.major <- ggplot2::element_line(colour = gc, size = 0.2, linetype = gl)
                         }
 
                     ## axis angle
                     if (aa == 0)
-                        rv$options$axis.text.y <- ggplot2::theme_text(colour = fc, family = ff, face = 'plain', size = fs * 0.8, angle = 90)
+                        rv$theme$axis.text.y <- ggplot2::element_text(colour = fc, family = ff, face = 'plain', size = fs * 0.8, angle = 90)
                     if (aa == 2)
-                        rv$options$axis.text.x <- ggplot2::theme_text(colour = fc, family = ff, face = 'plain', size = fs * 0.8, angle = 90, hjust = 1)
+                        rv$theme$axis.text.x <- ggplot2::element_text(colour = fc, family = ff, face = 'plain', size = fs * 0.8, angle = 90, hjust = 1)
                     if (aa == 3) {
-                        rv$options$axis.text.y <- ggplot2::theme_text(colour = fc, family = ff, face = 'plain', size = fs * 0.8, angle = 90)
-                        rv$options$axis.text.x <- ggplot2::theme_text(colour = fc, family = ff, face = 'plain', size = fs * 0.8, angle = 90, hjust = 1)
+                        rv$theme$axis.text.y <- ggplot2::element_text(colour = fc, family = ff, face = 'plain', size = fs * 0.8, angle = 90)
+                        rv$theme$axis.text.x <- ggplot2::element_text(colour = fc, family = ff, face = 'plain', size = fs * 0.8, angle = 90, hjust = 1)
                     }
 
                     ## legend
-                    if (!is.null(rv$options$legend.position)) {
-                        if (rv$options$legend.position != 'none')
-                            rv$options$legend.position <- panderOptions('graph.legend.position')
+                    if (!is.null(rv$theme$legend.position)) {
+                        if (rv$theme$legend.position != 'none')
+                            rv$theme$legend.position <- panderOptions('graph.legend.position')
                     } else
-                        rv$options$legend.position <- panderOptions('graph.legend.position')
+                        rv$theme$legend.position <- panderOptions('graph.legend.position')
 
                 }
 
