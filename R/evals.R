@@ -64,7 +64,11 @@ eval.msgs <- function(src, env = NULL, showInvisible = FALSE, graph.unify = eval
         messages <<- c(messages, sub('\n$', '', m$message))
     }
 
-    if (require(RAppArmor) & is.list(evalsOptions('RAppArmor'))) {
+    RAA.enabled <- suppressWarnings(require(RAppArmor, quietly = TRUE)) & is.list(evalsOptions('RAppArmor'))
+    if (RAA.enabled) {
+
+        ## DRY
+        RRA <- evalsOptions('RAppArmor')
 
         ## save global options
         opts.bak <- options()
@@ -94,7 +98,7 @@ eval.msgs <- function(src, env = NULL, showInvisible = FALSE, graph.unify = eval
     sink()
     close(con)
 
-    if (require(RAppArmor) & is.list(evalsOptions('RAppArmor'))) {
+    if (RAA.enabled) {
 
         ## reset settings
         setTimeLimit(elapsed = Inf)
@@ -709,6 +713,12 @@ evals <- function(txt, parse = TRUE, cache = TRUE, cache.mode = c('environment',
 
     `%d` <- 0
 
+    ## is RAppArmor enabled?
+    ## dealing with tmpdir only here
+    RAA.enabled <- suppressWarnings(require(RAppArmor, quietly = TRUE)) & !is.null(evalsOptions('RAppArmor')$tmpdir)
+    if (RAA.enabled)
+        RAA.tmpdir <- sub('/$', '', evalsOptions('RAppArmor')$tmpdir)
+
     ## main loop
     lapply(txt, function(src) {
 
@@ -719,16 +729,29 @@ evals <- function(txt, parse = TRUE, cache = TRUE, cache.mode = c('environment',
             file.name <- gsub('%i', debug$chunkID, file.name, fixed = TRUE)
         file <- sprintf('%s.%s', file.name, graph.output)
         if (grepl('%t', graph.name)) {
+            if (RAA.enabled)
+                stop('Creating unique files with `tempfile()` in a sandboxed directory does not make any sense.')
             if (length(strsplit(sprintf('placeholder%splaceholder', file.name), '%t')[[1]]) > 2)
                 stop('File name contains more then 1 "%t"!')
             rep <- strsplit(file, '%t')[[1]]
             file <- tempfile(pattern = rep[1], tmpdir = graph.dir, fileext = rep[2])
             file.name <- sub(sprintf('.%s$', graph.output), '', file)
         } else {
-            file <- file.path(gsub('\\', '/', graph.dir, fixed = TRUE), file)
-            file.name <- file.path(gsub('\\', '/', graph.dir, fixed = TRUE), file.name)
+
+            graph.dir <- gsub('\\', '/', graph.dir, fixed = TRUE)
+
+            ## modifying graph.dir to safe tempdir
+            if (RAA.enabled) {
+                graph.dir <- file.path(RAA.tmpdir, graph.dir)
+                dir.create(graph.dir, showWarnings = FALSE, recursive = TRUE)
+            }
+
+            file <- file.path(graph.dir, file)
+            file.name <- file.path(graph.dir, file.name)
         }
         if (grepl('%n', file.name)) {
+            if (RAA.enabled)
+                stop('Counting similar files in a sandboxed (mostly clean) directory does not make any sense.')
             if (length(strsplit(sprintf('placeholder%splaceholder', file.name), '%n')[[1]]) > 2)
                 stop('File name contains more then 1 "%n"!')
             similar.files <- list.files(graph.dir, pattern = sprintf('^%s\\.(jpeg|tiff|png|svg|bmp)$', gsub('%t', '[a-z0-9]*', gsub('%d|%n|%i', '[[:digit:]]*', basename(file.name)))))
@@ -923,6 +946,13 @@ evals <- function(txt, parse = TRUE, cache = TRUE, cache.mode = c('environment',
         ## we have a graph
         if (is.character(graph)) {
 
+            ## copy image & update file.name
+            if (RAA.enabled) {
+                file.name <- sub(paste0('^', RAA.tmpdir), '', file.name)
+                graph <- sub(paste0('^', RAA.tmpdir), '', graph)
+                file.rename(file, sprintf('%s.%s', file.name, graph.output))
+            }
+
             ## save recorded plot on demand
             if (graph.recordplot)
                 saveRDS(recorded.plot, file = sprintf('%s.recordplot', file.name))
@@ -941,6 +971,9 @@ evals <- function(txt, parse = TRUE, cache = TRUE, cache.mode = c('environment',
 
             ## generate high resolution images on demand
             if (hi.res) {
+
+                if (RAA.enabled)
+                    stop('If you are smarty enough to use Apparmor, then you must have disabled high resolution image support on your server a long time ago. Right? :)')
 
                 file.hi.res <- sprintf('%s-hires.%s', file.name, graph.output)
 
