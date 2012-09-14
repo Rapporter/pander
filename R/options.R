@@ -56,7 +56,8 @@
                 'hi.res.width'          = 960,
                 'graph.env'             = FALSE,
                 'graph.recordplot'      = FALSE,
-                'graph.RDS'             = FALSE
+                'graph.RDS'             = FALSE,
+                'RAppArmor'             = NULL
                 ))
 }
 

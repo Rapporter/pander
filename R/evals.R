@@ -64,15 +64,48 @@ eval.msgs <- function(src, env = NULL, showInvisible = FALSE, graph.unify = eval
         messages <<- c(messages, sub('\n$', '', m$message))
     }
 
+    if (require(RAppArmor) & is.list(evalsOptions('RAppArmor'))) {
+
+        ## save global options
+        opts.bak <- options()
+
+        ## set timeout
+        RAA <- evalsOptions('RAppArmor')
+        if (!is.null(RAA$timeout))
+            setTimeLimit(elapsed = RAA$timeout)
+
+        ## change hat
+        if (!is.null(RAA$hat)) {
+            .MagicToken <- round(runif(1)*10000) # this key is outside of env
+            aa_change_hat(RAA$hat, .MagicToken)
+        }
+
+    }
+
     ## grab stdout
     stdout <- vector("character")
     con <- textConnection("stdout", "wr", local=TRUE)
     sink(con, split = FALSE)
 
+    ## evaluate
     result <- suppressMessages(withCallingHandlers(tryCatch(withVisible(eval(parse(text = src), envir = env)), error = function(e) e), warning = warning.handler, message = message.handler))
 
+    ## let stdout live long
     sink()
     close(con)
+
+    if (require(RAppArmor) & is.list(evalsOptions('RAppArmor'))) {
+
+        ## reset settings
+        setTimeLimit(elapsed = Inf)
+        options(opts.bak)
+
+        ## revert hat
+        if (!is.null(RAA$hat))
+            aa_revert_hat(.MagicToken)
+
+    }
+
     if (length(stdout) == 0)
         stdout <- NULL
 
