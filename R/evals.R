@@ -65,6 +65,8 @@ eval.msgs <- function(src, env = NULL, showInvisible = FALSE, graph.unify = eval
     }
 
     RAA.enabled <- suppressWarnings(require(RAppArmor, quietly = TRUE)) & is.list(evalsOptions('RAppArmor'))
+    if (RAA.enabled)
+        RAA.enabled <- aa_is_enabled()
     if (RAA.enabled) {
 
         ## DRY
@@ -74,13 +76,12 @@ eval.msgs <- function(src, env = NULL, showInvisible = FALSE, graph.unify = eval
         opts.bak <- options()
 
         ## set timeout
-        RAA <- evalsOptions('RAppArmor')
         if (!is.null(RAA$timeout))
             setTimeLimit(elapsed = RAA$timeout)
 
         ## change hat
         if (!is.null(RAA$hat)) {
-            .MagicToken <- round(runif(1)*10000) # this key is outside of env
+            .MagicToken <- round(runif(1)*1e9)  # this key is outside of env
             aa_change_hat(RAA$hat, .MagicToken)
         }
 
@@ -716,6 +717,7 @@ evals <- function(txt, parse = TRUE, cache = TRUE, cache.mode = c('environment',
     ## is RAppArmor enabled?
     ## dealing with tmpdir only here
     RAA.enabled <- suppressWarnings(require(RAppArmor, quietly = TRUE)) & !is.null(evalsOptions('RAppArmor')$tmpdir)
+
     if (RAA.enabled)
         RAA.tmpdir <- sub('/$', '', evalsOptions('RAppArmor')$tmpdir)
 
@@ -725,9 +727,13 @@ evals <- function(txt, parse = TRUE, cache = TRUE, cache.mode = c('environment',
         ## get image file name
         `%d` <<- `%d` + 1
         file.name <- gsub('%d', `%d`, graph.name, fixed = TRUE)
+
+        ## chunk ID
         if (!is.null(debug$chunkID))
             file.name <- gsub('%i', debug$chunkID, file.name, fixed = TRUE)
         file <- sprintf('%s.%s', file.name, graph.output)
+
+        ## tempfile
         if (grepl('%t', graph.name)) {
             if (RAA.enabled)
                 stop('Creating unique files with `tempfile()` in a sandboxed directory does not make any sense.')
@@ -749,6 +755,8 @@ evals <- function(txt, parse = TRUE, cache = TRUE, cache.mode = c('environment',
             file <- file.path(graph.dir, file)
             file.name <- file.path(graph.dir, file.name)
         }
+
+        ## similar files counter
         if (grepl('%n', file.name)) {
             if (RAA.enabled)
                 stop('Counting similar files in a sandboxed (mostly clean) directory does not make any sense.')
