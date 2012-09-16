@@ -962,7 +962,8 @@ evals <- function(txt, parse = TRUE, cache = TRUE, cache.mode = c('environment',
             if (RAA.enabled) {
                 file.name <- sub(paste0('^', RAA.tmpdir), '', file.name)
                 graph <- sub(paste0('^', RAA.tmpdir), '', graph)
-                file.rename(file, sprintf('%s.%s', file.name, graph.output))
+                file.copy(file, graph)
+                file.remove(file)
             }
 
             ## save recorded plot on demand
