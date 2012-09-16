@@ -65,8 +65,8 @@ eval.msgs <- function(src, env = NULL, showInvisible = FALSE, graph.unify = eval
     }
 
     RAA.enabled <- suppressWarnings(require(RAppArmor, quietly = TRUE)) & is.list(evalsOptions('RAppArmor'))
-    if (RAA.enabled)
-        RAA.enabled <- aa_is_enabled()
+    ## if (RAA.enabled)
+    ##     RAA.enabled <- aa_is_enabled()
     if (RAA.enabled) {
 
         ## DRY
