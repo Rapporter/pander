@@ -15,7 +15,7 @@
 #' @param output (optional) file path of the output file
 #' @param convert string: format of required output document (besides Pandoc's markdown). Pandoc is called if set via \code{Pandoc.convert} and the converted document could be also opened automatically (see below).
 #' @param open try to open converted document with operating system's default program
-#' @param graph.name character string (default to \code{\%t} when \code{output} is set to \code{stdout} and \code{paste0(basename(output), '-\%n')} otherwise) passed to \code{\link{evals}}.  Besides \code{\link{evals}}'s possible tags \code{\%i} is also available which would be replaced by the chunk number.
+#' @param graph.name character string (default to \code{\%t} when \code{output} is set to \code{stdout} and \code{paste0(basename(output), '-\%n')} otherwise) passed to \code{\link{evals}}.  Besides \code{\link{evals}}'s possible tags \code{\%i} is also available which would be replaced by the chunk number and \code{\%I} with the order of the current expression.
 #' @param graph.dir character string (default to \code{tempdir()} when \code{output} is set to \code{stdout} and \code{dirname(graph.name)} otherwise) passed to \code{\link{evals}}
 #' @param graph.hi.res render high resolution images of plots? Default is \code{FALSE} except for HTML output.
 #' @param text character vector (treated as the content of the \code{file}
@@ -80,6 +80,7 @@ Pandoc.brew <- function(file = stdin(), output = stdout(), convert = FALSE, open
 
     ## id of chunk
     assign('chunkID', 0, envir = debug)
+    assign('cmdID', 0, envir = debug)
 
     ## helper fn
     showCode <- function(..., envir = parent.frame(), cache = evalsOptions('cache')) {
@@ -138,6 +139,10 @@ Pandoc.brew <- function(file = stdin(), output = stdout(), convert = FALSE, open
     ## remove trailing line-break text
     #if (tail(get('.storage', envir = envir), 1)[[1]]$text$eval == '\n')
     #    assign('brew', head(get('.storage', envir = envir), -1), envir = envir)
+
+    ## there is no sense of chunkID outside of brew
+    assign('chunkID', NULL, envir = debug)
+    assign('cmdID', NULL, envir = debug)
 
     invisible(get('.storage', envir = envir))
 
