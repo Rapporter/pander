@@ -70,7 +70,7 @@ eval.msgs <- function(src, env = NULL, showInvisible = FALSE, graph.unify = eval
     if (RAA.enabled) {
 
         ## DRY
-        RRA <- evalsOptions('RAppArmor')
+        RAA <- evalsOptions('RAppArmor')
 
         ## save global options
         opts.bak <- options()
