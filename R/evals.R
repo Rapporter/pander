@@ -449,7 +449,7 @@ eval.msgs <- function(src, env = NULL, showInvisible = FALSE, graph.unify = eval
 #' @param output a character vector of required returned values. This might be useful if you are only interested in the \code{result}, and do not want to save/see e.g. \code{messages} or \code{print}ed \code{output}. See examples below.
 #' @param env environment where evaluation takes place. If not set (by default), a new temporary environment is created.
 #' @param graph.unify should \code{evals} try to unify the style of (\code{base}, \code{lattice} and \code{ggplot2}) plots? If set to \code{TRUE}, some \code{panderOptions()} would apply. By default this is disabled not to freak out useRs :)
-#' @param graph.name set the file name of saved plots which is \code{\link{tempfile}} by default. A simple character string might be provided where \code{\%d} would be replaced by the index of the generating \code{txt} source, \code{\%n} with an incremented integer in \code{graph.dir} with similar file names and \code{\%t} by some unique random characters.
+#' @param graph.name set the file name of saved plots which is \code{\link{tempfile}} by default. A simple character string might be provided where \code{\%d} would be replaced by the index of the generating \code{txt} source, \code{\%n} with an incremented integer in \code{graph.dir} with similar file names and \code{\%t} by some unique random characters. While running in \code{\link{Pandoc.brew}} other indices could be triggered like \code{\%i} and \code{\%I}.
 #' @param graph.dir path to a directory where to place generated images. If the directory does not exist, \code{evals} try to create that. Default set to \code{plots} in current working directory.
 #' @param graph.output set the required file format of saved plots. Currently it could be any of  \code{grDevices}': \code{png}, \code{bmp}, \code{jpeg}, \code{jpg}, \code{tiff}, \code{svg} or \code{pdf}.
 #' @param width width of generated plot in pixels for even vector formats
@@ -731,6 +731,10 @@ evals <- function(txt, parse = TRUE, cache = TRUE, cache.mode = c('environment',
         ## chunk ID
         if (!is.null(debug$chunkID))
             file.name <- gsub('%i', debug$chunkID, file.name, fixed = TRUE)
+        if (!is.null(debug$cmdID)) {
+            assign('cmdID', debug$cmdID + 1, envir = debug)
+            file.name <- gsub('%I', debug$cmdID, file.name, fixed = TRUE)
+        }
         file <- sprintf('%s.%s', file.name, graph.output)
 
         ## tempfile

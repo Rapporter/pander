@@ -28,7 +28,8 @@
   \code{paste0(basename(output), '-\%n')} otherwise) passed
   to \code{\link{evals}}.  Besides \code{\link{evals}}'s
   possible tags \code{\%i} is also available which would be
-  replaced by the chunk number.}
+  replaced by the chunk number and \code{\%I} with the
+  order of the current expression.}
 
   \item{graph.dir}{character string (default to
   \code{tempdir()} when \code{output} is set to

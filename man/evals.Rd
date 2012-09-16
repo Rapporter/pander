@@ -109,7 +109,9 @@
   replaced by the index of the generating \code{txt}
   source, \code{\%n} with an incremented integer in
   \code{graph.dir} with similar file names and \code{\%t}
-  by some unique random characters.}
+  by some unique random characters. While running in
+  \code{\link{Pandoc.brew}} other indices could be
+  triggered like \code{\%i} and \code{\%I}.}
 
   \item{graph.dir}{path to a directory where to place
   generated images. If the directory does not exist,
