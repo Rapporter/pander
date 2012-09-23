@@ -866,3 +866,20 @@ add.significance.stars <- function(p) {
         }
     }
 }
+
+
+#' Toggle cache
+#'
+#' This function is just a wrapper around \code{\link{evalsOptions}} to switch pander's cache on or off easily, which might be handy in some brew documents to prevent repetitive strain injury :)
+#' @aliases cache.on
+#' @usage
+#' cache.on()
+#'
+#' cache.off()
+#' @export
+cache.off <- function()
+    evalsOptions('cache', FALSE)
+
+#' @export
+cache.on <- function()
+    evalsOptions('cache', TRUE)

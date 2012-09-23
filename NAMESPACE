@@ -1,5 +1,7 @@
 export(add.blank.lines)
 export(add.significance.stars)
+export(cache.off)
+export(cache.on)
 export(eval.msgs)
 export(evals)
 export(evals.option)
