@@ -293,7 +293,7 @@ Both models on a complex plot build with `base` R (actually with `graphics` func
 Another quick plot themed by our [back-end](http://daroczig.github.com/pander/) building on `ggplot2`:
 
 <%=
-g <- ggplot(golddata2012) + geom_point(aes(x=Year, y=Result)) + geom_smooth(aes(x=Year, y=nonLin), alpha=0.2) + geom_smooth(aes(x=Year, y=logLin, col = "#56B4E9"), alpha=0.2, col = "#009E73") + opts(title = d$Event[1]) + ylab("") + xlab("") + theme_bw() + opts(legend.position = "none")
+g <- ggplot(golddata2012) + geom_point(aes(x=Year, y=Result)) + geom_smooth(aes(x=Year, y=nonLin), alpha=0.2) + geom_smooth(aes(x=Year, y=logLin, col = "#56B4E9"), alpha=0.2, col = "#009E73") + ggtitle(d$Event[1]) + ylab("") + xlab("") + theme_bw() + theme(legend.position = "none")
 if (resultInTime)
     g <- g + scale_y_continuous(labels = ms)
 g
