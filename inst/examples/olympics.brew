@@ -51,6 +51,8 @@ panderOptions('graph.background', 'transparent')
 #' @return character in \code{hours:minutes:seconds} format
 ms <- function(sec, transform = TRUE) {
     sapply(sec, function(sec) {
+        if (is.na(sec))
+            return(NA)
         if (transform) {
             if (sec < 60) {
                 msec <- sec %% 1
