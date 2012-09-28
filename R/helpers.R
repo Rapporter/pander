@@ -55,7 +55,7 @@ repChar <- function(x, n, sep = '')
 #' p(c("Thelma", "Louise"), wrap = "", copula = "&")
 #' ## [1] "Thelma & Louise"
 #' @export
-#' @author Aleksandar Blagotić
+#' @author Aleksandar Blagotic
 #' @references This function was moved from \code{rapport} package: \url{http://rapport-package.info/}.
 p <- function(x, wrap = panderOptions('p.wrap'), sep = panderOptions('p.sep'), copula = panderOptions('p.copula'), limit = Inf){
 
@@ -92,7 +92,7 @@ p <- function(x, wrap = panderOptions('p.wrap'), sep = panderOptions('p.sep'), c
 #' wrap(c("fee", "fi", "foo", "fam"), "_")
 #' }
 #' @export
-#' @author Aleksandar Blagotić
+#' @author Aleksandar Blagotic
 #' @references This function was moved from \code{rapport} package: \url{http://rapport-package.info/}.
 wrap <- function(x, wrap = '"'){
     stopifnot(is.vector(x))

@@ -57,7 +57,7 @@ p(c("Thelma", "Louise"), wrap = "", copula = "&")
 ## [1] "Thelma & Louise"
 }
 \author{
-  Aleksandar Blagotić
+  Aleksandar Blagotic
 }
 \references{
   This function was moved from \code{rapport} package:

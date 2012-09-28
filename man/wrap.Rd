@@ -23,7 +23,7 @@ wrap(c("fee", "fi", "foo", "fam"), "_")
 }
 }
 \author{
-  Aleksandar Blagotić
+  Aleksandar Blagotic
 }
 \references{
   This function was moved from \code{rapport} package:
