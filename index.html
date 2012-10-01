@@ -674,16 +674,18 @@ myReport$<span class="kw">export</span>(<span class="dt">open =</span> <span cla
 <h2 id="in-practice">In practice</h2>
 <p>As <code>pander</code> does not cache based on raw sources of chunks and there is no easy way of enabling/disabling caching on a chunk basis, the users have to live with some <em>great advantages</em> and some <em>minor tricky situations</em> - which latter cannot be solved theoretically in my opinion, but <a href="https://github.com/Rapporter/pander/issues">I'd love to hear your feedback</a>.</p>
 <p>The caching hash is computed based on the structure and content of the R commands, so let us make some POC example to show the <strong>greatest asset</strong>:</p>
-<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">require</span>(lattice)
-<span class="kw">evals</span>(<span class="st">&#39;histogram(rep(mtcars$hp, 1e5))&#39;</span>)</code></pre>
+<pre class="sourceCode r"><code class="sourceCode r">x &lt;- mtcars$hp
+y &lt;- <span class="fl">1e3</span>
+<span class="kw">evals</span>(<span class="st">&#39;sapply(rep(x, y), mean)&#39;</span>)</code></pre>
 <p>It took a while, huh? :)</p>
 <p>Let us have some custom functions and variables:</p>
-<pre class="sourceCode r"><code class="sourceCode r">f &lt;- histogram
+<pre class="sourceCode r"><code class="sourceCode r">f &lt;- sapply
 g &lt;- rep
-A &lt;- mtcars$hp
-B &lt;- <span class="fl">1e5</span></code></pre>
+h &lt;- mean
+X &lt;- mtcars$hp * <span class="dv">1</span>
+Y &lt;- <span class="dv">1000</span></code></pre>
 <p>And now try to run something like:</p>
-<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">evals</span>(<span class="st">&#39;f(g(A, B))&#39;</span>)</code></pre>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">evals</span>(<span class="st">&#39;f(g(X, Y), h)&#39;</span>)</code></pre>
 <p>Yes, it was returned from cache!</p>
 <p>About the <strong>kickback</strong>:</p>
 <p>As <code>pander</code> (or rather: <code>evals</code>) does not really deal with what is written in the provided sources but rather checks what is <strong>inside that</strong>, there might be some tricky situations where you would expect the cache to work, but it would not. Short example: we are computing and saving to a variable something heavy in a chunk (please run these in a clean R session to avoid conflicts):</p>
@@ -693,6 +695,16 @@ B &lt;- <span class="fl">1e5</span></code></pre>
 <pre class="sourceCode r"><code class="sourceCode r">x &lt;- <span class="st">&#39;foobar&#39;</span>
 <span class="kw">evals</span>(<span class="st">&#39;x &lt;- sapply(rep(mtcars$hp, 1e3), mean)&#39;</span>)</code></pre>
 <p>I really think this is a minor issue (with very special coincidences) which cannot be addressed cleverly - but <strong>could be avoided with some cautions</strong> (e.g. run <code>Pandoc.brew</code> in a clean R session like with <code>Rscript</code> or <a href="http://dirk.eddelbuettel.com/code/littler.html"><code>littler</code></a> - if you are really afraid of this issue). And after all: you loose nothing, just the cache would not work for that only line and only once in most of the cases.</p>
+<p>Other cases when the hash of a call will not match cached hashes:</p>
+<ul>
+<li>a number is replaced by a variable holding the number, e.g.: <code>evals('1:5')</code> vs. <code>x &lt;- 1:5;evals('x')</code></li>
+<li>a part of an R object is replaced by a variable holding that, e.g.: <code>evals('mean(mtcars$hp)')</code> vs. <code>x &lt;- mtcars$hp;evals('mean(x)')</code></li>
+</ul>
+<p>But the e.g. following do work from cache fine:</p>
+<pre><code>x  &lt;- mtcars$hp
+xx &lt;- mtcars$hp*1
+evals(&#39;mean(x)&#39;)
+evals(&#39;mean(xx)&#39;)</code></pre>
 <h1 id="evals">Evals</h1>
 <p>Sorry, no online documentation ATM. Please check: <code>?evals</code></p>
 <h1 id="ess">ESS</h1>
@@ -713,7 +725,7 @@ B &lt;- <span class="fl">1e5</span></code></pre>
 <p>To use this small lib, just type: <code>M-x pander-mode</code> on any document. It might be useful to add a hook to <code>markdown-mode</code> if you find this useful.</p>
 <a href="http://githalytics.com/Rapporter/pander"><img style="border:none;" src="https://cruel-carlota.pagodabox.com/9dfac0c1da37bd83d1848289630631fd"/></a>
 <hr />
-<p>This report was generated with <a href="http://www.r-project.org/">R</a> (2.15.1) and <a href="https://github.com/rapporter/pander">pander</a> (0.2) in 0.974 sec on x86_64-unknown-linux-gnu platform.</p>
+<p>This report was generated with <a href="http://www.r-project.org/">R</a> (2.15.1) and <a href="https://github.com/rapporter/pander">pander</a> (0.2) in 1.058 sec on x86_64-unknown-linux-gnu platform.</p>
 <p align="center">
   Design: <a href="http://rapport-package.info/"><i>rapport</i> Development Team</a> &copy; 2012 | Backend: <a href="https://github.com/rapporter/pander">pander</a> | License: <a href="http://www.gnu.org/licenses/agpl.html" target="_blank">AGPL3</a> | Styled with <a href="http://www.getskeleton.com/" target="_blank">skeleton</a>
 </p>
