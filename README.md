@@ -770,7 +770,7 @@ Other cases when the hash of a call will not match cached hashes:
 
 But the e.g. following do work from cache fine:
 
-```
+```r
 x  <- mtcars$hp
 xx <- mtcars$hp*1
 evals('mean(x)')
