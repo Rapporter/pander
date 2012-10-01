@@ -450,8 +450,9 @@ As `pander` does not cache based on raw sources of chunks and there is no easy w
 The caching hash is computed based on the structure and content of the R commands, so let us make some POC example to show the **greatest asset**:
 
 ```r
-require(lattice)
-evals('histogram(rep(mtcars$hp, 1e5))')
+x <- mtcars$hp
+y <- 1e3
+evals('sapply(rep(x, y), mean)')
 ```
 
 It took a while, huh? :)
@@ -459,16 +460,17 @@ It took a while, huh? :)
 Let us have some custom functions and variables:
 
 ```r
-f <- histogram
+f <- sapply
 g <- rep
-A <- mtcars$hp
-B <- 1e5
+h <- mean
+X <- mtcars$hp * 1
+Y <- 1000
 ```
 
 And now try to run something like:
 
 ```r
-evals('f(g(A, B))')
+evals('f(g(X, Y), h)')
 ```
 
 Yes, it was returned from cache!
@@ -491,6 +493,20 @@ evals('x <- sapply(rep(mtcars$hp, 1e3), mean)')
 ```
 
 I really think this is a minor issue (with very special coincidences) which cannot be addressed cleverly - but **could be avoided with some cautions** (e.g. run `Pandoc.brew` in a clean R session like with `Rscript` or [`littler`](http://dirk.eddelbuettel.com/code/littler.html) - if you are really afraid of this issue). And after all: you loose nothing, just the cache would not work for that only line and only once in most of the cases.
+
+Other cases when the hash of a call will not match cached hashes:
+
+  * a number is replaced by a variable holding the number, e.g.: `evals('1:5')` vs. `x <- 1:5;evals('x')`
+  * a part of an R object is replaced by a variable holding that, e.g.: `evals('mean(mtcars$hp)')` vs. `x <- mtcars$hp;evals('mean(x)')`
+
+But the e.g. following do work from cache fine:
+
+```
+x  <- mtcars$hp
+xx <- mtcars$hp*1
+evals('mean(x)')
+evals('mean(xx)')
+```
 
 # Evals
 
