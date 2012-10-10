@@ -752,7 +752,7 @@ evals <- function(txt, parse = TRUE, cache = TRUE, cache.mode = c('environment',
 
             ## modifying graph.dir to safe tempdir
             if (RAA.enabled) {
-                graph.dir <- file.path(RAA.tmpdir, graph.dir)
+                graph.dir <- file.path(RAA.tmpdir, sub('^/', '', graph.dir))
                 dir.create(graph.dir, showWarnings = FALSE, recursive = TRUE)
             }
 
