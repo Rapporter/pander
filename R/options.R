@@ -56,7 +56,8 @@
                 'hi.res.width'          = 960,
                 'graph.env'             = FALSE,
                 'graph.recordplot'      = FALSE,
-                'graph.RDS'             = FALSE
+                'graph.RDS'             = FALSE,
+                'RAppArmor'             = NULL
                 ))
 }
 
@@ -84,6 +85,10 @@ masked.plots$plot <- masked.plots$barplot <- masked.plots$lines <- masked.plots$
     fn.pkg  <- gsub('.*library/|/help.*', '', help(fn)[1])
     fn.orig <- parse(text = paste0(fn.pkg, '::', fn))[[1]]
     mc      <- match.call(get(fn, envir = .GlobalEnv))
+
+    ## sometimes there is no need for graph tweaks
+    if (mc$plot == FALSE)
+        return(eval(mc, envir = parent.frame()))
 
     ## pander options
     fc  <- panderOptions('graph.fontcolor')
