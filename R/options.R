@@ -87,8 +87,9 @@ masked.plots$plot <- masked.plots$barplot <- masked.plots$lines <- masked.plots$
     mc      <- match.call(get(fn, envir = .GlobalEnv))
 
     ## sometimes there is no need for graph tweaks
-    if (mc$plot == FALSE)
-        return(eval(mc, envir = parent.frame()))
+    if (!is.null(mc$plot))
+        if (mc$plot == FALSE)
+            return(eval(mc, envir = parent.frame()))
 
     ## pander options
     fc  <- panderOptions('graph.fontcolor')
