@@ -102,7 +102,8 @@ eval.msgs <- function(src, env = NULL, showInvisible = FALSE, graph.unify = eval
     if (RAA.enabled) {
 
         ## reset settings
-        setTimeLimit(elapsed = Inf)
+        if (!is.null(RAA$timeout))
+            setTimeLimit(elapsed = Inf)
         options(opts.bak)
 
         ## revert hat
