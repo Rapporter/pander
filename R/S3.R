@@ -155,8 +155,14 @@ pander.numeric <- function(x, ...)
     cat(p(x))
 
 #' @S3method pander character
-pander.character <- function(x, ...)
-    cat(x)
+pander.character <- function(x, ...) {
+
+    if (length(x) < 2)
+        cat(x)
+    else
+        cat(p(x))
+
+}
 
 #' @S3method pander factor
 pander.factor <- function(x, ...)
