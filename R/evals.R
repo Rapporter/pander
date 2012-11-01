@@ -206,7 +206,7 @@ eval.msgs <- function(src, env = NULL, showInvisible = FALSE, graph.unify = eval
                         rv$theme$panel.border     <- ggplot2::element_rect(fill = NA, colour = tc)
                         rv$theme$panel.background <- ggplot2::element_rect(fill = pc, colour = tc)
                     } else {
-                        rv$theme$legend.key       <- rv$theme$strip.background <- ggplot2::element_rect(col = gc, fill = 'transparent')
+                        rv$theme$legend.key       <- rv$theme$strip.background <- ggplot2::element_rect(colour = gc, fill = 'transparent')
                         rv$theme$panel.border     <- ggplot2::element_rect(fill = NA, colour = gc)
                         rv$theme$panel.background <- ggplot2::element_rect(fill = pc, colour = gc)
                     }
