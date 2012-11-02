@@ -586,7 +586,7 @@ pandoc.list <- function(...)
 #' pandoc.table(t, style = "grid", split.cells = 5)
 #' pandoc.table(t, style = "simple")
 #' tryCatch(pandoc.table(t, style = "simple", split.cells = 5), error = function(e) 'Yeah, no newline support in simple tables')
-pandoc.table.return <- function(t, caption = storage$caption, digits = panderOptions('digits'), decimal.mark = panderOptions('decimal.mark'), round = panderOptions('round'), justify = 'left', style = c('multiline', 'grid', 'simple'), split.tables = panderOptions('table.split.table'), split.cells = panderOptions('table.split.cells')) {
+pandoc.table.return <- function(t, caption = storage$caption, digits = panderOptions('digits'), decimal.mark = panderOptions('decimal.mark'), round = panderOptions('round'), justify = 'centre', style = c('multiline', 'grid', 'simple'), split.tables = panderOptions('table.split.table'), split.cells = panderOptions('table.split.cells')) {
 
     ## helper functions
     table.expand <- function(cells, cols.width, justify, sep.cols) {
@@ -846,7 +846,7 @@ set.caption <- function(x)
 #' @param align character vector which length equals to one (would be repeated \code{n} times) ot \code{n} - where \code{n} equals to the number of columns in the following table
 #' @param row.names string holding the alignment of the (optional) row names
 #' @export
-set.alignment <- function(align = 'centre', row.names = 'left')
+set.alignment <- function(align = 'centre', row.names = 'right')
     assign('alignment', list(align = align, row.names = row.names) , envir = storage)
 
 
