@@ -59,6 +59,7 @@ repChar <- function(x, n, sep = '')
 #' @references This function was moved from \code{rapport} package: \url{http://rapport-package.info/}.
 p <- function(x, wrap = panderOptions('p.wrap'), sep = panderOptions('p.sep'), copula = panderOptions('p.copula'), limit = Inf){
 
+    attributes(x) <- NULL
     stopifnot(is.vector(x))
     stopifnot(all(sapply(list(wrap, sep, copula), function(x) is.character(x) && length(x) == 1)))
     x.len <- length(x)
@@ -95,6 +96,7 @@ p <- function(x, wrap = panderOptions('p.wrap'), sep = panderOptions('p.sep'), c
 #' @author Aleksandar Blagotic
 #' @references This function was moved from \code{rapport} package: \url{http://rapport-package.info/}.
 wrap <- function(x, wrap = '"'){
+    attributes(x) <- NULL
     stopifnot(is.vector(x))
     sprintf('%s%s%s', wrap, x, wrap)
 }
@@ -148,6 +150,7 @@ pandoc.p <- function(...)
 #' @keywords internal
 pandoc.add.formatting <- function(x, f) {
 
+    attributes(x) <- NULL
     if (!is.vector(x))
         stop('Sorry, vectors only!')
 
