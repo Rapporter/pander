@@ -6,7 +6,7 @@
   pandoc.table.return(t, caption = storage$caption,
     digits = panderOptions("digits"),
     decimal.mark = panderOptions("decimal.mark"),
-    round = panderOptions("round"), justify = "left",
+    round = panderOptions("round"), justify = "centre",
     style = c("multiline", "grid", "simple"),
     split.tables = panderOptions("table.split.table"),
     split.cells = panderOptions("table.split.cells"))
