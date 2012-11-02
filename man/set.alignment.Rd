@@ -2,7 +2,7 @@
 \alias{set.alignment}
 \title{Sets alignment for tables}
 \usage{
-  set.alignment(align = "centre", row.names = "left")
+  set.alignment(align = "centre", row.names = "right")
 }
 \arguments{
   \item{align}{character vector which length equals to one

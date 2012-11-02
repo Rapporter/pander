@@ -108,7 +108,7 @@ pander.table <- function(x, caption = attr(x, 'caption'), justify = attr(x, 'ali
         }
 
     if (is.null(justify))
-        justify <- 'left'
+        justify <- 'centre'
 
     pandoc.table(x, caption = caption, justify = justify)
 
@@ -124,7 +124,7 @@ pander.data.frame <- function(x, caption = attr(x, 'caption'), justify = attr(x,
         }
 
     if (is.null(justify))
-        justify <- 'left'
+        justify <- 'centre'
 
     pandoc.table(x, caption = caption, justify = justify)
 
@@ -140,7 +140,7 @@ pander.matrix <- function(x, caption = attr(x, 'caption'), justify = attr(x, 'al
         }
 
     if (is.null(justify))
-        justify <- 'left'
+        justify <- 'centre'
 
     pandoc.table(x, caption = caption, justify = justify)
 
