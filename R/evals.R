@@ -884,6 +884,11 @@ evals <- function(txt, parse = TRUE, cache = TRUE, cache.mode = c('environment',
         ## close grDevice
         clear.devs()
 
+        ## check if image file was created
+        if (is.character(graph))
+            if (!file.exists(file))
+                res$msg$errors <- c(res$msg$errors, paste('Image file not written by:', paste(src, collapse = ';')))
+
         ## error handling
         if (!is.null(res$msg$errors)) {
 
@@ -892,8 +897,8 @@ evals <- function(txt, parse = TRUE, cache = TRUE, cache.mode = c('environment',
                 rm(list = c('plot', 'barplot', 'lines', 'pie', 'boxplot', 'polygon', 'points','legend', 'hist', 'pairs', 'stripchart'), envir = env)
 
             class(res) <- 'evals'
-            if ('plot.new has not been called yet' %in% res[[1]]$msg$errors)
-                res[[1]]$msg$errors <- 'plot.new has not been called yet - Please note that all R commands are parsed and evaluated separately. To override this default behavior, add a plus sign (+) as the first character of the line(s) to lock to the prior one(s).'
+            if ('plot.new has not been called yet' %in% res$msg$errors)
+                res$msg$errors <- 'plot.new has not been called yet - Please note that all R commands are parsed and evaluated separately. To override this default behavior, add a plus sign (+) as the first character of the line(s) to evaluate with the prior one(s).'
             return(res)
         }
 
