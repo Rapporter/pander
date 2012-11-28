@@ -894,7 +894,7 @@ evals <- function(txt, parse = TRUE, cache = TRUE, cache.mode = c('environment',
 
             ## removing injected base::plot fns
             if (graph.unify)
-                rm(list = c('plot', 'barplot', 'lines', 'pie', 'boxplot', 'polygon', 'points','legend', 'hist', 'pairs', 'stripchart'), envir = env)
+                rm(list = ls(envir = masked.plots), envir = env)
 
             class(res) <- 'evals'
             if ('plot.new has not been called yet' %in% res$msg$errors)
