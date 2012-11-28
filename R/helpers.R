@@ -614,9 +614,6 @@ pandoc.table.return <- function(t, caption = storage$caption, digits = panderOpt
     split.large.cells <- function(cells)
         sapply(cells, function(x) {
 
-            ## remove trailing zeros
-            x <- sub('[\\.,]+0*$', '', x)
-
             ## split
             x <- paste(strwrap(x, width = split.cells), collapse = '\n')
 
@@ -634,28 +631,31 @@ pandoc.table.return <- function(t, caption = storage$caption, digits = panderOpt
     else
         style <- match.arg(style)
 
-    ## format numeric & convert to string
+    ## round numbers & cut digits & apply decimal mark
     if (length(dim(t)) == 0) {  # named char
-        ## just numbers
         t.n <- as.numeric(which(sapply(t, is.numeric)))
-        if (length(t.n) > 0)
+        if (length(t.n) > 0) {
             t[t.n] <- round(t[t.n], round)
+            t[t.n] <- sapply(t[t.n], format, trim = TRUE, digits = digits, decimal.mark = decimal.mark)
+        }
     }
     if (length(dim(t)) == 1) {
-        ## just numbers
         t.n <- as.numeric(which(apply(t, 1, is.numeric)))
-        if (length(t.n) > 0)
+        if (length(t.n) > 0) {
             t[t.n] <- round(t[t.n], round)
+            t[t.n] <- apply(t[t.n], 1, format, trim = TRUE, digits = digits, decimal.mark = decimal.mark)
+        }
     }
     if (length(dim(t)) == 2) {
-        ## just numbers (not just column-wise to make it general)
         t.n <- as.numeric(which(apply(t, 2, is.numeric)))
-        if (length(t.n) > 0)
+        if (length(t.n) > 0) {
             t[, t.n] <- round(t[, t.n], round)
+            t[, t.n] <- apply(t[, t.n, drop = FALSE], c(1,2), format, trim = TRUE, digits = digits, decimal.mark = decimal.mark)
+        }
     }
 
-    ## apply decimal.mark
-    t <- format(t, trim = TRUE, digits = digits, decimal.mark = decimal.mark)
+    ## drop unexpected classes and revert back to a common format
+    t <- format(t, trim = TRUE)
 
     ## TODO: adding formatting (emphasis, strong etc.)
 
