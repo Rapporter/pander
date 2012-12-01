@@ -132,17 +132,20 @@ masked.plots$plot <- masked.plots$barplot <- masked.plots$lines <- masked.plots$
         if (is.null(mc$col.clus))
             mc$col.clus <- cs
     }
-    par(fg = gc)
+
+    ## remove boxes
+    if (fn %in% c('pairs', 'stripchart')) {
+        doAddGrid <- FALSE
+        par(fg = fc)
+    } else {
+        if (panderOptions('graph.boxes'))
+            par(fg = gc)
+        else
+            par(fg = bc)
+    }
 
     if (fn == 'pie')
         mc$col <- cs
-
-    ## remove boxes
-    if (!panderOptions('graph.boxes'))
-        par(bty = 'n', xaxt = 'n', yaxt = 'n')
-
-    if (fn %in% c('pairs', 'stripchart'))
-        doAddGrid <- FALSE
 
     ## call
     mc[[1]] <- fn.orig
