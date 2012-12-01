@@ -59,6 +59,7 @@ repChar <- function(x, n, sep = '')
 #' @references This function was moved from \code{rapport} package: \url{http://rapport-package.info/}.
 p <- function(x, wrap = panderOptions('p.wrap'), sep = panderOptions('p.sep'), copula = panderOptions('p.copula'), limit = Inf){
 
+    attributes(x) <- NULL
     stopifnot(is.vector(x))
     stopifnot(all(sapply(list(wrap, sep, copula), function(x) is.character(x) && length(x) == 1)))
     x.len <- length(x)
@@ -95,6 +96,7 @@ p <- function(x, wrap = panderOptions('p.wrap'), sep = panderOptions('p.sep'), c
 #' @author Aleksandar Blagotic
 #' @references This function was moved from \code{rapport} package: \url{http://rapport-package.info/}.
 wrap <- function(x, wrap = '"'){
+    attributes(x) <- NULL
     stopifnot(is.vector(x))
     sprintf('%s%s%s', wrap, x, wrap)
 }
@@ -148,6 +150,7 @@ pandoc.p <- function(...)
 #' @keywords internal
 pandoc.add.formatting <- function(x, f) {
 
+    attributes(x) <- NULL
     if (!is.vector(x))
         stop('Sorry, vectors only!')
 
@@ -583,7 +586,7 @@ pandoc.list <- function(...)
 #' pandoc.table(t, style = "grid", split.cells = 5)
 #' pandoc.table(t, style = "simple")
 #' tryCatch(pandoc.table(t, style = "simple", split.cells = 5), error = function(e) 'Yeah, no newline support in simple tables')
-pandoc.table.return <- function(t, caption = storage$caption, digits = panderOptions('digits'), decimal.mark = panderOptions('decimal.mark'), round = panderOptions('round'), justify = 'left', style = c('multiline', 'grid', 'simple'), split.tables = panderOptions('table.split.table'), split.cells = panderOptions('table.split.cells')) {
+pandoc.table.return <- function(t, caption = storage$caption, digits = panderOptions('digits'), decimal.mark = panderOptions('decimal.mark'), round = panderOptions('round'), justify = 'centre', style = c('multiline', 'grid', 'simple'), split.tables = panderOptions('table.split.table'), split.cells = panderOptions('table.split.cells')) {
 
     ## helper functions
     table.expand <- function(cells, cols.width, justify, sep.cols) {
@@ -611,9 +614,6 @@ pandoc.table.return <- function(t, caption = storage$caption, digits = panderOpt
     split.large.cells <- function(cells)
         sapply(cells, function(x) {
 
-            ## remove trailing zeros
-            x <- sub('[\\.,]+0*$', '', x)
-
             ## split
             x <- paste(strwrap(x, width = split.cells), collapse = '\n')
 
@@ -631,28 +631,31 @@ pandoc.table.return <- function(t, caption = storage$caption, digits = panderOpt
     else
         style <- match.arg(style)
 
-    ## format numeric & convert to string
+    ## round numbers & cut digits & apply decimal mark
     if (length(dim(t)) == 0) {  # named char
-        ## just numbers
         t.n <- as.numeric(which(sapply(t, is.numeric)))
-        if (length(t.n) > 0)
+        if (length(t.n) > 0) {
             t[t.n] <- round(t[t.n], round)
+            t[t.n] <- sapply(t[t.n], format, trim = TRUE, digits = digits, decimal.mark = decimal.mark)
+        }
     }
     if (length(dim(t)) == 1) {
-        ## just numbers
         t.n <- as.numeric(which(apply(t, 1, is.numeric)))
-        if (length(t.n) > 0)
+        if (length(t.n) > 0) {
             t[t.n] <- round(t[t.n], round)
+            t[t.n] <- apply(t[t.n], 1, format, trim = TRUE, digits = digits, decimal.mark = decimal.mark)
+        }
     }
     if (length(dim(t)) == 2) {
-        ## just numbers (not just column-wise to make it general)
         t.n <- as.numeric(which(apply(t, 2, is.numeric)))
-        if (length(t.n) > 0)
+        if (length(t.n) > 0) {
             t[, t.n] <- round(t[, t.n], round)
+            t[, t.n] <- apply(t[, t.n, drop = FALSE], c(1,2), format, trim = TRUE, digits = digits, decimal.mark = decimal.mark)
+        }
     }
 
-    ## apply decimal.mark
-    t <- format(t, trim = TRUE, digits = digits, decimal.mark = decimal.mark)
+    ## drop unexpected classes and revert back to a common format
+    t <- format(t, trim = TRUE)
 
     ## TODO: adding formatting (emphasis, strong etc.)
 
@@ -843,7 +846,7 @@ set.caption <- function(x)
 #' @param align character vector which length equals to one (would be repeated \code{n} times) ot \code{n} - where \code{n} equals to the number of columns in the following table
 #' @param row.names string holding the alignment of the (optional) row names
 #' @export
-set.alignment <- function(align = 'centre', row.names = 'left')
+set.alignment <- function(align = 'centre', row.names = 'right')
     assign('alignment', list(align = align, row.names = row.names) , envir = storage)
 
 

@@ -245,7 +245,7 @@ eval.msgs <- function(src, env = NULL, showInvisible = FALSE, graph.unify = eval
                         rv$theme$panel.border     <- ggplot2::element_rect(fill = NA, colour = tc)
                         rv$theme$panel.background <- ggplot2::element_rect(fill = pc, colour = tc)
                     } else {
-                        rv$theme$legend.key       <- rv$theme$strip.background <- ggplot2::element_rect(col = gc, fill = 'transparent')
+                        rv$theme$legend.key       <- rv$theme$strip.background <- ggplot2::element_rect(colour = gc, fill = 'transparent')
                         rv$theme$panel.border     <- ggplot2::element_rect(fill = NA, colour = gc)
                         rv$theme$panel.background <- ggplot2::element_rect(fill = pc, colour = gc)
                     }
@@ -943,14 +943,21 @@ evals <- function(txt, parse = TRUE, cache = TRUE, cache.mode = c('environment',
         ## close grDevice
         clear.devs()
 
+        ## check if image file was created
+        if (is.character(graph))
+            if (!file.exists(file))
+                res$msg$errors <- c(res$msg$errors, paste('Image file not written by:', paste(src, collapse = ';')))
+
         ## error handling
         if (!is.null(res$msg$errors)) {
 
             ## removing injected base::plot fns
             if (graph.unify)
-                rm(list = c('plot', 'barplot', 'lines', 'pie', 'boxplot', 'polygon', 'points','legend', 'hist', 'pairs', 'stripchart'), envir = env)
+                rm(list = ls(envir = masked.plots), envir = env)
 
             class(res) <- 'evals'
+            if ('plot.new has not been called yet' %in% res$msg$errors)
+                res$msg$errors <- 'plot.new has not been called yet - Please note that all R commands are parsed and evaluated separately. To override this default behavior, add a plus sign (+) as the first character of the line(s) to evaluate with the prior one(s).'
             return(res)
         }
 

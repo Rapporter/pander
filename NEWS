@@ -1,0 +1,17 @@
+
+pander 0.3 (2012-10-24)
+----------------------------------------------------------------
+
+ * using ggplot2's new theme system (0.9.2)
+ * removed accented chars from examples to let ASCII live long
+ * added captions to most table-like S3 methods
+ * new `evals` graph.name option for chunk ID
+ * new functions to easily toggle caching
+ * a few minor bugfixes
+ * new demo document for brewing about Olympics
+
+
+pander 0.2 (2012-08-17)
+----------------------------------------------------------------
+
+Initial CRAN release.

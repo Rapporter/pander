@@ -108,7 +108,7 @@ pander.table <- function(x, caption = attr(x, 'caption'), justify = attr(x, 'ali
         }
 
     if (is.null(justify))
-        justify <- 'left'
+        justify <- 'centre'
 
     pandoc.table(x, caption = caption, justify = justify)
 
@@ -124,7 +124,7 @@ pander.data.frame <- function(x, caption = attr(x, 'caption'), justify = attr(x,
         }
 
     if (is.null(justify))
-        justify <- 'left'
+        justify <- 'centre'
 
     pandoc.table(x, caption = caption, justify = justify)
 
@@ -140,7 +140,7 @@ pander.matrix <- function(x, caption = attr(x, 'caption'), justify = attr(x, 'al
         }
 
     if (is.null(justify))
-        justify <- 'left'
+        justify <- 'centre'
 
     pandoc.table(x, caption = caption, justify = justify)
 
@@ -155,8 +155,14 @@ pander.numeric <- function(x, ...)
     cat(p(x))
 
 #' @S3method pander character
-pander.character <- function(x, ...)
-    cat(x)
+pander.character <- function(x, ...) {
+
+    if (length(x) < 2)
+        cat(x)
+    else
+        cat(p(x))
+
+}
 
 #' @S3method pander factor
 pander.factor <- function(x, ...)
