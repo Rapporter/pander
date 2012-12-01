@@ -73,7 +73,7 @@ eval.msgs <- function(src, env = NULL, showInvisible = FALSE, graph.unify = eval
         RAA <- evalsOptions('RAppArmor')
 
         ## save global options
-        opts.bak <- options()
+        #opts.bak <- options()
 
         ## set timeout
         if (!is.null(RAA$timeout))
@@ -104,7 +104,7 @@ eval.msgs <- function(src, env = NULL, showInvisible = FALSE, graph.unify = eval
         ## reset settings
         if (!is.null(RAA$timeout))
             setTimeLimit(elapsed = Inf)
-        options(opts.bak)
+        # options(opts.bak)
 
         ## revert hat
         if (!is.null(RAA$hat))
