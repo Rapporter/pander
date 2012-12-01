@@ -138,6 +138,8 @@ masked.plots$plot <- masked.plots$barplot <- masked.plots$lines <- masked.plots$
         if (is.null(mc$col.clus))
             mc$col.clus <- cs
     }
+
+    ## remove boxes
     if (fn %in% c('pairs', 'stripchart')) {
         doAddGrid <- FALSE
         par(fg = fc)
@@ -147,6 +149,7 @@ masked.plots$plot <- masked.plots$barplot <- masked.plots$lines <- masked.plots$
         else
             par(fg = bc)
     }
+
     if (fn == 'pie')
         mc$col <- cs
 
