@@ -598,7 +598,7 @@ pandoc.table.return <- function(t, caption = storage$caption, digits = panderOpt
             if (style == 'simple')
                 stop('Pandoc does not support newlines in simple table format!')
 
-            res <- lapply(as.character(df$txt), function(x) strsplit(x, '\n')[[1]])
+            res <- lapply(strsplit(as.character(df$txt), '\n'), unlist)
             res.lines <- max(sapply(res, length))
             res <- paste(sapply(1:res.lines, function(i) table.expand(sapply(res, function(x) ifelse(is.na(x[i]), '  ', x[i])), cols.width, justify, sep.cols)), collapse = '\n')
             return(res)
