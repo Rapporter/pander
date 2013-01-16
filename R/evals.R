@@ -684,9 +684,13 @@ evals <- function(txt, parse = TRUE, cache = TRUE, cache.mode = c('environment',
         file.name <- gsub('%d', `%d`, graph.name, fixed = TRUE)
 
         ## chunk ID
-        if (!is.null(debug$chunkID))
-            file.name <- gsub('%i', debug$chunkID, file.name, fixed = TRUE)
-        if (!is.null(debug$cmdID)) {
+        if (length(debug$chunkID) > 0) {
+            if ((length(debug$nestedID) > 0) && (debug$nestedID > 1))
+                file.name <- gsub('%i', paste0(debug$nestedID, '_', debug$chunkID), file.name, fixed = TRUE)
+            else
+                file.name <- gsub('%i', debug$chunkID, file.name, fixed = TRUE)
+        }
+        if (length(debug$cmdID) > 0) {
             assign('cmdID', debug$cmdID + 1, envir = debug)
             file.name <- gsub('%I', debug$cmdID, file.name, fixed = TRUE)
         }
