@@ -383,7 +383,7 @@ pandoc.header.return <- function(x, level = 1, style = c('atx', 'setext')) {
 
     res <- switch(style,
            'atx'    = paste(repChar('#', level), x),
-           'setext' = paste(x, repChar(ifelse(level == 1, '=', '-'), nchar(x)), sep = '\n')
+           'setext' = paste(x, repChar(ifelse(level == 1, '=', '-'), nchar(x, type = 'width')), sep = '\n')
            )
 
     add.blank.lines(res)
@@ -671,15 +671,15 @@ pandoc.table.return <- function(t, caption = storage$caption, digits = panderOpt
         t.colnames  <- names(t)
         if (!is.null(t.colnames)) {
             t.colnames       <- split.large.cells(t.colnames)
-            t.colnames.width <- sapply(t.colnames, function(x) max(nchar(strsplit(x, '\n')[[1]]), 0), USE.NAMES = FALSE) + 2
+            t.colnames.width <- sapply(t.colnames, function(x) max(nchar(strsplit(x, '\n')[[1]], type = 'width'), 0), USE.NAMES = FALSE) + 2
         } else {
             t.colnames.width <- 0
         }
 
         if (length(dim(t)) == 0)
-            t.width <- as.numeric(apply(cbind(t.colnames.width, as.numeric(sapply(t, nchar))), 1, max))
+            t.width <- as.numeric(apply(cbind(t.colnames.width, as.numeric(sapply(t, nchar, type = 'width'))), 1, max))
         else
-            t.width <- as.numeric(apply(cbind(t.colnames.width, as.numeric(apply(t, 1, nchar))), 1, max))
+            t.width <- as.numeric(apply(cbind(t.colnames.width, as.numeric(apply(t, 1, nchar, type = 'width'))), 1, max))
 
     } else {
 
@@ -693,13 +693,13 @@ pandoc.table.return <- function(t, caption = storage$caption, digits = panderOpt
         t.colnames  <- colnames(t)
         if (!is.null(t.colnames)) {
             t.colnames  <- split.large.cells(t.colnames)
-            t.colnames.width <- sapply(t.colnames, function(x) max(nchar(strsplit(x, '\n')[[1]]), 0), USE.NAMES = FALSE) + 2
+            t.colnames.width <- sapply(t.colnames, function(x) max(nchar(strsplit(x, '\n')[[1]], type = 'width'), 0), USE.NAMES = FALSE) + 2
         } else {
             t.colnames.width <- 0
         }
 
         ## also dealing with cells split by newlines
-        t.width     <-  as.numeric(apply(cbind(t.colnames.width, apply(t, 2, function(x) max(sapply(strsplit(x,'\n'), function(x) max(nchar(x), 0))))), 1, max))
+        t.width     <-  as.numeric(apply(cbind(t.colnames.width, apply(t, 2, function(x) max(sapply(strsplit(x,'\n'), function(x) max(nchar(x, type = 'width'), 0))))), 1, max))
 
         ## remove obvious row.names
         if (all(rownames(t) == 1:nrow(t)))
@@ -714,7 +714,7 @@ pandoc.table.return <- function(t, caption = storage$caption, digits = panderOpt
 
         t.rownames <- split.large.cells(t.rownames)
         t.colnames <- c('&nbsp;', t.colnames)
-        t.width <- c(max(sapply(strsplit(t.rownames, '\n'), function(x) max(nchar(x), 0))), t.width)
+        t.width <- c(max(sapply(strsplit(t.rownames, '\n'), function(x) max(nchar(x, type = 'width'), 0))), t.width)
         t.width[1] <- t.width[1] + 2
 
     }
