@@ -616,14 +616,26 @@ pandoc.table.return <- function(t, caption = storage$caption, digits = panderOpt
 
             ## split
             if (nchar(x) == nchar(x, type = 'width')) {
+
                 x <- paste(strwrap(x, width = split.cells), collapse = '\n')
-            } else { # CJK chars
-                x   <- strsplit(x, '')[[1]]
-                res <- sapply(1:ceiling(length(x)/split.cells), function(i) x[((i-1)*split.cells+1):((i-1)*split.cells+split.cells)])
-                nul <- which(is.na(res), arr.ind=T)
-                if (nrow(nul) > 0)
-                    res[nul] <- ''
-                x <- paste(apply(res, 2, paste, collapse = ''), collapse = '\n')
+
+            } else {
+
+                # dealing with CJK chars
+                split <- strsplit(x, '\\s')[[1]]
+                n <- nchar(split[1], type = 'width')
+                x <- split[1]
+                for (s in tail(split, -1)) {
+                    nc <- nchar(s, type = 'width')
+                    n  <- n + nc + 1
+                    if (n > split.cells) {
+                        n <- nc
+                        x <- paste(x, s, sep = '\n')
+                    } else {
+                        x <- paste(x, s, sep = ' ')
+                    }
+                }
+
             }
 
             ## return
