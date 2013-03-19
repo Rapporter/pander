@@ -537,7 +537,7 @@ pandoc.list <- function(...)
 #' @param decimal.mark passed to \code{format}
 #' @param round passed to \code{round}
 #' @param justify see \code{prettyNum}
-#' @param style which Pandoc style to use: \code{simple}, \code{multiline} or grid
+#' @param style which Pandoc style to use: \code{simple}, \code{multiline}, \code{grid} or \code{rmarkdown}
 #' @param split.tables where to split wide tables to separate tables. The default value (\code{80}) suggests the conventional number of characters used in a line, feel free to change (e.g. to \code{Inf} to disable this feature) if you are not using a VT100 terminal any more :)
 #' @param split.cells where to split cells' text with line breaks. Default to \code{30}, to disable set to \code{Inf}.
 #' @return By default this function outputs (see: \code{cat}) the result. If you would want to catch the result instead, then call the function ending in \code{.return}.
@@ -586,7 +586,8 @@ pandoc.list <- function(...)
 #' pandoc.table(t, style = "grid", split.cells = 5)
 #' pandoc.table(t, style = "simple")
 #' tryCatch(pandoc.table(t, style = "simple", split.cells = 5), error = function(e) 'Yeah, no newline support in simple tables')
-pandoc.table.return <- function(t, caption = storage$caption, digits = panderOptions('digits'), decimal.mark = panderOptions('decimal.mark'), round = panderOptions('round'), justify = 'centre', style = c('multiline', 'grid', 'simple'), split.tables = panderOptions('table.split.table'), split.cells = panderOptions('table.split.cells')) {
+#' pandoc.table(t, style = "rmarkdown")
+pandoc.table.return <- function(t, caption = storage$caption, digits = panderOptions('digits'), decimal.mark = panderOptions('decimal.mark'), round = panderOptions('round'), justify = 'centre', style = c('multiline', 'grid', 'simple', 'rmarkdown'), split.tables = panderOptions('table.split.table'), split.cells = panderOptions('table.split.cells')) {
 
     ## helper functions
     table.expand <- function(cells, cols.width, justify, sep.cols) {
@@ -807,6 +808,13 @@ pandoc.table.return <- function(t, caption = storage$caption, digits = panderOpt
                    sep.btn <- ''
                    sep.hdr <- paste(sapply(t.width, function(x) repChar('-', x)), collapse = ' ')
                    sep.col <- c('', ' ', '')
+               },
+               'rmarkdown'= {
+                   sep.row <- ''
+                   sep.top <- ''
+                   sep.btn <- ''
+                   sep.hdr <- paste(sapply(t.width, function(x) repChar('-', x)), collapse = ' | ')
+                   sep.col <- c('| ', ' | ', ' |')
                })
 
         ## header
