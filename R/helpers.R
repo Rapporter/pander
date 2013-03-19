@@ -596,7 +596,7 @@ pandoc.table.return <- function(t, caption = storage$caption, digits = panderOpt
 
         if (any(grepl('\n', df$txt))) {
 
-            if (style == 'simple')
+            if (style %in% c('simple', 'rmarkdown'))
                 stop('Pandoc does not support newlines in simple table format!')
 
             res <- lapply(strsplit(as.character(df$txt), '\n'), unlist)
