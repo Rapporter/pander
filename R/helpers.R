@@ -645,6 +645,23 @@ pandoc.table.return <- function(t, caption = storage$caption, digits = panderOpt
             else
                 x
         }, USE.NAMES = FALSE)
+    align.hdr <- function(t.width, justify) {
+        justify.vec <- rep(justify, length.out=length(t.width))
+        dashes <- sapply(
+                         seq_along(t.width),
+                         function(i) {
+                             width <- t.width[i]
+                             dash <- switch(
+                                            justify.vec[i],
+                                            left = paste0(":", repChar("-", width + 1)),
+                                            right = paste0(repChar("-", width + 1), ":"),
+                                            centre = paste0(":", repChar("-", width), ":")
+                                            )
+                             return(dash)
+                         })
+        hdr <- paste0("|", paste(dashes, collapse="|"), "|")
+        return(hdr)
+    }
 
     ## initializing
     res <- ''
@@ -813,7 +830,7 @@ pandoc.table.return <- function(t, caption = storage$caption, digits = panderOpt
                    sep.row <- ''
                    sep.top <- ''
                    sep.btn <- ''
-                   sep.hdr <- paste0('|-', paste(sapply(t.width, function(x) repChar('-', x)), collapse = '-|-'), '-|')
+                   sep.hdr <- align.hdr(t.width, justify)
                    sep.col <- c('| ', ' | ', ' |')
                })
 
