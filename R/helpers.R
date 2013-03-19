@@ -813,7 +813,7 @@ pandoc.table.return <- function(t, caption = storage$caption, digits = panderOpt
                    sep.row <- ''
                    sep.top <- ''
                    sep.btn <- ''
-                   sep.hdr <- paste0('|-', paste(sapply(t.width, function(x) repChar('-', x)), collapse = ' | '), '-|')
+                   sep.hdr <- paste0('|-', paste(sapply(t.width, function(x) repChar('-', x)), collapse = '-|-'), '-|')
                    sep.col <- c('| ', ' | ', ' |')
                })
 
