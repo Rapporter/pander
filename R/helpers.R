@@ -823,7 +823,7 @@ pandoc.table.return <- function(t, caption = storage$caption, digits = panderOpt
         } else {
             if (style == "rmarkdown") {
                 blank.hdr <- paste0('| ', paste(sapply(t.width, function(x) repChar(' ', x)), collapse = ' | '), ' |')
-                res <- paste(res, blank.hdr, sep='\n')
+                res <- paste(res, blank.hdr, sep.hdr, sep='\n')
             } else {
                     res <- paste(res, sep.top, sep = '\n')
             }
