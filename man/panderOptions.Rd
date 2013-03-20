@@ -32,9 +32,10 @@
   \code{'ordered'} or \code{'roman'} passed to
   \code{\link{pandoc.list}}. Please not that this has no
   effect on \code{pander} methods.  \item
-  \code{table.style}: \code{'multiline'}, \code{'grid'} or
-  \code{'simple'} passed to \code{\link{pandoc.table}}
-  \item \code{table.split.table}: numeric passed to
+  \code{table.style}: \code{'multiline'}, \code{'grid'},
+  \code{'simple'} or \code{'rmarkdown'} passed to
+  \code{\link{pandoc.table}} \item
+  \code{table.split.table}: numeric passed to
   \code{\link{pandoc.table}} and also affects \code{pander}
   methods. This option tells \code{pander} where to split
   too wide tables. The default value (\code{80}) suggests
