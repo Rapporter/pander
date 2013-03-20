@@ -7,7 +7,7 @@
     digits = panderOptions("digits"),
     decimal.mark = panderOptions("decimal.mark"),
     round = panderOptions("round"), justify = "centre",
-    style = c("multiline", "grid", "simple"),
+    style = c("multiline", "grid", "simple", "rmarkdown"),
     split.tables = panderOptions("table.split.table"),
     split.cells = panderOptions("table.split.cells"))
 }
@@ -25,7 +25,7 @@
   \item{justify}{see \code{prettyNum}}
 
   \item{style}{which Pandoc style to use: \code{simple},
-  \code{multiline} or grid}
+  \code{multiline}, \code{grid} or \code{rmarkdown}}
 
   \item{split.tables}{where to split wide tables to
   separate tables. The default value (\code{80}) suggests
@@ -101,6 +101,7 @@ pandoc.table(t, style = "grid")
 pandoc.table(t, style = "grid", split.cells = 5)
 pandoc.table(t, style = "simple")
 tryCatch(pandoc.table(t, style = "simple", split.cells = 5), error = function(e) 'Yeah, no newline support in simple tables')
+pandoc.table(t, style = "rmarkdown")
 }
 \references{
   John MacFarlane (2012): _Pandoc User's Guide_.

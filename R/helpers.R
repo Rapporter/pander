@@ -537,7 +537,7 @@ pandoc.list <- function(...)
 #' @param decimal.mark passed to \code{format}
 #' @param round passed to \code{round}
 #' @param justify see \code{prettyNum}
-#' @param style which Pandoc style to use: \code{simple}, \code{multiline} or grid
+#' @param style which Pandoc style to use: \code{simple}, \code{multiline}, \code{grid} or \code{rmarkdown}
 #' @param split.tables where to split wide tables to separate tables. The default value (\code{80}) suggests the conventional number of characters used in a line, feel free to change (e.g. to \code{Inf} to disable this feature) if you are not using a VT100 terminal any more :)
 #' @param split.cells where to split cells' text with line breaks. Default to \code{30}, to disable set to \code{Inf}.
 #' @return By default this function outputs (see: \code{cat}) the result. If you would want to catch the result instead, then call the function ending in \code{.return}.
@@ -586,7 +586,8 @@ pandoc.list <- function(...)
 #' pandoc.table(t, style = "grid", split.cells = 5)
 #' pandoc.table(t, style = "simple")
 #' tryCatch(pandoc.table(t, style = "simple", split.cells = 5), error = function(e) 'Yeah, no newline support in simple tables')
-pandoc.table.return <- function(t, caption = storage$caption, digits = panderOptions('digits'), decimal.mark = panderOptions('decimal.mark'), round = panderOptions('round'), justify = 'centre', style = c('multiline', 'grid', 'simple'), split.tables = panderOptions('table.split.table'), split.cells = panderOptions('table.split.cells')) {
+#' pandoc.table(t, style = "rmarkdown")
+pandoc.table.return <- function(t, caption = storage$caption, digits = panderOptions('digits'), decimal.mark = panderOptions('decimal.mark'), round = panderOptions('round'), justify = 'centre', style = c('multiline', 'grid', 'simple', 'rmarkdown'), split.tables = panderOptions('table.split.table'), split.cells = panderOptions('table.split.cells')) {
 
     ## helper functions
     table.expand <- function(cells, cols.width, justify, sep.cols) {
@@ -595,8 +596,8 @@ pandoc.table.return <- function(t, caption = storage$caption, digits = panderOpt
 
         if (any(grepl('\n', df$txt))) {
 
-            if (style == 'simple')
-                stop('Pandoc does not support newlines in simple table format!')
+            if (style %in% c('simple', 'rmarkdown'))
+                stop('Pandoc does not support newlines in simple or Rmarkdown table format!')
 
             res <- lapply(strsplit(as.character(df$txt), '\n'), unlist)
             res.lines <- max(sapply(res, length))
@@ -644,6 +645,23 @@ pandoc.table.return <- function(t, caption = storage$caption, digits = panderOpt
             else
                 x
         }, USE.NAMES = FALSE)
+    align.hdr <- function(t.width, justify) {
+        justify.vec <- rep(justify, length.out=length(t.width))
+        dashes <- sapply(
+                         seq_along(t.width),
+                         function(i) {
+                             width <- t.width[i]
+                             dash <- switch(
+                                            justify.vec[i],
+                                            left = paste0(":", repChar("-", width + 1)),
+                                            right = paste0(repChar("-", width + 1), ":"),
+                                            centre = paste0(":", repChar("-", width), ":")
+                                            )
+                             return(dash)
+                         })
+        hdr <- paste0("|", paste(dashes, collapse="|"), "|")
+        return(hdr)
+    }
 
     ## initializing
     res <- ''
@@ -807,13 +825,25 @@ pandoc.table.return <- function(t, caption = storage$caption, digits = panderOpt
                    sep.btn <- ''
                    sep.hdr <- paste(sapply(t.width, function(x) repChar('-', x)), collapse = ' ')
                    sep.col <- c('', ' ', '')
+               },
+               'rmarkdown'= {
+                   sep.row <- ''
+                   sep.top <- ''
+                   sep.btn <- ''
+                   sep.hdr <- align.hdr(t.width, justify)
+                   sep.col <- c('| ', ' | ', ' |')
                })
 
         ## header
         if (length(t.colnames) != 0) {
             res <- paste(res, sep.top, table.expand(t.colnames, t.width, justify, sep.col), sep.hdr, sep = '\n')
         } else {
-            res <- paste(res, sep.top, sep = '\n')
+            if (style == "rmarkdown") {
+                blank.hdr <- paste0('| ', paste(sapply(t.width, function(x) repChar(' ', x)), collapse = ' | '), ' |')
+                res <- paste(res, blank.hdr, sep.hdr, sep='\n')
+            } else {
+                    res <- paste(res, sep.top, sep = '\n')
+            }
         }
 
         ## body
