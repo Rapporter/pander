@@ -66,6 +66,8 @@ storage           <- new.env()
 storage$caption   <- NULL
 storage$alignment <- NULL
 debug             <- new.env()
+debug$nested      <- 0
+debug$nestedID    <- 0
 
 ## cache storage
 cached.results <- new.env()
