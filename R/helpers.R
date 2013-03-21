@@ -606,7 +606,7 @@ pandoc.table.return <- function(t, caption = storage$caption, digits = panderOpt
 
         } else {
 
-            res <- apply(df, 1, function(x) format(x[1], justify = x[3], width = x[2]))
+            res <- apply(df, 1, function(x) format(x[1], justify = x[3], width = as.numeric(x[2]) + length(which(gregexpr("\\\\", x[1])[[1]] > 0))))
             return(paste0(sep.cols[1], paste(res, collapse = sep.cols[2]), sep.cols[3]))
 
         }
