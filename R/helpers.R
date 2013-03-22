@@ -76,9 +76,9 @@ p <- function(x, wrap = panderOptions('p.wrap'), sep = panderOptions('p.sep'), c
     if (x.len == 1)
         wrap(x, wrap)
     else if (x.len == 2)
-        paste(wrap(x, wrap), collapse = sprintf(' %s ', copula))
+        paste(wrap(x, wrap), collapse = copula)
     else
-        paste(paste(wrap(head(x, -1), wrap), collapse = sep), copula, wrap(tail(x, 1), wrap))
+        paste0(paste(wrap(head(x, -1), wrap), collapse = sep), copula, wrap(tail(x, 1), wrap))
 }
 
 

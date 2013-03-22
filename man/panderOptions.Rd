@@ -54,7 +54,7 @@
   passed to \code{p} function \item \code{p.sep}: a string
   (default: \code{', '}) with the main separator passed to
   \code{p} function \item \code{p.copula}: a string
-  (default: \code{'and'}) with ending separator passed to
+  (default: \code{' and '}) with ending separator passed to
   \code{p} function \item \code{graph.nomargin}: boolean
   (default: \code{TRUE}) if trying to keep plots' margins
   at minimal \item \code{graph.fontfamily}: string
