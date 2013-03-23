@@ -95,7 +95,7 @@ II. Second element
 
 ```
 
-`pandoc` can return **tables** in [three formats](http://johnmacfarlane.net/pandoc/README.html#tables):
+`pandoc` can return **tables** in [four formats](http://johnmacfarlane.net/pandoc/README.html#tables):
 
   * The default style is the `multiline` format as most features (e.g. multi-line cells and alignment) are available in there.
 
@@ -137,6 +137,19 @@ II. Second element
 +---------------------+-------+-------+--------+
 | **Mazda RX4 Wag**   | 21    | 6     | 160    |
 +---------------------+-------+-------+--------+
+
+```
+
+  * `rmarkdown` tables can be used directly with `knitr` since they are understood by the `markdown` package:
+
+```rout
+> pandoc.table(m, style = "rmarkdown")
+
+
+|       &nbsp;        |  mpg  |  cyl  |  disp  |
+|:-------------------:|:-----:|:-----:|:------:|
+|    **Mazda RX4**    |  21   |   6   |  160   |
+|  **Mazda RX4 Wag**  |  21   |   6   |  160   |
 
 ```
 
