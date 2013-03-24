@@ -95,7 +95,7 @@ II. Second element
 
 ```
 
-`pandoc` can return **tables** in [four formats](http://johnmacfarlane.net/pandoc/README.html#tables):
+`pandoc` can return **tables** in [three formats supported by Pandoc](http://johnmacfarlane.net/pandoc/README.html#tables) and also in [PHP Markdown Extra format](http://michelf.ca/projects/php-markdown/extra/#table):
 
   * The default style is the `multiline` format as most features (e.g. multi-line cells and alignment) are available in there.
 
@@ -104,11 +104,11 @@ II. Second element
 > pandoc.table(m)
 
 --------------------------------------
-&nbsp;              mpg   cyl   disp  
+      &nbsp;         mpg   cyl   disp 
 ------------------- ----- ----- ------
-**Mazda RX4**       21    6     160   
+   **Mazda RX4**     21     6    160  
 
-**Mazda RX4 Wag**   21    6     160   
+ **Mazda RX4 Wag**   21     6    160  
 --------------------------------------
 
 ```
@@ -118,24 +118,24 @@ II. Second element
 ```rout
 > pandoc.table(m, style = "simple")
 
-&nbsp;              mpg   cyl   disp  
+      &nbsp;         mpg   cyl   disp 
 ------------------- ----- ----- ------
-**Mazda RX4**       21    6     160   
-**Mazda RX4 Wag**   21    6     160   
+   **Mazda RX4**     21     6    160  
+ **Mazda RX4 Wag**   21     6    160  
 
 ```
 
-  * `grid` format are really handy for [emacs](http://emacswiki.org/emacs/TableMode) users but do support line breaks inside cells, but do not tolerate cell alignment:
+  * `grid` format is really handy for [emacs](http://emacswiki.org/emacs/TableMode) users, does support line breaks inside cells, but do not tolerate cell alignment:
 
 ```rout
 > pandoc.table(m, style = "grid")
 
 +---------------------+-------+-------+--------+
-| &nbsp;              | mpg   | cyl   | disp   |
+|       &nbsp;        |  mpg  |  cyl  |  disp  |
 +=====================+=======+=======+========+
-| **Mazda RX4**       | 21    | 6     | 160    |
+|    **Mazda RX4**    |  21   |   6   |  160   |
 +---------------------+-------+-------+--------+
-| **Mazda RX4 Wag**   | 21    | 6     | 160    |
+|  **Mazda RX4 Wag**  |  21   |   6   |  160   |
 +---------------------+-------+-------+--------+
 
 ```
@@ -144,7 +144,6 @@ II. Second element
 
 ```rout
 > pandoc.table(m, style = "rmarkdown")
-
 
 |       &nbsp;        |  mpg  |  cyl  |  disp  |
 |:-------------------:|:-----:|:-----:|:------:|
@@ -159,11 +158,11 @@ Besides the `style` parameter there are several other ways to tweak the output l
 > pandoc.table(m, style = "grid", caption = "Hello caption!")
 
 +---------------------+-------+-------+--------+
-| &nbsp;              | mpg   | cyl   | disp   |
+|       &nbsp;        |  mpg  |  cyl  |  disp  |
 +=====================+=======+=======+========+
-| **Mazda RX4**       | 21    | 6     | 160    |
+|    **Mazda RX4**    |  21   |   6   |  160   |
 +---------------------+-------+-------+--------+
-| **Mazda RX4 Wag**   | 21    | 6     | 160    |
+|  **Mazda RX4 Wag**  |  21   |   6   |  160   |
 +---------------------+-------+-------+--------+
 
 Table: Hello caption!
@@ -176,11 +175,11 @@ Table: Hello caption!
 > pandoc.table(mtcars[1:2, ], style = "grid", caption = "Hello caption!")
 
 +---------------------+-------+-------+--------+------+--------+-------+
-| &nbsp;              | mpg   | cyl   | disp   | hp   | drat   | wt    |
+|       &nbsp;        |  mpg  |  cyl  |  disp  |  hp  |  drat  |  wt   |
 +=====================+=======+=======+========+======+========+=======+
-| **Mazda RX4**       | 21    | 6     | 160    | 110  | 3.9    | 2.620 |
+|    **Mazda RX4**    |  21   |   6   |  160   | 110  |  3.9   | 2.62  |
 +---------------------+-------+-------+--------+------+--------+-------+
-| **Mazda RX4 Wag**   | 21    | 6     | 160    | 110  | 3.9    | 2.875 |
+|  **Mazda RX4 Wag**  |  21   |   6   |  160   | 110  |  3.9   | 2.875 |
 +---------------------+-------+-------+--------+------+--------+-------+
 
 Table: Hello caption! (continued below)
@@ -188,11 +187,11 @@ Table: Hello caption! (continued below)
  
 
 +---------------------+--------+------+------+--------+--------+
-| &nbsp;              | qsec   | vs   | am   | gear   | carb   |
+|       &nbsp;        |  qsec  |  vs  |  am  |  gear  |  carb  |
 +=====================+========+======+======+========+========+
-| **Mazda RX4**       | 16.46  | 0    | 1    | 4      | 4      |
+|    **Mazda RX4**    | 16.46  |  0   |  1   |   4    |   4    |
 +---------------------+--------+------+------+--------+--------+
-| **Mazda RX4 Wag**   | 17.02  | 0    | 1    | 4      | 4      |
+|  **Mazda RX4 Wag**  | 17.02  |  0   |  1   |   4    |   4    |
 +---------------------+--------+------+------+--------+--------+
 
 ```
@@ -203,27 +202,27 @@ And too wide cells are also split by line breaks. E.g.:
 > pandoc.table(data.frame(id=1:2, value=c('FOO', 'Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.')))
 
 ----------------------------------
-id   value                        
+ id              value            
 ---- -----------------------------
-1    FOO                          
+ 1                FOO             
 
-2    Lorem ipsum dolor sit amet,  
+ 2    Lorem ipsum dolor sit amet, 
      consectetur adipisicing elit,
-     sed do eiusmod tempor        
-     incididunt ut labore et      
+         sed do eiusmod tempor    
+        incididunt ut labore et   
      dolore magna aliqua. Ut enim 
      ad minim veniam, quis nostrud
      exercitation ullamco laboris 
      nisi ut aliquip ex ea commodo
-     consequat. Duis aute irure   
-     dolor in reprehenderit in    
-     voluptate velit esse cillum  
-     dolore eu fugiat nulla       
-     pariatur. Excepteur sint     
-     occaecat cupidatat non       
-     proident, sunt in culpa qui  
+      consequat. Duis aute irure  
+       dolor in reprehenderit in  
+      voluptate velit esse cillum 
+        dolore eu fugiat nulla    
+       pariatur. Excepteur sint   
+        occaecat cupidatat non    
+      proident, sunt in culpa qui 
      officia deserunt mollit anim 
-     id est laborum               
+            id est laborum.       
 ----------------------------------
 
 ```
@@ -242,7 +241,7 @@ Besides simple types (vectors, matrices, tables or data frames) lists might be i
   * **c**:
 
     -------
-    0   1
+     0   1
     --- ---
     19  13
     -------
@@ -274,41 +273,41 @@ A nested list can be seen above with a table and all (optional) list names insid
   * **observed**:
 
     -------------------
-    &nbsp;  3   4   5
+    &nbsp;   3   4   5
     ------- --- --- ---
-    **0**   15  4   0
+     **0**  15   4   0
 
-    **1**   0   8   5
+     **1**   0   8   5
     -------------------
 
   * **expected**:
 
     -------------------------
-    &nbsp;  3     4     5
+    &nbsp;    3     4     5
     ------- ----- ----- -----
-    **0**   8.906 7.125 2.969
+     **0**  8.906 7.125 2.969
 
-    **1**   6.094 4.875 2.031
+     **1**  6.094 4.875 2.031
     -------------------------
 
   * **residuals**:
 
     ----------------------------
-    &nbsp;  3      4      5
+    &nbsp;    3      4      5
     ------- ------ ------ ------
-    **0**   2.042  -1.171 -1.723
+     **0**  2.042  -1.171 -1.723
 
-    **1**   -2.469 1.415  2.083
+     **1**  -2.469 1.415  2.083
     ----------------------------
 
   * **stdres**:
 
     ----------------------------
-    &nbsp;  3      4      5
+    &nbsp;    3      4      5
     ------- ------ ------ ------
-    **0**   4.395  -2.323 -2.943
+     **0**  4.395  -2.323 -2.943
 
-    **1**   -4.395 2.323  2.943
+     **1**  -4.395 2.323  2.943
     ----------------------------
 
 <!-- end of list -->
@@ -325,7 +324,7 @@ The output of different **statistical methods** are tried to be prettyfied. Some
 ---------------------------------------------------
  Test statistic   P value   Alternative hypothesis 
 ---------------- --------- ------------------------
-      0.24       _0.1124_         two-sided        
+      0.18       _0.3959_         two-sided        
 ---------------------------------------------------
 
 Table: Two-sample Kolmogorov-Smirnov test: `runif(50)` and `runif(50)`
@@ -335,7 +334,7 @@ Table: Two-sample Kolmogorov-Smirnov test: `runif(50)` and `runif(50)`
 ---------------------------------------
  Test statistic   df       P value     
 ---------------- ---- -----------------
-     20.94        2   _2.831e-05_ * * *
+    20.94467      2   _2.831e-05_ * * *
 ---------------------------------------
 
 Table: Pearson's Chi-squared test: `table(mtcars$am, mtcars$gear)`
@@ -344,11 +343,11 @@ Table: Pearson's Chi-squared test: `table(mtcars$am, mtcars$gear)`
 
 > pander(t.test(extra ~ group, data = sleep))
 
----------------------------------------------------------
- Test statistic   df    P value   Alternative hypothesis 
----------------- ----- --------- ------------------------
-     -1.861      17.78 _0.07939_        two.sided        
----------------------------------------------------------
+------------------------------------------------------------
+ Test statistic     df     P value   Alternative hypothesis 
+---------------- -------- --------- ------------------------
+   -1.860813     17.77647 _0.07939_        two.sided        
+------------------------------------------------------------
 
 Table: Welch Two Sample t-test: `extra` by `group`
 
@@ -359,19 +358,19 @@ Table: Welch Two Sample t-test: `extra` by `group`
 > m <- glm(counts ~ outcome + treatment, family=poisson())
 > pander(m)
 
----------------------------------------------------------------
-           &nbsp;  Estimate   Std. Error   z value    Pr(>|z|) 
------------------ ---------- ------------ ---------- ----------
-  **(Intercept)** 3.045e+00   1.709e-01   1.781e+01  5.427e-71 
+--------------------------------------------------------------
+           &nbsp;  Estimate   Std. Error   z value   Pr(>|z|) 
+----------------- ---------- ------------ --------- ----------
+  **(Intercept)**   3.045       0.1709      17.81   5.427e-71 
 
-     **outcome2** -4.543e-01  2.022e-01   -2.247e+00 2.465e-02 
+     **outcome2**  -0.4543      0.2022     -2.247    0.02465  
 
-     **outcome3** -2.930e-01  1.927e-01   -1.520e+00 1.285e-01 
+     **outcome3**   -0.293      0.1927      -1.52     0.1285  
 
-   **treatment2** 1.338e-15   2.000e-01   6.690e-15  1.000e+00 
+   **treatment2** 1.338e-15      0.2      6.69e-15      1     
 
-   **treatment3** 1.421e-15   2.000e-01   7.105e-15  1.000e+00 
----------------------------------------------------------------
+   **treatment3** 1.421e-15      0.2      7.105e-15     1     
+--------------------------------------------------------------
 
 Table: Fitting generalized (poisson/log) linear model: counts ~ outcome + treatment
 
@@ -380,9 +379,9 @@ Table: Fitting generalized (poisson/log) linear model: counts ~ outcome + treatm
 --------------------------------------------------------
          &nbsp;  Df   Deviance   Resid. Df   Resid. Dev 
 --------------- ---- ---------- ----------- ------------
-       **NULL**                      8         10.581   
+       **NULL**                      8         10.58    
 
-    **outcome**  2   5.452e+00       6         5.129    
+    **outcome**  2     5.452         6         5.129    
 
   **treatment**  2   2.665e-15       4         5.129    
 --------------------------------------------------------
@@ -394,11 +393,11 @@ Table: Analysis of Deviance Table
 -----------------------------------------------------------
          &nbsp;  Df   Sum Sq    Mean Sq   F value   Pr(>F) 
 --------------- ---- --------- --------- --------- --------
-    **outcome**  2   9.267e+01 4.633e+01 2.224e+00  0.2242 
+    **outcome**  2     92.67     46.33     2.224    0.2242 
 
   **treatment**  2   8.382e-31 4.191e-31 2.012e-32    1    
 
-  **Residuals**  4   8.333e+01 2.083e+01                   
+  **Residuals**  4     83.33     20.83                     
 -----------------------------------------------------------
 
 Table: Analysis of Variance Model
@@ -406,45 +405,45 @@ Table: Analysis of Variance Model
 > pander(prcomp(USArrests))
 
 -------------------------------------------------
-&nbsp;         PC1     PC2      PC3      PC4     
+    &nbsp;       PC1     PC2      PC3      PC4   
 -------------- ------- -------- -------- --------
-**Murder**     0.04170 -0.04482 0.07989  -0.99492
+  **Murder**   0.0417  -0.04482 0.07989  -0.9949 
 
-**Assault**    0.99522 -0.05876 -0.06757 0.03894 
+ **Assault**   0.9952  -0.05876 -0.06757 0.03894 
 
-**UrbanPop**   0.04634 0.97686  -0.20055 -0.05817
+ **UrbanPop**  0.04634  0.9769  -0.2005  -0.05817
 
-**Rape**       0.07516 0.20072  0.97408  0.07233 
+   **Rape**    0.07516  0.2007   0.9741  0.07233 
 -------------------------------------------------
 
 Table: Principal Components Analysis
 
---------------------------------------------------------------
-&nbsp;                       PC1      PC2      PC3     PC4    
----------------------------- -------- -------- ------- -------
-**Standard deviation**       83.73240 14.21240 6.48943 2.48279
+----------------------------------------------------------
+           &nbsp;             PC1     PC2    PC3     PC4  
+---------------------------- ------ ------- ------ -------
+   **Standard deviation**    83.73   14.21  6.489   2.483 
 
-**Proportion of Variance**   0.96553  0.02782  0.00580 0.00085
+ **Proportion of Variance**  0.9655 0.02782 0.0058 0.00085
 
-**Cumulative Proportion**    0.96553  0.99335  0.99915 1      
---------------------------------------------------------------
+ **Cumulative Proportion**   0.9655 0.9933  0.9991    1   
+----------------------------------------------------------
 
 > pander(density(mtcars$hp))
 
 --------------------------------------------
        &nbsp;  Coordinates   Density values 
 ------------- ------------- ----------------
-     **Min.**    -32.12        0.0000050    
+     **Min.**    -32.12          5e-06      
 
   **1st Qu.**     80.69        0.0004068    
 
-   **Median**    193.50        0.0016650    
+   **Median**     193.5         0.001665    
 
-     **Mean**    193.50        0.0022140    
+     **Mean**     193.5         0.002214    
 
-  **3rd Qu.**    306.30        0.0040900    
+  **3rd Qu.**     306.3         0.00409     
 
-     **Max.**    419.10        0.0060510    
+     **Max.**     419.1         0.006051    
 --------------------------------------------
 
 Table: Kernel density of *mtcars$hp* (bandwidth: 28.04104)
@@ -460,13 +459,13 @@ Table: Kernel density of *mtcars$hp* (bandwidth: 28.04104)
 
   **1st Qu.**     80.69            0        
 
-   **Median**    193.50            0        
+   **Median**     193.5            0        
 
-     **Mean**    193.50            0        
+     **Mean**     193.5            0        
 
-  **3rd Qu.**    306.30            0        
+  **3rd Qu.**     306.3            0        
 
-     **Max.**    419.10           0.01      
+     **Max.**     419.1           0.01      
 --------------------------------------------
 
 Table: Kernel density of *mtcars$hp* (bandwidth: 28.04104)
@@ -480,27 +479,27 @@ And of course tables are formatted (e.g. auto add of line breaks and splitting u
 > pander(data.frame(id=1:2, value=c('FOO', 'Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.')))
 
 ----------------------------------
-id   value                        
+ id              value            
 ---- -----------------------------
-1    FOO                          
+ 1                FOO             
 
-2    Lorem ipsum dolor sit amet,  
+ 2    Lorem ipsum dolor sit amet, 
      consectetur adipisicing elit,
-     sed do eiusmod tempor        
-     incididunt ut labore et      
+         sed do eiusmod tempor    
+        incididunt ut labore et   
      dolore magna aliqua. Ut enim 
      ad minim veniam, quis nostrud
      exercitation ullamco laboris 
      nisi ut aliquip ex ea commodo
-     consequat. Duis aute irure   
-     dolor in reprehenderit in    
-     voluptate velit esse cillum  
-     dolore eu fugiat nulla       
-     pariatur. Excepteur sint     
-     occaecat cupidatat non       
-     proident, sunt in culpa qui  
+      consequat. Duis aute irure  
+       dolor in reprehenderit in  
+      voluptate velit esse cillum 
+        dolore eu fugiat nulla    
+       pariatur. Excepteur sint   
+        occaecat cupidatat non    
+      proident, sunt in culpa qui 
      officia deserunt mollit anim 
-     id est laborum               
+            id est laborum.       
 ----------------------------------
 
 Table: Foo Bar
@@ -819,4 +818,4 @@ To use this small lib, just type: `M-x pander-mode` on any document. It might be
 
 
 -------
-This report was generated with [R](http://www.r-project.org/) (2.15.1) and [pander](https://github.com/rapporter/pander) (0.2) in 1.058 sec on x86_64-unknown-linux-gnu platform.
+This report was generated with [R](http://www.r-project.org/) (2.15.2) and [pander](https://github.com/rapporter/pander) (0.3.2) in 1.025 sec on x86_64-unknown-linux-gnu platform.
