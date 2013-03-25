@@ -95,7 +95,7 @@ II. Second element
 
 ```
 
-`pandoc` can return **tables** in [three formats supported by Pandoc](http://johnmacfarlane.net/pandoc/README.html#tables) and also in [PHP Markdown Extra format](http://michelf.ca/projects/php-markdown/extra/#table):
+`pandoc` can return **tables** in [four formats supported by Pandoc](http://johnmacfarlane.net/pandoc/README.html#tables), including the pipe tables also used in `knitr` and [PHP Markdown Extra format](http://michelf.ca/projects/php-markdown/extra/#table):
 
   * The default style is the `multiline` format as most features (e.g. multi-line cells and alignment) are available in there.
 
@@ -324,7 +324,7 @@ The output of different **statistical methods** are tried to be prettyfied. Some
 ---------------------------------------------------
  Test statistic   P value   Alternative hypothesis 
 ---------------- --------- ------------------------
-      0.18       _0.3959_         two-sided        
+      0.16       _0.5487_         two-sided        
 ---------------------------------------------------
 
 Table: Two-sample Kolmogorov-Smirnov test: `runif(50)` and `runif(50)`
@@ -818,4 +818,4 @@ To use this small lib, just type: `M-x pander-mode` on any document. It might be
 
 
 -------
-This report was generated with [R](http://www.r-project.org/) (2.15.2) and [pander](https://github.com/rapporter/pander) (0.3.2) in 1.025 sec on x86_64-unknown-linux-gnu platform.
+This report was generated with [R](http://www.r-project.org/) (2.15.2) and [pander](https://github.com/rapporter/pander) (0.3.2) in 0.939 sec on x86_64-unknown-linux-gnu platform.

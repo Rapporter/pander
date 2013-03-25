@@ -82,7 +82,7 @@ pandoc.list.return(l, 'roman')
 %>
 ```
 
-`pandoc` can return **tables** in [three formats supported by Pandoc](http://johnmacfarlane.net/pandoc/README.html#tables) and also in [PHP Markdown Extra format](http://michelf.ca/projects/php-markdown/extra/#table):
+`pandoc` can return **tables** in [four formats supported by Pandoc](http://johnmacfarlane.net/pandoc/README.html#tables), including the pipe tables also used in `knitr` and [PHP Markdown Extra format](http://michelf.ca/projects/php-markdown/extra/#table):
 
   * The default style is the `multiline` format as most features (e.g. multi-line cells and alignment) are available in there.
 
