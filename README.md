@@ -97,7 +97,7 @@ II. Second element
 
 `pandoc` can return **tables** in [four formats supported by Pandoc](http://johnmacfarlane.net/pandoc/README.html#tables), including the pipe tables also used in `knitr` and [PHP Markdown Extra format](http://michelf.ca/projects/php-markdown/extra/#table):
 
-  * The default style is the `multiline` format as most features (e.g. multi-line cells and alignment) are available in there.
+  * The default style is the [`multiline` format](http://johnmacfarlane.net/pandoc/README.html#multiline-tables) as most features (e.g. multi-line cells and alignment) are available in there.
 
 ```rout
 > m <- mtcars[1:2, 1:3]
@@ -113,7 +113,7 @@ II. Second element
 
 ```
 
-  * `simple` tables do not support line breaks in cells:
+  * [`simple` tables](http://johnmacfarlane.net/pandoc/README.html#simple-tables) do not support line breaks in cells:
 
 ```rout
 > pandoc.table(m, style = "simple")
@@ -125,7 +125,7 @@ II. Second element
 
 ```
 
-  * `grid` format is really handy for [emacs](http://emacswiki.org/emacs/TableMode) users, does support line breaks inside cells, but do not tolerate cell alignment:
+  * [`grid` format](http://johnmacfarlane.net/pandoc/README.html#grid-tables) is really handy for [emacs](http://emacswiki.org/emacs/TableMode) users, does support line breaks inside cells, but do not tolerate cell alignment:
 
 ```rout
 > pandoc.table(m, style = "grid")
@@ -140,7 +140,7 @@ II. Second element
 
 ```
 
-  * `rmarkdown` tables can be used directly with `knitr` since they are understood by the `markdown` package:
+  * [`rmarkdown` tables](http://johnmacfarlane.net/pandoc/README.html#pipe-tables) can be used directly with `knitr` since they are understood by the `markdown` package:
 
 ```rout
 > pandoc.table(m, style = "rmarkdown")
@@ -818,4 +818,4 @@ To use this small lib, just type: `M-x pander-mode` on any document. It might be
 
 
 -------
-This report was generated with [R](http://www.r-project.org/) (2.15.2) and [pander](https://github.com/rapporter/pander) (0.3.2) in 0.939 sec on x86_64-unknown-linux-gnu platform.
+This report was generated with [R](http://www.r-project.org/) (2.15.2) and [pander](https://github.com/rapporter/pander) (0.3.2) in 1.172 sec on x86_64-unknown-linux-gnu platform.
