@@ -125,9 +125,9 @@ II. Second element
 
 &lt;!-- end of list --&gt;
 </code></pre>
-<p><code>pandoc</code> can return <strong>tables</strong> in <a href="http://johnmacfarlane.net/pandoc/README.html#tables">three formats supported by Pandoc</a> and also in <a href="http://michelf.ca/projects/php-markdown/extra/#table">PHP Markdown Extra format</a>:</p>
+<p><code>pandoc</code> can return <strong>tables</strong> in <a href="http://johnmacfarlane.net/pandoc/README.html#tables">four formats supported by Pandoc</a>, including the pipe tables also used in <code>knitr</code> and <a href="http://michelf.ca/projects/php-markdown/extra/#table">PHP Markdown Extra format</a>:</p>
 <ul>
-<li>The default style is the <code>multiline</code> format as most features (e.g. multi-line cells and alignment) are available in there.</li>
+<li>The default style is the <a href="http://johnmacfarlane.net/pandoc/README.html#multiline-tables"><code>multiline</code> format</a> as most features (e.g. multi-line cells and alignment) are available in there.</li>
 </ul>
 <pre class="rout"><code>&gt; m &lt;- mtcars[1:2, 1:3]
 &gt; pandoc.table(m)
@@ -141,7 +141,7 @@ II. Second element
 --------------------------------------
 </code></pre>
 <ul>
-<li><code>simple</code> tables do not support line breaks in cells:</li>
+<li><a href="http://johnmacfarlane.net/pandoc/README.html#simple-tables"><code>simple</code> tables</a> do not support line breaks in cells:</li>
 </ul>
 <pre class="rout"><code>&gt; pandoc.table(m, style = &quot;simple&quot;)
 
@@ -151,7 +151,7 @@ II. Second element
  **Mazda RX4 Wag**   21     6    160  
 </code></pre>
 <ul>
-<li><code>grid</code> format is really handy for <a href="http://emacswiki.org/emacs/TableMode">emacs</a> users, does support line breaks inside cells, but do not tolerate cell alignment:</li>
+<li><a href="http://johnmacfarlane.net/pandoc/README.html#grid-tables"><code>grid</code> format</a> is really handy for <a href="http://emacswiki.org/emacs/TableMode">emacs</a> users, does support line breaks inside cells, but do not tolerate cell alignment:</li>
 </ul>
 <pre class="rout"><code>&gt; pandoc.table(m, style = &quot;grid&quot;)
 
@@ -164,7 +164,7 @@ II. Second element
 +---------------------+-------+-------+--------+
 </code></pre>
 <ul>
-<li><code>rmarkdown</code> tables can be used directly with <code>knitr</code> since they are understood by the <code>markdown</code> package:</li>
+<li><a href="http://johnmacfarlane.net/pandoc/README.html#pipe-tables"><code>rmarkdown</code> tables</a> can be used directly with <code>knitr</code> since they are understood by the <code>markdown</code> package:</li>
 </ul>
 <pre class="rout"><code>&gt; pandoc.table(m, style = &quot;rmarkdown&quot;)
 
@@ -320,7 +320,7 @@ Table: Hello caption! (continued below)
 ---------------------------------------------------
  Test statistic   P value   Alternative hypothesis 
 ---------------- --------- ------------------------
-      0.18       _0.3959_         two-sided        
+      0.16       _0.5487_         two-sided        
 ---------------------------------------------------
 
 Table: Two-sample Kolmogorov-Smirnov test: `runif(50)` and `runif(50)`
@@ -736,7 +736,7 @@ evals(&#39;mean(xx)&#39;)</code></pre>
 <p>To use this small lib, just type: <code>M-x pander-mode</code> on any document. It might be useful to add a hook to <code>markdown-mode</code> if you find this useful.</p>
 <p><a href="http://githalytics.com/Rapporter/pander"><img src="https://cruel-carlota.pagodabox.com/9dfac0c1da37bd83d1848289630631fd" title="githalytics.com" alt="githalytics.com alpha" /></a></p>
 <hr />
-<p>This report was generated with <a href="http://www.r-project.org/">R</a> (2.15.2) and <a href="https://github.com/rapporter/pander">pander</a> (0.3.2) in 1.025 sec on x86_64-unknown-linux-gnu platform.</p>
+<p>This report was generated with <a href="http://www.r-project.org/">R</a> (2.15.2) and <a href="https://github.com/rapporter/pander">pander</a> (0.3.2) in 1.172 sec on x86_64-unknown-linux-gnu platform.</p>
 <p align="center">
   Design: <a href="http://rapport-package.info/"><i>rapport</i> Development Team</a> &copy; 2012 | Backend: <a href="https://github.com/rapporter/pander">pander</a> | License: <a href="http://www.gnu.org/licenses/agpl.html" target="_blank">AGPL3</a> | Styled with <a href="http://www.getskeleton.com/" target="_blank">skeleton</a>
 </p>
