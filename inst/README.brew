@@ -377,6 +377,7 @@ myReport$export(open = FALSE)
   * `digits`: numeric (default: `2`) passed to `format`
   * `decimal.mark`: numeric (default: `.`) passed to `format`
   * `round`: numeric (default: `Inf`) passed to `round`
+  * `keep.trailing.zeros`: boolean (default: `FALSE`) show or remove trailing zeros in numbers (e.g. in numeric vectors or in columns of tables with numeric values)
   * `date`: string (default: `'%Y/%m/%d %X'`) passed to `format` when printing dates (`POSIXct` or `POSIXt`)
   * `header.style`: `'atx'` or `'setext'` passed to `pandoc.header`
   * `list.style`: `'bullet'` (default), `'ordered'` or `'roman'` passed to `pandoc.list`. Please not that this has no effect on `pander` methods.

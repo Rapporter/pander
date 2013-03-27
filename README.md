@@ -324,7 +324,7 @@ The output of different **statistical methods** are tried to be prettyfied. Some
 ---------------------------------------------------
  Test statistic   P value   Alternative hypothesis 
 ---------------- --------- ------------------------
-      0.16       _0.5487_         two-sided        
+      0.24       _0.1124_         two-sided        
 ---------------------------------------------------
 
 Table: Two-sample Kolmogorov-Smirnov test: `runif(50)` and `runif(50)`
@@ -649,6 +649,7 @@ myReport$export(open = FALSE)
   * `digits`: numeric (default: `2`) passed to `format`
   * `decimal.mark`: numeric (default: `.`) passed to `format`
   * `round`: numeric (default: `Inf`) passed to `round`
+  * `keep.trailing.zeros`: boolean (default: `FALSE`) show or remove trailing zeros in numbers (e.g. in numeric vectors or in columns of tables with numeric values)
   * `date`: string (default: `'%Y/%m/%d %X'`) passed to `format` when printing dates (`POSIXct` or `POSIXt`)
   * `header.style`: `'atx'` or `'setext'` passed to `pandoc.header`
   * `list.style`: `'bullet'` (default), `'ordered'` or `'roman'` passed to `pandoc.list`. Please not that this has no effect on `pander` methods.
@@ -818,4 +819,4 @@ To use this small lib, just type: `M-x pander-mode` on any document. It might be
 
 
 -------
-This report was generated with [R](http://www.r-project.org/) (2.15.2) and [pander](https://github.com/rapporter/pander) (0.3.2) in 1.172 sec on x86_64-unknown-linux-gnu platform.
+This report was generated with [R](http://www.r-project.org/) (2.15.3) and [pander](https://github.com/rapporter/pander) (0.3.2) in 1.201 sec on x86_64-unknown-linux-gnu platform.
