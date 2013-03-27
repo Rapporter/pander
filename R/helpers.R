@@ -75,7 +75,7 @@ p <- function(x, wrap = panderOptions('p.wrap'), sep = panderOptions('p.sep'), c
 
         ## optionally remove trailing zeros
         if (!keep.trailing.zeros)
-            x <- sub('[\\.,]+0*$', '', x)
+            x <- sub('(?:(\\..*[^0])0+|\\.0+)$', '\\1', x)
 
     }
 
@@ -682,33 +682,32 @@ pandoc.table.return <- function(t, caption = storage$caption, digits = panderOpt
         t.n <- as.numeric(which(sapply(t, is.numeric)))
         if (length(t.n) > 0) {
             t[t.n] <- round(t[t.n], round)
-            t[t.n] <- sapply(t[t.n], format, trim = TRUE, digits = digits, decimal.mark = decimal.mark)
             if (!keep.trailing.zeros)
-                t[t.n] <- sub('[\\.,]+0*$', '', t[t.n])
-
+                t[t.n] <- sapply(t[t.n], format, trim = TRUE, digits = digits, decimal.mark = decimal.mark)
         }
     }
     if (length(dim(t)) == 1) {
         t.n <- as.numeric(which(apply(t, 1, is.numeric)))
         if (length(t.n) > 0) {
             t[t.n] <- round(t[t.n], round)
-            t[t.n] <- apply(t[t.n], 1, format, trim = TRUE, digits = digits, decimal.mark = decimal.mark)
             if (!keep.trailing.zeros)
-                t[t.n] <- sub('[\\.,]+0*$', '', t[t.n])
+                t[t.n] <- apply(t[t.n], 1, format, trim = TRUE, digits = digits, decimal.mark = decimal.mark)
         }
     }
     if (length(dim(t)) == 2) {
         t.n <- as.numeric(which(apply(t, 2, is.numeric)))
         if (length(t.n) > 0) {
             t[, t.n] <- round(t[, t.n], round)
-            t[, t.n] <- apply(t[, t.n, drop = FALSE], c(1,2), format, trim = TRUE, digits = digits, decimal.mark = decimal.mark)
             if (!keep.trailing.zeros)
-                t[, t.n] <- apply(t[, t.n, drop = FALSE], c(1,2), sub, pattern = '[\\.,]+0*$', replacement = '')
+                t[, t.n] <- apply(t[, t.n, drop = FALSE], c(1,2), format, trim = TRUE, digits = digits, decimal.mark = decimal.mark)
         }
     }
 
     ## drop unexpected classes and revert back to a common format
-    t <- format(t, trim = TRUE)
+    if (keep.trailing.zeros)
+        t <- format(t, trim = TRUE, digits = digits, decimal.mark = decimal.mark)
+    else
+        t <- format(t, trim = TRUE)
 
     ## TODO: adding formatting (emphasis, strong etc.)
 
