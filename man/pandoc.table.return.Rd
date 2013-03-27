@@ -9,7 +9,8 @@
     round = panderOptions("round"), justify = "centre",
     style = c("multiline", "grid", "simple", "rmarkdown"),
     split.tables = panderOptions("table.split.table"),
-    split.cells = panderOptions("table.split.cells"))
+    split.cells = panderOptions("table.split.cells"),
+    keep.trailing.zeros = panderOptions("keep.trailing.zeros"))
 }
 \arguments{
   \item{t}{data frame, matrix or table}
@@ -37,6 +38,9 @@
   \item{split.cells}{where to split cells' text with line
   breaks. Default to \code{30}, to disable set to
   \code{Inf}.}
+
+  \item{keep.trailing.zeros}{to show or remove trailing
+  zeros in numbers on a column basis width}
 }
 \value{
   By default this function outputs (see: \code{cat}) the

@@ -4,7 +4,8 @@
 \usage{
   p(x, wrap = panderOptions("p.wrap"),
     sep = panderOptions("p.sep"),
-    copula = panderOptions("p.copula"), limit = Inf)
+    copula = panderOptions("p.copula"), limit = Inf,
+    keep.trailing.zeros = panderOptions("keep.trailing.zeros"))
 }
 \arguments{
   \item{x}{an atomic vector to get merged for inline
@@ -27,6 +28,9 @@
 
   \item{limit}{maximum character length (defaults to
   \code{Inf}initive elements)}
+
+  \item{keep.trailing.zeros}{to show or remove trailing
+  zeros in numbers}
 }
 \value{
   a string with concatenated vector contents

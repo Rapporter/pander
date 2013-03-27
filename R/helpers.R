@@ -44,6 +44,7 @@ repChar <- function(x, n, sep = '')
 #' @param sep a string with the main separator, i.e. the one that separates all vector elements but the last two (uses the value set in \code{p.sep} option - \code{","} by default)
 #' @param copula a string with ending separator - the one that separates the last two vector elements (uses the value set in \code{p.copula} option, \code{"and"} by default)
 #' @param limit maximum character length (defaults to \code{Inf}initive  elements)
+#' @param keep.trailing.zeros to show or remove trailing zeros in numbers
 #' @return a string with concatenated vector contents
 #' @examples
 #' p(c("fee", "fi", "foo", "fam"))
@@ -57,7 +58,7 @@ repChar <- function(x, n, sep = '')
 #' @export
 #' @author Aleksandar Blagotic
 #' @references This function was moved from \code{rapport} package: \url{http://rapport-package.info/}.
-p <- function(x, wrap = panderOptions('p.wrap'), sep = panderOptions('p.sep'), copula = panderOptions('p.copula'), limit = Inf){
+p <- function(x, wrap = panderOptions('p.wrap'), sep = panderOptions('p.sep'), copula = panderOptions('p.copula'), limit = Inf, keep.trailing.zeros = panderOptions('keep.trailing.zeros')){
 
     attributes(x) <- NULL
     stopifnot(is.vector(x))
@@ -68,9 +69,14 @@ p <- function(x, wrap = panderOptions('p.wrap'), sep = panderOptions('p.sep'), c
 
     ## prettify numbers
     if (is.numeric(x)) {
+
         x <- round(x, panderOptions('round'))
         x <- format(x, trim = TRUE, digits = panderOptions('digits'), decimal.mark = panderOptions('decimal.mark'))
-        x <- sub('[\\.,]+0*$', '', x) # removing trailing zeros
+
+        ## optionally remove trailing zeros
+        if (!keep.trailing.zeros)
+            x <- sub('[\\.,]+0*$', '', x)
+
     }
 
     if (x.len == 1)
@@ -540,6 +546,7 @@ pandoc.list <- function(...)
 #' @param style which Pandoc style to use: \code{simple}, \code{multiline}, \code{grid} or \code{rmarkdown}
 #' @param split.tables where to split wide tables to separate tables. The default value (\code{80}) suggests the conventional number of characters used in a line, feel free to change (e.g. to \code{Inf} to disable this feature) if you are not using a VT100 terminal any more :)
 #' @param split.cells where to split cells' text with line breaks. Default to \code{30}, to disable set to \code{Inf}.
+#' @param keep.trailing.zeros to show or remove trailing zeros in numbers on a column basis width
 #' @return By default this function outputs (see: \code{cat}) the result. If you would want to catch the result instead, then call the function ending in \code{.return}.
 #' @export
 #' @aliases pandoc.table
@@ -587,7 +594,7 @@ pandoc.list <- function(...)
 #' pandoc.table(t, style = "simple")
 #' tryCatch(pandoc.table(t, style = "simple", split.cells = 5), error = function(e) 'Yeah, no newline support in simple tables')
 #' pandoc.table(t, style = "rmarkdown")
-pandoc.table.return <- function(t, caption = storage$caption, digits = panderOptions('digits'), decimal.mark = panderOptions('decimal.mark'), round = panderOptions('round'), justify = 'centre', style = c('multiline', 'grid', 'simple', 'rmarkdown'), split.tables = panderOptions('table.split.table'), split.cells = panderOptions('table.split.cells')) {
+pandoc.table.return <- function(t, caption = storage$caption, digits = panderOptions('digits'), decimal.mark = panderOptions('decimal.mark'), round = panderOptions('round'), justify = 'centre', style = c('multiline', 'grid', 'simple', 'rmarkdown'), split.tables = panderOptions('table.split.table'), split.cells = panderOptions('table.split.cells'), keep.trailing.zeros = panderOptions('keep.trailing.zeros')) {
 
     ## helper functions
     table.expand <- function(cells, cols.width, justify, sep.cols) {
@@ -670,12 +677,15 @@ pandoc.table.return <- function(t, caption = storage$caption, digits = panderOpt
     else
         style <- match.arg(style)
 
-    ## round numbers & cut digits & apply decimal mark
+    ## round numbers & cut digits & apply decimal mark & optionally remove trailing zeros
     if (length(dim(t)) == 0) {  # named char
         t.n <- as.numeric(which(sapply(t, is.numeric)))
         if (length(t.n) > 0) {
             t[t.n] <- round(t[t.n], round)
             t[t.n] <- sapply(t[t.n], format, trim = TRUE, digits = digits, decimal.mark = decimal.mark)
+            if (!keep.trailing.zeros)
+                t[t.n] <- sub('[\\.,]+0*$', '', t[t.n])
+
         }
     }
     if (length(dim(t)) == 1) {
@@ -683,6 +693,8 @@ pandoc.table.return <- function(t, caption = storage$caption, digits = panderOpt
         if (length(t.n) > 0) {
             t[t.n] <- round(t[t.n], round)
             t[t.n] <- apply(t[t.n], 1, format, trim = TRUE, digits = digits, decimal.mark = decimal.mark)
+            if (!keep.trailing.zeros)
+                t[t.n] <- sub('[\\.,]+0*$', '', t[t.n])
         }
     }
     if (length(dim(t)) == 2) {
@@ -690,6 +702,8 @@ pandoc.table.return <- function(t, caption = storage$caption, digits = panderOpt
         if (length(t.n) > 0) {
             t[, t.n] <- round(t[, t.n], round)
             t[, t.n] <- apply(t[, t.n, drop = FALSE], c(1,2), format, trim = TRUE, digits = digits, decimal.mark = decimal.mark)
+            if (!keep.trailing.zeros)
+                t[, t.n] <- apply(t[, t.n, drop = FALSE], c(1,2), sub, pattern = '[\\.,]+0*$', replacement = '')
         }
     }
 
