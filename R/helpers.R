@@ -880,7 +880,7 @@ pandoc.table.return <- function(t, caption = storage$caption, digits = panderOpt
         ## (optional) caption
         if (!is.null(caption))
             if (caption != '')
-                res <- sprintf('%sTable: %s\n\n', res, caption)
+                res <- paste0(res, panderOptions('table.caption.prefix'), caption, '\n\n')
 
         ## truncating caption buffer if needed
         if (!is.null(storage$caption))

@@ -12,6 +12,7 @@
                 'table.style'           = 'multiline',
                 'table.split.table'     = 80,
                 'table.split.cells'     = 30,
+                'table.caption.prefix'  = 'Table: ',
                 'table.continues'       = 'Table continues below',
                 'table.continues.affix' = '(continued below)',
                 'evals.messages'        = TRUE,
@@ -188,6 +189,7 @@ masked.plots$plot <- masked.plots$barplot <- masked.plots$lines <- masked.plots$
 #'      \item \code{table.style}: \code{'multiline'}, \code{'grid'}, \code{'simple'} or \code{'rmarkdown'} passed to \code{\link{pandoc.table}}
 #'      \item \code{table.split.table}: numeric passed to \code{\link{pandoc.table}} and also affects \code{pander} methods. This option tells \code{pander} where to split too wide tables. The default value (\code{80}) suggests the conventional number of characters used in a line, feel free to change (e.g. to \code{Inf} to disable this feature) if you are not using a VT100 terminal any more :)
 #'      \item \code{table.split.cells}: numeric (default: \code{30}) passed to \code{\link{pandoc.table}} and also affects \code{pander} methods. This option tells \code{pander} where to split too wide cells with line breaks. Set \code{Inf} to disable.
+#'      \item \code{table.caption.prefix}: string (default: \code{'Table: '}) passed to \code{\link{pandoc.table}} to be used as caption prefix. Be sure about what you are doing if changing to other than \code{'Table: '} or \code{':'}.
 #'      \item \code{table.continues}: string (default: \code{'Table continues below'}) passed to \code{\link{pandoc.table}} to be used as caption for long (split) without a use defined caption
 #'      \item \code{table.continues.affix}: string (default: \code{'(continued below)'}) passed to \code{\link{pandoc.table}} to be used as an affix concatenated to the user defined caption for long (split) tables
 #'      \item \code{evals.messages}: boolean (default: \code{TRUE}) passed to \code{evals}' \code{pander} method specifying if messages should be rendered

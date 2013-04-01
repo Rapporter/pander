@@ -49,11 +49,16 @@
   affects \code{pander} methods. This option tells
   \code{pander} where to split too wide cells with line
   breaks. Set \code{Inf} to disable.  \item
-  \code{table.continues}: string (default: \code{'Table
-  continues below'}) passed to \code{\link{pandoc.table}}
-  to be used as caption for long (split) without a use
-  defined caption \item \code{table.continues.affix}:
-  string (default: \code{'(continued below)'}) passed to
+  \code{table.caption.prefix}: string (default:
+  \code{'Table: '}) passed to \code{\link{pandoc.table}} to
+  be used as caption prefix. Be sure about what you are
+  doing if changing to other than \code{'Table: '} or
+  \code{':'}.  \item \code{table.continues}: string
+  (default: \code{'Table continues below'}) passed to
+  \code{\link{pandoc.table}} to be used as caption for long
+  (split) without a use defined caption \item
+  \code{table.continues.affix}: string (default:
+  \code{'(continued below)'}) passed to
   \code{\link{pandoc.table}} to be used as an affix
   concatenated to the user defined caption for long (split)
   tables \item \code{evals.messages}: boolean (default:
