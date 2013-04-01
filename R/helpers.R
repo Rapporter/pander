@@ -536,7 +536,7 @@ pandoc.list <- function(...)
 #'
 #' This function will try to make pretty the provided R object's content like: rounding numbers, auto-recognizing if row names should be included etc.
 #'
-#' And also tries to split cells with line breaks or even the whole table to separate parts on demand. See the parameters above.
+#' And also tries to split cells with line breaks or even the whole table to separate parts on demand. See the parameters above and passed arguments of \code{\link{panderOptions}}.
 #' @param t data frame, matrix or table
 #' @param caption string
 #' @param digits passed to \code{format}
@@ -793,9 +793,9 @@ pandoc.table.return <- function(t, caption = storage$caption, digits = panderOpt
 
         ## update caption
         if (!is.null(caption))
-            caption <- paste(caption, '(continued below)')
+            caption <- paste(caption, panderOptions('table.continues.affix'))
         else
-            caption <- 'Table continues below'
+            caption <- panderOptions('table.continues')
 
         ## split
         if (length(t.rownames) != 0) {

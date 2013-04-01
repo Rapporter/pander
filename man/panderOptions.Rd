@@ -49,22 +49,30 @@
   affects \code{pander} methods. This option tells
   \code{pander} where to split too wide cells with line
   breaks. Set \code{Inf} to disable.  \item
-  \code{evals.messages}: boolean (default: \code{TRUE})
-  passed to \code{evals}' \code{pander} method specifying
-  if messages should be rendered \item \code{p.wrap}: a
-  string (default: \code{'_'}) to wrap vector elements
-  passed to \code{p} function \item \code{p.sep}: a string
-  (default: \code{', '}) with the main separator passed to
-  \code{p} function \item \code{p.copula}: a string
-  (default: \code{' and '}) with ending separator passed to
-  \code{p} function \item \code{graph.nomargin}: boolean
-  (default: \code{TRUE}) if trying to keep plots' margins
-  at minimal \item \code{graph.fontfamily}: string
-  (default: \code{'sans'}) specifying the font family to be
-  used in images. Please note, that using a custom font on
-  Windows requires \code{grDevices:::windowsFonts} first.
-  \item \code{graph.fontcolor}: string (default:
-  \code{'black'}) specifying the default font color \item
+  \code{table.continues}: string (default: \code{'Table
+  continues below'}) passed to \code{\link{pandoc.table}}
+  to be used as caption for long (split) without a use
+  defined caption \item \code{table.continues.affix}:
+  string (default: \code{'(continued below)'}) passed to
+  \code{\link{pandoc.table}} to be used as an affix
+  concatenated to the user defined caption for long (split)
+  tables \item \code{evals.messages}: boolean (default:
+  \code{TRUE}) passed to \code{evals}' \code{pander} method
+  specifying if messages should be rendered \item
+  \code{p.wrap}: a string (default: \code{'_'}) to wrap
+  vector elements passed to \code{p} function \item
+  \code{p.sep}: a string (default: \code{', '}) with the
+  main separator passed to \code{p} function \item
+  \code{p.copula}: a string (default: \code{' and '}) with
+  ending separator passed to \code{p} function \item
+  \code{graph.nomargin}: boolean (default: \code{TRUE}) if
+  trying to keep plots' margins at minimal \item
+  \code{graph.fontfamily}: string (default: \code{'sans'})
+  specifying the font family to be used in images. Please
+  note, that using a custom font on Windows requires
+  \code{grDevices:::windowsFonts} first.  \item
+  \code{graph.fontcolor}: string (default: \code{'black'})
+  specifying the default font color \item
   \code{graph.fontsize}: numeric (default: \code{12})
   specifying the \emph{base} font size in pixels. Main
   title is rendered with \code{1.2} and labels with

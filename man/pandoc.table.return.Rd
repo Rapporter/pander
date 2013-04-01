@@ -58,7 +58,8 @@
 
   And also tries to split cells with line breaks or even
   the whole table to separate parts on demand. See the
-  parameters above.
+  parameters above and passed arguments of
+  \code{\link{panderOptions}}.
 }
 \note{
   The \code{caption} text is read from an internal buffer
