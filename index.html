@@ -320,7 +320,7 @@ Table: Hello caption! (continued below)
 ---------------------------------------------------
  Test statistic   P value   Alternative hypothesis 
 ---------------- --------- ------------------------
-      0.16       _0.5487_         two-sided        
+      0.12       _0.8693_         two-sided        
 ---------------------------------------------------
 
 Table: Two-sample Kolmogorov-Smirnov test: `runif(50)` and `runif(50)`
@@ -611,12 +611,15 @@ myReport$<span class="kw">export</span>(<span class="dt">open =</span> <span cla
 <li><code>digits</code>: numeric (default: <code>2</code>) passed to <code>format</code></li>
 <li><code>decimal.mark</code>: numeric (default: <code>.</code>) passed to <code>format</code></li>
 <li><code>round</code>: numeric (default: <code>Inf</code>) passed to <code>round</code></li>
+<li><code>keep.trailing.zeros</code>: boolean (default: <code>FALSE</code>) show or remove trailing zeros in numbers (e.g. in numeric vectors or in columns of tables with numeric values)</li>
 <li><code>date</code>: string (default: <code>'%Y/%m/%d %X'</code>) passed to <code>format</code> when printing dates (<code>POSIXct</code> or <code>POSIXt</code>)</li>
 <li><code>header.style</code>: <code>'atx'</code> or <code>'setext'</code> passed to <code>pandoc.header</code></li>
 <li><code>list.style</code>: <code>'bullet'</code> (default), <code>'ordered'</code> or <code>'roman'</code> passed to <code>pandoc.list</code>. Please not that this has no effect on <code>pander</code> methods.</li>
 <li><code>table.style</code>: <code>'multiline'</code>, <code>'grid'</code> or <code>'simple'</code> passed to <code>pandoc.table</code></li>
 <li><code>table.split.table</code>: numeric passed to <code>pandoc.table</code> and also affects <code>pander</code> methods. This option tells <code>pander</code> where to split too wide tables. The default value (<code>80</code>) suggests the conventional number of characters used in a line, feel free to change (e.g. to <code>Inf</code> to disable this feature) if you are not using a VT100 terminal any more :)</li>
 <li><code>table.split.cells</code>: numeric (default: <code>30</code>) passed to <code>pandoc.table</code> and also affects <code>pander</code> methods. This option tells <code>pander</code> where to split too wide cells with line breaks. Set <code>Inf</code> to disable.</li>
+<li><code>table.continues</code>: string (default: <code>Table continues below</code>) passed to <code>pandoc.table</code> to be used as caption for long (split) without a use defined caption</li>
+<li><code>table.continues.affix</code>: string (default: <code>(continued below)</code>) passed to <code>pandoc.table</code> to be used as an affix concatenated to the user defined caption for long (split) tables</li>
 <li><code>evals.messages</code>: boolean (default: <code>TRUE</code>) passed to <code>evals</code>' <code>pander</code> method specifying if messages should be rendered</li>
 <li><code>p.wrap</code>: a string (default:<code>'_'</code>) to wrap vector elements passed to <code>p</code> function</li>
 <li><code>p.sep</code>: a string (default: <code>', '</code>) with the main separator passed to <code>p</code> function</li>
@@ -736,7 +739,7 @@ evals(&#39;mean(xx)&#39;)</code></pre>
 <p>To use this small lib, just type: <code>M-x pander-mode</code> on any document. It might be useful to add a hook to <code>markdown-mode</code> if you find this useful.</p>
 <p><a href="http://githalytics.com/Rapporter/pander"><img src="https://cruel-carlota.pagodabox.com/9dfac0c1da37bd83d1848289630631fd" title="githalytics.com" alt="githalytics.com alpha" /></a></p>
 <hr />
-<p>This report was generated with <a href="http://www.r-project.org/">R</a> (2.15.2) and <a href="https://github.com/rapporter/pander">pander</a> (0.3.2) in 1.172 sec on x86_64-unknown-linux-gnu platform.</p>
+<p>This report was generated with <a href="http://www.r-project.org/">R</a> (2.15.3) and <a href="https://github.com/rapporter/pander">pander</a> (0.3.3) in 1.051 sec on x86_64-unknown-linux-gnu platform.</p>
 <p align="center">
   Design: <a href="http://rapport-package.info/"><i>rapport</i> Development Team</a> &copy; 2012 | Backend: <a href="https://github.com/rapporter/pander">pander</a> | License: <a href="http://www.gnu.org/licenses/agpl.html" target="_blank">AGPL3</a> | Styled with <a href="http://www.getskeleton.com/" target="_blank">skeleton</a>
 </p>
