@@ -82,9 +82,9 @@ pandoc.list.return(l, 'roman')
 %>
 ```
 
-`pandoc` can return **tables** in [three formats](http://johnmacfarlane.net/pandoc/README.html#tables):
+`pandoc` can return **tables** in [four formats supported by Pandoc](http://johnmacfarlane.net/pandoc/README.html#tables), including the pipe tables also used in `knitr` and [PHP Markdown Extra format](http://michelf.ca/projects/php-markdown/extra/#table):
 
-  * The default style is the `multiline` format as most features (e.g. multi-line cells and alignment) are available in there.
+  * The default style is the [`multiline` format](http://johnmacfarlane.net/pandoc/README.html#multiline-tables) as most features (e.g. multi-line cells and alignment) are available in there.
 
 ```rout
 > m <- mtcars[1:2, 1:3]
@@ -94,7 +94,7 @@ pandoc.table.return(mtcars[1:2, 1:3])
 %>
 ```
 
-  * `simple` tables do not support line breaks in cells:
+  * [`simple` tables](http://johnmacfarlane.net/pandoc/README.html#simple-tables) do not support line breaks in cells:
 
 ```rout
 > pandoc.table(m, style = "simple")
@@ -103,12 +103,21 @@ pandoc.table.return(mtcars[1:2, 1:3], style = "simple")
 %>
 ```
 
-  * `grid` format are really handy for [emacs](http://emacswiki.org/emacs/TableMode) users but do support line breaks inside cells, but do not tolerate cell alignment:
+  * [`grid` format](http://johnmacfarlane.net/pandoc/README.html#grid-tables) is really handy for [emacs](http://emacswiki.org/emacs/TableMode) users, does support line breaks inside cells, but do not tolerate cell alignment:
 
 ```rout
 > pandoc.table(m, style = "grid")
 <%=
 pandoc.table.return(mtcars[1:2, 1:3], style = "grid")
+%>
+```
+
+  * [`rmarkdown` tables](http://johnmacfarlane.net/pandoc/README.html#pipe-tables) can be used directly with `knitr` since they are understood by the `markdown` package:
+
+```rout
+> pandoc.table(m, style = "rmarkdown")
+<%=
+pandoc.table.return(mtcars[1:2, 1:3], style = "rmarkdown")
 %>
 ```
 
@@ -368,12 +377,16 @@ myReport$export(open = FALSE)
   * `digits`: numeric (default: `2`) passed to `format`
   * `decimal.mark`: numeric (default: `.`) passed to `format`
   * `round`: numeric (default: `Inf`) passed to `round`
+  * `keep.trailing.zeros`: boolean (default: `FALSE`) show or remove trailing zeros in numbers (e.g. in numeric vectors or in columns of tables with numeric values)
   * `date`: string (default: `'%Y/%m/%d %X'`) passed to `format` when printing dates (`POSIXct` or `POSIXt`)
   * `header.style`: `'atx'` or `'setext'` passed to `pandoc.header`
   * `list.style`: `'bullet'` (default), `'ordered'` or `'roman'` passed to `pandoc.list`. Please not that this has no effect on `pander` methods.
   * `table.style`: `'multiline'`, `'grid'` or `'simple'` passed to `pandoc.table`
   * `table.split.table`: numeric passed to `pandoc.table` and also affects `pander` methods. This option tells `pander` where to split too wide tables. The default value (`80`) suggests the conventional number of characters used in a line, feel free to change (e.g. to `Inf` to disable this feature) if you are not using a VT100 terminal any more :)
   * `table.split.cells`: numeric (default: `30`) passed to `pandoc.table` and also affects `pander` methods. This option tells `pander` where to split too wide cells with line breaks. Set `Inf` to disable.
+  * `table.caption.prefix`: string (default: `Table: `) passed to `pandoc.table` to be used as caption prefix. Be sure about what you are doing if changing to other than `Table: ` or `:`.
+  * `table.continues`: string (default: `Table continues below`) passed to `pandoc.table` to be used as caption for long (split) without a use defined caption
+  * `table.continues.affix`: string (default: `(continued below)`) passed to `pandoc.table` to be used as an affix concatenated to the user defined caption for long (split) tables
   * `evals.messages`: boolean (default: `TRUE`) passed to `evals`' `pander` method specifying if messages should be rendered
   * `p.wrap`: a string (default:`'_'`) to wrap vector elements passed to `p` function
   * `p.sep`: a string (default: `', '`) with the main separator passed to `p` function

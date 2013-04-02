@@ -131,7 +131,7 @@ Pandoc.brew <- function(file = stdin(), output = stdout(), convert = FALSE, open
 
     ## remove absolute path from image links
     if (!output.stdout)
-        res <- gsub(sprintf(']\\(%s/', basedir), ']\\(', res)
+        res <- gsub(sprintf(']\\(%s/', basedir), ']\\(', res, fixed = TRUE)
 
     cat(remove.extra.newlines(paste(res, collapse = '\n')), '\n', file = output)
 

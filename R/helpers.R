@@ -44,6 +44,7 @@ repChar <- function(x, n, sep = '')
 #' @param sep a string with the main separator, i.e. the one that separates all vector elements but the last two (uses the value set in \code{p.sep} option - \code{","} by default)
 #' @param copula a string with ending separator - the one that separates the last two vector elements (uses the value set in \code{p.copula} option, \code{"and"} by default)
 #' @param limit maximum character length (defaults to \code{Inf}initive  elements)
+#' @param keep.trailing.zeros to show or remove trailing zeros in numbers
 #' @return a string with concatenated vector contents
 #' @examples
 #' p(c("fee", "fi", "foo", "fam"))
@@ -57,7 +58,7 @@ repChar <- function(x, n, sep = '')
 #' @export
 #' @author Aleksandar Blagotic
 #' @references This function was moved from \code{rapport} package: \url{http://rapport-package.info/}.
-p <- function(x, wrap = panderOptions('p.wrap'), sep = panderOptions('p.sep'), copula = panderOptions('p.copula'), limit = Inf){
+p <- function(x, wrap = panderOptions('p.wrap'), sep = panderOptions('p.sep'), copula = panderOptions('p.copula'), limit = Inf, keep.trailing.zeros = panderOptions('keep.trailing.zeros')){
 
     attributes(x) <- NULL
     stopifnot(is.vector(x))
@@ -68,17 +69,22 @@ p <- function(x, wrap = panderOptions('p.wrap'), sep = panderOptions('p.sep'), c
 
     ## prettify numbers
     if (is.numeric(x)) {
+
         x <- round(x, panderOptions('round'))
         x <- format(x, trim = TRUE, digits = panderOptions('digits'), decimal.mark = panderOptions('decimal.mark'))
-        x <- sub('[\\.,]+0*$', '', x) # removing trailing zeros
+
+        ## optionally remove trailing zeros
+        if (!keep.trailing.zeros)
+            x <- sub('(?:(\\..*[^0])0+|\\.0+)$', '\\1', x)
+
     }
 
     if (x.len == 1)
         wrap(x, wrap)
     else if (x.len == 2)
-        paste(wrap(x, wrap), collapse = sprintf(' %s ', copula))
+        paste(wrap(x, wrap), collapse = copula)
     else
-        paste(paste(wrap(head(x, -1), wrap), collapse = sep), copula, wrap(tail(x, 1), wrap))
+        paste0(paste(wrap(head(x, -1), wrap), collapse = sep), copula, wrap(tail(x, 1), wrap))
 }
 
 
@@ -530,7 +536,7 @@ pandoc.list <- function(...)
 #'
 #' This function will try to make pretty the provided R object's content like: rounding numbers, auto-recognizing if row names should be included etc.
 #'
-#' And also tries to split cells with line breaks or even the whole table to separate parts on demand. See the parameters above.
+#' And also tries to split cells with line breaks or even the whole table to separate parts on demand. See the parameters above and passed arguments of \code{\link{panderOptions}}.
 #' @param t data frame, matrix or table
 #' @param caption string
 #' @param digits passed to \code{format}
@@ -540,6 +546,7 @@ pandoc.list <- function(...)
 #' @param style which Pandoc style to use: \code{simple}, \code{multiline}, \code{grid} or \code{rmarkdown}
 #' @param split.tables where to split wide tables to separate tables. The default value (\code{80}) suggests the conventional number of characters used in a line, feel free to change (e.g. to \code{Inf} to disable this feature) if you are not using a VT100 terminal any more :)
 #' @param split.cells where to split cells' text with line breaks. Default to \code{30}, to disable set to \code{Inf}.
+#' @param keep.trailing.zeros to show or remove trailing zeros in numbers on a column basis width
 #' @return By default this function outputs (see: \code{cat}) the result. If you would want to catch the result instead, then call the function ending in \code{.return}.
 #' @export
 #' @aliases pandoc.table
@@ -587,7 +594,7 @@ pandoc.list <- function(...)
 #' pandoc.table(t, style = "simple")
 #' tryCatch(pandoc.table(t, style = "simple", split.cells = 5), error = function(e) 'Yeah, no newline support in simple tables')
 #' pandoc.table(t, style = "rmarkdown")
-pandoc.table.return <- function(t, caption = storage$caption, digits = panderOptions('digits'), decimal.mark = panderOptions('decimal.mark'), round = panderOptions('round'), justify = 'centre', style = c('multiline', 'grid', 'simple', 'rmarkdown'), split.tables = panderOptions('table.split.table'), split.cells = panderOptions('table.split.cells')) {
+pandoc.table.return <- function(t, caption = storage$caption, digits = panderOptions('digits'), decimal.mark = panderOptions('decimal.mark'), round = panderOptions('round'), justify = 'centre', style = c('multiline', 'grid', 'simple', 'rmarkdown'), split.tables = panderOptions('table.split.table'), split.cells = panderOptions('table.split.cells'), keep.trailing.zeros = panderOptions('keep.trailing.zeros')) {
 
     ## helper functions
     table.expand <- function(cells, cols.width, justify, sep.cols) {
@@ -606,7 +613,7 @@ pandoc.table.return <- function(t, caption = storage$caption, digits = panderOpt
 
         } else {
 
-            res <- apply(df, 1, function(x) format(x[1], justify = x[3], width = x[2]))
+            res <- apply(df, 1, function(x) format(x[1], justify = x[3], width = as.numeric(x[2]) + length(which(gregexpr("\\\\", x[1])[[1]] > 0))))
             return(paste0(sep.cols[1], paste(res, collapse = sep.cols[2]), sep.cols[3]))
 
         }
@@ -670,31 +677,37 @@ pandoc.table.return <- function(t, caption = storage$caption, digits = panderOpt
     else
         style <- match.arg(style)
 
-    ## round numbers & cut digits & apply decimal mark
+    ## round numbers & cut digits & apply decimal mark & optionally remove trailing zeros
     if (length(dim(t)) == 0) {  # named char
         t.n <- as.numeric(which(sapply(t, is.numeric)))
         if (length(t.n) > 0) {
             t[t.n] <- round(t[t.n], round)
-            t[t.n] <- sapply(t[t.n], format, trim = TRUE, digits = digits, decimal.mark = decimal.mark)
+            if (!keep.trailing.zeros)
+                t[t.n] <- sapply(t[t.n], format, trim = TRUE, digits = digits, decimal.mark = decimal.mark)
         }
     }
     if (length(dim(t)) == 1) {
         t.n <- as.numeric(which(apply(t, 1, is.numeric)))
         if (length(t.n) > 0) {
             t[t.n] <- round(t[t.n], round)
-            t[t.n] <- apply(t[t.n], 1, format, trim = TRUE, digits = digits, decimal.mark = decimal.mark)
+            if (!keep.trailing.zeros)
+                t[t.n] <- apply(t[t.n], 1, format, trim = TRUE, digits = digits, decimal.mark = decimal.mark)
         }
     }
     if (length(dim(t)) == 2) {
         t.n <- as.numeric(which(apply(t, 2, is.numeric)))
         if (length(t.n) > 0) {
             t[, t.n] <- round(t[, t.n], round)
-            t[, t.n] <- apply(t[, t.n, drop = FALSE], c(1,2), format, trim = TRUE, digits = digits, decimal.mark = decimal.mark)
+            if (!keep.trailing.zeros)
+                t[, t.n] <- apply(t[, t.n, drop = FALSE], c(1,2), format, trim = TRUE, digits = digits, decimal.mark = decimal.mark)
         }
     }
 
     ## drop unexpected classes and revert back to a common format
-    t <- format(t, trim = TRUE)
+    if (keep.trailing.zeros)
+        t <- format(t, trim = TRUE, digits = digits, decimal.mark = decimal.mark)
+    else
+        t <- format(t, trim = TRUE)
 
     ## TODO: adding formatting (emphasis, strong etc.)
 
@@ -780,9 +793,9 @@ pandoc.table.return <- function(t, caption = storage$caption, digits = panderOpt
 
         ## update caption
         if (!is.null(caption))
-            caption <- paste(caption, '(continued below)')
+            caption <- paste(caption, panderOptions('table.continues.affix'))
         else
-            caption <- 'Table continues below'
+            caption <- panderOptions('table.continues')
 
         ## split
         if (length(t.rownames) != 0) {
@@ -867,7 +880,7 @@ pandoc.table.return <- function(t, caption = storage$caption, digits = panderOpt
         ## (optional) caption
         if (!is.null(caption))
             if (caption != '')
-                res <- sprintf('%sTable: %s\n\n', res, caption)
+                res <- paste0(res, panderOptions('table.caption.prefix'), caption, '\n\n')
 
         ## truncating caption buffer if needed
         if (!is.null(storage$caption))

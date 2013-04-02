@@ -23,18 +23,21 @@
   \code{2}) passed to \code{format} \item
   \code{decimal.mark}: numeric (default: \code{.}) passed
   to \code{format} \item \code{round}: numeric (default:
-  \code{Inf}) passed to \code{round} \item \code{date}:
-  string (default: \code{'\%Y/\%m/\%d \%X'}) passed to
-  \code{format} when printing dates (\code{POSIXct} or
-  \code{POSIXt}) \item \code{header.style}: \code{'atx'} or
-  \code{'setext'} passed to \code{\link{pandoc.header}}
-  \item \code{list.style}: \code{'bullet'},
-  \code{'ordered'} or \code{'roman'} passed to
-  \code{\link{pandoc.list}}. Please not that this has no
-  effect on \code{pander} methods.  \item
-  \code{table.style}: \code{'multiline'}, \code{'grid'} or
-  \code{'simple'} passed to \code{\link{pandoc.table}}
-  \item \code{table.split.table}: numeric passed to
+  \code{Inf}) passed to \code{round} \item
+  \code{keep.trailing.zeros}: boolean (default:
+  \code{FALSE}) to show or remove trailing zeros in numbers
+  \item \code{date}: string (default: \code{'\%Y/\%m/\%d
+  \%X'}) passed to \code{format} when printing dates
+  (\code{POSIXct} or \code{POSIXt}) \item
+  \code{header.style}: \code{'atx'} or \code{'setext'}
+  passed to \code{\link{pandoc.header}} \item
+  \code{list.style}: \code{'bullet'}, \code{'ordered'} or
+  \code{'roman'} passed to \code{\link{pandoc.list}}.
+  Please not that this has no effect on \code{pander}
+  methods.  \item \code{table.style}: \code{'multiline'},
+  \code{'grid'}, \code{'simple'} or \code{'rmarkdown'}
+  passed to \code{\link{pandoc.table}} \item
+  \code{table.split.table}: numeric passed to
   \code{\link{pandoc.table}} and also affects \code{pander}
   methods. This option tells \code{pander} where to split
   too wide tables. The default value (\code{80}) suggests
@@ -46,22 +49,35 @@
   affects \code{pander} methods. This option tells
   \code{pander} where to split too wide cells with line
   breaks. Set \code{Inf} to disable.  \item
-  \code{evals.messages}: boolean (default: \code{TRUE})
-  passed to \code{evals}' \code{pander} method specifying
-  if messages should be rendered \item \code{p.wrap}: a
-  string (default: \code{'_'}) to wrap vector elements
-  passed to \code{p} function \item \code{p.sep}: a string
-  (default: \code{', '}) with the main separator passed to
-  \code{p} function \item \code{p.copula}: a string
-  (default: \code{'and'}) with ending separator passed to
-  \code{p} function \item \code{graph.nomargin}: boolean
-  (default: \code{TRUE}) if trying to keep plots' margins
-  at minimal \item \code{graph.fontfamily}: string
-  (default: \code{'sans'}) specifying the font family to be
-  used in images. Please note, that using a custom font on
-  Windows requires \code{grDevices:::windowsFonts} first.
-  \item \code{graph.fontcolor}: string (default:
-  \code{'black'}) specifying the default font color \item
+  \code{table.caption.prefix}: string (default:
+  \code{'Table: '}) passed to \code{\link{pandoc.table}} to
+  be used as caption prefix. Be sure about what you are
+  doing if changing to other than \code{'Table: '} or
+  \code{':'}.  \item \code{table.continues}: string
+  (default: \code{'Table continues below'}) passed to
+  \code{\link{pandoc.table}} to be used as caption for long
+  (split) without a use defined caption \item
+  \code{table.continues.affix}: string (default:
+  \code{'(continued below)'}) passed to
+  \code{\link{pandoc.table}} to be used as an affix
+  concatenated to the user defined caption for long (split)
+  tables \item \code{evals.messages}: boolean (default:
+  \code{TRUE}) passed to \code{evals}' \code{pander} method
+  specifying if messages should be rendered \item
+  \code{p.wrap}: a string (default: \code{'_'}) to wrap
+  vector elements passed to \code{p} function \item
+  \code{p.sep}: a string (default: \code{', '}) with the
+  main separator passed to \code{p} function \item
+  \code{p.copula}: a string (default: \code{' and '}) with
+  ending separator passed to \code{p} function \item
+  \code{graph.nomargin}: boolean (default: \code{TRUE}) if
+  trying to keep plots' margins at minimal \item
+  \code{graph.fontfamily}: string (default: \code{'sans'})
+  specifying the font family to be used in images. Please
+  note, that using a custom font on Windows requires
+  \code{grDevices:::windowsFonts} first.  \item
+  \code{graph.fontcolor}: string (default: \code{'black'})
+  specifying the default font color \item
   \code{graph.fontsize}: numeric (default: \code{12})
   specifying the \emph{base} font size in pixels. Main
   title is rendered with \code{1.2} and labels with
