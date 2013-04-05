@@ -1,4 +1,10 @@
 
+pander 0.3.4 (2013-04-05)
+----------------------------------------------------------------
+
+ * new options: table caption prefix and split caption messages (#28)
+ * fix for a rather unnoticeable but rapport-related critical bug that restulted in an invisibly returned wrong chunk type (concatenated image URL to the next paragpraph)
+
 pander 0.3.3 (2013-03-27)
 ----------------------------------------------------------------
 
