@@ -32,6 +32,6 @@ test_that('correct returned list element types', {
     expect_that(getChunkTypes(Pandoc.brew(text='foo has \nsome neat apples. Exactly <%=5%>', output = '/tmp/dev.null')), equals('text'))
     expect_that(getChunkTypes(Pandoc.brew(text='<%=5%> apple', output = '/tmp/dev.null')), equals('text'))
     expect_that(getChunkTypes(Pandoc.brew(text='## header\n<%=5%> apple', output = '/tmp/dev.null')), equals(c('heading', 'text')))
-
+    expect_that(getChunkTypes(Pandoc.brew(text='<%=plot(1:10)%> ', output = '/tmp/dev.null')), equals(c('block', 'text')))
 
 })
