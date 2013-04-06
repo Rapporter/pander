@@ -49,7 +49,7 @@ $(document).ready(function() {
 
     $head.each(function(i, val){
         
-        var linkId = val.id + "_link",
+        var linkId = val.id,
             $val = $(val);
 
         // insert anchor links before headings
