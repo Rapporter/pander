@@ -1094,15 +1094,38 @@ evals <- function(txt, parse = TRUE, cache = TRUE, cache.mode = c('environment',
 #'
 #' This function is a wrapper around \code{replayPlot} with some added tweaks (fixing memory address nullpointer issue) for compatibility.
 #' @param file path and name of file to read saved \code{recordPlot} object
-#' @references Thanks to Jeroen Ooms: \url{http://permalink.gmane.org/gmane.comp.lang.r.devel/29897}.
+#' @references Thanks to Jeroen Ooms \url{http://permalink.gmane.org/gmane.comp.lang.r.devel/29897} and JJ Allaire \url{https://github.com/rstudio/rstudio/commit/eb5f6f1db4717132c2ff111f068ffa6e8b2a5f0b}.
 #' @seealso \code{\link{evals}}
 #' @export
 redraw.recordedplot <- function(file) {
-    plot <- readRDS(file)
-    for(i in 1:length(plot[[1]])) {
-        if( "NativeSymbolInfo" %in% class(plot[[1]][[i]][[2]][[1]]) ){
-            plot[[1]][[i]][[2]][[1]] <- getNativeSymbolInfo(plot[[1]][[i]][[2]][[1]]$name);
+
+    plot <- tryCatch(readRDS(file), error = function(e) e)
+
+    if (inherits(plot, 'error'))
+        stop(paste('Cannot read file:', plot$message))
+
+    if (getRversion() < '3.0.0') {
+
+        for(i in 1:length(plot[[1]])) # @jeroenooms
+            if ('NativeSymbolInfo' %in% class(plot[[1]][[i]][[2]][[1]]))
+                plot[[1]][[i]][[2]][[1]] <- getNativeSymbolInfo(plot[[1]][[i]][[2]][[1]]$name)
+
+    } else {
+
+        for (i in 1:length(plot[[1]])) { # @jjallaire
+            symbol <- plot[[1]][[i]][[2]][[1]]
+            if ('NativeSymbolInfo' %in% class(symbol)) {
+                if (!is.null(symbol$package))
+                    name <- symbol$package[['name']]
+                else
+                    name <- symbol$dll[['name']]
+                pkgDLL <- getLoadedDLLs()[[name]]
+                nativeSymbol <- getNativeSymbolInfo(name = symbol$name, PACKAGE = pkgDLL, withRegistrationInfo = TRUE)
+                plot[[1]][[i]][[2]][[1]] <- nativeSymbol
+            }
         }
     }
-    replayPlot(plot)
+
+    suppressWarnings(grDevices::replayPlot(plot))
+
 }
