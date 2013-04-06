@@ -23,7 +23,10 @@
 
   \item{round}{passed to \code{round}}
 
-  \item{justify}{see \code{prettyNum}}
+  \item{justify}{defines alignment in cells passed to
+  \code{format}. Can be \code{left}, \code{right} or
+  \code{centre}, which latter can be also spelled as
+  \code{center}.}
 
   \item{style}{which Pandoc style to use: \code{simple},
   \code{multiline}, \code{grid} or \code{rmarkdown}}

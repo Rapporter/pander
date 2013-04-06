@@ -542,7 +542,7 @@ pandoc.list <- function(...)
 #' @param digits passed to \code{format}
 #' @param decimal.mark passed to \code{format}
 #' @param round passed to \code{round}
-#' @param justify see \code{prettyNum}
+#' @param justify defines alignment in cells passed to \code{format}. Can be \code{left}, \code{right} or \code{centre}, which latter can be also spelled as \code{center}.
 #' @param style which Pandoc style to use: \code{simple}, \code{multiline}, \code{grid} or \code{rmarkdown}
 #' @param split.tables where to split wide tables to separate tables. The default value (\code{80}) suggests the conventional number of characters used in a line, feel free to change (e.g. to \code{Inf} to disable this feature) if you are not using a VT100 terminal any more :)
 #' @param split.cells where to split cells' text with line breaks. Default to \code{30}, to disable set to \code{Inf}.
@@ -778,6 +778,9 @@ pandoc.table.return <- function(t, caption = storage$caption, digits = panderOpt
     } else {
         justify <- rep(justify, length(t.width))
     }
+    justify <- sub('^center$', 'centre', justify)
+    if (!all(justify %in% c('left', 'right', 'centre')))
+        stop('Invalid values passed for `justify` that can be "left", "right" or "centre/center".')
 
     ## split too wide tables
     if (sum(t.width + 4) > split.tables & length(t.width) > 1 + (length(t.rownames) != 0)) {
