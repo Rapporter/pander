@@ -238,6 +238,21 @@ data.frame(id=1:2, value=c('FOO', 'Lorem ipsum dolor sit amet, consectetur adipi
 %>
 ```
 
+The list of currently supported R classes:
+
+```rout
+> methods(pander)
+ [1] pander.anova*      pander.aov*        pander.cast_df*    pander.character*
+ [5] pander.data.frame* pander.default*    pander.density*    pander.evals*
+ [9] pander.factor*     pander.glm*        pander.htest*      pander.image*
+[13] pander.list*       pander.lm*         pander.logical*    pander.matrix*
+[17] pander.NULL*       pander.numeric*    pander.option      pander.POSIXct*
+[21] pander.POSIXt*     pander.prcomp*     pander.rapport*    pander.return
+[25] pander.table*
+
+   Non-visible functions are asterisked
+```
+
 # Brew to Pandoc
 
 Everyone knows and possibly uses [brew](http://cran.r-project.org/web/packages/brew/index.html) but if you would need some smack, the following links really worth visiting:
