@@ -24,9 +24,13 @@ The package is also capable of exporting/converting complex Pandoc documents (re
 
 # Installation
 
-Currently, this package is hosted only on [GitHub](https://github.com/Rapporter/pander).
+The stable version of the package can be found on [CRAN](http://cran.r-project.org/web/packages/pander/) and can be installed easily in the R console:
 
-Until this gets on [CRAN](cran.r-project.org), you can install it via nifty function from `devtools` package:
+```
+install.packages('pander')
+```
+
+On the other hand I welcome everyone to use the most recent version of the package with added features and currently hosted on [GitHub](https://github.com/Rapporter/pander), that can be installed easily with the nifty function of `devtools` package:
 
 ```
 library(devtools)
