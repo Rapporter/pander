@@ -1,12 +1,12 @@
-% [pander: An R Pandoc writer](https://github.com/Rapporter/pander)
+% [pander: An Pandoc writer in R](https://github.com/Rapporter/pander)
 
-**pander** is an [R](http://r-project.org) package containing [helpers](#helper-functions) to return [Pandoc](http://johnmacfarlane.net/pandoc/)'s markdown of user specified format or *automatically* of several type of [**R objects**](#generic-pander-method).
+**pander** is an [R](http://r-project.org) package containing [helpers](#helper-functions) to return [Pandoc](http://johnmacfarlane.net/pandoc/)'s markdown *automatically* from several type of [**R objects**](#generic-pander-method).
 
-The package is also capable of exporting/converting complex Pandoc documents (reports) in three ways ATM:
+The package is also capable of exporting/converting complex Pandoc documents (reports) in three ways at the moment:
 
-  * create somehow a markdown text file (e.g. with `brew`, `knitr` or any scripts of yours, maybe with `Pandoc.brew` - see just below) and transform that to other formats (like HTML, odt, pdf, docx etc.) with `Pandoc.convert`
+  * create somehow a markdown text file (e.g. with `brew`, `knitr` or any scripts of yours, maybe with `Pandoc.brew` - see just [below](#brew-to-pandoc)) and transform that to other formats (like HTML, odt, pdf, docx etc.) with `Pandoc.convert`
 
-  * users might write some reports in [brew](http://cran.r-project.org/web/packages/brew/index.html) syntax resulting in a pretty *Pandoc* document (where each R object are transformed to nicely formatted table, list etc.) and also in a **bunch of formats** (like HTML, odt, pdf, docx etc.) automatically.
+  * users might write some reports in a forked [brew](http://cran.r-project.org/web/packages/brew/index.html) syntax resulting in a pretty *Pandoc* document (where each R object are transformed to nicely formatted table, list etc.) and also in a **bunch of formats** (like HTML, odt, pdf, docx etc.) automatically.
 
     *Example*: this [`README.md`](https://github.com/Rapporter/pander/blob/master/README.md) is cooked with `Pandoc.brew` based on [`inst/README.brew`](https://github.com/Rapporter/pander/blob/master/inst/README.brew) and also exported to [HTML](http://rapporter.github.com/pander/). Details can be found [below](#brew-to-pandoc) or head directly to [examples](#examples).
 
@@ -24,9 +24,13 @@ The package is also capable of exporting/converting complex Pandoc documents (re
 
 # Installation
 
-Currently, this package is hosted only on [GitHub](https://github.com/Rapporter/pander).
+The stable version of the package can be found on [CRAN](http://cran.r-project.org/web/packages/pander/) and can be installed easily in the R console:
 
-Until this gets on [CRAN](cran.r-project.org), you can install it via nifty function from `devtools` package:
+```
+install.packages('pander')
+```
+
+On the other hand I welcome everyone to use the most recent version of the package with added features and currently hosted on [GitHub](https://github.com/Rapporter/pander), that can be installed easily with the nifty function of `devtools` package:
 
 ```
 library(devtools)
@@ -39,7 +43,7 @@ Or download the [sources in a zip file](https://github.com/Rapporter/pander/zipb
 
 `pander` heavily builds on [Pandoc](http://johnmacfarlane.net/pandoc) which should be **pre-installed** before trying to convert your reports to [different formats](http://johnmacfarlane.net/pandoc/). Although **main functions work without Pandoc**, e.g. you can generate a markdown formatted report via [Pandoc.brew](#brew-to-pandoc) or the custom [reference class](#live-report-generation), but I would really suggest to install that really great piece of software!
 
-The [installation process of Pandoc](http://johnmacfarlane.net/pandoc/installing.html) is quite straightforward on most operating systems: just download and run the binary (a few megabytes), and get a full-blown document converted in a few seconds/minutes. On different Linux distributions it might be a bit more complicated (as repositories tend to provide out-dated versions of Pandoc, so you would need `cabal-install` to [install from sources](https://github.com/jgm/pandoc/wiki/Installing-the-development-version-of-pandoc-1.9)). *Please do not forget to restart your R session to update your `PATH` after installation!*
+The [installation process of Pandoc](http://johnmacfarlane.net/pandoc/installing.html) is quite straightforward on most operating systems: just download and run the binary (a few megabytes), and get a full-blown document converted in a few seconds/minutes. On different Linux distributions it might be a bit more complicated (as repositories tend to provide out-dated versions of Pandoc, so you would need `cabal-install` to [install from sources](http://johnmacfarlane.net/pandoc/installing.html#all-platforms)). *Please do not forget to restart your R session to update your `PATH` after installation!*
 
 An alternative method (bypassing Pandoc dependency) would be to call the awesome [`markdown`](http://cran.r-project.org/web/packages/markdown/index.html) package to transform markdown (as far as I know: exclusively) to HTML.
 
@@ -324,7 +328,7 @@ The output of different **statistical methods** are tried to be prettyfied. Some
 ---------------------------------------------------
  Test statistic   P value   Alternative hypothesis 
 ---------------- --------- ------------------------
-      0.24       _0.1124_         two-sided        
+      0.18       _0.3959_         two-sided        
 ---------------------------------------------------
 
 Table: Two-sample Kolmogorov-Smirnov test: `runif(50)` and `runif(50)`
@@ -504,6 +508,21 @@ And of course tables are formatted (e.g. auto add of line breaks and splitting u
 
 Table: Foo Bar
 
+```
+
+The list of currently supported R classes:
+
+```rout
+> methods(pander)
+ [1] pander.anova*      pander.aov*        pander.cast_df*    pander.character*
+ [5] pander.data.frame* pander.default*    pander.density*    pander.evals*
+ [9] pander.factor*     pander.glm*        pander.htest*      pander.image*
+[13] pander.list*       pander.lm*         pander.logical*    pander.matrix*
+[17] pander.NULL*       pander.numeric*    pander.option      pander.POSIXct*
+[21] pander.POSIXt*     pander.prcomp*     pander.rapport*    pander.return
+[25] pander.table*
+
+   Non-visible functions are asterisked
 ```
 
 # Brew to Pandoc
@@ -822,4 +841,4 @@ To use this small lib, just type: `M-x pander-mode` on any document. It might be
 
 
 -------
-This report was generated with [R](http://www.r-project.org/) (2.15.3) and [pander](https://github.com/rapporter/pander) (0.3.3) in 1.534 sec on x86_64-unknown-linux-gnu platform.
+This report was generated with [R](http://www.r-project.org/) (2.15.3) and [pander](https://github.com/rapporter/pander) (0.3.4) in 0.984 sec on x86_64-unknown-linux-gnu platform.
