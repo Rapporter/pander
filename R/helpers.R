@@ -743,18 +743,18 @@ pandoc.table.return <- function(t, caption = storage$caption, digits = panderOpt
             check.highlight.parameters(highlight.cells, length(t))
             t[highlight.cells] <- pandoc.strong.return(t[highlight.cells])
         } else {
+            t <- as.matrix(t)
             if (!is.null(highlight.rows)) {
                 check.highlight.parameters(highlight.rows, nrow(t))
-                t[highlight.rows, ] <- pandoc.strong.return(t[highlight.rows, ])
+                t[highlight.rows, ] <- apply(t[highlight.rows, , drop = FALSE], 1, pandoc.strong.return)
             }
             if (!is.null(highlight.cols)) {
                 check.highlight.parameters(highlight.cols, ncol(t))
-                t[, highlight.cols] <- pandoc.strong.return(t[, highlight.cols])
+                t[, highlight.cols] <- apply(t[, highlight.cols, drop = FALSE], 2, pandoc.strong.return)
             }
             if (!is.null(highlight.cells)) {
-                t <- as.matrix(m)
                 check.highlight.parameters(highlight.cells, nrow(t), ncol(t))
-                t[highlight.cells] <- pandoc.strong.return(t[highlight.cells])
+                t[highlight.cells] <- apply(t[highlight.cells], c(1,2), pandoc.strong.return)
             }
         }
     }
