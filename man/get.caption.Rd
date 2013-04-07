@@ -1,6 +1,6 @@
 \name{get.caption}
 \alias{get.caption}
-\title{Get caption from temporary environment and truncates that}
+\title{Get caption}
 \usage{
   get.caption()
 }

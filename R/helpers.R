@@ -954,6 +954,18 @@ set.caption <- function(x)
     assign('caption', x , envir = storage)
 
 
+#' Get caption
+#'
+#' Get caption from temporary environment and truncates that
+#' @return stored caption as string
+#' @keywords internal
+get.caption <- function() {
+    res <- storage$caption
+    assign('caption', NULL , envir = storage)
+    return(res)
+}
+
+
 #' Sets alignment for tables
 #'
 #' This is a helper function to be used \emph{inside brew blocks} to update the alignment (\code{justify} parameter of \code{pandoc.table}) of the returning table. Possible values are: \code{centre}, \code{right}, \code{left}
@@ -964,13 +976,31 @@ set.alignment <- function(align = 'centre', row.names = 'right')
     assign('alignment', list(align = align, row.names = row.names) , envir = storage)
 
 
-#' Get caption from temporary environment and truncates that
-#' @return stored caption as string
+#' Get alignment
+#'
+#' Get alignment from temporary environment, truncating that and applying rownames and other columns alignment to passed \code{df}.
+#' @return vector of alignment parameters
 #' @keywords internal
-get.caption <- function() {
-    res <- storage$caption
-    assign('caption', NULL , envir = storage)
-    return(res)
+get.alignment <- function(df) {
+
+    a <- storage$alignment
+    assign('alignment', NULL , envir = storage)
+
+    if (length(dim(df)) == 0) {
+        w <- length(df)
+        n <- NULL
+    } else {
+        w <- ncol(df)
+        n <- rownames(df)
+        if (all(n == 1:nrow(df)))
+            n <- NULL
+    }
+
+    if (is.null(n))
+        return(rep(a$align, length.out = w))
+    else
+        return(c(a$row.names, rep(a$align, length.out = w)))
+
 }
 
 
