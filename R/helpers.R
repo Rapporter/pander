@@ -594,7 +594,7 @@ pandoc.list <- function(...)
 #' pandoc.table(t, style = "simple")
 #' tryCatch(pandoc.table(t, style = "simple", split.cells = 5), error = function(e) 'Yeah, no newline support in simple tables')
 #' pandoc.table(t, style = "rmarkdown")
-pandoc.table.return <- function(t, caption = storage$caption, digits = panderOptions('digits'), decimal.mark = panderOptions('decimal.mark'), round = panderOptions('round'), justify = 'centre', style = c('multiline', 'grid', 'simple', 'rmarkdown'), split.tables = panderOptions('table.split.table'), split.cells = panderOptions('table.split.cells'), keep.trailing.zeros = panderOptions('keep.trailing.zeros')) {
+pandoc.table.return <- function(t, caption = storage$caption, digits = panderOptions('digits'), decimal.mark = panderOptions('decimal.mark'), round = panderOptions('round'), justify = 'centre', style = c('multiline', 'grid', 'simple', 'rmarkdown'), split.tables = panderOptions('table.split.table'), split.cells = panderOptions('table.split.cells'), keep.trailing.zeros = panderOptions('keep.trailing.zeros'), highlight.rows = NULL, highlight.cols = NULL, highlight.cells = NULL) {
 
     ## helper functions
     table.expand <- function(cells, cols.width, justify, sep.cols) {
@@ -669,6 +669,32 @@ pandoc.table.return <- function(t, caption = storage$caption, digits = panderOpt
         hdr <- paste0("|", paste(dashes, collapse="|"), "|")
         return(hdr)
     }
+    is.wholenumber <- function(x, tol = .Machine$double.eps^0.5)
+        abs(x - round(x)) < tol
+    check.highlight.parameters <- function(x, num, num2) {
+        if (missing(num2)) {
+            if (!is.vector(x))
+                stop('Only a vector or NULL can be passed to highlight table cell(s), row(s) or column(s).')
+        } else {
+            if (dim(x) != 2)
+                stop('A matrix like structure can be passed to highlight cells in a table with two columns for row and column indexes.')
+        }
+        if (!all(is.wholenumber(x)))
+            stop('Only integers (whole numbers) can be passed to highlight table cell(s), row(s) or column(s).')
+        if (!all(x > 0))
+            stop(('Only positive numbers can be passed to highlight table cell(s), row(s) or column(s).'))
+        if (missing(num2)) {
+            if (!all(x < (num + 1)))
+                stop(paste('Too high number passed that should be kept below', num + 1))
+        } else {
+            if (ncol(x) != 2)
+                stop('A matrix like structure should be passed to highlight cells of a table with two columns for row and column indexes - just like what is returned by `which(..., arr.ind = TRUE)`.')
+            if (!all(x[, 1] < (num + 1)))
+                stop(paste('Too high number passed for row indexes that should be kept below', num + 1))
+            if (!all(x[, 2] < (num2 + 1)))
+                stop(paste('Too high number passed for column indexes that should be kept below', num + 1))
+        }
+    }
 
     ## initializing
     res <- ''
@@ -709,7 +735,29 @@ pandoc.table.return <- function(t, caption = storage$caption, digits = panderOpt
     else
         t <- format(t, trim = TRUE)
 
-    ## TODO: adding formatting (emphasis, strong etc.)
+    ## adding formatting (emphasis, strong etc.)
+    if (!is.null(highlight.rows) | !is.null(highlight.cols) | !is.null(highlight.cells)) {
+        if (length(dim(t)) < 2) {
+            if (!is.null(highlight.rows) | !is.null(highlight.cols))
+                stop('There is no sense in highlighting rows/columns in 1 dimensional tables. Hint: highlight cells instead. ')
+            check.highlight.parameters(highlight.cells, length(t))
+            t[highlight.cells] <- pandoc.strong.return(t[highlight.cells])
+        } else {
+            if (!is.null(highlight.rows)) {
+                check.highlight.parameters(highlight.rows, nrow(t))
+                t[highlight.rows, ] <- pandoc.strong.return(t[highlight.rows, ])
+            }
+            if (!is.null(highlight.cols)) {
+                check.highlight.parameters(highlight.cols, ncol(t))
+                t[, highlight.cols] <- pandoc.strong.return(t[, highlight.cols])
+            }
+            if (!is.null(highlight.cells)) {
+                t <- as.matrix(m)
+                check.highlight.parameters(highlight.cells, nrow(t), ncol(t))
+                t[highlight.cells] <- pandoc.strong.return(t[highlight.cells])
+            }
+        }
+    }
 
     ## helper variables & split too long (30+ chars) cells
     if (length(dim(t)) < 2) {

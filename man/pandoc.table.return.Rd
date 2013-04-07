@@ -10,7 +10,9 @@
     style = c("multiline", "grid", "simple", "rmarkdown"),
     split.tables = panderOptions("table.split.table"),
     split.cells = panderOptions("table.split.cells"),
-    keep.trailing.zeros = panderOptions("keep.trailing.zeros"))
+    keep.trailing.zeros = panderOptions("keep.trailing.zeros"),
+    highlight.rows = NULL, highlight.cols = NULL,
+    highlight.cells = NULL)
 }
 \arguments{
   \item{t}{data frame, matrix or table}
