@@ -54,3 +54,34 @@ test_that('highlight: error', {
     expect_that(pandoc.table(t, highlight.cols = 1:5), throws_error())
     expect_that(pandoc.table(t, highlight.cols = 1.5), throws_error())
 })
+
+context('captions')
+
+tables <- list(
+    mtcars,
+    mtcars[1:2, ],
+    summary(mtcars$am),
+    table(mtcars$am) + 0.1,
+    table(mtcars$am, mtcars$gear) + 0.1,
+    lm(mtcars$hp~1),
+    t.test(extra ~ group, data = sleep),
+    prcomp(USArrests),
+    density(mtcars$hp)
+    )
+
+has.caption <- function(ttt, evals = FALSE) {
+    set.caption('foo')
+    if (!evals)
+        any(grepl('Table:', pander.return(ttt)))
+    else
+        !is.null(attr(evals('get("ttt")', env = parent.frame())[[1]]$result, 'caption'))
+}
+
+test_that('direct call', {
+    for (ttt in tables)
+        expect_that(has.caption(ttt), is_true())
+})
+test_that('evals', {
+    for (ttt in tables)
+        expect_that(has.caption(ttt, evals = TRUE), is_true())
+})

@@ -964,6 +964,16 @@ set.alignment <- function(align = 'centre', row.names = 'right')
     assign('alignment', list(align = align, row.names = row.names) , envir = storage)
 
 
+#' Get caption from temporary environment and truncates that
+#' @return stored caption as string
+#' @keywords internal
+get.caption <- function() {
+    res <- storage$caption
+    assign('caption', NULL , envir = storage)
+    return(res)
+}
+
+
 #' Add significance stars
 #'
 #' This function adds significance stars to passed \code{p} value(s) as: one star for value below \code{0.05}, two for \code{0.01} and three for \code{0.001}.

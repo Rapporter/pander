@@ -983,13 +983,10 @@ evals <- function(txt, parse = TRUE, cache = TRUE, cache.mode = c('environment',
                 }
             }
 
-        ## add captured attributes
-        if (!is.null(storage$caption) & !is.null(result)) {
+        ## caption
+        if (!is.null(storage$caption) & !is.null(result))
+            attr(result, 'caption') <- get.caption()
 
-            attr(result, 'caption') <- storage$caption
-            assign('caption', NULL , envir = storage)
-
-        }
         ## alignment of tables
         if (!is.null(storage$alignment) & !is.null(result)) {
 

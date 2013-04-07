@@ -89,6 +89,9 @@ pander.logical <- function(x, ...)
 #' @S3method pander image
 pander.image <- function(x, caption = attr(x, 'caption'), href = attr(x, 'href'), ...) {
 
+    if (is.null(caption) & !is.null(storage$caption))
+        caption <- get.caption()
+
     res <- pandoc.image.return(as.character(x), caption)
 
     if (is.null(href))
@@ -101,11 +104,8 @@ pander.image <- function(x, caption = attr(x, 'caption'), href = attr(x, 'href')
 #' @S3method pander table
 pander.table <- function(x, caption = attr(x, 'caption'), justify = attr(x, 'alignment'), ...) {
 
-    if (is.null(caption))
-        if (!is.null(storage$caption)) {
-            caption <- storage$caption
-            storage$caption <- NULL
-        }
+    if (is.null(caption) & !is.null(storage$caption))
+        caption <- get.caption()
 
     if (is.null(justify))
         justify <- 'centre'
@@ -117,11 +117,8 @@ pander.table <- function(x, caption = attr(x, 'caption'), justify = attr(x, 'ali
 #' @S3method pander data.frame
 pander.data.frame <- function(x, caption = attr(x, 'caption'), justify = attr(x, 'alignment'), ...) {
 
-    if (is.null(caption))
-        if (!is.null(storage$caption)) {
-            caption <- storage$caption
-            storage$caption <- NULL
-        }
+    if (is.null(caption) & !is.null(storage$caption))
+        caption <- get.caption()
 
     if (is.null(justify))
         justify <- 'centre'
@@ -133,11 +130,8 @@ pander.data.frame <- function(x, caption = attr(x, 'caption'), justify = attr(x,
 #' @S3method pander matrix
 pander.matrix <- function(x, caption = attr(x, 'caption'), justify = attr(x, 'alignment'),  ...) {
 
-    if (is.null(caption))
-        if (!is.null(storage$caption)) {
-            caption <- storage$caption
-            storage$caption <- NULL
-        }
+    if (is.null(caption) & !is.null(storage$caption))
+        caption <- get.caption()
 
     if (is.null(justify))
         justify <- 'centre'
@@ -147,8 +141,17 @@ pander.matrix <- function(x, caption = attr(x, 'caption'), justify = attr(x, 'al
 }
 
 #' @S3method pander cast_df
-pander.cast_df<- function(x, caption = attr(x, 'caption'), justify = attr(x, 'alignment'), ...)
+pander.cast_df<- function(x, caption = attr(x, 'caption'), justify = attr(x, 'alignment'), ...) {
+
+    if (is.null(caption) & !is.null(storage$caption))
+        caption <- get.caption()
+
+    if (is.null(justify))
+        justify <- 'centre'
+
     pandoc.table(as.data.frame(x), caption = caption, justify = justify)
+
+}
 
 #' @S3method pander numeric
 pander.numeric <- function(x, ...)
@@ -178,10 +181,8 @@ pander.lm <- function(x, caption = attr(x, 'caption'), ...) {
     if (is.null(caption)) {
         if (is.null(storage$caption))
             caption <- sprintf('Fitting linear model: %s', deparse(x$call$formula))
-        else {
-            caption <- storage$caption
-            storage$caption <- NULL
-        }
+        else
+            caption <- get.caption()
     }
 
     pandoc.table(summary(x)$coeff, caption = caption, justify = c('right', rep('centre', 4)))
@@ -194,10 +195,8 @@ pander.glm <- function(x, caption = attr(x, 'caption'), ...) {
     if (is.null(caption)) {
         if (is.null(storage$caption))
             caption <- sprintf('Fitting generalized (%s) linear model: %s', paste(x$family$family, x$family$link, sep = '/'), deparse(x$call$formula))
-        else {
-            caption <- storage$caption
-            storage$caption <- NULL
-        }
+        else
+            caption <- get.caption()
     }
 
     pandoc.table(summary(x)$coeff, caption = caption, justify = c('right', rep('centre', 4)))
@@ -212,10 +211,8 @@ pander.aov <- function(x, caption = attr(x, 'caption'), ...) {
     if (is.null(caption)) {
         if (is.null(storage$caption))
             caption <- 'Analysis of Variance Model'
-        else {
-            caption <- storage$caption
-            storage$caption <- NULL
-        }
+        else
+            caption <- get.caption()
     }
 
     pandoc.table(res, caption = caption, justify = c('right', rep('centre', ncol(res))))
@@ -227,10 +224,8 @@ pander.anova <- function(x, caption = attr(x, 'caption'), ...) {
     if (is.null(caption)) {
         if (is.null(storage$caption))
             caption <- strsplit(attr(x, 'heading'), '\n')[[1]][1]
-        else {
-            caption <- storage$caption
-            storage$caption <- NULL
-        }
+        else
+            caption <- get.caption()
     }
 
     pandoc.table(x, caption = caption, justify = c('right', rep('centre', ncol(x))))
@@ -243,10 +238,8 @@ pander.htest <- function(x, caption = attr(x, 'caption'), ...) {
     if (is.null(caption)) {
         if (is.null(storage$caption))
             caption <- paste0(x$method, ': `', gsub('( and | by )', '`\\1`', x$data.name), '`')
-        else {
-            caption <- storage$caption
-            storage$caption <- NULL
-        }
+        else
+            caption <- get.caption()
     }
 
     ## we do not know which values are provided
@@ -276,10 +269,8 @@ pander.prcomp <- function(x, caption = attr(x, 'caption'), ...) {
     if (is.null(caption)) {
         if (is.null(storage$caption))
             caption <- 'Principal Components Analysis'
-        else {
-            caption <- storage$caption
-            storage$caption <- NULL
-        }
+        else
+            caption <- get.caption()
     }
 
     pandoc.table(x$rotation, caption = caption)
@@ -292,10 +283,8 @@ pander.density <- function(x, caption = attr(x, 'caption'), ...) {
     if (is.null(caption)) {
         if (is.null(storage$caption))
             caption <- sprintf('Kernel density of *%s* (bandwidth: %s)', x$data.name, format(x$bw))
-        else {
-            caption <- storage$caption
-            storage$caption <- NULL
-        }
+        else
+            caption <- get.caption()
     }
 
     res <- data.frame(Coordinates = as.numeric(summary(x$x)), 'Density values' = as.numeric(summary(x$y)), check.names = FALSE)
