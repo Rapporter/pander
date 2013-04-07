@@ -538,11 +538,11 @@ pandoc.list <- function(...)
 #'
 #' And also tries to split cells with line breaks or even the whole table to separate parts on demand. See the parameters above and passed arguments of \code{\link{panderOptions}}.
 #' @param t data frame, matrix or table
-#' @param caption string
+#' @param caption caption (string) to be shown under the table
 #' @param digits passed to \code{format}
 #' @param decimal.mark passed to \code{format}
 #' @param round passed to \code{round}
-#' @param justify defines alignment in cells passed to \code{format}. Can be \code{left}, \code{right} or \code{centre}, which latter can be also spelled as \code{center}.
+#' @param justify defines alignment in cells passed to \code{format}. Can be \code{left}, \code{right} or \code{centre}, which latter can be also spelled as \code{center}. Defaults to \code{centre}.
 #' @param style which Pandoc style to use: \code{simple}, \code{multiline}, \code{grid} or \code{rmarkdown}
 #' @param split.tables where to split wide tables to separate tables. The default value (\code{80}) suggests the conventional number of characters used in a line, feel free to change (e.g. to \code{Inf} to disable this feature) if you are not using a VT100 terminal any more :)
 #' @param split.cells where to split cells' text with line breaks. Default to \code{30}, to disable set to \code{Inf}.
@@ -594,7 +594,7 @@ pandoc.list <- function(...)
 #' pandoc.table(t, style = "simple")
 #' tryCatch(pandoc.table(t, style = "simple", split.cells = 5), error = function(e) 'Yeah, no newline support in simple tables')
 #' pandoc.table(t, style = "rmarkdown")
-pandoc.table.return <- function(t, caption = storage$caption, digits = panderOptions('digits'), decimal.mark = panderOptions('decimal.mark'), round = panderOptions('round'), justify = 'centre', style = c('multiline', 'grid', 'simple', 'rmarkdown'), split.tables = panderOptions('table.split.table'), split.cells = panderOptions('table.split.cells'), keep.trailing.zeros = panderOptions('keep.trailing.zeros'), highlight.rows = NULL, highlight.cols = NULL, highlight.cells = NULL) {
+pandoc.table.return <- function(t, caption, digits = panderOptions('digits'), decimal.mark = panderOptions('decimal.mark'), round = panderOptions('round'), justify, style = c('multiline', 'grid', 'simple', 'rmarkdown'), split.tables = panderOptions('table.split.table'), split.cells = panderOptions('table.split.cells'), keep.trailing.zeros = panderOptions('keep.trailing.zeros'), highlight.rows = NULL, highlight.cols = NULL, highlight.cells = NULL) {
 
     ## helper functions
     table.expand <- function(cells, cols.width, justify, sep.cols) {
@@ -702,6 +702,14 @@ pandoc.table.return <- function(t, caption = storage$caption, digits = panderOpt
         style <- panderOptions('table.style')
     else
         style <- match.arg(style)
+    if (missing(justify)) {
+        if (!is.null(storage$alignment))
+            justify <- get.alignment(t)
+        else
+            justify <- 'centre'
+    }
+    if (missing(caption))
+        caption <- get.caption()
 
     ## round numbers & cut digits & apply decimal mark & optionally remove trailing zeros
     if (length(dim(t)) == 0) {  # named char
@@ -932,10 +940,6 @@ pandoc.table.return <- function(t, caption = storage$caption, digits = panderOpt
         if (!is.null(caption) && caption != '')
             res <- paste0(res, panderOptions('table.caption.prefix'), caption, '\n\n')
 
-        ## truncating caption buffer if needed
-        if (!is.null(storage$caption))
-            storage$caption <- NULL
-
         return(res)
 
     }
@@ -968,7 +972,7 @@ get.caption <- function() {
 
 #' Sets alignment for tables
 #'
-#' This is a helper function to be used \emph{inside brew blocks} to update the alignment (\code{justify} parameter of \code{pandoc.table}) of the returning table. Possible values are: \code{centre}, \code{right}, \code{left}
+#' This is a helper function to update the alignment (\code{justify} parameter of \code{pandoc.table}) of the returning table. Possible values are: \code{centre} or \code{center}, \code{right}, \code{left}.
 #' @param align character vector which length equals to one (would be repeated \code{n} times) ot \code{n} - where \code{n} equals to the number of columns in the following table
 #' @param row.names string holding the alignment of the (optional) row names
 #' @export

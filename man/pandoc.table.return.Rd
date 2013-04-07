@@ -3,10 +3,10 @@
 \alias{pandoc.table.return}
 \title{Create a table}
 \usage{
-  pandoc.table.return(t, caption = storage$caption,
+  pandoc.table.return(t, caption,
     digits = panderOptions("digits"),
     decimal.mark = panderOptions("decimal.mark"),
-    round = panderOptions("round"), justify = "centre",
+    round = panderOptions("round"), justify,
     style = c("multiline", "grid", "simple", "rmarkdown"),
     split.tables = panderOptions("table.split.table"),
     split.cells = panderOptions("table.split.cells"),
@@ -17,7 +17,8 @@
 \arguments{
   \item{t}{data frame, matrix or table}
 
-  \item{caption}{string}
+  \item{caption}{caption (string) to be shown under the
+  table}
 
   \item{digits}{passed to \code{format}}
 
@@ -28,7 +29,7 @@
   \item{justify}{defines alignment in cells passed to
   \code{format}. Can be \code{left}, \code{right} or
   \code{centre}, which latter can be also spelled as
-  \code{center}.}
+  \code{center}. Defaults to \code{centre}.}
 
   \item{style}{which Pandoc style to use: \code{simple},
   \code{multiline}, \code{grid} or \code{rmarkdown}}

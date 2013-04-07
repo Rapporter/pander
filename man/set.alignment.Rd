@@ -14,9 +14,9 @@
   (optional) row names}
 }
 \description{
-  This is a helper function to be used \emph{inside brew
-  blocks} to update the alignment (\code{justify} parameter
-  of \code{pandoc.table}) of the returning table. Possible
-  values are: \code{centre}, \code{right}, \code{left}
+  This is a helper function to update the alignment
+  (\code{justify} parameter of \code{pandoc.table}) of the
+  returning table. Possible values are: \code{centre} or
+  \code{center}, \code{right}, \code{left}.
 }
 
