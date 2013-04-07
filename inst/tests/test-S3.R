@@ -31,3 +31,26 @@ test_that('decimal mark', {
 ##     pander(t)
 
 panderOptions('decimal.mark', dm)
+
+context('highlight tables')
+
+t <- mtcars[1:3, 1:5]
+test_that('highlight 1D: no error', {
+    expect_that(pandoc.table.return(t$mpg, highlight.cells = 1), is_a('character'))
+    expect_that(pandoc.table.return(t$mpg, highlight.cells = 1:2), is_a('character'))
+})
+
+t <- table(mtcars$am, mtcars$gear)
+test_that('highlight 2D: no error', {
+    expect_that(pandoc.table.return(t, highlight.rows = 1), is_a('character'))
+    expect_that(pandoc.table.return(t, highlight.rows = 1:2), is_a('character'))
+    expect_that(pandoc.table.return(t, highlight.cols = 1), is_a('character'))
+    expect_that(pandoc.table.return(t, highlight.cols = 1:2), is_a('character'))
+    expect_that(pandoc.table.return(t, highlight.cells = which(t > 10, arr.ind = TRUE)), is_a('character'))
+    expect_that(pandoc.table.return(t, highlight.cells = which(t > 20, arr.ind = TRUE)), is_a('character'))
+})
+
+test_that('highlight: error', {
+    expect_that(pandoc.table(t, highlight.cols = 1:5), throws_error())
+    expect_that(pandoc.table(t, highlight.cols = 1.5), throws_error())
+})
