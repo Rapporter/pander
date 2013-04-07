@@ -2,6 +2,8 @@
 
 cache.dir <- evalsOptions('cache.dir')
 graph.dir <- evalsOptions('graph.dir')
+wd <- getwd()
+setwd(tempdir())
 evalsOptions('cache.dir',  file.path(tempdir(), '.cache'))
 evalsOptions('graph.dir',  file.path(tempdir(), 'plots'))
 
@@ -204,3 +206,4 @@ test_that('long lines with line breaks', {
 
 evalsOptions('cache.dir',  cache.dir)
 evalsOptions('graph.dir',  graph.dir)
+setwd(wd)

@@ -81,7 +81,17 @@ test_that('direct call', {
     for (ttt in tables)
         expect_that(has.caption(ttt), is_true())
 })
+
+cache.dir <- evalsOptions('cache.dir')
+graph.dir <- evalsOptions('graph.dir')
+wd <- getwd()
+setwd(tempdir())
+evalsOptions('cache.dir',  file.path(tempdir(), '.cache'))
+evalsOptions('graph.dir',  file.path(tempdir(), 'plots'))
 test_that('evals', {
     for (ttt in tables)
         expect_that(has.caption(ttt, evals = TRUE), is_true())
 })
+evalsOptions('cache.dir',  cache.dir)
+evalsOptions('graph.dir',  graph.dir)
+setwd(wd)
