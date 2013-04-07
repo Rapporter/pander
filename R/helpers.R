@@ -676,7 +676,7 @@ pandoc.table.return <- function(t, caption = storage$caption, digits = panderOpt
             if (!is.vector(x))
                 stop('Only a vector or NULL can be passed to highlight table cell(s), row(s) or column(s).')
         } else {
-            if (dim(x) != 2)
+            if (length(dim(t)) != 2)
                 stop('A matrix like structure can be passed to highlight cells in a table with two columns for row and column indexes.')
         }
         if (!all(is.wholenumber(x)))
@@ -754,7 +754,7 @@ pandoc.table.return <- function(t, caption = storage$caption, digits = panderOpt
             }
             if (!is.null(highlight.cells)) {
                 check.highlight.parameters(highlight.cells, nrow(t), ncol(t))
-                t[highlight.cells] <- apply(t[highlight.cells], c(1,2), pandoc.strong.return)
+                t[highlight.cells] <- pandoc.strong.return(t[highlight.cells])
             }
         }
     }
