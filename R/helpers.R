@@ -725,7 +725,7 @@ pandoc.table.return <- function(t, caption, digits = panderOptions('digits'), de
         if (length(t.n) > 0) {
             t[t.n] <- round(t[t.n], round)
             if (!keep.trailing.zeros)
-                t[t.n] <- apply(t[t.n], 1, format, trim = TRUE, digits = digits, decimal.mark = decimal.mark)
+                t[t.n] <- apply(t[t.n, drop = FALSE], 1, format, trim = TRUE, digits = digits, decimal.mark = decimal.mark)
         }
     }
     if (length(dim(t)) == 2) {
