@@ -703,13 +703,22 @@ pandoc.table.return <- function(t, caption, digits = panderOptions('digits'), de
     else
         style <- match.arg(style)
     if (missing(justify)) {
-        if (!is.null(storage$alignment))
-            justify <- get.alignment(t)
-        else
-            justify <- 'centre'
+        if (is.null(attr(t, 'alignment'))) {
+            if (!is.null(storage$alignment))
+                justify <- get.alignment(t)
+            else
+                justify <- 'centre'
+        } else {
+            justify <- attr(t, 'alignment')
+        }
     }
-    if (missing(caption))
-        caption <- get.caption()
+    if (missing(caption)) {
+        if (is.null(attr(t, 'caption'))) {
+            caption <- get.caption()
+        } else {
+            caption <- attr(t, 'caption')
+        }
+    }
 
     ## round numbers & cut digits & apply decimal mark & optionally remove trailing zeros
     if (length(dim(t)) == 0) {  # named char
