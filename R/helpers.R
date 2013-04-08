@@ -532,11 +532,13 @@ pandoc.list <- function(...)
 
 #' Create a table
 #'
-#' Creates a Pandoc's markdown style table with optional caption.
+#' Creates a Pandoc's markdown style table with optional caption and some other tweaks. See 'Details' below.
 #'
-#' This function will try to make pretty the provided R object's content like: rounding numbers, auto-recognizing if row names should be included etc.
+#' This function takes any tabular data as its first argument and will try to make it pretty like: rounding and applying \code{digits} and custom \code{decimal.mark} to numbers, auto-recognizing if row names should be included, setting alignment of cells and dropping trailing zeros by default.
 #'
-#' And also tries to split cells with line breaks or even the whole table to separate parts on demand. See the parameters above and passed arguments of \code{\link{panderOptions}}.
+#' \code{pandoc.table} also tries to split large cells with line breaks or even the whole table to separate parts on demand. Other arguments lets the use to highlight some rows/cells/cells in the table with italic or bold text style.
+#'
+#' For more details please see the parameters above and passed arguments of \code{\link{panderOptions}}.
 #' @param t data frame, matrix or table
 #' @param caption caption (string) to be shown under the table
 #' @param digits passed to \code{format}
@@ -547,11 +549,17 @@ pandoc.list <- function(...)
 #' @param split.tables where to split wide tables to separate tables. The default value (\code{80}) suggests the conventional number of characters used in a line, feel free to change (e.g. to \code{Inf} to disable this feature) if you are not using a VT100 terminal any more :)
 #' @param split.cells where to split cells' text with line breaks. Default to \code{30}, to disable set to \code{Inf}.
 #' @param keep.trailing.zeros to show or remove trailing zeros in numbers on a column basis width
-#' @return By default this function outputs (see: \code{cat}) the result. If you would want to catch the result instead, then call the function ending in \code{.return}.
+#' @param emphasize.rows a vector for a two dimensional table specifying which rows to emphasize
+#' @param emphasize.cols a vector for a two dimensional table specifying which cols to emphasize
+#' @param emphasize.cells a vector for one-dimensional tables or a matrix like structure with two columns for row and column indexes to be emphasized in two dimensional tables. See e.g. \code{which(..., arr.ind = TRUE)}
+#' @param emphasize.strong.rows see \code{emphasize.rows} but in bold
+#' @param emphasize.strong.cols see \code{emphasize.cols} but in bold
+#' @param emphasize.strong.cells see \code{emphasize.cells} but in bold
+#' @return By default this function outputs (see: \code{cat}) the result. If you would want to catch the result instead, then call \code{pandoc.table.return} instead.
 #' @export
 #' @aliases pandoc.table
-#' @seealso \code{\link{set.caption}}
-#' @note The \code{caption} text is read from an internal buffer which defaults to \code{NULL}. To update that, call \code{link{set.caption}} before.
+#' @seealso \code{\link{set.caption}}, \code{\link{set.alignment}}
+#' @note If \code{caption} is missing, then the value is first checked in \code{t} object's \code{caption} attribute and if not found in an internal buffer set by \code{link{set.caption}}. \code{justify} parameter works similarly, see \code{\link{set.alignment}} for details.
 #' @references John MacFarlane (2012): _Pandoc User's Guide_. \url{http://johnmacfarlane.net/pandoc/README.html}
 #' @examples
 #' pandoc.table(mtcars)
@@ -594,6 +602,16 @@ pandoc.list <- function(...)
 #' pandoc.table(t, style = "simple")
 #' tryCatch(pandoc.table(t, style = "simple", split.cells = 5), error = function(e) 'Yeah, no newline support in simple tables')
 #' pandoc.table(t, style = "rmarkdown")
+#'
+#' ## highlight cells
+#' t <- mtcars[1:3, 1:5]
+#' pandoc.table(t$mpg, emphasize.cells = 1)
+#' pandoc.table(t$mpg, emphasize.strong.cells = 1)
+#' pandoc.table(t$mpg, emphasize.cells = 1, emphasize.strong.cells = 1)
+#' pandoc.table(t$mpg, emphasize.cells = 1:2)
+#' pandoc.table(t$mpg, emphasize.strong.cells = 1:2)
+#' pandoc.table(t, emphasize.cells = which(t > 20, arr.ind = TRUE))
+#' pandoc.table(t, emphasize.cells = which(t == 6, arr.ind = TRUE))
 pandoc.table.return <- function(t, caption, digits = panderOptions('digits'), decimal.mark = panderOptions('decimal.mark'), round = panderOptions('round'), justify, style = c('multiline', 'grid', 'simple', 'rmarkdown'), split.tables = panderOptions('table.split.table'), split.cells = panderOptions('table.split.cells'), keep.trailing.zeros = panderOptions('keep.trailing.zeros'), emphasize.rows = NULL, emphasize.cols = NULL, emphasize.cells = NULL, emphasize.strong.rows = NULL, emphasize.strong.cols = NULL, emphasize.strong.cells = NULL) {
 
     ## helper functions
@@ -870,11 +888,6 @@ pandoc.table.return <- function(t, caption, digits = panderOptions('digits'), de
         t.split <- max(which(cumsum(t.width + 4) > split.tables)[1] - 1, 1)
         if (t.split == 1 & length(t.rownames) != 0)
             t.split <- 2
-
-        #### do not make one column tables
-        ## t.col.n <- ifelse(length(dim(t)) > 1, ncol(t), length(t))
-        ## if (t.split >= t.col.n)
-        ##     t.split <- t.split - 1
 
         ## update caption
         if (!is.null(caption))
