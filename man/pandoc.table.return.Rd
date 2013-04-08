@@ -11,8 +11,10 @@
     split.tables = panderOptions("table.split.table"),
     split.cells = panderOptions("table.split.cells"),
     keep.trailing.zeros = panderOptions("keep.trailing.zeros"),
-    highlight.rows = NULL, highlight.cols = NULL,
-    highlight.cells = NULL)
+    emphasize.rows = NULL, emphasize.cols = NULL,
+    emphasize.cells = NULL, emphasize.strong.rows = NULL,
+    emphasize.strong.cols = NULL,
+    emphasize.strong.cells = NULL)
 }
 \arguments{
   \item{t}{data frame, matrix or table}

@@ -36,23 +36,33 @@ context('highlight tables')
 
 t <- mtcars[1:3, 1:5]
 test_that('highlight 1D: no error', {
-    expect_that(pandoc.table.return(t$mpg, highlight.cells = 1), is_a('character'))
-    expect_that(pandoc.table.return(t$mpg, highlight.cells = 1:2), is_a('character'))
+    expect_that(pandoc.table.return(t$mpg, emphasize.cells = 1), is_a('character'))
+    expect_that(pandoc.table.return(t$mpg, emphasize.cells = 1:2), is_a('character'))
+    expect_that(pandoc.table.return(t$mpg, emphasize.strong.cells = 1), is_a('character'))
+    expect_that(pandoc.table.return(t$mpg, emphasize.strong.cells = 1:2), is_a('character'))
 })
 
 t <- table(mtcars$am, mtcars$gear)
-test_that('highlight 2D: no error', {
-    expect_that(pandoc.table.return(t, highlight.rows = 1), is_a('character'))
-    expect_that(pandoc.table.return(t, highlight.rows = 1:2), is_a('character'))
-    expect_that(pandoc.table.return(t, highlight.cols = 1), is_a('character'))
-    expect_that(pandoc.table.return(t, highlight.cols = 1:2), is_a('character'))
-    expect_that(pandoc.table.return(t, highlight.cells = which(t > 10, arr.ind = TRUE)), is_a('character'))
-    expect_that(pandoc.table.return(t, highlight.cells = which(t > 20, arr.ind = TRUE)), is_a('character'))
+test_that('emphasize 2D: no error', {
+    expect_that(pandoc.table.return(t, emphasize.rows = 1), is_a('character'))
+    expect_that(pandoc.table.return(t, emphasize.rows = 1:2), is_a('character'))
+    expect_that(pandoc.table.return(t, emphasize.cols = 1), is_a('character'))
+    expect_that(pandoc.table.return(t, emphasize.cols = 1:2), is_a('character'))
+    expect_that(pandoc.table.return(t, emphasize.cells = which(t > 10, arr.ind = TRUE)), is_a('character'))
+    expect_that(pandoc.table.return(t, emphasize.cells = which(t > 20, arr.ind = TRUE)), is_a('character'))
+    expect_that(pandoc.table.return(t, emphasize.strong.rows = 1), is_a('character'))
+    expect_that(pandoc.table.return(t, emphasize.strong.rows = 1:2), is_a('character'))
+    expect_that(pandoc.table.return(t, emphasize.strong.cols = 1), is_a('character'))
+    expect_that(pandoc.table.return(t, emphasize.strong.cols = 1:2), is_a('character'))
+    expect_that(pandoc.table.return(t, emphasize.strong.cells = which(t > 10, arr.ind = TRUE)), is_a('character'))
+    expect_that(pandoc.table.return(t, emphasize.strong.cells = which(t > 20, arr.ind = TRUE)), is_a('character'))
 })
 
-test_that('highlight: error', {
-    expect_that(pandoc.table(t, highlight.cols = 1:5), throws_error())
-    expect_that(pandoc.table(t, highlight.cols = 1.5), throws_error())
+test_that('emphasize: error', {
+    expect_that(pandoc.table(t, emphasize.cols = 1:5), throws_error())
+    expect_that(pandoc.table(t, emphasize.cols = 1.5), throws_error())
+    expect_that(pandoc.table(t, emphasize.strong.cols = 1:5), throws_error())
+    expect_that(pandoc.table(t, emphasize.strong.cols = 1.5), throws_error())
 })
 
 context('captions')

@@ -594,7 +594,7 @@ pandoc.list <- function(...)
 #' pandoc.table(t, style = "simple")
 #' tryCatch(pandoc.table(t, style = "simple", split.cells = 5), error = function(e) 'Yeah, no newline support in simple tables')
 #' pandoc.table(t, style = "rmarkdown")
-pandoc.table.return <- function(t, caption, digits = panderOptions('digits'), decimal.mark = panderOptions('decimal.mark'), round = panderOptions('round'), justify, style = c('multiline', 'grid', 'simple', 'rmarkdown'), split.tables = panderOptions('table.split.table'), split.cells = panderOptions('table.split.cells'), keep.trailing.zeros = panderOptions('keep.trailing.zeros'), highlight.rows = NULL, highlight.cols = NULL, highlight.cells = NULL) {
+pandoc.table.return <- function(t, caption, digits = panderOptions('digits'), decimal.mark = panderOptions('decimal.mark'), round = panderOptions('round'), justify, style = c('multiline', 'grid', 'simple', 'rmarkdown'), split.tables = panderOptions('table.split.table'), split.cells = panderOptions('table.split.cells'), keep.trailing.zeros = panderOptions('keep.trailing.zeros'), emphasize.rows = NULL, emphasize.cols = NULL, emphasize.cells = NULL, emphasize.strong.rows = NULL, emphasize.strong.cols = NULL, emphasize.strong.cells = NULL) {
 
     ## helper functions
     table.expand <- function(cells, cols.width, justify, sep.cols) {
@@ -753,26 +753,43 @@ pandoc.table.return <- function(t, caption, digits = panderOptions('digits'), de
         t <- format(t, trim = TRUE)
 
     ## adding formatting (emphasis, strong etc.)
-    if (!is.null(highlight.rows) | !is.null(highlight.cols) | !is.null(highlight.cells)) {
-        if (length(dim(t)) < 2) {
-            if (!is.null(highlight.rows) | !is.null(highlight.cols))
-                stop('There is no sense in highlighting rows/columns in 1 dimensional tables. Hint: highlight cells instead. ')
-            check.highlight.parameters(highlight.cells, length(t))
-            t[highlight.cells] <- pandoc.strong.return(t[highlight.cells])
-        } else {
+    if (length(dim(t)) < 2) {
+        if (!is.null(emphasize.rows) | !is.null(emphasize.cols) | !is.null(emphasize.strong.rows) | !is.null(emphasize.strong.cols))
+            stop('There is no sense in highlighting rows/columns in 1 dimensional tables. Hint: highlight cells instead. ')
+        if (!is.null(emphasize.cells)) {
+            check.highlight.parameters(emphasize.cells, length(t))
+            t[emphasize.cells] <- pandoc.emphasis.return(t[emphasize.cells])
+        }
+        if (!is.null(emphasize.strong.cells)) {
+            check.highlight.parameters(emphasize.strong.cells, length(t))
+            t[emphasize.strong.cells] <- pandoc.strong.return(t[emphasize.strong.cells])
+        }
+    } else {
+        if (!is.null(emphasize.rows)) {
+            check.highlight.parameters(emphasize.rows, nrow(t))
+            t[emphasize.rows, ] <- apply(t[emphasize.rows, , drop = FALSE], 1, pandoc.emphasis.return)
+        }
+        if (!is.null(emphasize.strong.rows)) {
+            check.highlight.parameters(emphasize.strong.rows, nrow(t))
+            t[emphasize.strong.rows, ] <- apply(t[emphasize.strong.rows, , drop = FALSE], 1, pandoc.strong.return)
+        }
+        if (!is.null(emphasize.cols)) {
+            check.highlight.parameters(emphasize.cols, ncol(t))
+            t[, emphasize.cols] <- apply(t[, emphasize.cols, drop = FALSE], 2, pandoc.emphasis.return)
+        }
+        if (!is.null(emphasize.strong.cols)) {
+            check.highlight.parameters(emphasize.strong.cols, ncol(t))
+            t[, emphasize.strong.cols] <- apply(t[, emphasize.strong.cols, drop = FALSE], 2, pandoc.strong.return)
+        }
+        if (!is.null(emphasize.cells)) {
             t <- as.matrix(t)
-            if (!is.null(highlight.rows)) {
-                check.highlight.parameters(highlight.rows, nrow(t))
-                t[highlight.rows, ] <- apply(t[highlight.rows, , drop = FALSE], 1, pandoc.strong.return)
-            }
-            if (!is.null(highlight.cols)) {
-                check.highlight.parameters(highlight.cols, ncol(t))
-                t[, highlight.cols] <- apply(t[, highlight.cols, drop = FALSE], 2, pandoc.strong.return)
-            }
-            if (!is.null(highlight.cells)) {
-                check.highlight.parameters(highlight.cells, nrow(t), ncol(t))
-                t[highlight.cells] <- pandoc.strong.return(t[highlight.cells])
-            }
+            check.highlight.parameters(emphasize.cells, nrow(t), ncol(t))
+            t[emphasize.cells] <- pandoc.emphasis.return(t[emphasize.cells])
+        }
+        if (!is.null(emphasize.strong.cells)) {
+            t <- as.matrix(t)
+            check.highlight.parameters(emphasize.strong.cells, nrow(t), ncol(t))
+            t[emphasize.strong.cells] <- pandoc.strong.return(t[emphasize.strong.cells])
         }
     }
 
