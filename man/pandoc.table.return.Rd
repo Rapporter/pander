@@ -11,10 +11,9 @@
     split.tables = panderOptions("table.split.table"),
     split.cells = panderOptions("table.split.cells"),
     keep.trailing.zeros = panderOptions("keep.trailing.zeros"),
-    emphasize.rows = NULL, emphasize.cols = NULL,
-    emphasize.cells = NULL, emphasize.strong.rows = NULL,
-    emphasize.strong.cols = NULL,
-    emphasize.strong.cells = NULL)
+    emphasize.rows, emphasize.cols, emphasize.cells,
+    emphasize.strong.rows, emphasize.strong.cols,
+    emphasize.strong.cells)
 }
 \arguments{
   \item{t}{data frame, matrix or table}
@@ -155,6 +154,13 @@ pandoc.table(t$mpg, emphasize.cells = 1:2)
 pandoc.table(t$mpg, emphasize.strong.cells = 1:2)
 pandoc.table(t, emphasize.cells = which(t > 20, arr.ind = TRUE))
 pandoc.table(t, emphasize.cells = which(t == 6, arr.ind = TRUE))
+## with helpers
+emphasize.cols(1)
+emphasize.rows(1)
+pandoc.table(t)
+
+emphasize.strong.cells(which(t > 20, arr.ind = TRUE))
+pandoc.table(t)
 }
 \references{
   John MacFarlane (2012): _Pandoc User's Guide_.

@@ -187,7 +187,7 @@ get.alignment <- function(df) {
 #' emphasize.rows(1)
 #' pandoc.table(n)
 #'
-#' emphasize.strong.cells(which(n == 1))
+#' emphasize.strong.cells(which(n == 1, arr.ind = TRUE))
 #' pander(n)
 #' }
 emphasize.rows <- function(x)

@@ -24,6 +24,20 @@
   returned by \code{which(..., arr.ind = TRUE)}}
 }
 \description{
-  TODO
+  Storing indexes of cells to be (strong) emphasized of a
+  tabular data in an internal buffer that can be released
+  and applied by \code{\link{pandoc.table}},
+  \code{\link{pander}} or \code{\link{evals} later.
+}
+\examples{
+\dontrun{
+n <- data.frame(x = c(1,1,1,1,1), y = c(0,1,0,1,0))
+emphasize.cols(1)
+emphasize.rows(1)
+pandoc.table(n)
+
+emphasize.strong.cells(which(n == 1, arr.ind = TRUE))
+pander(n)
+}
 }
 

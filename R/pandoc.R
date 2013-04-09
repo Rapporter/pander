@@ -502,7 +502,14 @@ pandoc.list <- function(...)
 #' pandoc.table(t$mpg, emphasize.strong.cells = 1:2)
 #' pandoc.table(t, emphasize.cells = which(t > 20, arr.ind = TRUE))
 #' pandoc.table(t, emphasize.cells = which(t == 6, arr.ind = TRUE))
-pandoc.table.return <- function(t, caption, digits = panderOptions('digits'), decimal.mark = panderOptions('decimal.mark'), round = panderOptions('round'), justify, style = c('multiline', 'grid', 'simple', 'rmarkdown'), split.tables = panderOptions('table.split.table'), split.cells = panderOptions('table.split.cells'), keep.trailing.zeros = panderOptions('keep.trailing.zeros'), emphasize.rows = NULL, emphasize.cols = NULL, emphasize.cells = NULL, emphasize.strong.rows = NULL, emphasize.strong.cols = NULL, emphasize.strong.cells = NULL) {
+#' ## with helpers
+#' emphasize.cols(1)
+#' emphasize.rows(1)
+#' pandoc.table(t)
+#'
+#' emphasize.strong.cells(which(t > 20, arr.ind = TRUE))
+#' pandoc.table(t)
+pandoc.table.return <- function(t, caption, digits = panderOptions('digits'), decimal.mark = panderOptions('decimal.mark'), round = panderOptions('round'), justify, style = c('multiline', 'grid', 'simple', 'rmarkdown'), split.tables = panderOptions('table.split.table'), split.cells = panderOptions('table.split.cells'), keep.trailing.zeros = panderOptions('keep.trailing.zeros'), emphasize.rows, emphasize.cols, emphasize.cells, emphasize.strong.rows, emphasize.strong.cols, emphasize.strong.cells) {
 
     ## helper functions
     table.expand <- function(cells, cols.width, justify, sep.cols) {
@@ -605,12 +612,12 @@ pandoc.table.return <- function(t, caption, digits = panderOptions('digits'), de
     }
 
     ## initializing
-    res <- ''
-    if (missing(style))
+    mc  <- match.call()
+    if (is.null(mc$style))
         style <- panderOptions('table.style')
     else
         style <- match.arg(style)
-    if (missing(justify)) {
+    if (is.null(mc$justify)) {
         if (is.null(attr(t, 'alignment'))) {
             if (!is.null(storage$alignment))
                 justify <- get.alignment(t)
@@ -620,13 +627,29 @@ pandoc.table.return <- function(t, caption, digits = panderOptions('digits'), de
             justify <- attr(t, 'alignment')
         }
     }
-    if (missing(caption)) {
+    if (is.null(mc$caption)) {
         if (is.null(attr(t, 'caption'))) {
             caption <- get.caption()
         } else {
             caption <- attr(t, 'caption')
         }
     }
+    emphasize.parameters <- c('emphasize.rows', 'emphasize.cols', 'emphasize.cells', 'emphasize.strong.rows', 'emphasize.strong.cols', 'emphasize.strong.cells')
+    ## check if emphasize parameters were passed
+    if (all(sapply(emphasize.parameters, function(p) is.null(mc[[p]]), USE.NAMES = FALSE))) {
+        ## check if emphasize parameters were set in attributes
+        if (all(sapply(emphasize.parameters, function(p) is.null(attr(t, p)), USE.NAMES = FALSE)))
+            t <- get.emphasize(t)
+        ## set emphasize parameters at last
+        for (p in emphasize.parameters)
+            assign(p, attr(t, p))
+    } else {
+        ## some emphasize parameters passed, other should be set to NULL
+        for (p in emphasize.parameters)
+            if (is.null(mc[[p]]))
+                assign(p, NULL)
+    }
+    res <- ''
 
     ## round numbers & cut digits & apply decimal mark & optionally remove trailing zeros
     if (length(dim(t)) == 0) {  # named char
