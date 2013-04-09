@@ -38,3 +38,4 @@ Collate:
     'ess-functions.R'
     'options.R'
     'graph.R'
+    'pandoc.R'

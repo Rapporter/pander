@@ -122,11 +122,8 @@ set.caption <- function(x)
 #' Get caption from temporary environment and truncates that
 #' @return stored caption as string
 #' @keywords internal
-get.caption <- function() {
-    res <- storage$caption
-    assign('caption', NULL , envir = storage)
-    return(res)
-}
+get.caption <- function()
+    get.storage('caption')
 
 
 #' Sets alignment for tables
@@ -146,8 +143,7 @@ set.alignment <- function(align = 'centre', row.names = 'right')
 #' @keywords internal
 get.alignment <- function(df) {
 
-    a <- storage$alignment
-    assign('alignment', NULL , envir = storage)
+    a <- get.storage('alignment')
 
     if (length(dim(df)) == 0) {
         w <- length(df)
@@ -164,6 +160,73 @@ get.alignment <- function(df) {
     else
         return(c(a$row.names, rep(a$align, length.out = w)))
 
+}
+
+
+#' Emphasize rows/columns/cells
+#'
+#' Storing indexes of cells to be (strong) emphasized of a tabular data in an internal buffer that can be released and applied by \code{\link{pandoc.table}}, \code{\link{pander}} or \code{\link{evals} later.
+#' @param x vector of row/columns indexes or an array like returned by \code{which(..., arr.ind = TRUE)}
+#' @aliases emphasize.rows emphasize.cols emphasize.cells emphasize.strong.rows emphasize.strong.cols emphasize.strong.cells
+#' @usage
+#' emphasize.rows(x)
+#'
+#' emphasize.cols(x)
+#'
+#' emphasize.cells(x)
+#'
+#' emphasize.strong.rows(x)
+#'
+#' emphasize.strong.cols(x)
+#'
+#' emphasize.strong.cells(x)
+#' @export
+#' @examples \dontrun{
+#' n <- data.frame(x = c(1,1,1,1,1), y = c(0,1,0,1,0))
+#' emphasize.cols(1)
+#' emphasize.rows(1)
+#' pandoc.table(n)
+#'
+#' emphasize.strong.cells(which(n == 1))
+#' pander(n)
+#' }
+emphasize.rows <- function(x)
+    assign(deparse(match.call()[[1]]), x , envir = storage)
+#' @export
+emphasize.strong.rows <- emphasize.rows
+#' @export
+emphasize.cols <- emphasize.rows
+#' @export
+emphasize.strong.cols <- emphasize.rows
+#' @export
+emphasize.cells <- emphasize.rows
+#' @export
+emphasize.strong.cells <- emphasize.rows
+
+
+#' Get emphasize params from internal buffer
+#'
+#' And truncate content.
+#' @param df tabular data
+#' @return R object passed as \code{df} with possibly added \code{attr}s captured from internal buffer
+#' @keywords internal
+get.emphasize <- function(df) {
+    for (v in c('emphasize.rows', 'emphasize.cols', 'emphasize.cells', 'emphasize.strong.rows', 'emphasize.strong.cols', 'emphasize.strong.cells'))
+        if (is.null(attr(df, v)))
+            attr(df, v) <- get.storage(v)
+    return(df)
+}
+
+
+#' Get a value from internal buffer
+#'
+#' And truncate content.
+#' @param what string
+#' @keywords internal
+get.storage <- function(what) {
+    res <- tryCatch(get(what, envir = storage, inherits = FALSE), error = function(e) NULL)
+    assign(what, NULL , envir = storage)
+    return(res)
 }
 
 
