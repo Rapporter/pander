@@ -59,7 +59,11 @@ Now you would only need a few cool packages from CRAN:
 
 # Helper functions
 
-There are a bunch of helper functions in `pander` which return user specified inputs in Pandoc format. You could find these functions starting with `pandoc.`. For example `pandoc.strong` would return the passed characters with strong emphasis. E.g.:
+There are a bunch of helper functions in `pander` which e.g. return user specified inputs in Pandoc format or applies some extra formatting on those.
+
+## Primitive functions
+
+You could find the Pandoc-related functions starting with `pandoc.` - for example `pandoc.strong` would return the passed characters with strong emphasis. E.g.:
 
 ```rout
 > pandoc.strong('FOO')
@@ -68,7 +72,24 @@ There are a bunch of helper functions in `pander` which return user specified in
 [1] "**FOO**"
 ```
 
-As it can be seen here `pandoc` functions generally prints to console and do not return anything. If you want the opposite (get the Pandoc format as a string): call each function ending in `.return` - like the second call in the above example. For details please check documentation, e.g. `?pandoc.strong`.
+As it can be seen here `pandoc` functions generally prints to console and do not return anythingby default (see: `?cat`). If you want the opposite (get the Pandoc format as a string): call each function ending in `.return` - like the second call in the above example. For details please check documentation, e.g. `?pandoc.strong`.
+
+The full list of primitive Pandoc-related functions are:
+
+  * pandoc.indent
+  * pandoc.p
+  * pandoc.strong
+  * pandoc.emphasis
+  * pandoc.strikeout
+  * pandoc.verbatim
+  * pandoc.link
+  * pandoc.image
+  * pandoc.footnote
+  * pandoc.horizontal.rule
+  * pandoc.header
+  * pandoc.title
+
+## Lists
 
 Of course there are more complex functions too. Besides verbatim texts, (image) links or footnotes (among others) there are a helper e.g. for **lists**:
 
@@ -85,6 +106,8 @@ l <- list("First list element", paste0(1:5, '. subelement'), "Second element", l
 pandoc.list.return(l, 'roman')
 %>
 ```
+
+## Tables
 
 `pandoc` can return **tables** in [four formats supported by Pandoc](http://johnmacfarlane.net/pandoc/README.html#tables), including the pipe tables also used in `knitr` and [PHP Markdown Extra format](http://michelf.ca/projects/php-markdown/extra/#table):
 
@@ -149,6 +172,94 @@ And too wide cells are also split by line breaks. E.g.:
 > pandoc.table(data.frame(id=1:2, value=c('FOO', 'Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.')))
 <%=
 pandoc.table.return(data.frame(id=1:2, value=c('FOO', 'Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.')))
+%>
+```
+
+## Caption
+
+Beside directly calling `pandoc.table`'s `caption` parameter, one could also set a caption even before printing the markdown format - just use `set.caption` function:
+
+```rout
+> set.caption('Hello caption!')
+> pandoc.table(mtcars[1:2, ])
+<%=
+set.caption('Hello caption!');pandoc.table.return(mtcars[1:2, ])
+%>
+```
+
+Of course the `set.caption` function is not needed to be called directly before `pandoc.table` and it can be also used by the [`pander` method](#generic-pander-method) or inside of [`Pandoc.brew` documents](#brew-to-pandoc) too.
+
+## Cell alignment
+
+The `justify` argument of `pandoc.table` can be also set by a helper:
+
+```rout
+> set.alignment('left', row.names = 'right')
+> pandoc.table(mtcars[1:2,  1:5])
+<%=
+set.alignment('left', row.names = 'right');pandoc.table.return(mtcars[1:2,  1:5])
+%>
+> set.alignment(c('left', 'right', 'center', 'centre'))
+> pandoc.table(iris[1:3, 1:4])
+<%=
+set.alignment(c('left', 'right', 'center', 'centre'));pandoc.table.return(iris[1:3, 1:4])
+%>
+```
+
+And feel free to use either `centre` or `center` to align cells to the middle :)
+
+## Highlight cells
+
+And IMHO the most important feature in `pander` is the ease of highlighting rows, columns or any cells in a table that can be exported to HTML/pdf/MS Word etc. with the help of Pandoc.
+
+This can be achieved by calling `pandoc.table` directly and passing any (or more) of the following arguments:
+
+  * emphasize.rows
+  * emphasize.cols
+  * emphasize.cells
+  * emphasize.strong.rows
+  * emphasize.strong.cols
+  * emphasize.strong.cells
+
+`emphasize` would turn the affected cells to *italic*, while `emphasize.strong` would apply a **bold style** in the cell. Of course a cell can be also ***italic and strong*** at the same time.
+
+Arguments ending in `rows` or `cols` take a vector (e.g. `which` columns or rows to emphasize in a table), while the `cells` argument take either a vector (for one dimensional "tables") or an array-like data structure with two columns holding row and column indexes of cells to be emphasized -- just like what `which(..., arr.ind = TRUE)` returns.
+
+Examples:
+
+```rout
+> t <- mtcars[1:3, 1:5]
+> emphasize.cols(1)
+> emphasize.rows(1)
+> pandoc.table(t)
+<%=
+t <- mtcars[1:3, 1:5]
+emphasize.cols(1)
+emphasize.rows(1)
+t
+%>
+```
+Of course the these helper functions works with [`pander` method](#generic-pander-method) or inside of [`Pandoc.brew` documents](#brew-to-pandoc) too:
+
+```rout
+> emphasize.strong.cells(which(t > 20, arr.ind = TRUE))
+> pander(t)
+<%=
+emphasize.strong.cells(which(t > 20, arr.ind = TRUE))
+t
+%>
+> Pandoc.brew(text='
+## Title
+
+<\%\=
+set.caption('Formatted table')
+emphasize.rows(1)
+mtcars[1:2, 1:5]
+\%>')
+<%=
+set.caption('Formatted table')
+emphasize.rows(1)
+mtcars[1:2, 1:5]
 %>
 ```
 
@@ -237,6 +348,8 @@ set.caption('Foo Bar')
 data.frame(id=1:2, value=c('FOO', 'Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.'))
 %>
 ```
+
+## Methods
 
 The list of currently supported R classes:
 

@@ -59,7 +59,11 @@ Now you would only need a few cool packages from CRAN:
 
 # Helper functions
 
-There are a bunch of helper functions in `pander` which return user specified inputs in Pandoc format. You could find these functions starting with `pandoc.`. For example `pandoc.strong` would return the passed characters with strong emphasis. E.g.:
+There are a bunch of helper functions in `pander` which e.g. return user specified inputs in Pandoc format or applies some extra formatting on those.
+
+## Primitive functions
+
+You could find the Pandoc-related functions starting with `pandoc.` - for example `pandoc.strong` would return the passed characters with strong emphasis. E.g.:
 
 ```rout
 > pandoc.strong('FOO')
@@ -68,7 +72,24 @@ There are a bunch of helper functions in `pander` which return user specified in
 [1] "**FOO**"
 ```
 
-As it can be seen here `pandoc` functions generally prints to console and do not return anything. If you want the opposite (get the Pandoc format as a string): call each function ending in `.return` - like the second call in the above example. For details please check documentation, e.g. `?pandoc.strong`.
+As it can be seen here `pandoc` functions generally prints to console and do not return anythingby default (see: `?cat`). If you want the opposite (get the Pandoc format as a string): call each function ending in `.return` - like the second call in the above example. For details please check documentation, e.g. `?pandoc.strong`.
+
+The full list of primitive Pandoc-related functions are:
+
+  * pandoc.indent
+  * pandoc.p
+  * pandoc.strong
+  * pandoc.emphasis
+  * pandoc.strikeout
+  * pandoc.verbatim
+  * pandoc.link
+  * pandoc.image
+  * pandoc.footnote
+  * pandoc.horizontal.rule
+  * pandoc.header
+  * pandoc.title
+
+## Lists
 
 Of course there are more complex functions too. Besides verbatim texts, (image) links or footnotes (among others) there are a helper e.g. for **lists**:
 
@@ -98,6 +119,8 @@ II. Second element
 <!-- end of list -->
 
 ```
+
+## Tables
 
 `pandoc` can return **tables** in [four formats supported by Pandoc](http://johnmacfarlane.net/pandoc/README.html#tables), including the pipe tables also used in `knitr` and [PHP Markdown Extra format](http://michelf.ca/projects/php-markdown/extra/#table):
 
@@ -231,6 +254,143 @@ And too wide cells are also split by line breaks. E.g.:
 
 ```
 
+## Caption
+
+Beside directly calling `pandoc.table`'s `caption` parameter, one could also set a caption even before printing the markdown format - just use `set.caption` function:
+
+```rout
+> set.caption('Hello caption!')
+> pandoc.table(mtcars[1:2, ])
+
+--------------------------------------------------------
+      &nbsp;         mpg   cyl   disp   hp   drat   wt  
+------------------- ----- ----- ------ ---- ------ -----
+   **Mazda RX4**     21     6    160   110   3.9   2.62 
+
+ **Mazda RX4 Wag**   21     6    160   110   3.9   2.875
+--------------------------------------------------------
+
+Table: Hello caption! (continued below)
+
+ 
+--------------------------------------------------
+      &nbsp;         qsec   vs   am   gear   carb 
+------------------- ------ ---- ---- ------ ------
+   **Mazda RX4**    16.46   0    1     4      4   
+
+ **Mazda RX4 Wag**  17.02   0    1     4      4   
+--------------------------------------------------
+
+```
+
+Of course the `set.caption` function is not needed to be called directly before `pandoc.table` and it can be also used by the [`pander` method](#generic-pander-method) or inside of [`Pandoc.brew` documents](#brew-to-pandoc) too.
+
+## Cell alignment
+
+The `justify` argument of `pandoc.table` can be also set by a helper:
+
+```rout
+> set.alignment('left', row.names = 'right')
+> pandoc.table(mtcars[1:2,  1:5])
+
+--------------------------------------------------
+             &nbsp; mpg   cyl   disp   hp   drat  
+------------------- ----- ----- ------ ---- ------
+      **Mazda RX4** 21    6     160    110  3.9   
+
+  **Mazda RX4 Wag** 21    6     160    110  3.9   
+--------------------------------------------------
+
+> set.alignment(c('left', 'right', 'center', 'centre'))
+> pandoc.table(iris[1:3, 1:4])
+
+---------------------------------------------------------
+Sepal.Length     Sepal.Width  Petal.Length   Petal.Width 
+-------------- ------------- -------------- -------------
+5.1                      3.5      1.4            0.2     
+
+4.9                        3      1.4            0.2     
+
+4.7                      3.2      1.3            0.2     
+---------------------------------------------------------
+
+```
+
+And feel free to use either `centre` or `center` to align cells to the middle :)
+
+## Highlight cells
+
+And IMHO the most important feature in `pander` is the ease of highlighting rows, columns or any cells in a table that can be exported to HTML/pdf/MS Word etc. with the help of Pandoc.
+
+This can be achieved by calling `pandoc.table` directly and passing any (or more) of the following arguments:
+
+  * emphasize.rows
+  * emphasize.cols
+  * emphasize.cells
+  * emphasize.strong.rows
+  * emphasize.strong.cols
+  * emphasize.strong.cells
+
+`emphasize` would turn the affected cells to *italic*, while `emphasize.strong` would apply a **bold style** in the cell. Of course a cell can be also ***italic and strong*** at the same time.
+
+Arguments ending in `rows` or `cols` take a vector (e.g. `which` columns or rows to emphasize in a table), while the `cells` argument take either a vector (for one dimensional "tables") or an array-like data structure with two columns holding row and column indexes of cells to be emphasized -- just like what `which(..., arr.ind = TRUE)` returns.
+
+Examples:
+
+```rout
+> t <- mtcars[1:3, 1:5]
+> emphasize.cols(1)
+> emphasize.rows(1)
+> pandoc.table(t)
+
+----------------------------------------------------
+      &nbsp;         mpg    cyl   disp   hp    drat 
+------------------- ------ ----- ------ ----- ------
+   **Mazda RX4**     *21*   *6*  *160*  *110* *3.9* 
+
+ **Mazda RX4 Wag**   *21*    6    160    110   3.9  
+
+  **Datsun 710**    *22.8*   4    108    93    3.85 
+----------------------------------------------------
+
+```
+Of course the these helper functions works with [`pander` method](#generic-pander-method) or inside of [`Pandoc.brew` documents](#brew-to-pandoc) too:
+
+```rout
+> emphasize.strong.cells(which(t > 20, arr.ind = TRUE))
+> pander(t)
+
+---------------------------------------------------------
+      &nbsp;          mpg     cyl   disp     hp     drat 
+------------------- -------- ----- ------- ------- ------
+   **Mazda RX4**     **21**    6   **160** **110**  3.9  
+
+ **Mazda RX4 Wag**   **21**    6   **160** **110**  3.9  
+
+  **Datsun 710**    **22.8**   4   **108** **93**   3.85 
+---------------------------------------------------------
+
+> Pandoc.brew(text='
+## Title
+
+<\%\=
+set.caption('Formatted table')
+emphasize.rows(1)
+mtcars[1:2, 1:5]
+\%>')
+
+---------------------------------------------------
+      &nbsp;         mpg   cyl   disp   hp    drat 
+------------------- ----- ----- ------ ----- ------
+   **Mazda RX4**    *21*   *6*  *160*  *110* *3.9* 
+
+ **Mazda RX4 Wag**   21     6    160    110   3.9  
+---------------------------------------------------
+
+Table: Formatted table
+
+```
+
 # Generic pander method
 
 `pander` or `pandoc` (call as you wish) can deal with a bunch of R object types as being a pandocized `S3` method with a variety of classes.
@@ -328,7 +488,7 @@ The output of different **statistical methods** are tried to be prettyfied. Some
 ---------------------------------------------------
  Test statistic   P value   Alternative hypothesis 
 ---------------- --------- ------------------------
-      0.18       _0.3959_         two-sided        
+      0.14       _0.7166_         two-sided        
 ---------------------------------------------------
 
 Table: Two-sample Kolmogorov-Smirnov test: `runif(50)` and `runif(50)`
@@ -509,6 +669,8 @@ And of course tables are formatted (e.g. auto add of line breaks and splitting u
 Table: Foo Bar
 
 ```
+
+## Methods
 
 The list of currently supported R classes:
 
@@ -841,4 +1003,4 @@ To use this small lib, just type: `M-x pander-mode` on any document. It might be
 
 
 -------
-This report was generated with [R](http://www.r-project.org/) (2.15.3) and [pander](https://github.com/rapporter/pander) (0.3.4) in 0.984 sec on x86_64-unknown-linux-gnu platform.
+This report was generated with [R](http://www.r-project.org/) (2.15.3) and [pander](https://github.com/rapporter/pander) (0.3.4) in 1.472 sec on x86_64-unknown-linux-gnu platform.
