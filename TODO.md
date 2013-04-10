@@ -25,7 +25,7 @@
 
 ## Vignette
 
-  * TODO
+  * ~~TODO~~ won't fix: we have a homepage
 
 # Coding
 
@@ -52,7 +52,7 @@
   * ~~run twice with `evalsOptions('cache.time', 0)`:  `evals('x<-1:21;histogram(x)')`~~: resolved by updating objects (while returning from cache) changed by cached code~~
   * add option to run code in sandbox:
 
-  	  * RAppArmor: https://github.com/jeroenooms/RAppArmor
+  	  * ~~RAppArmor: https://github.com/jeroenooms/RAppArmor~~: see `RAppArmor` branch
       * ~~sandboxR: https://github.com/rapporter/sandboxR~~: just provide a sandboxed environment
 
 ### Image options:
@@ -102,7 +102,7 @@ Global options for: `lattice`, `ggplot2` and `base` plots
   * ~~table: add strong emphasis to row names~~
   * ~~table: fails with one-column tables. E.g.: `pander(mtcars[1,])`~~
   * ~~table: **issue** with rounding numbers, just check: `pander(mtcars$mpg)` vs. `pander(mtcars$mpg)` -> this is based on low `digits` option~~
-  * table: add more styling options (e.g. (strong) emphasizing custom cells, ~~alignment~~)
+  * ~~table: add more styling options (e.g. (strong) emphasizing custom cells, ~~alignment~~)~~
   * table: add option to draw significance starts in cells
   * table: @idea wrap header of tables to minimal (even in words!) to keep the table's width minimal
 
@@ -120,6 +120,7 @@ Global options for: `lattice`, `ggplot2` and `base` plots
   * **Q**: include Pandoc somehow in the package not to ask users to install it?
   
     **A**: INSTALL file updated + if Pandoc is not found it's shown to the user. Might try to auto-download binary for Mac/Windows? Linux users would deal with that problem, right? :)
+	**UPDATE**: see `installr` package
 
 ## Pandoc/pander methods
 
