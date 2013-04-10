@@ -991,6 +991,9 @@ evals <- function(txt, parse = TRUE, cache = TRUE, cache.mode = c('environment',
         if (!is.null(storage$alignment) & !is.null(result))
             attr(result, 'alignment') <- get.alignment(result)
 
+        ## highlight cells
+        result <- get.emphasize(result)
+
         ## return list at last
         res <- list(src      = src,
                     result   = result,
