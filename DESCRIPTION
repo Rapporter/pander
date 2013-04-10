@@ -12,8 +12,8 @@ Description: Contains some functions catching all messages, stdout and other
     latter reporting feature is supported in brew syntax or with a custom
     reference class with a smarty caching backend.
 Author: Gergely Daróczi <daroczig@rapporter.net>
-Version: 0.3.4
-Date: 2013-04-05
+Version: 0.3.5
+Date: 2013-04-10
 URL: http://rapporter.github.com/pander
 BugReports: https://github.com/rapporter/pander/issues
 License: AGPL-3

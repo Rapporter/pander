@@ -1,4 +1,14 @@
 
+pander 0.3.5 (2013-04-10)
+----------------------------------------------------------------
+
+ * new functions to highlight parts of a table
+ * let both US/UK spelling of "center"/"centre" work as alignment parameter for tables (#31)
+ * fix `pandoc.table` issue with tables holding only one number (#32)
+ * fix `redraw.recodedplot` compatibility issue with R 3.0.0
+ * fixing aligmnent of cells with helper outside of `Pandoc.brew`
+ * minor documentation improvements
+
 pander 0.3.4 (2013-04-05)
 ----------------------------------------------------------------
 
