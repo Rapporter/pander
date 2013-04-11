@@ -30,7 +30,9 @@ The stable version of the package can be found on [CRAN](http://cran.r-project.o
 install.packages('pander')
 ```
 
-On the other hand I welcome everyone to use the most recent version of the package with added features and currently hosted on [GitHub](https://github.com/Rapporter/pander), that can be installed easily with the nifty function of `devtools` package:
+On the other hand I welcome everyone to use the most recent version of the package with added features and currently hosted on [GitHub](https://github.com/Rapporter/pander). The current build status is: [![Build Status](https://travis-ci.org/Rapporter/pander.png?branch=master)](https://travis-ci.org/Rapporter/pander)
+
+It can be installed easily with the nifty function of `devtools` package:
 
 ```
 library(devtools)

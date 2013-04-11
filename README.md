@@ -30,7 +30,9 @@ The stable version of the package can be found on [CRAN](http://cran.r-project.o
 install.packages('pander')
 ```
 
-On the other hand I welcome everyone to use the most recent version of the package with added features and currently hosted on [GitHub](https://github.com/Rapporter/pander), that can be installed easily with the nifty function of `devtools` package:
+On the other hand I welcome everyone to use the most recent version of the package with added features and currently hosted on [GitHub](https://github.com/Rapporter/pander). The current build status is: [![Build Status](https://travis-ci.org/Rapporter/pander.png?branch=master)](https://travis-ci.org/Rapporter/pander)
+
+It can be installed easily with the nifty function of `devtools` package:
 
 ```
 library(devtools)
@@ -488,7 +490,7 @@ The output of different **statistical methods** are tried to be prettyfied. Some
 ---------------------------------------------------
  Test statistic   P value   Alternative hypothesis 
 ---------------- --------- ------------------------
-      0.14       _0.7166_         two-sided        
+      0.2        _0.2719_         two-sided        
 ---------------------------------------------------
 
 Table: Two-sample Kolmogorov-Smirnov test: `runif(50)` and `runif(50)`
@@ -1003,4 +1005,4 @@ To use this small lib, just type: `M-x pander-mode` on any document. It might be
 
 
 -------
-This report was generated with [R](http://www.r-project.org/) (2.15.3) and [pander](https://github.com/rapporter/pander) (0.3.4) in 1.472 sec on x86_64-unknown-linux-gnu platform.
+This report was generated with [R](http://www.r-project.org/) (2.15.3) and [pander](https://github.com/rapporter/pander) (0.3.5) in 1.293 sec on x86_64-unknown-linux-gnu platform.
