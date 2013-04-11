@@ -992,7 +992,8 @@ evals <- function(txt, parse = TRUE, cache = TRUE, cache.mode = c('environment',
             attr(result, 'alignment') <- get.alignment(result)
 
         ## highlight cells
-        result <- get.emphasize(result)
+        if (!is.null(result))
+            result <- get.emphasize(result)
 
         ## return list at last
         res <- list(src      = src,
