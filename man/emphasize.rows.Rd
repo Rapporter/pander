@@ -27,7 +27,7 @@
   Storing indexes of cells to be (strong) emphasized of a
   tabular data in an internal buffer that can be released
   and applied by \code{\link{pandoc.table}},
-  \code{\link{pander}} or \code{\link{evals} later.
+  \code{\link{pander}} or \code{\link{evals}} later.
 }
 \examples{
 \dontrun{

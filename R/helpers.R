@@ -165,7 +165,7 @@ get.alignment <- function(df) {
 
 #' Emphasize rows/columns/cells
 #'
-#' Storing indexes of cells to be (strong) emphasized of a tabular data in an internal buffer that can be released and applied by \code{\link{pandoc.table}}, \code{\link{pander}} or \code{\link{evals} later.
+#' Storing indexes of cells to be (strong) emphasized of a tabular data in an internal buffer that can be released and applied by \code{\link{pandoc.table}}, \code{\link{pander}} or \code{\link{evals}} later.
 #' @param x vector of row/columns indexes or an array like returned by \code{which(..., arr.ind = TRUE)}
 #' @aliases emphasize.rows emphasize.cols emphasize.cells emphasize.strong.rows emphasize.strong.cols emphasize.strong.cells
 #' @usage
