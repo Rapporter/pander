@@ -100,7 +100,7 @@ install_github(&#39;pander&#39;, &#39;Rapporter&#39;)</code></pre>
 <li>besides <a href="http://www.r-project.org/">R</a> of course!</li>
 </ul>
 <h1 id="helper-functions">Helper functions</h1>
-<p>There are a bunch of helper functions in <code>pander</code> which e.g. return user specified inputs in Pandoc format or applies some extra formatting on those.</p>
+<p>There are a bunch of helper functions in <code>pander</code> which e.g. return user specified inputs in Pandoc format or applies some extra formatting on those. For a technical documentation, see the HTML help files of the package at <a href="http://help.r-enthusiasts.com/library/pander/html/00Index.html">help.r-enthusiasts.com</a>.</p>
 <h2 id="primitive-functions">Primitive functions</h2>
 <p>You could find the Pandoc-related functions starting with <code>pandoc.</code> - for example <code>pandoc.strong</code> would return the passed characters with strong emphasis. E.g.:</p>
 <pre class="rout"><code>&gt; pandoc.strong(&#39;FOO&#39;)
@@ -455,7 +455,7 @@ Table: Formatted table
 ---------------------------------------------------
  Test statistic   P value   Alternative hypothesis 
 ---------------- --------- ------------------------
-      0.2        _0.2719_         two-sided        
+      0.1        _0.9667_         two-sided        
 ---------------------------------------------------
 
 Table: Two-sample Kolmogorov-Smirnov test: `runif(50)` and `runif(50)`
@@ -868,7 +868,8 @@ xx &lt;- mtcars$hp*1
 evals(&#39;mean(x)&#39;)
 evals(&#39;mean(xx)&#39;)</code></pre>
 <h1 id="evals">Evals</h1>
-<p>Sorry, no online documentation ATM. Please check: <code>?evals</code></p>
+<p>Sorry, no online documentation here ATM. Please check: <code>?evals</code></p>
+<p>Or head to the CRAN version of the docs at <a href="http://help.r-enthusiasts.com/library/pander/html/evals.html">help.r-enthusiasts.com</a></p>
 <h1 id="ess">ESS</h1>
 <p>I have created some simple LISP functions which would be handy if you are using the best damn IDE for R. These functions and default key-bindings are <a href="https://github.com/Rapporter/pander/tree/master/inst/pander.el">shipped with the package</a>, feel free to personalize.</p>
 <p>As time passed these small functions grew heavier (with my Emacs knowledge) so I ended up with a small library:</p>
@@ -887,7 +888,7 @@ evals(&#39;mean(xx)&#39;)</code></pre>
 <p>To use this small lib, just type: <code>M-x pander-mode</code> on any document. It might be useful to add a hook to <code>markdown-mode</code> if you find this useful.</p>
 <p><a href="http://githalytics.com/Rapporter/pander"><img src="https://cruel-carlota.pagodabox.com/9dfac0c1da37bd83d1848289630631fd" title="githalytics.com" alt="githalytics.com alpha" /></a></p>
 <hr />
-<p>This report was generated with <a href="http://www.r-project.org/">R</a> (2.15.3) and <a href="https://github.com/rapporter/pander">pander</a> (0.3.5) in 1.293 sec on x86_64-unknown-linux-gnu platform.</p>
+<p>This report was generated with <a href="http://www.r-project.org/">R</a> (2.15.3) and <a href="https://github.com/rapporter/pander">pander</a> (0.3.5) in 1.519 sec on x86_64-unknown-linux-gnu platform.</p>
 <p align="center">
   Design: <a href="http://rapport-package.info/"><i>rapport</i> Development Team</a> &copy; 2012 | Backend: <a href="https://github.com/rapporter/pander">pander</a> | License: <a href="http://www.gnu.org/licenses/agpl.html" target="_blank">AGPL3</a> | Styled with <a href="http://www.getskeleton.com/" target="_blank">skeleton</a>
 </p>
