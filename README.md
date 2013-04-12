@@ -61,7 +61,7 @@ Now you would only need a few cool packages from CRAN:
 
 # Helper functions
 
-There are a bunch of helper functions in `pander` which e.g. return user specified inputs in Pandoc format or applies some extra formatting on those.
+There are a bunch of helper functions in `pander` which e.g. return user specified inputs in Pandoc format or applies some extra formatting on those. For a technical documentation, see the HTML help files of the package at [help.r-enthusiasts.com](http://help.r-enthusiasts.com/library/pander/html/00Index.html).
 
 ## Primitive functions
 
@@ -490,7 +490,7 @@ The output of different **statistical methods** are tried to be prettyfied. Some
 ---------------------------------------------------
  Test statistic   P value   Alternative hypothesis 
 ---------------- --------- ------------------------
-      0.2        _0.2719_         two-sided        
+      0.1        _0.9667_         two-sided        
 ---------------------------------------------------
 
 Table: Two-sample Kolmogorov-Smirnov test: `runif(50)` and `runif(50)`
@@ -978,7 +978,9 @@ evals('mean(xx)')
 
 # Evals
 
-Sorry, no online documentation ATM. Please check: `?evals`
+Sorry, no online documentation here ATM. Please check: `?evals`
+
+Or head to the CRAN version of the docs at [help.r-enthusiasts.com](http://help.r-enthusiasts.com/library/pander/html/evals.html)
 
 # ESS
 
@@ -1005,4 +1007,4 @@ To use this small lib, just type: `M-x pander-mode` on any document. It might be
 
 
 -------
-This report was generated with [R](http://www.r-project.org/) (2.15.3) and [pander](https://github.com/rapporter/pander) (0.3.5) in 1.293 sec on x86_64-unknown-linux-gnu platform.
+This report was generated with [R](http://www.r-project.org/) (2.15.3) and [pander](https://github.com/rapporter/pander) (0.3.5) in 1.519 sec on x86_64-unknown-linux-gnu platform.

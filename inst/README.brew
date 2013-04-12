@@ -61,7 +61,7 @@ Now you would only need a few cool packages from CRAN:
 
 # Helper functions
 
-There are a bunch of helper functions in `pander` which e.g. return user specified inputs in Pandoc format or applies some extra formatting on those.
+There are a bunch of helper functions in `pander` which e.g. return user specified inputs in Pandoc format or applies some extra formatting on those. For a technical documentation, see the HTML help files of the package at [help.r-enthusiasts.com](http://help.r-enthusiasts.com/library/pander/html/00Index.html).
 
 ## Primitive functions
 
@@ -657,7 +657,9 @@ evals('mean(xx)')
 
 # Evals
 
-Sorry, no online documentation ATM. Please check: `?evals`
+Sorry, no online documentation here ATM. Please check: `?evals`
+
+Or head to the CRAN version of the docs at [help.r-enthusiasts.com](http://help.r-enthusiasts.com/library/pander/html/evals.html)
 
 # ESS
 
