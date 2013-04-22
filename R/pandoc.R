@@ -378,6 +378,11 @@ pandoc.title <- function(...)
 #' pandoc.list(l)
 #' pandoc.list(l, loose = TRUE)
 #' pandoc.list(l, 'roman')
+#'
+#' ## complex nested lists
+#' pandoc.list(list('one', as.list(2)))
+#' pandoc.list(list('one', list('two')))
+#' pandoc.list(list('one', list(2:3)))
 #' @importFrom utils as.roman
 pandoc.list.return <- function(elements, style = c('bullet', 'ordered', 'roman'), loose = FALSE, add.line.breaks = TRUE, add.end.of.list = TRUE, indent.level = 0) {
 
@@ -398,7 +403,7 @@ pandoc.list.return <- function(elements, style = c('bullet', 'ordered', 'roman')
     i.lag <- 0
     res <- ifelse(add.line.breaks, '\n', '')
     res <- paste(sapply(1:elements.l, function(i) {
-        if (length(elements[[i]]) == 1) {
+        if (length(elements[[i]]) == 1 && !is.list(elements[[i]])) {
             paste0(paste(rep(' ', indent.level * 4), collapse = ''), marker[i-i.lag], elements[i])
         } else {
             i.lag <<- i.lag + 1
