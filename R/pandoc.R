@@ -657,7 +657,10 @@ pandoc.table.return <- function(t, caption, digits = panderOptions('digits'), de
     res <- ''
 
     ## round numbers & cut digits & apply decimal mark & optionally remove trailing zeros
-    t.n <- as.numeric(which(sapply(t, is.numeric)))
+    if (!is.null(dim(t)) && dim(t) == 2 && is.table(t)) # sapply does not like 2-dimensional tables
+        t.n <- as.numeric(which(apply(t, 2, is.numeric)))
+    else
+        t.n <- as.numeric(which(sapply(t, is.numeric)))
     if (length(t.n) > 0) {
         t[t.n] <- round(t[t.n], round)
         if (!keep.trailing.zeros) {
