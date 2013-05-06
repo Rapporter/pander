@@ -674,7 +674,7 @@ pandoc.table.return <- function(t, caption, digits = panderOptions('digits'), de
         }
     }
     if (length(dim(t)) == 2) {
-        t.n <- as.numeric(which(apply(t, 2, is.numeric)))
+        t.n <- as.numeric(which(sapply(t, is.numeric)))
         if (length(t.n) > 0) {
             t[, t.n] <- round(t[, t.n], round)
             if (!keep.trailing.zeros)
