@@ -702,11 +702,11 @@ pandoc.table.return <- function(t, caption, digits = panderOptions('digits'), de
         }
         if (!is.null(emphasize.cols)) {
             check.highlight.parameters(emphasize.cols, ncol(t))
-            t[, emphasize.cols] <- apply(t[, emphasize.cols, drop = FALSE], 1, pandoc.emphasis.return)
+            t[, emphasize.cols] <- t(apply(t[, emphasize.cols, drop = FALSE], 1, pandoc.emphasis.return))
         }
         if (!is.null(emphasize.strong.cols)) {
             check.highlight.parameters(emphasize.strong.cols, ncol(t))
-            t[, emphasize.strong.cols] <- apply(t[, emphasize.strong.cols, drop = FALSE], 1, pandoc.strong.return)
+            t[, emphasize.strong.cols] <- t(apply(t[, emphasize.strong.cols, drop = FALSE], 1, pandoc.strong.return))
         }
         if (!is.null(emphasize.cells)) {
             t <- as.matrix(t)
