@@ -774,7 +774,8 @@ pandoc.table.return <- function(t, caption, digits = panderOptions('digits'), de
     if (length(t.rownames) != 0) {
 
         t.rownames <- split.large.cells(t.rownames)
-        t.colnames <- c('&nbsp;', t.colnames)
+        if (!is.null(t.colnames))
+            t.colnames <- c('&nbsp;', t.colnames)
         t.width <- c(max(sapply(strsplit(t.rownames, '\n'), function(x) max(nchar(x, type = 'width'), 0))), t.width)
         t.width[1] <- t.width[1] + 2
 
