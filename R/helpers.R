@@ -145,6 +145,9 @@ get.alignment <- function(df) {
 
     a <- get.storage('alignment')
 
+    if (is.null(a))
+        a <- list(align = 'centre', row.names = 'centre')
+
     if (length(dim(df)) == 0) {
         w <- length(df)
         n <- NULL
