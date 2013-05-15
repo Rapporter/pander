@@ -148,7 +148,7 @@ get.alignment <- function(df) {
     if (is.null(a))
         a <- list(align = 'centre', row.names = 'centre')
 
-    if (length(dim(df)) == 0) {
+    if (length(dim(df)) < 2) {
         w <- length(df)
         n <- NULL
     } else {
