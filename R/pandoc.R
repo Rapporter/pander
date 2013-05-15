@@ -836,14 +836,20 @@ pandoc.table.return <- function(t, caption, digits = panderOptions('digits'), de
                'multiline' = {
                    sep.row <- '\n'
                    sep.hdr <- paste(sapply(t.width, function(x) repChar('-', x)), collapse = ' ')
-                   sep.top <- gsub(' ', '-', sep.hdr)
+                   if (length(t.colnames) != 0)
+                       sep.top <- gsub(' ', '-', sep.hdr)
+                   else
+                       sep.top <- paste(sapply(t.width, function(x) repChar('-', x)), collapse = ' ')
                    sep.btn <- sep.top
                    sep.col <- c('', ' ', '')
                },
                'simple'   = {
                    sep.row <- ''
-                   sep.top <- ''
-                   sep.btn <- ''
+                   if (length(t.colnames) == 0)
+                       sep.top <- paste(sapply(t.width, function(x) repChar('-', x)), collapse = ' ')
+                   else
+                       sep.top <- ''
+                   sep.btn <- paste0('\n', sep.top)
                    sep.hdr <- paste(sapply(t.width, function(x) repChar('-', x)), collapse = ' ')
                    sep.col <- c('', ' ', '')
                },
