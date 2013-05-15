@@ -102,52 +102,40 @@ pander.image <- function(x, caption = attr(x, 'caption'), href = attr(x, 'href')
 }
 
 #' @S3method pander table
-pander.table <- function(x, caption = attr(x, 'caption'), justify = attr(x, 'alignment'), ...) {
+pander.table <- function(x, caption = attr(x, 'caption'), justify = get.alignment(x), ...) {
 
     if (is.null(caption) & !is.null(storage$caption))
         caption <- get.caption()
-
-    if (is.null(justify))
-        justify <- 'centre'
 
     pandoc.table(x, caption = caption, justify = justify)
 
 }
 
 #' @S3method pander data.frame
-pander.data.frame <- function(x, caption = attr(x, 'caption'), justify = attr(x, 'alignment'), ...) {
+pander.data.frame <- function(x, caption = attr(x, 'caption'), justify = get.alignment(x), ...) {
 
     if (is.null(caption) & !is.null(storage$caption))
         caption <- get.caption()
-
-    if (is.null(justify))
-        justify <- 'centre'
 
     pandoc.table(x, caption = caption, justify = justify)
 
 }
 
 #' @S3method pander matrix
-pander.matrix <- function(x, caption = attr(x, 'caption'), justify = attr(x, 'alignment'),  ...) {
+pander.matrix <- function(x, caption = attr(x, 'caption'), justify = get.alignment(x),  ...) {
 
     if (is.null(caption) & !is.null(storage$caption))
         caption <- get.caption()
-
-    if (is.null(justify))
-        justify <- 'centre'
 
     pandoc.table(x, caption = caption, justify = justify)
 
 }
 
 #' @S3method pander cast_df
-pander.cast_df<- function(x, caption = attr(x, 'caption'), justify = attr(x, 'alignment'), ...) {
+pander.cast_df<- function(x, caption = attr(x, 'caption'), justify = get.alignment(x), ...) {
 
     if (is.null(caption) & !is.null(storage$caption))
         caption <- get.caption()
-
-    if (is.null(justify))
-        justify <- 'centre'
 
     pandoc.table(as.data.frame(x), caption = caption, justify = justify)
 
