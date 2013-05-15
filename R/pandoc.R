@@ -573,7 +573,7 @@ pandoc.table.return <- function(t, caption, digits = panderOptions('digits'), de
                 x
         }, USE.NAMES = FALSE)
     align.hdr <- function(t.width, justify) {
-        justify.vec <- rep(justify, length.out=length(t.width))
+        justify.vec <- rep(justify, length.out = length(t.width))
         dashes <- mapply(function(justify, width)
                          switch(
                              justify,
@@ -582,7 +582,7 @@ pandoc.table.return <- function(t, caption, digits = panderOptions('digits'), de
                              centre = paste0(":", repChar("-", width), ":")
                              ),
                          justify.vec, t.width)
-        hdr <- paste0("|", paste(dashes, collapse="|"), "|")
+        hdr <- paste0("|", paste(dashes, collapse = "|"), "|")
         return(hdr)
     }
     is.wholenumber <- function(x, tol = .Machine$double.eps^0.5)
