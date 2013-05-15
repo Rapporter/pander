@@ -845,11 +845,11 @@ pandoc.table.return <- function(t, caption, digits = panderOptions('digits'), de
                },
                'simple'   = {
                    sep.row <- ''
-                   if (length(t.colnames) == 0)
+                   if (length(t.colnames) == 0) {
                        sep.top <- paste(sapply(t.width, function(x) repChar('-', x)), collapse = ' ')
-                   else
-                       sep.top <- ''
-                   sep.btn <- paste0('\n', sep.top)
+                       sep.btn <- paste0('\n', sep.top)
+                   } else
+                       sep.top <- sep.btn <- ''
                    sep.hdr <- paste(sapply(t.width, function(x) repChar('-', x)), collapse = ' ')
                    sep.col <- c('', ' ', '')
                },
