@@ -8,16 +8,39 @@ tables <- list(
     summary(mtcars$am),
     table(mtcars$am) + 0.1,
     table(mtcars$am, mtcars$gear) + 0.1,
+    summary(lm(mtcars$hp~1))$coeff
+    )
+
+test_that('no error: multiline', {
+    for (t in tables)
+        expect_that(pandoc.table.return(t, style = 'multiline'), is_a('character'))
+})
+test_that('no error: simple', {
+    for (t in tables)
+        expect_that(pandoc.table.return(t, style = 'simple'), is_a('character'))
+})
+test_that('no error: grid', {
+    for (t in tables)
+        expect_that(pandoc.table.return(t, style = 'grid'), is_a('character'))
+})
+test_that('no error: rmarkdown', {
+    for (t in tables)
+        expect_that(pandoc.table.return(t, style = 'rmarkdown'), is_a('character'))
+})
+
+tables <- list(
+    mtcars,
+    mtcars$am,
+    mtcars[1:2, ],
+    mtcars[1:2, 5],
+    summary(mtcars$am),
+    table(mtcars$am) + 0.1,
+    table(mtcars$am, mtcars$gear) + 0.1,
     lm(mtcars$hp~1),
     t.test(extra ~ group, data = sleep),
     prcomp(USArrests),
     density(mtcars$hp)
     )
-
-test_that('no error', {
-    for (t in tables)
-        expect_that(pander.return(t), is_a('character'))
-})
 
 dm <- panderOptions('decimal.mark')
 panderOptions('decimal.mark', ',')
