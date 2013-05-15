@@ -17,8 +17,9 @@ install:
   - "[ ! -d ~/R ] && mkdir ~/R"
   - R --version
   - R -e '.libPaths(); sessionInfo()'
-  - Rscript -e 'install.packages("testthat", dep = TRUE, repos = "http://cran.rapporter.net")'
-  - Rscript -e 'install.packages("pander", dep = TRUE, repos = "http://cran.rapporter.net")'
+  - Rscript -e 'install.packages("ggplot2", dep = TRUE, repos = "http://cran.r-project.org")'
+  - Rscript -e 'install.packages("testthat", dep = TRUE, repos = "http://cran.r-project.org")'
+  - Rscript -e 'install.packages("pander", dep = TRUE, repos = "http://cran.r-project.org")'
 
 # run tests
 script:
