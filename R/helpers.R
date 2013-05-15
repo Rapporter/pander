@@ -143,26 +143,31 @@ set.alignment <- function(align = 'centre', row.names = 'right')
 #' @keywords internal
 get.alignment <- function(df) {
 
-    a <- get.storage('alignment')
+    if (is.null(attr(df, 'alignment'))) {
 
-    if (is.null(a))
-        a <- list(align = 'centre', row.names = 'centre')
+        a <- get.storage('alignment')
 
-    if (length(dim(df)) < 2) {
-        w <- length(df)
-        n <- NULL
-    } else {
-        w <- ncol(df)
-        n <- rownames(df)
-        if (all(n == 1:nrow(df)))
+        if (is.null(a))
+            a <- list(align = 'centre', row.names = 'centre')
+
+        if (length(dim(df)) < 2) {
+            w <- length(df)
             n <- NULL
+        } else {
+            w <- ncol(df)
+            n <- rownames(df)
+            if (all(n == 1:nrow(df)))
+                n <- NULL
+        }
+
+        if (is.null(n))
+            return(rep(a$align, length.out = w))
+        else
+            return(c(a$row.names, rep(a$align, length.out = w)))
+
     }
 
-    if (is.null(n))
-        return(rep(a$align, length.out = w))
-    else
-        return(c(a$row.names, rep(a$align, length.out = w)))
-
+    attr(df, 'alignment')
 }
 
 
