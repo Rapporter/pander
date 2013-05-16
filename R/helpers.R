@@ -129,11 +129,11 @@ get.caption <- function()
 #' Sets alignment for tables
 #'
 #' This is a helper function to update the alignment (\code{justify} parameter of \code{pandoc.table}) of the returning table. Possible values are: \code{centre} or \code{center}, \code{right}, \code{left}.
-#' @param align character vector which length equals to one (would be repeated \code{n} times) ot \code{n} - where \code{n} equals to the number of columns in the following table
+#' @param default character vector which length equals to one (would be repeated \code{n} times) ot \code{n} - where \code{n} equals to the number of columns in the following table
 #' @param row.names string holding the alignment of the (optional) row names
 #' @export
-set.alignment <- function(align = 'centre', row.names = 'right')
-    assign('alignment', list(align = align, row.names = row.names) , envir = storage)
+set.alignment <- function(default = 'centre', row.names = 'right')
+    assign('alignment', list(default = default, row.names = row.names) , envir = storage)
 
 
 #' Get alignment
@@ -148,7 +148,7 @@ get.alignment <- function(df) {
         a <- get.storage('alignment')
 
         if (is.null(a))
-            a <- list(align = 'centre', row.names = 'centre')
+            a <- panderOptions('table.alignment')
 
         if (length(dim(df)) < 2) {
             w <- length(df)
@@ -161,9 +161,9 @@ get.alignment <- function(df) {
         }
 
         if (is.null(n))
-            return(rep(a$align, length.out = w))
+            return(rep(a$default, length.out = w))
         else
-            return(c(a$row.names, rep(a$align, length.out = w)))
+            return(c(a$row.names, rep(a$default, length.out = w)))
 
     }
 

@@ -15,6 +15,7 @@
                 'table.caption.prefix'  = 'Table: ',
                 'table.continues'       = 'Table continues below',
                 'table.continues.affix' = '(continued below)',
+                'table.alignment'       = list(default = 'centre', row.names = 'centre'),
                 'evals.messages'        = TRUE,
                 'p.wrap'                = '_',
                 'p.sep'                 = ', ',
