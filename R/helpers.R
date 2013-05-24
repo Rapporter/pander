@@ -150,8 +150,12 @@ get.alignment <- function(df) {
         if (is.null(a))
             a <- panderOptions('table.alignment')
 
-        if (is.function(a))
-            return(a(df))
+        if (is.function(a)) {
+            row.names <- NULL
+            if (length(dim(df)) < 2 || length(rownames(df)) > 0)
+                row.names <- df()
+            return(c(row.names, a(df)))
+        }
 
         if (length(a) == 1)
             a <- list(default = as.character(a), row.names = as.character(a))
