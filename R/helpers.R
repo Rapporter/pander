@@ -153,7 +153,7 @@ get.alignment <- function(df) {
         if (is.function(a)) {
             row.names <- NULL
             if (length(dim(df)) < 2 || length(rownames(df)) > 0)
-                row.names <- df()
+                row.names <- a()
             return(c(row.names, a(df)))
         }
 
