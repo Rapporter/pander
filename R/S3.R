@@ -67,7 +67,7 @@
 #' x <- chisq.test(table(mtcars$am, mtcars$gear))
 #' class(x) <- 'I heave never heard of!'
 #' pander(x)
-pander <- function(x, ...)
+pander <- function(x = NULL, ...)
     UseMethod('pander', x)
 #' @export
 pandoc <- pander
