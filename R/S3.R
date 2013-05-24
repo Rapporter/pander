@@ -67,7 +67,7 @@
 #' x <- chisq.test(table(mtcars$am, mtcars$gear))
 #' class(x) <- 'I heave never heard of!'
 #' pander(x)
-pander <- function(x, ...)
+pander <- function(x = NULL, ...)
     UseMethod('pander', x)
 #' @export
 pandoc <- pander
@@ -102,42 +102,42 @@ pander.image <- function(x, caption = attr(x, 'caption'), href = attr(x, 'href')
 }
 
 #' @S3method pander table
-pander.table <- function(x, caption = attr(x, 'caption'), justify = get.alignment(x), ...) {
+pander.table <- function(x, caption = attr(x, 'caption'), ...) {
 
     if (is.null(caption) & !is.null(storage$caption))
         caption <- get.caption()
 
-    pandoc.table(x, caption = caption, justify = justify)
+    pandoc.table(x, caption = caption)
 
 }
 
 #' @S3method pander data.frame
-pander.data.frame <- function(x, caption = attr(x, 'caption'), justify = get.alignment(x), ...) {
+pander.data.frame <- function(x, caption = attr(x, 'caption'), ...) {
 
     if (is.null(caption) & !is.null(storage$caption))
         caption <- get.caption()
 
-    pandoc.table(x, caption = caption, justify = justify)
+    pandoc.table(x, caption = caption)
 
 }
 
 #' @S3method pander matrix
-pander.matrix <- function(x, caption = attr(x, 'caption'), justify = get.alignment(x),  ...) {
+pander.matrix <- function(x, caption = attr(x, 'caption'),  ...) {
 
     if (is.null(caption) & !is.null(storage$caption))
         caption <- get.caption()
 
-    pandoc.table(x, caption = caption, justify = justify)
+    pandoc.table(x, caption = caption)
 
 }
 
 #' @S3method pander cast_df
-pander.cast_df<- function(x, caption = attr(x, 'caption'), justify = get.alignment(x), ...) {
+pander.cast_df<- function(x, caption = attr(x, 'caption'), ...) {
 
     if (is.null(caption) & !is.null(storage$caption))
         caption <- get.caption()
 
-    pandoc.table(as.data.frame(x), caption = caption, justify = justify)
+    pandoc.table(as.data.frame(x), caption = caption)
 
 }
 
@@ -173,7 +173,7 @@ pander.lm <- function(x, caption = attr(x, 'caption'), ...) {
             caption <- get.caption()
     }
 
-    pandoc.table(summary(x)$coeff, caption = caption, justify = c('right', rep('centre', 4)))
+    pandoc.table(summary(x)$coeff, caption = caption)
 
 }
 
@@ -187,7 +187,7 @@ pander.glm <- function(x, caption = attr(x, 'caption'), ...) {
             caption <- get.caption()
     }
 
-    pandoc.table(summary(x)$coeff, caption = caption, justify = c('right', rep('centre', 4)))
+    pandoc.table(summary(x)$coeff, caption = caption)
 
 }
 
@@ -203,7 +203,7 @@ pander.aov <- function(x, caption = attr(x, 'caption'), ...) {
             caption <- get.caption()
     }
 
-    pandoc.table(res, caption = caption, justify = c('right', rep('centre', ncol(res))))
+    pandoc.table(res, caption = caption)
 }
 
 #' @S3method pander anova
@@ -216,7 +216,7 @@ pander.anova <- function(x, caption = attr(x, 'caption'), ...) {
             caption <- get.caption()
     }
 
-    pandoc.table(x, caption = caption, justify = c('right', rep('centre', ncol(x))))
+    pandoc.table(x, caption = caption)
 
 }
 
@@ -247,7 +247,7 @@ pander.htest <- function(x, caption = attr(x, 'caption'), ...) {
     res$placeholder <- NULL
 
     ## return
-    pandoc.table(res, caption = caption, justify = 'centre')
+    pandoc.table(res, caption = caption)
 
 }
 
@@ -278,7 +278,7 @@ pander.density <- function(x, caption = attr(x, 'caption'), ...) {
     res <- data.frame(Coordinates = as.numeric(summary(x$x)), 'Density values' = as.numeric(summary(x$y)), check.names = FALSE)
     rownames(res) <- names(summary(1))
 
-    pandoc.table(res, caption = caption, justify = c('right', 'centre', 'centre'))
+    pandoc.table(res, caption = caption)
 }
 
 #' @S3method pander list

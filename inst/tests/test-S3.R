@@ -128,3 +128,40 @@ test_that('evals', {
 evalsOptions('cache.dir',  cache.dir)
 evalsOptions('graph.dir',  graph.dir)
 setwd(wd)
+
+context('default alignments')
+
+tables <- list(
+    mtcars,
+    mtcars$am,
+    mtcars[1:2, ],
+    mtcars[1:2, 5],
+    summary(mtcars$am),
+    table(mtcars$am) + 0.1,
+    table(mtcars$am, mtcars$gear) + 0.1,
+    summary(lm(mtcars$hp~1))$coeff
+    )
+
+tad <- panderOptions('table.alignment.default')
+tar <- panderOptions('table.alignment.rownames')
+
+panderOptions('table.alignment.default', 'centre')
+panderOptions('table.alignment.rownames', 'right')
+test_that('no error: allright', {
+    for (t in tables)
+        expect_that(pandoc.table.return(t, style = 'multiline'), is_a('character'))
+})
+
+f <- function(df) {
+        if (!is.table(df) || length(dim(df)) < 2)
+            ifelse(sapply(df, is.numeric), 'right', 'left')
+        else
+            ifelse(apply(df, 2, is.numeric), 'right', 'left')
+}
+panderOptions('table.alignment.default', f)
+test_that('no error: functions', {
+    for (t in tables)
+        expect_that(pandoc.table.return(t, style = 'multiline'), is_a('character'))
+})
+panderOptions('table.alignment.default', tad)
+panderOptions('table.alignment.rownames', tar)
