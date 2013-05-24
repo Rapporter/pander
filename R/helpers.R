@@ -107,6 +107,15 @@ wrap <- function(x, wrap = '"'){
     sprintf('%s%s%s', wrap, x, wrap)
 }
 
+#' Check if rownames are available
+#'
+#' Dummy helper to check if the R object has real rownames or not.
+#' @param x a tabular-like R object
+#' @return \code{TRUE} OR \code{FALSE}
+#' @export
+has.rownames <- function(x) {
+    length(dim(x)) != 1 && (length(rownames(x)) > 0 && !all(rownames(x) == 1:nrow(x)))
+}
 
 #' Adds caption in current block
 #'
@@ -147,14 +156,17 @@ get.alignment <- function(df) {
 
         a <- get.storage('alignment')
 
-        if (is.null(a))
-            a <- panderOptions('table.alignment')
-
-        if (is.function(a)) {
-            row.names <- NULL
-            if (length(dim(df)) != 1 && length(rownames(df)) > 0)
-                row.names <- a()
-            return(c(row.names, a(df)))
+        if (is.null(a)) {
+            ad <- panderOptions('table.alignment.default')
+            ar <- panderOptions('table.alignment.rownames')
+            if (is.function(ar))
+                ar <- ar()
+            if (is.function(ad)) {
+                if (!has.rownames(df))
+                    ar <- NULL
+                return(c(ar, ad(df)))
+            }
+            a <- list(default = ad, row.names = ar)
         }
 
         if (length(a) == 1)
