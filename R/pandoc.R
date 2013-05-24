@@ -619,14 +619,10 @@ pandoc.table.return <- function(t, caption, digits = panderOptions('digits'), de
     else
         style <- match.arg(style)
     if (is.null(mc$justify)) {
-        if (is.null(attr(t, 'alignment'))) {
-            if (!is.null(storage$alignment))
-                justify <- get.alignment(t)
-            else
-                justify <- 'centre'
-        } else {
+        if (is.null(attr(t, 'alignment')))
+            justify <- get.alignment(t)
+        else
             justify <- attr(t, 'alignment')
-        }
     }
     if (is.null(mc$caption)) {
         if (is.null(attr(t, 'caption'))) {
