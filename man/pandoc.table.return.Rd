@@ -121,7 +121,9 @@ pandoc.table(table(mtcars$am, mtcars$gear))
 pandoc.table(table(state.division, state.region))
 pandoc.table(table(state.division, state.region), justify = 'centre')
 
-m <- data.frame(a=c(1, -500, 10320, 23, 77), b=runif(5), c=c('a', 'bb', 'ccc', 'dddd', 'eeeee'))
+m <- data.frame(a = c(1, -500, 10320, 23, 77),
+  b = runif(5),
+  c = c('a', 'bb', 'ccc', 'dddd', 'eeeee'))
 pandoc.table(m)
 pandoc.table(m, justify = c('right', 'left', 'centre'))
 
@@ -130,7 +132,8 @@ pandoc.table(mtcars)
 pandoc.table(mtcars, caption = 'Only once after the first part!')
 
 ## tables with line breaks in cells
-## Note: line breaks are removed from table content and added automatically based on "split.cells" parameter!
+## NOTE: line breaks are removed from table content
+## and added automatically based on "split.cells" parameter!
 t <- data.frame(a = c('hundreds\\nof\\nmouses', '3 cats'), b=c('FOO is nice', 'BAR\\nBAR2'))
 pandoc.table(t)
 pandoc.table(t, split.cells = 5)
@@ -142,7 +145,8 @@ pandoc.table(m, style = "simple")
 pandoc.table(t, style = "grid")
 pandoc.table(t, style = "grid", split.cells = 5)
 pandoc.table(t, style = "simple")
-tryCatch(pandoc.table(t, style = "simple", split.cells = 5), error = function(e) 'Yeah, no newline support in simple tables')
+tryCatch(pandoc.table(t, style = "simple", split.cells = 5),
+  error = function(e) 'Yeah, no newline support in simple tables')
 pandoc.table(t, style = "rmarkdown")
 
 ## highlight cells
