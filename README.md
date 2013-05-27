@@ -289,7 +289,30 @@ Of course the `set.caption` function is not needed to be called directly before 
 
 ## Cell alignment
 
-The `justify` argument of `pandoc.table` can be also set by a helper:
+One can specify the alignment of the cells in a table directly by setting the `justify` parameter in `pandoc.table`:
+
+```rout
+> panderOptions('table.split.table', Inf)
+> pandoc.table(head(iris), justify = 'right')
+
+-------------------------------------------------------------------
+  Sepal.Length   Sepal.Width   Petal.Length   Petal.Width   Species
+-------------- ------------- -------------- ------------- ---------
+           5.1           3.5            1.4           0.2    setosa
+
+           4.9             3            1.4           0.2    setosa
+
+           4.7           3.2            1.3           0.2    setosa
+
+           4.6           3.1            1.5           0.2    setosa
+
+             5           3.6            1.4           0.2    setosa
+
+           5.4           3.9            1.7           0.4    setosa
+-------------------------------------------------------------------
+```
+
+Or pre-define the alignment for `pandoc.table` or the `pander` S3 method by a helper function:
 
 ```rout
 > set.alignment('left', row.names = 'right')
@@ -317,6 +340,8 @@ Sepal.Length     Sepal.Width  Petal.Length   Petal.Width
 ---------------------------------------------------------
 
 ```
+
+Beside using `set.alignment` helper or passing parameters directly to `pandoc.table`, you may also set the default alignment styles with [`panderOptions`](#pander-options).
 
 And feel free to use either `centre` or `center` to align cells to the middle :)
 
@@ -490,7 +515,7 @@ The output of different **statistical methods** are tried to be prettyfied. Some
 ---------------------------------------------------
  Test statistic   P value   Alternative hypothesis 
 ---------------- --------- ------------------------
-      0.1        _0.9667_         two-sided        
+      0.12       _0.8693_         two-sided        
 ---------------------------------------------------
 
 Table: Two-sample Kolmogorov-Smirnov test: `runif(50)` and `runif(50)`
@@ -1009,4 +1034,4 @@ To use this small lib, just type: `M-x pander-mode` on any document. It might be
 
 
 -------
-This report was generated with [R](http://www.r-project.org/) (3.0.0) and [pander](https://github.com/rapporter/pander) (0.3.7) in 1.951 sec on x86_64-unknown-linux-gnu platform.
+This report was generated with [R](http://www.r-project.org/) (3.0.0) and [pander](https://github.com/rapporter/pander) (0.3.7) in 1.677 sec on x86_64-unknown-linux-gnu platform.

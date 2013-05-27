@@ -193,7 +193,30 @@ Of course the `set.caption` function is not needed to be called directly before 
 
 ## Cell alignment
 
-The `justify` argument of `pandoc.table` can be also set by a helper:
+One can specify the alignment of the cells in a table directly by setting the `justify` parameter in `pandoc.table`:
+
+```rout
+> panderOptions('table.split.table', Inf)
+> pandoc.table(head(iris), justify = 'right')
+
+-------------------------------------------------------------------
+  Sepal.Length   Sepal.Width   Petal.Length   Petal.Width   Species
+-------------- ------------- -------------- ------------- ---------
+           5.1           3.5            1.4           0.2    setosa
+
+           4.9             3            1.4           0.2    setosa
+
+           4.7           3.2            1.3           0.2    setosa
+
+           4.6           3.1            1.5           0.2    setosa
+
+             5           3.6            1.4           0.2    setosa
+
+           5.4           3.9            1.7           0.4    setosa
+-------------------------------------------------------------------
+```
+
+Or pre-define the alignment for `pandoc.table` or the `pander` S3 method by a helper function:
 
 ```rout
 > set.alignment('left', row.names = 'right')
@@ -207,6 +230,8 @@ set.alignment('left', row.names = 'right');pandoc.table.return(mtcars[1:2,  1:5]
 set.alignment(c('left', 'right', 'center', 'centre'));pandoc.table.return(iris[1:3, 1:4])
 %>
 ```
+
+Beside using `set.alignment` helper or passing parameters directly to `pandoc.table`, you may also set the default alignment styles with [`panderOptions`](#pander-options).
 
 And feel free to use either `centre` or `center` to align cells to the middle :)
 
