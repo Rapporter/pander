@@ -1,4 +1,10 @@
 
+pander 0.3.7 (2013-05-27)
+----------------------------------------------------------------
+
+ * new options for default cell alignment (#41)
+ * new optional HTML class to manually exclude headers from TOC (#40)
+
 pander 0.3.6 (2013-05-15)
 ----------------------------------------------------------------
 
