@@ -283,7 +283,26 @@ Table: Hello caption! (continued below)
 </code></pre>
 <p>Of course the <code>set.caption</code> function is not needed to be called directly before <code>pandoc.table</code> and it can be also used by the <a href="#generic-pander-method"><code>pander</code> method</a> or inside of <a href="#brew-to-pandoc"><code>Pandoc.brew</code> documents</a> too.</p>
 <h2 id="cell-alignment">Cell alignment</h2>
-<p>The <code>justify</code> argument of <code>pandoc.table</code> can be also set by a helper:</p>
+<p>One can specify the alignment of the cells in a table directly by setting the <code>justify</code> parameter in <code>pandoc.table</code>:</p>
+<pre class="rout"><code>&gt; panderOptions(&#39;table.split.table&#39;, Inf)
+&gt; pandoc.table(head(iris), justify = &#39;right&#39;)
+
+-------------------------------------------------------------------
+  Sepal.Length   Sepal.Width   Petal.Length   Petal.Width   Species
+-------------- ------------- -------------- ------------- ---------
+           5.1           3.5            1.4           0.2    setosa
+
+           4.9             3            1.4           0.2    setosa
+
+           4.7           3.2            1.3           0.2    setosa
+
+           4.6           3.1            1.5           0.2    setosa
+
+             5           3.6            1.4           0.2    setosa
+
+           5.4           3.9            1.7           0.4    setosa
+-------------------------------------------------------------------</code></pre>
+<p>Or pre-define the alignment for <code>pandoc.table</code> or the <code>pander</code> S3 method by a helper function:</p>
 <pre class="rout"><code>&gt; set.alignment(&#39;left&#39;, row.names = &#39;right&#39;)
 &gt; pandoc.table(mtcars[1:2,  1:5])
 
@@ -308,6 +327,7 @@ Sepal.Length     Sepal.Width  Petal.Length   Petal.Width
 4.7                      3.2      1.3            0.2     
 ---------------------------------------------------------
 </code></pre>
+<p>Beside using <code>set.alignment</code> helper or passing parameters directly to <code>pandoc.table</code>, you may also set the default alignment styles with <a href="#pander-options"><code>panderOptions</code></a>.</p>
 <p>And feel free to use either <code>centre</code> or <code>center</code> to align cells to the middle :)</p>
 <h2 id="highlight-cells">Highlight cells</h2>
 <p>And IMHO the most important feature in <code>pander</code> is the ease of highlighting rows, columns or any cells in a table that can be exported to HTML/pdf/MS Word etc. with the help of Pandoc.</p>
@@ -455,7 +475,7 @@ Table: Formatted table
 ---------------------------------------------------
  Test statistic   P value   Alternative hypothesis 
 ---------------- --------- ------------------------
-      0.1        _0.9667_         two-sided        
+      0.12       _0.8693_         two-sided        
 ---------------------------------------------------
 
 Table: Two-sample Kolmogorov-Smirnov test: `runif(50)` and `runif(50)`
@@ -890,7 +910,7 @@ evals(&#39;mean(xx)&#39;)</code></pre>
 <p>To use this small lib, just type: <code>M-x pander-mode</code> on any document. It might be useful to add a hook to <code>markdown-mode</code> if you find this useful.</p>
 <p><a href="http://githalytics.com/Rapporter/pander"><img src="https://cruel-carlota.pagodabox.com/9dfac0c1da37bd83d1848289630631fd" title="githalytics.com" alt="githalytics.com alpha" /></a></p>
 <hr />
-<p>This report was generated with <a href="http://www.r-project.org/">R</a> (3.0.0) and <a href="https://github.com/rapporter/pander">pander</a> (0.3.7) in 1.951 sec on x86_64-unknown-linux-gnu platform.</p>
+<p>This report was generated with <a href="http://www.r-project.org/">R</a> (3.0.0) and <a href="https://github.com/rapporter/pander">pander</a> (0.3.7) in 1.677 sec on x86_64-unknown-linux-gnu platform.</p>
 <p align="center">
   Design: <a href="http://rapport-package.info/"><i>rapport</i> Development Team</a> &copy; 2012 | Backend: <a href="https://github.com/rapporter/pander">pander</a> | License: <a href="http://www.gnu.org/licenses/agpl.html" target="_blank">AGPL3</a> | Styled with <a href="http://www.getskeleton.com/" target="_blank">skeleton</a>
 </p>
