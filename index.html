@@ -465,7 +465,7 @@ Table: Two-sample Kolmogorov-Smirnov test: `runif(50)` and `runif(50)`
 ---------------------------------------
  Test statistic   df       P value     
 ---------------- ---- -----------------
-    20.94467      2   _2.831e-05_ * * *
+     20.94        2   _2.831e-05_ * * *
 ---------------------------------------
 
 Table: Pearson&#39;s Chi-squared test: `table(mtcars$am, mtcars$gear)`
@@ -474,11 +474,11 @@ Table: Pearson&#39;s Chi-squared test: `table(mtcars$am, mtcars$gear)`
 
 &gt; pander(t.test(extra ~ group, data = sleep))
 
-------------------------------------------------------------
- Test statistic     df     P value   Alternative hypothesis 
----------------- -------- --------- ------------------------
-   -1.860813     17.77647 _0.07939_        two.sided        
-------------------------------------------------------------
+---------------------------------------------------------
+ Test statistic   df    P value   Alternative hypothesis 
+---------------- ----- --------- ------------------------
+     -1.861      17.78 _0.07939_        two.sided        
+---------------------------------------------------------
 
 Table: Welch Two Sample t-test: `extra` by `group`
 
@@ -490,17 +490,17 @@ Table: Welch Two Sample t-test: `extra` by `group`
 &gt; pander(m)
 
 --------------------------------------------------------------
-           &amp;nbsp;  Estimate   Std. Error   z value   Pr(&gt;|z|) 
+     &amp;nbsp;        Estimate   Std. Error   z value   Pr(&gt;|z|) 
 ----------------- ---------- ------------ --------- ----------
-  **(Intercept)**   3.045       0.1709      17.81   5.427e-71 
+ **(Intercept)**    3.045       0.1709      17.81   5.427e-71 
 
-     **outcome2**  -0.4543      0.2022     -2.247    0.02465  
+  **outcome2**     -0.4543      0.2022     -2.247    0.02465  
 
-     **outcome3**   -0.293      0.1927      -1.52     0.1285  
+  **outcome3**      -0.293      0.1927      -1.52     0.1285  
 
-   **treatment2** 1.338e-15      0.2      6.69e-15      1     
+ **treatment2**   1.338e-15      0.2      6.69e-15      1     
 
-   **treatment3** 1.421e-15      0.2      7.105e-15     1     
+ **treatment3**   1.421e-15      0.2      7.105e-15     1     
 --------------------------------------------------------------
 
 Table: Fitting generalized (poisson/log) linear model: counts ~ outcome + treatment
@@ -508,13 +508,13 @@ Table: Fitting generalized (poisson/log) linear model: counts ~ outcome + treatm
 &gt; pander(anova(m))
 
 --------------------------------------------------------
-         &amp;nbsp;  Df   Deviance   Resid. Df   Resid. Dev 
+    &amp;nbsp;       Df   Deviance   Resid. Df   Resid. Dev 
 --------------- ---- ---------- ----------- ------------
-       **NULL**                      8         10.58    
+   **NULL**                          8         10.58    
 
-    **outcome**  2     5.452         6         5.129    
+  **outcome**    2     5.452         6         5.129    
 
-  **treatment**  2   2.665e-15       4         5.129    
+ **treatment**   2   2.665e-15       4         5.129    
 --------------------------------------------------------
 
 Table: Analysis of Deviance Table
@@ -522,13 +522,13 @@ Table: Analysis of Deviance Table
 &gt; pander(aov(m))
 
 -----------------------------------------------------------
-         &amp;nbsp;  Df   Sum Sq    Mean Sq   F value   Pr(&gt;F) 
+    &amp;nbsp;       Df   Sum Sq    Mean Sq   F value   Pr(&gt;F) 
 --------------- ---- --------- --------- --------- --------
-    **outcome**  2     92.67     46.33     2.224    0.2242 
+  **outcome**    2     92.67     46.33     2.224    0.2242 
 
-  **treatment**  2   8.382e-31 4.191e-31 2.012e-32    1    
+ **treatment**   2   8.382e-31 4.191e-31 2.012e-32    1    
 
-  **Residuals**  4     83.33     20.83                     
+ **Residuals**   4     83.33     20.83                     
 -----------------------------------------------------------
 
 Table: Analysis of Variance Model
@@ -562,19 +562,19 @@ Table: Principal Components Analysis
 &gt; pander(density(mtcars$hp))
 
 --------------------------------------------
-       &amp;nbsp;  Coordinates   Density values 
+   &amp;nbsp;      Coordinates   Density values 
 ------------- ------------- ----------------
-     **Min.**    -32.12          5e-06      
+  **Min.**       -32.12          5e-06      
 
-  **1st Qu.**     80.69        0.0004068    
+ **1st Qu.**      80.69        0.0004068    
 
-   **Median**     193.5         0.001665    
+ **Median**       193.5         0.001665    
 
-     **Mean**     193.5         0.002214    
+  **Mean**        193.5         0.002214    
 
-  **3rd Qu.**     306.3         0.00409     
+ **3rd Qu.**      306.3         0.00409     
 
-     **Max.**     419.1         0.006051    
+  **Max.**        419.1         0.006051    
 --------------------------------------------
 
 Table: Kernel density of *mtcars$hp* (bandwidth: 28.04104)
@@ -584,19 +584,19 @@ Table: Kernel density of *mtcars$hp* (bandwidth: 28.04104)
 &gt; pander(density(mtcars$hp))
 
 --------------------------------------------
-       &amp;nbsp;  Coordinates   Density values 
+   &amp;nbsp;      Coordinates   Density values 
 ------------- ------------- ----------------
-     **Min.**    -32.12            0        
+  **Min.**       -32.12            0        
 
-  **1st Qu.**     80.69            0        
+ **1st Qu.**      80.69            0        
 
-   **Median**     193.5            0        
+ **Median**       193.5            0        
 
-     **Mean**     193.5            0        
+  **Mean**        193.5            0        
 
-  **3rd Qu.**     306.3            0        
+ **3rd Qu.**      306.3            0        
 
-     **Max.**     419.1           0.01      
+  **Max.**        419.1           0.01      
 --------------------------------------------
 
 Table: Kernel density of *mtcars$hp* (bandwidth: 28.04104)
@@ -768,6 +768,8 @@ myReport$<span class="kw">export</span>(<span class="dt">open =</span> <span cla
 <li><code>table.caption.prefix</code>: string (default: <code>Table:</code>) passed to <code>pandoc.table</code> to be used as caption prefix. Be sure about what you are doing if changing to other than <code>Table:</code> or <code>:</code>.</li>
 <li><code>table.continues</code>: string (default: <code>Table continues below</code>) passed to <code>pandoc.table</code> to be used as caption for long (split) without a use defined caption</li>
 <li><code>table.continues.affix</code>: string (default: <code>(continued below)</code>) passed to <code>pandoc.table</code> to be used as an affix concatenated to the user defined caption for long (split) tables</li>
+<li><code>table.alignment.default</code>: string (default: <code>centre</code>) that defines the default alignment of cells. Can be <code>left</code>, <code>right</code> or <code>centre</code> that latter can be also spelled as <code>center</code></li>
+<li><code>table.alignment.rownames</code>: string (default: <code>centre</code>) that defines the alignment of rownames in tables. Can be <code>left</code>, <code>right</code> or <code>centre</code> that latter can be also spelled as <code>center</code></li>
 <li><code>evals.messages</code>: boolean (default: <code>TRUE</code>) passed to <code>evals</code>' <code>pander</code> method specifying if messages should be rendered</li>
 <li><code>p.wrap</code>: a string (default:<code>'_'</code>) to wrap vector elements passed to <code>p</code> function</li>
 <li><code>p.sep</code>: a string (default: <code>', '</code>) with the main separator passed to <code>p</code> function</li>
@@ -888,7 +890,7 @@ evals(&#39;mean(xx)&#39;)</code></pre>
 <p>To use this small lib, just type: <code>M-x pander-mode</code> on any document. It might be useful to add a hook to <code>markdown-mode</code> if you find this useful.</p>
 <p><a href="http://githalytics.com/Rapporter/pander"><img src="https://cruel-carlota.pagodabox.com/9dfac0c1da37bd83d1848289630631fd" title="githalytics.com" alt="githalytics.com alpha" /></a></p>
 <hr />
-<p>This report was generated with <a href="http://www.r-project.org/">R</a> (2.15.3) and <a href="https://github.com/rapporter/pander">pander</a> (0.3.5) in 1.519 sec on x86_64-unknown-linux-gnu platform.</p>
+<p>This report was generated with <a href="http://www.r-project.org/">R</a> (3.0.0) and <a href="https://github.com/rapporter/pander">pander</a> (0.3.7) in 1.951 sec on x86_64-unknown-linux-gnu platform.</p>
 <p align="center">
   Design: <a href="http://rapport-package.info/"><i>rapport</i> Development Team</a> &copy; 2012 | Backend: <a href="https://github.com/rapporter/pander">pander</a> | License: <a href="http://www.gnu.org/licenses/agpl.html" target="_blank">AGPL3</a> | Styled with <a href="http://www.getskeleton.com/" target="_blank">skeleton</a>
 </p>
