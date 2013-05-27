@@ -61,15 +61,23 @@
   \code{'(continued below)'}) passed to
   \code{\link{pandoc.table}} to be used as an affix
   concatenated to the user defined caption for long (split)
-  tables \item \code{evals.messages}: boolean (default:
-  \code{TRUE}) passed to \code{evals}' \code{pander} method
-  specifying if messages should be rendered \item
-  \code{p.wrap}: a string (default: \code{'_'}) to wrap
-  vector elements passed to \code{p} function \item
-  \code{p.sep}: a string (default: \code{', '}) with the
-  main separator passed to \code{p} function \item
-  \code{p.copula}: a string (default: \code{' and '}) with
-  ending separator passed to \code{p} function \item
+  tables \item \code{table.alignment.default}: string
+  (default: \code{centre}) that defines the default
+  alignment of cells. Can be \code{left}, \code{right} or
+  \code{centre} that latter can be also spelled as
+  \code{center}.  \item \code{table.alignment.rownames}:
+  string (default: \code{centre}) that defines the
+  alignment of rownames in tables. Can be \code{left},
+  \code{right} or \code{centre} that latter can be also
+  spelled as \code{center}.  \item \code{evals.messages}:
+  boolean (default: \code{TRUE}) passed to \code{evals}'
+  \code{pander} method specifying if messages should be
+  rendered \item \code{p.wrap}: a string (default:
+  \code{'_'}) to wrap vector elements passed to \code{p}
+  function \item \code{p.sep}: a string (default: \code{',
+  '}) with the main separator passed to \code{p} function
+  \item \code{p.copula}: a string (default: \code{' and '})
+  with ending separator passed to \code{p} function \item
   \code{graph.nomargin}: boolean (default: \code{TRUE}) if
   trying to keep plots' margins at minimal \item
   \code{graph.fontfamily}: string (default: \code{'sans'})

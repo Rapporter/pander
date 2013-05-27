@@ -194,6 +194,8 @@ masked.plots$plot <- masked.plots$barplot <- masked.plots$lines <- masked.plots$
 #'      \item \code{table.caption.prefix}: string (default: \code{'Table: '}) passed to \code{\link{pandoc.table}} to be used as caption prefix. Be sure about what you are doing if changing to other than \code{'Table: '} or \code{':'}.
 #'      \item \code{table.continues}: string (default: \code{'Table continues below'}) passed to \code{\link{pandoc.table}} to be used as caption for long (split) without a use defined caption
 #'      \item \code{table.continues.affix}: string (default: \code{'(continued below)'}) passed to \code{\link{pandoc.table}} to be used as an affix concatenated to the user defined caption for long (split) tables
+#'      \item \code{table.alignment.default}: string (default: \code{centre}) that defines the default alignment of cells. Can be \code{left}, \code{right} or \code{centre} that latter can be also spelled as \code{center}.
+#'      \item \code{table.alignment.rownames}: string (default: \code{centre}) that defines the alignment of rownames in tables. Can be \code{left}, \code{right} or \code{centre} that latter can be also spelled as \code{center}.
 #'      \item \code{evals.messages}: boolean (default: \code{TRUE}) passed to \code{evals}' \code{pander} method specifying if messages should be rendered
 #'      \item \code{p.wrap}: a string (default: \code{'_'}) to wrap vector elements passed to \code{p} function
 #'      \item \code{p.sep}: a string (default: \code{', '}) with the main separator passed to \code{p} function
