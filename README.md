@@ -500,7 +500,7 @@ Table: Two-sample Kolmogorov-Smirnov test: `runif(50)` and `runif(50)`
 ---------------------------------------
  Test statistic   df       P value     
 ---------------- ---- -----------------
-    20.94467      2   _2.831e-05_ * * *
+     20.94        2   _2.831e-05_ * * *
 ---------------------------------------
 
 Table: Pearson's Chi-squared test: `table(mtcars$am, mtcars$gear)`
@@ -509,11 +509,11 @@ Table: Pearson's Chi-squared test: `table(mtcars$am, mtcars$gear)`
 
 > pander(t.test(extra ~ group, data = sleep))
 
-------------------------------------------------------------
- Test statistic     df     P value   Alternative hypothesis 
----------------- -------- --------- ------------------------
-   -1.860813     17.77647 _0.07939_        two.sided        
-------------------------------------------------------------
+---------------------------------------------------------
+ Test statistic   df    P value   Alternative hypothesis 
+---------------- ----- --------- ------------------------
+     -1.861      17.78 _0.07939_        two.sided        
+---------------------------------------------------------
 
 Table: Welch Two Sample t-test: `extra` by `group`
 
@@ -525,17 +525,17 @@ Table: Welch Two Sample t-test: `extra` by `group`
 > pander(m)
 
 --------------------------------------------------------------
-           &nbsp;  Estimate   Std. Error   z value   Pr(>|z|) 
+     &nbsp;        Estimate   Std. Error   z value   Pr(>|z|) 
 ----------------- ---------- ------------ --------- ----------
-  **(Intercept)**   3.045       0.1709      17.81   5.427e-71 
+ **(Intercept)**    3.045       0.1709      17.81   5.427e-71 
 
-     **outcome2**  -0.4543      0.2022     -2.247    0.02465  
+  **outcome2**     -0.4543      0.2022     -2.247    0.02465  
 
-     **outcome3**   -0.293      0.1927      -1.52     0.1285  
+  **outcome3**      -0.293      0.1927      -1.52     0.1285  
 
-   **treatment2** 1.338e-15      0.2      6.69e-15      1     
+ **treatment2**   1.338e-15      0.2      6.69e-15      1     
 
-   **treatment3** 1.421e-15      0.2      7.105e-15     1     
+ **treatment3**   1.421e-15      0.2      7.105e-15     1     
 --------------------------------------------------------------
 
 Table: Fitting generalized (poisson/log) linear model: counts ~ outcome + treatment
@@ -543,13 +543,13 @@ Table: Fitting generalized (poisson/log) linear model: counts ~ outcome + treatm
 > pander(anova(m))
 
 --------------------------------------------------------
-         &nbsp;  Df   Deviance   Resid. Df   Resid. Dev 
+    &nbsp;       Df   Deviance   Resid. Df   Resid. Dev 
 --------------- ---- ---------- ----------- ------------
-       **NULL**                      8         10.58    
+   **NULL**                          8         10.58    
 
-    **outcome**  2     5.452         6         5.129    
+  **outcome**    2     5.452         6         5.129    
 
-  **treatment**  2   2.665e-15       4         5.129    
+ **treatment**   2   2.665e-15       4         5.129    
 --------------------------------------------------------
 
 Table: Analysis of Deviance Table
@@ -557,13 +557,13 @@ Table: Analysis of Deviance Table
 > pander(aov(m))
 
 -----------------------------------------------------------
-         &nbsp;  Df   Sum Sq    Mean Sq   F value   Pr(>F) 
+    &nbsp;       Df   Sum Sq    Mean Sq   F value   Pr(>F) 
 --------------- ---- --------- --------- --------- --------
-    **outcome**  2     92.67     46.33     2.224    0.2242 
+  **outcome**    2     92.67     46.33     2.224    0.2242 
 
-  **treatment**  2   8.382e-31 4.191e-31 2.012e-32    1    
+ **treatment**   2   8.382e-31 4.191e-31 2.012e-32    1    
 
-  **Residuals**  4     83.33     20.83                     
+ **Residuals**   4     83.33     20.83                     
 -----------------------------------------------------------
 
 Table: Analysis of Variance Model
@@ -597,19 +597,19 @@ Table: Principal Components Analysis
 > pander(density(mtcars$hp))
 
 --------------------------------------------
-       &nbsp;  Coordinates   Density values 
+   &nbsp;      Coordinates   Density values 
 ------------- ------------- ----------------
-     **Min.**    -32.12          5e-06      
+  **Min.**       -32.12          5e-06      
 
-  **1st Qu.**     80.69        0.0004068    
+ **1st Qu.**      80.69        0.0004068    
 
-   **Median**     193.5         0.001665    
+ **Median**       193.5         0.001665    
 
-     **Mean**     193.5         0.002214    
+  **Mean**        193.5         0.002214    
 
-  **3rd Qu.**     306.3         0.00409     
+ **3rd Qu.**      306.3         0.00409     
 
-     **Max.**     419.1         0.006051    
+  **Max.**        419.1         0.006051    
 --------------------------------------------
 
 Table: Kernel density of *mtcars$hp* (bandwidth: 28.04104)
@@ -619,19 +619,19 @@ Table: Kernel density of *mtcars$hp* (bandwidth: 28.04104)
 > pander(density(mtcars$hp))
 
 --------------------------------------------
-       &nbsp;  Coordinates   Density values 
+   &nbsp;      Coordinates   Density values 
 ------------- ------------- ----------------
-     **Min.**    -32.12            0        
+  **Min.**       -32.12            0        
 
-  **1st Qu.**     80.69            0        
+ **1st Qu.**      80.69            0        
 
-   **Median**     193.5            0        
+ **Median**       193.5            0        
 
-     **Mean**     193.5            0        
+  **Mean**        193.5            0        
 
-  **3rd Qu.**     306.3            0        
+ **3rd Qu.**      306.3            0        
 
-     **Max.**     419.1           0.01      
+  **Max.**        419.1           0.01      
 --------------------------------------------
 
 Table: Kernel density of *mtcars$hp* (bandwidth: 28.04104)
@@ -842,6 +842,8 @@ myReport$export(open = FALSE)
   * `table.caption.prefix`: string (default: `Table: `) passed to `pandoc.table` to be used as caption prefix. Be sure about what you are doing if changing to other than `Table: ` or `:`.
   * `table.continues`: string (default: `Table continues below`) passed to `pandoc.table` to be used as caption for long (split) without a use defined caption
   * `table.continues.affix`: string (default: `(continued below)`) passed to `pandoc.table` to be used as an affix concatenated to the user defined caption for long (split) tables
+  * `table.alignment.default`: string (default: `centre`) that defines the default alignment of cells. Can be `left`, `right` or `centre` that latter can be also spelled as `center`
+  * `table.alignment.rownames`: string (default: `centre`) that defines the alignment of rownames in tables. Can be `left`, `right` or `centre` that latter can be also spelled as `center`
   * `evals.messages`: boolean (default: `TRUE`) passed to `evals`' `pander` method specifying if messages should be rendered
   * `p.wrap`: a string (default:`'_'`) to wrap vector elements passed to `p` function
   * `p.sep`: a string (default: `', '`) with the main separator passed to `p` function
@@ -1007,4 +1009,4 @@ To use this small lib, just type: `M-x pander-mode` on any document. It might be
 
 
 -------
-This report was generated with [R](http://www.r-project.org/) (2.15.3) and [pander](https://github.com/rapporter/pander) (0.3.5) in 1.519 sec on x86_64-unknown-linux-gnu platform.
+This report was generated with [R](http://www.r-project.org/) (3.0.0) and [pander](https://github.com/rapporter/pander) (0.3.7) in 1.951 sec on x86_64-unknown-linux-gnu platform.
