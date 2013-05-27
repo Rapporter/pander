@@ -1,4 +1,4 @@
-% [pander: An Pandoc writer in R](https://github.com/Rapporter/pander)
+% [pander: A Pandoc writer in R](https://github.com/Rapporter/pander)
 
 **pander** is an [R](http://r-project.org) package containing [helpers](#helper-functions) to return [Pandoc](http://johnmacfarlane.net/pandoc/)'s markdown *automatically* from several type of [**R objects**](#generic-pander-method).
 
@@ -515,7 +515,7 @@ The output of different **statistical methods** are tried to be prettyfied. Some
 ---------------------------------------------------
  Test statistic   P value   Alternative hypothesis 
 ---------------- --------- ------------------------
-      0.12       _0.8693_         two-sided        
+      0.14       _0.7166_         two-sided        
 ---------------------------------------------------
 
 Table: Two-sample Kolmogorov-Smirnov test: `runif(50)` and `runif(50)`
@@ -1034,4 +1034,4 @@ To use this small lib, just type: `M-x pander-mode` on any document. It might be
 
 
 -------
-This report was generated with [R](http://www.r-project.org/) (3.0.0) and [pander](https://github.com/rapporter/pander) (0.3.7) in 1.677 sec on x86_64-unknown-linux-gnu platform.
+This report was generated with [R](http://www.r-project.org/) (3.0.0) and [pander](https://github.com/rapporter/pander) (0.3.7) in 1.55 sec on x86_64-unknown-linux-gnu platform.

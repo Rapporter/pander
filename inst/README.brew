@@ -1,4 +1,4 @@
-% [pander: An Pandoc writer in R](https://github.com/Rapporter/pander)
+% [pander: A Pandoc writer in R](https://github.com/Rapporter/pander)
 
 **pander** is an [R](http://r-project.org) package containing [helpers](#helper-functions) to return [Pandoc](http://johnmacfarlane.net/pandoc/)'s markdown *automatically* from several type of [**R objects**](#generic-pander-method).
 
