@@ -15,7 +15,7 @@ install:
   - sudo apt-add-repository -y ppa:opencpu/rapparmor
   - sudo apt-get update
   - sudo apt-get install -y r-base-dev pandoc qpdf texinfo texlive-latex-extra texlive-fonts-recommended texlive-fonts-extra
-  - apt-get install -y r-cran-rapparmor
+  - sudo apt-get install -y r-cran-rapparmor
   - "[ ! -d ~/R ] && mkdir ~/R"
   - R --version
   - R -e '.libPaths(); sessionInfo()'
