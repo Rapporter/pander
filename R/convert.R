@@ -43,7 +43,10 @@ openFileInOS <- function(f) {
 #' @examples \dontrun{
 #' Pandoc.convert(text = c('# Demo', 'with a paragraph'))
 #' Pandoc.convert('http://rapporter.github.com/pander/minimal.md')
-#' ## Note: the generated HTML is not showing images with relative path from the above file. Based on that `pdf`, `docx` etc. formats would not work! If you want to convert an online markdown file to other formats with this function, please pre-process the file to have absolute paths instead.
+#' ## Note: the generated HTML is not showing images with relative path from the above file.
+#' ## Based on that `pdf`, `docx` etc. formats would not work! If you want to convert an
+#' ## online markdown file to other formats with this function, please pre-process the file
+#' ## to have absolute paths instead.
 #' }
 Pandoc.convert <- function(f, text, format = 'html', open = TRUE, options = '', footer = TRUE, proc.time, portable.html = TRUE) {
 

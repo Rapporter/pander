@@ -3,19 +3,23 @@
 \alias{pandoc.table.return}
 \title{Create a table}
 \usage{
-  pandoc.table.return(t, caption = storage$caption,
+  pandoc.table.return(t, caption,
     digits = panderOptions("digits"),
     decimal.mark = panderOptions("decimal.mark"),
-    round = panderOptions("round"), justify = "centre",
+    round = panderOptions("round"), justify,
     style = c("multiline", "grid", "simple", "rmarkdown"),
     split.tables = panderOptions("table.split.table"),
     split.cells = panderOptions("table.split.cells"),
-    keep.trailing.zeros = panderOptions("keep.trailing.zeros"))
+    keep.trailing.zeros = panderOptions("keep.trailing.zeros"),
+    emphasize.rows, emphasize.cols, emphasize.cells,
+    emphasize.strong.rows, emphasize.strong.cols,
+    emphasize.strong.cells)
 }
 \arguments{
   \item{t}{data frame, matrix or table}
 
-  \item{caption}{string}
+  \item{caption}{caption (string) to be shown under the
+  table}
 
   \item{digits}{passed to \code{format}}
 
@@ -23,7 +27,10 @@
 
   \item{round}{passed to \code{round}}
 
-  \item{justify}{see \code{prettyNum}}
+  \item{justify}{defines alignment in cells passed to
+  \code{format}. Can be \code{left}, \code{right} or
+  \code{centre}, which latter can be also spelled as
+  \code{center}. Defaults to \code{centre}.}
 
   \item{style}{which Pandoc style to use: \code{simple},
   \code{multiline}, \code{grid} or \code{rmarkdown}}
@@ -41,30 +48,60 @@
 
   \item{keep.trailing.zeros}{to show or remove trailing
   zeros in numbers on a column basis width}
+
+  \item{emphasize.rows}{a vector for a two dimensional
+  table specifying which rows to emphasize}
+
+  \item{emphasize.cols}{a vector for a two dimensional
+  table specifying which cols to emphasize}
+
+  \item{emphasize.cells}{a vector for one-dimensional
+  tables or a matrix like structure with two columns for
+  row and column indexes to be emphasized in two
+  dimensional tables. See e.g. \code{which(..., arr.ind =
+  TRUE)}}
+
+  \item{emphasize.strong.rows}{see \code{emphasize.rows}
+  but in bold}
+
+  \item{emphasize.strong.cols}{see \code{emphasize.cols}
+  but in bold}
+
+  \item{emphasize.strong.cells}{see \code{emphasize.cells}
+  but in bold}
 }
 \value{
   By default this function outputs (see: \code{cat}) the
   result. If you would want to catch the result instead,
-  then call the function ending in \code{.return}.
+  then call \code{pandoc.table.return} instead.
 }
 \description{
   Creates a Pandoc's markdown style table with optional
-  caption.
+  caption and some other tweaks. See 'Details' below.
 }
 \details{
-  This function will try to make pretty the provided R
-  object's content like: rounding numbers, auto-recognizing
-  if row names should be included etc.
+  This function takes any tabular data as its first
+  argument and will try to make it pretty like: rounding
+  and applying \code{digits} and custom \code{decimal.mark}
+  to numbers, auto-recognizing if row names should be
+  included, setting alignment of cells and dropping
+  trailing zeros by default.
 
-  And also tries to split cells with line breaks or even
-  the whole table to separate parts on demand. See the
-  parameters above and passed arguments of
-  \code{\link{panderOptions}}.
+  \code{pandoc.table} also tries to split large cells with
+  line breaks or even the whole table to separate parts on
+  demand. Other arguments lets the use to highlight some
+  rows/cells/cells in the table with italic or bold text
+  style.
+
+  For more details please see the parameters above and
+  passed arguments of \code{\link{panderOptions}}.
 }
 \note{
-  The \code{caption} text is read from an internal buffer
-  which defaults to \code{NULL}. To update that, call
-  \code{link{set.caption}} before.
+  If \code{caption} is missing, then the value is first
+  checked in \code{t} object's \code{caption} attribute and
+  if not found in an internal buffer set by
+  \code{link{set.caption}}. \code{justify} parameter works
+  similarly, see \code{\link{set.alignment}} for details.
 }
 \examples{
 pandoc.table(mtcars)
@@ -84,7 +121,9 @@ pandoc.table(table(mtcars$am, mtcars$gear))
 pandoc.table(table(state.division, state.region))
 pandoc.table(table(state.division, state.region), justify = 'centre')
 
-m <- data.frame(a=c(1, -500, 10320, 23, 77), b=runif(5), c=c('a', 'bb', 'ccc', 'dddd', 'eeeee'))
+m <- data.frame(a = c(1, -500, 10320, 23, 77),
+  b = runif(5),
+  c = c('a', 'bb', 'ccc', 'dddd', 'eeeee'))
 pandoc.table(m)
 pandoc.table(m, justify = c('right', 'left', 'centre'))
 
@@ -93,7 +132,8 @@ pandoc.table(mtcars)
 pandoc.table(mtcars, caption = 'Only once after the first part!')
 
 ## tables with line breaks in cells
-## Note: line breaks are removed from table content and added automatically based on "split.cells" parameter!
+## NOTE: line breaks are removed from table content
+## and added automatically based on "split.cells" parameter!
 t <- data.frame(a = c('hundreds\\nof\\nmouses', '3 cats'), b=c('FOO is nice', 'BAR\\nBAR2'))
 pandoc.table(t)
 pandoc.table(t, split.cells = 5)
@@ -105,14 +145,32 @@ pandoc.table(m, style = "simple")
 pandoc.table(t, style = "grid")
 pandoc.table(t, style = "grid", split.cells = 5)
 pandoc.table(t, style = "simple")
-tryCatch(pandoc.table(t, style = "simple", split.cells = 5), error = function(e) 'Yeah, no newline support in simple tables')
+tryCatch(pandoc.table(t, style = "simple", split.cells = 5),
+  error = function(e) 'Yeah, no newline support in simple tables')
 pandoc.table(t, style = "rmarkdown")
+
+## highlight cells
+t <- mtcars[1:3, 1:5]
+pandoc.table(t$mpg, emphasize.cells = 1)
+pandoc.table(t$mpg, emphasize.strong.cells = 1)
+pandoc.table(t$mpg, emphasize.cells = 1, emphasize.strong.cells = 1)
+pandoc.table(t$mpg, emphasize.cells = 1:2)
+pandoc.table(t$mpg, emphasize.strong.cells = 1:2)
+pandoc.table(t, emphasize.cells = which(t > 20, arr.ind = TRUE))
+pandoc.table(t, emphasize.cells = which(t == 6, arr.ind = TRUE))
+## with helpers
+emphasize.cols(1)
+emphasize.rows(1)
+pandoc.table(t)
+
+emphasize.strong.cells(which(t > 20, arr.ind = TRUE))
+pandoc.table(t)
 }
 \references{
   John MacFarlane (2012): _Pandoc User's Guide_.
   \url{http://johnmacfarlane.net/pandoc/README.html}
 }
 \seealso{
-  \code{\link{set.caption}}
+  \code{\link{set.caption}}, \code{\link{set.alignment}}
 }
 

@@ -2,39 +2,41 @@
 {
     ## pander settings
     options('pander' = list(
-                'digits'                = 4,
-                'decimal.mark'          = '.',
-                'round'                 = Inf,
-                'keep.trailing.zeros'   = FALSE,
-                'date'                  = '%Y/%m/%d %X',
-                'header.style'          = 'atx',
-                'list.style'            = 'bullet',
-                'table.style'           = 'multiline',
-                'table.split.table'     = 80,
-                'table.split.cells'     = 30,
-                'table.caption.prefix'  = 'Table: ',
-                'table.continues'       = 'Table continues below',
-                'table.continues.affix' = '(continued below)',
-                'evals.messages'        = TRUE,
-                'p.wrap'                = '_',
-                'p.sep'                 = ', ',
-                'p.copula'              = ' and ',
-                'graph.nomargin'        = TRUE,
-                'graph.fontfamily'      = 'sans',
-                'graph.fontcolor'       = 'black',
-                'graph.fontsize'        = 12,
-                'graph.grid'            = TRUE,
-                'graph.grid.minor'      = TRUE,
-                'graph.grid.color'      = 'grey',
-                'graph.grid.lty'        = 'dashed',
-                'graph.boxes'           = FALSE,
-                'graph.legend.position' = 'right',
-                'graph.background'      = 'white',
-                'graph.panel.background'= 'transparent',
-                'graph.colors'          = c("#56B4E9", "#009E73", "#F0E442", "#0072B2", "#D55E00", "#CC79A7", "#999999", "#E69F00"),
-                'graph.color.rnd'       = FALSE,
-                'graph.axis.angle'      = 1,
-                'graph.symbol'          = 1
+                'digits'                   = 4,
+                'decimal.mark'             = '.',
+                'round'                    = Inf,
+                'keep.trailing.zeros'      = FALSE,
+                'date'                     = '%Y/%m/%d %X',
+                'header.style'             = 'atx',
+                'list.style'               = 'bullet',
+                'table.style'              = 'multiline',
+                'table.split.table'        = 80,
+                'table.split.cells'        = 30,
+                'table.caption.prefix'     = 'Table: ',
+                'table.continues'          = 'Table continues below',
+                'table.continues.affix'    = '(continued below)',
+                'table.alignment.default'  = 'centre',
+                'table.alignment.rownames' = 'centre',
+                'evals.messages'           = TRUE,
+                'p.wrap'                   = '_',
+                'p.sep'                    = ', ',
+                'p.copula'                 = ' and ',
+                'graph.nomargin'           = TRUE,
+                'graph.fontfamily'         = 'sans',
+                'graph.fontcolor'          = 'black',
+                'graph.fontsize'           = 12,
+                'graph.grid'               = TRUE,
+                'graph.grid.minor'         = TRUE,
+                'graph.grid.color'         = 'grey',
+                'graph.grid.lty'           = 'dashed',
+                'graph.boxes'              = FALSE,
+                'graph.legend.position'    = 'right',
+                'graph.background'         = 'white',
+                'graph.panel.background'   = 'transparent',
+                'graph.colors'             = c("#56B4E9", "#009E73", "#F0E442", "#0072B2", "#D55E00", "#CC79A7", "#999999", "#E69F00"),
+                'graph.color.rnd'          = FALSE,
+                'graph.axis.angle'         = 1,
+                'graph.symbol'             = 1
                 ))
 
     ## evals options
@@ -198,6 +200,8 @@ masked.plots$plot <- masked.plots$barplot <- masked.plots$lines <- masked.plots$
 #'      \item \code{table.caption.prefix}: string (default: \code{'Table: '}) passed to \code{\link{pandoc.table}} to be used as caption prefix. Be sure about what you are doing if changing to other than \code{'Table: '} or \code{':'}.
 #'      \item \code{table.continues}: string (default: \code{'Table continues below'}) passed to \code{\link{pandoc.table}} to be used as caption for long (split) without a use defined caption
 #'      \item \code{table.continues.affix}: string (default: \code{'(continued below)'}) passed to \code{\link{pandoc.table}} to be used as an affix concatenated to the user defined caption for long (split) tables
+#'      \item \code{table.alignment.default}: string (default: \code{centre}) that defines the default alignment of cells. Can be \code{left}, \code{right} or \code{centre} that latter can be also spelled as \code{center}.
+#'      \item \code{table.alignment.rownames}: string (default: \code{centre}) that defines the alignment of rownames in tables. Can be \code{left}, \code{right} or \code{centre} that latter can be also spelled as \code{center}.
 #'      \item \code{evals.messages}: boolean (default: \code{TRUE}) passed to \code{evals}' \code{pander} method specifying if messages should be rendered
 #'      \item \code{p.wrap}: a string (default: \code{'_'}) to wrap vector elements passed to \code{p} function
 #'      \item \code{p.sep}: a string (default: \code{', '}) with the main separator passed to \code{p} function

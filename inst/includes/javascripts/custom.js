@@ -45,11 +45,11 @@ $(document).ready(function() {
     $header.after('<hr class="large" />');
 
     // get all headings
-    var $head = $content.children().not('header').filter(':header');
+    var $head = $content.children().not('header').filter(':header').not('.exclude_from_toc');
 
     $head.each(function(i, val){
         
-        var linkId = val.id + "_link",
+        var linkId = val.id,
             $val = $(val);
 
         // insert anchor links before headings

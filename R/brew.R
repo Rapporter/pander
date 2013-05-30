@@ -28,7 +28,10 @@
 #'      \item John MacFarlane (2012): _Pandoc User's Guide_. \url{http://johnmacfarlane.net/pandoc/README.html}
 #' }
 #' @examples \dontrun{
-#' text <- paste('# Header', '', 'What a lovely list:\n<%=as.list(runif(10))%>', 'A wide table:\n<%=mtcars[1:3, ]%>', 'And a nice chart:\n\n<%=plot(1:10)%>', sep = '\n')
+#' text <- paste('# Header', '',
+#'   'What a lovely list:\n<%=as.list(runif(10))%>',
+#'   'A wide table:\n<%=mtcars[1:3, ]%>',
+#'   'And a nice chart:\n\n<%=plot(1:10)%>', sep = '\n')
 #' Pandoc.brew(text = text)
 #' Pandoc.brew(text = text, output = tempfile(), convert = 'html')
 #' Pandoc.brew(text = text, output = tempfile(), convert = 'pdf')
@@ -38,14 +41,21 @@
 #'
 #' ## package bundled examples
 #' Pandoc.brew(system.file('examples/minimal.brew', package='pander'))
-#' Pandoc.brew(system.file('examples/minimal.brew', package='pander'), output = tempfile(), convert = 'html')
+#' Pandoc.brew(system.file('examples/minimal.brew', package='pander'),
+#'   output = tempfile(), convert = 'html')
 #' Pandoc.brew(system.file('examples/short-code-long-report.brew', package='pander'))
-#' Pandoc.brew(system.file('examples/short-code-long-report.brew', package='pander'), output = tempfile(), convert = 'html')
+#' Pandoc.brew(system.file('examples/short-code-long-report.brew', package='pander'),
+#'   output = tempfile(), convert = 'html')
 #'
 #' ## brew returning R objects
-#' str(Pandoc.brew(text='Pi equals to <%=pi%>.\nAnd here are some random data:\n<%=runif(10)%>'))
-#' str(Pandoc.brew(text='# Header <%=1%>\nPi is <%=pi%> which is smaller then <%=2%>.\nfoo\nbar\n <%=3%>\n<%=mtcars[1:2,]%>'))
-#' str(Pandoc.brew(text='<%for (i in 1:5) {%>\n Pi has a lot (<%=i%>) of power: <%=pi^i%><%}%>'))
+#' str(Pandoc.brew(text='Pi equals to <%=pi%>.
+#' And here are some random data:\n<%=runif(10)%>'))
+#'
+#' str(Pandoc.brew(text='# Header <%=1%>\nPi is <%=pi%> which is smaller then <%=2%>.
+#' foo\nbar\n <%=3%>\n<%=mtcars[1:2,]%>'))
+#'
+#' str(Pandoc.brew(text='<%for (i in 1:5) {%>
+#' Pi has a lot (<%=i%>) of power: <%=pi^i%><%}%>'))
 #' }
 Pandoc.brew <- function(file = stdin(), output = stdout(), convert = FALSE, open = TRUE, graph.name, graph.dir, graph.hi.res = FALSE, text = NULL, envir = parent.frame()) {
 

@@ -317,7 +317,8 @@ txt <- list('df <- mtcars',
  'ggplot(mtcars) + geom_point(aes(x = hp, y = mpg))')
 evals(txt)
 
-## the same commands in one string but also evaluating the `plot` with `text` (note the leading "+" on the beginning of `text...` line)
+## the same commands in one string but also evaluating the `plot` with `text`
+## (note the leading "+" on the beginning of `text...` line)
 txt <- 'df <- mtcars
  plot(mtcars$hp, pch = 19)
  +text(mtcars$hp, label = rownames(mtcars), pos = 4)
@@ -332,35 +333,39 @@ evals('message(20);message(20)', parse = FALSE)
 
 ## adding a caption to a plot
 evals('set.caption("FOO"); plot(1:10)')
-## `plot` is started with a `+` to eval the codes in the same chunk (no extra chunk with NULL result)
+## `plot` is started with a `+` to eval the codes in the same chunk
+## (no extra chunk with NULL result)
 evals('set.caption("FOO"); +plot(1:10)')
 
 ## handling warnings
 evals('chisq.test(mtcars$gear, mtcars$hp)')
-evals(list(c('chisq.test(mtcars$gear, mtcars$am)', 'pi', 'chisq.test(mtcars$gear, mtcars$hp)')), parse = F)
-evals(c('chisq.test(mtcars$gear, mtcars$am)', 'pi', 'chisq.test(mtcars$gear, mtcars$hp)'))
+evals(list(c('chisq.test(mtcars$gear, mtcars$am)', 'pi',
+  'chisq.test(mtcars$gear, mtcars$hp)')), parse = FALSE)
+evals(c('chisq.test(mtcars$gear, mtcars$am)',
+  'pi',
+  'chisq.test(mtcars$gear, mtcars$hp)'))
 
 ## handling errors
 evals('runiff(20)')
 evals('Old MacDonald had a farm\\\\dots')
 evals('## Some comment')
 evals(c('runiff(20)', 'Old MacDonald had a farm?'))
-evals(list(c('runiff(20)', 'Old MacDonald had a farm?')), parse = F)
+evals(list(c('runiff(20)', 'Old MacDonald had a farm?')), parse = FALSE)
 evals(c('mean(1:10)', 'no.R.function()'))
-evals(list(c('mean(1:10)', 'no.R.function()')), parse = F)
+evals(list(c('mean(1:10)', 'no.R.function()')), parse = FALSE)
 evals(c('no.R.object', 'no.R.function()', 'very.mixed.up(stuff)'))
-evals(list(c('no.R.object', 'no.R.function()', 'very.mixed.up(stuff)')), parse = F)
+evals(list(c('no.R.object', 'no.R.function()', 'very.mixed.up(stuff)')), parse = FALSE)
 evals(c('no.R.object', 'Old MacDonald had a farm\\\\dots', 'pi'))
-evals('no.R.object;Old MacDonald had a farm\\\\dots;pi', parse = F)
-evals(list(c('no.R.object', 'Old MacDonald had a farm\\\\dots', 'pi')), parse = F)
+evals('no.R.object;Old MacDonald had a farm\\\\dots;pi', parse = FALSE)
+evals(list(c('no.R.object', 'Old MacDonald had a farm\\\\dots', 'pi')), parse = FALSE)
 
 ## graph options
 evals('plot(1:10)')
 evals('plot(1:10);plot(2:20)')
 evals('plot(1:10)', graph.output = 'jpg')
 evals('plot(1:10)', height = 800)
-evals('plot(1:10)', height = 800, hi.res = T)
-evals('plot(1:10)', graph.output = 'pdf', hi.res = T)
+evals('plot(1:10)', height = 800, hi.res = TRUE)
+evals('plot(1:10)', graph.output = 'pdf', hi.res = TRUE)
 evals('plot(1:10)', res = 30)
 evals('plot(1:10)', graph.name = 'myplot')
 evals(list('plot(1:10)', 'plot(2:20)'), graph.name = 'myplots-\%d')
@@ -368,15 +373,18 @@ evals('plot(1:10)', graph.env = TRUE)
 evals('x <- runif(100);plot(x)', graph.env = TRUE)
 evals(c('plot(1:10)', 'plot(2:20)'), graph.env = TRUE)
 evals(c('x <- runif(100)', 'plot(x)','y <- runif(100)', 'plot(y)'), graph.env = TRUE)
-evals(list(c('x <- runif(100)', 'plot(x)'), c('y <- runif(100)', 'plot(y)')), graph.env = TRUE, parse = F)
+evals(list(
+    c('x <- runif(100)', 'plot(x)'),
+    c('y <- runif(100)', 'plot(y)')),
+  graph.env = TRUE, parse = FALSE)
 evals('plot(1:10)', graph.recordplot = TRUE)
 ## unprinted lattice plot
 evals('histogram(mtcars$hp)', graph.recordplot = TRUE)
 
 ## caching
 system.time(evals('plot(mtcars)'))
-system.time(evals('plot(mtcars)'))                   # running again to see the speed-up :)
-system.time(evals('plot(mtcars)', cache = FALSE))    # cache disabled
+system.time(evals('plot(mtcars)'))                # running again to see the speed-up :)
+system.time(evals('plot(mtcars)', cache = FALSE)) # cache disabled
 
 ## caching mechanism does check what's inside a variable:
 x <- mtcars
@@ -387,12 +395,13 @@ x <- mtcars
 system.time(evals('plot(x)'))
 
 ## stress your CPU - only once!
-evals('x <- sapply(rep(mtcars$hp, 1e3), mean)')      # run it again!
+evals('x <- sapply(rep(mtcars$hp, 1e3), mean)')   # run it again!
 
 ## play with cache
 require(lattice)
 evals('histogram(rep(mtcars$hp, 1e5))')
-## nor run the below call - which would return the cached version of the above call :)
+## nor run the below call
+## that would return the cached version of the above call :)
 f <- histogram
 g <- rep
 A <- mtcars$hp
@@ -422,9 +431,11 @@ evals('22/7', hooks = list('numeric' = round))
 evals('matrix(runif(25), 5, 5)', hooks = list('matrix' = round))
 
 ## setting default hook
-evals(c('runif(10)', 'matrix(runif(9), 3, 3)'), hooks = list('default'=round))
+evals(c('runif(10)', 'matrix(runif(9), 3, 3)'),
+  hooks = list('default'=round))
 ## round all values except for matrices
-evals(c('runif(10)', 'matrix(runif(9), 3, 3)'), hooks = list(matrix = 'print', 'default' = round))
+evals(c('runif(10)', 'matrix(runif(9), 3, 3)'),
+  hooks = list(matrix = 'print', 'default' = round))
 
 # advanced hooks
 hooks <- list('numeric' = list(round, 2), 'matrix' = list(round, 1))
@@ -442,11 +453,14 @@ evals('runif(10)', length = 5)
 # note the following will not be filtered!
 evals('matrix(1,1,1)', length = 1)
 
-# if you do not want to let such things be eval-ed in the middle of a string use it with other filters :)
+# if you do not want to let such things be eval-ed in the middle of a string
+# use it with other filters :)
 evals('matrix(1,1,1)', length = 1, classes = 'numeric')
 
 # hooks & filtering
-evals('matrix(5,5,5)', hooks = list('matrix' = pander.return), output = 'result')
+evals('matrix(5,5,5)',
+  hooks = list('matrix' = pander.return),
+  output = 'result')
 
 # eval-ing chunks in given environment
 myenv <- new.env()

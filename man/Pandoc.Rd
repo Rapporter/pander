@@ -1,6 +1,13 @@
 \name{Pandoc}
 \alias{Pandoc}
 \title{Reporting with Pandoc}
+\usage{
+  Pandoc(...)
+}
+\arguments{
+  \item{...}{this is an R5 object without any direct params
+  but it should be documented, right?}
+}
 \description{
   This \code{R5} reference class can hold bunch of elements
   (text or R objects) from which it tries to create a
