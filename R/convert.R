@@ -39,6 +39,7 @@ openFileInOS <- function(f) {
 #' @references John MacFarlane (2012): _Pandoc User's Guide_. \url{http://johnmacfarlane.net/pandoc/README.html}
 #' @note This function depends on \code{Pandoc} which should be pre-installed on user's machine. See the \code{INSTALL} file of the package.
 #' @return Converted file's path.
+#' @importFrom tools file_path_sans_ext
 #' @export
 #' @examples \dontrun{
 #' Pandoc.convert(text = c('# Demo', 'with a paragraph'))
@@ -77,7 +78,7 @@ Pandoc.convert <- function(f, text, format = 'html', open = TRUE, options = '', 
         f.out <- paste0(tempfile(), '.', format)
     } else {
         f.dir <- dirname(f)
-        f.out <- paste0(f, '.', format)
+        f.out <- paste0(file_path_sans_ext(basename(f)), '.', format)
     }
 
     ## add nifty HTML/CSS/JS components
