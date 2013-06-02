@@ -661,7 +661,10 @@ pandoc.table.return <- function(t, caption, digits = panderOptions('digits'), de
     else
         t.n <- as.numeric(which(apply(t, 2, is.numeric)))
     if (length(t.n) > 0) {
-        t[t.n] <- round(t[t.n], round)
+        switch(as.character(length(dim(t))),
+               '0' = t[t.n]   <- round(t[t.n], round),
+               '1' = t[t.n]   <- round(t[t.n], round),
+               '2' = t[, t.n] <- apply(t[, t.n, drop = FALSE], 2, round, digits = round))
         if (!keep.trailing.zeros) {
             switch(as.character(length(dim(t))),
                    '0' = t[t.n]   <- sapply(t[t.n], format, trim = TRUE, digits = digits, decimal.mark = decimal.mark),
