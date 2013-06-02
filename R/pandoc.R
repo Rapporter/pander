@@ -663,12 +663,10 @@ pandoc.table.return <- function(t, caption, digits = panderOptions('digits'), de
     if (length(t.n) > 0) {
         t[t.n] <- round(t[t.n], round)
         if (!keep.trailing.zeros) {
-            if (length(dim(t)) == 0) # named char
-                t[t.n] <- sapply(t[t.n], format, trim = TRUE, digits = digits, decimal.mark = decimal.mark)
-            if (length(dim(t)) == 1)
-                t[t.n] <- apply(t[t.n, drop = FALSE], 1, format, trim = TRUE, digits = digits, decimal.mark = decimal.mark)
-            if (length(dim(t)) == 2)
-                t[, t.n] <- apply(t[, t.n, drop = FALSE], c(1,2), format, trim = TRUE, digits = digits, decimal.mark = decimal.mark)
+            switch(length(dim(t)),
+                   0 = t[t.n]   <- sapply(t[t.n], format, trim = TRUE, digits = digits, decimal.mark = decimal.mark),
+                   1 = t[t.n]   <- apply(t[t.n, drop = FALSE], 1, format, trim = TRUE, digits = digits, decimal.mark = decimal.mark),
+                   2 = t[, t.n] <- apply(t[, t.n, drop = FALSE], c(1,2), format, trim = TRUE, digits = digits, decimal.mark = decimal.mark))
         }
     }
 
