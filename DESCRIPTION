@@ -21,7 +21,8 @@ Depends:
     R (>= 2.15.0)
 Imports:
     methods,
-    digest
+    digest,
+    tools
 Suggests:
     grid,
     lattice,
