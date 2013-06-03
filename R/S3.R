@@ -2,12 +2,13 @@
 #'
 #' Prints an R object in Pandoc's markdown.
 #' @param x an R object
-#' @param ... optional parameters
+#' @param ... optional parameters passed to special methods
 #' @return By default this function outputs (see: \code{cat}) the result. If you would want to catch the result instead, then call the function ending in \code{.return}.
 #' @note This function can be called by \code{pander} and \code{pandoc} too.
 #' @references \itemize{
-#' \item John MacFarlane (2012): _Pandoc User's Guide_. \url{http://johnmacfarlane.net/pandoc/README.html}
-#' \item David Hajage (2011): _ascii. Export R objects to several markup languages._ \url{http://CRAN.R-project.org/package=ascii}
+#'   \item John MacFarlane (2013): _Pandoc User's Guide_. \url{http://johnmacfarlane.net/pandoc/README.html}
+#'   \item David Hajage (2011): _ascii. Export R objects to several markup languages._ \url{http://CRAN.R-project.org/package=ascii}
+#'   \item Hlavac, Marek (2013): _stargazer: LaTeX code for well-formatted regression and summary statistics tables._ \url{http://CRAN.R-project.org/package=stargazer}
 #' }
 #' @export
 #' @aliases pander pander.return pandoc pandoc.return
@@ -55,6 +56,8 @@
 #' pander(m)
 #' pander(anova(m))
 #' pander(aov(m))
+#' ## overwriting labels
+#' pander(lm(Sepal.Width ~ Species, data = iris), covariate.labels = c('Versicolor', 'Virginica'))
 #'
 #' ## Prcomp
 #' pander(prcomp(USArrests))
@@ -164,7 +167,7 @@ pander.list <- function(x, ...)
     pandoc.list(x)
 
 #' @S3method pander lm
-pander.lm <- function(x, caption = attr(x, 'caption'), ...) {
+pander.lm <- function(x, caption = attr(x, 'caption'), covariate.labels, ...) {
 
     if (is.null(caption)) {
         if (is.null(storage$caption))
@@ -173,7 +176,13 @@ pander.lm <- function(x, caption = attr(x, 'caption'), ...) {
             caption <- get.caption()
     }
 
-    pandoc.table(summary(x)$coeff, caption = caption)
+    res <- summary(x)$coeff
+    res <- res[c(2:nrow(res), 1), ]
+
+    if (!missing(covariate.labels))
+        row.names(res)[1:length(covariate.labels)] <- covariate.labels
+
+    pandoc.table(res, caption = caption)
 
 }
 
