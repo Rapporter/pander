@@ -167,7 +167,7 @@ pander.list <- function(x, ...)
     pandoc.list(x)
 
 #' @S3method pander lm
-pander.lm <- function(x, caption = attr(x, 'caption'), covariate.labels, ...) {
+pander.lm <- function(x, caption = attr(x, 'caption'), covariate.labels, summary = FALSE, ...) {
 
     if (is.null(caption)) {
         if (is.null(storage$caption))
@@ -176,14 +176,28 @@ pander.lm <- function(x, caption = attr(x, 'caption'), covariate.labels, ...) {
             caption <- get.caption()
     }
 
-    res <- summary(x)$coeff
+    xs  <- summary(x)
+    res <- as.data.frame(xs$coeff)
+
     if (nrow(res) > 1)
         res <- res[c(2:nrow(res), 1), ]
 
     if (!missing(covariate.labels))
         row.names(res)[1:length(covariate.labels)] <- covariate.labels
 
-    pandoc.table(res, caption = caption)
+    if (summary) {
+        pandoc.table(res)
+        pandoc.table(data.frame(
+            'Observations'        = length(xs$residuals),
+            'Residual Std. Error' = xs$sigma,
+            '$R^2$'               = xs$r.squared,
+            'Adjusted $R^2$'      = xs$adj.r.squared,
+            check.names = FALSE), keep.trailing.zeros = TRUE, caption = caption, digits = 4)
+    } else {
+
+        pandoc.table(res, caption = caption)
+
+    }
 
 }
 
