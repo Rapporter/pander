@@ -101,9 +101,11 @@ Pandoc.convert <- function(f, text, format = 'html', open = TRUE, options = '', 
     ## TODO
 
     ## add footer to file
-    if (footer)
-        if (!grepl('This report was generated', tail(readLines(f, warn = FALSE), 1)))
+    if (footer) {
+        rl <- readLines(f, warn = FALSE)
+        if (length(rl) > 0 && !grepl('This report was generated', tail(rl, 1)))
             cat(sprintf('\n\n-------\nThis report was generated with [R](http://www.r-project.org/) (%s) and [pander](https://github.com/rapporter/pander) (%s)%son %s platform.', sprintf('%s.%s', R.version$major, R.version$minor), packageDescription("pander")$Version, ifelse(missing(proc.time), ' ', sprintf(' in %s sec ', format(proc.time))), R.version$platform), file = f, append = TRUE)
+    }
 
     ## set specified dir
     wd <- getwd()
