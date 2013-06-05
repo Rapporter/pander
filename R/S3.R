@@ -167,7 +167,7 @@ pander.list <- function(x, ...)
     pandoc.list(x)
 
 #' @S3method pander lm
-pander.lm <- function(x, caption = attr(x, 'caption'), covariate.labels, summary = FALSE, ...) {
+pander.lm <- function(x, caption = attr(x, 'caption'), covariate.labels, omit, summary = FALSE, ...) {
 
     if (is.null(caption)) {
         if (is.null(storage$caption))
@@ -181,6 +181,9 @@ pander.lm <- function(x, caption = attr(x, 'caption'), covariate.labels, summary
 
     if (nrow(res) > 1)
         res <- res[c(2:nrow(res), 1), ]
+
+    if (!missing(omit))
+        res <- res[-grep(omit, row.names(res)), ]
 
     if (!missing(covariate.labels))
         row.names(res)[1:length(covariate.labels)] <- covariate.labels
