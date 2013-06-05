@@ -183,7 +183,7 @@ pander.lm <- function(x, caption = attr(x, 'caption'), covariate.labels, omit, s
         res <- res[c(2:nrow(res), 1), ]
 
     if (!missing(omit))
-        res <- res[-grep(omit, row.names(res)), ]
+        res <- res[!apply(sapply(omit, grepl, row.names(res)), 1, any), ]
 
     if (!missing(covariate.labels))
         row.names(res)[1:length(covariate.labels)] <- covariate.labels
