@@ -85,7 +85,7 @@ Pandoc.convert <- function(f, text, format = 'html', open = TRUE, options = '', 
     if (format == 'html') {
 
         if (portable.html & options == '') {
-            portable.dirs <- c('fonts', 'images', 'javascripts', 'stylesheets')
+            portable.dirs <- c('images', 'javascripts', 'stylesheets')
             for (portable.dir in portable.dirs)
                 file.copy(system.file(sprintf('includes/%s', portable.dir), package='pander'), f.dir, recursive  = TRUE)
         }
