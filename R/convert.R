@@ -78,7 +78,7 @@ Pandoc.convert <- function(f, text, format = 'html', open = TRUE, options = '', 
         f.out <- paste0(tempfile(), '.', format)
     } else {
         f.dir <- dirname(f)
-        f.out <- paste0(file_path_sans_ext(basename(f)), '.', format)
+        f.out <- paste0(file_path_sans_ext(f), '.', format)
     }
 
     ## add nifty HTML/CSS/JS components
