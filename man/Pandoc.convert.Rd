@@ -34,9 +34,10 @@
   \item{proc.time}{optionally passed number in seconds
   which would be shown in the generated document's footer}
 
-  \item{portable.html}{copy JS/CSS/images files to the HTML
-  file's directory if converting to \code{HTML} without
-  custom \code{options}}
+  \item{portable.html}{instead of using local files, rather
+  linking JS/CSS files to an online CDN for portability and
+  including base64-encoded images if converting to
+  \code{HTML} without custom \code{options}}
 }
 \value{
   Converted file's path.
@@ -56,7 +57,7 @@
 \examples{
 \dontrun{
 Pandoc.convert(text = c('# Demo', 'with a paragraph'))
-Pandoc.convert('http://rapporter.github.com/pander/minimal.md')
+Pandoc.convert('http://rapporter.github.io/pander/minimal.md')
 ## Note: the generated HTML is not showing images with relative path from the above file.
 ## Based on that `pdf`, `docx` etc. formats would not work! If you want to convert an
 ## online markdown file to other formats with this function, please pre-process the file

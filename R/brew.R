@@ -68,10 +68,6 @@ Pandoc.brew <- function(file = stdin(), output = stdout(), convert = FALSE, open
         if (output.stdout)
             stop('A file name should be provided while converting a document.')
 
-    ## in HTML it's cool to have high resolution images too
-    if ((missing(graph.hi.res)) & (convert == 'html'))
-        graph.hi.res <- TRUE
-
     if (!output.stdout) {
         basedir    <- dirname(output)
         if (missing(graph.name))
