@@ -64,6 +64,9 @@ Pandoc.convert <- function(f, text, format = 'html', open = TRUE, options = '', 
         cat(text, file = f, sep = '\n')
     }
 
+    ## content
+    rl <- readLines(f, warn = FALSE)
+
     ## force UTF-8 encoding
     if (!grepl('utf', Sys.getlocale())) {
         text <- iconv(readLines(f, warn = FALSE), from = '', to = 'UTF-8')
@@ -93,19 +96,18 @@ Pandoc.convert <- function(f, text, format = 'html', open = TRUE, options = '', 
         if (options == '')
             options <- sprintf('-H "%s" -A "%s"', system.file('includes/html/header.html', package='pander'), system.file('includes/html/footer.html', package='pander'))
 
-    } else
-        if (options == '')
+    } else {
+        if (options == '' && any(grepl('^#', fl)))
             options <- '--toc'
+    }
 
     ## add other formats' templates
     ## TODO
 
     ## add footer to file
-    if (footer) {
-        rl <- readLines(f, warn = FALSE)
+    if (footer)
         if (length(rl) > 0 && !grepl('This report was generated', tail(rl, 1)))
             cat(sprintf('\n\n-------\nThis report was generated with [R](http://www.r-project.org/) (%s) and [pander](https://github.com/rapporter/pander) (%s)%son %s platform.', sprintf('%s.%s', R.version$major, R.version$minor), packageDescription("pander")$Version, ifelse(missing(proc.time), ' ', sprintf(' in %s sec ', format(proc.time))), R.version$platform), file = f, append = TRUE)
-    }
 
     ## set specified dir
     wd <- getwd()
