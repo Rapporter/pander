@@ -1,7 +1,7 @@
 /* Custom stuff */
 
 body {
-    font-family: 'DroidSansRegular', sans-serif;
+    font-family: sans-serif;
 }
 
 header {
@@ -10,7 +10,7 @@ header {
 
 h1, h2, h3, h4, h5, h6, .subtitle {
     color: #383336;
-    font-family: 'DroidSansBold', sans-serif;
+    font-family: sans-serif;
     margin: 0 0 15px;
 }
 
@@ -32,7 +32,7 @@ h1, h2, h3, h4, h5, h6, .subtitle {
 }
 
 .highlight, code {
-    font-family: 'DroidSansMono', monospace;
+    font-family: monospace;
     background-color: #F5F5F5;
     border: solid 1px #DDD;
 }
@@ -163,7 +163,7 @@ ul.tabs li a.active {
 
 .contact {
     color: #383336;
-    font-family: DroidSans;
+    font-family: sans-serif;
     font-size: 1.5em;
     font-weight: bold;
 }
