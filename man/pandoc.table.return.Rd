@@ -13,7 +13,7 @@
     keep.trailing.zeros = panderOptions("keep.trailing.zeros"),
     emphasize.rows, emphasize.cols, emphasize.cells,
     emphasize.strong.rows, emphasize.strong.cols,
-    emphasize.strong.cells)
+    emphasize.strong.cells, ...)
 }
 \arguments{
   \item{t}{data frame, matrix or table}
@@ -69,6 +69,9 @@
 
   \item{emphasize.strong.cells}{see \code{emphasize.cells}
   but in bold}
+
+  \item{...}{unsupported extra arguments directly placed
+  into \code{/dev/null}}
 }
 \value{
   By default this function outputs (see: \code{cat}) the
