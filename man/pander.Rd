@@ -12,7 +12,8 @@
 \arguments{
   \item{x}{an R object}
 
-  \item{...}{optional parameters passed to special methods}
+  \item{...}{optional parameters passed to special methods
+  and/or raw \code{pandoc.*} functions}
 }
 \value{
   By default this function outputs (see: \code{cat}) the

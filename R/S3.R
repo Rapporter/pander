@@ -2,7 +2,7 @@
 #'
 #' Prints an R object in Pandoc's markdown.
 #' @param x an R object
-#' @param ... optional parameters passed to special methods
+#' @param ... optional parameters passed to special methods and/or raw \code{pandoc.*} functions
 #' @return By default this function outputs (see: \code{cat}) the result. If you would want to catch the result instead, then call the function ending in \code{.return}.
 #' @note This function can be called by \code{pander} and \code{pandoc} too.
 #' @references \itemize{
@@ -110,7 +110,7 @@ pander.table <- function(x, caption = attr(x, 'caption'), ...) {
     if (is.null(caption) & !is.null(storage$caption))
         caption <- get.caption()
 
-    pandoc.table(x, caption = caption)
+    pandoc.table(x, caption = caption, ...)
 
 }
 
@@ -120,7 +120,7 @@ pander.data.frame <- function(x, caption = attr(x, 'caption'), ...) {
     if (is.null(caption) & !is.null(storage$caption))
         caption <- get.caption()
 
-    pandoc.table(x, caption = caption)
+    pandoc.table(x, caption = caption, ...)
 
 }
 
@@ -130,7 +130,7 @@ pander.matrix <- function(x, caption = attr(x, 'caption'),  ...) {
     if (is.null(caption) & !is.null(storage$caption))
         caption <- get.caption()
 
-    pandoc.table(x, caption = caption)
+    pandoc.table(x, caption = caption, ...)
 
 }
 
@@ -140,7 +140,7 @@ pander.cast_df<- function(x, caption = attr(x, 'caption'), ...) {
     if (is.null(caption) & !is.null(storage$caption))
         caption <- get.caption()
 
-    pandoc.table(as.data.frame(x), caption = caption)
+    pandoc.table(as.data.frame(x), caption = caption, ...)
 
 }
 
@@ -189,7 +189,7 @@ pander.lm <- function(x, caption = attr(x, 'caption'), covariate.labels, omit, s
         row.names(res)[1:length(covariate.labels)] <- covariate.labels
 
     if (summary) {
-        pandoc.table(res)
+        pandoc.table(res, ...)
         pandoc.table(data.frame(
             'Observations'        = length(xs$residuals),
             'Residual Std. Error' = xs$sigma,
@@ -198,7 +198,7 @@ pander.lm <- function(x, caption = attr(x, 'caption'), covariate.labels, omit, s
             check.names = FALSE), keep.trailing.zeros = TRUE, caption = caption, digits = 4)
     } else {
 
-        pandoc.table(res, caption = caption)
+        pandoc.table(res, caption = caption, ...)
 
     }
 
@@ -214,7 +214,7 @@ pander.glm <- function(x, caption = attr(x, 'caption'), ...) {
             caption <- get.caption()
     }
 
-    pandoc.table(summary(x)$coeff, caption = caption)
+    pandoc.table(summary(x)$coeff, caption = caption, ...)
 
 }
 
@@ -230,7 +230,7 @@ pander.aov <- function(x, caption = attr(x, 'caption'), ...) {
             caption <- get.caption()
     }
 
-    pandoc.table(res, caption = caption)
+    pandoc.table(res, caption = caption, ...)
 }
 
 #' @S3method pander anova
@@ -243,7 +243,7 @@ pander.anova <- function(x, caption = attr(x, 'caption'), ...) {
             caption <- get.caption()
     }
 
-    pandoc.table(x, caption = caption)
+    pandoc.table(x, caption = caption, ...)
 
 }
 
@@ -274,7 +274,7 @@ pander.htest <- function(x, caption = attr(x, 'caption'), ...) {
     res$placeholder <- NULL
 
     ## return
-    pandoc.table(res, caption = caption)
+    pandoc.table(res, caption = caption, ...)
 
 }
 
@@ -288,8 +288,8 @@ pander.prcomp <- function(x, caption = attr(x, 'caption'), ...) {
             caption <- get.caption()
     }
 
-    pandoc.table(x$rotation, caption = caption)
-    pandoc.table(summary(x)$importance)
+    pandoc.table(x$rotation, caption = caption, ...)
+    pandoc.table(summary(x)$importance, ...)
 }
 
 #' @S3method pander density
@@ -305,7 +305,7 @@ pander.density <- function(x, caption = attr(x, 'caption'), ...) {
     res <- data.frame(Coordinates = as.numeric(summary(x$x)), 'Density values' = as.numeric(summary(x$y)), check.names = FALSE)
     rownames(res) <- names(summary(1))
 
-    pandoc.table(res, caption = caption)
+    pandoc.table(res, caption = caption, ...)
 }
 
 #' @S3method pander list
