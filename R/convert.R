@@ -98,7 +98,7 @@ Pandoc.convert <- function(f, text, format = 'html', open = TRUE, options = '', 
 
     } else {
 
-        if (options == '' && any(grepl('^#', fl)))
+        if (options == '' && any(grepl('^#', rl)))
             options <- '--toc'
 
     }
