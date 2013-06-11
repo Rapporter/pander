@@ -550,6 +550,10 @@ pandoc.table.return <- function(t, caption, digits = panderOptions('digits'), de
     split.large.cells <- function(cells)
         sapply(cells, function(x) {
 
+            ## escape pipes
+            if (style == 'rmarkdown')
+                x <- gsub('\\|', '\\\\|', x)
+
             ## split
             if (nchar(x) == nchar(x, type = 'width')) {
 
