@@ -768,7 +768,7 @@ pandoc.table.return <- function(t, caption, digits = panderOptions('digits'), de
         t.width     <-  as.numeric(apply(cbind(t.colnames.width, apply(t, 2, function(x) max(sapply(strsplit(x,'\n'), function(x) max(nchar(x, type = 'width'), 0))))), 1, max))
 
         ## remove obvious row.names
-        if (all(rownames(t) == 1:nrow(t)))
+        if (all(rownames(t) == 1:nrow(t)) | all(rownames(t) == ''))
             t.rownames <- NULL
 
         if (!is.null(t.rownames))
