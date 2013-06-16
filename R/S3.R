@@ -171,7 +171,7 @@ pander.lm <- function(x, caption = attr(x, 'caption'), covariate.labels, omit, s
 
     if (is.null(caption)) {
         if (is.null(storage$caption))
-            caption <- sprintf('Fitting linear model: %s', deparse(x$call$formula))
+            caption <- sprintf('Fitting linear model: %s', paste(sub('^[ ]*', '', deparse(model$call$formula)), collapse = ''))
         else
             caption <- get.caption()
     }
@@ -209,7 +209,7 @@ pander.glm <- function(x, caption = attr(x, 'caption'), ...) {
 
     if (is.null(caption)) {
         if (is.null(storage$caption))
-            caption <- sprintf('Fitting generalized (%s) linear model: %s', paste(x$family$family, x$family$link, sep = '/'), deparse(x$call$formula))
+            caption <- sprintf('Fitting generalized (%s) linear model: %s', paste(x$family$family, x$family$link, sep = '/'), paste(sub('^[ ]*', '', deparse(model$call$formula)), collapse = ''))
         else
             caption <- get.caption()
     }
