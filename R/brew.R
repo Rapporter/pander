@@ -20,6 +20,7 @@
 #' @param graph.hi.res render high resolution images of plots? Default is \code{FALSE} except for HTML output.
 #' @param text character vector (treated as the content of the \code{file}
 #' @param envir environment where to \code{brew} the template
+#' @param ... additional parameters passed to \code{\link{Pandoc.convert}}
 #' @note Only one of the input parameters (\code{file} or \code{text}) is to be used at once!
 #' @export
 #' @return converted file name with full path if \code{convert} is set, none otherwise
@@ -57,7 +58,7 @@
 #' str(Pandoc.brew(text='<%for (i in 1:5) {%>
 #' Pi has a lot (<%=i%>) of power: <%=pi^i%><%}%>'))
 #' }
-Pandoc.brew <- function(file = stdin(), output = stdout(), convert = FALSE, open = TRUE, graph.name, graph.dir, graph.hi.res = FALSE, text = NULL, envir = parent.frame()) {
+Pandoc.brew <- function(file = stdin(), output = stdout(), convert = FALSE, open = TRUE, graph.name, graph.dir, graph.hi.res = FALSE, text = NULL, envir = parent.frame(), ...) {
 
     timer <- proc.time()
     output.stdout <- deparse(substitute(output)) == 'stdout()'
@@ -142,7 +143,7 @@ Pandoc.brew <- function(file = stdin(), output = stdout(), convert = FALSE, open
     cat(remove.extra.newlines(paste(res, collapse = '\n')), '\n', file = output)
 
     if (is.character(convert))
-        Pandoc.convert(output, format = convert, open = open, proc.time = as.numeric(proc.time() - timer)[3])
+        Pandoc.convert(output, format = convert, open = open, proc.time = as.numeric(proc.time() - timer)[3], ...)
 
     ## remove trailing line-break text
     #if (tail(get('.storage', envir = envir), 1)[[1]]$text$eval == '\n')
