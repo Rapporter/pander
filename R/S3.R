@@ -87,7 +87,7 @@ pander.NULL <- function(x, ...)
 
 #' @S3method pander logical
 pander.logical <- function(x, ...)
-    return(as.character(x))
+    cat(as.character(x))
 
 #' @S3method pander image
 pander.image <- function(x, caption = attr(x, 'caption'), href = attr(x, 'href'), ...) {
