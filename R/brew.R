@@ -20,6 +20,7 @@
 #' @param graph.hi.res render high resolution images of plots? Default is \code{FALSE} except for HTML output.
 #' @param text character vector (treated as the content of the \code{file}
 #' @param envir environment where to \code{brew} the template
+#' @param append should append or rather overwrite (default) the \code{output} markdown text file? Please note that this option only affects the markdown file and not the optionally created other formats.
 #' @param ... additional parameters passed to \code{\link{Pandoc.convert}}
 #' @note Only one of the input parameters (\code{file} or \code{text}) is to be used at once!
 #' @export
@@ -58,7 +59,7 @@
 #' str(Pandoc.brew(text='<%for (i in 1:5) {%>
 #' Pi has a lot (<%=i%>) of power: <%=pi^i%><%}%>'))
 #' }
-Pandoc.brew <- function(file = stdin(), output = stdout(), convert = FALSE, open = TRUE, graph.name, graph.dir, graph.hi.res = FALSE, text = NULL, envir = parent.frame(), ...) {
+Pandoc.brew <- function(file = stdin(), output = stdout(), convert = FALSE, open = TRUE, graph.name, graph.dir, graph.hi.res = FALSE, text = NULL, envir = parent.frame(), append = FALSE, ...) {
 
     timer <- proc.time()
     output.stdout <- deparse(substitute(output)) == 'stdout()'
@@ -140,7 +141,7 @@ Pandoc.brew <- function(file = stdin(), output = stdout(), convert = FALSE, open
     if (!output.stdout)
         res <- gsub(sprintf(']\\(%s/', basedir), ']\\(', res, fixed = TRUE)
 
-    cat(remove.extra.newlines(paste(res, collapse = '\n')), '\n', file = output)
+    cat(remove.extra.newlines(paste(res, collapse = '\n')), '\n', file = output, append = append)
 
     if (is.character(convert))
         Pandoc.convert(output, format = convert, open = open, proc.time = as.numeric(proc.time() - timer)[3], ...)
