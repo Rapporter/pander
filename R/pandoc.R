@@ -52,7 +52,7 @@ pandoc.add.formatting <- function(x, f) {
 
     f.e  <- gsub('*', '\\*', f, fixed = TRUE)
     x    <- trim.spaces(x)
-    w    <- which(!grepl(sprintf('^%s.*%s$', f.e, f.e), x))
+    w    <- which(!grepl(sprintf('^%s.*%s$', f.e, f.e), x) & x != '')
     x[w] <- paste0(f, x[w], f)
 
     return(x)
