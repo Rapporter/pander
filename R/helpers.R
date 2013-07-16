@@ -114,7 +114,7 @@ wrap <- function(x, wrap = '"'){
 #' @return \code{TRUE} OR \code{FALSE}
 #' @export
 has.rownames <- function(x) {
-    length(dim(x)) != 1 && (length(rownames(x)) > 0 && !all(rownames(x) == 1:nrow(x)))
+    length(dim(x)) != 1 && length(rownames(x)) > 0 && !all(rownames(x) == 1:nrow(x)) && !all(rownames(x) == '')
 }
 
 #' Adds caption in current block
@@ -159,11 +159,11 @@ get.alignment <- function(df) {
         if (is.null(a)) {
             ad <- panderOptions('table.alignment.default')
             ar <- panderOptions('table.alignment.rownames')
+            if (!has.rownames(df))
+                ar <- NULL
             if (is.function(ar))
                 ar <- ar()
             if (is.function(ad)) {
-                if (!has.rownames(df))
-                    ar <- NULL
                 return(c(ar, ad(df)))
             }
             a <- list(default = ad, row.names = ar)
