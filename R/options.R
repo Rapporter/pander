@@ -86,7 +86,7 @@ hash.cache.last.used <- new.env() # when was the hash last queried
 
 ## masked plots
 masked.plots <- new.env()
-masked.plots$plot <- masked.plots$barplot <- masked.plots$lines <- masked.plots$pie <- masked.plots$boxplot <- masked.plots$polygon <- masked.plots$points <- masked.plots$legend <- masked.plots$hist <- masked.plots$pairs <- masked.plots$stripchart <- masked.plots$clusplot <- function (...) {
+masked.plots$plot <- masked.plots$barplot <- masked.plots$lines <- masked.plots$pie <- masked.plots$boxplot <- masked.plots$polygon <- masked.plots$points <- masked.plots$legend <- masked.plots$hist <- masked.plots$pairs <- masked.plots$stripchart <- masked.plots$clusplot <- masked.plots$text <- function (...) {
 
     mc      <- match.call()
     fn      <- deparse(mc[[1]])
@@ -111,17 +111,20 @@ masked.plots$plot <- masked.plots$barplot <- masked.plots$lines <- masked.plots$
     cb <- cs[1]
 
     ## global par update
-    par(
-      family   = panderOptions('graph.fontfamily'),
-      cex      = cex, cex.axis = cex * 0.8, cex.lab = cex, cex.main = cex * 1.2, cex.sub = cex,
-      bg       = bc, # TODO: how could we color only the inner plot area globally? Not like: https://stat.ethz.ch/pipermail/r-help/2003-May/033971.html
-      las      = panderOptions('graph.axis.angle'),
-      lwd      = 2,
-      pch      = panderOptions('graph.symbol'),
-      col.axis = fc, col.lab = fc, col.main = fc, col.sub = fc)
+    if (!fn %in% c('text')) {
+        par(
+            family   = panderOptions('graph.fontfamily'),
+            cex      = cex, cex.axis = cex * 0.8, cex.lab = cex, cex.main = cex * 1.2, cex.sub = cex,
+            bg       = bc, # TODO: how could we color only the inner plot area globally? Not like: https://stat.ethz.ch/pipermail/r-help/2003-May/033971.html
+            las      = panderOptions('graph.axis.angle'),
+            lwd      = 2,
+            pch      = panderOptions('graph.symbol'),
+            col.axis = fc, col.lab = fc, col.main = fc, col.sub = fc)
+    }
 
     ## remove margins
-    if (panderOptions('graph.nomargin')) {
+
+    if (panderOptions('graph.nomargin') & !fn %in% c('text')) {
         par(mar = c(4.1, 4.3, 2.1, 0.1))
     }
 

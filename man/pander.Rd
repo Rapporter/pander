@@ -12,7 +12,8 @@
 \arguments{
   \item{x}{an R object}
 
-  \item{...}{optional parameters}
+  \item{...}{optional parameters passed to special methods
+  and/or raw \code{pandoc.*} functions}
 }
 \value{
   By default this function outputs (see: \code{cat}) the
@@ -65,6 +66,8 @@ m <- glm(counts ~ outcome + treatment, family = poisson())
 pander(m)
 pander(anova(m))
 pander(aov(m))
+## overwriting labels
+pander(lm(Sepal.Width ~ Species, data = iris), covariate.labels = c('Versicolor', 'Virginica'))
 
 ## Prcomp
 pander(prcomp(USArrests))
@@ -79,11 +82,14 @@ class(x) <- 'I heave never heard of!'
 pander(x)
 }
 \references{
-  \itemize{ \item John MacFarlane (2012): _Pandoc User's
+  \itemize{ \item John MacFarlane (2013): _Pandoc User's
   Guide_.
   \url{http://johnmacfarlane.net/pandoc/README.html} \item
   David Hajage (2011): _ascii. Export R objects to several
   markup languages._
-  \url{http://CRAN.R-project.org/package=ascii} }
+  \url{http://CRAN.R-project.org/package=ascii} \item
+  Hlavac, Marek (2013): _stargazer: LaTeX code for
+  well-formatted regression and summary statistics tables._
+  \url{http://CRAN.R-project.org/package=stargazer} }
 }
 

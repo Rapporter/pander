@@ -5,7 +5,7 @@
   Pandoc.brew(file = stdin(), output = stdout(),
     convert = FALSE, open = TRUE, graph.name, graph.dir,
     graph.hi.res = FALSE, text = NULL,
-    envir = parent.frame())
+    envir = parent.frame(), append = FALSE, ...)
 }
 \arguments{
   \item{file}{file path of the brew template. As this is
@@ -45,6 +45,14 @@
 
   \item{envir}{environment where to \code{brew} the
   template}
+
+  \item{append}{should append or rather overwrite (default)
+  the \code{output} markdown text file? Please note that
+  this option only affects the markdown file and not the
+  optionally created other formats.}
+
+  \item{...}{additional parameters passed to
+  \code{\link{Pandoc.convert}}}
 }
 \value{
   converted file name with full path if \code{convert} is

@@ -515,7 +515,7 @@ The output of different **statistical methods** are tried to be prettyfied. Some
 ---------------------------------------------------
  Test statistic   P value   Alternative hypothesis 
 ---------------- --------- ------------------------
-      0.14       _0.7166_         two-sided        
+      0.22       _0.1786_         two-sided        
 ---------------------------------------------------
 
 Table: Two-sample Kolmogorov-Smirnov test: `runif(50)` and `runif(50)`
@@ -1030,8 +1030,8 @@ Few options of `pander-mode`: `M-x customize-group pander`
 
 To use this small lib, just type: `M-x pander-mode` on any document. It might be useful to add a hook to `markdown-mode` if you find this useful.
 
-[![githalytics.com alpha](https://cruel-carlota.pagodabox.com/9dfac0c1da37bd83d1848289630631fd "githalytics.com")](http://githalytics.com/Rapporter/pander) 
+[![githalytics.com alpha](https://cruel-carlota.gopagoda.com/9dfac0c1da37bd83d1848289630631fd "githalytics.com")](http://githalytics.com/Rapporter/pander) 
 
 
 -------
-This report was generated with [R](http://www.r-project.org/) (3.0.0) and [pander](https://github.com/rapporter/pander) (0.3.7) in 1.55 sec on x86_64-unknown-linux-gnu platform.
+This report was generated with [R](http://www.r-project.org/) (3.0.1) and [pander](https://github.com/rapporter/pander) (0.3.7) in 1.554 sec on x86_64-unknown-linux-gnu platform.

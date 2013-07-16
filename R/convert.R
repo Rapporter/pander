@@ -35,14 +35,15 @@ openFileInOS <- function(f) {
 #' @param options optionally passed arguments to Pandoc (instead of \code{pander}'s default)
 #' @param footer add footer to document with meta-information
 #' @param proc.time optionally passed number in seconds which would be shown in the generated document's footer
-#' @param portable.html copy JS/CSS/images files to the HTML file's directory if converting to \code{HTML} without custom \code{options}
+#' @param portable.html instead of using local files, rather linking JS/CSS files to an online CDN for portability and including base64-encoded images if converting to \code{HTML} without custom \code{options}
 #' @references John MacFarlane (2012): _Pandoc User's Guide_. \url{http://johnmacfarlane.net/pandoc/README.html}
 #' @note This function depends on \code{Pandoc} which should be pre-installed on user's machine. See the \code{INSTALL} file of the package.
 #' @return Converted file's path.
+#' @importFrom tools file_path_sans_ext
 #' @export
 #' @examples \dontrun{
 #' Pandoc.convert(text = c('# Demo', 'with a paragraph'))
-#' Pandoc.convert('http://rapporter.github.com/pander/minimal.md')
+#' Pandoc.convert('http://rapporter.github.io/pander/minimal.md')
 #' ## Note: the generated HTML is not showing images with relative path from the above file.
 #' ## Based on that `pdf`, `docx` etc. formats would not work! If you want to convert an
 #' ## online markdown file to other formats with this function, please pre-process the file
@@ -63,6 +64,9 @@ Pandoc.convert <- function(f, text, format = 'html', open = TRUE, options = '', 
         cat(text, file = f, sep = '\n')
     }
 
+    ## content
+    rl <- readLines(f, warn = FALSE)
+
     ## force UTF-8 encoding
     if (!grepl('utf', Sys.getlocale())) {
         text <- iconv(readLines(f, warn = FALSE), from = '', to = 'UTF-8')
@@ -77,31 +81,34 @@ Pandoc.convert <- function(f, text, format = 'html', open = TRUE, options = '', 
         f.out <- paste0(tempfile(), '.', format)
     } else {
         f.dir <- dirname(f)
-        f.out <- paste0(f, '.', format)
+        f.out <- paste0(file_path_sans_ext(f), '.', format)
     }
 
     ## add nifty HTML/CSS/JS components
     if (format == 'html') {
 
-        if (portable.html & options == '') {
-            portable.dirs <- c('fonts', 'images', 'javascripts', 'stylesheets')
-            for (portable.dir in portable.dirs)
-                file.copy(system.file(sprintf('includes/%s', portable.dir), package='pander'), f.dir, recursive  = TRUE)
+        if (options == '') {
+
+            options <- sprintf('-A "%s"', system.file('includes/html/footer.html', package='pander'))
+
+            if (portable.html)
+                options <- paste('--self-contain', options)
+
         }
 
-        if (options == '')
-            options <- sprintf('-H "%s" -A "%s"', system.file('includes/html/header.html', package='pander'), system.file('includes/html/footer.html', package='pander'))
+    } else {
 
-    } else
-        if (options == '')
+        if (options == '' && any(grepl('^#', rl)))
             options <- '--toc'
+
+    }
 
     ## add other formats' templates
     ## TODO
 
     ## add footer to file
     if (footer)
-        if (!grepl('This report was generated', tail(readLines(f, warn = FALSE), 1)))
+        if (length(rl) > 0 && !grepl('This report was generated', tail(rl, 1)))
             cat(sprintf('\n\n-------\nThis report was generated with [R](http://www.r-project.org/) (%s) and [pander](https://github.com/rapporter/pander) (%s)%son %s platform.', sprintf('%s.%s', R.version$major, R.version$minor), packageDescription("pander")$Version, ifelse(missing(proc.time), ' ', sprintf(' in %s sec ', format(proc.time))), R.version$platform), file = f, append = TRUE)
 
     ## set specified dir
@@ -110,6 +117,22 @@ Pandoc.convert <- function(f, text, format = 'html', open = TRUE, options = '', 
 
     ## call Pandoc
     res <- suppressWarnings(tryCatch(system(sprintf('pandoc -f markdown -s %s %s -o %s', options, shQuote(f), shQuote(f.out)), intern = TRUE), error = function(e) e))
+
+    ## inject HTML header
+    if (format == 'html' && grepl(sprintf('^(--self-contain )*-A "%s"$', system.file('includes/html/footer.html', package='pander')), options)) {
+
+        rl <- readLines(f.out, warn = FALSE)
+        he <- grep('</head>', rl)
+        ho <- readLines(system.file('includes/html/header.html', package='pander'), warn = FALSE)
+
+        if (portable.html)
+            ch <- ho
+        else
+            ch <- gsub('http://cdn.rapporter.net/pander', system.file('includes/', package='pander'), ho)
+
+        writeLines(c(rl[1:(he - 1)], ch, rl[he:length(rl)]), f.out)
+
+    }
 
     ## revert settings
     setwd(wd)

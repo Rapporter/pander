@@ -52,7 +52,7 @@ pandoc.add.formatting <- function(x, f) {
 
     f.e  <- gsub('*', '\\*', f, fixed = TRUE)
     x    <- trim.spaces(x)
-    w    <- which(!grepl(sprintf('^%s.*%s$', f.e, f.e), x))
+    w    <- which(!grepl(sprintf('^%s.*%s$', f.e, f.e), x) & x != '')
     x[w] <- paste0(f, x[w], f)
 
     return(x)
@@ -453,6 +453,7 @@ pandoc.list <- function(...)
 #' @param emphasize.strong.rows see \code{emphasize.rows} but in bold
 #' @param emphasize.strong.cols see \code{emphasize.cols} but in bold
 #' @param emphasize.strong.cells see \code{emphasize.cells} but in bold
+#' @param ... unsupported extra arguments directly placed into \code{/dev/null}
 #' @return By default this function outputs (see: \code{cat}) the result. If you would want to catch the result instead, then call \code{pandoc.table.return} instead.
 #' @export
 #' @aliases pandoc.table
@@ -521,7 +522,7 @@ pandoc.list <- function(...)
 #'
 #' emphasize.strong.cells(which(t > 20, arr.ind = TRUE))
 #' pandoc.table(t)
-pandoc.table.return <- function(t, caption, digits = panderOptions('digits'), decimal.mark = panderOptions('decimal.mark'), round = panderOptions('round'), justify, style = c('multiline', 'grid', 'simple', 'rmarkdown'), split.tables = panderOptions('table.split.table'), split.cells = panderOptions('table.split.cells'), keep.trailing.zeros = panderOptions('keep.trailing.zeros'), emphasize.rows, emphasize.cols, emphasize.cells, emphasize.strong.rows, emphasize.strong.cols, emphasize.strong.cells) {
+pandoc.table.return <- function(t, caption, digits = panderOptions('digits'), decimal.mark = panderOptions('decimal.mark'), round = panderOptions('round'), justify, style = c('multiline', 'grid', 'simple', 'rmarkdown'), split.tables = panderOptions('table.split.table'), split.cells = panderOptions('table.split.cells'), keep.trailing.zeros = panderOptions('keep.trailing.zeros'), emphasize.rows, emphasize.cols, emphasize.cells, emphasize.strong.rows, emphasize.strong.cols, emphasize.strong.cells, ...) {
 
     ## helper functions
     table.expand <- function(cells, cols.width, justify, sep.cols) {
@@ -548,6 +549,10 @@ pandoc.table.return <- function(t, caption, digits = panderOptions('digits'), de
     }
     split.large.cells <- function(cells)
         sapply(cells, function(x) {
+
+            ## escape pipes
+            if (style == 'rmarkdown')
+                x <- gsub('\\|', '\\\\|', x)
 
             ## split
             if (nchar(x) == nchar(x, type = 'width')) {
@@ -661,14 +666,15 @@ pandoc.table.return <- function(t, caption, digits = panderOptions('digits'), de
     else
         t.n <- as.numeric(which(apply(t, 2, is.numeric)))
     if (length(t.n) > 0) {
-        t[t.n] <- round(t[t.n], round)
+        if (length(dim(t)) == 2)
+            t[, t.n] <- apply(t[, t.n, drop = FALSE], 2, round, digits = round)
+        else
+            t[t.n]   <- round(t[t.n], round)
         if (!keep.trailing.zeros) {
-            if (length(dim(t)) == 0) # named char
-                t[t.n] <- sapply(t[t.n], format, trim = TRUE, digits = digits, decimal.mark = decimal.mark)
-            if (length(dim(t)) == 1)
-                t[t.n] <- apply(t[t.n, drop = FALSE], 1, format, trim = TRUE, digits = digits, decimal.mark = decimal.mark)
-            if (length(dim(t)) == 2)
-                t[, t.n] <- apply(t[, t.n, drop = FALSE], c(1,2), format, trim = TRUE, digits = digits, decimal.mark = decimal.mark)
+            switch(as.character(length(dim(t))),
+                   '0' = t[t.n]   <- sapply(t[t.n], format, trim = TRUE, digits = digits, decimal.mark = decimal.mark),
+                   '1' = t[t.n]   <- apply(t[t.n, drop = FALSE], 1, format, trim = TRUE, digits = digits, decimal.mark = decimal.mark),
+                   '2' = t[, t.n] <- apply(t[, t.n, drop = FALSE], c(1,2), format, trim = TRUE, digits = digits, decimal.mark = decimal.mark))
         }
     }
 
@@ -762,7 +768,7 @@ pandoc.table.return <- function(t, caption, digits = panderOptions('digits'), de
         t.width     <-  as.numeric(apply(cbind(t.colnames.width, apply(t, 2, function(x) max(sapply(strsplit(x,'\n'), function(x) max(nchar(x, type = 'width'), 0))))), 1, max))
 
         ## remove obvious row.names
-        if (all(rownames(t) == 1:nrow(t)))
+        if (all(rownames(t) == 1:nrow(t)) | all(rownames(t) == ''))
             t.rownames <- NULL
 
         if (!is.null(t.rownames))
