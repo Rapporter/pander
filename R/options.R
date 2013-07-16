@@ -93,77 +93,81 @@ masked.plots$plot <- masked.plots$barplot <- masked.plots$lines <- masked.plots$
     fn.orig <- parse(text = paste0(fn.pkg, '::', fn))[[1]]
     mc      <- match.call(get(fn, envir = .GlobalEnv))
 
-    ## pander options
-    fc  <- panderOptions('graph.fontcolor')
-    fbs <- panderOptions('graph.fontsize')
-    bc  <- panderOptions('graph.background')
-    gc  <- panderOptions('graph.grid.color')
-    cex <- fbs/12
-    cs <- panderOptions('graph.colors')
-    if (panderOptions('graph.color.rnd'))
-        cs <- sample(cs)
-    cb <- cs[1]
+    if (!(is.null(mc$plot) && !mc$plot)) {
 
-    ## global par update
-    if (!fn %in% c('text')) {
-        par(
-            family   = panderOptions('graph.fontfamily'),
-            cex      = cex, cex.axis = cex * 0.8, cex.lab = cex, cex.main = cex * 1.2, cex.sub = cex,
-            bg       = bc, # TODO: how could we color only the inner plot area globally? Not like: https://stat.ethz.ch/pipermail/r-help/2003-May/033971.html
-            las      = panderOptions('graph.axis.angle'),
-            lwd      = 2,
-            pch      = panderOptions('graph.symbol'),
-            col.axis = fc, col.lab = fc, col.main = fc, col.sub = fc)
+        ## pander options
+        fc  <- panderOptions('graph.fontcolor')
+        fbs <- panderOptions('graph.fontsize')
+        bc  <- panderOptions('graph.background')
+        gc  <- panderOptions('graph.grid.color')
+        cex <- fbs/12
+        cs <- panderOptions('graph.colors')
+        if (panderOptions('graph.color.rnd'))
+            cs <- sample(cs)
+        cb <- cs[1]
+
+        ## global par update
+        if (!fn %in% c('text')) {
+            par(
+                family   = panderOptions('graph.fontfamily'),
+                cex      = cex, cex.axis = cex * 0.8, cex.lab = cex, cex.main = cex * 1.2, cex.sub = cex,
+                bg       = bc, # TODO: how could we color only the inner plot area globally? Not like: https://stat.ethz.ch/pipermail/r-help/2003-May/033971.html
+                las      = panderOptions('graph.axis.angle'),
+                lwd      = 2,
+                pch      = panderOptions('graph.symbol'),
+                col.axis = fc, col.lab = fc, col.main = fc, col.sub = fc)
+        }
+
+        ## remove margins
+
+        if (panderOptions('graph.nomargin') & !fn %in% c('text')) {
+            par(mar = c(4.1, 4.3, 2.1, 0.1))
+        }
+
+        ## default: grid is added to all plots
+        doAddGrid <- TRUE
+
+        ## update colors
+        if (is.null(mc$col) & is.null(mc$color))
+            mc$col <- cb
+        if (fn == 'boxplot')
+            mc$border <- 'black'
+        if (fn == 'clusplot') {
+            mc$col <- NULL
+            if (is.null(mc$color))
+                mc$color <- TRUE
+            if (is.null(mc$shade))
+                mc$shade <- TRUE
+            if (is.null(mc$labels))
+                mc$labels <- 4
+            if (is.null(mc$col.p))
+                mc$col.p <- 'black'
+            if (is.null(mc$col.clus))
+                mc$col.clus <- cs
+        }
+
+        ## remove boxes
+        if (fn %in% c('pairs', 'stripchart')) {
+            doAddGrid <- FALSE
+            par(fg = fc)
+        } else {
+            if (panderOptions('graph.boxes'))
+                par(fg = gc)
+            else
+                par(fg = bc)
+        }
+
+        if (fn == 'pie')
+            mc$col <- cs
+
     }
-
-    ## remove margins
-
-    if (panderOptions('graph.nomargin') & !fn %in% c('text')) {
-        par(mar = c(4.1, 4.3, 2.1, 0.1))
-    }
-
-    ## default: grid is added to all plots
-    doAddGrid <- TRUE
-
-    ## update colors
-    if (is.null(mc$col) & is.null(mc$color))
-        mc$col <- cb
-    if (fn == 'boxplot')
-        mc$border <- 'black'
-    if (fn == 'clusplot') {
-        mc$col <- NULL
-        if (is.null(mc$color))
-            mc$color <- TRUE
-        if (is.null(mc$shade))
-            mc$shade <- TRUE
-        if (is.null(mc$labels))
-            mc$labels <- 4
-        if (is.null(mc$col.p))
-            mc$col.p <- 'black'
-        if (is.null(mc$col.clus))
-            mc$col.clus <- cs
-    }
-
-    ## remove boxes
-    if (fn %in% c('pairs', 'stripchart')) {
-        doAddGrid <- FALSE
-        par(fg = fc)
-    } else {
-        if (panderOptions('graph.boxes'))
-            par(fg = gc)
-        else
-            par(fg = bc)
-    }
-
-    if (fn == 'pie')
-        mc$col <- cs
 
     ## call
     mc[[1]] <- fn.orig
     eval(mc, envir = parent.frame())
 
     ## grid
-    if (all(par()$mfrow == 1) & panderOptions('graph.grid') & doAddGrid) {
+    if (all(par()$mfrow == 1) & panderOptions('graph.grid') & doAddGrid & !(is.null(mc$plot) && !mc$plot)) {
 
         g <- tryCatch(grid(lty = panderOptions('graph.grid.lty'), col = panderOptions('graph.grid.color'), lwd = 0.5), error = function(e) e)
         if (!inherits(g, 'error')) {
