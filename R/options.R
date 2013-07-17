@@ -93,7 +93,7 @@ masked.plots$plot <- masked.plots$barplot <- masked.plots$lines <- masked.plots$
     fn.orig <- parse(text = paste0(fn.pkg, '::', fn))[[1]]
     mc      <- match.call(get(fn, envir = .GlobalEnv))
 
-    if (!(is.null(mc$plot) && !mc$plot)) {
+    if (!(!is.null(mc$plot) && !mc$plot)) {
 
         ## pander options
         fc  <- panderOptions('graph.fontcolor')
@@ -167,7 +167,7 @@ masked.plots$plot <- masked.plots$barplot <- masked.plots$lines <- masked.plots$
     eval(mc, envir = parent.frame())
 
     ## grid
-    if (all(par()$mfrow == 1) & panderOptions('graph.grid') & doAddGrid & !(is.null(mc$plot) && !mc$plot)) {
+    if (all(par()$mfrow == 1) & panderOptions('graph.grid') & doAddGrid & !(!is.null(mc$plot) && !mc$plot)) {
 
         g <- tryCatch(grid(lty = panderOptions('graph.grid.lty'), col = panderOptions('graph.grid.color'), lwd = 0.5), error = function(e) e)
         if (!inherits(g, 'error')) {
