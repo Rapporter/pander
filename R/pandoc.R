@@ -736,6 +736,7 @@ pandoc.table.return <- function(t, caption, digits = panderOptions('digits'), de
         t.rownames  <- NULL
         t.colnames  <- names(t)
         if (!is.null(t.colnames)) {
+            t.colnames       <- replace(t.colnames, which(t.colnames == ''), '&nbsp;')
             t.colnames       <- split.large.cells(t.colnames)
             t.colnames.width <- sapply(t.colnames, function(x) max(nchar(strsplit(x, '\n')[[1]], type = 'width'), 0), USE.NAMES = FALSE) + 2
         } else {
@@ -758,7 +759,8 @@ pandoc.table.return <- function(t, caption, digits = panderOptions('digits'), de
         t.rownames  <- rownames(t)
         t.colnames  <- colnames(t)
         if (!is.null(t.colnames)) {
-            t.colnames  <- split.large.cells(t.colnames)
+            t.colnames <- replace(t.colnames, which(t.colnames == ''), '&nbsp;')
+            t.colnames <- split.large.cells(t.colnames)
             t.colnames.width <- sapply(t.colnames, function(x) max(nchar(strsplit(x, '\n')[[1]], type = 'width'), 0), USE.NAMES = FALSE) + 2
         } else {
             t.colnames.width <- 0
