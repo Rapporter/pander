@@ -717,9 +717,13 @@ evals <- function(txt, parse = TRUE, cache = TRUE, cache.mode = c('environment',
             rep <- strsplit(file, '%t')[[1]]
             file <- tempfile(pattern = rep[1], tmpdir = graph.dir, fileext = rep[2])
             file.name <- sub(sprintf('.%s$', graph.output), '', file)
+        } else {
+            file <- file.path(graph.dir, file)
+            file.name <- file.path(graph.dir, file.name)
         }
-        file <- file.path(gsub('\\', '/', graph.dir, fixed = TRUE), file)
-        file.name <- file.path(gsub('\\', '/', graph.dir, fixed = TRUE), file.name)
+        file <- gsub('\\', '/', file, fixed = TRUE)
+        file.name <- gsub('\\', '/', file.name, fixed = TRUE)
+
 
         ## similar files counter
         if (grepl('%n', file.name)) {
