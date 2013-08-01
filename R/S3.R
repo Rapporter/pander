@@ -385,3 +385,7 @@ pander.POSIXct <- function(x, ...)
 #' @S3method pander POSIXt
 pander.POSIXt <- function(x, ...)
     cat(format(x, panderOptions('date')))
+
+#' @S3method pander ftable
+pander.ftable <- function(x,  ...)
+    pandoc.table(x, ...)
