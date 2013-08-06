@@ -4,7 +4,7 @@
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
   <meta http-equiv="Content-Style-Type" content="text/css" />
   <meta name="generator" content="pandoc" />
-  <title>pander: An Pandoc writer in R</title>
+  <title>pander: A Pandoc writer in R</title>
   <style type="text/css">code{white-space: pre;}</style>
   <style type="text/css">
 table.sourceCode, tr.sourceCode, td.lineNumbers, td.sourceCode {
@@ -25,44 +25,43 @@ code > span.al { color: #ff0000; font-weight: bold; }
 code > span.fu { color: #06287e; }
 code > span.er { color: #ff0000; font-weight: bold; }
   </style>
-  <!--[if lt IE 9]>
-      <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
-      <![endif]-->
-  
-  <link rel="stylesheet" href="stylesheets/base.css" />
-  <link rel="stylesheet" href="stylesheets/skeleton.css" />
-  <link rel="stylesheet" href="stylesheets/layout.css" />
-  <link rel="stylesheet" href="stylesheets/fonts.css" />
-  <link rel="stylesheet" href="stylesheets/slimbox2.css" />
-  <link rel="stylesheet" href="stylesheets/custom.css" />
-  <link rel="stylesheet" href="stylesheets/caption.css"/>
-  
-  <link rel="shortcut icon" href="images/favicon.gif" />
-  <link rel="apple-touch-icon" href="images/apple-touch-icon.png" />
-  <link rel="apple-touch-icon" sizes="72x72" href="images/apple-touch-icon-72x72.png" />
-  <link rel="apple-touch-icon" sizes="114x114" href="images/apple-touch-icon-114x114.png" />
-  
-  <script type="text/javascript" src="javascripts/jquery-1.7.2.min.js"></script>
-  <script type="text/javascript" src="javascripts/tabs.js"></script>  <!--remove-->
-  <script type="text/javascript" src="javascripts/custom.js"></script>
-  <script type="text/javascript" src="javascripts/slimbox2.js"></script>
-  <script type="text/x-mathjax-config">
-    MathJax.Hub.Config({
-    tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]}
-    });
-  </script>
-  <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_HTML"></script>
-  <script type="text/javascript" src="javascripts/jcaption.min.js" /></script>
+<!--[if lt IE 9]>
+    <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+<![endif]-->
+
+<link rel="stylesheet" href="stylesheets/base.css" />
+<link rel="stylesheet" href="stylesheets/skeleton.css" />
+<link rel="stylesheet" href="stylesheets/layout.css" />
+<link rel="stylesheet" href="stylesheets/slimbox2.css" />
+<link rel="stylesheet" href="stylesheets/custom.css" />
+<link rel="stylesheet" href="stylesheets/caption.css"/>
+
+<link rel="shortcut icon" href="images/favicon.gif" />
+<link rel="apple-touch-icon" href="images/apple-touch-icon.png" />
+<link rel="apple-touch-icon" sizes="72x72" href="images/apple-touch-icon-72x72.png" />
+<link rel="apple-touch-icon" sizes="114x114" href="images/apple-touch-icon-114x114.png" />
+
+<script type="text/javascript" src="javascripts/jquery-1.7.2.min.js"></script>
+<script type="text/javascript" src="javascripts/custom.js"></script>
+<script type="text/javascript" src="javascripts/slimbox2.js"></script>
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+  tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]}
+  });
+</script>
+<script type="text/javascript" src="http://cdn.rapporter.net/mathjax/2.1/MathJax.js?config=TeX-AMS_HTML"></script>
+<script type="text/javascript" src="javascripts/jcaption.min.js" /></script>
 </head>
 <body>
 <div id="header">
-<h1 class="title"><a href="https://github.com/Rapporter/pander">pander: An Pandoc writer in R</a></h1>
+<h1 class="title"><a href="https://github.com/Rapporter/pander">pander: A Pandoc writer in R</a></h1>
 </div>
-<p><strong>pander</strong> is an <a href="http://r-project.org">R</a> package containing <a href="#helper-functions">helpers</a> to return <a href="http://johnmacfarlane.net/pandoc/">Pandoc</a>'s markdown <em>automatically</em> from several type of <a href="#generic-pander-method"><strong>R objects</strong></a>.</p>
+<h1 id="overview">Overview</h1>
+<p><strong>pander</strong> is an <a href="http://r-project.org">R</a> package containing <a href="#helper-functions">helpers</a> to return <a href="http://johnmacfarlane.net/pandoc/">Pandoc</a>'s markdown even <em>automatically</em> from several type of <a href="#generic-pander-method"><strong>R objects</strong> with a general S3 method</a>.</p>
 <p>The package is also capable of exporting/converting complex Pandoc documents (reports) in three ways at the moment:</p>
 <ul>
-<li><p>create somehow a markdown text file (e.g. with <code>brew</code>, <code>knitr</code> or any scripts of yours, maybe with <code>Pandoc.brew</code> - see just <a href="#brew-to-pandoc">below</a>) and transform that to other formats (like HTML, odt, pdf, docx etc.) with <code>Pandoc.convert</code></p></li>
-<li><p>users might write some reports in a forked <a href="http://cran.r-project.org/web/packages/brew/index.html">brew</a> syntax resulting in a pretty <em>Pandoc</em> document (where each R object are transformed to nicely formatted table, list etc.) and also in a <strong>bunch of formats</strong> (like HTML, odt, pdf, docx etc.) automatically.</p>
+<li><p>create somehow a markdown text file (e.g. with <code>brew</code>, <code>knitr</code> or any scripts of yours, maybe with <code>Pandoc.brew</code> - see just <a href="#brew-to-pandoc">below</a>) and transform that to other formats (like HTML, odt, pdf, docx etc.) with <code>Pandoc.convert</code> -- just like <a href="http://yihui.name/knitr/demo/pandoc/"><code>pandoc</code> function in knitr</a>,</p></li>
+<li><p>users might write some reports in a forked version of <a href="http://cran.r-project.org/web/packages/brew/index.html">brew</a> syntax resulting in a pretty <em>Pandoc</em> document (where each R object are automatically transformed to nicely formatted table, list etc.) and also in a <strong>bunch of ither formats</strong> (like HTML, odt, pdf, docx etc.),</p>
 <p><em>Example</em>: this <a href="https://github.com/Rapporter/pander/blob/master/README.md"><code>README.md</code></a> is cooked with <code>Pandoc.brew</code> based on <a href="https://github.com/Rapporter/pander/blob/master/inst/README.brew"><code>inst/README.brew</code></a> and also exported to <a href="http://rapporter.github.com/pander/">HTML</a>. Details can be found <a href="#brew-to-pandoc">below</a> or head directly to <a href="#examples">examples</a>.</p></li>
 </ul>
 <!-- endlist -->
@@ -70,10 +69,12 @@ code > span.er { color: #ff0000; font-weight: bold; }
 <ul>
 <li>or users might create a report in a live R session by adding some R objects and paragraphs to a <code>Pandoc</code> reference class object. Details can be found <a href="#live-report-generation">below</a>.</li>
 </ul>
-<p><strong>How it is differ from Sweave, brew, knitr, R2HTML etc.?</strong></p>
+<p><strong>How does <code>pander</code> differ from Sweave, brew, knitr, R2HTML etc.?</strong></p>
 <ul>
-<li>no need for calling <code>ascii</code>, <code>xtable</code>, <code>Hmisc</code>, <code>tables</code> etc. to transform an R object to <code>HTML</code>, <code>tex</code> etc. as <code>pander</code> results in Pandoc's <em>markdown</em> which can (automatically) be converted to almost any text document format (like: pdf, HTML, odt, docx, textile, asciidoc, reStructuredText etc.). Conversion can be done automatically after calling <code>pander</code> reporting functions (<a href="#brew-to-pandoc">Pander.brew</a> or <a href="#live-report-generation">Pandoc</a>).</li>
+<li>first of all <code>pander</code> can be used as a helper with any other literate programming solution, so you might want to call <code>pander</code> inside of <code>knitr</code> chunks,</li>
+<li>but if you stick with <code>pander</code>'s literate tool, then <strong>no need</strong> for calling <code>ascii</code>, <code>xtable</code>, <code>Hmisc</code>, <code>tables</code> etc. or even <code>pander</code> in the R command chunks to transform an R object to <code>HTML</code>, <code>tex</code> etc. as <code>Pandoc.brew</code> automatically results in Pandoc's <em>markdown</em> which can be converted to almost any text document format (like: pdf, HTML, odt, docx, textile, asciidoc, reStructuredText etc.). Conversion can be done automatically after calling <code>pander</code> reporting functions (<a href="#brew-to-pandoc">Pander.brew</a> or <a href="#live-report-generation">Pandoc</a>).</li>
 <li>based on the above <em>no &quot;traditional&quot; R console output</em> is shown in the resulting document (nor in markdown, nor in exported docs) but <strong>all R objects are transformed to tables, list etc</strong>. Well, there is an option (<code>show.src</code>) to show the original R commands before the formatted output, and <code>pander</code>˛calls can be also easily tweaked (just file an issue) to return <code>print</code>ed R objects - if you would need that in some strange situation - like writing an R tutorial. But <strong>I really think that nor R code, nor raw R results have anything to do with an exported report</strong> :)</li>
+<li>of course all warnings, messages and errors are captured while evaluating R expressions just like <code>stdout</code> <strong>beside</strong> the raw R object. So the resulting report can also include the raw R objects for futher edits if needed,</li>
 <li><em>graphs/plots</em> are recognized in blocks of R commands without any special setting or marks around code block and saved to disk in a <code>png</code> file linked in the resulting document. This means if you create a report (e.g. <code>brew</code> a text file) and export it to pdf/docx etc. all the plots/images would be there. There are some parameters to specify the resolution of the image and also the type (e.g. <code>jpg</code>, <code>svg</code> or <code>pdf</code>) besides a <strong>wide variety of <a href="#pander-options">theme options</a></strong>. About the latter, please check out <code>graphs.brew</code> <a href="#examples">below</a>.</li>
 <li><code>pander</code>˛uses its build in (IMHO quite decent) <a href="#caching"><strong>caching</strong></a>. This means that if evaluation of some R commands take too much time (which can be set by option/parameter), then the results are saved in a file and returned from there on next exact R code's evaluation. This caching algorithm tries to be <strong>smart</strong> as checks not only the passed R sources, but <em>all variables and functions</em> inside that and saves the hash of those. This is a quite secure way of caching (see details <a href="#caching">below</a>), but if you would encounter any issues, just switch off the cache. I've not seen any issues :)</li>
 <li><code>knitr</code> <em>support</em> is coming too, for details see my <a href="https://github.com/Rapporter/pander/blob/master/TODO.md">TODO list</a> <strong>Update</strong>: just use <code>knitr</code> to generate markdown and pass that to <code>Pandoc.convert</code></li>
@@ -314,6 +315,8 @@ Table: Hello caption! (continued below)
   **Mazda RX4 Wag** 21    6     160    110  3.9   
 --------------------------------------------------
 
+Table: Hello caption!
+
 &gt; set.alignment(c(&#39;left&#39;, &#39;right&#39;, &#39;center&#39;, &#39;centre&#39;))
 &gt; pandoc.table(iris[1:3, 1:4])
 
@@ -475,7 +478,7 @@ Table: Formatted table
 ---------------------------------------------------
  Test statistic   P value   Alternative hypothesis 
 ---------------- --------- ------------------------
-      0.12       _0.8693_         two-sided        
+      0.14       _0.7166_         two-sided        
 ---------------------------------------------------
 
 Table: Two-sample Kolmogorov-Smirnov test: `runif(50)` and `runif(50)`
@@ -908,11 +911,11 @@ evals(&#39;mean(xx)&#39;)</code></pre>
 <li><code>pander-show-source</code>: If non-nil then the source of R commands would also show up in generated documents while running 'pander-eval'. This would not affect <code>brew</code> functions ATM.</li>
 </ul>
 <p>To use this small lib, just type: <code>M-x pander-mode</code> on any document. It might be useful to add a hook to <code>markdown-mode</code> if you find this useful.</p>
-<p><a href="http://githalytics.com/Rapporter/pander"><img src="https://cruel-carlota.pagodabox.com/9dfac0c1da37bd83d1848289630631fd" title="githalytics.com" alt="githalytics.com alpha" /></a></p>
+<p><a href="http://githalytics.com/Rapporter/pander"><img src="https://cruel-carlota.gopagoda.com/9dfac0c1da37bd83d1848289630631fd" title="githalytics.com" alt="githalytics.com alpha" /></a></p>
 <hr />
-<p>This report was generated with <a href="http://www.r-project.org/">R</a> (3.0.0) and <a href="https://github.com/rapporter/pander">pander</a> (0.3.7) in 1.677 sec on x86_64-unknown-linux-gnu platform.</p>
+<p>This report was generated with <a href="http://www.r-project.org/">R</a> (3.0.1) and <a href="https://github.com/rapporter/pander">pander</a> (0.3.7) in 1.05 sec on x86_64-unknown-linux-gnu platform.</p>
 <p align="center">
-  Design: <a href="http://rapport-package.info/"><i>rapport</i> Development Team</a> &copy; 2012 | Backend: <a href="https://github.com/rapporter/pander">pander</a> | License: <a href="http://www.gnu.org/licenses/agpl.html" target="_blank">AGPL3</a> | Styled with <a href="http://www.getskeleton.com/" target="_blank">skeleton</a>
+  Design: <a href="http://rapport-package.info/"><i>rapport</i> Development Team</a> &copy; 2011-2013 | Backend: <a href="https://github.com/rapporter/pander">pander</a> | License: <a href="http://www.gnu.org/licenses/agpl.html" target="_blank">AGPL3</a> | Styled with <a href="http://www.getskeleton.com/" target="_blank">skeleton</a>
 </p>
 </body>
 </html>
