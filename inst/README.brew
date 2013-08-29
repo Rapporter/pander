@@ -538,7 +538,8 @@ myReport$export(open = FALSE)
 `pander` comes with some globally adjustable options which would have an effect on the result of your reports. You can query and update these options with `panderOptions()`:
 
   * `digits`: numeric (default: `2`) passed to `format`
-  * `decimal.mark`: numeric (default: `.`) passed to `format`
+  * `decimal.mark`: string (default: `.`) passed to `format`
+  * `big.mark`: string (default: ``) passed to `format`
   * `round`: numeric (default: `Inf`) passed to `round`
   * `keep.trailing.zeros`: boolean (default: `FALSE`) show or remove trailing zeros in numbers (e.g. in numeric vectors or in columns of tables with numeric values)
   * `date`: string (default: `'%Y/%m/%d %X'`) passed to `format` when printing dates (`POSIXct` or `POSIXt`)
