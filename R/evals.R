@@ -1091,11 +1091,11 @@ evals <- function(txt, parse = TRUE, cache = TRUE, cache.mode = c('environment',
     })
 }
 
-#' Redraws saved plot
+#' Redraws plot saved in file
 #'
-#' This function is a wrapper around \code{replayPlot} with some added tweaks (fixing memory address nullpointer issue) for compatibility.
-#' @param file path and name of file to read saved \code{recordPlot} object
-#' @references Thanks to Jeroen Ooms \url{http://permalink.gmane.org/gmane.comp.lang.r.devel/29897} and JJ Allaire \url{https://github.com/rstudio/rstudio/commit/eb5f6f1db4717132c2ff111f068ffa6e8b2a5f0b}.
+#' This function is a wrapper around \code{redrawPlot}.
+#' @param file path and name of an rds file containing a plot object to be redrawn
+#' @references Thanks to Jeroen Ooms \url{http://permalink.gmane.org/gmane.comp.lang.r.devel/29897}, JJ Allaire \url{https://github.com/rstudio/rstudio/commit/eb5f6f1db4717132c2ff111f068ffa6e8b2a5f0b}, and Gabriel Becker.
 #' @seealso \code{\link{evals}}
 #' @export
 redraw.recordedplot <- function(file) {
@@ -1105,28 +1105,47 @@ redraw.recordedplot <- function(file) {
     if (inherits(plot, 'error'))
         stop(paste('Cannot read file:', plot$message))
 
-    if (getRversion() < '3.0.0') {
+    redrawPlot(plot)
+}
 
-        for(i in 1:length(plot[[1]])) # @jeroenooms
-            if ('NativeSymbolInfo' %in% class(plot[[1]][[i]][[2]][[1]]))
-                plot[[1]][[i]][[2]][[1]] <- getNativeSymbolInfo(plot[[1]][[i]][[2]][[1]]$name)
 
-    } else {
+#' Redraw a recordedplot, grid, trellis, or ggplot2 plot.
+#'
+#' This function redraws the plot represented by \code{recPlot}. It can redraw grid/trellis/ggplot2/etc plots, as well as \code{recordedplot} objects. For \code{recordedplot} objects it acts as a wrapper around \code{replayPlot} with memory tweaks to fix native symbol address errors when the recordedplot was loaded from an rda/rds file.
+#' @param the plot object to redraw
+#' @references Thanks to Jeroen Ooms \url{http://permalink.gmane.org/gmane.comp.lang.r.devel/29897}, JJ Allaire \url{https://github.com/rstudio/rstudio/commit/eb5f6f1db4717132c2ff111f068ffa6e8b2a5f0b}, and Gabriel Becker.
+#' @seealso \code{\link{redraw.recordedplot}}
+#' @export
 
-        for (i in 1:length(plot[[1]])) { # @jjallaire
-            symbol <- plot[[1]][[i]][[2]][[1]]
-            if ('NativeSymbolInfo' %in% class(symbol)) {
-                if (!is.null(symbol$package))
-                    name <- symbol$package[['name']]
-                else
-                    name <- symbol$dll[['name']]
-                pkgDLL <- getLoadedDLLs()[[name]]
-                nativeSymbol <- getNativeSymbolInfo(name = symbol$name, PACKAGE = pkgDLL, withRegistrationInfo = TRUE)
-                plot[[1]][[i]][[2]][[1]] <- nativeSymbol
+redrawPlot <- function(recPlot)
+{
+    #this allows us to deal with trellis/grid/ggplot objects as well ...
+    if(!is(recPlot, "recordedplot"))
+        {
+            res = try(print(recPlot))
+            if(is(res, "error"))
+                stop(res)
+        } else {
+            if (getRversion() < "3.0.0") {
+                for (i in 1:length(recPlot[[1]])) #@jeroenooms
+                    if ("NativeSymbolInfo" %in% class(recPlot[[1]][[i]][[2]][[1]])) 
+                        recPlot[[1]][[i]][[2]][[1]] <- getNativeSymbolInfo(recPlot[[1]][[i]][[2]][[1]]$name)
             }
+            else {
+                for (i in 1:length(recPlot[[1]])) #@jjallaire
+                {
+                    symbol <- recPlot[[1]][[i]][[2]][[1]]
+                    if ("NativeSymbolInfo" %in% class(symbol)) {
+                        if (!is.null(symbol$package)) 
+                            name <- symbol$package[["name"]]
+                        else name <- symbol$dll[["name"]]
+                        pkgDLL <- getLoadedDLLs()[[name]]
+                        nativeSymbol <- getNativeSymbolInfo(name = symbol$name, 
+                                                            PACKAGE = pkgDLL, withRegistrationInfo = TRUE)
+                        recPlot[[1]][[i]][[2]][[1]] <- nativeSymbol
+                    }
+                }
+            }
+            suppressWarnings(grDevices::replayPlot(recPlot))
         }
-    }
-
-    suppressWarnings(grDevices::replayPlot(plot))
-
 }
