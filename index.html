@@ -315,8 +315,6 @@ Table: Hello caption! (continued below)
   **Mazda RX4 Wag** 21    6     160    110  3.9   
 --------------------------------------------------
 
-Table: Hello caption!
-
 &gt; set.alignment(c(&#39;left&#39;, &#39;right&#39;, &#39;center&#39;, &#39;centre&#39;))
 &gt; pandoc.table(iris[1:3, 1:4])
 
@@ -478,7 +476,7 @@ Table: Formatted table
 ---------------------------------------------------
  Test statistic   P value   Alternative hypothesis 
 ---------------- --------- ------------------------
-      0.14       _0.7166_         two-sided        
+      0.16       _0.5487_         two-sided        
 ---------------------------------------------------
 
 Table: Two-sample Kolmogorov-Smirnov test: `runif(50)` and `runif(50)`
@@ -779,7 +777,8 @@ myReport$<span class="kw">export</span>(<span class="dt">open =</span> <span cla
 <p><code>pander</code> comes with some globally adjustable options which would have an effect on the result of your reports. You can query and update these options with <code>panderOptions()</code>:</p>
 <ul>
 <li><code>digits</code>: numeric (default: <code>2</code>) passed to <code>format</code></li>
-<li><code>decimal.mark</code>: numeric (default: <code>.</code>) passed to <code>format</code></li>
+<li><code>decimal.mark</code>: string (default: <code>.</code>) passed to <code>format</code></li>
+<li><code>big.mark</code>: string (default: `<code>) passed to</code>format`</li>
 <li><code>round</code>: numeric (default: <code>Inf</code>) passed to <code>round</code></li>
 <li><code>keep.trailing.zeros</code>: boolean (default: <code>FALSE</code>) show or remove trailing zeros in numbers (e.g. in numeric vectors or in columns of tables with numeric values)</li>
 <li><code>date</code>: string (default: <code>'%Y/%m/%d %X'</code>) passed to <code>format</code> when printing dates (<code>POSIXct</code> or <code>POSIXt</code>)</li>
@@ -913,7 +912,7 @@ evals(&#39;mean(xx)&#39;)</code></pre>
 <p>To use this small lib, just type: <code>M-x pander-mode</code> on any document. It might be useful to add a hook to <code>markdown-mode</code> if you find this useful.</p>
 <p><a href="http://githalytics.com/Rapporter/pander"><img src="https://cruel-carlota.gopagoda.com/9dfac0c1da37bd83d1848289630631fd" title="githalytics.com" alt="githalytics.com alpha" /></a></p>
 <hr />
-<p>This report was generated with <a href="http://www.r-project.org/">R</a> (3.0.1) and <a href="https://github.com/rapporter/pander">pander</a> (0.3.7) in 1.05 sec on x86_64-unknown-linux-gnu platform.</p>
+<p>This report was generated with <a href="http://www.r-project.org/">R</a> (3.0.1) and <a href="https://github.com/rapporter/pander">pander</a> (0.3.8) in 1.326 sec on x86_64-unknown-linux-gnu platform.</p>
 <p align="center">
   Design: <a href="http://rapport-package.info/"><i>rapport</i> Development Team</a> &copy; 2011-2013 | Backend: <a href="https://github.com/rapporter/pander">pander</a> | License: <a href="http://www.gnu.org/licenses/agpl.html" target="_blank">AGPL3</a> | Styled with <a href="http://www.getskeleton.com/" target="_blank">skeleton</a>
 </p>
