@@ -330,8 +330,6 @@ Or pre-define the alignment for `pandoc.table` or the `pander` S3 method by a he
   **Mazda RX4 Wag** 21    6     160    110  3.9   
 --------------------------------------------------
 
-Table: Hello caption!
-
 > set.alignment(c('left', 'right', 'center', 'centre'))
 > pandoc.table(iris[1:3, 1:4])
 
@@ -521,7 +519,7 @@ The output of different **statistical methods** are tried to be prettyfied. Some
 ---------------------------------------------------
  Test statistic   P value   Alternative hypothesis 
 ---------------- --------- ------------------------
-      0.14       _0.7166_         two-sided        
+      0.16       _0.5487_         two-sided        
 ---------------------------------------------------
 
 Table: Two-sample Kolmogorov-Smirnov test: `runif(50)` and `runif(50)`
@@ -861,7 +859,8 @@ myReport$export(open = FALSE)
 `pander` comes with some globally adjustable options which would have an effect on the result of your reports. You can query and update these options with `panderOptions()`:
 
   * `digits`: numeric (default: `2`) passed to `format`
-  * `decimal.mark`: numeric (default: `.`) passed to `format`
+  * `decimal.mark`: string (default: `.`) passed to `format`
+  * `big.mark`: string (default: ``) passed to `format`
   * `round`: numeric (default: `Inf`) passed to `round`
   * `keep.trailing.zeros`: boolean (default: `FALSE`) show or remove trailing zeros in numbers (e.g. in numeric vectors or in columns of tables with numeric values)
   * `date`: string (default: `'%Y/%m/%d %X'`) passed to `format` when printing dates (`POSIXct` or `POSIXt`)
@@ -1040,4 +1039,4 @@ To use this small lib, just type: `M-x pander-mode` on any document. It might be
 
 
 -------
-This report was generated with [R](http://www.r-project.org/) (3.0.1) and [pander](https://github.com/rapporter/pander) (0.3.7) in 1.05 sec on x86_64-unknown-linux-gnu platform.
+This report was generated with [R](http://www.r-project.org/) (3.0.1) and [pander](https://github.com/rapporter/pander) (0.3.8) in 1.326 sec on x86_64-unknown-linux-gnu platform.
