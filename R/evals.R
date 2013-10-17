@@ -910,6 +910,12 @@ evals <- function(txt, parse = TRUE, cache = TRUE, cache.mode = c('environment',
             if (!file.exists(file))
                 res$msg$errors <- c(res$msg$errors, paste('Image file not written by:', paste(src, collapse = ';')))
 
+        ## remove dummy img file (1px) on Windows if created
+        if (grepl("w|W", .Platform$OS.type))
+            if (!is.character(graph))
+                if (file.exists(file))
+                    unlink(file)
+
         ## error handling
         if (!is.null(res$msg$errors)) {
 
@@ -1128,7 +1134,7 @@ redrawPlot <- function(recPlot)
         } else {
             if (getRversion() < "3.0.0") {
                 for (i in 1:length(recPlot[[1]])) #@jeroenooms
-                    if ("NativeSymbolInfo" %in% class(recPlot[[1]][[i]][[2]][[1]])) 
+                    if ("NativeSymbolInfo" %in% class(recPlot[[1]][[i]][[2]][[1]]))
                         recPlot[[1]][[i]][[2]][[1]] <- getNativeSymbolInfo(recPlot[[1]][[i]][[2]][[1]]$name)
             }
             else {
@@ -1136,11 +1142,11 @@ redrawPlot <- function(recPlot)
                 {
                     symbol <- recPlot[[1]][[i]][[2]][[1]]
                     if ("NativeSymbolInfo" %in% class(symbol)) {
-                        if (!is.null(symbol$package)) 
+                        if (!is.null(symbol$package))
                             name <- symbol$package[["name"]]
                         else name <- symbol$dll[["name"]]
                         pkgDLL <- getLoadedDLLs()[[name]]
-                        nativeSymbol <- getNativeSymbolInfo(name = symbol$name, 
+                        nativeSymbol <- getNativeSymbolInfo(name = symbol$name,
                                                             PACKAGE = pkgDLL, withRegistrationInfo = TRUE)
                         recPlot[[1]][[i]][[2]][[1]] <- nativeSymbol
                     }
