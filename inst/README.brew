@@ -597,7 +597,7 @@ The list of possible options are:
   * `graph.unify`: should `evals` try to unify the style of (`base`, `lattice` and `ggplot2`) plots? If set to `TRUE`, some `panderOptions()` would apply. By default this is disabled not to freak out useRs :)
   * `graph.name`: set the file name of saved plots which is `%s` by default. A simple character string might be provided where `%d` would be replaced by the index of the generating `txt` source, `%n` with an incremented integer in `graph.dir` with similar file names and `%t` by some unique random characters. When used in a `brew` file, `%i` is also available which would be replaced by the chunk number.
   * `graph.dir`: path to a directory where to place generated images. If the directory does not exist, [`evals`](#evals) try to create that. Default set to `plots` in current working directory.
-  * `graph.output`: set the required file format of saved plots. Currently it could be any of  `grDevices`: `png`, `bmp`, `jpeg`, `jpg`, `tiff`, `svg` or `pdf`.
+  * `graph.output`: set the required file format of saved plots. Currently it could be any of  `grDevices`: `png`, `bmp`, `jpeg`, `jpg`, `tiff`, `svg` or `pdf`. Set to `NA` not to save plots at all and tweak that setting with `capture.plot()` on demand.
   * `width`: width of generated plot in pixels for even vector formats
   * `height`: height of generated plot in pixels for even vector formats
   * `res`: nominal resolution in `ppi`. The height and width of vector images will be calculated based in this.

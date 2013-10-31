@@ -603,7 +603,7 @@ eval.msgs <- function(src, env = NULL, showInvisible = FALSE, graph.unify = eval
 #' }
 #' @export
 #' @importFrom digest digest
-evals <- function(txt, parse = TRUE, cache = TRUE, cache.mode = c('environment', 'disk'), cache.dir = '.cache', cache.time = 0.1, cache.copy.images = FALSE, showInvisible = FALSE, classes = NULL, hooks = NULL, length = Inf, output = c('all', 'src', 'result', 'output', 'type', 'msg', 'stdout'), env = NULL, graph.unify = evalsOptions('graph.unify'), graph.name = '%t', graph.dir = 'plots', graph.output = c('png', 'bmp', 'jpeg', 'jpg', 'tiff', 'svg', 'pdf'), width = 480, height = 480, res= 72, hi.res = FALSE, hi.res.width = 960, hi.res.height = 960*(height/width), hi.res.res = res*(hi.res.width/width), graph.env = FALSE, graph.recordplot = FALSE, graph.RDS = FALSE, ...){
+evals <- function(txt, parse = TRUE, cache = TRUE, cache.mode = c('environment', 'disk'), cache.dir = '.cache', cache.time = 0.1, cache.copy.images = FALSE, showInvisible = FALSE, classes = NULL, hooks = NULL, length = Inf, output = c('all', 'src', 'result', 'output', 'type', 'msg', 'stdout'), env = NULL, graph.unify = evalsOptions('graph.unify'), graph.name = '%t', graph.dir = 'plots', graph.output = c('png', 'bmp', 'jpeg', 'jpg', 'tiff', 'svg', 'pdf', NA), width = 480, height = 480, res= 72, hi.res = FALSE, hi.res.width = 960, hi.res.height = 960*(height/width), hi.res.res = res*(hi.res.width/width), graph.env = FALSE, graph.recordplot = FALSE, graph.RDS = FALSE, ...){
 
     if (missing(txt))
         stop('No R code provided to evaluate!')
@@ -675,9 +675,11 @@ evals <- function(txt, parse = TRUE, cache = TRUE, cache.mode = c('environment',
     if (!is.character(graph.name))
         stop('Wrong graph.name (!character) specified!')
 
-    graph.output <- match.arg(graph.output)
-    if (graph.output == 'jpg')
-        graph.output <- 'jpeg'
+    if (!is.na(graph.output)) {
+        graph.output <- match.arg(graph.output)
+        if (graph.output == 'jpg')
+            graph.output <- 'jpeg'
+    }
 
     ## env for running all lines of code
     if (is.null(env))
@@ -693,51 +695,55 @@ evals <- function(txt, parse = TRUE, cache = TRUE, cache.mode = c('environment',
     ## main loop
     lapply(txt, function(src) {
 
-        ## get image file name
-        `%d` <<- `%d` + 1
-        file.name <- gsub('%d', `%d`, graph.name, fixed = TRUE)
+        if (!is.na(graph.output)) {
 
-        ## chunk ID
-        if (length(debug$chunkID) > 0) {
-            if ((length(debug$nestedID) > 0) && (debug$nestedID > 1))
-                file.name <- gsub('%i', paste0(debug$nestedID, '_', debug$chunkID), file.name, fixed = TRUE)
-            else
-                file.name <- gsub('%i', debug$chunkID, file.name, fixed = TRUE)
-        }
-        if (length(debug$cmdID) > 0) {
-            assign('cmdID', debug$cmdID + 1, envir = debug)
-            file.name <- gsub('%I', debug$cmdID, file.name, fixed = TRUE)
-        }
-        file <- sprintf('%s.%s', file.name, graph.output)
+            ## get image file name
+            `%d` <<- `%d` + 1
+            file.name <- gsub('%d', `%d`, graph.name, fixed = TRUE)
 
-        ## tempfile
-        if (grepl('%t', graph.name)) {
-            if (length(strsplit(sprintf('placeholder%splaceholder', file.name), '%t')[[1]]) > 2)
-                stop('File name contains more then 1 "%t"!')
-            rep <- strsplit(file, '%t')[[1]]
-            file <- tempfile(pattern = rep[1], tmpdir = graph.dir, fileext = rep[2])
-            file.name <- sub(sprintf('.%s$', graph.output), '', file)
-        } else {
-            file <- file.path(graph.dir, file)
-            file.name <- file.path(graph.dir, file.name)
-        }
-        file <- gsub('\\', '/', file, fixed = TRUE)
-        file.name <- gsub('\\', '/', file.name, fixed = TRUE)
+            ## chunk ID
+            if (length(debug$chunkID) > 0) {
+                if ((length(debug$nestedID) > 0) && (debug$nestedID > 1))
+                    file.name <- gsub('%i', paste0(debug$nestedID, '_', debug$chunkID), file.name, fixed = TRUE)
+                else
+                    file.name <- gsub('%i', debug$chunkID, file.name, fixed = TRUE)
+            }
+            if (length(debug$cmdID) > 0) {
+                assign('cmdID', debug$cmdID + 1, envir = debug)
+                file.name <- gsub('%I', debug$cmdID, file.name, fixed = TRUE)
+            }
+            file <- sprintf('%s.%s', file.name, graph.output)
+
+            ## tempfile
+            if (grepl('%t', graph.name)) {
+                if (length(strsplit(sprintf('placeholder%splaceholder', file.name), '%t')[[1]]) > 2)
+                    stop('File name contains more then 1 "%t"!')
+                rep <- strsplit(file, '%t')[[1]]
+                file <- tempfile(pattern = rep[1], tmpdir = graph.dir, fileext = rep[2])
+                file.name <- sub(sprintf('.%s$', graph.output), '', file)
+            } else {
+                file <- file.path(graph.dir, file)
+                file.name <- file.path(graph.dir, file.name)
+            }
+            file <- gsub('\\', '/', file, fixed = TRUE)
+            file.name <- gsub('\\', '/', file.name, fixed = TRUE)
 
 
-        ## similar files counter
-        if (grepl('%n', file.name)) {
-            if (length(strsplit(sprintf('placeholder%splaceholder', file.name), '%n')[[1]]) > 2)
-                stop('File name contains more then 1 "%n"!')
-            similar.files <- list.files(graph.dir, pattern = sprintf('^%s\\.(jpeg|tiff|png|svg|bmp|pdf)$', gsub('%t', '[a-z0-9]*', gsub('%d|%n|%i', '[[:digit:]]*', basename(file.name)))))
-            if (length(similar.files) > 0) {
-                similar.files <- sub('\\.(jpeg|tiff|png|svg|bmp|pdf)$', '', similar.files)
-                rep <- gsub('%t', '[a-z0-9]*', gsub('%d|%i', '[[:digit:]]*', strsplit(basename(file.name), '%n')[[1]]))
-                `%n` <- max(as.numeric(gsub(paste(rep, collapse = '|'), '', similar.files))) + 1
-            } else
-                `%n` <- 1
-            file.name <- gsub('%n', `%n`, file.name, fixed = TRUE)
-            file <- gsub('%n', `%n`, file, fixed = TRUE)
+            ## similar files counter
+            if (grepl('%n', file.name)) {
+                if (length(strsplit(sprintf('placeholder%splaceholder', file.name), '%n')[[1]]) > 2)
+                    stop('File name contains more then 1 "%n"!')
+                similar.files <- list.files(graph.dir, pattern = sprintf('^%s\\.(jpeg|tiff|png|svg|bmp|pdf)$', gsub('%t', '[a-z0-9]*', gsub('%d|%n|%i', '[[:digit:]]*', basename(file.name)))))
+                if (length(similar.files) > 0) {
+                    similar.files <- sub('\\.(jpeg|tiff|png|svg|bmp|pdf)$', '', similar.files)
+                    rep <- gsub('%t', '[a-z0-9]*', gsub('%d|%i', '[[:digit:]]*', strsplit(basename(file.name), '%n')[[1]]))
+                    `%n` <- max(as.numeric(gsub(paste(rep, collapse = '|'), '', similar.files))) + 1
+                } else
+                    `%n` <- 1
+                file.name <- gsub('%n', `%n`, file.name, fixed = TRUE)
+                file <- gsub('%n', `%n`, file, fixed = TRUE)
+            }
+
         }
 
         ## checking cache
@@ -814,7 +820,7 @@ evals <- function(txt, parse = TRUE, cache = TRUE, cache.mode = c('environment',
 
                 if (inherits(cached.result$result, 'image')) {
 
-                    if (cache.copy.images & cache.mode == 'disk') {
+                    if (cache.copy.images && cache.mode == 'disk' && !is.na(graph.output)) {
 
                         ## we are copying img file + possibly extra from cache dir
                         file.copy(paste0(cached, '.', graph.output), file)
@@ -854,30 +860,33 @@ evals <- function(txt, parse = TRUE, cache = TRUE, cache.mode = c('environment',
 
         ## clear graphics device (if there would be any open)
         clear.devs <- function()
-            while (!is.null(dev.list()))
-                dev.off(as.numeric(dev.list()[1]))
+            if (!is.na(graph.output))
+                while (!is.null(dev.list()))
+                    dev.off(as.numeric(dev.list()[1]))
         clear.devs()
 
-        ## init (potential) img file
-        if (evalsOptions('graph.unify'))
-            pbg <- panderOptions('graph.background')
-        else
-            pbg <- 'white'
-        if (graph.output %in% c('bmp', 'jpeg', 'png', 'tiff')) {
-            if (capabilities('cairo')) {
-                do.call(graph.output, list(file, width = width, height = height, res = res, bg = pbg, type = 'cairo', ...))
-            } else {
-                do.call(graph.output, list(file, width = width, height = height, res = res, bg = pbg, ...))
+        if (!is.na(graph.output)) {
+
+            ## init (potential) img file
+            if (evalsOptions('graph.unify'))
+                pbg <- panderOptions('graph.background')
+            else
+                pbg <- 'white'
+            if (graph.output %in% c('bmp', 'jpeg', 'png', 'tiff')) {
+                if (capabilities('cairo')) {
+                    do.call(graph.output, list(file, width = width, height = height, res = res, bg = pbg, type = 'cairo', ...))
+                } else {
+                    do.call(graph.output, list(file, width = width, height = height, res = res, bg = pbg, ...))
+                }
             }
+            if (graph.output == 'svg')
+                do.call(graph.output, list(file, width = width/res, height = height/res, bg = pbg, ...)) # TODO: font-family?
+            if (graph.output == 'pdf')
+                do.call('cairo_pdf', list(file, width = width/res, height = height/res, bg = pbg,...)) # TODO: font-family?
+
+            ## start recordPlot
+            dev.control(displaylist = "enable")
         }
-
-        if (graph.output == 'svg')
-            do.call(graph.output, list(file, width = width/res, height = height/res, bg = pbg, ...)) # TODO: font-family?
-        if (graph.output == 'pdf')
-            do.call('cairo_pdf', list(file, width = width/res, height = height/res, bg = pbg,...)) # TODO: font-family?
-
-        ## start recordPlot
-        dev.control(displaylist = "enable")
 
         ## if caching: save the initial environment's objects' hashes
         if (cache) {
@@ -893,20 +902,23 @@ evals <- function(txt, parse = TRUE, cache = TRUE, cache.mode = c('environment',
             })
 
         ## env for optional high resolution images
-        if (hi.res)
+        if (hi.res && !is.na(graph.output))
             env.hires <- env
 
         ## eval
         res <- eval.msgs(src, env = env, showInvisible = showInvisible, graph.unify = graph.unify)
 
         ## grab recorded.plot
-        if (!is.null(dev.list())) {
+        if (!is.na(graph.output) && !is.null(dev.list())) {
             recorded.plot <- recordPlot()
             dev.control("inhibit")
         }
 
         ## did we produce a plot?
-        graph  <- ifelse(exists('recorded.plot'), ifelse(is.null(recorded.plot[[1]]), FALSE, file), FALSE)
+        if (is.na(graph.output))
+            graph <- FALSE
+        else
+            graph <- ifelse(exists('recorded.plot'), ifelse(is.null(recorded.plot[[1]]), FALSE, file), FALSE)
 
         ## close grDevice
         clear.devs()
