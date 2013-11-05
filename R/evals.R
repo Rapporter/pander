@@ -642,7 +642,7 @@ eval.msgs <- function(src, env = NULL, showInvisible = FALSE, graph.unify = eval
 #' }
 #' @export
 #' @importFrom digest digest
-evals <- function(txt, parse = TRUE, cache = TRUE, cache.mode = c('environment', 'disk'), cache.dir = '.cache', cache.time = 0.1, cache.copy.images = FALSE, showInvisible = FALSE, classes = NULL, hooks = NULL, length = Inf, output = c('all', 'src', 'result', 'output', 'type', 'msg', 'stdout'), env = NULL, graph.unify = evalsOptions('graph.unify'), graph.name = '%t', graph.dir = 'plots', graph.output = c('png', 'bmp', 'jpeg', 'jpg', 'tiff', 'svg', 'pdf'), width = 480, height = 480, res= 72, hi.res = FALSE, hi.res.width = 960, hi.res.height = 960*(height/width), hi.res.res = res*(hi.res.width/width), graph.env = FALSE, graph.recordplot = FALSE, graph.RDS = FALSE, ...){
+evals <- function(txt, parse = TRUE, cache = TRUE, cache.mode = c('environment', 'disk'), cache.dir = '.cache', cache.time = 0.1, cache.copy.images = FALSE, showInvisible = FALSE, classes = NULL, hooks = NULL, length = Inf, output = c('all', 'src', 'result', 'output', 'type', 'msg', 'stdout'), env = NULL, graph.unify = evalsOptions('graph.unify'), graph.name = '%t', graph.dir = 'plots', graph.output = c('png', 'bmp', 'jpeg', 'jpg', 'tiff', 'svg', 'pdf', NA), width = 480, height = 480, res= 72, hi.res = FALSE, hi.res.width = 960, hi.res.height = 960*(height/width), hi.res.res = res*(hi.res.width/width), graph.env = FALSE, graph.recordplot = FALSE, graph.RDS = FALSE, ...){
 
     if (missing(txt))
         stop('No R code provided to evaluate!')
@@ -714,9 +714,11 @@ evals <- function(txt, parse = TRUE, cache = TRUE, cache.mode = c('environment',
     if (!is.character(graph.name))
         stop('Wrong graph.name (!character) specified!')
 
-    graph.output <- match.arg(graph.output)
-    if (graph.output == 'jpg')
-        graph.output <- 'jpeg'
+    if (!is.na(graph.output)) {
+        graph.output <- match.arg(graph.output)
+        if (graph.output == 'jpg')
+            graph.output <- 'jpeg'
+    }
 
     ## env for running all lines of code
     if (is.null(env))
@@ -739,61 +741,67 @@ evals <- function(txt, parse = TRUE, cache = TRUE, cache.mode = c('environment',
     ## main loop
     lapply(txt, function(src) {
 
-        ## get image file name
-        `%d` <<- `%d` + 1
-        file.name <- gsub('%d', `%d`, graph.name, fixed = TRUE)
+        if (!is.na(graph.output)) {
 
-        ## chunk ID
-        if (length(debug$chunkID) > 0) {
-            if ((length(debug$nestedID) > 0) && (debug$nestedID > 1))
-                file.name <- gsub('%i', paste0(debug$nestedID, '_', debug$chunkID), file.name, fixed = TRUE)
-            else
-                file.name <- gsub('%i', debug$chunkID, file.name, fixed = TRUE)
-        }
-        if (length(debug$cmdID) > 0) {
-            assign('cmdID', debug$cmdID + 1, envir = debug)
-            file.name <- gsub('%I', debug$cmdID, file.name, fixed = TRUE)
-        }
-        file <- sprintf('%s.%s', file.name, graph.output)
+            ## get image file name
+            `%d` <<- `%d` + 1
+            file.name <- gsub('%d', `%d`, graph.name, fixed = TRUE)
 
-        ## tempfile
-        if (grepl('%t', graph.name)) {
-            if (RAA.enabled)
-                stop('Creating unique files with `tempfile()` in a sandboxed directory does not make any sense.')
-            if (length(strsplit(sprintf('placeholder%splaceholder', file.name), '%t')[[1]]) > 2)
-                stop('File name contains more then 1 "%t"!')
-            rep <- strsplit(file, '%t')[[1]]
-            file <- tempfile(pattern = rep[1], tmpdir = graph.dir, fileext = rep[2])
-            file.name <- sub(sprintf('.%s$', graph.output), '', file)
-        } else {
+            ## chunk ID
+            if (length(debug$chunkID) > 0) {
+                if ((length(debug$nestedID) > 0) && (debug$nestedID > 1))
+                    file.name <- gsub('%i', paste0(debug$nestedID, '_', debug$chunkID), file.name, fixed = TRUE)
+                else
+                    file.name <- gsub('%i', debug$chunkID, file.name, fixed = TRUE)
+            }
+            if (length(debug$cmdID) > 0) {
+                assign('cmdID', debug$cmdID + 1, envir = debug)
+                file.name <- gsub('%I', debug$cmdID, file.name, fixed = TRUE)
+            }
+            file <- sprintf('%s.%s', file.name, graph.output)
 
-            graph.dir <- gsub('\\', '/', graph.dir, fixed = TRUE)
+            ## tempfile
+            if (grepl('%t', graph.name)) {
+                if (RAA.enabled)
+                    stop('Creating unique files with `tempfile()` in a sandboxed directory does not make any sense.')
+                if (length(strsplit(sprintf('placeholder%splaceholder', file.name), '%t')[[1]]) > 2)
+                    stop('File name contains more then 1 "%t"!')
+                rep <- strsplit(file, '%t')[[1]]
+                file <- tempfile(pattern = rep[1], tmpdir = graph.dir, fileext = rep[2])
+                file.name <- sub(sprintf('.%s$', graph.output), '', file)
 
-            ## modifying graph.dir to safe tempdir
-            if (RAA.enabled) {
-                graph.dir <- file.path(RAA.tmpdir, sub('^/', '', graph.dir))
-                dir.create(graph.dir, showWarnings = FALSE, recursive = TRUE)
+            } else {
+
+                graph.dir <- gsub('\\', '/', graph.dir, fixed = TRUE)
+
+                ## modifying graph.dir to safe tempdir
+                if (RAA.enabled) {
+                    graph.dir <- file.path(RAA.tmpdir, sub('^/', '', graph.dir))
+                    dir.create(graph.dir, showWarnings = FALSE, recursive = TRUE)
+                }
+
+                file <- file.path(graph.dir, file)
+                file.name <- file.path(graph.dir, file.name)
             }
 
-            file <- file.path(graph.dir, file)
-            file.name <- file.path(graph.dir, file.name)
-        }
 
-        ## similar files counter
-        if (grepl('%n', file.name)) {
-            if (RAA.enabled)
-                stop('Counting similar files in a sandboxed (mostly clean) directory does not make any sense.')
-            if (length(strsplit(sprintf('placeholder%splaceholder', file.name), '%n')[[1]]) > 2)
-                stop('File name contains more then 1 "%n"!')
-            similar.files <- list.files(graph.dir, pattern = sprintf('^%s\\.(jpeg|tiff|png|svg|bmp|pdf)$', gsub('%t', '[a-z0-9]*', gsub('%d|%n|%i', '[[:digit:]]*', basename(file.name)))))
-            if (length(similar.files) > 0) {
-                similar.files <- sub('\\.(jpeg|tiff|png|svg|bmp|pdf)$', '', similar.files)
-                rep <- gsub('%t', '[a-z0-9]*', gsub('%d|%i', '[[:digit:]]*', strsplit(basename(file.name), '%n')[[1]]))
-                `%n` <- max(as.numeric(gsub(paste(rep, collapse = '|'), '', similar.files))) + 1
-            } else
-                `%n` <- 1
-            file.name <- gsub('%n', `%n`, file.name, fixed = TRUE)
-            file <- gsub('%n', `%n`, file, fixed = TRUE)
+            ## similar files counter
+            if (grepl('%n', file.name)) {
+                if (RAA.enabled)
+                    stop('Counting similar files in a sandboxed (mostly clean) directory does not make any sense.')
+                if (length(strsplit(sprintf('placeholder%splaceholder', file.name), '%n')[[1]]) > 2)
+                    stop('File name contains more then 1 "%n"!')
+                similar.files <- list.files(graph.dir, pattern = sprintf('^%s\\.(jpeg|tiff|png|svg|bmp|pdf)$', gsub('%t', '[a-z0-9]*', gsub('%d|%n|%i', '[[:digit:]]*', basename(file.name)))))
+                if (length(similar.files) > 0) {
+                    similar.files <- sub('\\.(jpeg|tiff|png|svg|bmp|pdf)$', '', similar.files)
+                    rep <- gsub('%t', '[a-z0-9]*', gsub('%d|%i', '[[:digit:]]*', strsplit(basename(file.name), '%n')[[1]]))
+                    `%n` <- max(as.numeric(gsub(paste(rep, collapse = '|'), '', similar.files))) + 1
+                } else
+                    `%n` <- 1
+                file.name <- gsub('%n', `%n`, file.name, fixed = TRUE)
+                file <- gsub('%n', `%n`, file, fixed = TRUE)
+            }
+
         }
 
         ## checking cache
@@ -870,7 +878,7 @@ evals <- function(txt, parse = TRUE, cache = TRUE, cache.mode = c('environment',
 
                 if (inherits(cached.result$result, 'image')) {
 
-                    if (cache.copy.images & cache.mode == 'disk') {
+                    if (cache.copy.images && cache.mode == 'disk' && !is.na(graph.output)) {
 
                         ## we are copying img file + possibly extra from cache dir
                         file.copy(paste0(cached, '.', graph.output), file)
@@ -910,24 +918,30 @@ evals <- function(txt, parse = TRUE, cache = TRUE, cache.mode = c('environment',
 
         ## clear graphics device (if there would be any open)
         clear.devs <- function()
-            while (!is.null(dev.list()))
-                dev.off(as.numeric(dev.list()[1]))
+            if (!is.na(graph.output))
+                while (!is.null(dev.list()))
+                    dev.off(as.numeric(dev.list()[1]))
         clear.devs()
 
-        ## init (potential) img file
-        if (evalsOptions('graph.unify'))
-            pbg <- panderOptions('graph.background')
-        else
-            pbg <- 'white'
-        if (graph.output %in% c('bmp', 'jpeg', 'png', 'tiff'))
-            do.call(graph.output, list(file, width = width, height = height, res = res, bg = pbg, ...))
-        if (graph.output == 'svg')
-            do.call(graph.output, list(file, width = width/res, height = height/res, bg = pbg, ...)) # TODO: font-family?
-        if (graph.output == 'pdf')
-            do.call('cairo_pdf', list(file, width = width/res, height = height/res, bg = pbg,...)) # TODO: font-family?
+        if (!is.na(graph.output)) {
 
-        ## start recordPlot
-        dev.control(displaylist = "enable")
+            ## init (potential) img file
+            pbg <- panderOptions('graph.background')
+            if (graph.output %in% c('bmp', 'jpeg', 'png', 'tiff')) {
+                if (capabilities('cairo')) {
+                    do.call(graph.output, list(file, width = width, height = height, res = res, bg = pbg, type = 'cairo', ...))
+                } else {
+                    do.call(graph.output, list(file, width = width, height = height, res = res, bg = pbg, ...))
+                }
+            }
+            if (graph.output == 'svg')
+                do.call(graph.output, list(file, width = width/res, height = height/res, bg = pbg, ...)) # TODO: font-family?
+            if (graph.output == 'pdf')
+                do.call('cairo_pdf', list(file, width = width/res, height = height/res, bg = pbg,...)) # TODO: font-family?
+
+            ## start recordPlot
+            dev.control(displaylist = "enable")
+        }
 
         ## if caching: save the initial environment's objects' hashes
         if (cache) {
@@ -943,20 +957,23 @@ evals <- function(txt, parse = TRUE, cache = TRUE, cache.mode = c('environment',
             })
 
         ## env for optional high resolution images
-        if (hi.res)
+        if (hi.res && !is.na(graph.output))
             env.hires <- env
 
         ## eval
         res <- eval.msgs(src, env = env, showInvisible = showInvisible, graph.unify = graph.unify)
 
         ## grab recorded.plot
-        if (!is.null(dev.list())) {
+        if (!is.na(graph.output) && !is.null(dev.list())) {
             recorded.plot <- recordPlot()
             dev.control("inhibit")
         }
 
         ## did we produce a plot?
-        graph  <- ifelse(exists('recorded.plot'), ifelse(is.null(recorded.plot[[1]]), FALSE, file), FALSE)
+        if (is.na(graph.output))
+            graph <- FALSE
+        else
+            graph <- ifelse(exists('recorded.plot'), ifelse(is.null(recorded.plot[[1]]), FALSE, file), FALSE)
 
         ## close grDevice
         clear.devs()
@@ -965,6 +982,12 @@ evals <- function(txt, parse = TRUE, cache = TRUE, cache.mode = c('environment',
         if (is.character(graph))
             if (!file.exists(file))
                 res$msg$errors <- c(res$msg$errors, paste('Image file not written by:', paste(src, collapse = ';')))
+
+        ## remove dummy img file (1px) on Windows if created
+        if (grepl("w|W", .Platform$OS.type))
+            if (!is.character(graph))
+                if (file.exists(file))
+                    unlink(file)
 
         ## error handling
         if (!is.null(res$msg$errors)) {
@@ -1018,7 +1041,13 @@ evals <- function(txt, parse = TRUE, cache = TRUE, cache.mode = c('environment',
 
                 ## initialize high resolution image file
                 if (graph.output %in% c('bmp', 'jpeg', 'png', 'tiff')) {
-                    do.call(graph.output, list(file.hi.res, width = hi.res.width, height = hi.res.height, res = hi.res.res, bg = pbg, ...))
+
+                    if (capabilities('cairo')) {
+                        do.call(graph.output, list(file.hi.res, width = hi.res.width, height = hi.res.height, res = hi.res.res, bg = pbg, type = 'cairo', ...))
+                    } else {
+                        do.call(graph.output, list(file.hi.res, width = hi.res.width, height = hi.res.height, res = hi.res.res, bg = pbg, ...))
+                    }
+
                 } else {
 
                     if (.Platform$OS.type == 'unix')    # a symlink would be fine for vector formats on a unix-like OS
@@ -1158,11 +1187,11 @@ evals <- function(txt, parse = TRUE, cache = TRUE, cache.mode = c('environment',
     })
 }
 
-#' Redraws saved plot
+#' Redraws plot saved in file
 #'
-#' This function is a wrapper around \code{replayPlot} with some added tweaks (fixing memory address nullpointer issue) for compatibility.
-#' @param file path and name of file to read saved \code{recordPlot} object
-#' @references Thanks to Jeroen Ooms \url{http://permalink.gmane.org/gmane.comp.lang.r.devel/29897} and JJ Allaire \url{https://github.com/rstudio/rstudio/commit/eb5f6f1db4717132c2ff111f068ffa6e8b2a5f0b}.
+#' This function is a wrapper around \code{redrawPlot}.
+#' @param file path and name of an rds file containing a plot object to be redrawn
+#' @references Thanks to Jeroen Ooms \url{http://permalink.gmane.org/gmane.comp.lang.r.devel/29897}, JJ Allaire \url{https://github.com/rstudio/rstudio/commit/eb5f6f1db4717132c2ff111f068ffa6e8b2a5f0b}, and Gabriel Becker.
 #' @seealso \code{\link{evals}}
 #' @export
 redraw.recordedplot <- function(file) {
@@ -1172,28 +1201,47 @@ redraw.recordedplot <- function(file) {
     if (inherits(plot, 'error'))
         stop(paste('Cannot read file:', plot$message))
 
-    if (getRversion() < '3.0.0') {
+    redrawPlot(plot)
+}
 
-        for(i in 1:length(plot[[1]])) # @jeroenooms
-            if ('NativeSymbolInfo' %in% class(plot[[1]][[i]][[2]][[1]]))
-                plot[[1]][[i]][[2]][[1]] <- getNativeSymbolInfo(plot[[1]][[i]][[2]][[1]]$name)
 
-    } else {
+#' Redraw a recordedplot, grid, trellis, or ggplot2 plot.
+#'
+#' This function redraws the plot represented by \code{recPlot}. It can redraw grid/trellis/ggplot2/etc plots, as well as \code{recordedplot} objects. For \code{recordedplot} objects it acts as a wrapper around \code{replayPlot} with memory tweaks to fix native symbol address errors when the recordedplot was loaded from an rda/rds file.
+#' @param the plot object to redraw
+#' @references Thanks to Jeroen Ooms \url{http://permalink.gmane.org/gmane.comp.lang.r.devel/29897}, JJ Allaire \url{https://github.com/rstudio/rstudio/commit/eb5f6f1db4717132c2ff111f068ffa6e8b2a5f0b}, and Gabriel Becker.
+#' @seealso \code{\link{redraw.recordedplot}}
+#' @export
 
-        for (i in 1:length(plot[[1]])) { # @jjallaire
-            symbol <- plot[[1]][[i]][[2]][[1]]
-            if ('NativeSymbolInfo' %in% class(symbol)) {
-                if (!is.null(symbol$package))
-                    name <- symbol$package[['name']]
-                else
-                    name <- symbol$dll[['name']]
-                pkgDLL <- getLoadedDLLs()[[name]]
-                nativeSymbol <- getNativeSymbolInfo(name = symbol$name, PACKAGE = pkgDLL, withRegistrationInfo = TRUE)
-                plot[[1]][[i]][[2]][[1]] <- nativeSymbol
+redrawPlot <- function(recPlot)
+{
+    #this allows us to deal with trellis/grid/ggplot objects as well ...
+    if(!is(recPlot, "recordedplot"))
+        {
+            res = try(print(recPlot))
+            if(is(res, "error"))
+                stop(res)
+        } else {
+            if (getRversion() < "3.0.0") {
+                for (i in 1:length(recPlot[[1]])) #@jeroenooms
+                    if ("NativeSymbolInfo" %in% class(recPlot[[1]][[i]][[2]][[1]]))
+                        recPlot[[1]][[i]][[2]][[1]] <- getNativeSymbolInfo(recPlot[[1]][[i]][[2]][[1]]$name)
             }
+            else {
+                for (i in 1:length(recPlot[[1]])) #@jjallaire
+                {
+                    symbol <- recPlot[[1]][[i]][[2]][[1]]
+                    if ("NativeSymbolInfo" %in% class(symbol)) {
+                        if (!is.null(symbol$package))
+                            name <- symbol$package[["name"]]
+                        else name <- symbol$dll[["name"]]
+                        pkgDLL <- getLoadedDLLs()[[name]]
+                        nativeSymbol <- getNativeSymbolInfo(name = symbol$name,
+                                                            PACKAGE = pkgDLL, withRegistrationInfo = TRUE)
+                        recPlot[[1]][[i]][[2]][[1]] <- nativeSymbol
+                    }
+                }
+            }
+            suppressWarnings(grDevices::replayPlot(recPlot))
         }
-    }
-
-    suppressWarnings(grDevices::replayPlot(plot))
-
 }

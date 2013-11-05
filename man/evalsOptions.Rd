@@ -91,7 +91,9 @@
   \code{graph.output}: set the required file format of
   saved plots. Currently it could be any of
   \code{grDevices}: \code{png}, \code{bmp}, \code{jpeg},
-  \code{jpg}, \code{tiff}, \code{svg} or \code{pdf}.  \item
+  \code{jpg}, \code{tiff}, \code{svg} or \code{pdf}. Set to
+  \code{NA} not to save plots at all and tweak that setting
+  with \code{\link{capture.plot()}} on demand.  \item
   \code{width}: width of generated plot in pixels for even
   vector formats \item \code{height}: height of generated
   plot in pixels for even vector formats \item \code{res}:

@@ -1,4 +1,17 @@
 
+pander 0.3.8 (2013-08-29)
+----------------------------------------------------------------
+
+ * dropped custom font for decreased package size (#39)
+ * defaults to self contained HTML file (#39)
+ * remove file extension for `vignetteEngine` (#44)
+ * pander goes starzgazer (#46)
+ * new option for big.mark
+ * fix: rounding 2D tabless (#45)
+ * fix: pass optional parameters from S3 method to `pandoc.table`
+ * fix: suppress empty rownames
+ * further minor fixes: caption, par, text, pander.booelan
+
 pander 0.3.7 (2013-05-27)
 ----------------------------------------------------------------
 

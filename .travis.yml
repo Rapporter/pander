@@ -11,11 +11,10 @@ env:
 
 # install dependencies
 install:
-  - sudo apt-add-repository -y ppa:marutter/rdev
-  - sudo apt-add-repository -y ppa:opencpu/rapparmor
+  - sudo add-apt-repository 'deb http://cran.r-project.org/bin/linux/ubuntu precise/' 
+  - sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-keys E084DAB9
   - sudo apt-get update
-  - sudo apt-get install -y r-base-dev pandoc qpdf texinfo texlive-latex-extra texlive-fonts-recommended texlive-fonts-extra
-  - sudo apt-get install -y r-cran-rapparmor
+  - sudo apt-get install r-base-dev pandoc qpdf texinfo texlive-latex-extra texlive-fonts-recommended texlive-fonts-extra
   - "[ ! -d ~/R ] && mkdir ~/R"
   - R --version
   - R -e '.libPaths(); sessionInfo()'

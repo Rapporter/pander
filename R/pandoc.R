@@ -441,6 +441,7 @@ pandoc.list <- function(...)
 #' @param caption caption (string) to be shown under the table
 #' @param digits passed to \code{format}
 #' @param decimal.mark passed to \code{format}
+#' @param big.mark passed to \code{format}
 #' @param round passed to \code{round}
 #' @param justify defines alignment in cells passed to \code{format}. Can be \code{left}, \code{right} or \code{centre}, which latter can be also spelled as \code{center}. Defaults to \code{centre}.
 #' @param style which Pandoc style to use: \code{simple}, \code{multiline}, \code{grid} or \code{rmarkdown}
@@ -522,7 +523,7 @@ pandoc.list <- function(...)
 #'
 #' emphasize.strong.cells(which(t > 20, arr.ind = TRUE))
 #' pandoc.table(t)
-pandoc.table.return <- function(t, caption, digits = panderOptions('digits'), decimal.mark = panderOptions('decimal.mark'), round = panderOptions('round'), justify, style = c('multiline', 'grid', 'simple', 'rmarkdown'), split.tables = panderOptions('table.split.table'), split.cells = panderOptions('table.split.cells'), keep.trailing.zeros = panderOptions('keep.trailing.zeros'), emphasize.rows, emphasize.cols, emphasize.cells, emphasize.strong.rows, emphasize.strong.cols, emphasize.strong.cells, ...) {
+pandoc.table.return <- function(t, caption, digits = panderOptions('digits'), decimal.mark = panderOptions('decimal.mark'), big.mark = panderOptions('big.mark'), round = panderOptions('round'), justify, style = c('multiline', 'grid', 'simple', 'rmarkdown'), split.tables = panderOptions('table.split.table'), split.cells = panderOptions('table.split.cells'), keep.trailing.zeros = panderOptions('keep.trailing.zeros'), emphasize.rows, emphasize.cols, emphasize.cells, emphasize.strong.rows, emphasize.strong.cols, emphasize.strong.cells, ...) {
 
     ## helper functions
     table.expand <- function(cells, cols.width, justify, sep.cols) {
@@ -672,15 +673,15 @@ pandoc.table.return <- function(t, caption, digits = panderOptions('digits'), de
             t[t.n]   <- round(t[t.n], round)
         if (!keep.trailing.zeros) {
             switch(as.character(length(dim(t))),
-                   '0' = t[t.n]   <- sapply(t[t.n], format, trim = TRUE, digits = digits, decimal.mark = decimal.mark),
-                   '1' = t[t.n]   <- apply(t[t.n, drop = FALSE], 1, format, trim = TRUE, digits = digits, decimal.mark = decimal.mark),
-                   '2' = t[, t.n] <- apply(t[, t.n, drop = FALSE], c(1,2), format, trim = TRUE, digits = digits, decimal.mark = decimal.mark))
+                   '0' = t[t.n]   <- sapply(t[t.n], format, trim = TRUE, digits = digits, decimal.mark = decimal.mark, big.mark = big.mark),
+                   '1' = t[t.n]   <- apply(t[t.n, drop = FALSE], 1, format, trim = TRUE, digits = digits, decimal.mark = decimal.mark, big.mark = big.mark),
+                   '2' = t[, t.n] <- apply(t[, t.n, drop = FALSE], c(1,2), format, trim = TRUE, digits = digits, decimal.mark = decimal.mark, big.mark = big.mark))
         }
     }
 
     ## drop unexpected classes and revert back to a common format
     if (keep.trailing.zeros)
-        t <- format(t, trim = TRUE, digits = digits, decimal.mark = decimal.mark)
+        t <- format(t, trim = TRUE, digits = digits, decimal.mark = decimal.mark, big.mark = big.mark)
     else
         t <- format(t, trim = TRUE)
 
@@ -736,6 +737,7 @@ pandoc.table.return <- function(t, caption, digits = panderOptions('digits'), de
         t.rownames  <- NULL
         t.colnames  <- names(t)
         if (!is.null(t.colnames)) {
+            t.colnames       <- replace(t.colnames, which(t.colnames == ''), '&nbsp;')
             t.colnames       <- split.large.cells(t.colnames)
             t.colnames.width <- sapply(t.colnames, function(x) max(nchar(strsplit(x, '\n')[[1]], type = 'width'), 0), USE.NAMES = FALSE) + 2
         } else {
@@ -758,7 +760,8 @@ pandoc.table.return <- function(t, caption, digits = panderOptions('digits'), de
         t.rownames  <- rownames(t)
         t.colnames  <- colnames(t)
         if (!is.null(t.colnames)) {
-            t.colnames  <- split.large.cells(t.colnames)
+            t.colnames <- replace(t.colnames, which(t.colnames == ''), '&nbsp;')
+            t.colnames <- split.large.cells(t.colnames)
             t.colnames.width <- sapply(t.colnames, function(x) max(nchar(strsplit(x, '\n')[[1]], type = 'width'), 0), USE.NAMES = FALSE) + 2
         } else {
             t.colnames.width <- 0

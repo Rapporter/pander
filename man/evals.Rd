@@ -10,7 +10,7 @@
     output = c("all", "src", "result", "output", "type", "msg", "stdout"),
     env = NULL, graph.unify = evalsOptions("graph.unify"),
     graph.name = "\%t", graph.dir = "plots",
-    graph.output = c("png", "bmp", "jpeg", "jpg", "tiff", "svg", "pdf"),
+    graph.output = c("png", "bmp", "jpeg", "jpg", "tiff", "svg", "pdf", NA),
     width = 480, height = 480, res = 72, hi.res = FALSE,
     hi.res.width = 960,
     hi.res.height = 960 * (height/width),

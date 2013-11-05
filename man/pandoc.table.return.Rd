@@ -6,6 +6,7 @@
   pandoc.table.return(t, caption,
     digits = panderOptions("digits"),
     decimal.mark = panderOptions("decimal.mark"),
+    big.mark = panderOptions("big.mark"),
     round = panderOptions("round"), justify,
     style = c("multiline", "grid", "simple", "rmarkdown"),
     split.tables = panderOptions("table.split.table"),
@@ -24,6 +25,8 @@
   \item{digits}{passed to \code{format}}
 
   \item{decimal.mark}{passed to \code{format}}
+
+  \item{big.mark}{passed to \code{format}}
 
   \item{round}{passed to \code{round}}
 

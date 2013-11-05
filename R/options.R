@@ -4,6 +4,7 @@
     options('pander' = list(
                 'digits'                   = 4,
                 'decimal.mark'             = '.',
+                'big.mark'                 = '',
                 'round'                    = Inf,
                 'keep.trailing.zeros'      = FALSE,
                 'date'                     = '%Y/%m/%d %X',
@@ -62,8 +63,7 @@
                 'hi.res.width'          = 960,
                 'graph.env'             = FALSE,
                 'graph.recordplot'      = FALSE,
-                'graph.RDS'             = FALSE,
-                'RAppArmor'             = NULL
+                'graph.RDS'             = FALSE
                 ))
 }
 
@@ -94,82 +94,81 @@ masked.plots$plot <- masked.plots$barplot <- masked.plots$lines <- masked.plots$
     fn.orig <- parse(text = paste0(fn.pkg, '::', fn))[[1]]
     mc      <- match.call(get(fn, envir = .GlobalEnv))
 
-    ## sometimes there is no need for graph tweaks
-    if (!is.null(mc$plot))
-        if (mc$plot == FALSE)
-            return(eval(mc, envir = parent.frame()))
+    if (!(!is.null(mc$plot) && !mc$plot)) {
 
-    ## pander options
-    fc  <- panderOptions('graph.fontcolor')
-    fbs <- panderOptions('graph.fontsize')
-    bc  <- panderOptions('graph.background')
-    gc  <- panderOptions('graph.grid.color')
-    cex <- fbs/12
-    cs <- panderOptions('graph.colors')
-    if (panderOptions('graph.color.rnd'))
-        cs <- sample(cs)
-    cb <- cs[1]
+        ## pander options
+        fc  <- panderOptions('graph.fontcolor')
+        fbs <- panderOptions('graph.fontsize')
+        bc  <- panderOptions('graph.background')
+        gc  <- panderOptions('graph.grid.color')
+        cex <- fbs/12
+        cs <- panderOptions('graph.colors')
+        if (panderOptions('graph.color.rnd'))
+            cs <- sample(cs)
+        cb <- cs[1]
 
-    ## global par update
-    if (!fn %in% c('text')) {
-        par(
-            family   = panderOptions('graph.fontfamily'),
-            cex      = cex, cex.axis = cex * 0.8, cex.lab = cex, cex.main = cex * 1.2, cex.sub = cex,
-            bg       = bc, # TODO: how could we color only the inner plot area globally? Not like: https://stat.ethz.ch/pipermail/r-help/2003-May/033971.html
-            las      = panderOptions('graph.axis.angle'),
-            lwd      = 2,
-            pch      = panderOptions('graph.symbol'),
-            col.axis = fc, col.lab = fc, col.main = fc, col.sub = fc)
+        ## global par update
+        if (!fn %in% c('text')) {
+            par(
+                family   = panderOptions('graph.fontfamily'),
+                cex      = cex, cex.axis = cex * 0.8, cex.lab = cex, cex.main = cex * 1.2, cex.sub = cex,
+                bg       = bc, # TODO: how could we color only the inner plot area globally? Not like: https://stat.ethz.ch/pipermail/r-help/2003-May/033971.html
+                las      = panderOptions('graph.axis.angle'),
+                lwd      = 2,
+                pch      = panderOptions('graph.symbol'),
+                col.axis = fc, col.lab = fc, col.main = fc, col.sub = fc)
+        }
+
+        ## remove margins
+
+        if (panderOptions('graph.nomargin') & !fn %in% c('text')) {
+            par(mar = c(4.1, 4.3, 2.1, 0.1))
+        }
+
+        ## default: grid is added to all plots
+        doAddGrid <- TRUE
+
+        ## update colors
+        if (is.null(mc$col) & is.null(mc$color))
+            mc$col <- cb
+        if (fn == 'boxplot')
+            mc$border <- 'black'
+        if (fn == 'clusplot') {
+            mc$col <- NULL
+            if (is.null(mc$color))
+                mc$color <- TRUE
+            if (is.null(mc$shade))
+                mc$shade <- TRUE
+            if (is.null(mc$labels))
+                mc$labels <- 4
+            if (is.null(mc$col.p))
+                mc$col.p <- 'black'
+            if (is.null(mc$col.clus))
+                mc$col.clus <- cs
+        }
+
+        ## remove boxes
+        if (fn %in% c('pairs', 'stripchart')) {
+            doAddGrid <- FALSE
+            par(fg = fc)
+        } else {
+            if (panderOptions('graph.boxes'))
+                par(fg = gc)
+            else
+                par(fg = bc)
+        }
+
+        if (fn == 'pie')
+            mc$col <- cs
+
     }
-
-    ## remove margins
-
-    if (panderOptions('graph.nomargin') & !fn %in% c('text')) {
-        par(mar = c(4.1, 4.3, 2.1, 0.1))
-    }
-
-    ## default: grid is added to all plots
-    doAddGrid <- TRUE
-
-    ## update colors
-    if (is.null(mc$col) & is.null(mc$color))
-        mc$col <- cb
-    if (fn == 'boxplot')
-        mc$border <- 'black'
-    if (fn == 'clusplot') {
-        mc$col <- NULL
-        if (is.null(mc$color))
-            mc$color <- TRUE
-        if (is.null(mc$shade))
-            mc$shade <- TRUE
-        if (is.null(mc$labels))
-            mc$labels <- 4
-        if (is.null(mc$col.p))
-            mc$col.p <- 'black'
-        if (is.null(mc$col.clus))
-            mc$col.clus <- cs
-    }
-
-    ## remove boxes
-    if (fn %in% c('pairs', 'stripchart')) {
-        doAddGrid <- FALSE
-        par(fg = fc)
-    } else {
-        if (panderOptions('graph.boxes'))
-            par(fg = gc)
-        else
-            par(fg = bc)
-    }
-
-    if (fn == 'pie')
-        mc$col <- cs
 
     ## call
     mc[[1]] <- fn.orig
     eval(mc, envir = parent.frame())
 
     ## grid
-    if (all(par()$mfrow == 1) & panderOptions('graph.grid') & doAddGrid) {
+    if (all(par()$mfrow == 1) & panderOptions('graph.grid') & doAddGrid & !(!is.null(mc$plot) && !mc$plot)) {
 
         g <- tryCatch(grid(lty = panderOptions('graph.grid.lty'), col = panderOptions('graph.grid.color'), lwd = 0.5), error = function(e) e)
         if (!inherits(g, 'error')) {
@@ -191,7 +190,8 @@ masked.plots$plot <- masked.plots$barplot <- masked.plots$lines <- masked.plots$
 #'
 #' \itemize{
 #'      \item \code{digits}: numeric (default: \code{2}) passed to \code{format}
-#'      \item \code{decimal.mark}: numeric (default: \code{.}) passed to \code{format}
+#'      \item \code{decimal.mark}: string (default: \code{.}) passed to \code{format}
+#'      \item \code{big.mark}: string (default: '') passed to \code{format}
 #'      \item \code{round}: numeric (default: \code{Inf}) passed to \code{round}
 #'      \item \code{keep.trailing.zeros}: boolean (default: \code{FALSE}) to show or remove trailing zeros in numbers
 #'      \item \code{date}: string (default: \code{'\%Y/\%m/\%d \%X'}) passed to \code{format} when printing dates (\code{POSIXct} or \code{POSIXt})
@@ -299,7 +299,7 @@ pander.option <- function(x, ...) {
 #'      \item \code{graph.unify}: should \code{evals} try to unify the style of (\code{base}, \code{lattice} and \code{ggplot2}) plots? If set to \code{TRUE}, some \code{panderOptions()} would apply. By default this is disabled not to freak out useRs :)
 #'      \item \code{graph.name}: set the file name of saved plots which is \code{\link{tempfile}} by default. A simple character string might be provided where \code{\%d} would be replaced by the index of the generating \code{txt} source, \code{\%n} with an incremented integer in \code{graph.dir} with similar file names and \code{\%t} by some random characters. A function's name to be \code{eval}uated can be passed here too.
 #'      \item \code{graph.dir}: path to a directory where to place generated images. If the directory does not exist, \code{\link{evals}} try to create that. Default set to \code{plots} in current working directory.
-#'      \item \code{graph.output}: set the required file format of saved plots. Currently it could be any of  \code{grDevices}: \code{png}, \code{bmp}, \code{jpeg}, \code{jpg}, \code{tiff}, \code{svg} or \code{pdf}.
+#'      \item \code{graph.output}: set the required file format of saved plots. Currently it could be any of  \code{grDevices}: \code{png}, \code{bmp}, \code{jpeg}, \code{jpg}, \code{tiff}, \code{svg} or \code{pdf}. Set to \code{NA} not to save plots at all and tweak that setting with \code{\link{capture.plot()}} on demand.
 #'      \item \code{width}: width of generated plot in pixels for even vector formats
 #'      \item \code{height}: height of generated plot in pixels for even vector formats
 #'      \item \code{res}: nominal resolution in \code{ppi}. The height and width of vector images will be calculated based in this.
