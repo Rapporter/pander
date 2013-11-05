@@ -868,10 +868,7 @@ evals <- function(txt, parse = TRUE, cache = TRUE, cache.mode = c('environment',
         if (!is.na(graph.output)) {
 
             ## init (potential) img file
-            if (evalsOptions('graph.unify'))
-                pbg <- panderOptions('graph.background')
-            else
-                pbg <- 'white'
+            pbg <- panderOptions('graph.background')
             if (graph.output %in% c('bmp', 'jpeg', 'png', 'tiff')) {
                 if (capabilities('cairo')) {
                     do.call(graph.output, list(file, width = width, height = height, res = res, bg = pbg, type = 'cairo', ...))
