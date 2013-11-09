@@ -502,10 +502,8 @@ pandoc.list <- function(...)
 #' pandoc.table(m, style = "simple")
 #' pandoc.table(t, style = "grid")
 #' pandoc.table(t, style = "grid", split.cells = 5)
-#' pandoc.table(t, style = "simple")
 #' tryCatch(pandoc.table(t, style = "simple", split.cells = 5),
 #'   error = function(e) 'Yeah, no newline support in simple tables')
-#' pandoc.table(t, style = "rmarkdown")
 #'
 #' ## highlight cells
 #' t <- mtcars[1:3, 1:5]
