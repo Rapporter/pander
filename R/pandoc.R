@@ -551,29 +551,28 @@ pandoc.table.return <- function(t, caption, digits = panderOptions('digits'), de
     split.large.cells <- function(cells)
         sapply(cells, function(x) {
 
-            ## escape pipes
-            if (style == 'rmarkdown')
-                x <- gsub('\\|', '\\\\|', x)
+            if (!style %in% c('simple', 'rmarkdown')) {
 
-            ## split
-            if (nchar(x) == nchar(x, type = 'width')) {
+                ## split
+                if (nchar(x) == nchar(x, type = 'width')) {
 
-                x <- paste(strwrap(x, width = split.cells), collapse = '\n')
+                    x <- paste(strwrap(x, width = split.cells), collapse = '\n')
 
-            } else {
+                } else {
 
-                # dealing with CJK chars
-                split <- strsplit(x, '\\s')[[1]]
-                n <- nchar(split[1], type = 'width')
-                x <- split[1]
-                for (s in tail(split, -1)) {
-                    nc <- nchar(s, type = 'width')
-                    n  <- n + nc + 1
-                    if (n > split.cells) {
-                        n <- nc
-                        x <- paste(x, s, sep = '\n')
-                    } else {
-                        x <- paste(x, s, sep = ' ')
+                    ## dealing with CJK chars
+                    split <- strsplit(x, '\\s')[[1]]
+                    n <- nchar(split[1], type = 'width')
+                    x <- split[1]
+                    for (s in tail(split, -1)) {
+                        nc <- nchar(s, type = 'width')
+                        n  <- n + nc + 1
+                        if (n > split.cells) {
+                            n <- nc
+                            x <- paste(x, s, sep = '\n')
+                        } else {
+                            x <- paste(x, s, sep = ' ')
+                        }
                     }
                 }
 
@@ -584,6 +583,7 @@ pandoc.table.return <- function(t, caption, digits = panderOptions('digits'), de
                 ''
             else
                 x
+
         }, USE.NAMES = FALSE)
     align.hdr <- function(t.width, justify) {
         justify.vec <- rep(justify, length.out = length(t.width))
