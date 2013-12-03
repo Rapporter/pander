@@ -8,7 +8,7 @@ The package is also capable of exporting/converting complex Pandoc documents (re
 
   * create somehow a markdown text file (e.g. with `brew`, `knitr` or any scripts of yours, maybe with `Pandoc.brew` - see just [below](#brew-to-pandoc)) and transform that to other formats (like HTML, odt, pdf, docx etc.) with `Pandoc.convert` -- just like [`pandoc` function in knitr](http://yihui.name/knitr/demo/pandoc/),
 
-  * users might write some reports in a forked version of [brew](http://cran.r-project.org/web/packages/brew/index.html) syntax resulting in a pretty *Pandoc* document (where each R object are automatically transformed to nicely formatted table, list etc.) and also in a **bunch of ither formats** (like HTML, odt, pdf, docx etc.),
+  * users might write some reports in a forked version of [brew](http://cran.r-project.org/web/packages/brew/index.html) syntax resulting in a pretty *Pandoc* document (where each R object are automatically transformed to nicely formatted table, list etc.) and also in a **bunch of other formats** (like HTML, odt, pdf, docx etc.),
 
     *Example*: this [`README.md`](https://github.com/Rapporter/pander/blob/master/README.md) is cooked with `Pandoc.brew` based on [`inst/README.brew`](https://github.com/Rapporter/pander/blob/master/inst/README.brew) and also exported to [HTML](http://rapporter.github.com/pander/). Details can be found [below](#brew-to-pandoc) or head directly to [examples](#examples).
 
