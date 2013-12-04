@@ -8,7 +8,7 @@ The package is also capable of exporting/converting complex Pandoc documents (re
 
   * create somehow a markdown text file (e.g. with `brew`, `knitr` or any scripts of yours, maybe with `Pandoc.brew` - see just [below](#brew-to-pandoc)) and transform that to other formats (like HTML, odt, pdf, docx etc.) with `Pandoc.convert` -- just like [`pandoc` function in knitr](http://yihui.name/knitr/demo/pandoc/),
 
-  * users might write some reports in a forked version of [brew](http://cran.r-project.org/web/packages/brew/index.html) syntax resulting in a pretty *Pandoc* document (where each R object are automatically transformed to nicely formatted table, list etc.) and also in a **bunch of ither formats** (like HTML, odt, pdf, docx etc.),
+  * users might write some reports in a forked version of [brew](http://cran.r-project.org/web/packages/brew/index.html) syntax resulting in a pretty *Pandoc* document (where each R object are automatically transformed to nicely formatted table, list etc.) and also in a **bunch of other formats** (like HTML, odt, pdf, docx etc.),
 
     *Example*: this [`README.md`](https://github.com/Rapporter/pander/blob/master/README.md) is cooked with `Pandoc.brew` based on [`inst/README.brew`](https://github.com/Rapporter/pander/blob/master/inst/README.brew) and also exported to [HTML](http://rapporter.github.com/pander/). Details can be found [below](#brew-to-pandoc) or head directly to [examples](#examples).
 
@@ -519,7 +519,7 @@ The output of different **statistical methods** are tried to be prettyfied. Some
 ---------------------------------------------------
  Test statistic   P value   Alternative hypothesis 
 ---------------- --------- ------------------------
-      0.16       _0.5487_         two-sided        
+      0.22       _0.1786_         two-sided        
 ---------------------------------------------------
 
 Table: Two-sample Kolmogorov-Smirnov test: `runif(50)` and `runif(50)`
@@ -918,7 +918,7 @@ The list of possible options are:
   * `graph.unify`: should `evals` try to unify the style of (`base`, `lattice` and `ggplot2`) plots? If set to `TRUE`, some `panderOptions()` would apply. By default this is disabled not to freak out useRs :)
   * `graph.name`: set the file name of saved plots which is `%s` by default. A simple character string might be provided where `%d` would be replaced by the index of the generating `txt` source, `%n` with an incremented integer in `graph.dir` with similar file names and `%t` by some unique random characters. When used in a `brew` file, `%i` is also available which would be replaced by the chunk number.
   * `graph.dir`: path to a directory where to place generated images. If the directory does not exist, [`evals`](#evals) try to create that. Default set to `plots` in current working directory.
-  * `graph.output`: set the required file format of saved plots. Currently it could be any of  `grDevices`: `png`, `bmp`, `jpeg`, `jpg`, `tiff`, `svg` or `pdf`.
+  * `graph.output`: set the required file format of saved plots. Currently it could be any of  `grDevices`: `png`, `bmp`, `jpeg`, `jpg`, `tiff`, `svg` or `pdf`. Set to `NA` not to save plots at all and tweak that setting with `capture.plot()` on demand.
   * `width`: width of generated plot in pixels for even vector formats
   * `height`: height of generated plot in pixels for even vector formats
   * `res`: nominal resolution in `ppi`. The height and width of vector images will be calculated based in this.
@@ -1039,4 +1039,4 @@ To use this small lib, just type: `M-x pander-mode` on any document. It might be
 
 
 -------
-This report was generated with [R](http://www.r-project.org/) (3.0.1) and [pander](https://github.com/rapporter/pander) (0.3.8) in 1.326 sec on x86_64-unknown-linux-gnu platform.
+This report was generated with [R](http://www.r-project.org/) (3.0.2) and [pander](https://github.com/rapporter/pander) (0.3.9) in 1.027 sec on x86_64-unknown-linux-gnu platform.
