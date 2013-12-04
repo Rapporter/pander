@@ -61,7 +61,7 @@ code > span.er { color: #ff0000; font-weight: bold; }
 <p>The package is also capable of exporting/converting complex Pandoc documents (reports) in three ways at the moment:</p>
 <ul>
 <li><p>create somehow a markdown text file (e.g. with <code>brew</code>, <code>knitr</code> or any scripts of yours, maybe with <code>Pandoc.brew</code> - see just <a href="#brew-to-pandoc">below</a>) and transform that to other formats (like HTML, odt, pdf, docx etc.) with <code>Pandoc.convert</code> -- just like <a href="http://yihui.name/knitr/demo/pandoc/"><code>pandoc</code> function in knitr</a>,</p></li>
-<li><p>users might write some reports in a forked version of <a href="http://cran.r-project.org/web/packages/brew/index.html">brew</a> syntax resulting in a pretty <em>Pandoc</em> document (where each R object are automatically transformed to nicely formatted table, list etc.) and also in a <strong>bunch of ither formats</strong> (like HTML, odt, pdf, docx etc.),</p>
+<li><p>users might write some reports in a forked version of <a href="http://cran.r-project.org/web/packages/brew/index.html">brew</a> syntax resulting in a pretty <em>Pandoc</em> document (where each R object are automatically transformed to nicely formatted table, list etc.) and also in a <strong>bunch of other formats</strong> (like HTML, odt, pdf, docx etc.),</p>
 <p><em>Example</em>: this <a href="https://github.com/Rapporter/pander/blob/master/README.md"><code>README.md</code></a> is cooked with <code>Pandoc.brew</code> based on <a href="https://github.com/Rapporter/pander/blob/master/inst/README.brew"><code>inst/README.brew</code></a> and also exported to <a href="http://rapporter.github.com/pander/">HTML</a>. Details can be found <a href="#brew-to-pandoc">below</a> or head directly to <a href="#examples">examples</a>.</p></li>
 </ul>
 <!-- endlist -->
@@ -476,7 +476,7 @@ Table: Formatted table
 ---------------------------------------------------
  Test statistic   P value   Alternative hypothesis 
 ---------------- --------- ------------------------
-      0.16       _0.5487_         two-sided        
+      0.22       _0.1786_         two-sided        
 ---------------------------------------------------
 
 Table: Two-sample Kolmogorov-Smirnov test: `runif(50)` and `runif(50)`
@@ -835,7 +835,7 @@ myReport$<span class="kw">export</span>(<span class="dt">open =</span> <span cla
 <li><code>graph.unify</code>: should <code>evals</code> try to unify the style of (<code>base</code>, <code>lattice</code> and <code>ggplot2</code>) plots? If set to <code>TRUE</code>, some <code>panderOptions()</code> would apply. By default this is disabled not to freak out useRs :)</li>
 <li><code>graph.name</code>: set the file name of saved plots which is <code>%s</code> by default. A simple character string might be provided where <code>%d</code> would be replaced by the index of the generating <code>txt</code> source, <code>%n</code> with an incremented integer in <code>graph.dir</code> with similar file names and <code>%t</code> by some unique random characters. When used in a <code>brew</code> file, <code>%i</code> is also available which would be replaced by the chunk number.</li>
 <li><code>graph.dir</code>: path to a directory where to place generated images. If the directory does not exist, <a href="#evals"><code>evals</code></a> try to create that. Default set to <code>plots</code> in current working directory.</li>
-<li><code>graph.output</code>: set the required file format of saved plots. Currently it could be any of <code>grDevices</code>: <code>png</code>, <code>bmp</code>, <code>jpeg</code>, <code>jpg</code>, <code>tiff</code>, <code>svg</code> or <code>pdf</code>.</li>
+<li><code>graph.output</code>: set the required file format of saved plots. Currently it could be any of <code>grDevices</code>: <code>png</code>, <code>bmp</code>, <code>jpeg</code>, <code>jpg</code>, <code>tiff</code>, <code>svg</code> or <code>pdf</code>. Set to <code>NA</code> not to save plots at all and tweak that setting with <code>capture.plot()</code> on demand.</li>
 <li><code>width</code>: width of generated plot in pixels for even vector formats</li>
 <li><code>height</code>: height of generated plot in pixels for even vector formats</li>
 <li><code>res</code>: nominal resolution in <code>ppi</code>. The height and width of vector images will be calculated based in this.</li>
@@ -912,7 +912,7 @@ evals(&#39;mean(xx)&#39;)</code></pre>
 <p>To use this small lib, just type: <code>M-x pander-mode</code> on any document. It might be useful to add a hook to <code>markdown-mode</code> if you find this useful.</p>
 <p><a href="http://githalytics.com/Rapporter/pander"><img src="https://cruel-carlota.gopagoda.com/9dfac0c1da37bd83d1848289630631fd" title="githalytics.com" alt="githalytics.com alpha" /></a></p>
 <hr />
-<p>This report was generated with <a href="http://www.r-project.org/">R</a> (3.0.1) and <a href="https://github.com/rapporter/pander">pander</a> (0.3.8) in 1.326 sec on x86_64-unknown-linux-gnu platform.</p>
+<p>This report was generated with <a href="http://www.r-project.org/">R</a> (3.0.2) and <a href="https://github.com/rapporter/pander">pander</a> (0.3.9) in 1.027 sec on x86_64-unknown-linux-gnu platform.</p>
 <p align="center">
   Design: <a href="http://rapport-package.info/"><i>rapport</i> Development Team</a> &copy; 2011-2013 | Backend: <a href="https://github.com/rapporter/pander">pander</a> | License: <a href="http://www.gnu.org/licenses/agpl.html" target="_blank">AGPL3</a> | Styled with <a href="http://www.getskeleton.com/" target="_blank">skeleton</a>
 </p>
