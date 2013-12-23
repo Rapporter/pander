@@ -52,7 +52,7 @@ openFileInOS <- function(f) {
 Pandoc.convert <- function(f, text, format = 'html', open = TRUE, options = '', footer = TRUE, proc.time, portable.html = TRUE) {
 
     ## check for Pandoc
-    if (system('pandoc -v', ignore.stdout = TRUE) != 0) {
+    if (Sys.which('pandoc') == '') {
         if (grepl("w|W", .Platform$OS.type))
             message('You may install Pandoc easily with "install.pandoc()" from the "installr" package.')
         stop("It seems Pandoc is not installed or path of binary is not found. Did you restarted R after Pandoc install? See installation details by running:\n\n\t readLines(system.file('includes/html/footer.html', package='pander'))\n")
@@ -116,7 +116,10 @@ Pandoc.convert <- function(f, text, format = 'html', open = TRUE, options = '', 
     setwd(f.dir)
 
     ## call Pandoc
-    res <- suppressWarnings(tryCatch(system(sprintf('pandoc -f markdown -s %s %s -o %s', options, shQuote(f), shQuote(f.out)), intern = TRUE), error = function(e) e))
+    if (grepl("w|W", .Platform$OS.type))
+        res <- suppressWarnings(tryCatch(shell(sprintf('pandoc -f markdown -s %s %s -o %s', options, shQuote(f), shQuote(f.out)), intern = TRUE), error = function(e) e))
+    else
+        res <- suppressWarnings(tryCatch(system(sprintf('pandoc -f markdown -s %s %s -o %s', options, shQuote(f), shQuote(f.out)), intern = TRUE), error = function(e) e))
 
     ## inject HTML header
     if (format == 'html' && grepl(sprintf('^(--self-contain )*-A "%s"$', system.file('includes/html/footer.html', package='pander')), options)) {
