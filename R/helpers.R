@@ -64,7 +64,8 @@ p <- function(x, wrap = panderOptions('p.wrap'), sep = panderOptions('p.sep'), c
     stopifnot(is.vector(x))
     stopifnot(all(sapply(list(wrap, sep, copula), function(x) is.character(x) && length(x) == 1)))
     x.len <- length(x)
-    stopifnot(x.len > 0)
+    if (x.len == 0)
+        return('')
     stopifnot(x.len <= limit)
 
     ## prettify numbers
