@@ -68,7 +68,7 @@
 #' pander(x)
 pander <- function(x = NULL, ...)
     UseMethod('pander', x)
-#' @export
+#' @export pander.return
 pander.return <- function(...)
     capture.output(pander(...))
 
