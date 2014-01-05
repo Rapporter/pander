@@ -2,8 +2,8 @@
 \alias{eval.msgs}
 \title{Evaluate with messages}
 \usage{
-  eval.msgs(src, env = NULL, showInvisible = FALSE,
-    graph.unify = evalsOptions("graph.unify"))
+eval.msgs(src, env = NULL, showInvisible = FALSE,
+  graph.unify = evalsOptions("graph.unify"))
 }
 \arguments{
   \item{src}{character values containing R code}
@@ -22,42 +22,41 @@
   \code{evals} instead.}
 }
 \value{
-  a list of parsed elements each containing: \code{src}
-  (the command run), \code{result} (R object: \code{NULL}
-  if nothing returned), \code{print}ed \code{output},
-  \code{type} (class of returned object if any),
-  informative/wawrning and error messages (if any returned
-  by the command run, otherwise set to \code{NULL}) and
-  possible \code{stdout}t value. See Details above.
+a list of parsed elements each containing: \code{src} (the
+command run), \code{result} (R object: \code{NULL} if
+nothing returned), \code{print}ed \code{output},
+\code{type} (class of returned object if any),
+informative/wawrning and error messages (if any returned by
+the command run, otherwise set to \code{NULL}) and possible
+\code{stdout}t value. See Details above.
 }
 \description{
-  This function takes text(s) of R code and \code{eval}s
-  all at one run - returning a list with four elements. See
-  \code{Details}.
+This function takes text(s) of R code and \code{eval}s all
+at one run - returning a list with four elements. See
+\code{Details}.
 }
 \details{
-  \code{eval.msgs} returns a detailed list of the result of
-  evaluation: \itemize{ \item \emph{src} - character vector
-  of specified R code.  \item \emph{result} - result of
-  evaluation. \code{NULL} if nothing is returned. If any R
-  code returned an R object while evaluating then the
-  \emph{last} R object will be returned as a raw R object.
-  If a graph is plotted in the end of the given R code
-  (remember: \emph{last} R object), it would be
-  automatically printed (see e.g. \code{lattice} and
-  \code{ggplot2}).  \item \emph{output} - character vector
-  of printed version (\code{capture.output}) of
-  \code{result} \item \emph{type} - class of generated
-  output. "NULL" if nothing is returned, "error" if some
-  error occurred.  \item \emph{msg} - possible messages
-  grabbed while evaluating specified R code with the
-  following structure: \itemize{ \item \emph{messages} -
-  character vector of possible diagnostic message(s) \item
-  \emph{warnings} - character vector of possible warning
-  message(s) \item \emph{errors} - character vector of
-  possible error message(s) } \item \emph{stdout} -
-  character vector of possibly printed texts to standard
-  output (console) }
+\code{eval.msgs} returns a detailed list of the result of
+evaluation: \itemize{ \item \emph{src} - character vector
+of specified R code.  \item \emph{result} - result of
+evaluation. \code{NULL} if nothing is returned. If any R
+code returned an R object while evaluating then the
+\emph{last} R object will be returned as a raw R object. If
+a graph is plotted in the end of the given R code
+(remember: \emph{last} R object), it would be automatically
+printed (see e.g. \code{lattice} and \code{ggplot2}).
+\item \emph{output} - character vector of printed version
+(\code{capture.output}) of \code{result} \item \emph{type}
+- class of generated output. "NULL" if nothing is returned,
+"error" if some error occurred.  \item \emph{msg} -
+possible messages grabbed while evaluating specified R code
+with the following structure: \itemize{ \item
+\emph{messages} - character vector of possible diagnostic
+message(s) \item \emph{warnings} - character vector of
+possible warning message(s) \item \emph{errors} - character
+vector of possible error message(s) } \item \emph{stdout} -
+character vector of possibly printed texts to standard
+output (console) }
 }
 \examples{
 \dontrun{
@@ -86,6 +85,6 @@ eval.msgs('cat("writing to console");1:4')
 }
 }
 \seealso{
-  \code{\link{evals}}
+\code{\link{evals}}
 }
 

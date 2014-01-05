@@ -2,7 +2,7 @@
 \alias{repChar}
 \title{Repeating chars}
 \usage{
-  repChar(x, n, sep = "")
+repChar(x, n, sep = "")
 }
 \arguments{
   \item{x}{string to repeat}
@@ -12,10 +12,10 @@
   \item{sep}{separator between repetitions}
 }
 \value{
-  character vector
+character vector
 }
 \description{
-  Repeating a string \code{n} times and returning a
-  concatenated character vector.
+Repeating a string \code{n} times and returning a
+concatenated character vector.
 }
 

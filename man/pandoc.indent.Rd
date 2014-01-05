@@ -2,7 +2,7 @@
 \alias{pandoc.indent}
 \title{Indent text}
 \usage{
-  pandoc.indent(x, level = 0)
+pandoc.indent(x, level = 0)
 }
 \arguments{
   \item{x}{character vector}
@@ -10,8 +10,8 @@
   \item{level}{integer}
 }
 \description{
-  Indent all (optionally concatenated) lines of provided
-  text with given level.
+Indent all (optionally concatenated) lines of provided text
+with given level.
 }
 \examples{
 pandoc.indent('FOO', 1)

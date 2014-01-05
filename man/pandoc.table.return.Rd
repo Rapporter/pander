@@ -3,18 +3,15 @@
 \alias{pandoc.table.return}
 \title{Create a table}
 \usage{
-  pandoc.table.return(t, caption,
-    digits = panderOptions("digits"),
-    decimal.mark = panderOptions("decimal.mark"),
-    big.mark = panderOptions("big.mark"),
-    round = panderOptions("round"), justify,
-    style = c("multiline", "grid", "simple", "rmarkdown"),
-    split.tables = panderOptions("table.split.table"),
-    split.cells = panderOptions("table.split.cells"),
-    keep.trailing.zeros = panderOptions("keep.trailing.zeros"),
-    emphasize.rows, emphasize.cols, emphasize.cells,
-    emphasize.strong.rows, emphasize.strong.cols,
-    emphasize.strong.cells, ...)
+pandoc.table.return(t, caption, digits = panderOptions("digits"),
+  decimal.mark = panderOptions("decimal.mark"),
+  big.mark = panderOptions("big.mark"), round = panderOptions("round"),
+  justify, style = c("multiline", "grid", "simple", "rmarkdown"),
+  split.tables = panderOptions("table.split.table"),
+  split.cells = panderOptions("table.split.cells"),
+  keep.trailing.zeros = panderOptions("keep.trailing.zeros"), emphasize.rows,
+  emphasize.cols, emphasize.cells, emphasize.strong.rows, emphasize.strong.cols,
+  emphasize.strong.cells, ...)
 }
 \arguments{
   \item{t}{data frame, matrix or table}
@@ -77,37 +74,36 @@
   into \code{/dev/null}}
 }
 \value{
-  By default this function outputs (see: \code{cat}) the
-  result. If you would want to catch the result instead,
-  then call \code{pandoc.table.return} instead.
+By default this function outputs (see: \code{cat}) the
+result. If you would want to catch the result instead, then
+call \code{pandoc.table.return} instead.
 }
 \description{
-  Creates a Pandoc's markdown style table with optional
-  caption and some other tweaks. See 'Details' below.
+Creates a Pandoc's markdown style table with optional
+caption and some other tweaks. See 'Details' below.
 }
 \details{
-  This function takes any tabular data as its first
-  argument and will try to make it pretty like: rounding
-  and applying \code{digits} and custom \code{decimal.mark}
-  to numbers, auto-recognizing if row names should be
-  included, setting alignment of cells and dropping
-  trailing zeros by default.
+This function takes any tabular data as its first argument
+and will try to make it pretty like: rounding and applying
+\code{digits} and custom \code{decimal.mark} to numbers,
+auto-recognizing if row names should be included, setting
+alignment of cells and dropping trailing zeros by default.
 
-  \code{pandoc.table} also tries to split large cells with
-  line breaks or even the whole table to separate parts on
-  demand. Other arguments lets the use to highlight some
-  rows/cells/cells in the table with italic or bold text
-  style.
+\code{pandoc.table} also tries to split large cells with
+line breaks or even the whole table to separate parts on
+demand. Other arguments lets the use to highlight some
+rows/cells/cells in the table with italic or bold text
+style.
 
-  For more details please see the parameters above and
-  passed arguments of \code{\link{panderOptions}}.
+For more details please see the parameters above and passed
+arguments of \code{\link{panderOptions}}.
 }
 \note{
-  If \code{caption} is missing, then the value is first
-  checked in \code{t} object's \code{caption} attribute and
-  if not found in an internal buffer set by
-  \code{link{set.caption}}. \code{justify} parameter works
-  similarly, see \code{\link{set.alignment}} for details.
+If \code{caption} is missing, then the value is first
+checked in \code{t} object's \code{caption} attribute and
+if not found in an internal buffer set by
+\code{link{set.caption}}. \code{justify} parameter works
+similarly, see \code{\link{set.alignment}} for details.
 }
 \examples{
 pandoc.table(mtcars)
@@ -171,10 +167,10 @@ emphasize.strong.cells(which(t > 20, arr.ind = TRUE))
 pandoc.table(t)
 }
 \references{
-  John MacFarlane (2012): _Pandoc User's Guide_.
-  \url{http://johnmacfarlane.net/pandoc/README.html}
+John MacFarlane (2012): _Pandoc User's Guide_.
+\url{http://johnmacfarlane.net/pandoc/README.html}
 }
 \seealso{
-  \code{\link{set.caption}}, \code{\link{set.alignment}}
+\code{\link{set.caption}}, \code{\link{set.alignment}}
 }
 

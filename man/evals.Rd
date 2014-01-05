@@ -2,21 +2,17 @@
 \alias{evals}
 \title{Evaluate and Process R Code}
 \usage{
-  evals(txt, parse = TRUE, cache = TRUE,
-    cache.mode = c("environment", "disk"),
-    cache.dir = ".cache", cache.time = 0.1,
-    cache.copy.images = FALSE, showInvisible = FALSE,
-    classes = NULL, hooks = NULL, length = Inf,
-    output = c("all", "src", "result", "output", "type", "msg", "stdout"),
-    env = NULL, graph.unify = evalsOptions("graph.unify"),
-    graph.name = "\%t", graph.dir = "plots",
-    graph.output = c("png", "bmp", "jpeg", "jpg", "tiff", "svg", "pdf", NA),
-    width = 480, height = 480, res = 72, hi.res = FALSE,
-    hi.res.width = 960,
-    hi.res.height = 960 * (height/width),
-    hi.res.res = res * (hi.res.width/width),
-    graph.env = FALSE, graph.recordplot = FALSE,
-    graph.RDS = FALSE, ...)
+evals(txt, parse = TRUE, cache = TRUE, cache.mode = c("environment",
+  "disk"), cache.dir = ".cache", cache.time = 0.1,
+  cache.copy.images = FALSE, showInvisible = FALSE, classes = NULL,
+  hooks = NULL, length = Inf, output = c("all", "src", "result", "output",
+  "type", "msg", "stdout"), env = NULL,
+  graph.unify = evalsOptions("graph.unify"), graph.name = "\%t",
+  graph.dir = "plots", graph.output = c("png", "bmp", "jpeg", "jpg", "tiff",
+  "svg", "pdf", NA), width = 480, height = 480, res = 72,
+  hi.res = FALSE, hi.res.width = 960, hi.res.height = 960 *
+  (height/width), hi.res.res = res * (hi.res.width/width),
+  graph.env = FALSE, graph.recordplot = FALSE, graph.RDS = FALSE, ...)
 }
 \arguments{
   \item{txt}{a character vector containing R code. This
@@ -167,134 +163,130 @@
   (e.g. \code{bg}, \code{pointsize} etc.)}
 }
 \value{
-  a list of parsed elements each containing: \code{src}
-  (the command run), \code{result} (R object: \code{NULL}
-  if nothing returned, path to image file if a plot was
-  generated), \code{print}ed \code{output}, \code{type}
-  (class of returned object if any), informative/wawrning
-  and error messages (if any returned by the command run,
-  otherwise set to \code{NULL}) and possible \code{stdout}t
-  value. See Details above.
+a list of parsed elements each containing: \code{src} (the
+command run), \code{result} (R object: \code{NULL} if
+nothing returned, path to image file if a plot was
+generated), \code{print}ed \code{output}, \code{type}
+(class of returned object if any), informative/wawrning and
+error messages (if any returned by the command run,
+otherwise set to \code{NULL}) and possible \code{stdout}t
+value. See Details above.
 }
 \description{
-  This function takes either a vector/list of
-  \emph{strings} with actual R code, which it to be
-  \code{parse}d to separate elements. Each list element is
-  \code{eval}uated in a special environment, and a detailed
-  list of results is returned for each logical part of the
-  R code: a character value with R code, resulting R
-  object, printed output, class of resulting R object,
-  possible informative/warning/error messages and anything
-  written to \code{stdout}. If a graph is plotted in the
-  given text, the returned object is a string specifying
-  the path to the saved file. Please see Details below. If
-  \code{parse} option set to \code{FALSE}, then the
-  returned list's length equals to the length of the
-  \code{parse}d input - as each string is evaluated as
-  separate R code in the same environment. If a nested list
-  of R code or a concatenated string (separated by
-  \code{\\n} or \code{;}) is provided like
-  \code{list(c('runif(1)', 'runif(1)'))} with
-  \code{parse=FALSE}, then everything is \code{eval}ed at
-  one run so the length of returned list equals to one or
-  the length of the provided nested list. See examples
-  below.
+This function takes either a vector/list of \emph{strings}
+with actual R code, which it to be \code{parse}d to
+separate elements. Each list element is \code{eval}uated in
+a special environment, and a detailed list of results is
+returned for each logical part of the R code: a character
+value with R code, resulting R object, printed output,
+class of resulting R object, possible
+informative/warning/error messages and anything written to
+\code{stdout}. If a graph is plotted in the given text, the
+returned object is a string specifying the path to the
+saved file. Please see Details below. If \code{parse}
+option set to \code{FALSE}, then the returned list's length
+equals to the length of the \code{parse}d input - as each
+string is evaluated as separate R code in the same
+environment. If a nested list of R code or a concatenated
+string (separated by \code{\\n} or \code{;}) is provided
+like \code{list(c('runif(1)', 'runif(1)'))} with
+\code{parse=FALSE}, then everything is \code{eval}ed at one
+run so the length of returned list equals to one or the
+length of the provided nested list. See examples below.
 }
 \details{
-  As \code{\link{evals}} tries to grab the plots
-  internally, pleas do not run commands that set graphic
-  device or \code{dev.off}. E.g. running
-  \code{evals(c('png("/tmp/x.png")', 'plot(1:10)',
-  'dev.off()'))} would fail. \code{print}ing of
-  \code{lattice} and \code{ggplot2} objects is not needed,
-  \code{evals} would deal with that automatically.
+As \code{\link{evals}} tries to grab the plots internally,
+pleas do not run commands that set graphic device or
+\code{dev.off}. E.g. running
+\code{evals(c('png("/tmp/x.png")', 'plot(1:10)',
+'dev.off()'))} would fail. \code{print}ing of
+\code{lattice} and \code{ggplot2} objects is not needed,
+\code{evals} would deal with that automatically.
 
-  The generated image file(s) of the plots can be
-  fine-tuned by some specific options, please check out
-  \code{graph.output}, \code{width}, \code{height},
-  \code{res}, \code{hi.res}, \code{hi.res.width},
-  \code{hi.res.height} and \code{hi.res.res} parameters.
-  Most of these options are better not to touch, see
-  details of parameters below.
+The generated image file(s) of the plots can be fine-tuned
+by some specific options, please check out
+\code{graph.output}, \code{width}, \code{height},
+\code{res}, \code{hi.res}, \code{hi.res.width},
+\code{hi.res.height} and \code{hi.res.res} parameters. Most
+of these options are better not to touch, see details of
+parameters below.
 
-  Returned result values: list with the following elements
-  \itemize{ \item \emph{src} - character vector of
-  specified R code.  \item \emph{result} - result of
-  evaluation. \code{NULL} if nothing is returned. If any R
-  code returned an R object while evaluating then the
-  \emph{last} R object will be returned as a raw R object.
-  If a graph is plotted in the given text, the returned
-  object is a string (with \code{class} set to
-  \code{image}) specifying the path to the saved image
-  file. If graphic device was touched, then no other R
-  objects will be returned.  \item \emph{output} -
-  character vector of printed version
-  (\code{capture.output}) of \code{result} \item
-  \emph{type} - class of generated output. "NULL" if
-  nothing is returned, "error" if some error occurred.
-  \item \emph{msg} - possible messages grabbed while
-  evaluating specified R code with the following structure:
-  \itemize{ \item \emph{messages} - character vector of
-  possible diagnostic message(s) \item \emph{warnings} -
-  character vector of possible warning message(s) \item
-  \emph{errors} - character vector of possible error
-  message(s) } \item \emph{stdout} - character vector of
-  possibly printed texts to standard output (console) }
+Returned result values: list with the following elements
+\itemize{ \item \emph{src} - character vector of specified
+R code.  \item \emph{result} - result of evaluation.
+\code{NULL} if nothing is returned. If any R code returned
+an R object while evaluating then the \emph{last} R object
+will be returned as a raw R object. If a graph is plotted
+in the given text, the returned object is a string (with
+\code{class} set to \code{image}) specifying the path to
+the saved image file. If graphic device was touched, then
+no other R objects will be returned.  \item \emph{output} -
+character vector of printed version (\code{capture.output})
+of \code{result} \item \emph{type} - class of generated
+output. "NULL" if nothing is returned, "error" if some
+error occurred.  \item \emph{msg} - possible messages
+grabbed while evaluating specified R code with the
+following structure: \itemize{ \item \emph{messages} -
+character vector of possible diagnostic message(s) \item
+\emph{warnings} - character vector of possible warning
+message(s) \item \emph{errors} - character vector of
+possible error message(s) } \item \emph{stdout} - character
+vector of possibly printed texts to standard output
+(console) }
 
-  By default \code{evals} tries to \emph{cache} results.
-  This means that if evaluation of some R commands take too
-  much time (specified in \code{cache.time} parameter),
-  then \code{evals} would save the results in a file and
-  return from there on next exact R code's evaluation. This
-  caching algorithm tries to be smart as checks not only
-  the passed R sources, but all variables inside that and
-  saves the hash of those.
+By default \code{evals} tries to \emph{cache} results. This
+means that if evaluation of some R commands take too much
+time (specified in \code{cache.time} parameter), then
+\code{evals} would save the results in a file and return
+from there on next exact R code's evaluation. This caching
+algorithm tries to be smart as checks not only the passed R
+sources, but all variables inside that and saves the hash
+of those.
 
-  Technical details of the caching algorithm: \itemize{
-  \item Each passed R chunk is \code{parse}d to single
-  commands.  \item Each parsed command's part (let it be a
-  function, variable, constant etc.) \code{eval}uated (as a
-  \code{name}) separately to a \code{list}. This list
-  describes the unique structure and the content of the
-  passed R commands, and has some IMHO really great
-  benefits (see examples below).  \item A hash if computed
-  to each list element and cached too in \code{pander}'s
-  local environments. This is useful if you are using large
-  data frames, just imagine: the caching algorithm would
-  have to compute the hash for the same data frame each
-  time it's touched! This way the hash is recomputed only
-  if the R object with the given name is changed.  \item
-  The list is \code{serialize}d and an \code{SHA-1} hash is
-  computed for that - which is unique and there is no real
-  risk of collision.  \item If \code{evals} can find the
-  cached results in a file named to the computed hash, then
-  it is returned on the spot.  \item Otherwise the call is
-  evaluated and the results are optionally saved to cache
-  (e.g. if \code{cache} is active, if the
-  \code{proc.time()} of the evaluation is higher then it is
-  defined in \code{cache.time} etc.). }
+Technical details of the caching algorithm: \itemize{ \item
+Each passed R chunk is \code{parse}d to single commands.
+\item Each parsed command's part (let it be a function,
+variable, constant etc.) \code{eval}uated (as a
+\code{name}) separately to a \code{list}. This list
+describes the unique structure and the content of the
+passed R commands, and has some IMHO really great benefits
+(see examples below).  \item A hash if computed to each
+list element and cached too in \code{pander}'s local
+environments. This is useful if you are using large data
+frames, just imagine: the caching algorithm would have to
+compute the hash for the same data frame each time it's
+touched! This way the hash is recomputed only if the R
+object with the given name is changed.  \item The list is
+\code{serialize}d and an \code{SHA-1} hash is computed for
+that - which is unique and there is no real risk of
+collision.  \item If \code{evals} can find the cached
+results in a file named to the computed hash, then it is
+returned on the spot.  \item Otherwise the call is
+evaluated and the results are optionally saved to cache
+(e.g. if \code{cache} is active, if the \code{proc.time()}
+of the evaluation is higher then it is defined in
+\code{cache.time} etc.). }
 
-  This is a quite secure way of caching, but if you would
-  encounter any issues, just set \code{cache} to
-  \code{FALSE} or tweak other cache parameters. While
-  setting \code{cache.dir}, please do think about what you
-  are doing and move your \code{graph.dir} accordingly, as
-  \code{evals} might result in returning an image file path
-  which is not found any more on your file system!
+This is a quite secure way of caching, but if you would
+encounter any issues, just set \code{cache} to \code{FALSE}
+or tweak other cache parameters. While setting
+\code{cache.dir}, please do think about what you are doing
+and move your \code{graph.dir} accordingly, as \code{evals}
+might result in returning an image file path which is not
+found any more on your file system!
 
-  Also, if you have generated a plot and rendered that to
-  e.g. \code{png} before and later try to get e.g.
-  \code{pdf} - it would fail with \code{cache} on.
-  Similarly you cannot render a high resolution image of a
-  cached image, but you have to (temporary) disable
-  caching.
+Also, if you have generated a plot and rendered that to
+e.g. \code{png} before and later try to get e.g. \code{pdf}
+- it would fail with \code{cache} on. Similarly you cannot
+render a high resolution image of a cached image, but you
+have to (temporary) disable caching.
 
-  The default \code{evals} options could be set globally
-  with \code{\link{evalsOptions}}, e.g. to switch off the
-  cache just run \code{evalsOptions('cache', FALSE)}.
+The default \code{evals} options could be set globally with
+\code{\link{evalsOptions}}, e.g. to switch off the cache
+just run \code{evalsOptions('cache', FALSE)}.
 
-  Please check the examples carefully below to get a
-  detailed overview of \code{\link{evals}}.
+Please check the examples carefully below to get a detailed
+overview of \code{\link{evals}}.
 }
 \examples{
 \dontrun{
@@ -473,6 +465,6 @@ evals('mean(x)')
 }
 }
 \seealso{
-  \code{\link{eval.msgs}} \code{\link{evalsOptions}}
+\code{\link{eval.msgs}} \code{\link{evalsOptions}}
 }
 

@@ -3,10 +3,9 @@
 \alias{pandoc.list.return}
 \title{Create a list}
 \usage{
-  pandoc.list.return(elements,
-    style = c("bullet", "ordered", "roman"), loose = FALSE,
-    add.line.breaks = TRUE, add.end.of.list = TRUE,
-    indent.level = 0)
+pandoc.list.return(elements, style = c("bullet", "ordered", "roman"),
+  loose = FALSE, add.line.breaks = TRUE, add.end.of.list = TRUE,
+  indent.level = 0)
 }
 \arguments{
   \item{elements}{character vector of strings}
@@ -24,13 +23,13 @@
   \item{indent.level}{the level of indent}
 }
 \value{
-  By default this function outputs (see: \code{cat}) the
-  result. If you would want to catch the result instead,
-  then call the function ending in \code{.return}.
+By default this function outputs (see: \code{cat}) the
+result. If you would want to catch the result instead, then
+call the function ending in \code{.return}.
 }
 \description{
-  Creates a Pandoc's markdown format list from provided
-  character vector/list.
+Creates a Pandoc's markdown format list from provided
+character vector/list.
 }
 \examples{
 ## basic lists
@@ -55,7 +54,7 @@ pandoc.list(list('one', list('two')))
 pandoc.list(list('one', list(2:3)))
 }
 \references{
-  John MacFarlane (2012): _Pandoc User's Guide_.
-  \url{http://johnmacfarlane.net/pandoc/README.html}
+John MacFarlane (2012): _Pandoc User's Guide_.
+\url{http://johnmacfarlane.net/pandoc/README.html}
 }
 

@@ -7,27 +7,27 @@
 \alias{emphasize.strong.rows}
 \title{Emphasize rows/columns/cells}
 \usage{
-  emphasize.rows(x)
+emphasize.rows(x)
 
-  emphasize.cols(x)
+emphasize.cols(x)
 
-  emphasize.cells(x)
+emphasize.cells(x)
 
-  emphasize.strong.rows(x)
+emphasize.strong.rows(x)
 
-  emphasize.strong.cols(x)
+emphasize.strong.cols(x)
 
-  emphasize.strong.cells(x)
+emphasize.strong.cells(x)
 }
 \arguments{
   \item{x}{vector of row/columns indexes or an array like
   returned by \code{which(..., arr.ind = TRUE)}}
 }
 \description{
-  Storing indexes of cells to be (strong) emphasized of a
-  tabular data in an internal buffer that can be released
-  and applied by \code{\link{pandoc.table}},
-  \code{\link{pander}} or \code{\link{evals}} later.
+Storing indexes of cells to be (strong) emphasized of a
+tabular data in an internal buffer that can be released and
+applied by \code{\link{pandoc.table}}, \code{\link{pander}}
+or \code{\link{evals}} later.
 }
 \examples{
 \dontrun{

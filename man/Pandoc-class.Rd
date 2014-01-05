@@ -1,19 +1,17 @@
-\name{Pandoc}
-\alias{Pandoc}
+\docType{class}
+\name{Pandoc-class}
+\alias{Pandoc-class}
 \title{Reporting with Pandoc}
-\usage{
-  Pandoc(...)
-}
 \arguments{
   \item{...}{this is an R5 object without any direct params
   but it should be documented, right?}
 }
 \description{
-  This \code{R5} reference class can hold bunch of elements
-  (text or R objects) from which it tries to create a
-  Pandoc's markdown text file. Exporting the report to
-  several formats (like: pdf, docx, odt etc. - see Pandoc's
-  documentation) is also possible, see examples below.
+This \code{R5} reference class can hold bunch of elements
+(text or R objects) from which it tries to create a
+Pandoc's markdown text file. Exporting the report to
+several formats (like: pdf, docx, odt etc. - see Pandoc's
+documentation) is also possible, see examples below.
 }
 \examples{
 \dontrun{

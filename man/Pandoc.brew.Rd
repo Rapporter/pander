@@ -2,10 +2,9 @@
 \alias{Pandoc.brew}
 \title{Brew in pandoc format}
 \usage{
-  Pandoc.brew(file = stdin(), output = stdout(),
-    convert = FALSE, open = TRUE, graph.name, graph.dir,
-    graph.hi.res = FALSE, text = NULL,
-    envir = parent.frame(), append = FALSE, ...)
+Pandoc.brew(file = stdin(), output = stdout(), convert = FALSE,
+  open = TRUE, graph.name, graph.dir, graph.hi.res = FALSE, text = NULL,
+  envir = parent.frame(), append = FALSE, ...)
 }
 \arguments{
   \item{file}{file path of the brew template. As this is
@@ -55,40 +54,38 @@
   \code{\link{Pandoc.convert}}}
 }
 \value{
-  converted file name with full path if \code{convert} is
-  set, none otherwise
+converted file name with full path if \code{convert} is
+set, none otherwise
 }
 \description{
-  This function behaves just like \code{brew} except for
-  the \code{<\%=...\%>} tags, where \code{Pandoc.brew}
-  first translate the R object found between the tags to
-  Pandoc's markdown before passing to the \code{cat}
-  function.
+This function behaves just like \code{brew} except for the
+\code{<\%=...\%>} tags, where \code{Pandoc.brew} first
+translate the R object found between the tags to Pandoc's
+markdown before passing to the \code{cat} function.
 }
 \details{
-  This parser tries to be smart in some ways:
+This parser tries to be smart in some ways:
 
-  \itemize{ \item a block (R commands between the tags)
-  could return any value at any part of the block and there
-  are no restrictions about the number of returned R
-  objects \item plots and images are grabbed in the
-  document, rendered to a png file and \code{pander} method
-  would result in a Pandoc's markdown formatted image link
-  (so the image would be shown/included in the exported
-  document). The images are put in \code{plots} directory
-  in current \code{getwd()} or to the specified
-  \code{output} file's directory.  \item all
-  warnings/messages and errors are recorded in the blocks
-  and returned in the document as a footnote }
+\itemize{ \item a block (R commands between the tags) could
+return any value at any part of the block and there are no
+restrictions about the number of returned R objects \item
+plots and images are grabbed in the document, rendered to a
+png file and \code{pander} method would result in a
+Pandoc's markdown formatted image link (so the image would
+be shown/included in the exported document). The images are
+put in \code{plots} directory in current \code{getwd()} or
+to the specified \code{output} file's directory.  \item all
+warnings/messages and errors are recorded in the blocks and
+returned in the document as a footnote }
 
-  Please see my Github page for details
-  (\url{http://rapporter.github.com/pander/#brew-to-pandoc})
-  and examples
-  (\url{http://rapporter.github.com/pander/#examples}).
+Please see my Github page for details
+(\url{http://rapporter.github.com/pander/#brew-to-pandoc})
+and examples
+(\url{http://rapporter.github.com/pander/#examples}).
 }
 \note{
-  Only one of the input parameters (\code{file} or
-  \code{text}) is to be used at once!
+Only one of the input parameters (\code{file} or
+\code{text}) is to be used at once!
 }
 \examples{
 \dontrun{
@@ -123,10 +120,10 @@ Pi has a lot (<\%=i\%>) of power: <\%=pi^i\%><\%}\%>'))
 }
 }
 \references{
-  \itemize{ \item Jeffrey Horner (2011). _brew: Templating
-  Framework for Report Generation._
-  \url{http://CRAN.R-project.org/package=brew} \item John
-  MacFarlane (2012): _Pandoc User's Guide_.
-  \url{http://johnmacfarlane.net/pandoc/README.html} }
+\itemize{ \item Jeffrey Horner (2011). _brew: Templating
+Framework for Report Generation._
+\url{http://CRAN.R-project.org/package=brew} \item John
+MacFarlane (2012): _Pandoc User's Guide_.
+\url{http://johnmacfarlane.net/pandoc/README.html} }
 }
 

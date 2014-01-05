@@ -3,8 +3,8 @@
 \alias{pandoc.verbatim.return}
 \title{Add verbatim}
 \usage{
-  pandoc.verbatim.return(x,
-    style = c("inline", "indent", "delim"), attrs = "")
+pandoc.verbatim.return(x, style = c("inline", "indent", "delim"),
+  attrs = "")
 }
 \arguments{
   \item{x}{character vector}
@@ -16,13 +16,13 @@
   attribute to the \code{delimited} block}
 }
 \value{
-  By default this function outputs (see: \code{cat}) the
-  result. If you would want to catch the result instead,
-  then call the function ending in \code{.return}.
+By default this function outputs (see: \code{cat}) the
+result. If you would want to catch the result instead, then
+call the function ending in \code{.return}.
 }
 \description{
-  Pandoc's markdown verbatim format (e.g. \code{`FOO`}) is
-  added to character string.
+Pandoc's markdown verbatim format (e.g. \code{`FOO`}) is
+added to character string.
 }
 \examples{
 ## different styles/formats
@@ -38,12 +38,11 @@ pandoc.verbatim(c('FOOO\\nBAR  ', ' I do R'), 'delim')
 pandoc.verbatim(c('cat("FOO")', 'mean(bar)'), 'delim', '.R #MyCode custom_var="10"')
 }
 \references{
-  John MacFarlane (2012): _Pandoc User's Guide_.
-  \url{http://johnmacfarlane.net/pandoc/README.html}
+John MacFarlane (2012): _Pandoc User's Guide_.
+\url{http://johnmacfarlane.net/pandoc/README.html}
 }
 \seealso{
-  \code{\link{pandoc.emphasis}}
-  \code{\link{pandoc.strikeout}}
-  \code{\link{pandoc.strong}}
+\code{\link{pandoc.emphasis}}
+\code{\link{pandoc.strikeout}} \code{\link{pandoc.strong}}
 }
 

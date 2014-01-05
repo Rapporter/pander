@@ -2,13 +2,13 @@
 \alias{get.caption}
 \title{Get caption}
 \usage{
-  get.caption()
+get.caption()
 }
 \value{
-  stored caption as string
+stored caption as string
 }
 \description{
-  Get caption from temporary environment and truncates that
+Get caption from temporary environment and truncates that
 }
 \keyword{internal}
 

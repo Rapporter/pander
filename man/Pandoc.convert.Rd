@@ -2,9 +2,8 @@
 \alias{Pandoc.convert}
 \title{Converts Pandoc to other format}
 \usage{
-  Pandoc.convert(f, text, format = "html", open = TRUE,
-    options = "", footer = TRUE, proc.time,
-    portable.html = TRUE)
+Pandoc.convert(f, text, format = "html", open = TRUE, options = "",
+  footer = TRUE, proc.time, portable.html = TRUE)
 }
 \arguments{
   \item{f}{Pandoc's markdown format file path. If URL is
@@ -40,19 +39,18 @@
   \code{HTML} without custom \code{options}}
 }
 \value{
-  Converted file's path.
+Converted file's path.
 }
 \description{
-  Calling John MacFarlane's great program to convert
-  specified file (see \code{f} parameter below) or
-  character vector {see \code{text} paramater} to other
-  formats like \code{HTML}, \code{pdf}, \code{docx},
-  \code{odt} etc.
+Calling John MacFarlane's great program to convert
+specified file (see \code{f} parameter below) or character
+vector {see \code{text} paramater} to other formats like
+\code{HTML}, \code{pdf}, \code{docx}, \code{odt} etc.
 }
 \note{
-  This function depends on \code{Pandoc} which should be
-  pre-installed on user's machine. See the \code{INSTALL}
-  file of the package.
+This function depends on \code{Pandoc} which should be
+pre-installed on user's machine. See the \code{INSTALL}
+file of the package.
 }
 \examples{
 \dontrun{
@@ -65,7 +63,7 @@ Pandoc.convert('http://rapporter.github.io/pander/minimal.md')
 }
 }
 \references{
-  John MacFarlane (2012): _Pandoc User's Guide_.
-  \url{http://johnmacfarlane.net/pandoc/README.html}
+John MacFarlane (2012): _Pandoc User's Guide_.
+\url{http://johnmacfarlane.net/pandoc/README.html}
 }
 

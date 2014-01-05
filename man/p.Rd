@@ -2,10 +2,9 @@
 \alias{p}
 \title{Inline Printing}
 \usage{
-  p(x, wrap = panderOptions("p.wrap"),
-    sep = panderOptions("p.sep"),
-    copula = panderOptions("p.copula"), limit = Inf,
-    keep.trailing.zeros = panderOptions("keep.trailing.zeros"))
+p(x, wrap = panderOptions("p.wrap"), sep = panderOptions("p.sep"),
+  copula = panderOptions("p.copula"), limit = Inf,
+  keep.trailing.zeros = panderOptions("keep.trailing.zeros"))
 }
 \arguments{
   \item{x}{an atomic vector to get merged for inline
@@ -33,22 +32,22 @@
   zeros in numbers}
 }
 \value{
-  a string with concatenated vector contents
+a string with concatenated vector contents
 }
 \description{
-  \code{\link{p}} merges elements of a vector in one string
-  for the sake of pretty inline printing. Default
-  parameters are read from appropriate \code{option} values
-  (see argument description for details). This function
-  allows you to put the results of an expression that
-  yields a variable \emph{inline}, by wrapping the vector
-  elements with the string provided in \code{wrap}, and
-  separating elements by main and ending separator
-  (\code{sep} and \code{copula}). In case of a two-length
-  vector, value specified in \code{copula} will be used as
-  a separator. You can also control the length of provided
-  vector by altering an integer value specified in
-  \code{limit} argument (defaults to \code{Inf}).
+\code{\link{p}} merges elements of a vector in one string
+for the sake of pretty inline printing. Default parameters
+are read from appropriate \code{option} values (see
+argument description for details). This function allows you
+to put the results of an expression that yields a variable
+\emph{inline}, by wrapping the vector elements with the
+string provided in \code{wrap}, and separating elements by
+main and ending separator (\code{sep} and \code{copula}).
+In case of a two-length vector, value specified in
+\code{copula} will be used as a separator. You can also
+control the length of provided vector by altering an
+integer value specified in \code{limit} argument (defaults
+to \code{Inf}).
 }
 \examples{
 p(c("fee", "fi", "foo", "fam"))
@@ -61,10 +60,10 @@ p(c("Thelma", "Louise"), wrap = "", copula = "&")
 ## [1] "Thelma & Louise"
 }
 \author{
-  Aleksandar Blagotic
+Aleksandar Blagotic
 }
 \references{
-  This function was moved from \code{rapport} package:
-  \url{http://rapport-package.info/}.
+This function was moved from \code{rapport} package:
+\url{http://rapport-package.info/}.
 }
 

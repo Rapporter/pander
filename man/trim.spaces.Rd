@@ -2,18 +2,18 @@
 \alias{trim.spaces}
 \title{Trim leading and trailing spaces}
 \usage{
-  trim.spaces(x)
+trim.spaces(x)
 }
 \arguments{
   \item{x}{character vector}
 }
 \value{
-  character vector
+character vector
 }
 \description{
-  Trim leading and trailing spaces
+Trim leading and trailing spaces
 }
 \seealso{
-  \code{trim.space} in \code{rapport} package
+\code{trim.space} in \code{rapport} package
 }
 

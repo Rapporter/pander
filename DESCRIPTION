@@ -29,14 +29,3 @@ Suggests:
     ggplot2 (>= 0.9.2)
 SystemRequirements: Pandoc (http://johnmacfarlane.net/pandoc) for exporting
     markdown files to other formats.
-Collate:
-    'helpers.R'
-    'S3.R'
-    'R5.R'
-    'brew.R'
-    'convert.R'
-    'evals.R'
-    'ess-functions.R'
-    'options.R'
-    'graph.R'
-    'pandoc.R'
