@@ -11,11 +11,7 @@
 #'   \item Hlavac, Marek (2013): _stargazer: LaTeX code for well-formatted regression and summary statistics tables._ \url{http://CRAN.R-project.org/package=stargazer}
 #' }
 #' @export
-#' @aliases pander pander.return pandoc pandoc.return
-#' @usage
-#' pander(x, ...)
-#'
-#' pandoc(x, ...)
+#' @aliases pander pander.return
 #' @examples
 #'
 #' ## Vectors
@@ -73,13 +69,8 @@
 pander <- function(x = NULL, ...)
     UseMethod('pander', x)
 #' @export
-pandoc <- pander
-
-#' @export
-pandoc.return <- function(...)
+pander.return <- function(...)
     capture.output(pander(...))
-#' @export
-pander.return <- pandoc.return
 
 #' @S3method pander NULL
 pander.NULL <- function(x, ...)

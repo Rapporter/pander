@@ -1,13 +1,9 @@
 \name{pander}
 \alias{pander}
 \alias{pander.return}
-\alias{pandoc}
-\alias{pandoc.return}
 \title{Generic pander method}
 \usage{
-  pander(x, ...)
-
-  pandoc(x, ...)
+pander(x = NULL, ...)
 }
 \arguments{
   \item{x}{an R object}
@@ -16,16 +12,16 @@
   and/or raw \code{pandoc.*} functions}
 }
 \value{
-  By default this function outputs (see: \code{cat}) the
-  result. If you would want to catch the result instead,
-  then call the function ending in \code{.return}.
+By default this function outputs (see: \code{cat}) the
+result. If you would want to catch the result instead, then
+call the function ending in \code{.return}.
 }
 \description{
-  Prints an R object in Pandoc's markdown.
+Prints an R object in Pandoc's markdown.
 }
 \note{
-  This function can be called by \code{pander} and
-  \code{pandoc} too.
+This function can be called by \code{pander} and
+\code{pandoc} too.
 }
 \examples{
 ## Vectors
@@ -82,14 +78,13 @@ class(x) <- 'I heave never heard of!'
 pander(x)
 }
 \references{
-  \itemize{ \item John MacFarlane (2013): _Pandoc User's
-  Guide_.
-  \url{http://johnmacfarlane.net/pandoc/README.html} \item
-  David Hajage (2011): _ascii. Export R objects to several
-  markup languages._
-  \url{http://CRAN.R-project.org/package=ascii} \item
-  Hlavac, Marek (2013): _stargazer: LaTeX code for
-  well-formatted regression and summary statistics tables._
-  \url{http://CRAN.R-project.org/package=stargazer} }
+\itemize{ \item John MacFarlane (2013): _Pandoc User's
+Guide_. \url{http://johnmacfarlane.net/pandoc/README.html}
+\item David Hajage (2011): _ascii. Export R objects to
+several markup languages._
+\url{http://CRAN.R-project.org/package=ascii} \item Hlavac,
+Marek (2013): _stargazer: LaTeX code for well-formatted
+regression and summary statistics tables._
+\url{http://CRAN.R-project.org/package=stargazer} }
 }
 
