@@ -2,7 +2,7 @@
 #'
 #' This \code{R5} reference class can hold bunch of elements (text or R objects) from which it tries to create a Pandoc's markdown text file. Exporting the report to several formats (like: pdf, docx, odt etc. - see Pandoc's documentation) is also possible, see examples below.
 #' @param ... this is an R5 object without any direct params but it should be documented, right?
-#' @export
+#' @export Pandoc
 #' @examples \dontrun{
 #' ## Initialize a new Pandoc object
 #' myReport <- Pandoc$new()
