@@ -116,10 +116,11 @@ Pandoc.convert <- function(f, text, format = 'html', open = TRUE, options = '', 
     setwd(f.dir)
 
     ## call Pandoc
+    cmd <- sprintf('pandoc -f markdown -s %s %s -o %s', options, shQuote(f), shQuote(f.out))
     if (grepl("w|W", .Platform$OS.type))
-        res <- suppressWarnings(tryCatch(shell(sprintf('pandoc -f markdown -s %s %s -o %s', options, shQuote(f), shQuote(f.out)), intern = TRUE), error = function(e) e))
+        res <- suppressWarnings(tryCatch(shell(cmd, intern = TRUE), error = function(e) e))
     else
-        res <- suppressWarnings(tryCatch(system(sprintf('pandoc -f markdown -s %s %s -o %s', options, shQuote(f), shQuote(f.out)), intern = TRUE), error = function(e) e))
+        res <- suppressWarnings(tryCatch(system(cmd, intern = TRUE), error = function(e) e))
 
     ## inject HTML header
     if (format == 'html' && grepl(sprintf('^(--self-contain )*-A "%s"$', system.file('includes/html/footer.html', package='pander')), options)) {
@@ -142,7 +143,7 @@ Pandoc.convert <- function(f, text, format = 'html', open = TRUE, options = '', 
 
     ## return
     if (!is.null(attr(res, "status"))) {
-        warning(paste0('Pandoc had some problems while converting to ', format, ': \n', res))
+        warning(paste0('Pandoc had some problems while converting to ', format, ': \n\n', paste(res, collapse = '\n'), '\n\nPandoc was called as:\n\n\t', cmd))
     } else {
         if (open)
             openFileInOS(f.out)
