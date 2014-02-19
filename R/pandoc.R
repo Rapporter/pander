@@ -623,6 +623,10 @@ pandoc.table.return <- function(t, caption, digits = panderOptions('digits'), de
         }
     }
 
+    ## converting 3D+ tables to 2D
+    if (length(dim(t)) > 2)
+        t <- ftable(t)
+
     ## initializing
     mc  <- match.call()
     if (is.null(mc$style))
@@ -631,7 +635,7 @@ pandoc.table.return <- function(t, caption, digits = panderOptions('digits'), de
         style <- match.arg(style)
     if (is.null(mc$justify)) {
         if (is.null(attr(t, 'alignment')))
-            justify <- get.alignment(t)
+            justify <- get.alignment(format(t))
         else
             justify <- attr(t, 'alignment')
     }

@@ -8,7 +8,8 @@ tables <- list(
     summary(mtcars$am),
     table(mtcars$am) + 0.1,
     table(mtcars$am, mtcars$gear) + 0.1,
-    summary(lm(mtcars$hp~1))$coeff
+    summary(lm(mtcars$hp~1))$coeff,
+    table(mtcars$am, mtcars$gear, mtcars$carb)
     )
 
 test_that('no error: multiline', {
@@ -39,7 +40,8 @@ tables <- list(
     lm(mtcars$hp~1),
     t.test(extra ~ group, data = sleep),
     prcomp(USArrests),
-    density(mtcars$hp)
+    density(mtcars$hp),
+    table(mtcars$am, mtcars$gear, mtcars$carb)
     )
 
 dm <- panderOptions('decimal.mark')
@@ -139,7 +141,8 @@ tables <- list(
     summary(mtcars$am),
     table(mtcars$am) + 0.1,
     table(mtcars$am, mtcars$gear) + 0.1,
-    summary(lm(mtcars$hp~1))$coeff
+    summary(lm(mtcars$hp~1))$coeff,
+    table(mtcars$am, mtcars$gear, mtcars$carb)
     )
 
 tad <- panderOptions('table.alignment.default')
