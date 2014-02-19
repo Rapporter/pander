@@ -41,7 +41,7 @@ tables <- list(
     t.test(extra ~ group, data = sleep),
     prcomp(USArrests),
     density(mtcars$hp),
-    table(mtcars$am, mtcars$gear, mtcars$carb)
+    table(mtcars$am, mtcars$gear, mtcars$carb) + 0.1
     )
 
 dm <- panderOptions('decimal.mark')
