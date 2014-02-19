@@ -634,10 +634,14 @@ pandoc.table.return <- function(t, caption, digits = panderOptions('digits'), de
     else
         style <- match.arg(style)
     if (is.null(mc$justify)) {
-        if (is.null(attr(t, 'alignment')))
-            justify <- get.alignment(format(t))
-        else
+        if (is.null(attr(t, 'alignment'))) {
+            if (inherits(t, 'ftable'))
+                justify <- get.alignment(format(t))
+            else
+                justify <- get.alignment(t)
+        } else {
             justify <- attr(t, 'alignment')
+        }
     }
     if (is.null(mc$caption)) {
         if (is.null(attr(t, 'caption'))) {
