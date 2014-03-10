@@ -917,3 +917,17 @@ pandoc.table.return <- function(t, caption, digits = panderOptions('digits'), de
 #' @export
 pandoc.table <- function(...)
     cat(pandoc.table.return(...))
+
+#' Create horizontal rule
+#'
+#' Creates a Pandoc's markdown format horizontal line with trailing and leading newlines.
+#' @return By default this function outputs (see: \code{cat}) the result. If you would want to catch the result instead, then call the function ending in \code{.return}.
+#' @export
+#' @aliases pandoc.horizontal.rule
+#' @references John MacFarlane (2012): _Pandoc User's Guide_. \url{http://johnmacfarlane.net/pandoc/README.html}
+pandoc.CrossTable.return <- function()
+  cat(pandoc.CrossTable)
+
+#' @export
+pandoc.CrossTable <- function(...)
+  cat(pandoc.CrossTable.return(...))
