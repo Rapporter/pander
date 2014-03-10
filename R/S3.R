@@ -377,6 +377,10 @@ pander.POSIXct <- function(x, ...)
 pander.POSIXt <- function(x, ...)
     cat(format(x, panderOptions('date')))
 
+#' @S3method pander ftable
+pander.ftable <- function(x,  ...)
+    pandoc.table(x, ...)
+
 #' @S3method pander CrossTable
 pander.CrossTable <- function(x, ...) {
   totals <- x$t
