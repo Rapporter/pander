@@ -407,7 +407,7 @@ pander.CrossTable <- function(x, caption = attr(x, 'caption'), ...){
   colnames(constructed.table) <- c(col.labels,"Total")
   new.row.labels <- vector()
   for (i in 1:row.size){
-    new.row.labels <- c(new.row.labels, row.labels[i],"N", "Row", "Column","","")
+    new.row.labels <- c(new.row.labels, row.labels[i],"N", "Row (%)", "Column (%)","","")
     constructed.table[6 * (i - 1), ] <- rep("", col.size + 1)
     constructed.table[1 + 6 * (i - 1), ] <- rep("", col.size + 1)
     constructed.table[2 + 6 * (i - 1), ] <- c(totals[i, ], row.sum[i])
