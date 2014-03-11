@@ -378,47 +378,51 @@ pander.POSIXt <- function(x, ...)
     cat(format(x, panderOptions('date')))
 
 #' @S3method pander ftable
-pander.ftable <- function(x,  ...)
+pander.ftable <- function(x, ...)
     pandoc.table(x, ...)
 
 #' @S3method pander CrossTable
-pander.CrossTable <- function(x, ...) {
-  totals <- x$t
-  RowLabels <- row.names(totals)
-  ColLabels <- colnames(totals)
-  row.size <- length(RowLabels)
-  col.size <- length(ColLabels)
-  RowName <- x$RowData
-  ColName <- x$ColData  
-  CPR <- round(x$prop.row * 100, digits = 0)
-  CPC <- round(x$prop.col * 100, digits = 0)
-  CPT <- round(x$prop.tbl * 100, digits = 0)
-  FullSum <- x$gt
-  RowSum <- x$rs
-  ColSum <- x$cs
-  TotalN <- x$total.n
-  x1 <- rep(0, (col.size + 1)*(6 * row.size + 2))
-  temp <- matrix(x1, ncol=(col.size + 1))
-  temp <- as.table(temp)
-  colnames(temp) <- c(ColLabels,"Total")
-  row.labels <- vector()
-  for (i in 1:row.size){
-    row.labels <- c(row.labels, RowLabels[i],"N", "Row", "Column","","")
-    temp[6 * (i - 1) + 1, ] <- rep("", col.size + 1)
-    temp[6 * i, ] <- rep("", col.size + 1)
-    temp[6 * (i - 1), ] <- rep("", col.size + 1)
-    temp[2 + (i - 1)* 6, ] <- c(totals[i, ], RowSum[i])
-    temp[3 + (i - 1)* 6, ] <- c(CPR[i, ], round(sum(totals[i,]/TotalN * 100), digits = 0))
-    temp[4 + (i - 1)* 6, ] <- c(CPC[i, ], "")
-    temp[5 + (i - 1)* 6, ] <- c(CPT[i, ], "")
+pander.CrossTable <- function(x, caption = attr(x, 'caption'), ...){
+  if (is.null(caption) & !is.null(storage$caption))
+    caption <- get.caption()
+  to.percent <- function(x, digits = 0){
+    paste(round(x * 100, digits), "%",sep="")    
   }
-  temp[6 * row.size + 1, ] <- c(ColSum, TotalN)
-  last <- vector()
+  totals <- x$t
+  row.labels <- row.names(totals)
+  col.labels <- colnames(totals)
+  row.size <- length(row.labels)
+  col.size <- length(col.labels)
+  row.name <- x$RowData
+  col.name <- x$ColData  
+  proportion.row <- apply(x$prop.row, c(1,2), to.percent)
+  proportion.column <- apply(x$prop.col, c(1,2), to.percent)
+  proportion.table <- apply(x$prop.tbl, c(1,2), to.percent)
+  row.sum<- x$rs
+  col.sum <- x$cs
+  table.sum <- x$total.n
+  zeros <- rep(0, (col.size + 1)*(6 * row.size + 2))
+  constructed.table<- matrix(zeros, ncol=(col.size + 1))
+  constructed.table <- as.table(constructed.table)
+  colnames(constructed.table) <- c(col.labels,"Total")
+  new.row.labels <- vector()
+  for (i in 1:row.size){
+    new.row.labels <- c(new.row.labels, row.labels[i],"N", "Row", "Column","","")
+    constructed.table[6 * (i - 1), ] <- rep("", col.size + 1)
+    constructed.table[1 + 6 * (i - 1), ] <- rep("", col.size + 1)
+    constructed.table[2 + 6 * (i - 1), ] <- c(totals[i, ], row.sum[i])
+    constructed.table[3 + 6 * (i - 1), ] <- c(proportion.row[i, ], to.percent(sum(totals[i,]/table.sum)))
+    constructed.table[4 + 6 * (i - 1), ] <- c(proportion.column[i, ], "")
+    constructed.table[5 + 6 * (i - 1), ] <- c(proportion.table[i, ], "")
+    constructed.table[6 * i, ] <- rep("", col.size + 1)
+  }
+  constructed.table[6 * row.size + 1, ] <- c(col.sum, table.sum)
+  row.last <- vector()
   for (i in 1:col.size)
-    last <- c(last, round(sum(totals[,i])/TotalN * 100, digits = 0))
-  last <- c(last, "")
-  temp[6 * row.size + 2, ] <- last
-  row.labels <- c(row.labels, "Total", "")
-  row.names(temp) <- row.labels
-  pandoc.table(temp)
+    row.last <- c(row.last, to.percent(sum(totals[,i])/table.sum))
+  row.last <- c(row.last, "")
+  constructed.table[6 * row.size + 2, ] <- row.last
+  new.row.labels <- c(new.row.labels, "Total", "")
+  row.names(constructed.table) <- new.row.labels
+  pandoc.table(constructed.table, caption=caption, ...)
 }
