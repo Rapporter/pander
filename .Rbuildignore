@@ -2,3 +2,5 @@
 .travis.yml
 Makefile
 TODO.md
+^.*\.Rproj$
+^\.Rproj\.user$
