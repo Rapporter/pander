@@ -16,4 +16,4 @@ check: build
 	R CMD check $(PKGNAME)_$(PKGVERS).tar.gz --as-cran
 
 test:
-	Rscript -e 'library(pander);library(testthat);test_package("pander")'
+	Rscript -e 'library(pander);library(methods);library(testthat);test_package("pander")'
