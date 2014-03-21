@@ -380,3 +380,37 @@ pander.POSIXt <- function(x, ...)
 #' @S3method pander ftable
 pander.ftable <- function(x,  ...)
     pandoc.table(x, ...)
+
+#' @S3method pander CrossTable
+pander.CrossTable<-function(x,...){
+	rnames<-names(x$rs)
+	cnames<-names(x$cs)
+	outp<-matrix(ncol=length(cnames)+2,nrow=0,
+			dimnames=list(NULL,c('',cnames,'Total')))
+	
+	for (i in rnames){
+		# Counts in cells
+		temp_outp<-rbind('',
+				sprintf('%i',x$t[i,]),
+				do.call('rbind',
+						lapply(x[c('prop.row','prop.col','prop.tbl')],
+								function(y)sprintf('%0.0f%%',100*y[i,]))))
+		# Rownames and counts in rows
+		temp_outp<-cbind(
+				c(pandoc.strong.return(i),'N','Row (%)','Column (%)',''),
+				temp_outp,
+				c('',sprintf('%i',sum(x$t[i,])),
+						sprintf('%0.0f%%',100*sum(x$prob.tbl[i,])),'',''))
+		outp<-rbind(outp,temp_outp)
+	}
+	
+	outp<-rbind(outp,'')
+	
+	# Counts in columns and total
+	outp<-rbind(outp,
+			c('Total',sprintf('%i',c(colSums(x$t),sum(x$t)))),
+			c('',sprintf('%0.0f%%',100*colSums(x$prop.tbl)),''))
+	rownames(outp)<-NULL
+	
+	pander(outp,...)
+}
