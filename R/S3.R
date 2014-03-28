@@ -399,8 +399,8 @@ pander.CrossTable<-function(x,...){
 		temp_outp<-cbind(
 				c(pandoc.strong.return(i),'N','Row (%)','Column (%)',''),
 				temp_outp,
-				c('',sprintf('%i',sum(x$t[i,])),
-						sprintf('%0.0f%%',100*sum(x$prop.tbl[i,])),'',''))
+				c('',sprintf('%i',sum(x$t[i,])),'','',
+						sprintf('%0.0f%%',100*sum(x$prop.tbl[i,]))))
 		outp<-rbind(outp,temp_outp)
 	}
 	
