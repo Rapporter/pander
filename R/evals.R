@@ -1147,32 +1147,30 @@ redraw.recordedplot <- function(file) {
 redrawPlot <- function(recPlot)
 {
     #this allows us to deal with trellis/grid/ggplot objects as well ...
-    if(!is(recPlot, "recordedplot"))
-        {
-            res = try(print(recPlot))
-            if(is(res, "error"))
-                stop(res)
-        } else {
-            if (getRversion() < "3.0.0") {
-                for (i in 1:length(recPlot[[1]])) #@jeroenooms
-                    if ("NativeSymbolInfo" %in% class(recPlot[[1]][[i]][[2]][[1]]))
-                        recPlot[[1]][[i]][[2]][[1]] <- getNativeSymbolInfo(recPlot[[1]][[i]][[2]][[1]]$name)
-            }
-            else {
-                for (i in 1:length(recPlot[[1]])) #@jjallaire
-                {
-                    symbol <- recPlot[[1]][[i]][[2]][[1]]
-                    if ("NativeSymbolInfo" %in% class(symbol)) {
-                        if (!is.null(symbol$package))
-                            name <- symbol$package[["name"]]
-                        else name <- symbol$dll[["name"]]
-                        pkgDLL <- getLoadedDLLs()[[name]]
-                        nativeSymbol <- getNativeSymbolInfo(name = symbol$name,
-                                                            PACKAGE = pkgDLL, withRegistrationInfo = TRUE)
-                        recPlot[[1]][[i]][[2]][[1]] <- nativeSymbol
-                    }
+    if(!is(recPlot, "recordedplot")) {
+        res = try(print(recPlot))
+        if(is(res, "error"))
+            stop(res)
+    } else {
+        if (getRversion() < "3.0.0") {
+            for (i in 1:length(recPlot[[1]])) #@jeroenooms
+                if ("NativeSymbolInfo" %in% class(recPlot[[1]][[i]][[2]][[1]]))
+                    recPlot[[1]][[i]][[2]][[1]] <- getNativeSymbolInfo(recPlot[[1]][[i]][[2]][[1]]$name)
+        }
+        else {
+            for (i in 1:length(recPlot[[1]])) { #@jjallaire
+                symbol <- recPlot[[1]][[i]][[2]][[1]]
+                if ("NativeSymbolInfo" %in% class(symbol)) {
+                    if (!is.null(symbol$package))
+                        name <- symbol$package[["name"]]
+                    else name <- symbol$dll[["name"]]
+                    pkgDLL <- getLoadedDLLs()[[name]]
+                    nativeSymbol <- getNativeSymbolInfo(name = symbol$name,
+                                                        PACKAGE = pkgDLL, withRegistrationInfo = TRUE)
+                    recPlot[[1]][[i]][[2]][[1]] <- nativeSymbol
                 }
             }
-            suppressWarnings(grDevices::replayPlot(recPlot))
         }
+        suppressWarnings(grDevices::replayPlot(recPlot))
+    }
 }
