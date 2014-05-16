@@ -380,3 +380,49 @@ pander.POSIXt <- function(x, ...)
 #' @S3method pander ftable
 pander.ftable <- function(x,  ...)
     pandoc.table(x, ...)
+
+#' @S3method pander CrossTable
+pander.CrossTable <- function(x, digits=0, ...) {
+  caption <- paste('Cross Table of', attr(x, "xlab"), 'and', attr(x, "ylab"))
+  
+  counts <- as.data.frame(rbind(x$t, x$prop.row, x$prop.col, x$prop.tbl))
+  s <- split(counts, f=row.names(counts))
+  # for every factor level, create a summary table
+  round_to_percent <- function(x) paste0(round(x * 100, digits=digits), '%')
+  
+  sum_table <- function(t) {
+    level <- row.names(t)[1]
+    
+    t[1, ] <- round(t[1, ], digits=digits)
+    t[-1, ] <- sapply(t[-1, ], round_to_percent)
+    rsum <- c(round(x$rs[level]), rep(NA, 2), 
+              round_to_percent(x$rs[level]/x$total.n))
+    
+    # add row sum to last col
+    t <- cbind(t, Total = rsum)
+    
+    # add blank line to last row
+    t <- rbind(NA, t, NA)
+    
+    # add row names
+    t <- cbind(a=c(level, 'N', 'Row (%)', 'Column (%)', ' ', ' '), t) 
+    colnames(t)[1] <- ' '
+    
+
+    return(t)
+  }
+  
+  res <- as.matrix(do.call(rbind, lapply(s, sum_table)))
+  res <- rbind(res, 
+               c('Total', x$cs, x$total.n), 
+               c(' ', round_to_percent(x$cs/x$total.n), NA))
+  
+  rownames(res) <- NULL
+  
+  # levels
+  n <- dim(x$t)[1]
+  emph <- matrix(c(seq(from=1, by=6, length.out=n), rep(1, n)), ncol=2)
+  
+  pandoc.table(res, caption = caption, 
+               emphasize.strong.cells = emph, ...)
+}

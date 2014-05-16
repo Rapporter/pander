@@ -1,4 +1,5 @@
 S3method(pander,"NULL")
+S3method(pander,CrossTable)
 S3method(pander,POSIXct)
 S3method(pander,POSIXt)
 S3method(pander,anova)
