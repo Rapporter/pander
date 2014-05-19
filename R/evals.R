@@ -1143,36 +1143,36 @@ redraw.recordedplot <- function(file) {
 #' @references Thanks to Jeroen Ooms \url{http://permalink.gmane.org/gmane.comp.lang.r.devel/29897}, JJ Allaire \url{https://github.com/rstudio/rstudio/commit/eb5f6f1db4717132c2ff111f068ffa6e8b2a5f0b}, and Gabriel Becker.
 #' @seealso \code{\link{redraw.recordedplot}}
 #' @export
-
 redrawPlot <- function(recPlot)
 {
     #this allows us to deal with trellis/grid/ggplot objects as well ...
-    if(!is(recPlot, "recordedplot"))
-        {
-            res = try(print(recPlot))
-            if(is(res, "error"))
-                stop(res)
+    if(!is(recPlot, "recordedplot")) {
+        res = try(print(recPlot))
+        if(is(res, "error"))
+            stop(res)
+    } else {
+        if (getRversion() < "3.0.0") {
+            for (i in 1:length(recPlot[[1]])) #@jeroenooms
+                if ("NativeSymbolInfo" %in% class(recPlot[[1]][[i]][[2]][[1]]))
+                    recPlot[[1]][[i]][[2]][[1]] <- getNativeSymbolInfo(recPlot[[1]][[i]][[2]][[1]]$name)
         } else {
-            if (getRversion() < "3.0.0") {
-                for (i in 1:length(recPlot[[1]])) #@jeroenooms
-                    if ("NativeSymbolInfo" %in% class(recPlot[[1]][[i]][[2]][[1]]))
-                        recPlot[[1]][[i]][[2]][[1]] <- getNativeSymbolInfo(recPlot[[1]][[i]][[2]][[1]]$name)
-            }
-            else {
-                for (i in 1:length(recPlot[[1]])) #@jjallaire
-                {
-                    symbol <- recPlot[[1]][[i]][[2]][[1]]
-                    if ("NativeSymbolInfo" %in% class(symbol)) {
-                        if (!is.null(symbol$package))
-                            name <- symbol$package[["name"]]
-                        else name <- symbol$dll[["name"]]
-                        pkgDLL <- getLoadedDLLs()[[name]]
-                        nativeSymbol <- getNativeSymbolInfo(name = symbol$name,
-                                                            PACKAGE = pkgDLL, withRegistrationInfo = TRUE)
-                        recPlot[[1]][[i]][[2]][[1]] <- nativeSymbol
-                    }
+            for (i in 1:length(recPlot[[1]])) { #@jjallaire
+                symbol <- recPlot[[1]][[i]][[2]][[1]]
+                if ("NativeSymbolInfo" %in% class(symbol)) {
+                    if (!is.null(symbol$package))
+                        name <- symbol$package[["name"]]
+                    else name <- symbol$dll[["name"]]
+                    pkgDLL <- getLoadedDLLs()[[name]]
+                    nativeSymbol <- getNativeSymbolInfo(name = symbol$name,
+                                                        PACKAGE = pkgDLL, withRegistrationInfo = TRUE)
+                    recPlot[[1]][[i]][[2]][[1]] <- nativeSymbol
                 }
             }
-            suppressWarnings(grDevices::replayPlot(recPlot))
         }
+        if (is.null(attr(recPlot, "pid")) || attr(recPlot, "pid") != Sys.getpid()) {
+            warning('Loading plot snapshot from a different session with possible side effects or errors.')
+            attr(recPlot, 'pid') <- Sys.getpid()
+        }
+        suppressWarnings(grDevices::replayPlot(recPlot))
+    }
 }
