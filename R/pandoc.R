@@ -576,7 +576,9 @@ pandoc.table.return <- function(t, caption, digits = panderOptions('digits'), de
             if (nchar(x) == nchar(x, type = 'width')) {
               x <- paste(strwrap(x, width = split.cells), collapse = '\n')
             } else {                
-              ## dealing with CJK chars
+              ## dealing with CJK chars + also it does not count \n, \t, etc.
+              ## this happens because width - counts only the number of columns 
+              ## cat will use to print the string in a monospaced font. 
               if (!keep.line.breaks){
                 x <- split.line(x)
               } else {

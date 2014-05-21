@@ -383,8 +383,8 @@ pander.ftable <- function(x, ...)
 
 #' @S3method pander CrossTable
 pander.CrossTable <- function(x, caption = attr(x, 'caption'), ...){
-  #if (is.null(caption) & !is.null(storage$caption))
-  #  caption <- get.caption()
+  if (is.null(caption) & !is.null(storage$caption))
+    caption <- get.caption()
   to.percent <- function(x, digits = 0){
     paste(round(x * 100, digits), "%",sep="")    
   }
@@ -400,29 +400,29 @@ pander.CrossTable <- function(x, caption = attr(x, 'caption'), ...){
   proportion.table <- apply(x$prop.tbl, c(1,2), to.percent)
   row.sum<- x$rs
   col.sum <- x$cs
-  table.sum <- x$total.n
+  table.sum <- x$gt
   zeros <- rep(0, (col.size + 2) * (row.size + 1))
   constructed.table<- matrix(zeros, ncol=(col.size + 2))
   constructed.table <- as.table(constructed.table)
   colnames(constructed.table) <- c("&nbsp;",col.labels,"Total")
   new.row.labels <- vector()
   for (i in 1:row.size){
-    constructed.table[i, 1] <- c(new.row.labels, paste(pandoc.strong.return(row.labels[i]), "N", "Row (%)", "Column (%)", sep="\n"))
+    constructed.table[i, 1] <- c(new.row.labels, paste(pandoc.strong.return(row.labels[i]), "N", "Row (%)", "Column(%)",sep="\\  \n"))
     for (j in 2:(col.size + 1)){
-      constructed.table[i, j] <- paste("",totals[i, j - 1],
+      constructed.table[i, j] <- paste("&nbsp;",totals[i, j - 1],
                                       proportion.row[i, j - 1],
                                       proportion.column[i, j - 1],
                                       proportion.table[i, j - 1], 
-                                      sep="\n")
+                                      sep="\\ \n")
     }
-    constructed.table[i, col.size + 2] <- paste("", row.sum[i],
-                                                to.percent(sum(totals[i,]/table.sum)), "", "",
-                                                sep="\n")
+    constructed.table[i, col.size + 2] <- paste("&nbsp;", row.sum[i],
+                                                to.percent(sum(totals[i,]/table.sum)),
+                                                sep="\\ \n")
   }
-  row.last <- "Total\n"
+  row.last <- "Total"
   for (i in 2:(col.size + 1))
-    row.last[i] <- paste(col.sum[i - 1], to.percent(sum(totals[,i - 1])/table.sum), sep="\n")
-  row.last[col.size + 2] <- paste(table.sum, "", sep="\n")
+    row.last[i] <- paste(col.sum[i - 1], to.percent(sum(totals[,i - 1])/table.sum), sep="\\ \n")
+  row.last[col.size + 2] <- paste(table.sum, "", sep="\\ \n")
   constructed.table[row.size + 1, ] <- row.last
   row.names(constructed.table) <- new.row.labels
   pandoc.table(constructed.table, caption=caption, keep.line.breaks = TRUE, ...)
