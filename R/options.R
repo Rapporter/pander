@@ -7,6 +7,7 @@
                 'big.mark'                 = '',
                 'round'                    = Inf,
                 'keep.trailing.zeros'      = FALSE,
+                'keep.line.breaks'         = FALSE,
                 'date'                     = '%Y/%m/%d %X',
                 'header.style'             = 'atx',
                 'list.style'               = 'bullet',
@@ -194,6 +195,7 @@ masked.plots$plot <- masked.plots$barplot <- masked.plots$lines <- masked.plots$
 #'      \item \code{big.mark}: string (default: '') passed to \code{format}
 #'      \item \code{round}: numeric (default: \code{Inf}) passed to \code{round}
 #'      \item \code{keep.trailing.zeros}: boolean (default: \code{FALSE}) to show or remove trailing zeros in numbers
+#'      \item \code{keep.line.breaks}: boolean (default: \code{FALSE}) to keep or remove line breaks from cells in a table
 #'      \item \code{date}: string (default: \code{'\%Y/\%m/\%d \%X'}) passed to \code{format} when printing dates (\code{POSIXct} or \code{POSIXt})
 #'      \item \code{header.style}: \code{'atx'} or \code{'setext'} passed to \code{\link{pandoc.header}}
 #'      \item \code{list.style}: \code{'bullet'}, \code{'ordered'} or \code{'roman'} passed to \code{\link{pandoc.list}}. Please not that this has no effect on \code{pander} methods.

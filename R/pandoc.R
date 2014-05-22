@@ -1,3 +1,4 @@
+
 #' Indent text
 #'
 #' Indent all (optionally concatenated) lines of provided text with given level.
@@ -448,6 +449,7 @@ pandoc.list <- function(...)
 #' @param split.tables where to split wide tables to separate tables. The default value (\code{80}) suggests the conventional number of characters used in a line, feel free to change (e.g. to \code{Inf} to disable this feature) if you are not using a VT100 terminal any more :)
 #' @param split.cells where to split cells' text with line breaks. Default to \code{30}, to disable set to \code{Inf}.
 #' @param keep.trailing.zeros to show or remove trailing zeros in numbers on a column basis width
+#' @param keep.line.breaks to keep or remove line breaks from cells in a table
 #' @param emphasize.rows a vector for a two dimensional table specifying which rows to emphasize
 #' @param emphasize.cols a vector for a two dimensional table specifying which cols to emphasize
 #' @param emphasize.cells a vector for one-dimensional tables or a matrix like structure with two columns for row and column indexes to be emphasized in two dimensional tables. See e.g. \code{which(..., arr.ind = TRUE)}
@@ -490,7 +492,7 @@ pandoc.list <- function(...)
 #' pandoc.table(mtcars, caption = 'Only once after the first part!')
 #'
 #' ## tables with line breaks in cells
-#' ## NOTE: line breaks are removed from table content
+#' ## NOTE: line breaks are removed from table content in case keep.line.breaks is set to FALSE
 #' ## and added automatically based on "split.cells" parameter!
 #' t <- data.frame(a = c('hundreds\nof\nmouses', '3 cats'), b=c('FOO is nice', 'BAR\nBAR2'))
 #' pandoc.table(t)
@@ -521,7 +523,7 @@ pandoc.list <- function(...)
 #'
 #' emphasize.strong.cells(which(t > 20, arr.ind = TRUE))
 #' pandoc.table(t)
-pandoc.table.return <- function(t, caption, digits = panderOptions('digits'), decimal.mark = panderOptions('decimal.mark'), big.mark = panderOptions('big.mark'), round = panderOptions('round'), justify, style = c('multiline', 'grid', 'simple', 'rmarkdown'), split.tables = panderOptions('table.split.table'), split.cells = panderOptions('table.split.cells'), keep.trailing.zeros = panderOptions('keep.trailing.zeros'), emphasize.rows, emphasize.cols, emphasize.cells, emphasize.strong.rows, emphasize.strong.cols, emphasize.strong.cells, ...) {
+pandoc.table.return <- function(t, caption, digits = panderOptions('digits'), decimal.mark = panderOptions('decimal.mark'), big.mark = panderOptions('big.mark'), round = panderOptions('round'), justify, style = c('multiline', 'grid', 'simple', 'rmarkdown'), split.tables = panderOptions('table.split.table'), split.cells = panderOptions('table.split.cells'), keep.trailing.zeros = panderOptions('keep.trailing.zeros'), keep.line.breaks = panderOptions('keep.line.breaks'), emphasize.rows, emphasize.cols, emphasize.cells, emphasize.strong.rows, emphasize.strong.cols, emphasize.strong.cells, ...) {
 
     ## helper functions
     table.expand <- function(cells, cols.width, justify, sep.cols) {
@@ -546,42 +548,54 @@ pandoc.table.return <- function(t, caption, digits = panderOptions('digits'), de
         }
 
     }
+    split.line <- function(x){
+      split <- strsplit(x, '\\s')[[1]]
+      n <- nchar(split[1], type = 'width')
+      x <- split[1]
+      if (is.na(x))   # case of when line starts with a line break
+        x <- ''
+      for (s in tail(split, -1)) {
+        if (s == "") # for case of when keeping line breaks, strsplit returns empty lines
+          next 
+        nc <- nchar(s, type = 'width')
+        n  <- n + nc + 1
+        if (n > split.cells) {
+          n <- nc
+          x <- paste(x, s, sep = '\n')
+        } else {
+          x <- paste(x, s, sep = ' ')
+        }
+      }
+      x
+    }
+    
     split.large.cells <- function(cells)
         sapply(cells, function(x) {
-
-            if (!style %in% c('simple', 'rmarkdown')) {
-
-                ## split
-                if (nchar(x) == nchar(x, type = 'width')) {
-
-                    x <- paste(strwrap(x, width = split.cells), collapse = '\n')
-
-                } else {
-
-                    ## dealing with CJK chars
-                    split <- strsplit(x, '\\s')[[1]]
-                    n <- nchar(split[1], type = 'width')
-                    x <- split[1]
-                    for (s in tail(split, -1)) {
-                        nc <- nchar(s, type = 'width')
-                        n  <- n + nc + 1
-                        if (n > split.cells) {
-                            n <- nc
-                            x <- paste(x, s, sep = '\n')
-                        } else {
-                            x <- paste(x, s, sep = ' ')
-                        }
-                    }
+          if (!style %in% c('simple', 'rmarkdown')) {
+            ## split
+            if (nchar(x) == nchar(x, type = 'width')) {
+              x <- paste(strwrap(x, width = split.cells), collapse = '\n')
+            } else {                
+              ## dealing with CJK chars + also it does not count \n, \t, etc.
+              ## this happens because width - counts only the number of columns 
+              ## cat will use to print the string in a monospaced font. 
+              if (!keep.line.breaks){
+                x <- split.line(x)
+              } else {
+                lines <- strsplit(x, '\\n')[[1]]
+                x <- ""
+                for (line in lines){
+                  sl <- split.line(line)    
+                  x <- paste0(x, sl, sep="\n")
                 }
-
+              }
             }
-
-            ## return
-            if (x == 'NA')
-                ''
-            else
-                x
-
+          }
+          ## return
+          if (is.na(x))
+            ''
+          else
+            x
         }, USE.NAMES = FALSE)
     align.hdr <- function(t.width, justify) {
         justify.vec <- rep(justify, length.out = length(t.width))
