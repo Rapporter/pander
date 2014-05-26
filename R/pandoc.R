@@ -931,3 +931,28 @@ pandoc.table.return <- function(t, caption, digits = panderOptions('digits'), de
 #' @export
 pandoc.table <- function(...)
     cat(pandoc.table.return(...))
+
+#' Formulas
+#'
+#' Pandoc's mardown formula.
+#' @param x formula
+#' @param max.width maximum width in characters per line
+#' @param caption caption (string) to be shown under the formula
+#' @return By default this function outputs (see: \code{cat}) the result. If you would want to catch the result instead, then call the function ending in \code{.return}.
+#' @export
+#' @aliases pandoc.formula
+#' @examples
+#' pandoc.formula(y ~ x)
+#' pandoc.formula(formula(paste("y ~ ", paste0("x", 1:12, collapse = " + "))))
+pandoc.formula.return <- function(x, max.width, caption){
+  res <- deparse(x, width.cutoff=max.width)
+  res <- paste(res, "\n\n")
+  ## (optional) caption
+  if (!is.null(caption) && caption != '')
+    res <- paste0(res, panderOptions('formula.caption.prefix'), caption, '\n\n')
+  return(res)
+}
+
+#' @export
+pandoc.formula <- function(...)
+  cat(pandoc.formula.return(...))

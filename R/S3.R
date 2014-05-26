@@ -427,3 +427,10 @@ pander.CrossTable <- function(x, caption = attr(x, 'caption'), ...){
   row.names(constructed.table) <- new.row.labels
   pandoc.table(constructed.table, caption=caption, keep.line.breaks = TRUE, ...)
 }
+
+#' @S3method pander formula
+pander.formula <- function(x, max.width = 80, caption = attr(x, 'caption')){
+  if (is.null(caption) & !is.null(storage$caption))
+    caption <- get.caption()
+  pandoc.formula(x, max.width = max.width, caption = caption)
+}
