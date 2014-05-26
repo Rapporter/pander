@@ -23,6 +23,7 @@
                 'p.wrap'                   = '_',
                 'p.sep'                    = ', ',
                 'p.copula'                 = ' and ',
+                'plain.ascii'              = FALSE,
                 'graph.nomargin'           = TRUE,
                 'graph.fontfamily'         = 'sans',
                 'graph.fontcolor'          = 'black',

@@ -523,7 +523,7 @@ pandoc.list <- function(...)
 #'
 #' emphasize.strong.cells(which(t > 20, arr.ind = TRUE))
 #' pandoc.table(t)
-pandoc.table.return <- function(t, caption, digits = panderOptions('digits'), decimal.mark = panderOptions('decimal.mark'), big.mark = panderOptions('big.mark'), round = panderOptions('round'), justify, style = c('multiline', 'grid', 'simple', 'rmarkdown'), split.tables = panderOptions('table.split.table'), split.cells = panderOptions('table.split.cells'), keep.trailing.zeros = panderOptions('keep.trailing.zeros'), keep.line.breaks = panderOptions('keep.line.breaks'), emphasize.rows, emphasize.cols, emphasize.cells, emphasize.strong.rows, emphasize.strong.cols, emphasize.strong.cells, ...) {
+pandoc.table.return <- function(t, caption, digits = panderOptions('digits'), decimal.mark = panderOptions('decimal.mark'), big.mark = panderOptions('big.mark'), round = panderOptions('round'), justify, style = c('multiline', 'grid', 'simple', 'rmarkdown'), split.tables = panderOptions('table.split.table'), split.cells = panderOptions('table.split.cells'), keep.trailing.zeros = panderOptions('keep.trailing.zeros'), keep.line.breaks = panderOptions('keep.line.breaks'), plain.ascii = panderOptions('plain.ascii'), emphasize.rows, emphasize.cols, emphasize.cells, emphasize.strong.rows, emphasize.strong.cols, emphasize.strong.cells, ...) {
 
     ## helper functions
     table.expand <- function(cells, cols.width, justify, sep.cols) {
@@ -548,6 +548,12 @@ pandoc.table.return <- function(t, caption, digits = panderOptions('digits'), de
         }
 
     }
+    
+    # function for cell conversion to plain-ascii (deletion of markup characters)
+    to.plain.ascii <- function(x){
+      gsub("[&nbsp;]|[*]|[\\\\]", "", x)
+    }
+    
     split.line <- function(x){
       split <- strsplit(x, '\\s')[[1]]
       n <- nchar(split[1], type = 'width')
@@ -795,7 +801,7 @@ pandoc.table.return <- function(t, caption, digits = panderOptions('digits'), de
             t.rownames <- NULL
 
         if (!is.null(t.rownames))
-            t.rownames <- pandoc.strong.return(t.rownames)
+            t.rownames <- pandoc.strong.return(t.rownames) # TODO 
 
     }
 
@@ -888,10 +894,17 @@ pandoc.table.return <- function(t, caption, digits = panderOptions('digits'), de
                    sep.hdr <- align.hdr(t.width, justify)
                    sep.col <- c('| ', ' | ', ' |')
                })
-
+        
+        if (plain.ascii){
+          t <- apply(t, c(1,2), to.plain.ascii)
+          t.rownames <- sapply(t.rownames, to.plain.ascii)
+          t.colnames <- sapply(t.colnames, to.plain.ascii)
+        }
+        
+        ## Actual printing starts here
         ## header
         if (length(t.colnames) != 0) {
-            res <- paste(res, sep.top, table.expand(t.colnames, t.width, justify, sep.col), sep.hdr, sep = '\n')
+            res <- paste(res, sep.top, table.expand(t.colnames, t.width, justify, sep.col), sep.hdr, sep = '\n') ## Roman. PRINT HEADER
         } else {
             if (style == "rmarkdown") {
                 blank.hdr <- paste0('| ', paste(sapply(t.width, function(x) repChar(' ', x)), collapse = ' | '), ' |')
