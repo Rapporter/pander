@@ -450,6 +450,7 @@ pandoc.list <- function(...)
 #' @param split.cells where to split cells' text with line breaks. Default to \code{30}, to disable set to \code{Inf}.
 #' @param keep.trailing.zeros to show or remove trailing zeros in numbers on a column basis width
 #' @param keep.line.breaks to keep or remove line breaks from cells in a table
+#' @param plain.ascii to define if output should be in plain ascii or not
 #' @param emphasize.rows a vector for a two dimensional table specifying which rows to emphasize
 #' @param emphasize.cols a vector for a two dimensional table specifying which cols to emphasize
 #' @param emphasize.cells a vector for one-dimensional tables or a matrix like structure with two columns for row and column indexes to be emphasized in two dimensional tables. See e.g. \code{which(..., arr.ind = TRUE)}
