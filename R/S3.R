@@ -427,3 +427,31 @@ pander.CrossTable <- function(x, caption = attr(x, 'caption'), ...){
   row.names(constructed.table) <- new.row.labels
   pandoc.table(constructed.table, caption=caption, keep.line.breaks = TRUE, ...)
 }
+
+#' @S3method pander ts
+pander.ts <- function(x, caption = attr(x, 'caption'), ...){
+  if (is.null(caption) & !is.null(storage$caption))
+    caption <- get.caption()
+  if (!is.null(ncol(x))) {
+    tp.1 <- trunc(time(x))
+    tp.2 <- trunc(cycle(x))
+    day.abb <- c("Sun", "Mon", "Tue", "Wed", "Thu", "Fri", 
+                 "Sat")
+    row.names <- switch(frequency(x), tp.1, "Arg2", "Arg3", 
+                        paste(tp.1, c("Q1", "Q2", "Q3", "Q4")[tp.2], sep = " "), 
+                        "Arg5", "Arg6", paste("Wk.", tp.1, " ", day.abb[tp.2], 
+                                              sep = ""), "Arg8", "Arg9", "Arg10", "Arg11", 
+                        paste(tp.1, month.abb[tp.2], sep = " "))
+    t <- data.frame(x, row.names = row.names)
+  } else {
+    col.names <- switch(frequency(x), "Value", "Arg2", "Arg3", 
+                        c("Q1", "Q2", "Q3", "Q4"), "Arg5", "Arg6", day.abb, 
+                        "Arg8", "Arg9", "Arg10", "Arg11", month.abb)
+    row.names <- seq(from = start(x)[1], to = end(x)[1])
+    t <- data.frame(matrix(c(rep(NA, start(x)[2] - 1), 
+                             x, rep(NA, frequency(x) - end(x)[2])), ncol = frequency(x), 
+                           byrow = TRUE), row.names = row.names)
+    names(t) <- col.names
+  }
+  pandoc.table(t, caption=caption, ...)
+}
