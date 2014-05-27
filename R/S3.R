@@ -427,3 +427,29 @@ pander.CrossTable <- function(x, caption = attr(x, 'caption'), ...){
   row.names(constructed.table) <- new.row.labels
   pandoc.table(constructed.table, caption=caption, keep.line.breaks = TRUE, ...)
 }
+
+#' @S3method pander coxph
+pander.coxph <- function(x, caption = attr(x, 'caption'), ...) {
+  if (is.null(caption)) {
+    if (is.null(storage$caption))
+      caption <- sprintf('Fitting Proportional Hazards Regression Model: %s', paste(sub('^[ ]*', '', deparse(x$call$formula)), collapse = ''))
+    else
+      caption <- get.caption()
+  }
+  cox <- x
+  beta <- cox$coef
+  se <- sqrt(diag(cox$var))
+  if (is.null(cox$naive.var)) {
+    c.tab <- cbind(beta, exp(beta), se, beta/se, 
+                   1 - pchisq((beta/se)^2, 1))
+    dimnames(c.tab) <- list(names(beta), c("coef", "exp(coef)", 
+                                           "se(coef)", "z", "p"))
+  }
+  else {
+    c.tab <- cbind(beta, exp(beta), se, beta/se, 
+                   signif(1 - pchisq((beta/se)^2, 1), 1))
+    dimnames(c.tab) <- list(names(beta), c("coef", "exp(coef)", 
+                                           "robust se", "z", "p"))
+  }
+  pandoc.table(c.tab, caption=caption,...)
+}
