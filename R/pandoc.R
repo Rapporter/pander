@@ -944,8 +944,16 @@ pandoc.table <- function(...)
 #' @examples
 #' pandoc.formula(y ~ x)
 #' pandoc.formula(formula(paste("y ~ ", paste0("x", 1:12, collapse = " + "))))
-pandoc.formula.return <- function(x, max.width, caption){
-  res <- deparse(x, width.cutoff=max.width)
+pandoc.formula.return <- function(x, max.width = 80, caption){
+  mc  <- match.call()
+  if (is.null(mc$caption)) {
+    if (is.null(attr(t, 'caption'))) {
+      caption <- get.caption()
+    } else {
+      caption <- attr(t, 'caption')
+    }
+  }
+  res <- deparse(x, width.cutoff = max.width)
   res <- paste(res, "\n\n")
   ## (optional) caption
   if (!is.null(caption) && caption != '')
