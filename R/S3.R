@@ -455,3 +455,10 @@ pander.ts <- function(x, caption = attr(x, 'caption'), ...){
   }
   pandoc.table(t, caption=caption, ...)
 }
+
+#' @S3method pander formula
+pander.formula <- function(x, max.width = 80, caption = attr(x, 'caption')){
+  if (is.null(caption) & !is.null(storage$caption))
+    caption <- get.caption()
+  pandoc.formula(x, max.width = max.width, caption = caption)
+}
