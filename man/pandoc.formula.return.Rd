@@ -4,7 +4,7 @@
 \alias{pandoc.formula.return}
 \title{Formulas}
 \usage{
-pandoc.formula.return(x, max.width, caption)
+pandoc.formula.return(x, max.width = 80, caption)
 }
 \arguments{
 \item{x}{formula}
