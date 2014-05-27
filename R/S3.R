@@ -438,3 +438,34 @@ pander.zoo <- function(x, caption = attr(x, 'caption'), ...){
   rownames(c.tab) <- NULL
   pandoc.table(c.tab, caption = caption, ...)
 } 
+
+#' @S3method pander lme
+pander.lme <- function(x, caption = attr(x, 'caption'), summary = FALSE, ...) {
+  
+  if (is.null(caption)) {
+    if (is.null(storage$caption))
+      caption <- sprintf('Linear mixed-effects model fit by %s : %s', 
+                         paste(sub('^[ ]*', '', ifelse(x$method == "REML", "REML\n", "maximum likelihood\n"))),
+                         paste(sub('^[ ]*', '', deparse(x$call$fixed)), collapse = ''))
+    else
+      caption <- get.caption()
+  }
+  
+  xs  <- summary(x)
+  res <- as.data.frame(xs$tTable)
+  
+  if (summary) {
+    pandoc.table(res, caption = paste(sub('^[ ]*', 'Fixed effects: ', deparse(x$call$fixed)), collapse = ''),  split.tables = Inf,...)
+    pandoc.table(xs$residuals, caption="Standardized Within-Group Residuals")
+    pandoc.table(data.frame(
+      'Observations'        = x$dims[["N"]],
+      'Groups'              = x$dims$ngrps[1:x$dims$Q],
+      'Log-restricted-likelihood' = x$logLik,
+      check.names = FALSE), keep.trailing.zeros = TRUE, caption = caption, digits = 4)
+  } else {
+    
+    pandoc.table(res, caption = caption, ...)
+    
+  }
+  
+}
