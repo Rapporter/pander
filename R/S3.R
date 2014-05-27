@@ -427,3 +427,14 @@ pander.CrossTable <- function(x, caption = attr(x, 'caption'), ...){
   row.names(constructed.table) <- new.row.labels
   pandoc.table(constructed.table, caption=caption, keep.line.breaks = TRUE, ...)
 }
+
+#' @S3method pander zoo
+pander.zoo <- function(x, caption = attr(x, 'caption'), ...){
+  if (is.null(caption) & !is.null(storage$caption))
+    caption <- get.caption()
+  c.tab <- as.data.frame(t(as.matrix(x)))
+  colnames(c.tab) <- trunc(time(x))
+#   colnames(c.tab) <- format(trunc(time(x)), panderOptions('date'))
+  rownames(c.tab) <- NULL
+  pandoc.table(c.tab, caption = caption, ...)
+} 
