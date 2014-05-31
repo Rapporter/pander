@@ -246,8 +246,9 @@ pander.aovlist <- function(x, caption = attr(x, 'caption'), ...) {
     pandoc.table(unclass(y[[1]][[1]]), caption, ...)
   else {
     z <- y[[1]][[1]]
-    for (i in 2:n) 
-      z <- rbind(z, y[[i]][[1]])
+    for (i in 2:n){ 
+        z <- rbind(z, y[[i]][[1]])
+    }
     pandoc.table(z, caption, ...)
   }
 }
