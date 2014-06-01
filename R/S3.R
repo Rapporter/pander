@@ -434,7 +434,7 @@ pander.lme <- function(x, caption = attr(x, 'caption'), summary = FALSE, ...) {
   if (is.null(caption)) {
     if (is.null(storage$caption))
       caption <- sprintf('Linear mixed-effects model fit by %s : %s', 
-                         paste(sub('^[ ]*', '', ifelse(x$method == "REML", "REML", "maximum likelihood\n"))),
+                         paste(sub('^[ ]*', '', ifelse(x$method == "REML", "REML", "maximum likelihood"))),
                          paste(sub('^[ ]*', '', deparse(x$call$fixed)), collapse = ''))
     else
       caption <- get.caption()
