@@ -227,26 +227,26 @@ pander.aov <- function(x, caption = attr(x, 'caption'), ...) {
 #' @S3method pander anova
 pander.anova <- function(x, caption = attr(x, 'caption'), ...) {
 
-    if (is.null(caption)) {
+    if (is.null(caption))
         if (is.null(storage$caption))
-            caption <- strsplit(attr(x, 'heading'), '\n')[[1]][1]
-        else
-            caption <- get.caption()
-    }
+            if (!is.null(attr(x, 'heading')))
+                caption <- strsplit(attr(x, 'heading'), '\n')[[1]][1]
+    if (is.null(caption))
+        caption <- get.caption()
 
     pandoc.table(x, caption = caption, ...)
 
 }
 #' @S3method pander aovlist
 pander.aovlist <- function(x, caption = attr(x, 'caption'), ...) {
-  
+
   y <- summary(x)
   n <- length(y)
-  if (n == 1) 
+  if (n == 1)
     pandoc.table(unclass(y[[1]][[1]]), caption, ...)
   else {
     z <- y[[1]][[1]]
-    for (i in 2:n){ 
+    for (i in 2:n){
         z <- rbind(z, y[[i]][[1]])
     }
     pandoc.table(z, caption, ...)
@@ -401,7 +401,7 @@ pander.CrossTable <- function(x, caption = attr(x, 'caption'), ...){
   if (is.null(caption) & !is.null(storage$caption))
     caption <- get.caption()
   to.percent <- function(x, digits = 0){
-    paste(round(x * 100, digits), "%",sep="")    
+    paste(round(x * 100, digits), "%",sep="")
   }
   totals <- x$t
   row.labels <- row.names(totals)
@@ -409,7 +409,7 @@ pander.CrossTable <- function(x, caption = attr(x, 'caption'), ...){
   row.size <- length(row.labels)
   col.size <- length(col.labels)
   row.name <- x$RowData
-  col.name <- x$ColData  
+  col.name <- x$ColData
   proportion.row <- apply(x$prop.row, c(1,2), to.percent)
   proportion.column <- apply(x$prop.col, c(1,2), to.percent)
   proportion.table <- apply(x$prop.tbl, c(1,2), to.percent)
@@ -427,7 +427,7 @@ pander.CrossTable <- function(x, caption = attr(x, 'caption'), ...){
       constructed.table[i, j] <- paste("&nbsp;",totals[i, j - 1],
                                       proportion.row[i, j - 1],
                                       proportion.column[i, j - 1],
-                                      proportion.table[i, j - 1], 
+                                      proportion.table[i, j - 1],
                                       sep="\\ \n")
     }
     constructed.table[i, col.size + 2] <- paste("&nbsp;", row.sum[i],
@@ -450,21 +450,21 @@ pander.ts <- function(x, caption = attr(x, 'caption'), ...){
   if (!is.null(ncol(x))) {
     tp.1 <- trunc(time(x))
     tp.2 <- trunc(cycle(x))
-    day.abb <- c("Sun", "Mon", "Tue", "Wed", "Thu", "Fri", 
+    day.abb <- c("Sun", "Mon", "Tue", "Wed", "Thu", "Fri",
                  "Sat")
-    row.names <- switch(frequency(x), tp.1, "Arg2", "Arg3", 
-                        paste(tp.1, c("Q1", "Q2", "Q3", "Q4")[tp.2], sep = " "), 
-                        "Arg5", "Arg6", paste("Wk.", tp.1, " ", day.abb[tp.2], 
-                                              sep = ""), "Arg8", "Arg9", "Arg10", "Arg11", 
+    row.names <- switch(frequency(x), tp.1, "Arg2", "Arg3",
+                        paste(tp.1, c("Q1", "Q2", "Q3", "Q4")[tp.2], sep = " "),
+                        "Arg5", "Arg6", paste("Wk.", tp.1, " ", day.abb[tp.2],
+                                              sep = ""), "Arg8", "Arg9", "Arg10", "Arg11",
                         paste(tp.1, month.abb[tp.2], sep = " "))
     t <- data.frame(x, row.names = row.names)
   } else {
-    col.names <- switch(frequency(x), "Value", "Arg2", "Arg3", 
-                        c("Q1", "Q2", "Q3", "Q4"), "Arg5", "Arg6", day.abb, 
+    col.names <- switch(frequency(x), "Value", "Arg2", "Arg3",
+                        c("Q1", "Q2", "Q3", "Q4"), "Arg5", "Arg6", day.abb,
                         "Arg8", "Arg9", "Arg10", "Arg11", month.abb)
     row.names <- seq(from = start(x)[1], to = end(x)[1])
-    t <- data.frame(matrix(c(rep(NA, start(x)[2] - 1), 
-                             x, rep(NA, frequency(x) - end(x)[2])), ncol = frequency(x), 
+    t <- data.frame(matrix(c(rep(NA, start(x)[2] - 1),
+                             x, rep(NA, frequency(x) - end(x)[2])), ncol = frequency(x),
                            byrow = TRUE), row.names = row.names)
     names(t) <- col.names
   }
@@ -490,15 +490,15 @@ pander.coxph <- function(x, caption = attr(x, 'caption'), ...) {
   beta <- cox$coef
   se <- sqrt(diag(cox$var))
   if (is.null(cox$naive.var)) {
-    c.tab <- cbind(beta, exp(beta), se, beta/se, 
+    c.tab <- cbind(beta, exp(beta), se, beta/se,
                    1 - pchisq((beta/se)^2, 1))
-    dimnames(c.tab) <- list(names(beta), c("coef", "exp(coef)", 
+    dimnames(c.tab) <- list(names(beta), c("coef", "exp(coef)",
                                            "se(coef)", "z", "p"))
   }
   else {
-    c.tab <- cbind(beta, exp(beta), se, beta/se, 
+    c.tab <- cbind(beta, exp(beta), se, beta/se,
                    signif(1 - pchisq((beta/se)^2, 1), 1))
-    dimnames(c.tab) <- list(names(beta), c("coef", "exp(coef)", 
+    dimnames(c.tab) <- list(names(beta), c("coef", "exp(coef)",
                                            "robust se", "z", "p"))
   }
   pandoc.table(c.tab, caption=caption,...)
@@ -513,7 +513,7 @@ pander.zoo <- function(x, caption = attr(x, 'caption'), ...) {
                  c.tab)
   if (length(colnames(x)) != 0)
     colnames(c.tab) <- c("Period", colnames(z))
-  else 
+  else
     colnames(c.tab) <- c("Period", "Value")
   rownames(c.tab) <- NULL
   pandoc.table(c.tab, caption = caption, ...)
@@ -524,7 +524,7 @@ pander.lme <- function(x, caption = attr(x, 'caption'), summary = FALSE, ...) {
 
   if (is.null(caption)) {
     if (is.null(storage$caption))
-      caption <- sprintf('Linear mixed-effects model fit by %s : %s', 
+      caption <- sprintf('Linear mixed-effects model fit by %s : %s',
                          paste(sub('^[ ]*', '', ifelse(x$method == "REML", "REML", "maximum likelihood"))),
                          paste(sub('^[ ]*', '', deparse(x$call$fixed)), collapse = ''))
     else
