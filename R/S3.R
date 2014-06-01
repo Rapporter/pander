@@ -488,3 +488,18 @@ pander.coxph <- function(x, caption = attr(x, 'caption'), ...) {
   }
   pandoc.table(c.tab, caption=caption,...)
 }
+
+#' @S3method pander zoo
+pander.zoo <- function(x, caption = attr(x, 'caption'), ...) {
+  if (is.null(caption) & !is.null(storage$caption))
+    caption <- get.caption()
+  c.tab <- as.data.frame(x)
+  c.tab <- cbind(format(trunc(time(x)), format = panderOptions('date')),
+                 c.tab)
+  if (length(colnames(x)) != 0)
+    colnames(c.tab) <- c("Period", colnames(z))
+  else 
+    colnames(c.tab) <- c("Period", "Value")
+  rownames(c.tab) <- NULL
+  pandoc.table(c.tab, caption = caption, ...)
+} 
