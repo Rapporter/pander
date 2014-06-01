@@ -433,7 +433,7 @@ pander.zoo <- function(x, caption = attr(x, 'caption'), ...){
   if (is.null(caption) & !is.null(storage$caption))
     caption <- get.caption()
   c.tab <- as.data.frame(x)
-  c.tab <- cbind(format(trunc(time(x)), panderOptions('date')), 
+  c.tab <- cbind(format(trunc(time(x)), format = panderOptions('date')), 
                  c.tab)  
   if (length(colnames(x)) != 0)
     colnames(c.tab) <- c("Period", colnames(z))
