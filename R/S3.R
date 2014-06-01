@@ -237,6 +237,21 @@ pander.anova <- function(x, caption = attr(x, 'caption'), ...) {
     pandoc.table(x, caption = caption, ...)
 
 }
+#' @S3method pander aovlist
+pander.aovlist <- function(x, caption = attr(x, 'caption'), ...) {
+  
+  y <- summary(x)
+  n <- length(y)
+  if (n == 1) 
+    pandoc.table(unclass(y[[1]][[1]]), caption, ...)
+  else {
+    z <- y[[1]][[1]]
+    for (i in 2:n){ 
+        z <- rbind(z, y[[i]][[1]])
+    }
+    pandoc.table(z, caption, ...)
+  }
+}
 
 #' @S3method pander htest
 pander.htest <- function(x, caption = attr(x, 'caption'), ...) {
