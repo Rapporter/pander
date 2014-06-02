@@ -568,9 +568,7 @@ pander.describe<- function(x, caption = attr(x, 'caption'), short = TRUE, split.
                        dim.counts[2])
     }
     names(counts) <- names(x$count)
-    counts <- pandoc.table.return(counts, caption = caption, ...)
-    #   counts <- ascii(counts, include.colnames = TRUE, caption = "", 
-    #                   caption.level = "s")
+    counts <- pandoc.table.return(counts, caption = caption, split.tables = split.tables, ...)
     val <- x$values
     if (length(val)) {
       if (!is.matrix(val)) {
@@ -613,8 +611,6 @@ pander.describe<- function(x, caption = attr(x, 'caption'), short = TRUE, split.
             else z <- paste(z, w, sep = ", ")
           }
           val <- pander.return(z)
-          # add here
-          #         val <- ascii(as.list(z), list.type = "none")
         } else {
           dim.val <- dim(val)
           if (is.null(dim.val)) {
@@ -626,7 +622,7 @@ pander.describe<- function(x, caption = attr(x, 'caption'), short = TRUE, split.
           }
           rownames(val) <- rownames(x$values)
           colnames(val) <- colnames(x$values)
-          val <- pandoc.table.return(val,...)
+          val <- pandoc.table.return(val, split.tables = split.tables,...)
         }
       }
     }
