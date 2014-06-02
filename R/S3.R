@@ -549,3 +549,33 @@ pander.lme <- function(x, caption = attr(x, 'caption'), summary = FALSE, ...) {
   }
 
 }
+
+#' @S3method pander sessionInfo
+pander.sessionInfo <- function (x, locale = TRUE, ...) 
+{
+  mkLabel <- function(L, n) {
+    vers <- sapply(L[[n]], function(x) x[["Version"]])
+    pkg <- sapply(L[[n]], function(x) x[["Package"]])
+    paste(pkg, vers, sep = "_")
+  }
+  cat(pandoc.strong(x$R.version$version.string), "\n", sep = "")
+  cat(pandoc.strong("Platform:"), x$platform, "\n\n", sep = " ")
+  if (locale) {
+    cat(pandoc.strong("locale:"),"\n")
+    pander(strsplit(x$locale, ";", fixed = TRUE)[[1]], ...)
+    cat("\n")
+  }
+  cat(pandoc.strong("attached base packages:"),"\n")
+  pander(x$basePkgs, quote = FALSE, ...)
+  if (!is.null(x$otherPkgs)) {
+    cat("\n")
+    cat(pandoc.strong("other attached packages:"),"\n")
+    pander(mkLabel(x, "otherPkgs"), quote = FALSE, ...)
+  }
+  if (!is.null(x$loadedOnly)) {
+    cat("\n")
+    cat(pandoc.strong("loaded via a namespace (and not attached):"),"\n")
+    pander(mkLabel(x, "loadedOnly"), quote = FALSE, ...)
+  }
+  invisible(x)
+}
