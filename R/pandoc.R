@@ -978,3 +978,30 @@ pandoc.formula.return <- function(x, max.width = 80, caption){
 #' @export
 pandoc.formula <- function(...)
   cat(pandoc.formula.return(...))
+
+
+#' Dates
+#'
+#' Pandoc's mardown date.
+#' @param x date or vector of dates
+#' @param inline if to render vector of dates as inline paragraph or not (as list)
+#' @param simplified if just add date formatting to vector of dates
+#' @return By default this function outputs (see: \code{cat}) the result. If you would want to catch the result instead, then call the function ending in \code{.return}.
+#' @export
+#' @aliases pandoc.date
+#' @examples
+#' pandoc.date(Sys.date())
+#' pandoc.date(Sys.date() - 1:10)
+pandoc.date.return <- function(x, inline = TRUE, simplified = FALSE)
+  if (length(x) == 1 || simplified){
+    format(x, format = panderOptions('date'))
+  } else {  
+    if (inline)
+      p(as.character(format(x, format = panderOptions('date'))))
+    else
+      pandoc.list.return(as.list((format(x, format = panderOptions('date')))), add.end.of.list = FALSE)
+  }
+
+#' @export
+pandoc.date <- function(...)
+  cat(pandoc.date.return(...))
