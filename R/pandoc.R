@@ -952,13 +952,14 @@ pandoc.table <- function(...)
 #' @param x formula
 #' @param max.width maximum width in characters per line
 #' @param caption caption (string) to be shown under the formula
+#' @param add.line.breaks if to add 2 line breaks after formula
 #' @return By default this function outputs (see: \code{cat}) the result. If you would want to catch the result instead, then call the function ending in \code{.return}.
 #' @export
 #' @aliases pandoc.formula
 #' @examples
 #' pandoc.formula(y ~ x)
 #' pandoc.formula(formula(paste("y ~ ", paste0("x", 1:12, collapse = " + "))))
-pandoc.formula.return <- function(x, max.width = 80, caption){
+pandoc.formula.return <- function(x, max.width = 80, caption, add.line.breaks = TRUE){
   mc  <- match.call()
   if (is.null(mc$caption)) {
     if (is.null(attr(t, 'caption'))) {
@@ -968,7 +969,8 @@ pandoc.formula.return <- function(x, max.width = 80, caption){
     }
   }
   res <- deparse(x, width.cutoff = max.width)
-  res <- paste(res, "\n\n")
+  if (add.line.breaks)
+    res <- paste(res, "\n\n")
   ## (optional) caption
   if (!is.null(caption) && caption != '')
     res <- paste0(res, panderOptions('formula.caption.prefix'), caption, '\n\n')
