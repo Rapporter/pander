@@ -549,3 +549,46 @@ pander.lme <- function(x, caption = attr(x, 'caption'), summary = FALSE, ...) {
   }
 
 }
+
+#' @S3method pander survfit
+pander.survfit <- function (x, caption = attr(x, 'caption'), scale = 1, print.rmean = getOption("survfit.print.rmean"), rmean = getOption("survfit.rmean"),...) 
+{
+  if (is.null(caption) & !is.null(storage$caption))
+    caption <- get.caption()
+  omit <- x$na.action
+  na <- NULL
+  if (length(omit)) 
+    na <- pander(list(naprint(omit)), list.type = "none")
+  if (!missing(print.rmean) && is.logical(print.rmean) && missing(rmean)) {
+    if (print.rmean) 
+      rmean <- "common"
+    else rmean <- "none"
+  }
+  if (is.null(rmean)) {
+    if (is.logical(print.rmean)) {
+      if (print.rmean) 
+        rmean <- "common"
+      else rmean <- "none"
+    }else rmean <- "none"
+  }
+  if (is.numeric(rmean)) {
+    if (is.null(x$start.time)) {
+      if (rmean < min(x$time)) 
+        stop("Truncation point for the mean is < smallest survival")
+    } else if (rmean < x$start.time) 
+      stop("Truncation point for the mean is < smallest survival")
+  } else {
+    rmean <- match.arg(rmean, c("none", "common", "individual"))
+    if (length(rmean) == 0) 
+      stop("Invalid value for rmean option")
+  }
+  temp <- survival:::survmean(x, scale = scale, rmean)
+  mat <- pandoc.table(temp$matrix, caption = ...)
+  restrm <- NULL
+  if (rmean != "none") {
+    if (rmean == "individual") 
+      restrm <- pander("* restricted mean with variable upper limit")
+    else restrm <- pander(paste("* restricted mean with upper limit = ", 
+                                    format(temp$end.time[1])))
+  }
+}
