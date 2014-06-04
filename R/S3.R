@@ -402,9 +402,9 @@ pander.mtable <- function(x, caption = attr(x, 'caption'), ...){
     caption <- get.caption()
   coefs <- ftable(as.table(x$coefficients), row.vars = rev(x$as.row), 
                   col.vars = rev(x$as.col))
-  col.size <- dim(x$coefficients)[x$as.col[2]]
-  row.size <- dim(x$coefficients)[x$as.row[2]]
   coefs <- as.data.frame(rbind(coefs, x$summaries))
+  col.size <- length(colnames(coefs))
+  row.size <- length(dimnames(x$coefficients)[[3]])
   zeros <- rep(0, (col.size) * (row.size))
   temp <- matrix(zeros, ncol=(col.size))
   temp <- as.table(temp)
