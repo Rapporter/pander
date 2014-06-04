@@ -396,6 +396,21 @@ pander.POSIXt <- function(x, ...)
 pander.ftable <- function(x, ...)
     pandoc.table(x, ...)
 
+#' @S3method pander mtable
+pander.mtable <- function(x, caption = attr(x, 'caption'), ...){
+  if (is.null(caption) & !is.null(storage$caption))
+    caption <- get.caption()
+  coefs <- ftable(as.table(x$coefficients), row.vars = rev(x$as.row), 
+                  col.vars = rev(x$as.col))
+  r.names <- as.vector(rbind(dimnames(x$coefficients)[[3]], rep("", dim(x$coefficients)[x$as.row[2]])))
+  r.names <- c(r.names, rownames(x$summaries))
+  coefs <- as.data.frame(rbind(coefs, x$summaries))
+  rownames(coefs) <- NULL
+  coefs <- cbind(r.names, coefs)
+  colnames(coefs)[1] <- ""
+  pandoc.table(coefs, emphasize.cols = 1, ...)
+}
+
 #' @S3method pander CrossTable
 pander.CrossTable <- function(x, caption = attr(x, 'caption'), ...){
   if (is.null(caption) & !is.null(storage$caption))
