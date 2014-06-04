@@ -402,13 +402,23 @@ pander.mtable <- function(x, caption = attr(x, 'caption'), ...){
     caption <- get.caption()
   coefs <- ftable(as.table(x$coefficients), row.vars = rev(x$as.row), 
                   col.vars = rev(x$as.col))
-  r.names <- as.vector(rbind(dimnames(x$coefficients)[[3]], rep("", dim(x$coefficients)[x$as.row[2]])))
-  r.names <- c(r.names, rownames(x$summaries))
+  col.size <- dim(x$coefficients)[x$as.col[2]]
+  row.size <- dim(x$coefficients)[x$as.row[2]]
   coefs <- as.data.frame(rbind(coefs, x$summaries))
-  rownames(coefs) <- NULL
-  coefs <- cbind(r.names, coefs)
-  colnames(coefs)[1] <- ""
-  pandoc.table(coefs, emphasize.cols = 1, ...)
+  zeros <- rep(0, (col.size) * (row.size))
+  temp <- matrix(zeros, ncol=(col.size))
+  temp <- as.table(temp)
+  for (i in 1:row.size){
+    tmp.row <- vector()
+    s <- as.vector(rbind(as.vector(as.matrix(coefs[2 *i - 1,])), as.vector(as.matrix(coefs[2*i,]))))
+    for (j in 1:col.size)
+      tmp.row <- c(tmp.row, paste(s[2*j - 1], s[2 * j], sep="\\ \n"))
+    temp[i,] <- tmp.row 
+  }
+  temp <- rbind(temp, x$summaries)
+  rownames(temp) <- c(dimnames(x$coefficients)[[3]], rownames(x$summaries))
+  colnames(temp) <- colnames(coefs)
+  pandoc.table(temp, caption = caption, keep.line.breaks = TRUE, ...)
 }
 
 #' @S3method pander CrossTable
