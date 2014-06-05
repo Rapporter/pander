@@ -549,3 +549,28 @@ pander.lme <- function(x, caption = attr(x, 'caption'), summary = FALSE, ...) {
   }
 
 }
+
+#' @S3method pander stat.table
+pander.stat.table <- function(x, caption = attr(x, 'caption'), ...){
+  if (is.null(caption) & !is.null(storage$caption))
+    caption <- get.caption()
+  if (length(dim(x)) == 2) {
+    results <- pandoc.table(t(x), caption = caption, ...)
+  }
+  if (length(dim(x)) == 3) {
+    xx <- list()
+    for (i in 1:dim(x)[2]) {
+      xx[[i]] <- x[, i, ]
+    }
+    xx <- do.call(rbind, xx)
+    dn <- dimnames(x)
+    lgroup <- list(names(dn)[2], dn[[2]])
+    tgroup <- names(dn)[3]
+    c.s <- length(dn[[3]])
+    xx <- rbind(colnames(xx), xx)
+    xx <- cbind(unlist(lgroup),xx)
+    xx <- rbind(c(rep("", c.s), tgroup), xx)
+    colnames(xx) <- NULL
+    pandoc.table(xx, caption = caption, emphasize.rows = c(1,2), emphasize.cols = 1,...)
+  }
+}
