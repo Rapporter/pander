@@ -549,3 +549,9 @@ pander.lme <- function(x, caption = attr(x, 'caption'), summary = FALSE, ...) {
   }
 
 }
+
+#' @S3method pander smooth.spline
+pander.smooth.spline <- function(x, ...) {
+  x <- as.list(capture.output(x)[-1:-3])
+  pandoc.list(x, add.end.of.list = FALSE)
+}
