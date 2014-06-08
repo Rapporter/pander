@@ -494,14 +494,40 @@ pander.coxph <- function(x, caption = attr(x, 'caption'), ...) {
                    1 - pchisq((beta/se)^2, 1))
     dimnames(c.tab) <- list(names(beta), c("coef", "exp(coef)",
                                            "se(coef)", "z", "p"))
-  }
-  else {
+  } else {
     c.tab <- cbind(beta, exp(beta), se, beta/se,
                    signif(1 - pchisq((beta/se)^2, 1), 1))
     dimnames(c.tab) <- list(names(beta), c("coef", "exp(coef)",
                                            "robust se", "z", "p"))
   }
   pandoc.table(c.tab, caption=caption,...)
+  logtest <- -2 * (x$loglik[1] - x$loglik[2])
+  if (is.null(x$df)) 
+    df <- sum(!is.na(beta))
+  else df <- round(sum(x$df), 2)
+  cat("\n")
+  cat("Likelihood ratio test=", format(round(logtest, 2)), 
+      "  on ", df, " df,", " p=", format(1 - pchisq(logtest, 
+                                                    df)), sep = "")
+  omit <- x$na.action
+  cat("  n=", x$n)
+  if (!is.null(x$nevent)) 
+    cat(", number of events=", x$nevent, "\n")
+  else cat("\n")
+  if (length(omit)) 
+    cat("   (", naprint(omit), ")\n", sep = "")
+}
+
+#' @S3method pander clogit
+pander.clogit <- function (x, caption = attr(x, 'caption'), ...) 
+{
+  if (is.null(caption)) {
+    if (is.null(storage$caption))
+      caption <- sprintf('Fitting Conditional logistic regression: %s', paste(sub('^[ ]*', '', deparse(x$userCall)), collapse = ''))
+    else
+      caption <- get.caption()
+  }
+  pander.coxph(x, caption = caption, ...)
 }
 
 #' @S3method pander zoo
