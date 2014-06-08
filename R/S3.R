@@ -549,3 +549,28 @@ pander.lme <- function(x, caption = attr(x, 'caption'), summary = FALSE, ...) {
   }
 
 }
+
+#' @S3method pander rlm
+pander.rlm <- function(x, caption = attr(x, 'caption'), ...) {
+  if (is.null(caption)) {
+    if (is.null(storage$caption))
+      if (!is.null(x$call))
+        caption <- sprintf('Fitting linear model by robust regression: %s', paste(sub('^[ ]*', '', deparse(x$call$formula)), collapse = ''))
+      else
+        caption <- 'Fitting linear model by robust regression'
+    else
+      caption <- get.caption()
+  }
+  if (x$converged) 
+    cat("Converged in", length(x$conv), "iterations\n")
+  else 
+    cat("Ran", length(x$conv), "iterations without convergence\n")
+  coef <- x$coefficients
+  pandoc.table(coef, caption = caption, ...)
+  nobs <- length(x$residuals)
+  rdf <- nobs - length(coef)
+  cat("Degrees of freedom:", nobs, "total;", rdf, "residual\n")
+  if (nzchar(mess <- naprint(x$na.action))) 
+    cat("  (", mess, ")\n", sep = "")
+  cat("Scale estimate:", format(signif(x$s, 3)), "\n")
+}
