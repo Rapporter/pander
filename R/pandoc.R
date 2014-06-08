@@ -990,8 +990,9 @@ pandoc.formula <- function(...)
 #' @export
 #' @aliases pandoc.date
 #' @examples
-#' pandoc.date(Sys.date())
-#' pandoc.date(Sys.date() - 1:10)
+#' pandoc.date(Sys.Date())
+#' pandoc.date(Sys.Date() - 1:10)
+#' pandoc.date(Sys.Date() - 1:10, inline = FALSE)
 pandoc.date.return <- function(x, inline = TRUE, simplified = FALSE)
   if (length(x) == 1 || simplified){
     format(x, format = panderOptions('date'))
