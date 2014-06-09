@@ -563,6 +563,7 @@ pander.stat.table <- function(x, caption = attr(x, 'caption'), ...){
       xx[[i]] <- x[, i, ]
     }
     xx <- do.call(rbind, xx)
+    xx <- apply(xx, c(1,2), format, digits=panderOptions("digits"))
     dn <- dimnames(x)
     lgroup <- list(names(dn)[2], dn[[2]])
     tgroup <- names(dn)[3]
