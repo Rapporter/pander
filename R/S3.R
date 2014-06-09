@@ -384,8 +384,8 @@ pander.evals <- function(x, ...) {
 pander.rapport <- function(x, ...)
     print(x)
 
-#' @S3method pander POSIXt
-pander.POSIXt <- function(x, ...)
+#' @S3method pander POSIXlt
+pander.POSIXlt <- function(x, ...)
   pandoc.date(x, ...)
 
 #' @S3method pander POSIXct
