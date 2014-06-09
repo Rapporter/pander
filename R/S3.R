@@ -569,7 +569,7 @@ pander.rlm <- function(x, caption = attr(x, 'caption'), ...) {
   pandoc.table(coef, caption = caption, ...)
   nobs <- length(x$residuals)
   rdf <- nobs - length(coef)
-  cat("Degrees of freedom:", nobs, "total;", rdf, "residual\n")
+  cat("Degrees of freedom:", nobs, "total;", rdf, "residual\n\n")
   if (nzchar(mess <- naprint(x$na.action))) 
     cat("  (", mess, ")\n", sep = "")
   cat("Scale estimate:", format(signif(x$s, 3)), "\n")
