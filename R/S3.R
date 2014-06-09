@@ -762,3 +762,9 @@ pander.survfit <- function (x, caption = attr(x, 'caption'), scale = 1, print.rm
                                     format(temp$end.time[1])))
   }
 }
+
+#' @S3method pander smooth.spline
+pander.smooth.spline <- function(x, ...) {
+  x <- as.list(capture.output(x)[-1:-3])
+  pandoc.list(x, add.end.of.list = FALSE)
+}
