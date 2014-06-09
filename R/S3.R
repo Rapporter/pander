@@ -401,6 +401,31 @@ pander.Date <- function(x, ...)
 pander.ftable <- function(x, ...)
     pandoc.table(x, ...)
 
+#' @S3method pander mtable
+pander.mtable <- function(x, caption = attr(x, 'caption'), ...){
+  if (is.null(caption) & !is.null(storage$caption))
+    caption <- get.caption()
+  coefs <- ftable(as.table(x$coefficients), row.vars = rev(x$as.row), 
+                  col.vars = rev(x$as.col))
+  coefs <- as.data.frame(rbind(coefs, x$summaries))
+  col.size <- length(colnames(coefs))
+  row.size <- length(dimnames(x$coefficients)[[3]])
+  zeros <- rep(0, (col.size) * (row.size))
+  temp <- matrix(zeros, ncol=(col.size))
+  temp <- as.table(temp)
+  for (i in 1:row.size){
+    tmp.row <- vector()
+    s <- as.vector(rbind(as.vector(as.matrix(coefs[2 *i - 1,])), as.vector(as.matrix(coefs[2*i,]))))
+    for (j in 1:col.size)
+      tmp.row <- c(tmp.row, paste(s[2*j - 1], s[2 * j], sep="\\ \n"))
+    temp[i,] <- tmp.row 
+  }
+  temp <- rbind(temp, x$summaries)
+  rownames(temp) <- c(dimnames(x$coefficients)[[3]], rownames(x$summaries))
+  colnames(temp) <- colnames(coefs)
+  pandoc.table(temp, caption = caption, keep.line.breaks = TRUE, ...)
+}
+
 #' @S3method pander CrossTable
 pander.CrossTable <- function(x, caption = attr(x, 'caption'), ...){
   if (is.null(caption) & !is.null(storage$caption))
