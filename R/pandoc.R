@@ -552,7 +552,7 @@ pandoc.table.return <- function(t, caption, digits = panderOptions('digits'), de
     
     # function for cell conversion to plain-ascii (deletion of markup characters)
     to.plain.ascii <- function(x){
-      gsub("[&nbsp;]|[**]|[\\\\]", "", x)
+      gsub("&nbsp;|[*]{2}|[\\\\]", "", x)
     }
     
     split.line <- function(x){
