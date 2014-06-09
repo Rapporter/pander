@@ -4,7 +4,7 @@
 \alias{pandoc.formula.return}
 \title{Formulas}
 \usage{
-pandoc.formula.return(x, max.width = 80, caption)
+pandoc.formula.return(x, max.width = 80, caption, add.line.breaks = TRUE)
 }
 \arguments{
 \item{x}{formula}
@@ -12,6 +12,8 @@ pandoc.formula.return(x, max.width = 80, caption)
 \item{max.width}{maximum width in characters per line}
 
 \item{caption}{caption (string) to be shown under the formula}
+
+\item{add.line.breaks}{if to add 2 line breaks after formula}
 }
 \value{
 By default this function outputs (see: \code{cat}) the result. If you would want to catch the result instead, then call the function ending in \code{.return}.
