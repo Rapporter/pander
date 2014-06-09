@@ -384,13 +384,18 @@ pander.evals <- function(x, ...) {
 pander.rapport <- function(x, ...)
     print(x)
 
-#' @S3method pander POSIXct
-pander.POSIXct <- function(x, ...)
-    cat(format(x, panderOptions('date')))
-
 #' @S3method pander POSIXt
 pander.POSIXt <- function(x, ...)
-    cat(format(x, panderOptions('date')))
+  pandoc.date(x, ...)
+
+#' @S3method pander POSIXct
+pander.POSIXct <- function(x, ...)
+  pandoc.date(x, ...)
+
+#' @S3method pander Date
+pander.Date <- function(x, ...)
+  pandoc.date(x, ...)
+
 
 #' @S3method pander ftable
 pander.ftable <- function(x, ...)
@@ -509,7 +514,7 @@ pander.zoo <- function(x, caption = attr(x, 'caption'), ...) {
   if (is.null(caption) & !is.null(storage$caption))
     caption <- get.caption()
   c.tab <- as.data.frame(x)
-  c.tab <- cbind(format(trunc(time(x)), format = panderOptions('date')),
+  c.tab <- cbind(pandoc.date.return(trunc(time(x)), simplified = TRUE),
                  c.tab)
   if (length(colnames(x)) != 0)
     colnames(c.tab) <- c("Period", colnames(z))
