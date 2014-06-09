@@ -654,3 +654,45 @@ pander.describe<- function(x, caption = attr(x, 'caption'), short = TRUE, split.
     describe.single(x, caption = caption, short = short, split.tables = split.tables,...)
   invisible()
 }
+
+#' @S3method pander survdiff
+pander.survdiff <- function(x, caption = attr(x, 'caption'), ...) {
+  if (is.null(caption)) {
+    if (is.null(storage$caption))
+      caption <- sprintf("Call: %s", 
+                         paste(sub('^[ ]*', '', deparse(x$call$formula)), collapse = ''))
+    else
+      caption <- get.caption()
+  }
+  if (length(x$n) == 1) {
+    z <- sign(x$exp - x$obs) * sqrt(x$chisq)
+    temp <- c(x$obs, x$exp, z, signif(1 - pchisq(x$chisq, 
+                                                 1), panderOptions("digits")))
+    names(temp) <- c("Observed", "Expected", "Z", "p")
+    temp <- t(temp)
+    include.rownames = FALSE
+  }
+  else {
+    if (is.matrix(x$obs)) {
+      otmp <- apply(x$obs, 1, sum)
+      etmp <- apply(x$exp, 1, sum)
+    }
+    else {
+      otmp <- x$obs
+      etmp <- x$exp
+    }
+    df <- sum(1 * (etmp > 0)) - 1
+    p <- 1 - pchisq(x$chisq, df[!is.na(df)])
+    temp <- cbind(x$n, otmp, etmp, ((otmp - etmp)^2)/etmp, 
+                  ((otmp - etmp)^2)/diag(x$var))
+    dimnames(temp) <- list(names(x$n), c("N", "Observed", 
+                                         "Expected", "(O-E)^2/E", "(O-E)^2/V"))
+    caption <- paste(caption, sprintf("Chisq = %f \non %d degrees of freedom, p = %f",
+                                      x$chisq, 
+                                      df, 
+                                      p), sep = " ")
+  }
+  temp <- as.data.frame(temp, checknames = FALSE)
+  pandoc.table(temp, caption = caption)
+
+}
