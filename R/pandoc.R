@@ -555,7 +555,7 @@ pandoc.table.return <- function(t, caption, digits = panderOptions('digits'), de
       gsub("&nbsp;|[*]{2}|[\\\\]", "", x)
     }
     
-    split.line <- function(x){
+    split.line <- function(x, max.width){
       split <- strsplit(x, '\\s')[[1]]
       n <- nchar(split[1], type = 'width')
       x <- split[1]
@@ -566,7 +566,7 @@ pandoc.table.return <- function(t, caption, digits = panderOptions('digits'), de
           next 
         nc <- nchar(s, type = 'width')
         n  <- n + nc + 1
-        if (n > split.cells) {
+        if (n > max.width) {
           n <- nc
           x <- paste(x, s, sep = '\n')
         } else {
@@ -576,34 +576,70 @@ pandoc.table.return <- function(t, caption, digits = panderOptions('digits'), de
       x
     }
     
-    split.large.cells <- function(cells)
-        sapply(cells, function(x) {
-          if (!style %in% c('simple', 'rmarkdown')) {
-            ## split
-            if (nchar(x) == nchar(x, type = 'width')) {
-              x <- paste(strwrap(x, width = split.cells), collapse = '\n')
-            } else {                
-              ## dealing with CJK chars + also it does not count \n, \t, etc.
-              ## this happens because width - counts only the number of columns 
-              ## cat will use to print the string in a monospaced font. 
-              if (!keep.line.breaks){
-                x <- split.line(x)
-              } else {
-                lines <- strsplit(x, '\\n')[[1]]
-                x <- ""
-                for (line in lines){
-                  sl <- split.line(line)    
-                  x <- paste0(x, sl, sep="\n")
-                }
-              }
+    split.large.cells.helper <- function(x, max.width){
+      if (!style %in% c('simple', 'rmarkdown')) {
+        ## split
+        if (nchar(x) == nchar(x, type = 'width')) {
+          x <- paste(strwrap(x, width = max.width), collapse = '\n')
+        } else {                
+          ## dealing with CJK chars + also it does not count \n, \t, etc.
+          ## this happens because width - counts only the number of columns 
+          ## cat will use to print the string in a monospaced font. 
+          if (!keep.line.breaks){
+            x <- split.line(x, max.width)
+          } else {
+            lines <- strsplit(x, '\\n')[[1]]
+            x <- ""
+            for (line in lines){
+              sl <- split.line(line)    
+              x <- paste0(x, sl, sep="\n")
             }
           }
-          ## return
-          if (is.na(x))
-            ''
-          else
-            x
-        }, USE.NAMES = FALSE)
+        }
+      }
+      ## return
+      if (is.na(x))
+        ''
+      else
+        x      
+    }
+    
+    split.large.cells <- function(cells){
+        if (length(split.cells) == 0){
+          warning("Split cells is vector of length 0, reverting to default value") ## TODO better explanation
+          split.cells <- 30
+        }
+        if (length(dim(cells)) == 0){    ## Case of just a number
+          if (length(split.cells) == 1){
+            res <- split.large.cells.helper(cells, split.cells)
+          } else {
+            warning("Split.cells param is too big") ## TODO better explanation
+            res <- split.large.cells.helper(cells, split.cells[1])
+          }
+        }else{
+          if (length(split.cells) == 1) ## to make less checks later
+            split.cells <- rep(split.cells, length(cells))
+          if(length(dim(cells)) == 1){ ## Vector
+            if (length(cells) > length(split.cells) && length(split.cells) != 1){
+              warning("Split.cells vectors is smaller than data. Default value will be used")
+              split.cells <- 30
+            }
+            res <- NULL
+            for (i in 1:length(cells)){
+              res <- cbind(res, split.large.cells.helper(cells[i], max.width = split.cells[i]))
+            }          
+          } else { ## Matrix/Table
+            res <- NULL
+            for (j in 1:dim(x)[2]){
+              res <- cbind(res,
+                           sapply(cells[,j], split.large.cells.helper, max.width = split.cells[j], USE.NAMES = FALSE)
+              )
+            }          
+          }    
+        }
+        res
+    }
+    
     align.hdr <- function(t.width, justify) {
         justify.vec <- rep(justify, length.out = length(t.width))
         dashes <- mapply(function(justify, width)
@@ -756,10 +792,7 @@ pandoc.table.return <- function(t, caption, digits = panderOptions('digits'), de
     ## helper variables & split too long (30+ chars) cells
     if (length(dim(t)) < 2) {
 
-        if (length(dim(t)) == 0)
-            t[1:length(t)] <- split.large.cells(t)
-        else
-            t[1:dim(t)] <- split.large.cells(t)
+        t <- split.large.cells(t)
 
         t.rownames  <- NULL
         t.colnames  <- names(t)
@@ -782,7 +815,7 @@ pandoc.table.return <- function(t, caption, digits = panderOptions('digits'), de
         if (dim(t)[1] == 0)
             t[1, ] <- NA
 
-        t <- apply(t, c(1,2), split.large.cells)
+        t <- split.large.cells(t)
 
         t.rownames  <- rownames(t)
         t.colnames  <- colnames(t)
@@ -795,14 +828,14 @@ pandoc.table.return <- function(t, caption, digits = panderOptions('digits'), de
         }
 
         ## also dealing with cells split by newlines
-        t.width     <-  as.numeric(apply(cbind(t.colnames.width, apply(t, 2, function(x) max(sapply(strsplit(x,'\n'), function(x) max(nchar(x, type = 'width'), 0))))), 1, max))
+        t.width <-  as.numeric(apply(cbind(t.colnames.width, apply(t, 2, function(x) max(sapply(strsplit(x,'\n'), function(x) max(nchar(x, type = 'width'), 0))))), 1, max))
 
         ## remove obvious row.names
         if (all(rownames(t) == 1:nrow(t)) | all(rownames(t) == ''))
             t.rownames <- NULL
 
         if (!is.null(t.rownames))
-            t.rownames <- pandoc.strong.return(t.rownames) # TODO 
+            t.rownames <- pandoc.strong.return(t.rownames)  
 
     }
 
@@ -815,7 +848,7 @@ pandoc.table.return <- function(t, caption, digits = panderOptions('digits'), de
         t.width[1] <- t.width[1] + 2
 
     }
-
+    ### Problem is in justify, gives wrong params. Everything else seems fine
     if (length(justify) != 1) {
         if (length(t.rownames) != 0)
             if (length(justify) != length(t.width))
