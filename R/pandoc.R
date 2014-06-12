@@ -627,14 +627,16 @@ pandoc.table.return <- function(t, caption, digits = panderOptions('digits'), de
             res <- NULL
             for (i in 1:length(cells)){
               res <- cbind(res, split.large.cells.helper(cells[i], max.width = split.cells[i]))
-            }          
+            } 
+            colnames(res) <- colnames(x)
           } else { ## Matrix/Table
             res <- NULL
             for (j in 1:dim(x)[2]){
               res <- cbind(res,
-                           sapply(cells[,j], split.large.cells.helper, max.width = split.cells[j], USE.NAMES = FALSE)
-              )
+                           sapply(cells[,j], split.large.cells.helper, max.width = split.cells[j], USE.NAMES = FALSE))
             }          
+            rownames(res) <- rownames(x)
+            colnames(res) <- colnames(x)
           }    
         }
         res
