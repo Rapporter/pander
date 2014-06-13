@@ -796,44 +796,28 @@ pandoc.table.return <- function(t, caption, digits = panderOptions('digits'), de
         }
     }
 
+    
     ## helper variables & split too long (30+ chars) cells
+    
+    ## checking for empty data frames
+    if (length(dim(t)) > 1 && dim(t)[1] == 0)
+      t[1, ] <- NA
+    t <- split.large.cells(t)
+    t.rownames  <- rownames(t)
+    t.colnames  <- colnames(t)
+    if (!is.null(t.colnames)) {
+      t.colnames <- replace(t.colnames, which(t.colnames == ''), '&nbsp;')
+      t.colnames <- split.large.cells(t.colnames)
+      t.colnames.width <- sapply(t.colnames, function(x) max(nchar(strsplit(x, '\n')[[1]], type = 'width'), 0), USE.NAMES = FALSE) + 2
+    } else {
+      t.colnames.width <- 0
+    }
     if (length(dim(t)) < 2) {
-
-        t <- split.large.cells(t)
-
-        t.rownames  <- NULL
-        t.colnames  <- names(t)
-        if (!is.null(t.colnames)) {
-            t.colnames       <- replace(t.colnames, which(t.colnames == ''), '&nbsp;')
-            t.colnames       <- split.large.cells(t.colnames)
-            t.colnames.width <- sapply(t.colnames, function(x) max(nchar(strsplit(x, '\n')[[1]], type = 'width'), 0), USE.NAMES = FALSE) + 2
-        } else {
-            t.colnames.width <- 0
-        }
-
         if (length(dim(t)) == 0)
             t.width <- as.numeric(apply(cbind(t.colnames.width, as.numeric(sapply(t, nchar, type = 'width'))), 1, max))
         else
             t.width <- as.numeric(apply(cbind(t.colnames.width, as.numeric(apply(t, 1, nchar, type = 'width'))), 1, max))
-
     } else {
-
-        ## checking for empty data frames
-        if (dim(t)[1] == 0)
-            t[1, ] <- NA
-
-        t <- split.large.cells(t)
-
-        t.rownames  <- rownames(t)
-        t.colnames  <- colnames(t)
-        if (!is.null(t.colnames)) {
-            t.colnames <- replace(t.colnames, which(t.colnames == ''), '&nbsp;')
-            t.colnames <- split.large.cells(t.colnames)
-            t.colnames.width <- sapply(t.colnames, function(x) max(nchar(strsplit(x, '\n')[[1]], type = 'width'), 0), USE.NAMES = FALSE) + 2
-        } else {
-            t.colnames.width <- 0
-        }
-
         ## also dealing with cells split by newlines
         t.width <-  as.numeric(apply(cbind(t.colnames.width, apply(t, 2, function(x) max(sapply(strsplit(x,'\n'), function(x) max(nchar(x, type = 'width'), 0))))), 1, max))
 
@@ -843,7 +827,6 @@ pandoc.table.return <- function(t, caption, digits = panderOptions('digits'), de
 
         if (!is.null(t.rownames))
             t.rownames <- pandoc.strong.return(t.rownames)  
-
     }
 
     if (length(t.rownames) != 0) {
