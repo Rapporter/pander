@@ -604,41 +604,46 @@ pandoc.table.return <- function(t, caption, digits = panderOptions('digits'), de
         x      
     }
     
-    split.large.cells <- function(cells){
+    split.large.cells <- function(cells, for.rownames = FALSE){ ## use first is for rownames
         if (length(split.cells) == 0){
           warning("Split cells is vector of length 0, reverting to default value") ## TODO better explanation
           split.cells <- 30
         }
-        if (length(dim(cells)) == 0){    ## Case of just a number
-          if (length(split.cells) == 1){
-            res <- split.large.cells.helper(cells, split.cells)
-          } else {
-            warning("Split.cells param is too big") ## TODO better explanation
-            res <- split.large.cells.helper(cells, split.cells[1])
-          }
-        }else{
-          if (length(split.cells) == 1) ## to make less checks later
-            split.cells <- rep(split.cells, length(cells))
-          if(length(dim(cells)) == 1){ ## Vector
-            if (length(cells) > length(split.cells) && length(split.cells) != 1){
+        if (length(split.cells) == 1) ## to make less checks later
+          split.cells <- rep(split.cells, length(cells))
+        if (for.rownames)
+          split.cells <- rep(split.cells[1], length(cells))
+        if (length(dim(cells)) < 2){
+          if (length(dim(t)) == 0){
+            if (length(split.cells) == 1){
+              res <- split.large.cells.helper(cells, split.cells)
+            } else {
+              warning("Split.cells param is too big") ## TODO better explanation
+              res <- split.large.cells.helper(cells, split.cells[1])
+            }
+          }else{
+            if (length(cells) > length(split.cells)){
               warning("Split.cells vectors is smaller than data. Default value will be used")
               split.cells <- 30
             }
+            if (!for.rownames && (length(split.cells) == length(cells) + 1))
+              split.cells <- split.cells[-1]
             res <- NULL
             for (i in 1:length(cells)){
-              res <- cbind(res, split.large.cells.helper(cells[i], max.width = split.cells[i]))
+              res <- c(res, split.large.cells.helper(cells[i], max.width = split.cells[i]))
             } 
-            colnames(res) <- colnames(x)
-          } else { ## Matrix/Table
-            res <- NULL
-            for (j in 1:dim(x)[2]){
-              res <- cbind(res,
-                           sapply(cells[,j], split.large.cells.helper, max.width = split.cells[j], USE.NAMES = FALSE))
-            }          
-            rownames(res) <- rownames(x)
-            colnames(res) <- colnames(x)
-          }    
-        }
+          }
+        }else{
+          if (length(split.cells) == dim(cells)[2] + 1)
+            split.cells <- split.cells[-1] ## discard first which was for rownames
+          res <- NULL
+          for (j in 1:dim(cells)[2]){
+            res <- cbind(res,
+                         sapply(cells[,j], split.large.cells.helper, max.width = split.cells[j], USE.NAMES = FALSE))
+          }          
+          rownames(res) <- rownames(cells)
+          colnames(res) <- colnames(cells)
+        }    
         res
     }
     
@@ -843,7 +848,10 @@ pandoc.table.return <- function(t, caption, digits = panderOptions('digits'), de
 
     if (length(t.rownames) != 0) {
 
-        t.rownames <- split.large.cells(t.rownames)
+        if (length(split.cells) == dim(t)[2])
+          split.cells <- c(30, split.cells)
+        t.rownames <- split.large.cells(t.rownames, TRUE)
+        
         if (!is.null(t.colnames))
             t.colnames <- c('&nbsp;', t.colnames)
         t.width <- c(max(sapply(strsplit(t.rownames, '\n'), function(x) max(nchar(x, type = 'width'), 0))), t.width)
