@@ -622,20 +622,24 @@ pandoc.table.return <- function(t, caption, digits = panderOptions('digits'), de
               res <- split.large.cells.helper(cells, split.cells[1])
             }
           }else{
-            if (length(cells) > length(split.cells)){
-              warning("Split.cells vectors is smaller than data. Default value will be used")
-              split.cells <- 30
-            }
             if (!for.rownames && (length(split.cells) == length(cells) + 1))
               split.cells <- split.cells[-1]
+            if (length(cells) > length(split.cells)){
+              warning("Split.cells vectors is smaller than data. Default value will be used for other cells")
+              split.cells <- c(split.cells, rep(30, length(cells) - length(split.cells)))
+            }
             res <- NULL
             for (i in 1:length(cells)){
               res <- c(res, split.large.cells.helper(cells[i], max.width = split.cells[i]))
             } 
           }
         }else{
-          if (length(split.cells) == dim(cells)[2] + 1)
+          if ((length(split.cells) == dim(cells)[2] + 1))
             split.cells <- split.cells[-1] ## discard first which was for rownames
+          if (dim(cells)[2] > length(split.cells)){
+            warning("Split.cells vectors is smaller than data. Default value will be used for other cells")
+            split.cells <- c(split.cells, rep(30, dim(cells)[2] - length(split.cells)))
+          }
           res <- NULL
           for (j in 1:dim(cells)[2]){
             res <- cbind(res,
@@ -831,7 +835,7 @@ pandoc.table.return <- function(t, caption, digits = panderOptions('digits'), de
 
     if (length(t.rownames) != 0) {
 
-        if (length(split.cells) == dim(t)[2])
+        if ((length(split.cells) <= dim(t)[2]) && (length(split.cells) > 1))
           split.cells <- c(30, split.cells)
         t.rownames <- split.large.cells(t.rownames, TRUE)
         
