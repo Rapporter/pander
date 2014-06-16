@@ -624,7 +624,7 @@ pandoc.table.return <- function(t, caption, digits = panderOptions('digits'), de
               res <- split.large.cells.helper(cells, split.cells[1])
             }
           }else{
-            if (!for.rownames && (length(split.cells) == length(cells) + 1))
+            if (!for.rownames && (length(split.cells) >= length(cells) + 1))
               split.cells <- split.cells[-1]
             if (length(cells) > length(split.cells)){
               warning("Split.cells vectors is smaller than data. Default value will be used for other cells")
@@ -636,7 +636,7 @@ pandoc.table.return <- function(t, caption, digits = panderOptions('digits'), de
             } 
           }
         }else{
-          if ((length(split.cells) == dim(cells)[2] + 1))
+          if ((length(split.cells) >= dim(cells)[2] + 1))
             split.cells <- split.cells[-1] ## discard first which was for rownames
           if (dim(cells)[2] > length(split.cells)){
             warning("Split.cells vectors is smaller than data. Default value will be used for other cells")
