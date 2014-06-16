@@ -577,6 +577,8 @@ pandoc.table.return <- function(t, caption, digits = panderOptions('digits'), de
     }
     
     split.large.cells.helper <- function(x, max.width){
+      if (!is.character(x))
+        x <- as.character(x)
       if (!style %in% c('simple', 'rmarkdown')) {
         ## split
         if (nchar(x) == nchar(x, type = 'width')) {
