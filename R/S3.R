@@ -162,7 +162,7 @@ pander.lm <- function(x, caption = attr(x, 'caption'), covariate.labels, omit, s
 
     if (is.null(caption)) {
         if (is.null(storage$caption))
-            caption <- sprintf('Fitting linear model: %s', paste(sub('^[ ]*', '', deparse(x$call$formula)), collapse = ''))
+            caption <- pandoc.formula.return(x$call$formula, "Fitting linear model:")
         else
             caption <- get.caption()
     }
@@ -200,7 +200,9 @@ pander.glm <- function(x, caption = attr(x, 'caption'), ...) {
 
     if (is.null(caption)) {
         if (is.null(storage$caption))
-            caption <- sprintf('Fitting generalized (%s) linear model: %s', paste(x$family$family, x$family$link, sep = '/'), paste(sub('^[ ]*', '', deparse(x$call$formula)), collapse = ''))
+            caption <- sprintf('Fitting generalized (%s) linear model: %s', 
+                               paste(x$family$family, x$family$link, sep = '/'), 
+                               pandoc.formula.return(x$call$formula))
         else
             caption <- get.caption()
     }
@@ -508,11 +510,16 @@ pander.formula <- function(x, max.width = 80, caption = attr(x, 'caption')) {
   pandoc.formula(x, max.width = max.width, caption = caption)
 }
 
+#' @S3method pander call
+pander.call <- function(x, ...) {
+  pander.formula(x, ...)
+}
+
 #' @S3method pander coxph
 pander.coxph <- function(x, caption = attr(x, 'caption'), ...) {
   if (is.null(caption)) {
     if (is.null(storage$caption))
-      caption <- sprintf('Fitting Proportional Hazards Regression Model: %s', paste(sub('^[ ]*', '', deparse(x$call$formula)), collapse = ''))
+      caption <- pandoc.formula.return(x$call$formula,"Fitting Proportional Hazards Regression Model:")
     else
       caption <- get.caption()
   }
@@ -553,7 +560,7 @@ pander.clogit <- function (x, caption = attr(x, 'caption'), ...)
 {
   if (is.null(caption)) {
     if (is.null(storage$caption))
-      caption <- sprintf('Fitting Conditional logistic regression: %s', paste(sub('^[ ]*', '', deparse(x$userCall)), collapse = ''))
+      caption <- pandoc.formula.return(x$userCall, text = "Fitting Conditional logistic regression:")
     else
       caption <- get.caption()
   }
@@ -582,7 +589,7 @@ pander.lme <- function(x, caption = attr(x, 'caption'), summary = FALSE, ...) {
     if (is.null(storage$caption))
       caption <- sprintf('Linear mixed-effects model fit by %s : %s',
                          paste(sub('^[ ]*', '', ifelse(x$method == "REML", "REML", "maximum likelihood"))),
-                         paste(sub('^[ ]*', '', deparse(x$call$fixed)), collapse = ''))
+                         pandoc.formula.return(x$call$fixed), collapse = '')
     else
       caption <- get.caption()
   }
@@ -591,7 +598,7 @@ pander.lme <- function(x, caption = attr(x, 'caption'), summary = FALSE, ...) {
   res <- as.data.frame(xs$tTable)
 
   if (summary) {
-    pandoc.table(res, caption = paste(sub('^[ ]*', 'Fixed effects: ', deparse(x$call$fixed)), collapse = ''),  split.tables = Inf,...)
+    pandoc.table(res, caption = pandoc.formula.return(x$call$fixed, text = 'Fixed effects: '),split.tables = Inf,...)
     pandoc.table(xs$residuals, caption="Standardized Within-Group Residuals")
     pandoc.table(data.frame(
       'Observations'        = x$dims[["N"]],
@@ -710,8 +717,7 @@ pander.describe <- function(x, caption = attr(x, 'caption'), short = TRUE, split
 pander.survdiff <- function(x, caption = attr(x, 'caption'), ...) {
   if (is.null(caption)) {
     if (is.null(storage$caption))
-      caption <- sprintf("Call: %s", 
-                         paste(sub('^[ ]*', '', deparse(x$call$formula)), collapse = ''))
+      caption <- pandoc.formula.return(x$call$formula, text="Call:")
     else
       caption <- get.caption()
   }
@@ -800,7 +806,7 @@ pander.rlm <- function(x, caption = attr(x, 'caption'), ...) {
   if (is.null(caption)) {
     if (is.null(storage$caption))
       if (!is.null(x$call))
-        caption <- sprintf('Fitting linear model by robust regression: %s', paste(sub('^[ ]*', '', deparse(x$call$formula)), collapse = ''))
+        caption <- pandoc.formula.return(x$call$formula, text = "Fitting linear model by robust regression:")
       else
         caption <- 'Fitting linear model by robust regression'
     else
