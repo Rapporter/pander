@@ -557,14 +557,14 @@ pandoc.table.return <- function(t, caption, digits = panderOptions('digits'), de
     
     split.line <- function(x){
       split <- strsplit(x, '\\s')[[1]]
-      n <- nchar(split[1], type = 'width')
+      n <- nchar(split[1], type='chars')
       x <- split[1]
       if (is.na(x))   # case of when line starts with a line break
         x <- ''
       for (s in tail(split, -1)) {
         if (s == "") # for case of when keeping line breaks, strsplit returns empty lines
           next 
-        nc <- nchar(s, type = 'width')
+        nc <- nchar(s, type = 'chars')
         n  <- n + nc + 1
         if (n > split.cells) {
           n <- nc
@@ -580,7 +580,7 @@ pandoc.table.return <- function(t, caption, digits = panderOptions('digits'), de
         sapply(cells, function(x) {
           if (!style %in% c('simple', 'rmarkdown')) {
             ## split
-            if (nchar(x) == nchar(x, type = 'width')) {
+            if (nchar(x) == nchar(encodeString(x))) { ## checks for no meta characters
               x <- paste(strwrap(x, width = split.cells), collapse = '\n')
             } else {                
               ## dealing with CJK chars + also it does not count \n, \t, etc.
