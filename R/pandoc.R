@@ -524,7 +524,7 @@ pandoc.list <- function(...)
 #'
 #' emphasize.strong.cells(which(t > 20, arr.ind = TRUE))
 #' pandoc.table(t)
-pandoc.table.return <- function(t, caption, digits = panderOptions('digits'), decimal.mark = panderOptions('decimal.mark'), big.mark = panderOptions('big.mark'), round = panderOptions('round'), justify, style = c('multiline', 'grid', 'simple', 'rmarkdown'), split.tables = panderOptions('table.split.table'), split.cells = panderOptions('table.split.cells'), keep.trailing.zeros = panderOptions('keep.trailing.zeros'), keep.line.breaks = panderOptions('keep.line.breaks'), plain.ascii = panderOptions('plain.ascii'), emphasize.rows, emphasize.cols, emphasize.cells, emphasize.strong.rows, emphasize.strong.cols, emphasize.strong.cells, ...) {
+pandoc.table.return <- function(t, caption, digits = panderOptions('digits'), decimal.mark = panderOptions('decimal.mark'), big.mark = panderOptions('big.mark'), round = panderOptions('round'), justify, style = c('multiline', 'grid', 'simple', 'rmarkdown'), split.tables = panderOptions('table.split.table'), split.cells = panderOptions('table.split.cells'), keep.trailing.zeros = panderOptions('keep.trailing.zeros'), keep.line.breaks = panderOptions('keep.line.breaks'), plain.ascii = panderOptions('plain.ascii'), exact.split = FALSE, emphasize.rows, emphasize.cols, emphasize.cells, emphasize.strong.rows, emphasize.strong.cols, emphasize.strong.cells, ...) {
 
     ## helper functions
     table.expand <- function(cells, cols.width, justify, sep.cols) {
@@ -561,27 +561,85 @@ pandoc.table.return <- function(t, caption, digits = panderOptions('digits'), de
       x <- split[1]
       if (is.na(x))   # case of when line starts with a line break
         x <- ''
-      for (s in tail(split, -1)) {
-        if (s == "") # for case of when keeping line breaks, strsplit returns empty lines
+      words <- tail(split, -1)
+      while(length(words) !=0){
+        s <- words[1]
+        if (s == ""){ # for case of when keeping line breaks, strsplit returns empty lines
+          words <- words[-1]
           next 
+        }
         nc <- nchar(s, type = 'width')
         n  <- n + nc + 1
-        if (n > max.width) {
-          n <- nc
-          x <- paste(x, s, sep = '\n')
+        if (n >= max.width) {
+          if (exact.split){
+            n <- n - nc
+            syllables <- strsplit(hyphen(s, hyph.pattern="en.us", quiet = TRUE)@hyphen[1,2], "-")[[1]]
+            sylls <- vector()
+            # also determine new max line width
+            for (syl in syllables){
+              n.s <- nchar(syl, type='chars')
+              if (n.s + n > max.width){
+                #exit
+                pos <- match(syl, syllables)
+                if (pos == 1){
+                  line.end <- "\n"
+                  leftover <- NULL
+                } else {
+                  line.end <- "-\n"
+                  leftover <- paste(syllables[pos : length(syllables)], collapse="")
+                }
+                if (length(sylls) != 0) # paste previous syllables
+                  x <- paste(paste(x, paste0(sylls, collapse='', sep=''), sep = ' '), line.end, sep=" ")
+                else
+                  x <- paste(x, line.end, sep="")
+                # max.width <- n + n.s ## questionable
+                words <- c(leftover, words[-1])
+                n <- 0
+                break
+              }else{
+                n <- n + n.s
+                sylls <- paste(sylls, syl, sep='')
+              }
+            }
+          }else{
+            n <- nc
+            x <- paste(x, s, sep = '\n')
+            words <- words[-1]
+          }
         } else {
-          x <- paste(x, s, sep = ' ')
+          if (substr(x, nchar(x), nchar(x)) == '\n'){ # to deal with string that start with line break
+            x <- paste(x, s, sep = '')
+          }else{
+            x <- paste(x, s, sep = ' ')
+          }
+          words <- words[-1]
         }
+      }
+      x <- gsub(" \\\n", "\\\n", x)
+      x <- gsub("\\\n ", "\\\n", x)
+      x <- gsub(" -", "-", x)
+
+      if (exact.split && grepl("\\d", x) &&
+            nchar(grep("\\d", x, value = TRUE)) == nchar(x)
+          && nchar(x) > max.width){
+        res <- substr(x, 1, max.width)
+        x <- substr(x, max.width, nchar(x))
+        for (i in 2:floor(nchar(x)/max.width)){
+          res <- paste(res, substr(x, 1, max.width), sep='\n')
+          x <- substr(x, max.width, nchar(x))
+        }
+        x <- res
       }
       x
     }
+    
     
     split.large.cells.helper <- function(x, max.width){
       if (!is.character(x))
         x <- as.character(x)
       if (!style %in% c('simple', 'rmarkdown')) {
         ## split
-        if (nchar(x) == nchar(x, type = 'width')) {
+        if (nchar(x) == nchar(x, type = 'width') && !exact.split) {
           x <- paste(strwrap(x, width = max.width), collapse = '\n')
         } else {                
           ## dealing with CJK chars + also it does not count \n, \t, etc.
