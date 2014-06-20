@@ -444,6 +444,7 @@ pandoc.list <- function(...)
 #' @param decimal.mark passed to \code{format}
 #' @param big.mark passed to \code{format}
 #' @param round passed to \code{round}
+#' @param use.hyphening if to use hyphening when splitting large cells \code{round}
 #' @param justify defines alignment in cells passed to \code{format}. Can be \code{left}, \code{right} or \code{centre}, which latter can be also spelled as \code{center}. Defaults to \code{centre}.
 #' @param style which Pandoc style to use: \code{simple}, \code{multiline}, \code{grid} or \code{rmarkdown}
 #' @param split.tables where to split wide tables to separate tables. The default value (\code{80}) suggests the conventional number of characters used in a line, feel free to change (e.g. to \code{Inf} to disable this feature) if you are not using a VT100 terminal any more :)
@@ -524,7 +525,7 @@ pandoc.list <- function(...)
 #'
 #' emphasize.strong.cells(which(t > 20, arr.ind = TRUE))
 #' pandoc.table(t)
-pandoc.table.return <- function(t, caption, digits = panderOptions('digits'), decimal.mark = panderOptions('decimal.mark'), big.mark = panderOptions('big.mark'), round = panderOptions('round'), justify, style = c('multiline', 'grid', 'simple', 'rmarkdown'), split.tables = panderOptions('table.split.table'), split.cells = panderOptions('table.split.cells'), keep.trailing.zeros = panderOptions('keep.trailing.zeros'), keep.line.breaks = panderOptions('keep.line.breaks'), plain.ascii = panderOptions('plain.ascii'), exact.split = FALSE, emphasize.rows, emphasize.cols, emphasize.cells, emphasize.strong.rows, emphasize.strong.cols, emphasize.strong.cells, ...) {
+pandoc.table.return <- function(t, caption, digits = panderOptions('digits'), decimal.mark = panderOptions('decimal.mark'), big.mark = panderOptions('big.mark'), round = panderOptions('round'), justify, style = c('multiline', 'grid', 'simple', 'rmarkdown'), split.tables = panderOptions('table.split.table'), split.cells = panderOptions('table.split.cells'), keep.trailing.zeros = panderOptions('keep.trailing.zeros'), keep.line.breaks = panderOptions('keep.line.breaks'), plain.ascii = panderOptions('plain.ascii'), use.hyphening = FALSE, emphasize.rows, emphasize.cols, emphasize.cells, emphasize.strong.rows, emphasize.strong.cols, emphasize.strong.cells, ...) {
 
     ## helper functions
     table.expand <- function(cells, cols.width, justify, sep.cols) {
@@ -570,7 +571,7 @@ pandoc.table.return <- function(t, caption, digits = panderOptions('digits'), de
         added.syllable <- FALSE  #if any syllables have been already added to the result
         n.c <- n.c + n.w + 1
         if (n.c >= max.width) {
-          if (exact.split){
+          if (use.hyphening){
             n.c <- n.c - n.w - 1
             syllables <- strsplit(hyphen(s, hyph.pattern="en.us", quiet = TRUE)@hyphen[1,2], "-")[[1]]
             if (length(syllables) == 0)
@@ -651,7 +652,7 @@ pandoc.table.return <- function(t, caption, digits = panderOptions('digits'), de
         x <- as.character(x)
       if (!style %in% c('simple', 'rmarkdown')) {
         ## split
-        if (nchar(x) == nchar(x, type = 'width') && !exact.split) {
+        if (nchar(x) == nchar(x, type = 'width') && !use.hyphening) {
           x <- paste(strwrap(x, width = max.width), collapse = '\n')
         } else {                
           ## dealing with CJK chars + also it does not count \n, \t, etc.
@@ -764,7 +765,7 @@ pandoc.table.return <- function(t, caption, digits = panderOptions('digits'), de
     }
 
     ## check for exact.split
-    if (exact.split)
+    if (use.hyphening)
       if ("koRpus" %in% rownames(installed.packages())){
         require(koRpus)
       } else {
