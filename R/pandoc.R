@@ -645,6 +645,7 @@ pandoc.table.return <- function(t, caption, digits = panderOptions('digits'), de
     }
     
     
+    
     split.large.cells.helper <- function(x, max.width){
       if (!is.character(x))
         x <- as.character(x)
@@ -762,6 +763,15 @@ pandoc.table.return <- function(t, caption, digits = panderOptions('digits'), de
         }
     }
 
+    ## check for exact.split
+    if (exact.split)
+      if ("koRpus" %in% rownames(installed.packages())){
+        require(koRpus)
+      } else {
+        exact.split = FALSE
+        warning("To use exact.split option koRpus package has to be installed!")
+      }
+      
     ## converting 3D+ tables to 2D
     if (length(dim(t)) > 2)
         t <- ftable(t)
