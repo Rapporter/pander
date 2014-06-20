@@ -444,7 +444,7 @@ pandoc.list <- function(...)
 #' @param decimal.mark passed to \code{format}
 #' @param big.mark passed to \code{format}
 #' @param round passed to \code{round}
-#' @param use.hyphening if to use hyphening when splitting large cells \code{round}
+#' @param use.hyphening if to use hyphening when splitting large cells
 #' @param justify defines alignment in cells passed to \code{format}. Can be \code{left}, \code{right} or \code{centre}, which latter can be also spelled as \code{center}. Defaults to \code{centre}.
 #' @param style which Pandoc style to use: \code{simple}, \code{multiline}, \code{grid} or \code{rmarkdown}
 #' @param split.tables where to split wide tables to separate tables. The default value (\code{80}) suggests the conventional number of characters used in a line, feel free to change (e.g. to \code{Inf} to disable this feature) if you are not using a VT100 terminal any more :)
