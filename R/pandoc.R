@@ -557,78 +557,89 @@ pandoc.table.return <- function(t, caption, digits = panderOptions('digits'), de
     
     split.line <- function(x, max.width){
       split <- strsplit(x, '\\s')[[1]]
-      n <- nchar(split[1], type = 'width')
-      x <- split[1]
-      if (is.na(x))   # case of when line starts with a line break
-        x <- ''
-      words <- tail(split, -1)
+      n.c <- 0
+      words <- split
+      x <- NULL
       while(length(words) !=0){
         s <- words[1]
         if (s == ""){ # for case of when keeping line breaks, strsplit returns empty lines
           words <- words[-1]
           next 
         }
-        nc <- nchar(s, type = 'width')
-        n  <- n + nc + 1
-        if (n >= max.width) {
+        n.w <- nchar(s, type = 'width')
+        added.syllable <- FALSE  #if any syllables have been already added to the result
+        n.c <- n.c + n.w + 1
+        if (n.c >= max.width) {
           if (exact.split){
-            n <- n - nc
+            n.c <- n.c - n.w - 1
             syllables <- strsplit(hyphen(s, hyph.pattern="en.us", quiet = TRUE)@hyphen[1,2], "-")[[1]]
-            sylls <- vector()
+            if (length(syllables) == 0)
+              syllables <- s
             # also determine new max line width
             for (syl in syllables){
               n.s <- nchar(syl, type='chars')
-              if (n.s + n > max.width){
+              if (n.s + n.c + 1 > max.width){
                 #exit
-                pos <- match(syl, syllables)
-                if (pos == 1){
-                  line.end <- "\n"
-                  leftover <- NULL
-                } else {
+                if (added.syllable){
                   line.end <- "-\n"
+                  pos <- match(syl, syllables)
                   leftover <- paste(syllables[pos : length(syllables)], collapse="")
+                } else {
+                  if (n.c == 0){
+                    if (length(syllables) == 1)
+                      line.end <- paste(syl, "\n", sep="")
+                    else
+                      line.end <- paste(syl, "-\n", sep="")
+                    pos <- match(syl, syllables)
+                    if (pos == length(syllables))
+                      leftover <- NULL
+                    else
+                      leftover <- paste(syllables[(pos + 1) : length(syllables)], collapse="")
+                  } else {
+                    line.end <- "\n"
+                    leftover <- s
+                  }
                 }
-                if (length(sylls) != 0) # paste previous syllables
-                  x <- paste(paste(x, paste0(sylls, collapse='', sep=''), sep = ' '), line.end, sep=" ")
-                else
-                  x <- paste(x, line.end, sep="")
+                x <- paste(x, line.end, sep="")
                 # max.width <- n + n.s ## questionable
                 words <- c(leftover, words[-1])
-                n <- 0
+                n.c <- 0
                 break
               }else{
-                n <- n + n.s
-                sylls <- paste(sylls, syl, sep='')
+                if (added.syllable)
+                  n.c <- n.s + n.c
+                else
+                  n.c <- n.c + n.s + 1
+                if (!added.syllable && n.c == max.width){
+                  words <- words[-1]
+                }
+                # add end of line handle
+                if (is.null(x) || grepl('(\r|\n)$', x) || added.syllable){
+                  x <- paste(x, syl, sep = '')
+                }else{
+                  x <- paste(x, syl, sep = ' ')
+                }
+                added.syllable = TRUE
               }
             }
           }else{
-            n <- nc
-            x <- paste(x, s, sep = '\n')
+            n.c <- 0
+            if (is.null(x) || grepl('(\r|\n)$', x)){ 
+              x <- paste(x, s, sep = '')
+            }else{
+              x <- paste(x, s, sep = ' ')
+            }
+            x <- paste(x, "\n", sep="")
             words <- words[-1]
           }
         } else {
-          if (substr(x, nchar(x), nchar(x)) == '\n'){ # to deal with string that start with line break
+          if (is.null(x) || grepl('(\r|\n)$', x)){ 
             x <- paste(x, s, sep = '')
           }else{
             x <- paste(x, s, sep = ' ')
           }
           words <- words[-1]
         }
-      }
-      x <- gsub(" \\\n", "\\\n", x)
-      x <- gsub("\\\n ", "\\\n", x)
-      x <- gsub(" -", "-", x)
-
-      if (exact.split && grepl("\\d", x) &&
-            nchar(grep("\\d", x, value = TRUE)) == nchar(x)
-          && nchar(x) > max.width){
-        res <- substr(x, 1, max.width)
-        x <- substr(x, max.width, nchar(x))
-        for (i in 2:floor(nchar(x)/max.width)){
-          res <- paste(res, substr(x, 1, max.width), sep='\n')
-          x <- substr(x, max.width, nchar(x))
-        }
-        x <- res
       }
       x
     }
