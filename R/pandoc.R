@@ -444,7 +444,7 @@ pandoc.list <- function(...)
 #' @param decimal.mark passed to \code{format}
 #' @param big.mark passed to \code{format}
 #' @param round passed to \code{round}
-#' @param use.hyphening if to use hyphening when splitting large cells
+#' @param use.hyphening boolean (default: \code{FALSE}) if try to use hyphening when splitting large cells according to table.split.cells. Requires koRpus package.
 #' @param justify defines alignment in cells passed to \code{format}. Can be \code{left}, \code{right} or \code{centre}, which latter can be also spelled as \code{center}. Defaults to \code{centre}.
 #' @param style which Pandoc style to use: \code{simple}, \code{multiline}, \code{grid} or \code{rmarkdown}
 #' @param split.tables where to split wide tables to separate tables. The default value (\code{80}) suggests the conventional number of characters used in a line, feel free to change (e.g. to \code{Inf} to disable this feature) if you are not using a VT100 terminal any more :)
@@ -525,7 +525,7 @@ pandoc.list <- function(...)
 #'
 #' emphasize.strong.cells(which(t > 20, arr.ind = TRUE))
 #' pandoc.table(t)
-pandoc.table.return <- function(t, caption, digits = panderOptions('digits'), decimal.mark = panderOptions('decimal.mark'), big.mark = panderOptions('big.mark'), round = panderOptions('round'), justify, style = c('multiline', 'grid', 'simple', 'rmarkdown'), split.tables = panderOptions('table.split.table'), split.cells = panderOptions('table.split.cells'), keep.trailing.zeros = panderOptions('keep.trailing.zeros'), keep.line.breaks = panderOptions('keep.line.breaks'), plain.ascii = panderOptions('plain.ascii'), use.hyphening = FALSE, emphasize.rows, emphasize.cols, emphasize.cells, emphasize.strong.rows, emphasize.strong.cols, emphasize.strong.cells, ...) {
+pandoc.table.return <- function(t, caption, digits = panderOptions('digits'), decimal.mark = panderOptions('decimal.mark'), big.mark = panderOptions('big.mark'), round = panderOptions('round'), justify, style = c('multiline', 'grid', 'simple', 'rmarkdown'), split.tables = panderOptions('table.split.table'), split.cells = panderOptions('table.split.cells'), keep.trailing.zeros = panderOptions('keep.trailing.zeros'), keep.line.breaks = panderOptions('keep.line.breaks'), plain.ascii = panderOptions('plain.ascii'), use.hyphening = panderOptions('use.hyphening'), emphasize.rows, emphasize.cols, emphasize.cells, emphasize.strong.rows, emphasize.strong.cols, emphasize.strong.cells, ...) {
 
     ## helper functions
     table.expand <- function(cells, cols.width, justify, sep.cols) {
@@ -680,7 +680,7 @@ pandoc.table.return <- function(t, caption, digits = panderOptions('digits'), de
     split.large.cells <- function(cells, for.rownames = FALSE){ ## use first is for rownames
         if (length(split.cells) == 0){
           warning("Split cells is vector of length 0, reverting to default value") ## TODO better explanation
-          split.cells <- 30
+          split.cells <- panderOptions('table.split.cells')
         }
         if (length(split.cells) == 1) ## to make less checks later
           split.cells <- rep(split.cells, length(cells))
@@ -699,7 +699,7 @@ pandoc.table.return <- function(t, caption, digits = panderOptions('digits'), de
               split.cells <- split.cells[-1]
             if (length(cells) > length(split.cells)){
               warning("Split.cells vectors is smaller than data. Default value will be used for other cells")
-              split.cells <- c(split.cells, rep(30, length(cells) - length(split.cells)))
+              split.cells <- c(split.cells, rep(panderOptions('table.split.cells'), length(cells) - length(split.cells)))
             }
             res <- NULL
             for (i in 1:length(cells)){
@@ -711,7 +711,7 @@ pandoc.table.return <- function(t, caption, digits = panderOptions('digits'), de
             split.cells <- split.cells[-1] ## discard first which was for rownames
           if (dim(cells)[2] > length(split.cells)){
             warning("Split.cells vectors is smaller than data. Default value will be used for other cells")
-            split.cells <- c(split.cells, rep(30, dim(cells)[2] - length(split.cells)))
+            split.cells <- c(split.cells, rep(panderOptions('table.split.cells'), dim(cells)[2] - length(split.cells)))
           }
           res <- NULL
           for (j in 1:dim(cells)[2]){
@@ -765,13 +765,8 @@ pandoc.table.return <- function(t, caption, digits = panderOptions('digits'), de
     }
 
     ## check for exact.split
-    if (use.hyphening)
-      if ("koRpus" %in% rownames(installed.packages())){
-        require(koRpus)
-      } else {
-        exact.split = FALSE
-        warning("To use exact.split option koRpus package has to be installed!")
-      }
+    if (use.hyphening && !require(koRpus))
+        use.hyphening = FALSE
       
     ## converting 3D+ tables to 2D
     if (length(dim(t)) > 2)
