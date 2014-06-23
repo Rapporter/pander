@@ -597,6 +597,8 @@ pandoc.table.return <- function(t, caption, digits = panderOptions('digits'), de
                 }
               }
             }
+          }else{
+            x <- gsub("^\\s+|\\s+$", "", x)
           }
           ## return
           if (is.na(x))
@@ -710,7 +712,7 @@ pandoc.table.return <- function(t, caption, digits = panderOptions('digits'), de
     if (keep.trailing.zeros)
         t <- format(t, trim = TRUE, digits = digits, decimal.mark = decimal.mark, big.mark = big.mark)
     else
-        t <- format(t, trim = TRUE)
+        t <- format(t, trim = TRUE)  ### here adds unneeded zero's
 
     ## adding formatting (emphasis, strong etc.)
     if (length(dim(t)) < 2) {
