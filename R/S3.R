@@ -606,6 +606,7 @@ pander.lme <- function(x, caption = attr(x, 'caption'), summary = FALSE, ...) {
 
 }
 
+<<<<<<< HEAD
 #' @S3method pander describe
 pander.describe <- function(x, caption = attr(x, 'caption'), short = TRUE, split.tables = 60, ...) {
   if (is.null(caption) & !is.null(storage$caption))
@@ -845,3 +846,45 @@ pander.stat.table <- function(x, caption = attr(x, 'caption'), ...){
     pandoc.table(xx, caption = caption, emphasize.rows = c(1,2), emphasize.cols = 1,...)
   }
 }
+
+#' @S3method pander sessionInfo
+pander.sessionInfo <- function (x, locale = TRUE, compact = TRUE, ...) 
+{
+  mkLabel <- function(L, n) {
+    vers <- sapply(L[[n]], function(x) x[["Version"]])
+    pkg <- sapply(L[[n]], function(x) x[["Package"]])
+    sprintf("%s(v.%s)", pkg, vers)
+  }
+  cat(pandoc.strong(x$R.version$version.string), "\n\n", sep = "")
+  cat(pandoc.strong("Platform:"), x$platform, "\n\n", sep = " ")
+  if (locale) {
+    cat(pandoc.strong("locale:"))
+    cat("\n")
+    pander(gsub("[/]","||",strsplit(x$locale, ";", fixed = TRUE)[[1]]), ...)
+    cat("\n")
+  }
+  if (compact){
+    attached.base.packages <- pander.return(x$basePkgs, quote = FALSE, ...)
+    other.attached.packages <- pander.return(mkLabel(x, "otherPkgs"), quote = FALSE, ...)
+    load.via.namespaces <- pander.return(mkLabel(x, "loadedOnly"), quote = FALSE, ...)
+  } else {
+    attached.base.packages <- pandoc.list.return(x$basePkgs, add.end.of.list = FALSE, ...)
+    other.attached.packages <- pandoc.list.return(mkLabel(x, "otherPkgs"), add.end.of.list = FALSE, ...)
+    load.via.namespaces <- pandoc.list.return(mkLabel(x, "loadedOnly"), add.end.of.list = FALSE, ...)
+  }
+  cat("\n")
+  cat(pandoc.strong("attached base packages:"),"\n")
+  cat(attached.base.packages)
+  if (!is.null(x$otherPkgs)) {
+    cat("\n\n")
+    cat(pandoc.strong("other attached packages:"),"\n")
+    cat(other.attached.packages)
+  }
+  if (!is.null(x$loadedOnly)) {
+    cat("\n\n")
+    cat(pandoc.strong("loaded via a namespace (and not attached):"),"\n")
+    cat(load.via.namespaces)
+  }
+  invisible(x)
+}
+
