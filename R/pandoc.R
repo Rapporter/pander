@@ -444,6 +444,7 @@ pandoc.list <- function(...)
 #' @param decimal.mark passed to \code{format}
 #' @param big.mark passed to \code{format}
 #' @param round passed to \code{round}
+#' @param use.hyphening boolean (default: \code{FALSE}) if try to use hyphening when splitting large cells according to table.split.cells. Requires koRpus package.
 #' @param justify defines alignment in cells passed to \code{format}. Can be \code{left}, \code{right} or \code{centre}, which latter can be also spelled as \code{center}. Defaults to \code{centre}.
 #' @param style which Pandoc style to use: \code{simple}, \code{multiline}, \code{grid} or \code{rmarkdown}
 #' @param split.tables where to split wide tables to separate tables. The default value (\code{80}) suggests the conventional number of characters used in a line, feel free to change (e.g. to \code{Inf} to disable this feature) if you are not using a VT100 terminal any more :)
@@ -524,7 +525,7 @@ pandoc.list <- function(...)
 #'
 #' emphasize.strong.cells(which(t > 20, arr.ind = TRUE))
 #' pandoc.table(t)
-pandoc.table.return <- function(t, caption, digits = panderOptions('digits'), decimal.mark = panderOptions('decimal.mark'), big.mark = panderOptions('big.mark'), round = panderOptions('round'), justify, style = c('multiline', 'grid', 'simple', 'rmarkdown'), split.tables = panderOptions('table.split.table'), split.cells = panderOptions('table.split.cells'), keep.trailing.zeros = panderOptions('keep.trailing.zeros'), keep.line.breaks = panderOptions('keep.line.breaks'), plain.ascii = panderOptions('plain.ascii'), emphasize.rows, emphasize.cols, emphasize.cells, emphasize.strong.rows, emphasize.strong.cols, emphasize.strong.cells, ...) {
+pandoc.table.return <- function(t, caption, digits = panderOptions('digits'), decimal.mark = panderOptions('decimal.mark'), big.mark = panderOptions('big.mark'), round = panderOptions('round'), justify, style = c('multiline', 'grid', 'simple', 'rmarkdown'), split.tables = panderOptions('table.split.table'), split.cells = panderOptions('table.split.cells'), keep.trailing.zeros = panderOptions('keep.trailing.zeros'), keep.line.breaks = panderOptions('keep.line.breaks'), plain.ascii = panderOptions('plain.ascii'), use.hyphening = panderOptions('use.hyphening'), emphasize.rows, emphasize.cols, emphasize.cells, emphasize.strong.rows, emphasize.strong.cols, emphasize.strong.cells, ...) {
 
     ## helper functions
     table.expand <- function(cells, cols.width, justify, sep.cols) {
@@ -555,33 +556,103 @@ pandoc.table.return <- function(t, caption, digits = panderOptions('digits'), de
       gsub("&nbsp;|[*]{2}|[\\\\]", "", x)
     }
     
-    split.line <- function(x, max.width){
+    split.line <- function(x, max.width = panderOptions('table.split.cells')){
       split <- strsplit(x, '\\s')[[1]]
-      n <- nchar(split[1], type='chars')
-      x <- split[1]
-      if (is.na(x))   # case of when line starts with a line break
-        x <- ''
-      for (s in tail(split, -1)) {
-        if (s == "") # for case of when keeping line breaks, strsplit returns empty lines
+      n.c <- 0
+      words <- split
+      x <- NULL
+      while(length(words) !=0){
+        s <- words[1]
+        if (s == ""){ # for case of when keeping line breaks, strsplit returns empty lines
+          words <- words[-1]
           next 
-        nc <- nchar(s, type = 'chars')
-        n  <- n + nc + 1
-        if (n > max.width) {
-          n <- nc
-          x <- paste(x, s, sep = '\n')
+        }
+        n.w <- nchar(s, type = 'width')
+        added.syllable <- FALSE  #if any syllables have been already added to the result
+        n.c <- n.c + n.w + 1
+        if (n.c >= max.width) {
+          if (use.hyphening){
+            n.c <- n.c - n.w - 1
+            syllables <- strsplit(hyphen(s, hyph.pattern="en.us", quiet = TRUE)@hyphen[1,2], "-")[[1]]
+            if (length(syllables) == 0)
+              syllables <- s
+            # also determine new max line width
+            for (syl in syllables){
+              n.s <- nchar(syl, type='chars')
+              if (n.s + n.c + 1 > max.width){
+                #exit
+                if (added.syllable){
+                  line.end <- "-\n"
+                  pos <- match(syl, syllables)
+                  leftover <- paste(syllables[pos : length(syllables)], collapse="")
+                } else {
+                  if (n.c == 0){
+                    if (length(syllables) == 1)
+                      line.end <- paste(syl, "\n", sep="")
+                    else
+                      line.end <- paste(syl, "-\n", sep="")
+                    pos <- match(syl, syllables)
+                    if (pos == length(syllables))
+                      leftover <- NULL
+                    else
+                      leftover <- paste(syllables[(pos + 1) : length(syllables)], collapse="")
+                  } else {
+                    line.end <- "\n"
+                    leftover <- s
+                  }
+                }
+                x <- paste(x, line.end, sep="")
+                # max.width <- n + n.s ## questionable
+                words <- c(leftover, words[-1])
+                n.c <- 0
+                break
+              }else{
+                if (added.syllable)
+                  n.c <- n.s + n.c
+                else
+                  n.c <- n.c + n.s + 1
+                if (!added.syllable && n.c == max.width){
+                  words <- words[-1]
+                }
+                # add end of line handle
+                if (is.null(x) || grepl('(\r|\n)$', x) || added.syllable){
+                  x <- paste(x, syl, sep = '')
+                }else{
+                  x <- paste(x, syl, sep = ' ')
+                }
+                added.syllable = TRUE
+              }
+            }
+          }else{
+            n.c <- 0
+            if (is.null(x) || grepl('(\r|\n)$', x)){ 
+              x <- paste(x, s, sep = '')
+            }else{
+              x <- paste(x, s, sep = ' ')
+            }
+            x <- paste(x, "\n", sep="")
+            words <- words[-1]
+          }
         } else {
-          x <- paste(x, s, sep = ' ')
+          if (is.null(x) || grepl('(\r|\n)$', x)){ 
+            x <- paste(x, s, sep = '')
+          }else{
+            x <- paste(x, s, sep = ' ')
+          }
+          words <- words[-1]
         }
       }
       x
     }
+    
+    
     
     split.large.cells.helper <- function(x, max.width){
       if (!is.character(x))
         x <- as.character(x)
       if (!style %in% c('simple', 'rmarkdown')) {
         ## split
-        if (nchar(x) == nchar(encodeString(x))) {
+        if (nchar(x) == nchar(encodeString(x)) && !use.hyphening) {
           x <- paste(strwrap(x, width = max.width), collapse = '\n')
         } else {                
           ## dealing with CJK chars + also it does not count \n, \t, etc.
@@ -593,12 +664,12 @@ pandoc.table.return <- function(t, caption, digits = panderOptions('digits'), de
             lines <- strsplit(x, '\\n')[[1]]
             x <- ""
             for (line in lines){
-              sl <- split.line(line)    
+              sl <- split.line(line, max.width)    
               x <- paste0(x, sl, sep="\n")
             }
 	        }
         }
-      } else {
+      }else{
         x <- gsub("^\\s+|\\s+$", "", x)
       }
       ## return
@@ -611,7 +682,7 @@ pandoc.table.return <- function(t, caption, digits = panderOptions('digits'), de
     split.large.cells <- function(cells, for.rownames = FALSE){ ## use first is for rownames
         if (length(split.cells) == 0){
           warning("Split cells is vector of length 0, reverting to default value") ## TODO better explanation
-          split.cells <- 30
+          split.cells <- panderOptions('table.split.cells')
         }
         if (length(split.cells) == 1) ## to make less checks later
           split.cells <- rep(split.cells, length(cells))
@@ -630,7 +701,7 @@ pandoc.table.return <- function(t, caption, digits = panderOptions('digits'), de
               split.cells <- split.cells[-1]
             if (length(cells) > length(split.cells)){
               warning("Split.cells vectors is smaller than data. Default value will be used for other cells")
-              split.cells <- c(split.cells, rep(30, length(cells) - length(split.cells)))
+              split.cells <- c(split.cells, rep(panderOptions('table.split.cells'), length(cells) - length(split.cells)))
             }
             res <- NULL
             for (i in 1:length(cells)){
@@ -642,7 +713,7 @@ pandoc.table.return <- function(t, caption, digits = panderOptions('digits'), de
             split.cells <- split.cells[-1] ## discard first which was for rownames
           if (dim(cells)[2] > length(split.cells)){
             warning("Split.cells vectors is smaller than data. Default value will be used for other cells")
-            split.cells <- c(split.cells, rep(30, dim(cells)[2] - length(split.cells)))
+            split.cells <- c(split.cells, rep(panderOptions('table.split.cells'), dim(cells)[2] - length(split.cells)))
           }
           res <- NULL
           for (j in 1:dim(cells)[2]){
@@ -695,6 +766,10 @@ pandoc.table.return <- function(t, caption, digits = panderOptions('digits'), de
         }
     }
 
+    ## check for exact.split
+    if (use.hyphening && !require(koRpus))
+        use.hyphening = FALSE
+      
     ## converting 3D+ tables to 2D
     if (length(dim(t)) > 2)
         t <- ftable(t)
