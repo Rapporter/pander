@@ -595,8 +595,11 @@ pandoc.table.return <- function(t, caption, digits = panderOptions('digits'), de
             for (line in lines){
               sl <- split.line(line)    
               x <- paste0(x, sl, sep="\n")
-           }
-	}
+            }
+	        }
+        }
+      } else {
+        x <- gsub("^\\s+|\\s+$", "", x)
       }
       ## return
       if (is.na(x))
@@ -1026,7 +1029,7 @@ pandoc.formula <- function(...)
 #' pandoc.date(Sys.Date())
 #' pandoc.date(Sys.Date() - 1:10)
 #' pandoc.date(Sys.Date() - 1:10, inline = FALSE)
-pandoc.date.return <- function(x, inline = TRUE, simplified = FALSE)
+pandoc.date.return <- function(x, inline = TRUE, simplified = FALSE){
   if (length(x) == 1 || simplified){
     format(x, format = panderOptions('date'))
   } else {  
@@ -1035,7 +1038,9 @@ pandoc.date.return <- function(x, inline = TRUE, simplified = FALSE)
     else
       pandoc.list.return(as.list((format(x, format = panderOptions('date')))), add.end.of.list = FALSE)
   }
+}
 
 #' @export
-pandoc.date <- function(...)
+pandoc.date <- function(...){
   cat(pandoc.date.return(...))
+}
