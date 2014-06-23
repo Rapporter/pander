@@ -556,7 +556,7 @@ pandoc.table.return <- function(t, caption, digits = panderOptions('digits'), de
       gsub("&nbsp;|[*]{2}|[\\\\]", "", x)
     }
     
-    split.line <- function(x, max.width){
+    split.line <- function(x, max.width = panderOptions('table.split.cells')){
       split <- strsplit(x, '\\s')[[1]]
       n.c <- 0
       words <- split
@@ -652,7 +652,7 @@ pandoc.table.return <- function(t, caption, digits = panderOptions('digits'), de
         x <- as.character(x)
       if (!style %in% c('simple', 'rmarkdown')) {
         ## split
-        if (nchar(x) == nchar(x, type = 'width') && !use.hyphening) {
+        if (nchar(x) == nchar(encodeString(x)) && !use.hyphening) {
           x <- paste(strwrap(x, width = max.width), collapse = '\n')
         } else {                
           ## dealing with CJK chars + also it does not count \n, \t, etc.
@@ -664,7 +664,7 @@ pandoc.table.return <- function(t, caption, digits = panderOptions('digits'), de
             lines <- strsplit(x, '\\n')[[1]]
             x <- ""
             for (line in lines){
-              sl <- split.line(line)    
+              sl <- split.line(line, max.width)    
               x <- paste0(x, sl, sep="\n")
             }
           }
