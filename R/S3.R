@@ -606,7 +606,6 @@ pander.lme <- function(x, caption = attr(x, 'caption'), summary = FALSE, ...) {
 
 }
 
-<<<<<<< HEAD
 #' @S3method pander describe
 pander.describe <- function(x, caption = attr(x, 'caption'), short = TRUE, split.tables = 60, ...) {
   if (is.null(caption) & !is.null(storage$caption))
