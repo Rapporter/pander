@@ -897,7 +897,17 @@ pandoc.table.return <- function(t, caption, digits = panderOptions('digits'), de
                })
         
         if (plain.ascii){
-          t <- apply(t, c(1,2), to.plain.ascii)
+          if (length(dim(t)) < 2){
+            if (length(dim(t)) == 0){
+              t[1:length(t)] <- to.plain.ascii(t)
+            }else{
+              t[1:dim(t)] <- to.plain.ascii(t)
+            }
+          }else{
+            if (dim(t)[1] == 0)
+              t[1, ] <- NA
+            t <- apply(t, c(1,2), to.plain.ascii)
+          }
           t.rownames <- sapply(t.rownames, to.plain.ascii)
           t.colnames <- sapply(t.colnames, to.plain.ascii)
         }
