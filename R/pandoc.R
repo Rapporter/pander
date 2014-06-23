@@ -669,6 +669,8 @@ pandoc.table.return <- function(t, caption, digits = panderOptions('digits'), de
             }
           }
         }
+      }else{
+        x <- gsub("^\\s+|\\s+$", "", x)
       }
       ## return
       if (is.na(x))
