@@ -962,6 +962,7 @@ pandoc.table <- function(...)
 #'
 #' Pandoc's mardown formula.
 #' @param x formula
+#' @param text text to be written before result
 #' @param max.width maximum width in characters per line
 #' @param caption caption (string) to be shown under the formula
 #' @param add.line.breaks if to add 2 line breaks after formula
@@ -971,7 +972,7 @@ pandoc.table <- function(...)
 #' @examples
 #' pandoc.formula(y ~ x)
 #' pandoc.formula(formula(paste("y ~ ", paste0("x", 1:12, collapse = " + "))))
-pandoc.formula.return <- function(x, max.width = 80, caption, add.line.breaks = TRUE){
+pandoc.formula.return <- function(x, text = NULL, max.width = 80, caption, add.line.breaks = FALSE){
   mc  <- match.call()
   if (is.null(mc$caption)) {
     if (is.null(attr(t, 'caption'))) {
@@ -980,7 +981,9 @@ pandoc.formula.return <- function(x, max.width = 80, caption, add.line.breaks = 
       caption <- attr(t, 'caption')
     }
   }
-  res <- deparse(x, width.cutoff = max.width)
+  res <- paste(sub('^[ ]*', '', deparse(x, width.cutoff = max.width)), collapse = '')
+  if (!is.null(text))
+    res <- paste(text, res, sep=" ")
   if (add.line.breaks)
     res <- paste(res, "\n\n")
   ## (optional) caption
