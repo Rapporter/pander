@@ -195,6 +195,17 @@ pander.lm <- function(x, caption = attr(x, 'caption'), covariate.labels, omit, s
 
 }
 
+#' @S3method pander summary.lm
+pander.summary.lm <- function(x, caption = attr(x, 'caption'), ...) {
+  if (is.null(caption)) {
+    if (is.null(storage$caption))
+      caption <- pandoc.formula.return(x$call$formula, "Fitting linear model:")
+    else
+      caption <- get.caption()
+  }  
+  pander(eval(x$call), caption = caption, summary = TRUE, ...)
+}
+
 #' @S3method pander glm
 pander.glm <- function(x, caption = attr(x, 'caption'), ...) {
 
