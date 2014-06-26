@@ -157,8 +157,8 @@ pander.factor <- function(x, ...)
 pander.list <- function(x, ...)
     pandoc.list(x)
 
-#' @S3method pander lm
-pander.lm <- function(x, caption = attr(x, 'caption'), covariate.labels, omit, summary = FALSE, ...) {
+#' @S3method pander summary.lm
+pander.summary.lm <- function(x, caption = attr(x, 'caption'), covariate.labels, omit, summary = TRUE, ...) {
 
     if (is.null(caption)) {
         if (is.null(storage$caption))
@@ -167,8 +167,7 @@ pander.lm <- function(x, caption = attr(x, 'caption'), covariate.labels, omit, s
             caption <- get.caption()
     }
 
-    xs  <- summary(x)
-    res <- as.data.frame(xs$coeff)
+    res <- as.data.frame(x$coeff)
 
     if (nrow(res) > 1)
         res <- res[c(2:nrow(res), 1), ]
@@ -182,10 +181,10 @@ pander.lm <- function(x, caption = attr(x, 'caption'), covariate.labels, omit, s
     if (summary) {
         pandoc.table(res, ...)
         pandoc.table(data.frame(
-            'Observations'        = length(xs$residuals),
-            'Residual Std. Error' = xs$sigma,
-            '$R^2$'               = xs$r.squared,
-            'Adjusted $R^2$'      = xs$adj.r.squared,
+            'Observations'        = length(x$residuals),
+            'Residual Std. Error' = x$sigma,
+            '$R^2$'               = x$r.squared,
+            'Adjusted $R^2$'      = x$adj.r.squared,
             check.names = FALSE), keep.trailing.zeros = TRUE, caption = caption, digits = 4)
     } else {
 
@@ -195,15 +194,15 @@ pander.lm <- function(x, caption = attr(x, 'caption'), covariate.labels, omit, s
 
 }
 
-#' @S3method pander summary.lm
-pander.summary.lm <- function(x, caption = attr(x, 'caption'), ...) {
+#' @S3method pander lm
+pander.lm <- function(x, caption = attr(x, 'caption'), ...) {
   if (is.null(caption)) {
     if (is.null(storage$caption))
       caption <- pandoc.formula.return(x$call$formula, "Fitting linear model:")
     else
       caption <- get.caption()
   }  
-  pander(eval(x$call), caption = caption, summary = TRUE, ...)
+  pander.summary.lm(summary(x), caption = caption, summary = FALSE, ...)
 }
 
 #' @S3method pander glm
