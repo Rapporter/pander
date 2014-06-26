@@ -180,12 +180,25 @@ pander.summary.lm <- function(x, caption = attr(x, 'caption'), covariate.labels,
 
     if (summary) {
         pandoc.table(res, ...)
+        if (class(x) == 'summary.glm'){
+          cat("\n(Dispersion parameter for ", x$family$family, " family taken to be ", 
+              format(x$dispersion), ")\n\n") 
+          stats <- cbind(paste(format(c("Null","Residual"), justify = "right"), "deviance:"),
+                         apply(cbind( 
+                                    format(unlist(x[c("null.deviance", "deviance")]), digits = panderOptions('digits')), " on", 
+                                    format(unlist(x[c("df.null", "df.residual")])), " degrees of freedom\n"), 
+                          1L, paste, collapse = " "))
+          rownames(stats) <- NULL
+          colnames(stats) <- NULL
+          pandoc.table(stats, keep.trailing.zeros = TRUE, ...)
+        }else{
         pandoc.table(data.frame(
             'Observations'        = length(x$residuals),
             'Residual Std. Error' = x$sigma,
             '$R^2$'               = x$r.squared,
             'Adjusted $R^2$'      = x$adj.r.squared,
-            check.names = FALSE), keep.trailing.zeros = TRUE, caption = caption, digits = 4)
+            check.names = FALSE), keep.trailing.zeros = TRUE, caption = caption, digits = panderOptions('digits'))
+        }
     } else {
 
         pandoc.table(res, caption = caption, ...)
@@ -194,14 +207,16 @@ pander.summary.lm <- function(x, caption = attr(x, 'caption'), covariate.labels,
 
 }
 
+#' @S3method pander summary.glm
+pander.summary.glm <- function(x, caption = attr(x, 'caption'), covariate.labels, omit, summary = TRUE, ...) {
+  
+  pander.summary.lm(x, caption = caption, summary = summary,...)
+  
+}
+
+
 #' @S3method pander lm
 pander.lm <- function(x, caption = attr(x, 'caption'), ...) {
-  if (is.null(caption)) {
-    if (is.null(storage$caption))
-      caption <- pandoc.formula.return(x$call$formula, "Fitting linear model:")
-    else
-      caption <- get.caption()
-  }  
   pander.summary.lm(summary(x), caption = caption, summary = FALSE, ...)
 }
 
@@ -217,14 +232,14 @@ pander.glm <- function(x, caption = attr(x, 'caption'), ...) {
             caption <- get.caption()
     }
 
-    pandoc.table(summary(x)$coeff, caption = caption, ...)
+    pander.summary.glm(summary(x), caption = caption, summary = FALSE, ...)
 
 }
 
-#' @S3method pander aov
-pander.aov <- function(x, caption = attr(x, 'caption'), ...) {
+#' @S3method pander summary.aov
+pander.summary.aov <- function(x, caption = attr(x, 'caption'), ...) {
 
-    res <- unclass(summary(x))[[1]]
+    res <- unclass(x)[[1]]
 
     if (is.null(caption)) {
         if (is.null(storage$caption))
@@ -235,6 +250,12 @@ pander.aov <- function(x, caption = attr(x, 'caption'), ...) {
 
     pandoc.table(res, caption = caption, ...)
 }
+
+#' @S3method pander aov
+pander.aov <- function(x, caption = attr(x, 'caption'), ...) {
+  pander(summary(x), caption = caption, ...)
+}
+  
 
 #' @S3method pander anova
 pander.anova <- function(x, caption = attr(x, 'caption'), ...) {
@@ -249,11 +270,10 @@ pander.anova <- function(x, caption = attr(x, 'caption'), ...) {
     pandoc.table(x, caption = caption, ...)
 
 }
-#' @S3method pander aovlist
-pander.aovlist <- function(x, caption = attr(x, 'caption'), ...) {
 
-  y <- summary(x)
-  n <- length(y)
+#' @S3method pander summary.aovlist
+pander.summary.aovlist <- function(x, caption = attr(x, 'caption'), ...) {
+ n <- length(y)
   if (n == 1)
     pandoc.table(unclass(y[[1]][[1]]), caption, ...)
   else {
@@ -261,8 +281,13 @@ pander.aovlist <- function(x, caption = attr(x, 'caption'), ...) {
     for (i in 2:n){
         z <- rbind(z, y[[i]][[1]])
     }
-    pandoc.table(z, caption, ...)
+    pandoc.table(z, caption = caption, ...)
   }
+}
+
+#' @S3method pander aovlist
+pander.aovlist <- function(x, caption = attr(x, 'caption'), ...) {
+  pander(summary(x), caption = caption, ...)
 }
 
 #' @S3method pander htest
@@ -296,8 +321,8 @@ pander.htest <- function(x, caption = attr(x, 'caption'), ...) {
 
 }
 
-#' @S3method pander prcomp
-pander.prcomp <- function(x, caption = attr(x, 'caption'), ...) {
+#' @S3method pander summary.prcomp
+pander.summary.prcomp <- function(x, caption = attr(x, 'caption'), summary = TRUE, ...) {
 
     if (is.null(caption)) {
         if (is.null(storage$caption))
@@ -307,9 +332,16 @@ pander.prcomp <- function(x, caption = attr(x, 'caption'), ...) {
     }
 
     pandoc.table(x$rotation, caption = caption, ...)
-    pandoc.table(summary(x)$importance, ...)
+    if (summary)
+      pandoc.table(x$importance, ...)
 }
 
+#' @S3method pander prcomp
+pander.prcomp <- function(x, caption = attr(x, 'caption'),  ...) {
+  pander(summary(x), caption = caption, summary = FALSE, ...)
+}
+  
+  
 #' @S3method pander density
 pander.density <- function(x, caption = attr(x, 'caption'), ...) {
 
