@@ -769,6 +769,37 @@ pandoc.table.return <- function(t, caption, digits = panderOptions('digits'), de
     ## check for exact.split
     if (use.hyphening && !require(koRpus))
         use.hyphening = FALSE
+    
+    ## check for relative split.cells
+    if (all(grepl("%$", split.cells))){
+      d <- 0
+      if (length(dim(y)) < 2){
+        if (length(dim(y)) == 0){
+           d <- length(y)
+        }else{
+          d <- dim(y)[1]
+        }
+      }else{
+          d <- dim(y)[2]
+      }
+      split.cells <- as.numeric(gsub("%$","",split.cells))
+      if (sum(split.cells) == 100){
+        if (is.infinite(split.tables)){
+          warning("Split.tables is an infinite value, so split cells can't be suplied as relative value. Reverting to default")
+          split.cells <- panderOptions("table.split.cells")
+        } else{
+          if (length(split.cells) < d + (length(rownames(y)) != 0)){
+            warning("Using relative split.cells require a value for every column and rownames. Reverting to default")
+            split.cells <- panderOptions("table.split.cells")
+          } else {
+            split.cells <- round(split.cells * 0.01 * split.tables)
+          }
+        }
+      } else {
+        warning("Supplied relative values don't add up to 100%. Reverting to default")
+        split.cells <- panderOptions("table.split.cells")
+      }
+    }
       
     ## converting 3D+ tables to 2D
     if (length(dim(t)) > 2)
@@ -924,7 +955,7 @@ pandoc.table.return <- function(t, caption, digits = panderOptions('digits'), de
         t.width[1] <- t.width[1] + 2
 
     }
-    ### Problem is in justify, gives wrong params. Everything else seems fine
+
     if (length(justify) != 1) {
         if (length(t.rownames) != 0)
             if (length(justify) != length(t.width))
