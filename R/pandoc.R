@@ -773,14 +773,14 @@ pandoc.table.return <- function(t, caption, digits = panderOptions('digits'), de
     ## check for relative split.cells
     if (all(grepl("%$", split.cells))){
       d <- 0
-      if (length(dim(y)) < 2){
-        if (length(dim(y)) == 0){
-           d <- length(y)
+      if (length(dim(x)) < 2){
+        if (length(dim(x)) == 0){
+           d <- length(x)
         }else{
-          d <- dim(y)[1]
+          d <- dim(x)[1]
         }
       }else{
-          d <- dim(y)[2]
+          d <- dim(x)[2]
       }
       split.cells <- as.numeric(gsub("%$","",split.cells))
       if (sum(split.cells) == 100){
@@ -788,7 +788,7 @@ pandoc.table.return <- function(t, caption, digits = panderOptions('digits'), de
           warning("Split.tables is an infinite value, so split cells can't be suplied as relative value. Reverting to default")
           split.cells <- panderOptions("table.split.cells")
         } else{
-          if (length(split.cells) < d + (length(rownames(y)) != 0)){
+          if (length(split.cells) < d + (length(rownames(x)) != 0)){
             warning("Using relative split.cells require a value for every column and rownames. Reverting to default")
             split.cells <- panderOptions("table.split.cells")
           } else {

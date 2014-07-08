@@ -168,3 +168,13 @@ test_that('no error: functions', {
 })
 panderOptions('table.alignment.default', tad)
 panderOptions('table.alignment.rownames', tar)
+
+context("warnings.expectations")
+
+test_that('split.cells param produces expected warnings',{
+  mt <- mtcars[1:2, 1:4]
+  expect_warning(pander(mt, split.cells = c(1,2)))
+  expect_warning(pander(mt, split.cells = c(1,2,3)))
+  expect_warning(pander(mt, split.cells = c("10%","10%","10%")))
+  expect_warning(pander(mt, split.cells = c("30%","30%","40%")))
+})
