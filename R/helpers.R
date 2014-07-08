@@ -297,3 +297,101 @@ cache.off <- function()
 #' @export
 cache.on <- function()
     evalsOptions('cache', TRUE)
+
+#' Split line with line breaks depending on max.width
+#'
+#' This is a helper function to insert line breaks depending on (\code{split.cells} parameter of \code{pandoc.table}) of the returning table. 
+#' @param x string to be split. Works only with one string. Non-string arguments and multi-dimensional arguments are returned unchaged
+#' @param max.width default integer value specyfing max number of characters between line breaks
+#' @param use.hyphening (default: \code{FALSE}) if try to use hyphening when splitting large cells according to table.split.cells. Requires koRpus package.
+#' @return character string with line breaks
+#' @export
+split.line <- function(x, max.width = panderOptions('table.split.cells'), use.hyphening = FALSE){
+  if (!is.character(x) || !is.null(dim(x)) || length(x) != 1)
+    return(x)
+  paste.wrapper <- function(x, s, additional.param = FALSE){ ## simplifies pastes at the end. Use 3 times in the code
+    if (is.null(x) || grepl('(\r|\n)$', x) || additional.param){ 
+      x <- paste(x, s, sep = '')
+    }else{
+      x <- paste(x, s, sep = ' ')
+    }
+    x
+  }
+  ## check for exact.split
+  if (use.hyphening && !require(koRpus))
+    use.hyphening = FALSE
+  split <- strsplit(x, '\\s')[[1]]
+  n.c <- 0
+  words <- split
+  x <- NULL
+  while(length(words) !=0){
+    s <- words[1]
+    if (s == ""){ # for case of when keeping line breaks, strsplit returns empty lines
+      words <- words[-1]
+      next 
+    }
+    n.w <- nchar(s, type = 'width')
+    added.syllable <- FALSE  #if any syllables have been already added to the result
+    n.c <- n.c + n.w + 1
+    if (n.c >= max.width) {
+      if (use.hyphening){
+        n.c <- n.c - n.w - 1
+        syllables <- strsplit(hyphen(s, hyph.pattern="en.us", quiet = TRUE)@hyphen[1,2], "-")[[1]]
+        if (length(syllables) == 0)
+          syllables <- s
+        # also determine new max line width
+        for (syl in syllables){
+          n.s <- nchar(syl, type='chars')
+          if (n.s + n.c + 1 > max.width){
+            if (added.syllable){
+              line.end <- "-\n"
+              pos <- match(syl, syllables)
+              leftover <- paste(syllables[pos : length(syllables)], collapse="")
+            } else {
+              if (n.c == 0){
+                line.end <- paste(syl, if (length(syllables) == 1) "\n" else "-\n", sep="")
+                pos <- match(syl, syllables)
+                leftover <- if (pos == length(syllables)) NULL 
+                            else leftover <- paste(syllables[(pos + 1) : length(syllables)], collapse="")
+              } else {
+                line.end <- "\n"
+                leftover <- s
+              }
+            }
+            x <- paste(x, line.end, sep="")
+            # max.width <- n + n.s ## questionable
+            words <- c(leftover, words[-1])
+            n.c <- 0
+            break
+          }else{
+            if (added.syllable)
+              n.c <- n.s + n.c
+            else
+              n.c <- n.c + n.s + 1
+            if (!added.syllable && n.c == max.width){
+              words <- words[-1]
+            }
+            # add end of line handle
+            x <- paste.wrapper(x, syl, added.syllable)
+            added.syllable = TRUE
+          }
+        }
+      }else{
+        n.c <- 0
+        if (is.null(x) || grepl('(\r|\n)$', x)){
+          x <- paste(x, s, sep = '')
+          words <- words[-1]
+        }
+        if (length(words) != 0 && words[1] != "")
+          x <- paste(x, "\n", sep="")
+      }
+    } else {
+      x <- paste.wrapper(x, s)
+      words <- words[-1]
+    }
+  }
+  if (is.null(x))
+    return("")
+  else
+    return(x)
+}
