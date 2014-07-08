@@ -788,7 +788,7 @@ pandoc.table.return <- function(t, caption, digits = panderOptions('digits'), de
           warning("Split.tables is an infinite value, so split cells can't be suplied as relative value. Reverting to default")
           split.cells <- panderOptions("table.split.cells")
         } else{
-          if (length(split.cells) < d + (length(rownames(y)) != 0)){
+          if (length(split.cells) < d + (length(rownames(x)) != 0)){
             warning("Using relative split.cells require a value for every column and rownames. Reverting to default")
             split.cells <- panderOptions("table.split.cells")
           } else {
