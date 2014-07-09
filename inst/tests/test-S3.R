@@ -169,7 +169,6 @@ test_that('no error: functions', {
 panderOptions('table.alignment.default', tad)
 panderOptions('table.alignment.rownames', tar)
 
-
 context("keep.line.breaks")
 test_that('keep.line.breaks works correctly', {
   # keeping line breaks in a simple data.frame with one line breaks differs lines amount by one
@@ -218,4 +217,14 @@ test_that('keep.line.breaks works correctly', {
   lines.x.no.breaks <- length(strsplit(pandoc.table.return(x, keep.line.breaks = FALSE, split.cells = Inf, split.tables = Inf), "\n")[[1]])
   lines.x.keep.breaks <- length(strsplit(pandoc.table.return(x, keep.line.breaks = TRUE), "\n")[[1]])
   expect_equal(lines.x.no.breaks + 2 * max(n) - 2, lines.x.keep.breaks)  
+})
+
+context("warnings.expectations")
+
+test_that('split.cells param produces expected warnings',{
+  mt <- mtcars[1:2, 1:4]
+  expect_warning(pander(mt, split.cells = c(1,2)))
+  expect_warning(pander(mt, split.cells = c(1,2,3)))
+  expect_warning(pander(mt, split.cells = c("10%","10%","10%")))
+  expect_warning(pander(mt, split.cells = c("30%","30%","40%")))
 })
