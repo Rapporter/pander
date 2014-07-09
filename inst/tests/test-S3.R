@@ -168,3 +168,54 @@ test_that('no error: functions', {
 })
 panderOptions('table.alignment.default', tad)
 panderOptions('table.alignment.rownames', tar)
+
+
+context("keep.line.breaks")
+test_that('keep.line.breaks works correctly', {
+  # keeping line breaks in a simple data.frame with one line breaks differs lines amount by one
+  x <- data.frame(a="Pander\nPackage")
+  lines.x.no.breaks <- length(strsplit(pandoc.table.return(x, keep.line.breaks = FALSE), "\n")[[1]])
+  lines.x.keep.breaks <- length(strsplit(pandoc.table.return(x, keep.line.breaks = TRUE), "\n")[[1]])
+  expect_equal(lines.x.no.breaks + 1, lines.x.keep.breaks)
+
+  # keeping line breaks in a simple data.frame with 2 rows with 1 line breaks differst lines amount by 2
+  x <- data.frame(a=c("Pander\nPackage","Pander\nPackage"))
+  lines.x.no.breaks <- length(strsplit(pandoc.table.return(x, keep.line.breaks = FALSE), "\n")[[1]])
+  lines.x.keep.breaks <- length(strsplit(pandoc.table.return(x, keep.line.breaks = TRUE), "\n")[[1]])
+  expect_equal(lines.x.no.breaks + 2, lines.x.keep.breaks)
+  
+  #if there are no line breaks originally, they do not get introduced
+  x <- data.frame(a=c("Pander Package","Pander Package"))
+  lines.x.no.breaks <- length(strsplit(pandoc.table.return(x, keep.line.breaks = FALSE), "\n")[[1]])
+  lines.x.keep.breaks <- length(strsplit(pandoc.table.return(x, keep.line.breaks = TRUE), "\n")[[1]])
+  expect_equal(lines.x.no.breaks, lines.x.keep.breaks)
+  
+  # works with random number of rows added
+  rows <- sample(1:100, 1)
+  x <- data.frame(a=rep("Pander\nPackage", rows))
+  lines.x.no.breaks <- length(strsplit(pandoc.table.return(x, keep.line.breaks = FALSE), "\n")[[1]])
+  lines.x.keep.breaks <- length(strsplit(pandoc.table.return(x, keep.line.breaks = TRUE), "\n")[[1]])
+  expect_equal(lines.x.no.breaks + rows, lines.x.keep.breaks)
+  
+  # random number of line breaks in one cell
+  n <- sample(1:10, 1)
+  x <- data.frame(a=paste(rep("pander", n), collapse="\n"))
+  lines.x.no.breaks <- length(strsplit(pandoc.table.return(x, keep.line.breaks = FALSE, split.cells = Inf), "\n")[[1]])
+  lines.x.keep.breaks <- length(strsplit(pandoc.table.return(x, keep.line.breaks = TRUE), "\n")[[1]])
+  expect_equal(lines.x.no.breaks + n - 1, lines.x.keep.breaks)
+  
+  # random number of line breaks in cells, 3 columns
+  n <- sample(1:10, 3)
+  x <- data.frame(a=paste(rep("pander", n[1]), collapse="\n"), 
+                  b = paste(rep("pander", n[2]), collapse="\n"), 
+                  c = paste(rep("pander", n[3]), collapse="\n"))
+  lines.x.no.breaks <- length(strsplit(pandoc.table.return(x, keep.line.breaks = FALSE, split.cells = Inf, split.tables = Inf), "\n")[[1]])
+  lines.x.keep.breaks <- length(strsplit(pandoc.table.return(x, keep.line.breaks = TRUE), "\n")[[1]])
+  expect_equal(lines.x.no.breaks + max(n) - 1, lines.x.keep.breaks)
+  
+  # 3 columns, 2 rows
+  x <- rbind(x,x)
+  lines.x.no.breaks <- length(strsplit(pandoc.table.return(x, keep.line.breaks = FALSE, split.cells = Inf, split.tables = Inf), "\n")[[1]])
+  lines.x.keep.breaks <- length(strsplit(pandoc.table.return(x, keep.line.breaks = TRUE), "\n")[[1]])
+  expect_equal(lines.x.no.breaks + 2 * max(n) - 2, lines.x.keep.breaks)  
+})
