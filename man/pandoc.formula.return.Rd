@@ -4,10 +4,13 @@
 \alias{pandoc.formula.return}
 \title{Formulas}
 \usage{
-pandoc.formula.return(x, max.width = 80, caption, add.line.breaks = TRUE)
+pandoc.formula.return(x, text = NULL, max.width = 80, caption,
+  add.line.breaks = FALSE)
 }
 \arguments{
 \item{x}{formula}
+
+\item{text}{text to be written before result}
 
 \item{max.width}{maximum width in characters per line}
 

@@ -12,8 +12,9 @@ pandoc.table.return(t, caption, digits = panderOptions("digits"),
   split.cells = panderOptions("table.split.cells"),
   keep.trailing.zeros = panderOptions("keep.trailing.zeros"),
   keep.line.breaks = panderOptions("keep.line.breaks"),
-  plain.ascii = panderOptions("plain.ascii"), emphasize.rows, emphasize.cols,
-  emphasize.cells, emphasize.strong.rows, emphasize.strong.cols,
+  plain.ascii = panderOptions("plain.ascii"),
+  use.hyphening = panderOptions("use.hyphening"), emphasize.rows,
+  emphasize.cols, emphasize.cells, emphasize.strong.rows, emphasize.strong.cols,
   emphasize.strong.cells, ...)
 }
 \arguments{
@@ -28,6 +29,8 @@ pandoc.table.return(t, caption, digits = panderOptions("digits"),
 \item{big.mark}{passed to \code{format}}
 
 \item{round}{passed to \code{round}}
+
+\item{use.hyphening}{boolean (default: \code{FALSE}) if try to use hyphening when splitting large cells according to table.split.cells. Requires koRpus package.}
 
 \item{justify}{defines alignment in cells passed to \code{format}. Can be \code{left}, \code{right} or \code{centre}, which latter can be also spelled as \code{center}. Defaults to \code{centre}.}
 
