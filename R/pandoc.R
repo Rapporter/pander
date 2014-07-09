@@ -556,97 +556,6 @@ pandoc.table.return <- function(t, caption, digits = panderOptions('digits'), de
       gsub("&nbsp;|[*]{2}|[\\\\]", "", x)
     }
     
-    split.line <- function(x, max.width = panderOptions('table.split.cells')){
-      split <- strsplit(x, '\\s')[[1]]
-      n.c <- 0
-      words <- split
-      x <- NULL
-      while(length(words) !=0){
-        s <- words[1]
-        if (s == ""){ # for case of when keeping line breaks, strsplit returns empty lines
-          words <- words[-1]
-          next 
-        }
-        n.w <- nchar(s, type = 'width')
-        added.syllable <- FALSE  #if any syllables have been already added to the result
-        n.c <- n.c + n.w + 1
-        if (n.c >= max.width) {
-          if (use.hyphening){
-            n.c <- n.c - n.w - 1
-            syllables <- strsplit(hyphen(s, hyph.pattern="en.us", quiet = TRUE)@hyphen[1,2], "-")[[1]]
-            if (length(syllables) == 0)
-              syllables <- s
-            # also determine new max line width
-            for (syl in syllables){
-              n.s <- nchar(syl, type='chars')
-              if (n.s + n.c + 1 > max.width){
-                #exit
-                if (added.syllable){
-                  line.end <- "-\n"
-                  pos <- match(syl, syllables)
-                  leftover <- paste(syllables[pos : length(syllables)], collapse="")
-                } else {
-                  if (n.c == 0){
-                    if (length(syllables) == 1)
-                      line.end <- paste(syl, "\n", sep="")
-                    else
-                      line.end <- paste(syl, "-\n", sep="")
-                    pos <- match(syl, syllables)
-                    if (pos == length(syllables))
-                      leftover <- NULL
-                    else
-                      leftover <- paste(syllables[(pos + 1) : length(syllables)], collapse="")
-                  } else {
-                    line.end <- "\n"
-                    leftover <- s
-                  }
-                }
-                x <- paste(x, line.end, sep="")
-                # max.width <- n + n.s ## questionable
-                words <- c(leftover, words[-1])
-                n.c <- 0
-                break
-              }else{
-                if (added.syllable)
-                  n.c <- n.s + n.c
-                else
-                  n.c <- n.c + n.s + 1
-                if (!added.syllable && n.c == max.width){
-                  words <- words[-1]
-                }
-                # add end of line handle
-                if (is.null(x) || grepl('(\r|\n)$', x) || added.syllable){
-                  x <- paste(x, syl, sep = '')
-                }else{
-                  x <- paste(x, syl, sep = ' ')
-                }
-                added.syllable = TRUE
-              }
-            }
-          }else{
-            n.c <- 0
-            if (is.null(x) || grepl('(\r|\n)$', x)){ 
-              x <- paste(x, s, sep = '')
-            }else{
-              x <- paste(x, s, sep = ' ')
-            }
-            x <- paste(x, "\n", sep="")
-            words <- words[-1]
-          }
-        } else {
-          if (is.null(x) || grepl('(\r|\n)$', x)){ 
-            x <- paste(x, s, sep = '')
-          }else{
-            x <- paste(x, s, sep = ' ')
-          }
-          words <- words[-1]
-        }
-      }
-      x
-    }
-    
-    
-    
     split.large.cells.helper <- function(x, max.width){
       if (!is.character(x))
         x <- as.character(x)
@@ -659,7 +568,7 @@ pandoc.table.return <- function(t, caption, digits = panderOptions('digits'), de
           ## this happens because width - counts only the number of columns 
           ## cat will use to print the string in a monospaced font. 
           if (!keep.line.breaks){
-            x <- split.line(x, max.width)
+            x <- split.line(x, max.width, use.hyphening)
           } else {
             lines <- strsplit(x, '\\n')[[1]]
             x <- ""
@@ -766,10 +675,6 @@ pandoc.table.return <- function(t, caption, digits = panderOptions('digits'), de
         }
     }
 
-    ## check for exact.split
-    if (use.hyphening && !require(koRpus))
-        use.hyphening = FALSE
-    
     ## check for relative split.cells
     if (all(grepl("%$", split.cells))){
       d <- 0
