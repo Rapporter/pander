@@ -22,7 +22,8 @@ Depends:
 Imports:
     methods,
     digest,
-    tools
+    tools,
+    Rcpp (>= 0.11.2)
 Suggests:
     grid,
     lattice,
@@ -30,3 +31,4 @@ Suggests:
     koRpus
 SystemRequirements: Pandoc (http://johnmacfarlane.net/pandoc) for exporting
     markdown files to other formats.
+LinkingTo: Rcpp
