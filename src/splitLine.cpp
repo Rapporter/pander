@@ -32,7 +32,7 @@ void process_hyphenation(std::string &result, std::string &word, int &nline, int
     hyphened_word_vec = hyphen(word);
     hyphened_word = std::string(hyphened_word_vec[0]);
     cword = new char[hyphened_word.length() + 1];
-    std::strcpy(cword, hyphened_word.c_str());
+    strcpy(cword, hyphened_word.c_str());
     pch_syl = strtok_r(cword, "-", &end_syllable);
     if (hyphened_word == word){ // no hyphen
       if (nline == 1){
