@@ -307,8 +307,14 @@ cache.on <- function()
 #' @return character string with line breaks
 #' @export
 splitLine <- function(x, max.width = panderOptions('table.split.cells'), use.hyphening = FALSE){
+  if (suppressWarnings(!is.na(as.numeric(x))))
+    return(x)
   if (!is.character(x) || !is.null(dim(x)) || length(x) != 1)
     return(x)
+  if (is.infinite(max.width))
+    max.width <- .Machine$integer.max
+  if (use.hyphening && !require(koRpus))
+    use.hyphening <- FALSE
   hyphen_f <- function(s)
     hyphen(s, hyph.pattern="en.us", quiet = TRUE)@hyphen[1,2]
   .Call('pander_splitLine_cpp', PACKAGE = 'pander', x, max.width, use.hyphening, hyphen_f)

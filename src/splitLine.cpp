@@ -70,7 +70,6 @@ void process_hyphenation(std::string &result, std::string &word, int &nline, int
 }
 
 
-//// [[Rcpp::export]]
 std::string splitLine_cpp(std::string str, int max_width, bool use_hyphening, Rcpp::Function hyphen){
   char *pch_word, *cstr, *end_word;
   std::string result, word, hyphened_word, syllable;

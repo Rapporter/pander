@@ -573,6 +573,7 @@ pandoc.table.return <- function(t, caption, digits = panderOptions('digits'), de
           ## this happens because width - counts only the number of columns 
           ## cat will use to print the string in a monospaced font. 
           if (!keep.line.breaks){
+            x <- gsub("\n", " ", x)
             x <- splitLine(x, max.width, use.hyphening)
           } else {
             lines <- strsplit(x, '\\n')[[1]]
