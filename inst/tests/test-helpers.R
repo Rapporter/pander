@@ -54,7 +54,7 @@ test_that('splitLine with hyphening behaves correctly',{
   expect_true(widthSpaced(x, 5, "max") <= 5) # max width of line is less than 5 (in case it has spaces)
   expect_true(widthSpaced(x, 10, "max") <= 10) # max width of line is less than 10 (in case it has spaces)
   expect_true(widthSpaced(x, 10, "min") >= 1) # every line has at least one character
-  expect_equal("char-\nac-\nter\n", splitLine("character", 2, TRUE)) # check correctness for predifined word
+  expect_equal("char-\nac-\nter", splitLine("character", 2, TRUE)) # check correctness for predifined word
   expect_equal("", splitLine("", 2, TRUE)) # for empty string, returns empty string
   expect_equal(length(strsplit(splitLine(x, 10, TRUE), "\n")[[1]]), 13) # when max.width param is small, every word is a line
   expect_false(grepl("- ", splitLine(x, 10, TRUE))) # no space after hyphen
