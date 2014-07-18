@@ -4,7 +4,6 @@
 #include <cstdlib>
 using namespace Rcpp;
 
-// getExample and test what is the problem
 std::string format_cpp(std::string x, std::string justify, int width){
   int i, j;
   std::string result = "";
@@ -25,10 +24,8 @@ std::string format_cpp(std::string x, std::string justify, int width){
   } 
   return result;
 }
-// tableExpand_cpp(cells, cols.width, jus, sep.cols)
-// [[Rcpp::export]]
+//[[Rcpp::export]]
 std::string tableExpand_cpp(CharacterVector cells, IntegerVector colsWidth, CharacterVector justify, CharacterVector sepCols, std::string style) {
-//    DataFrame df = DataFrame::create(Named("txt")= cells, Named("width") = colsWidth, Named("justify") = justify);
     std::string res = "", temp, word;
     int i, j;
     bool hasLineBreak = false;
@@ -36,7 +33,7 @@ std::string tableExpand_cpp(CharacterVector cells, IntegerVector colsWidth, Char
     // check for having a line break
     for (i = 0; i < cells.length(); i++){
       temp = as<std::string>(cells[i]);
-      if (temp.find('\n')!=std::string::npos){
+      if (temp.find('\n') != std::string::npos){
         hasLineBreak = true;
         break;
       }
@@ -47,7 +44,9 @@ std::string tableExpand_cpp(CharacterVector cells, IntegerVector colsWidth, Char
       int n = cells.length(), maxLengthCells = 0;
       std::vector<std::string> *resSplit = new std::vector<std::string>[n];
       for (i = 0; i < n; i++){
+        temp = std::string(cells[i]);
         char *tempStr = new char[cells[i].size()], *end, *pch;
+        std::strcpy(tempStr, temp.c_str());
         pch = strtok_r(tempStr,"\n", &end);
         while (pch != NULL)
         {
