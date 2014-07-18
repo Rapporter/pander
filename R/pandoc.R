@@ -539,12 +539,15 @@ pandoc.table.return <- function(t, caption, digits = panderOptions('digits'), de
 
             res <- lapply(strsplit(as.character(df$txt), '\n'), unlist)
             res.lines <- max(sapply(res, length))
-            res <- paste(sapply(1:res.lines, function(i) table.expand(sapply(res, function(x) ifelse(is.na(x[i]), '  ', x[i])), cols.width, justify, sep.cols)), collapse = '\n')
+            res <- paste(
+              sapply(1:res.lines, 
+                     function(i) table.expand(sapply(res, function(x) ifelse(is.na(x[i]), '  ', x[i])), cols.width, justify, sep.cols)), collapse = '\n')
             return(res)
 
         } else {
 
-            res <- apply(df, 1, function(x) format(x[1], justify = x[3], width = as.numeric(x[2]) + length(which(gregexpr("\\\\", x[1])[[1]] > 0))))
+            res <- apply(df, 1, 
+                         function(x) format(x[1], justify = x[3], width = as.numeric(x[2]) + length(which(gregexpr("\\\\", x[1])[[1]] > 0))))
             return(paste0(sep.cols[1], paste(res, collapse = sep.cols[2]), sep.cols[3]))
 
         }
@@ -905,7 +908,9 @@ pandoc.table.return <- function(t, caption, digits = panderOptions('digits'), de
             res <- list(t[1:t.split, drop = FALSE], t[(t.split + 1):length(t), drop = FALSE])
 
         ## recursive call
-        res <- paste(pandoc.table.return(res[[1]], caption = caption, digits = digits, decimal.mark = decimal.mark, round = round, justify = justify[[1]], style = style), pandoc.table.return(res[[2]], caption = NULL, digits = digits, decimal.mark = decimal.mark, round = round, justify = justify[[2]], style = style))
+        res <- paste(
+          pandoc.table.return(res[[1]], caption = caption, digits = digits, decimal.mark = decimal.mark, round = round, justify = justify[[1]], style = style), 
+          pandoc.table.return(res[[2]], caption = NULL, digits = digits, decimal.mark = decimal.mark, round = round, justify = justify[[2]], style = style))
 
         return(res)
 
