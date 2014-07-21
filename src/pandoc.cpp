@@ -21,6 +21,7 @@ std::string format_cpp(std::string x, std::string justify, int width){
   return result;
 }
 
+//[[Rcpp::export]]
 std::string tableExpand_cpp(CharacterVector cells, IntegerVector colsWidth, CharacterVector justify, CharacterVector sepCols, std::string style) {
     std::string res = "", word, *line;
     size_t pos;
