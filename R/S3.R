@@ -209,15 +209,13 @@ pander.summary.lm <- function(x, caption = attr(x, 'caption'), covariate.labels,
 
 #' @S3method pander summary.glm
 pander.summary.glm <- function(x, caption = attr(x, 'caption'), covariate.labels, omit, summary = TRUE, ...) {
-  
-  pander.summary.lm(x, caption = caption, summary = summary,...)
-  
+  pander.summary.lm(x, caption = caption, summary = summary, covariate.labels = covariate.labels, omit = omit, ...)
 }
 
 
 #' @S3method pander lm
-pander.lm <- function(x, caption = attr(x, 'caption'), ...) {
-  pander.summary.lm(summary(x), caption = caption, summary = FALSE, ...)
+pander.lm <- function(x, caption = attr(x, 'caption'), covariate.labels, omit, ...) {
+  pander.summary.lm(summary(x), caption = caption, summary = FALSE, covariate.labels = covariate.labels, omit = omit, ...)
 }
 
 #' @S3method pander glm
