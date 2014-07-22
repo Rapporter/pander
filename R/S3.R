@@ -935,3 +935,12 @@ pander.sessionInfo <- function (x, locale = TRUE, compact = TRUE, ...)
   invisible(x)
 }
 
+#' @S3method pander function
+pander.function <- function(x, caption = attr(x, 'caption'), add.name = FALSE, ...){
+  fname <- substitute(x)
+  if (!is.null(add.name) && add.name)
+    cat(fname, " <- ")
+  for (line in deparse(x))
+    cat(line, "\n")
+}
+  
