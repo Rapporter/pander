@@ -526,31 +526,10 @@ pandoc.list <- function(...)
 #' emphasize.strong.cells(which(t > 20, arr.ind = TRUE))
 #' pandoc.table(t)
 pandoc.table.return <- function(t, caption, digits = panderOptions('digits'), decimal.mark = panderOptions('decimal.mark'), big.mark = panderOptions('big.mark'), round = panderOptions('round'), justify, style = c('multiline', 'grid', 'simple', 'rmarkdown'), split.tables = panderOptions('table.split.table'), split.cells = panderOptions('table.split.cells'), keep.trailing.zeros = panderOptions('keep.trailing.zeros'), keep.line.breaks = panderOptions('keep.line.breaks'), plain.ascii = panderOptions('plain.ascii'), use.hyphening = panderOptions('use.hyphening'), emphasize.rows, emphasize.cols, emphasize.cells, emphasize.strong.rows, emphasize.strong.cols, emphasize.strong.cells, ...) {
-
     ## helper functions
     table.expand <- function(cells, cols.width, justify, sep.cols) {
-
-        df  <- data.frame(txt = cells, width = cols.width, justify = justify)
-
-        if (any(grepl('\n', df$txt))) {
-
-            if (style %in% c('simple', 'rmarkdown'))
-                stop('Pandoc does not support newlines in simple or Rmarkdown table format!')
-
-            res <- lapply(strsplit(as.character(df$txt), '\n'), unlist)
-            res.lines <- max(sapply(res, length))
-            res <- paste(sapply(1:res.lines, function(i) table.expand(sapply(res, function(x) ifelse(is.na(x[i]), '  ', x[i])), cols.width, justify, sep.cols)), collapse = '\n')
-            return(res)
-
-        } else {
-
-            res <- apply(df, 1, function(x) format(x[1], justify = x[3], width = as.numeric(x[2]) + length(which(gregexpr("\\\\", x[1])[[1]] > 0))))
-            return(paste0(sep.cols[1], paste(res, collapse = sep.cols[2]), sep.cols[3]))
-
-        }
-
+      .Call('pander_tableExpand_cpp', PACKAGE = 'pander', cells, cols.width, justify, sep.cols, style)
     }
-    
     # function for cell conversion to plain-ascii (deletion of markup characters)
     to.plain.ascii <- function(x){
       x <- gsub("&nbsp;", "", x)  # table non-breaking space
@@ -905,7 +884,9 @@ pandoc.table.return <- function(t, caption, digits = panderOptions('digits'), de
             res <- list(t[1:t.split, drop = FALSE], t[(t.split + 1):length(t), drop = FALSE])
 
         ## recursive call
-        res <- paste(pandoc.table.return(res[[1]], caption = caption, digits = digits, decimal.mark = decimal.mark, round = round, justify = justify[[1]], style = style), pandoc.table.return(res[[2]], caption = NULL, digits = digits, decimal.mark = decimal.mark, round = round, justify = justify[[2]], style = style))
+        res <- paste(
+          pandoc.table.return(res[[1]], caption = caption, digits = digits, decimal.mark = decimal.mark, round = round, justify = justify[[1]], style = style), 
+          pandoc.table.return(res[[2]], caption = NULL, digits = digits, decimal.mark = decimal.mark, round = round, justify = justify[[2]], style = style))
 
         return(res)
 

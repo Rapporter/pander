@@ -933,3 +933,19 @@ pander.sessionInfo <- function (x, locale = TRUE, compact = TRUE, ...)
   invisible(x)
 }
 
+#' @S3method pander microbenchmark
+pander.microbenchmark <- function(x, caption = attr(x, 'caption'), expr.labels, unit, ...){
+  xs <- summary(x, unit = unit)
+  if (is.null(caption)) {
+    if (is.null(storage$caption))
+      caption <- paste("Unit: ", attr(xs, "unit"), sep = "")
+    else
+      caption <- get.caption()
+  }  
+  if (!missing(expr.labels)){
+    xs[,1] <- as.vector(xs[,1])
+    xs[1:length(expr.labels), 1] <- expr.labels
+  }
+  pander(xs, caption = caption, ...)
+}
+  
