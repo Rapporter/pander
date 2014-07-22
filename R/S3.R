@@ -936,9 +936,9 @@ pander.sessionInfo <- function (x, locale = TRUE, compact = TRUE, ...)
 }
 
 #' @S3method pander function
-pander.function <- function(x, caption = attr(x, 'caption'), add.name = FALSE, verbatium = TRUE, ...){
+pander.function <- function(x, caption = attr(x, 'caption'), add.name = FALSE, verbatim = TRUE, ...){
   fname <- substitute(x)
-  ps <- ifelse(verbatium, "\t", "")
+  ps <- ifelse(verbatim, "\t", "")
   if (!is.null(add.name) && add.name)
     cat(ps, fname, " <- ", sep = "")
   for (line in deparse(x))
