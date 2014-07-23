@@ -1,7 +1,5 @@
 #include <Rcpp.h>
 #include <string.h>
-#include <cstdio> 
-#include <cstdlib>
 using namespace Rcpp;
 
 std::string format_cpp(std::string x, std::string justify, int width){
