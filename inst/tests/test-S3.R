@@ -228,3 +228,64 @@ test_that('split.cells param produces expected warnings',{
   expect_warning(pander(mt, split.cells = c("10%","10%","10%")))
   expect_warning(pander(mt, split.cells = c("30%","30%","40%")))
 })
+
+context("table.expand")
+
+test_that('produces.errors',{
+  x <- data.frame(a="Pander\nPackage")
+  expect_error(pander(x, style='simple', keep.line.breaks = T))
+  expect_error(pander(x, style='simple', keep.line.breaks = T))
+})
+
+table.expand <- function(cells, cols.width, justify, sep.cols) {
+  .Call('pander_tableExpand_cpp', PACKAGE = 'pander', cells, cols.width, justify, sep.cols, style)
+}
+
+test_that('table.expand behaves correctly',{
+  # I save results of original table expand written in R and now as a safe check that new table.expand returns the same results for different styles and justify
+  ## multiline style check
+  argv <-  structure(list(txt = structure(c(1L, 4L, 2L, 3L), .Label = c("&nbsp;",  "cyl", "disp", "mpg"), class = "factor"), width = c(19, 5, 5,  6), justify = structure(c(1L, 1L, 1L, 1L), .Label = "centre", class = "factor")), .Names = c("txt",  "width", "justify"), row.names = c(NA, -4L), class = "data.frame") 
+  sep.cols <-  c("", " ", "") 
+  style <-  "multiline" 
+  expect_equal(table.expand(argv[,1], argv[,2], argv[,3], sep.cols), "      &nbsp;         mpg   cyl   disp ");
+  ## grid style check
+  argv <-  structure(list(txt = structure(c(1L, 5L, 2L, 3L, 4L), .Label = c("&nbsp;",  "cyl", "disp", "hp", "mpg"), class = "factor"), width = c(20,  5, 5, 6, 4), justify = structure(c(1L, 1L, 1L, 1L, 1L), .Label = "centre", class = "factor")), .Names = c("txt",  "width", "justify"), row.names = c(NA, -5L), class = "data.frame") 
+  sep.cols <-  c("| ", " | ", " |") 
+  style <-  "grid" 
+  expect_equal(table.expand(argv[,1], argv[,2], argv[,3], sep.cols), "|        &nbsp;        |  mpg  |  cyl  |  disp  |  hp  |" )
+  ## rmarkdown style check
+  argv <-  structure(list(txt = structure(c(1L, 4L, 5L, 3L, 2L), .Label = c("**Mazda RX4**",  "110", "160", "21", "6"), class = "factor"), width = c(20, 5,  5, 6, 4), justify = structure(c(1L, 1L, 1L, 1L, 1L), .Label = "centre", class = "factor")), .Names = c("txt",  "width", "justify"), row.names = c("t.rownames", "mpg", "cyl",  "disp", "hp"), class = "data.frame") 
+  sep.cols <-  c("| ", " | ", " |") 
+  style <-  "rmarkdown" 
+  expect_equal(table.expand(argv[,1], argv[,2], argv[,3], sep.cols), "|    **Mazda RX4**     |  21   |   6   |  160   | 110  |")
+  ## simple style check
+  argv <-  structure(list(txt = structure(c(1L, 3L, 4L, 2L, 5L), .Label = c("**Datsun 710**",  "108", "22.8", "4", "93"), class = "factor"), width = c(20, 5,  5, 6, 4), justify = structure(c(1L, 1L, 1L, 1L, 1L), .Label = "centre", class = "factor")), .Names = c("txt",  "width", "justify"), row.names = c("t.rownames", "mpg", "cyl",  "disp", "hp"), class = "data.frame") 
+  sep.cols <-  c("", " ", "") 
+  style <-  "simple" 
+  expect_equal(table.expand(argv[,1], argv[,2], argv[,3], sep.cols), "   **Datsun 710**    22.8    4    108    93 ")
+  ## left justification
+  argv <-  structure(list(txt = structure(c(1L, 4L, 5L, 3L, 2L), .Label = c("**Mazda",  "110", "160", "21", "6"), class = "factor"), width = c(10, 5,  5, 6, 4), justify = structure(c(1L, 1L, 1L, 1L, 1L), .Label = "left", class = "factor")), .Names = c("txt",  "width", "justify"), row.names = c(NA, -5L), class = "data.frame") 
+  sep.cols <-  c("", " ", "") 
+  style <-  "multiline" 
+  expect_equal(table.expand(argv[,1], argv[,2], argv[,3], sep.cols), "**Mazda    21    6     160    110 ");
+  ## right justification
+  argv <-  structure(list(txt = structure(c(1L, 3L, 5L, 4L, 2L), .Label = c("**Hornet 4 Drive**",  "110", "21.4", "258", "6"), class = "factor"), width = c(20,  5, 5, 6, 4), justify = structure(c(1L, 1L, 1L, 1L, 1L), .Label = "right", class = "factor")), .Names = c("txt",  "width", "justify"), row.names = c("t.rownames", "mpg", "cyl",  "disp", "hp"), class = "data.frame") 
+  sep.cols <-  c("", " ", "") 
+  style <-  "simple" 
+  expect_equal(table.expand(argv[,1], argv[,2], argv[,3], sep.cols), "  **Hornet 4 Drive**  21.4     6    258  110" );
+  ## multiple lines
+  argv <-  structure(list(txt = structure(c(1L, 3L, 5L, 4L, 2L), .Label = c("**Hornet\n4\nDrive**",  "110", "21.4", "258", "6"), class = "factor"), width = c(10,  5, 5, 6, 4), justify = structure(c(1L, 1L, 1L, 1L, 1L), .Label = "left", class = "factor")), .Names = c("txt",  "width", "justify"), row.names = c("t.rownames", "mpg", "cyl",  "disp", "hp"), class = "data.frame") 
+  sep.cols <-  c("", " ", "") 
+  style <-  "multiline" 
+  expect_equal(table.expand(argv[,1], argv[,2], argv[,3], sep.cols), "**Hornet   21.4  6     258    110 \n4                                 \nDrive**                           ");
+ 
+  argv <-  structure(list(txt = structure(c(1L, 3L, 4L, 2L, 5L), .Label = c("**Datsun\n710**",  "108", "22.8", "4", "93"), class = "factor"), width = c(10, 5,  5, 6, 4), justify = structure(c(1L, 1L, 1L, 1L, 1L), .Label = "left", class = "factor")), .Names = c("txt",  "width", "justify"), row.names = c("t.rownames", "mpg", "cyl",  "disp", "hp"), class = "data.frame") 
+  sep.cols <-  c("", " ", "") 
+  style <-  "multiline" 
+  expect_equal(table.expand(argv[,1], argv[,2], argv[,3], sep.cols), "**Datsun   22.8  4     108    93  \n710**                             ");
+  
+  argv <-  structure(list(txt = structure(c(1L, 4L, 5L, 3L, 2L), .Label = c("**Mazda\nRX4\nWag**",  "110", "160", "21", "6"), class = "factor"), width = c(10, 5,  5, 6, 4), justify = structure(c(1L, 1L, 1L, 1L, 1L), .Label = "left", class = "factor")), .Names = c("txt",  "width", "justify"), row.names = c("t.rownames", "mpg", "cyl",  "disp", "hp"), class = "data.frame") 
+  sep.cols <-  c("", " ", "") 
+  style <-  "multiline" 
+  expect_equal(table.expand(argv[,1], argv[,2], argv[,3], sep.cols), "**Mazda    21    6     160    110 \nRX4                               \nWag**                             ");
+})
