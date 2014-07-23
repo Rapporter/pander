@@ -949,3 +949,18 @@ pander.microbenchmark <- function(x, caption = attr(x, 'caption'), expr.labels, 
   pander(xs, caption = caption, ...)
 }
   
+#' @S3method pander function
+pander.function <- function(x, caption = attr(x, 'caption'), add.name = FALSE, verbatim = TRUE, syntax.highlighting = FALSE, ...){
+  fname <- substitute(x)
+  ps <- ""
+  if (syntax.highlighting){
+    cat("```r\n")
+  } else
+    ps <- ifelse(verbatim, "\t", "")
+  if (!is.null(add.name) && add.name)
+    cat(ps, fname, " <- ", sep = "")
+  for (line in deparse(x))
+    cat(ps, line, "\n", sep = "")
+  if (syntax.highlighting)
+    cat("```")
+}
