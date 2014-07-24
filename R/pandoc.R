@@ -462,6 +462,7 @@ pandoc.list <- function(...)
 #' @return By default this function outputs (see: \code{cat}) the result. If you would want to catch the result instead, then call \code{pandoc.table.return} instead.
 #' @export
 #' @useDynLib pander
+#' @importFrom Rcpp evalCpp
 #' @aliases pandoc.table
 #' @seealso \code{\link{set.caption}}, \code{\link{set.alignment}}
 #' @note If \code{caption} is missing, then the value is first checked in \code{t} object's \code{caption} attribute and if not found in an internal buffer set by \code{link{set.caption}}. \code{justify} parameter works similarly, see \code{\link{set.alignment}} for details.
