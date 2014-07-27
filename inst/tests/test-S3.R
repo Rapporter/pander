@@ -234,7 +234,7 @@ context("table.expand")
 test_that('produces.errors',{
   x <- data.frame(a="Pander\nPackage")
   expect_error(pander(x, style='simple', keep.line.breaks = T))
-  expect_error(pander(x, style='simple', keep.line.breaks = T))
+  expect_error(pander(x, style='rmarkdown', keep.line.breaks = T))
 })
 
 table.expand <- function(cells, cols.width, justify, sep.cols, style) {
