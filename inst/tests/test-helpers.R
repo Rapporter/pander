@@ -35,6 +35,8 @@ test_that('splitLine without hyphening behaves correctly',{
     else if (type=="min")
       min(sapply(strsplit(splitLine(x, max.width), "\n"), nchar))
   }
+  expect_equal(splitLine("foo bar", 7), "foo bar")
+  expect_equal(splitLine("foo bar", 6), "foo\nbar")
   expect_true(widthSpaced(x, 5, "max") <= 5) # max width of line is less than 5 (in case it has spaces)
   expect_true(widthSpaced(x, 10, "max") <= 10) # max width of line is less than 10 (in case it has spaces)
   expect_true(widthSpaced(x, 10, "min") >= 1) # every line has at least one character

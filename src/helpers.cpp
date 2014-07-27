@@ -84,7 +84,7 @@ std::string splitLine_cpp(std::string str, int max_width, bool use_hyphening, Rc
     pch_word = strtok_r(NULL, " ", &end_word);
     nword = word.length();
     nline = nline + nword + 1;
-    if (nline > max_width) {
+    if (nline - 1 > max_width) {
       if (use_hyphening) {
         process_hyphenation(result, word, nline, nword, max_width, hyphen);
       } else {
