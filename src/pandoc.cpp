@@ -6,9 +6,9 @@ std::string format_cpp(std::string x, std::string justify, int width){
   std::string result = "";
   if (justify == "left"){
     result += x;
-    result += std::string(width, ' ');
+    result += std::string(width - x.length(), ' ');
   } else if (justify == "right"){
-    result += std::string(width, ' ');
+    result += std::string(width - x.length(), ' ');
     result += x;
   } else {
     result += std::string((width - x.length())/2, ' ');
@@ -25,7 +25,7 @@ std::string tableExpand_cpp(CharacterVector cells, IntegerVector colsWidth, Char
     size_t pos;
     char endline = '\n';
     std::vector<std::string> cellsC(cells.size()), *resSplit;
-    int i, j, width, maxLengthCells = 0, n = 0;
+    int i, j, maxLengthCells = 0, n = 0;
     bool hasLineBreak = false;
     // check for having a line break and convert to string vector for easiness
     for (i = 0; i < cellsC.size(); i++){
@@ -62,9 +62,7 @@ std::string tableExpand_cpp(CharacterVector cells, IntegerVector colsWidth, Char
     } else {
       res = sepCols[0];
       for (i = 0; i < cells.size(); i++){
-        width = colsWidth[i] + std::count(cells[i].begin(), cells[i].end(), '\\');
-        std::string fres = format_cpp(as<std::string>(cells[i]), as<std::string>(justify[i]), width);
-        res += fres;
+        res += format_cpp(as<std::string>(cells[i]), as<std::string>(justify[i]), colsWidth[i]);
         if (i != (cells.length() - 1)) // because of collapse usage
           res += sepCols[1];
       }
