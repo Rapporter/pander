@@ -568,16 +568,12 @@ pandoc.table.return <- function(t, caption, digits = panderOptions('digits'), de
       }else{
         x <- gsub("^\\s+|\\s+$", "", x)
       }
-      ## return
-      if (is.na(x))
-        ''
-      else
-        x      
+      x      
     }
     
     split.large.cells <- function(cells, for.rownames = FALSE){ ## use first is for rownames
         if (length(split.cells) == 0){
-          warning("Split cells is vector of length 0, reverting to default value") ## TODO better explanation
+          warning("split.cells is a vector of length 0, reverting to default value")
           split.cells <- panderOptions('table.split.cells')
         }
         if (length(split.cells) == 1) ## to make less checks later
@@ -589,14 +585,13 @@ pandoc.table.return <- function(t, caption, digits = panderOptions('digits'), de
             if (length(split.cells) == 1){
               res <- split.large.cells.helper(cells, split.cells)
             } else {
-              warning("Split.cells param is too big") ## TODO better explanation
               res <- split.large.cells.helper(cells, split.cells[1])
             }
           }else{
             if (!for.rownames && (length(split.cells) >= length(cells) + 1))
               split.cells <- split.cells[-1]
             if (length(cells) > length(split.cells)){
-              warning("Split.cells vectors is smaller than data. Default value will be used for other cells")
+              warning("length of split.cells vector is smaller than data. Default value will be used for other cells")
               split.cells <- c(split.cells, rep(panderOptions('table.split.cells'), length(cells) - length(split.cells)))
             }
             res <- NULL
@@ -608,7 +603,7 @@ pandoc.table.return <- function(t, caption, digits = panderOptions('digits'), de
           if ((length(split.cells) >= dim(cells)[2] + 1))
             split.cells <- split.cells[-1] ## discard first which was for rownames
           if (dim(cells)[2] > length(split.cells)){
-            warning("Split.cells vectors is smaller than data. Default value will be used for other cells")
+            warning("length of split.cells vector is smaller than data. Default value will be used for other cells")
             split.cells <- c(split.cells, rep(panderOptions('table.split.cells'), dim(cells)[2] - length(split.cells)))
           }
           res <- NULL
@@ -680,7 +675,9 @@ pandoc.table.return <- function(t, caption, digits = panderOptions('digits'), de
           warning("Split.tables is an infinite value, so split cells can't be suplied as relative value. Reverting to default")
           split.cells <- panderOptions("table.split.cells")
         } else{
-          if (length(split.cells) < d + (length(rownames(t)) != 0)){
+          d <- ifelse(length(rownames(t)) != 0, d, d + 1)
+          if (length(split.cells) < d){
+            cat("d - ", d, "\n")
             warning("Using relative split.cells require a value for every column and rownames. Reverting to default")
             split.cells <- panderOptions("table.split.cells")
           } else {
