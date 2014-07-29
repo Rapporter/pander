@@ -72,11 +72,13 @@ p <- function(x, wrap = panderOptions('p.wrap'), sep = panderOptions('p.sep'), c
     if (is.numeric(x)) {
 
         x <- round(x, panderOptions('round'))
-        x <- format(x, trim = TRUE, digits = panderOptions('digits'), decimal.mark = panderOptions('decimal.mark'))
 
-        ## optionally remove trailing zeros
+        ## optionally remove trailing zeros by running format separately on each element of the vector
         if (!keep.trailing.zeros)
-            x <- sub('(?:(\\..*[^0])0+|\\.0+)$', '\\1', x)
+            x <- sapply(x, format, trim = TRUE, digits = panderOptions('digits'), decimal.mark = panderOptions('decimal.mark'))
+        ## otherwise force using the same number format for all vector elements
+        else
+            x <- format(x, trim = TRUE, digits = panderOptions('digits'), decimal.mark = panderOptions('decimal.mark'))
 
     }
 
@@ -300,7 +302,7 @@ cache.on <- function()
 
 #' Split line with line breaks depending on max.width
 #'
-#' This is a helper function to insert line breaks depending on (\code{split.cells} parameter of \code{pandoc.table}) of the returning table. 
+#' This is a helper function to insert line breaks depending on (\code{split.cells} parameter of \code{pandoc.table}) of the returning table.
 #' @param x string to be split. Works only with one string. Non-string arguments and multi-dimensional arguments are returned unchaged
 #' @param max.width default integer value specyfing max number of characters between line breaks
 #' @param use.hyphening (default: \code{FALSE}) if try to use hyphening when splitting large cells according to table.split.cells. Requires koRpus package.
