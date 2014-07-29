@@ -219,7 +219,27 @@ test_that('keep.line.breaks works correctly', {
   expect_equal(lines.x.no.breaks + 2 * max(n) - 2, lines.x.keep.breaks)  
 })
 
-context("warnings.expectations")
+context("split.cells")
+test_that('split.cells works correctly',{
+  x <- data.frame(a = "foo bar\nfo bar")
+  # single line break behaves correctly combines with keep line breaks
+  expect_equal(pandoc.table.return(x, keep.line.breaks = T, split.cells = 7), "\n-------\n   a   \n-------\nfoo bar\nfo bar \n-------\n\n")
+  expect_equal(pandoc.table.return(x, keep.line.breaks = T, split.cells = 6), "\n------\n  a   \n------\n foo  \n bar  \nfo bar\n------\n\n")
+  # Corner values of split.cells
+  x <- data.frame(a = "foo bar", b = "foo bar")
+  expect_equal(length(strsplit(pandoc.table.return(x, split.cells = c(6, Inf)), "\n")[[1]]), 8)
+  expect_equal(pandoc.table.return(x, split.cells = c(6, Inf)), "\n-----------\n a     b   \n--- -------\nfoo foo bar\nbar        \n-----------\n\n")
+  expect_equal(pandoc.table.return(x, split.cells = c(Inf, 6)), "\n-----------\n   a     b \n------- ---\nfoo bar foo\n        bar\n-----------\n\n")
+  expect_equal(pandoc.table.return(x, split.cells = c(7, 7)), "\n---------------\n   a       b   \n------- -------\nfoo bar foo bar\n---------------\n\n")
+  expect_equal(pandoc.table.return(x, split.cells = c(7, 7)), pandoc.table.return(x, split.cells = Inf))
+  expect_equal(pandoc.table.return(x, split.cells = c(6 ,6)), pandoc.table.return(x, split.cells = 6))
+  expect_equal(pandoc.table.return(x, split.cells = c(7 ,7)), pandoc.table.return(x, split.cells = 7))
+  expect_equal(pandoc.table.return(x, split.cells = c(7 ,7)), pandoc.table.return(x, split.cells = 7))
+  # relative split.cells
+  expect_equal(pandoc.table.return(x, split.cells = c("50%", "50%")), pandoc.table.return(x, split.cells = c(7)))
+  expect_equal(pandoc.table.return(x, split.cells = c("20%", "80%"), split.tables = 30), pandoc.table.return(x, split.cells = c(6, Inf)))
+  expect_equal(pandoc.table.return(x, split.cells = c("80%", "20%"), split.tables = 30), pandoc.table.return(x, split.cells = c(Inf, 6)))
+})
 
 test_that('split.cells param produces expected warnings',{
   mt <- mtcars[1:2, 1:4]
