@@ -19,22 +19,33 @@ test_that('has.rownames: FALSE', {
 
 context('splitLine')
 
-test_that('splitLine leaves non-string arguments unchanged',{
+test_that('splitLine leaves non-string arguments and empty string unchanged',{
   expect_equal(1, splitLine(1))
   expect_equal(1:10, splitLine(1:10))
   expect_equal(c("string 1", "string 2", "string 3"), splitLine(c("string 1", "string 2", "string 3")))
   expect_equal(mtcars, splitLine(mtcars))
   expect_equal(summary(lm(mtcars$hp~1)), splitLine(summary(lm(mtcars$hp~1))))
+  expect_equal(splitLine("", 10), "")
+  expect_equal(splitLine("", 0), "")
+  expect_equal(splitLine("", Inf), "")
 })
 
 test_that('splitLine without hyphening behaves correctly',{
-  x <- "Really do clean up and test your code and think twice before you even start contemplating optimizing the code"
   widthSpaced <- function(x, max.width, type="max"){
     if (type=="max")
       max(sapply(strsplit(splitLine(x, max.width), "\n"), function(x) nchar(x) * grepl(" ", x)))
     else if (type=="min")
       min(sapply(strsplit(splitLine(x, max.width), "\n"), nchar))
   }
+  x <- "foo bar"
+  expect_equal(splitLine(x, 7), "foo bar")
+  expect_equal(splitLine(x, 6), "foo\nbar")
+  x <- "Each character string in the input is first split into paragraphs (or lines containing whitespace only)"
+  expect_equal(splitLine(x, 10), "Each\ncharacter\nstring in\nthe input\nis first\nsplit into\nparagraphs\n(or lines\ncontaining\nwhitespace\nonly)")
+  expect_equal(splitLine(x, 20), "Each character\nstring in the input\nis first split into\nparagraphs (or lines\ncontaining\nwhitespace only)")
+  expect_equal(splitLine(x, 0), paste(strwrap(x, 0), collapse="\n")) # zero width replaces whitespaces by line breaks
+  expect_equal(splitLine(x, Inf), x) # Infinite does not change
+  x <- "Really do clean up and test your code and think twice before you even start contemplating optimizing the code"
   expect_true(widthSpaced(x, 5, "max") <= 5) # max width of line is less than 5 (in case it has spaces)
   expect_true(widthSpaced(x, 10, "max") <= 10) # max width of line is less than 10 (in case it has spaces)
   expect_true(widthSpaced(x, 10, "min") >= 1) # every line has at least one character
@@ -54,10 +65,17 @@ test_that('splitLine with hyphening behaves correctly',{
   expect_true(widthSpaced(x, 5, "max") <= 5) # max width of line is less than 5 (in case it has spaces)
   expect_true(widthSpaced(x, 10, "max") <= 10) # max width of line is less than 10 (in case it has spaces)
   expect_true(widthSpaced(x, 10, "min") >= 1) # every line has at least one character
-  expect_equal("char-\nac-\nter", splitLine("character", 2, TRUE)) # check correctness for predifined word
-  expect_equal("", splitLine("", 2, TRUE)) # for empty string, returns empty string
-  expect_equal(length(strsplit(splitLine(x, 10, TRUE), "\n")[[1]]), 13) # when max.width param is small, every word is a line
+  # check correctness for predifined words/phrases
+  expect_equal("char-\nac-\nter", splitLine("character", 2, TRUE)) 
+  expect_equal(splitLine("start testing", 5, T), "start\ntest-\ning")
+  expect_equal(splitLine("Pander Package", 5, T), "Pan-\nder\nPack-\nage")
+  expect_equal(splitLine("Pander Package", 6, T), "Pander\nPack-\nage")
+  expect_equal(splitLine("Pander Package", 7, T), "Pander\nPackage")
+  # predifined example
+  expect_equal(length(strsplit(splitLine(x, 10, TRUE), "\n")[[1]]), 12) # when max.width param is small, every word is a line
   expect_false(grepl("- ", splitLine(x, 10, TRUE))) # no space after hyphen
   expect_false(grepl(" -", splitLine(x, 10, TRUE))) # no space before hyphen
   expect_false(grepl("\n ", splitLine(x, 20, TRUE))) # line does not start with a space
+  # infinite width
+  expect_equal(splitLine(x, Inf, TRUE), x)
 })

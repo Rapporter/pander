@@ -548,7 +548,7 @@ pandoc.table.return <- function(t, caption, digits = panderOptions('digits'), de
       if (!style %in% c('simple', 'rmarkdown')) {
         ## split
         if (nchar(x) == nchar(encodeString(x)) && !use.hyphening) {
-          x <- paste(strwrap(x, width = max.width), collapse = '\n')
+          x <- paste(strwrap(x, width = max.width + 1), collapse = '\n')
         } else {                
           ## dealing with CJK chars + also it does not count \n, \t, etc.
           ## this happens because width - counts only the number of columns 
@@ -560,7 +560,7 @@ pandoc.table.return <- function(t, caption, digits = panderOptions('digits'), de
             lines <- strsplit(x, '\\n')[[1]]
             x <- ""
             for (line in lines){
-              sl <- splitLine(line, max.width)    
+              sl <- splitLine(line, max.width, use.hyphening)    
               x <- paste0(x, sl, sep="\n")
             }
 	        }

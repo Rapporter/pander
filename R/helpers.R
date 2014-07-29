@@ -309,7 +309,7 @@ cache.on <- function()
 #' @return character string with line breaks
 #' @export
 splitLine <- function(x, max.width = panderOptions('table.split.cells'), use.hyphening = FALSE){
-  if (!is.character(x) || !is.null(dim(x)) || length(x) != 1)
+  if (!is.character(x) || !is.null(dim(x)) || length(x) != 1 || x == "")
     return(x)
   if (suppressWarnings(!is.na(as.numeric(x))))
     return(x)
