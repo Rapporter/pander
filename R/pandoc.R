@@ -448,10 +448,10 @@ pandoc.list <- function(...)
 #' @param justify defines alignment in cells passed to \code{format}. Can be \code{left}, \code{right} or \code{centre}, which latter can be also spelled as \code{center}. Defaults to \code{centre}.
 #' @param style which Pandoc style to use: \code{simple}, \code{multiline}, \code{grid} or \code{rmarkdown}
 #' @param split.tables where to split wide tables to separate tables. The default value (\code{80}) suggests the conventional number of characters used in a line, feel free to change (e.g. to \code{Inf} to disable this feature) if you are not using a VT100 terminal any more :)
-#' @param split.cells where to split cells' text with line breaks. Default to \code{30}, to disable set to \code{Inf}.
+#' @param split.cells where to split cells' text with line breaks. Default to \code{30}, to disable set to \code{Inf}. Can be also supplied as a vector, for each cell separately (if length(split.cells) == number of columns + 1, then first value in split.cells if for row names, and others are for columns). Supports relative (percentage) parameters in combination with split.tables.
 #' @param keep.trailing.zeros to show or remove trailing zeros in numbers on a column basis width
-#' @param keep.line.breaks to keep or remove line breaks from cells in a table
-#' @param plain.ascii to define if output should be in plain ascii or not
+#' @param keep.line.breaks (default: \code{FALSE}) if to keep or remove line breaks from cells in a table
+#' @param plain.ascii (default: \code{FALSE}) if output should be in plain ascii (without markdown markup) or not
 #' @param emphasize.rows a vector for a two dimensional table specifying which rows to emphasize
 #' @param emphasize.cols a vector for a two dimensional table specifying which cols to emphasize
 #' @param emphasize.cells a vector for one-dimensional tables or a matrix like structure with two columns for row and column indexes to be emphasized in two dimensional tables. See e.g. \code{which(..., arr.ind = TRUE)}
@@ -527,12 +527,50 @@ pandoc.list <- function(...)
 #'
 #' emphasize.strong.cells(which(t > 20, arr.ind = TRUE))
 #' pandoc.table(t)
+#' 
+#' ### plain.ascii
+#' pandoc.table(mtcars[1:3, 1:3], plain.ascii = TRUE)
+#' 
+#' ### keep.line.breaks
+#' x <- data.frame(a="Pandoc\nPackage")
+#' pandoc.table(x)
+#' pandoc.table(x, keep.line.breaks = TRUE)
+#' 
+#' ## split.cells
+#' x <- data.frame(a = "foo bar", b = "foo bar")
+#' pandoc.table(x, split.cells = 4)
+#' pandoc.table(x, split.cells = 7)
+#' pandoc.table(x, split.cells = c(4, 7))
+#' pandoc.table(x, split.cells = c("20%", "80%"), split.tables = 30)
+#' 
+#' y <- c("aa aa aa", "aaa aaa", "a a a a a", "aaaaa", "bbbb bbbb bbbb", "bb bbb bbbb")
+#' y <- matrix(y, ncol = 3, nrow = 2)
+#' rownames(y) <- c("rowname one", "rowname two")
+#' colnames(y) <- c("colname one", "colname two", "colname three")
+#' pandoc.table(y, split.cells = 2)
+#' pandoc.table(y, split.cells = 6)
+#' pandoc.table(y, split.cells = c(2, 6, 10))
+#' pandoc.table(y, split.cells = c(2, Inf, Inf))
+#' 
+#' ## first value used for rownames
+#' pander(y, split.cells = c(5, 2, Inf, Inf))
+#' pandoc.table(y, split.cells = c(5, 2, Inf, 5, 3, 10))
+#' 
+#' ## when not enough reverting to default values
+#' pandoc.table(y, split.cells = c(5, 2))
+#' 
+#' ## split.cells with hyphenation
+#' x <- data.frame(a="Can be also supplied as a vector, for each cell separately", b = "Can be also supplied as a vector, for each cell separately") 
+#' pandoc.table(x, split.cells = 10, use.hyphening = TRUE)
+
 pandoc.table.return <- function(t, caption, digits = panderOptions('digits'), decimal.mark = panderOptions('decimal.mark'), big.mark = panderOptions('big.mark'), round = panderOptions('round'), justify, style = c('multiline', 'grid', 'simple', 'rmarkdown'), split.tables = panderOptions('table.split.table'), split.cells = panderOptions('table.split.cells'), keep.trailing.zeros = panderOptions('keep.trailing.zeros'), keep.line.breaks = panderOptions('keep.line.breaks'), plain.ascii = panderOptions('plain.ascii'), use.hyphening = panderOptions('use.hyphening'), emphasize.rows, emphasize.cols, emphasize.cells, emphasize.strong.rows, emphasize.strong.cols, emphasize.strong.cells, ...) {
     ## helper functions
+    # expands cells for output
     table.expand <- function(cells, cols.width, justify, sep.cols) {
       .Call('pander_tableExpand_cpp', PACKAGE = 'pander', cells, cols.width, justify, sep.cols, style)
     }
-    # function for cell conversion to plain-ascii (deletion of markup characters)
+    
+    # cell conversion to plain-ascii (deletion of markup characters)
     to.plain.ascii <- function(x){
       x <- gsub("&nbsp;", "", x)  # table non-breaking space
       x <- gsub("^[*]{1,2}|[*]{1,2}$", "", x) # emphasis and strong
@@ -541,8 +579,9 @@ pandoc.table.return <- function(t, caption, digits = panderOptions('digits'), de
       x <- gsub("^[~]{2}|[~]{2}$", "", x) # strikeout
       gsub("^[_]|[_]$", "", x) # italic
     }
-    
-    split.large.cells.helper <- function(x, max.width){
+
+    # split single cell with line breaks based on max.width
+    split.single.cell <- function(x, max.width){
       if (!is.character(x))
         x <- as.character(x)
       if (!style %in% c('simple', 'rmarkdown')) {
@@ -576,40 +615,38 @@ pandoc.table.return <- function(t, caption, digits = panderOptions('digits'), de
           warning("split.cells is a vector of length 0, reverting to default value")
           split.cells <- panderOptions('table.split.cells')
         }
-        if (length(split.cells) == 1) ## to make less checks later
+        
+        # if we have a single value, extend it to a vector to do less checks laters
+        if (length(split.cells) == 1) 
           split.cells <- rep(split.cells, length(cells))
-        if (for.rownames)
+        if (for.rownames) # in case it is used for rownames, we only need the first value
           split.cells <- rep(split.cells[1], length(cells))
-        if (length(dim(cells)) < 2){
-          if (length(dim(t)) == 0){
-            if (length(split.cells) == 1){
-              res <- split.large.cells.helper(cells, split.cells)
-            } else {
-              res <- split.large.cells.helper(cells, split.cells[1])
-            }
-          }else{
+
+        res <- NULL
+        if (length(dim(cells)) < 2){ # single value and vectors/lists
+          if (length(cells) == 0){
+            res <- split.single.cell(cells, split.cells[1])
+          } else {
             if (!for.rownames && (length(split.cells) >= length(cells) + 1))
-              split.cells <- split.cells[-1]
+              split.cells <- split.cells[-1] ## discard first value which was for rownames
             if (length(cells) > length(split.cells)){
               warning("length of split.cells vector is smaller than data. Default value will be used for other cells")
               split.cells <- c(split.cells, rep(panderOptions('table.split.cells'), length(cells) - length(split.cells)))
             }
-            res <- NULL
             for (i in 1:length(cells)){
-              res <- c(res, split.large.cells.helper(cells[i], max.width = split.cells[i]))
+              res <- c(res, split.single.cell(cells[i], max.width = split.cells[i]))
             } 
           }
-        }else{
+        } else { #matrixes and tables
           if ((length(split.cells) >= dim(cells)[2] + 1))
-            split.cells <- split.cells[-1] ## discard first which was for rownames
+            split.cells <- split.cells[-1] ## discard first value which was for rownames
           if (dim(cells)[2] > length(split.cells)){
             warning("length of split.cells vector is smaller than data. Default value will be used for other cells")
             split.cells <- c(split.cells, rep(panderOptions('table.split.cells'), dim(cells)[2] - length(split.cells)))
           }
-          res <- NULL
           for (j in 1:dim(cells)[2]){
             res <- cbind(res,
-                         sapply(cells[,j], split.large.cells.helper, max.width = split.cells[j], USE.NAMES = FALSE))
+                         sapply(cells[,j], split.single.cell, max.width = split.cells[j], USE.NAMES = FALSE))
           }          
           rownames(res) <- rownames(cells)
           colnames(res) <- colnames(cells)

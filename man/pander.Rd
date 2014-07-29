@@ -2,7 +2,7 @@
 \name{pander}
 \alias{pander}
 \alias{pander.return}
-\title{Generic pander method}
+\title{Generic pander.method}
 \usage{
 pander(x = NULL, ...)
 }

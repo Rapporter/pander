@@ -1,4 +1,4 @@
-#' Generic pander method
+#' Generic pander.method
 #'
 #' Prints an R object in Pandoc's markdown.
 #' @param x an R object
@@ -11,7 +11,7 @@
 #'   \item Hlavac, Marek (2013): _stargazer: LaTeX code for well-formatted regression and summary statistics tables._ \url{http://CRAN.R-project.org/package=stargazer}
 #' }
 #' @export
-#' @aliases pander pander.return
+#' @aliases pander.return
 #' @examples
 #'
 #' ## Vectors
@@ -72,15 +72,15 @@ pander <- function(x = NULL, ...)
 pander.return <- function(...)
     capture.output(pander(...))
 
-#' @S3method pander NULL
+#' @export pander.NULL
 pander.NULL <- function(x, ...)
     return(invisible(NULL))
 
-#' @S3method pander logical
+#' @export pander.logical
 pander.logical <- function(x, ...)
     cat(as.character(x))
 
-#' @S3method pander image
+#' @export pander.image
 pander.image <- function(x, caption = attr(x, 'caption'), href = attr(x, 'href'), ...) {
 
     if (is.null(caption) & !is.null(storage$caption))
@@ -95,7 +95,7 @@ pander.image <- function(x, caption = attr(x, 'caption'), href = attr(x, 'href')
 
 }
 
-#' @S3method pander table
+#' @export pander.table
 pander.table <- function(x, caption = attr(x, 'caption'), ...) {
 
     if (is.null(caption) & !is.null(storage$caption))
@@ -105,7 +105,7 @@ pander.table <- function(x, caption = attr(x, 'caption'), ...) {
 
 }
 
-#' @S3method pander data.frame
+#' @export pander.data.frame
 pander.data.frame <- function(x, caption = attr(x, 'caption'), ...) {
 
     if (is.null(caption) & !is.null(storage$caption))
@@ -115,7 +115,7 @@ pander.data.frame <- function(x, caption = attr(x, 'caption'), ...) {
 
 }
 
-#' @S3method pander matrix
+#' @export pander.matrix
 pander.matrix <- function(x, caption = attr(x, 'caption'),  ...) {
 
     if (is.null(caption) & !is.null(storage$caption))
@@ -125,7 +125,7 @@ pander.matrix <- function(x, caption = attr(x, 'caption'),  ...) {
 
 }
 
-#' @S3method pander cast_df
+#' @export pander.cast_df
 pander.cast_df<- function(x, caption = attr(x, 'caption'), ...) {
 
     if (is.null(caption) & !is.null(storage$caption))
@@ -135,11 +135,11 @@ pander.cast_df<- function(x, caption = attr(x, 'caption'), ...) {
 
 }
 
-#' @S3method pander numeric
+#' @export pander.numeric
 pander.numeric <- function(x, ...)
     cat(p(x))
 
-#' @S3method pander character
+#' @export pander.character
 pander.character <- function(x, ...) {
 
     if (length(x) < 2)
@@ -149,15 +149,22 @@ pander.character <- function(x, ...) {
 
 }
 
-#' @S3method pander factor
+#' @export pander.factor
 pander.factor <- function(x, ...)
     cat(p(as.character(x)))
 
-#' @S3method pander list
+#' @export pander.list
 pander.list <- function(x, ...)
     pandoc.list(x)
 
-#' @S3method pander summary.lm
+#' @title Pander summary.lm method
+#' @param x an summary.lm object
+#' @param covariate.labels vector to replace covariate lables in the table
+#' @param omit
+#' @param summary (defaut:\code{TRUE}) if used for summary.lm or lm
+#' @param ... optional parameters passed to special methods and/or raw \code{pandoc.*} functions
+#' @return By default this function outputs (see: \code{cat}) the result. If you would want to catch the result instead, then call the function ending in \code{.return}.
+#' @export pander.summary.lm
 pander.summary.lm <- function(x, caption = attr(x, 'caption'), covariate.labels, omit, summary = TRUE, ...) {
 
     if (is.null(caption)) {
@@ -207,18 +214,18 @@ pander.summary.lm <- function(x, caption = attr(x, 'caption'), covariate.labels,
 
 }
 
-#' @S3method pander summary.glm
+#' @export pander.summary.glm
 pander.summary.glm <- function(x, caption = attr(x, 'caption'), covariate.labels, omit, summary = TRUE, ...) {
   pander.summary.lm(x, caption = caption, summary = summary, covariate.labels = covariate.labels, omit = omit, ...)
 }
 
 
-#' @S3method pander lm
+#' @export pander.lm
 pander.lm <- function(x, caption = attr(x, 'caption'), covariate.labels, omit, ...) {
   pander.summary.lm(summary(x), caption = caption, summary = FALSE, covariate.labels = covariate.labels, omit = omit, ...)
 }
 
-#' @S3method pander glm
+#' @export pander.glm
 pander.glm <- function(x, caption = attr(x, 'caption'), ...) {
 
     if (is.null(caption)) {
@@ -234,7 +241,7 @@ pander.glm <- function(x, caption = attr(x, 'caption'), ...) {
 
 }
 
-#' @S3method pander summary.aov
+#' @export pander.summary.aov
 pander.summary.aov <- function(x, caption = attr(x, 'caption'), ...) {
 
     res <- unclass(x)[[1]]
@@ -249,13 +256,13 @@ pander.summary.aov <- function(x, caption = attr(x, 'caption'), ...) {
     pandoc.table(res, caption = caption, ...)
 }
 
-#' @S3method pander aov
+#' @export pander.aov
 pander.aov <- function(x, caption = attr(x, 'caption'), ...) {
   pander(summary(x), caption = caption, ...)
 }
   
 
-#' @S3method pander anova
+#' @export pander.anova
 pander.anova <- function(x, caption = attr(x, 'caption'), ...) {
 
     if (is.null(caption))
@@ -269,7 +276,7 @@ pander.anova <- function(x, caption = attr(x, 'caption'), ...) {
 
 }
 
-#' @S3method pander summary.aovlist
+#' @export pander.summary.aovlist
 pander.summary.aovlist <- function(x, caption = attr(x, 'caption'), ...) {
  n <- length(y)
   if (n == 1)
@@ -283,12 +290,12 @@ pander.summary.aovlist <- function(x, caption = attr(x, 'caption'), ...) {
   }
 }
 
-#' @S3method pander aovlist
+#' @export pander.aovlist
 pander.aovlist <- function(x, caption = attr(x, 'caption'), ...) {
   pander(summary(x), caption = caption, ...)
 }
 
-#' @S3method pander htest
+#' @export pander.htest
 pander.htest <- function(x, caption = attr(x, 'caption'), ...) {
 
     if (is.null(caption)) {
@@ -319,7 +326,7 @@ pander.htest <- function(x, caption = attr(x, 'caption'), ...) {
 
 }
 
-#' @S3method pander summary.prcomp
+#' @export pander.summary.prcomp
 pander.summary.prcomp <- function(x, caption = attr(x, 'caption'), summary = TRUE, ...) {
 
     if (is.null(caption)) {
@@ -334,13 +341,13 @@ pander.summary.prcomp <- function(x, caption = attr(x, 'caption'), summary = TRU
       pandoc.table(x$importance, ...)
 }
 
-#' @S3method pander prcomp
+#' @export pander.prcomp
 pander.prcomp <- function(x, caption = attr(x, 'caption'),  ...) {
   pander(summary(x), caption = caption, summary = FALSE, ...)
 }
   
   
-#' @S3method pander density
+#' @export pander.density
 pander.density <- function(x, caption = attr(x, 'caption'), ...) {
 
     if (is.null(caption)) {
@@ -356,7 +363,7 @@ pander.density <- function(x, caption = attr(x, 'caption'), ...) {
     pandoc.table(res, caption = caption, ...)
 }
 
-#' @S3method pander list
+#' @export pander.list
 pander.list <- function(x, ...) {
 
     ## match call
@@ -395,16 +402,16 @@ pander.list <- function(x, ...) {
 
 }
 
-#' @S3method pander default
+#' @export pander.default
 pander.default <- function(x, ...) {
 
-    warning(sprintf('No pander method for "%s", reverting to default.', class(x)))
+    warning(sprintf('No pander.method for "%s", reverting to default.', class(x)))
     class(x) <- 'list'
     pander(x)
 
 }
 
-#' @S3method pander evals
+#' @export pander.evals
 pander.evals <- function(x, ...) {
 
     o <- pander(x$result)
@@ -422,28 +429,28 @@ pander.evals <- function(x, ...) {
 
 }
 
-#' @S3method pander rapport
+#' @export pander.rapport
 pander.rapport <- function(x, ...)
     print(x)
 
-#' @S3method pander POSIXlt
+#' @export pander.POSIXlt
 pander.POSIXlt <- function(x, ...)
   pandoc.date(x, ...)
 
-#' @S3method pander POSIXct
+#' @export pander.POSIXct
 pander.POSIXct <- function(x, ...)
   pandoc.date(x, ...)
 
-#' @S3method pander Date
+#' @export pander.Date
 pander.Date <- function(x, ...)
   pandoc.date(x, ...)
 
 
-#' @S3method pander ftable
+#' @export pander.ftable
 pander.ftable <- function(x, ...)
     pandoc.table(x, ...)
 
-#' @S3method pander mtable
+#' @export pander.mtable
 pander.mtable <- function(x, caption = attr(x, 'caption'), ...){
   if (is.null(caption) & !is.null(storage$caption))
     caption <- get.caption()
@@ -468,7 +475,7 @@ pander.mtable <- function(x, caption = attr(x, 'caption'), ...){
   pandoc.table(temp, caption = caption, keep.line.breaks = TRUE, ...)
 }
 
-#' @S3method pander CrossTable
+#' @export pander.CrossTable
 pander.CrossTable <- function(x, caption = attr(x, 'caption'), ...){
   if (is.null(caption) & !is.null(storage$caption))
     caption <- get.caption()
@@ -515,7 +522,7 @@ pander.CrossTable <- function(x, caption = attr(x, 'caption'), ...){
   pandoc.table(constructed.table, caption=caption, keep.line.breaks = TRUE, ...)
 }
 
-#' @S3method pander ts
+#' @export pander.ts
 pander.ts <- function(x, caption = attr(x, 'caption'), ...){
   if (is.null(caption) & !is.null(storage$caption))
     caption <- get.caption()
@@ -543,19 +550,19 @@ pander.ts <- function(x, caption = attr(x, 'caption'), ...){
   pandoc.table(t, caption=caption, ...)
 }
 
-#' @S3method pander formula
+#' @export pander.formula
 pander.formula <- function(x, max.width = 80, caption = attr(x, 'caption'), ...) {
   if (is.null(caption) & !is.null(storage$caption))
     caption <- get.caption()
   pandoc.formula(x, max.width = max.width, caption = caption)
 }
 
-#' @S3method pander call
+#' @export pander.call
 pander.call <- function(x, ...) {
   pander.formula(x, ...)
 }
 
-#' @S3method pander coxph
+#' @export pander.coxph
 pander.coxph <- function(x, caption = attr(x, 'caption'), ...) {
   if (is.null(caption)) {
     if (is.null(storage$caption))
@@ -595,7 +602,7 @@ pander.coxph <- function(x, caption = attr(x, 'caption'), ...) {
     cat("   (", naprint(omit), ")\n", sep = "")
 }
 
-#' @S3method pander clogit
+#' @export pander.clogit
 pander.clogit <- function (x, caption = attr(x, 'caption'), ...) 
 {
   if (is.null(caption)) {
@@ -607,7 +614,7 @@ pander.clogit <- function (x, caption = attr(x, 'caption'), ...)
   pander.coxph(x, caption = caption, ...)
 }
 
-#' @S3method pander zoo
+#' @export pander.zoo
 pander.zoo <- function(x, caption = attr(x, 'caption'), ...) {
   if (is.null(caption) & !is.null(storage$caption))
     caption <- get.caption()
@@ -622,7 +629,7 @@ pander.zoo <- function(x, caption = attr(x, 'caption'), ...) {
   pandoc.table(c.tab, caption = caption, ...)
 }
 
-#' @S3method pander lme
+#' @export pander.lme
 pander.lme <- function(x, caption = attr(x, 'caption'), summary = FALSE, ...) {
 
   if (is.null(caption)) {
@@ -653,7 +660,7 @@ pander.lme <- function(x, caption = attr(x, 'caption'), summary = FALSE, ...) {
 
 }
 
-#' @S3method pander describe
+#' @export pander.describe
 pander.describe <- function(x, caption = attr(x, 'caption'), short = TRUE, split.tables = 60, ...) {
   if (is.null(caption) & !is.null(storage$caption))
     caption <- get.caption()
@@ -753,7 +760,7 @@ pander.describe <- function(x, caption = attr(x, 'caption'), short = TRUE, split
   invisible()
 }
 
-#' @S3method pander survdiff
+#' @export pander.survdiff
 pander.survdiff <- function(x, caption = attr(x, 'caption'), ...) {
   if (is.null(caption)) {
     if (is.null(storage$caption))
@@ -793,7 +800,7 @@ pander.survdiff <- function(x, caption = attr(x, 'caption'), ...) {
   pandoc.table(temp, caption = caption)
 }
 
-#' @S3method pander survfit
+#' @export pander.survfit
 pander.survfit <- function (x, caption = attr(x, 'caption'), scale = 1, print.rmean = getOption("survfit.print.rmean"), rmean = getOption("survfit.rmean"), ...) {
   if (is.null(caption) & !is.null(storage$caption))
     caption <- get.caption()
@@ -835,13 +842,13 @@ pander.survfit <- function (x, caption = attr(x, 'caption'), scale = 1, print.rm
   }
 }
 
-#' @S3method pander smooth.spline
+#' @export pander.smooth.spline
 pander.smooth.spline <- function(x, ...) {
   x <- as.list(capture.output(x)[-1:-3])
   pandoc.list(x, add.end.of.list = FALSE)
 }
 
-#' @S3method pander rlm
+#' @export pander.rlm
 pander.rlm <- function(x, caption = attr(x, 'caption'), ...) {
   if (is.null(caption)) {
     if (is.null(storage$caption))
@@ -866,7 +873,7 @@ pander.rlm <- function(x, caption = attr(x, 'caption'), ...) {
   cat("Scale estimate:", format(signif(x$s, 3)), "\n")
 }
 
-#' @S3method pander stat.table
+#' @export pander.stat.table
 pander.stat.table <- function(x, caption = attr(x, 'caption'), ...){
   if (is.null(caption) & !is.null(storage$caption))
     caption <- get.caption()
@@ -892,7 +899,7 @@ pander.stat.table <- function(x, caption = attr(x, 'caption'), ...){
   }
 }
 
-#' @S3method pander sessionInfo
+#' @export pander.sessionInfo
 pander.sessionInfo <- function (x, locale = TRUE, compact = TRUE, ...) 
 {
   mkLabel <- function(L, n) {
@@ -933,7 +940,7 @@ pander.sessionInfo <- function (x, locale = TRUE, compact = TRUE, ...)
   invisible(x)
 }
 
-#' @S3method pander microbenchmark
+#' @export pander.microbenchmark
 pander.microbenchmark <- function(x, caption = attr(x, 'caption'), expr.labels, unit, ...){
   xs <- summary(x, unit = unit)
   if (is.null(caption)) {
@@ -949,7 +956,7 @@ pander.microbenchmark <- function(x, caption = attr(x, 'caption'), expr.labels, 
   pander(xs, caption = caption, ...)
 }
   
-#' @S3method pander function
+#' @export pander.function
 pander.function <- function(x, caption = attr(x, 'caption'), add.name = FALSE, verbatim = TRUE, syntax.highlighting = FALSE, ...){
   fname <- substitute(x)
   ps <- ""
