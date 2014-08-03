@@ -6,7 +6,7 @@
 redrawPlot(recPlot)
 }
 \arguments{
-\item{the}{plot object to redraw}
+\item{recPlot}{the plot object to redraw}
 }
 \description{
 This function redraws the plot represented by \code{recPlot}. It can redraw grid/trellis/ggplot2/etc plots, as well as \code{recordedplot} objects. For \code{recordedplot} objects it acts as a wrapper around \code{replayPlot} with memory tweaks to fix native symbol address errors when the recordedplot was loaded from an rda/rds file.

@@ -306,6 +306,10 @@ cache.on <- function()
 #' @param use.hyphening (default: \code{FALSE}) if try to use hyphening when splitting large cells according to table.split.cells. Requires koRpus package.
 #' @return character string with line breaks
 #' @export
+#' @examples
+#' splitLine("foo bar", 6)
+#' splitLine("foo bar", 7)
+#' splitLine("Pandoc Package", 3, TRUE)
 splitLine <- function(x, max.width = panderOptions('table.split.cells'), use.hyphening = FALSE){
   if (!is.character(x) || !is.null(dim(x)) || length(x) != 1 || x == "")
     return(x)

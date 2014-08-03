@@ -1028,7 +1028,7 @@ pandoc.table <- function(...)
 #'
 #' Pandoc's mardown formula.
 #' @param x formula
-#' @param text text to be written before result
+#' @param text text to be written before result in the same line. Typically used by calls from other functions in the package
 #' @param max.width maximum width in characters per line
 #' @param caption caption (string) to be shown under the formula
 #' @param add.line.breaks if to add 2 line breaks after formula
