@@ -57,12 +57,11 @@ An alternative method (bypassing Pandoc dependency) would be to call the awesome
 
 Now you would only need a few cool packages from CRAN:
 
-  * [digest](http://cran.r-project.org/web/packages/digest/index.html) to compute hashes while caching
-  * [koRpus](http://cran.r-project.org/web/packages/koRpus/index.html) to use hyphenation when splitting large table cells
- * ~~[brew](http://cran.r-project.org/web/packages/brew/index.html) for literate programming~~
-  * ~~[parser](http://cran.r-project.org/web/packages/parser/index.html) to identify variables in passed R commands~~
-  * ~~[evaluate](http://cran.r-project.org/web/packages/evaluate/index.html)~~
-  * besides [R](http://www.r-project.org/) of course!
+* *Required*:
+  	* [digest](http://cran.r-project.org/web/packages/digest/index.html) to compute hashes while caching
+	* [Rcpp](http://cran.r-project.org/web/packages/Rcpp/index.html) to compile certain functions used by the package
+* *Suggested*:
+	* [koRpus](http://cran.r-project.org/web/packages/koRpus/index.html) to use hyphenation when splitting large table cells
 
 # Helper functions
 
