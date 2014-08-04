@@ -61,6 +61,7 @@ Now you would only need a few cool packages from CRAN:
   * ~~[brew](http://cran.r-project.org/web/packages/brew/index.html) for literate programming~~
   * ~~[parser](http://cran.r-project.org/web/packages/parser/index.html) to identify variables in passed R commands~~
   * ~~[evaluate](http://cran.r-project.org/web/packages/evaluate/index.html)~~
+  * [koRpus](http://cran.r-project.org/web/packages/koRpus/index.html) to use hyphenation when splitting late table cells
   * besides [R](http://www.r-project.org/) of course!
 
 # Helper functions

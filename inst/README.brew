@@ -58,7 +58,8 @@ An alternative method (bypassing Pandoc dependency) would be to call the awesome
 Now you would only need a few cool packages from CRAN:
 
   * [digest](http://cran.r-project.org/web/packages/digest/index.html) to compute hashes while caching
-  * ~~[brew](http://cran.r-project.org/web/packages/brew/index.html) for literate programming~~
+  * [koRpus](http://cran.r-project.org/web/packages/koRpus/index.html) to use hyphenation when splitting large table cells
+ * ~~[brew](http://cran.r-project.org/web/packages/brew/index.html) for literate programming~~
   * ~~[parser](http://cran.r-project.org/web/packages/parser/index.html) to identify variables in passed R commands~~
   * ~~[evaluate](http://cran.r-project.org/web/packages/evaluate/index.html)~~
   * besides [R](http://www.r-project.org/) of course!
@@ -172,12 +173,54 @@ pandoc.table.return(mtcars[1:2, ], style = "grid", caption = 'Hello caption!')
 %>
 ```
 
-And too wide cells are also split by line breaks. E.g.:
+And too wide cells are also split by line breaks. Maximum number of characters in a cell is specified by `split.cells` parameter (default to 30). `split.cells` can be a single value, vector (values for each column separately) and relative vector (percentages of `split.tables` parameter). E.g.:
 
 ```rout
+# default value
 > pandoc.table(data.frame(id=1:2, value=c('FOO', 'Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.')))
 <%=
 pandoc.table.return(data.frame(id=1:2, value=c('FOO', 'Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.')))
+%>
+# single value for all columns
+> pandoc.table(data.frame(a="Pander package", b="Pander package", c="Pander package"), split.cells = c(5))
+<%= 
+pandoc.table(data.frame(a="Pander package", b="Pander package", c="Pander package"), split.cells = c(5))
+%>
+# vector of values for each column
+> pandoc.table(data.frame(a="Pander package", b="Pander package", c="Pander package"), split.cells = c(5, 20, 5))
+<%= 
+pandoc.table(data.frame(a="Pander package", b="Pander package", c="Pander package"), split.cells = c(5, 20, 5))
+%>
+# relative vector of values for each column
+> pandoc.table(data.frame(a="Pander package", b="Pander package", c="Pander package"), split.cells = c("20%", "60%", "20%"), split.tables = 40)
+<%= 
+pandoc.table(data.frame(a="Pander package", b="Pander package", c="Pander package"), split.cells = c("20%", "60%", "20%"), split.tables = 40)
+%>
+```
+
+By default line breaks in cells are discarded and are added based on `split.cells` parameter. To preserve line breaks inside cells `keep.line.breaks` parameter should be used.
+
+```rout
+> pandoc.table(data.frame(a="Pander\npackage"))
+<%=
+pandoc.table(data.frame(a="Pander\npackage"))
+%>
+> pandoc.table(data.frame(a="Pander\npackage"), keep.line.breaks = TRUE)
+<%=
+pandoc.table(data.frame(a="Pander\npackage"), keep.line.breaks = TRUE)
+%>
+```
+
+To render tables without any markdown markup `plain.ascii` parameter should be used.
+
+```rout
+> pandoc.table(mtcars[1:3, 1:3])
+<%=
+pandoc.table(mtcars[1:3, 1:3])
+%>
+> pandoc.table(mtcars[1:3, 1:3], plain.ascii = TRUE)
+<%=
+pandoc.table(mtcars[1:3, 1:3], plain.ascii = TRUE)
 %>
 ```
 
@@ -386,15 +429,7 @@ The list of currently supported R classes:
 
 ```rout
 > methods(pander)
- [1] pander.anova*      pander.aov*        pander.cast_df*    pander.character*
- [5] pander.data.frame* pander.default*    pander.density*    pander.evals*
- [9] pander.factor*     pander.glm*        pander.htest*      pander.image*
-[13] pander.list*       pander.lm*         pander.logical*    pander.matrix*
-[17] pander.NULL*       pander.numeric*    pander.option      pander.POSIXct*
-[21] pander.POSIXt*     pander.prcomp*     pander.rapport*    pander.return
-[25] pander.table*
-
-   Non-visible functions are asterisked
+<%=methods(pander)%>
 ```
 
 # Brew to Pandoc

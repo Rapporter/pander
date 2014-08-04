@@ -4,21 +4,13 @@
 \title{Pander method for list class}
 \usage{
 \method{pander}{list}(x, ...)
-
-\method{pander}{list}(x, ...)
 }
 \arguments{
 \item{x}{a list object}
 
-\item{...}{igroned parameters}
-
-\item{x}{a list object}
-
-\item{...}{ignored parameters}
+\item{...}{optional parameters passed to special methods and/or raw \code{pandoc.list} function}
 }
 \description{
-Prints a list object in Pandoc's markdown.
-
 Prints a list object in Pandoc's markdown.
 }
 

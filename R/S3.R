@@ -213,10 +213,10 @@ pander.factor <- function(x, ...)
 #'
 #' Prints a list object in Pandoc's markdown.
 #' @param x a list object
-#' @param ... igroned parameters
+#' @param ... optional parameters passed to special methods and/or raw \code{pandoc.list} function
 #' @export pander.list
 pander.list <- function(x, ...)
-    pandoc.list(x)
+    pandoc.list(x, ...)
 
 #' Pander method for summary.lm class
 #'
@@ -503,50 +503,6 @@ pander.density <- function(x, caption = attr(x, 'caption'), ...) {
     rownames(res) <- names(summary(1))
 
     pandoc.table(res, caption = caption, ...)
-}
-
-#' Pander method for list class
-#'
-#' Prints a list object in Pandoc's markdown.
-#' @param x a list object
-#' @param ... ignored parameters
-#' @export pander.list
-pander.list <- function(x, ...) {
-
-    ## match call
-    mc <- match.call()
-    if (is.null(mc$indent))
-        indent <- 0
-    else
-        indent <- eval(mc$indent, parent.frame(1))
-
-    ## grab elements name (if any)
-    x.names <- sapply(names(x), function(x) ifelse(x == '', '  *', sprintf('  * **%s**:', x)))
-    if (length(x.names) == 0)
-        x.names <- rep('  *', length(x))
-
-    ## capture pandoc output of list element
-    res <- paste(unlist(lapply(1:length(x), function(i) {
-
-        res.i <- paste(capture.output(pander(x[[i]], indent = indent + 1)), collapse = '\n')
-        if (grepl('\n', res.i) & !grepl('\n *\\* ', res.i)) {
-            res.i <- sub('^\n', '\n\n', res.i)
-            res.i <- pandoc.indent(res.i, 1)
-        }
-
-        paste(x.names[i], res.i)
-
-    })), collapse = '\n')
-
-    ## indent output
-    res <- pandoc.indent(res, indent)
-
-    ## add (comment): end of list (preventing conflicts with forthcoming pandoc blocks)
-    if (indent == 0)
-        res <- paste0(res, '\n\n<!-- end of list -->\n')
-
-    pandoc.p(res)
-
 }
 
 #' Default Pander method
