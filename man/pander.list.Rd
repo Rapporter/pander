@@ -8,7 +8,7 @@
 \arguments{
 \item{x}{a list object}
 
-\item{...}{optional parameters passed to special methods and/or raw \code{pandoc.list} function}
+\item{...}{ignored parameters}
 }
 \description{
 Prints a list object in Pandoc's markdown.

@@ -122,9 +122,12 @@ has.rownames <- function(x) {
 #'
 #' This is a helper function to add a caption to the returning image/table.
 #' @param x string
+#' @param permanent (default \code{FALSE}) if caption is permanent (for all future tables) or not
 #' @export
-set.caption <- function(x)
+set.caption <- function(x, permanent = FALSE){
     assign('caption', x , envir = storage)
+    attr(storage$caption, 'permanent') <- permanent
+}
 
 
 #' Get caption
@@ -141,9 +144,12 @@ get.caption <- function()
 #' This is a helper function to update the alignment (\code{justify} parameter of \code{pandoc.table}) of the returning table. Possible values are: \code{centre} or \code{center}, \code{right}, \code{left}.
 #' @param default character vector which length equals to one (would be repeated \code{n} times) ot \code{n} - where \code{n} equals to the number of columns in the following table
 #' @param row.names string holding the alignment of the (optional) row names
+#' @param permanent (default \code{FALSE}) if alignment is permanent (for all future tables) or not
 #' @export
-set.alignment <- function(default = 'centre', row.names = 'right')
+set.alignment <- function(default = 'centre', row.names = 'right', permanent = FALSE){
     assign('alignment', list(default = default, row.names = row.names) , envir = storage)
+    attr(storage$alignment, 'permanent') <- permanent
+}
 
 
 #' Get alignment
@@ -256,7 +262,8 @@ get.emphasize <- function(df) {
 #' @keywords internal
 get.storage <- function(what) {
     res <- tryCatch(get(what, envir = storage, inherits = FALSE), error = function(e) NULL)
-    assign(what, NULL , envir = storage)
+    if (is.null(attr(res, 'permanent')) || !attr(res, 'permanent'))
+      assign(what, NULL , envir = storage)
     return(res)
 }
 
