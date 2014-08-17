@@ -126,7 +126,8 @@ has.rownames <- function(x) {
 #' @export
 set.caption <- function(x, permanent = FALSE){
     assign('caption', x , envir = storage)
-    attr(storage$caption, 'permanent') <- permanent
+    if (!is.null(x))
+      attr(storage$caption, 'permanent') <- permanent
 }
 
 
