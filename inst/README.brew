@@ -1,34 +1,10 @@
 % [pander: A Pandoc writer in R](https://github.com/Rapporter/pander)
 
-# Overview
-
-**pander** is an [R](http://r-project.org) package containing [helpers](#helper-functions) to return [Pandoc](http://johnmacfarlane.net/pandoc/)'s markdown even *automatically* from several type of [**R objects** with a general S3 method](#generic-pander-method).
-
-The package is also capable of exporting/converting complex Pandoc documents (reports) in three ways at the moment:
-
-  * create somehow a markdown text file (e.g. with `brew`, `knitr` or any scripts of yours, maybe with `Pandoc.brew` - see just [below](#brew-to-pandoc)) and transform that to other formats (like HTML, odt, pdf, docx etc.) with `Pandoc.convert` -- just like [`pandoc` function in knitr](http://yihui.name/knitr/demo/pandoc/),
-
-  * users might write some reports in a forked version of [brew](http://cran.r-project.org/web/packages/brew/index.html) syntax resulting in a pretty *Pandoc* document (where each R object are automatically transformed to nicely formatted table, list etc.) and also in a **bunch of other formats** (like HTML, odt, pdf, docx etc.),
-
-    *Example*: this [`README.md`](https://github.com/Rapporter/pander/blob/master/README.md) is cooked with `Pandoc.brew` based on [`inst/README.brew`](https://github.com/Rapporter/pander/blob/master/inst/README.brew) and also exported to [HTML](http://rapporter.github.com/pander/). Details can be found [below](#brew-to-pandoc) or head directly to [examples](#examples).
-
-<!-- endlist -->
-
- * or users might create a report in a live R session by adding some R objects and paragraphs to a `Pandoc` reference class object. Details can be found [below](#live-report-generation).
-
-**How does `pander` differ from Sweave, brew, knitr, R2HTML etc.?**
-
-  * first of all `pander` can be used as a helper with any other literate programming solution, so you might want to call `pander` inside of `knitr` chunks,
-  * but if you stick with `pander`'s literate tool, then **no need** for calling `ascii`, `xtable`, `Hmisc`, `tables` etc. or even `pander` in the R command chunks to transform an R object to `HTML`, `tex` etc. as `Pandoc.brew` automatically results in Pandoc's *markdown* which can be converted to almost any text document format (like: pdf, HTML, odt, docx, textile, asciidoc, reStructuredText etc.). Conversion can be done automatically after calling `pander` reporting functions ([Pander.brew](#brew-to-pandoc) or [Pandoc](#live-report-generation)).
-  * based on the above *no "traditional" R console output* is shown in the resulting document (nor in markdown, nor in exported docs) but **all R objects are transformed to tables, list etc**. Well, there is an option (`show.src`) to show the original R commands before the formatted output, and `pander`˛calls can be also easily tweaked (just file an issue) to return `print`ed R objects - if you would need that in some strange situation - like writing an R tutorial. But **I really think that nor R code, nor raw R results have anything to do with an exported report** :)
-  * of course all warnings, messages and errors are captured while evaluating R expressions just like `stdout` **beside** the raw R object. So the resulting report can also include the raw R objects for futher edits if needed,
-  * *graphs/plots* are recognized in blocks of R commands without any special setting or marks around code block and saved to disk in a `png` file linked in the resulting document. This means if you create a report (e.g. `brew` a text file) and export it to pdf/docx etc. all the plots/images would be there. There are some parameters to specify the resolution of the image and also the type (e.g. `jpg`, `svg` or `pdf`) besides a **wide variety of [theme options](#pander-options)**. About the latter, please check out `graphs.brew` [below](#examples).
-  * `pander`˛uses its build in (IMHO quite decent) [**caching**](#caching). This means that if evaluation of some R commands take too much time (which can be set by option/parameter), then the results are saved in a file and returned from there on next exact R code's evaluation. This caching algorithm tries to be **smart** as checks not only the passed R sources, but *all variables and functions* inside that and saves the hash of those. This is a quite secure way of caching (see details [below](#caching)), but if you would encounter any issues, just switch off the cache. I've not seen any issues :)
-  * `knitr` *support* is coming too, for details see my [TODO list](https://github.com/Rapporter/pander/blob/master/TODO.md) **Update**: just use `knitr` to generate markdown and pass that to `Pandoc.convert`
+The main aim of **pander** [R](http://r-project.org) package is to provide an minimal and easy tool for rendering **R objects** into [Pandoc](http://johnmacfarlane.net/pandoc/)'s markdown. The package is also capable of exporting/converting complex Pandoc documents (reports) in [various ways](#creating-pandoc-documents). Regarding the difference between `pander` and other packages for exporting R object to different formats please refer to this [section](#difference-from-other-rendering-packages).
 
 # Installation
 
-The stable version of the package can be found on [CRAN](http://cran.r-project.org/web/packages/pander/) and can be installed easily in the R console:
+The stable version of the package can be found on [CRAN](http://cran.r-project.org/web/packages/pander/) and can be installed easily in the R console like any other package:
 
 ```
 install.packages('pander')
@@ -36,7 +12,7 @@ install.packages('pander')
 
 On the other hand I welcome everyone to use the most recent version of the package with added features and currently hosted on [GitHub](https://github.com/Rapporter/pander). The current build status is: [![Build Status](https://travis-ci.org/Rapporter/pander.png?branch=master)](https://travis-ci.org/Rapporter/pander)
 
-It can be installed easily with the nifty function of `devtools` package:
+It can be installed easily with the nifty function of `devtools` package from [CRAN](http://cran.r-project.org/web/packages/devtools/index.html):
 
 ```
 library(devtools)
@@ -45,40 +21,29 @@ install_github('pander', 'Rapporter')
 
 Or download the [sources in a zip file](https://github.com/Rapporter/pander/zipball/master) and build manually. If you're running R on Windows, you need to install [Rtools](http://cran.stat.ucla.edu/bin/windows/Rtools/).
 
-## Depends
+## Dependencies
 
-`pander` heavily builds on [Pandoc](http://johnmacfarlane.net/pandoc) which should be **pre-installed** before trying to convert your reports to [different formats](http://johnmacfarlane.net/pandoc/). Although **main functions work without Pandoc**, e.g. you can generate a markdown formatted report via [Pandoc.brew](#brew-to-pandoc) or the custom [reference class](#live-report-generation), but I would really suggest to install that really great piece of software!
+Few cool packages from CRAN are needed for using `pander`
 
-The [installation process of Pandoc](http://johnmacfarlane.net/pandoc/installing.html) is quite straightforward on most operating systems: just download and run the binary (a few megabytes), and get a full-blown document converted in a few seconds/minutes. On different Linux distributions it might be a bit more complicated (as repositories tend to provide out-dated versions of Pandoc, so you would need `cabal-install` to [install from sources](http://johnmacfarlane.net/pandoc/installing.html#all-platforms)). *Please do not forget to restart your R session to update your `PATH` after installation!*
+* *Required*:
+  	* [digest](http://cran.r-project.org/web/packages/digest/index.html) to compute hashes while caching
+	* [Rcpp](http://cran.r-project.org/web/packages/Rcpp/index.html) to compile certain functions used by the package
+* *Suggested*:
+	* [koRpus](http://cran.r-project.org/web/packages/koRpus/index.html) to use hyphenation when splitting large table cells
 
-An alternative method (bypassing Pandoc dependency) would be to call the awesome [`markdown`](http://cran.r-project.org/web/packages/markdown/index.html) package to transform markdown (as far as I know: exclusively) to HTML.
+### Pandoc 
 
-~~And as `pander` and `rapport` are quite Siamese twins, you would need an **up-to-date** version of [rapport](http://rapport-package.info) most likely installed from [Github](https://github.com/aL3xa/rapport).~~ `pander` now can work independently from `rapport`.
+`pander` heavily builds on [Pandoc](http://johnmacfarlane.net/pandoc), which should be **pre-installed** before trying to convert your reports to [different formats](http://johnmacfarlane.net/pandoc/). Although **main functions work without Pandoc**, e.g. you can generate a markdown formatted report via [Pandoc.brew](#brew-to-pandoc) or the custom [reference class](#live-report-generation), but installing that great piece of software is suggested! 
 
-Now you would only need a few cool packages from CRAN:
-
-  * [digest](http://cran.r-project.org/web/packages/digest/index.html) to compute hashes while caching
-  * ~~[brew](http://cran.r-project.org/web/packages/brew/index.html) for literate programming~~
-  * ~~[parser](http://cran.r-project.org/web/packages/parser/index.html) to identify variables in passed R commands~~
-  * ~~[evaluate](http://cran.r-project.org/web/packages/evaluate/index.html)~~
-  * besides [R](http://www.r-project.org/) of course!
+Starting v0.98.932 [RStudio](http://www.rstudio.com/) comes with a bundled `Pandoc` binary, so one can save the tedious steps of installing `Pandoc`. If you are not using `RStudio` or using an older version of `RStudio`, please refer [here](#installing-pandoc) for some notes on installing `Pandoc`.
 
 # Helper functions
 
-There are a bunch of helper functions in `pander` which e.g. return user specified inputs in Pandoc format or applies some extra formatting on those. For a technical documentation, see the HTML help files of the package at [help.r-enthusiasts.com](http://help.r-enthusiasts.com/library/pander/html/00Index.html).
+`pander` package contains numerous helper functions, which render user specified inputs in `Pandoc` format or apply some extra formatting on it. All  Pandoc-related functions starting with `pandoc.` - for example `pandoc.table` is used for rendering tables in Pandoc's markdown format. For a technical documentation, see the HTML help files of the package at [Rdocumentation](http://www.rdocumentation.org/packages/pander)
 
 ## Primitive functions
 
-You could find the Pandoc-related functions starting with `pandoc.` - for example `pandoc.strong` would return the passed characters with strong emphasis. E.g.:
-
-```rout
-> pandoc.strong('FOO')
-**FOO**>
-> pandoc.strong.return('FOO')
-[1] "**FOO**"
-```
-
-As it can be seen here `pandoc` functions generally prints to console and do not return anythingby default (see: `?cat`). If you want the opposite (get the Pandoc format as a string): call each function ending in `.return` - like the second call in the above example. For details please check documentation, e.g. `?pandoc.strong`.
+`pandoc` functions generally prints to console and do not return anything by default (see: `?cat`). If you want the opposite (get the Pandoc format as a string): call each function ending in `.return` - like the second call in the above example. For details please check documentation, e.g. `?pandoc.strong`.
 
 The full list of primitive Pandoc-related functions are:
 
@@ -97,15 +62,13 @@ The full list of primitive Pandoc-related functions are:
 
 ## Lists
 
-Of course there are more complex functions too. Besides verbatim texts, (image) links or footnotes (among others) there are a helper e.g. for **lists**:
+Besides verbatim texts, (image) links or footnotes (among others) there is a helper for **lists**:
 
 ```rout
 > l <- list("First list element", paste0(1:5, '. subelement'), "Second element", list('F', 'B', 'I', c('phone', 'pad', 'talics')))
 > pandoc.list(l, 'roman')
 ```
-
-Which returns:
-
+Which produces the following output:
 ```
 <%=
 l <- list("First list element", paste0(1:5, '. subelement'), "Second element", list('F', 'B', 'I', c('phone', 'pad', 'talics')))
@@ -115,7 +78,21 @@ pandoc.list.return(l, 'roman')
 
 ## Tables
 
-`pandoc` can return **tables** in [four formats supported by Pandoc](http://johnmacfarlane.net/pandoc/README.html#tables), including the pipe tables also used in `knitr` and [PHP Markdown Extra format](http://michelf.ca/projects/php-markdown/extra/#table):
+One of the core helper functions is for rendering **tables**:
+
+```rout
+> pandoc.table(mtcars[1:3, 1:4])
+```
+Which produces the following output:
+```rout
+<%=mtcars[1:3, 1:4]%>
+```
+
+Table rendering supports numerous different parameters e.g. [style](#style), [caption](#caption), [cell highlighting](#highlight-cells), [cell alignment](#cell-alignment), [width](#table-and-cell-width), etc.
+ 
+### Style
+
+`pandoc` can return **tables** in [four formats supported by Pandoc](http://johnmacfarlane.net/pandoc/README.html#tables)(*multiline*, *simple*, *grid*, *pipe/rmarkdown*). The pipe tables also used in `knitr` and [PHP Markdown Extra format](http://michelf.ca/projects/php-markdown/extra/#table):
 
   * The default style is the [`multiline` format](http://johnmacfarlane.net/pandoc/README.html#multiline-tables) as most features (e.g. multi-line cells and alignment) are available in there.
 
@@ -154,7 +131,9 @@ pandoc.table.return(mtcars[1:2, 1:3], style = "rmarkdown")
 %>
 ```
 
-Besides the `style` parameter there are several other ways to tweak the output like `decimal.mark` or `digits`. And of course it's really easy to add a **caption**:
+### Caption
+
+It's really easy to add a **caption** to a table:
 
 ```rout
 > pandoc.table(m, style = "grid", caption = "Hello caption!")
@@ -163,61 +142,45 @@ pandoc.table.return(mtcars[1:2, 1:3], style = "grid", caption = 'Hello caption!'
 %>
 ```
 
-`pandoc.table`˙can deal with the problem of really **wide tables**. Ever had an issue in LaTeX or MS Word when tried to print a correlation matrix of 40 variables? Not a problem any more as `pandoc.table` splits up the table if wider then 80 characters and handles caption too:
+or using special helper functions for `caption` (`set.caption`). Unless `permanent` option is set for `TRUE`, caption will be set only for next table.
 
 ```rout
-> pandoc.table(mtcars[1:2, ], style = "grid", caption = "Hello caption!")
+> set.caption("Hello caption!")
+> pandoc.table(m, style = "grid")
 <%=
-pandoc.table.return(mtcars[1:2, ], style = "grid", caption = 'Hello caption!')
+pandoc.table.return(mtcars[1:2, 1:3], style = "grid", caption = 'Hello caption!')
 %>
 ```
 
-And too wide cells are also split by line breaks. E.g.:
+To disable permanently set caption, just call `set.caption(NULL)` or call `set.caption` with `permanent` parameter being set to `FALSE`.
 
-```rout
-> pandoc.table(data.frame(id=1:2, value=c('FOO', 'Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.')))
-<%=
-pandoc.table.return(data.frame(id=1:2, value=c('FOO', 'Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.')))
-%>
-```
+### Highlight cells
 
-## Caption
+One of the most-important features in `pander` is the ease of highlighting rows, columns or any cells in a table that can be exported to HTML/pdf/MS Word etc. with the help of Pandoc.
 
-Beside directly calling `pandoc.table`'s `caption` parameter, one could also set a caption even before printing the markdown format - just use `set.caption` function:
+This can be achieved by calling `pandoc.table` directly and passing any (or more) of the following arguments:
 
-```rout
-> set.caption('Hello caption!')
-> pandoc.table(mtcars[1:2, ])
-<%=
-set.caption('Hello caption!');pandoc.table.return(mtcars[1:2, ])
-%>
-```
+  * emphasize.rows
+  * emphasize.cols
+  * emphasize.cells
+  * emphasize.strong.rows
+  * emphasize.strong.cols
+  * emphasize.strong.cells
 
-Of course the `set.caption` function is not needed to be called directly before `pandoc.table` and it can be also used by the [`pander` method](#generic-pander-method) or inside of [`Pandoc.brew` documents](#brew-to-pandoc) too.
+`emphasize` would turn the affected cells to *italic*, while `emphasize.strong` would apply a **bold style** in the cell. Of course a cell can be also ***italic and strong*** at the same time.
 
-## Cell alignment
+Arguments ending in `rows` or `cols` take a vector (e.g. `which` columns or rows to emphasize in a table), while the `cells` argument take either a vector (for one dimensional "tables") or an array-like data structure with two columns holding row and column indexes of cells to be emphasized -- just like what `which(..., arr.ind = TRUE)` returns.
+
+
+### Cell alignment
 
 One can specify the alignment of the cells in a table directly by setting the `justify` parameter in `pandoc.table`:
 
 ```rout
-> panderOptions('table.split.table', Inf)
-> pandoc.table(head(iris), justify = 'right')
-
--------------------------------------------------------------------
-  Sepal.Length   Sepal.Width   Petal.Length   Petal.Width   Species
--------------- ------------- -------------- ------------- ---------
-           5.1           3.5            1.4           0.2    setosa
-
-           4.9             3            1.4           0.2    setosa
-
-           4.7           3.2            1.3           0.2    setosa
-
-           4.6           3.1            1.5           0.2    setosa
-
-             5           3.6            1.4           0.2    setosa
-
-           5.4           3.9            1.7           0.4    setosa
--------------------------------------------------------------------
+> pandoc.table(iris[,1:3], justify = 'right')
+<%=
+pandoc.table(iris[,1:3], justify = 'right')
+%>
 ```
 
 Or pre-define the alignment for `pandoc.table` or the `pander` S3 method by a helper function:
@@ -235,64 +198,119 @@ set.alignment(c('left', 'right', 'center', 'centre'));pandoc.table.return(iris[1
 %>
 ```
 
+or using special helper functions for `alignment` (`set.alignment`). Unless `permanent` option is set for `TRUE`, alignment will be set only for next table.
+
+```rout
+> set.alignment("right")
+> pandoc.table(mtcars[1:2, 1:3], style = "grid")
+<%=
+pandoc.table.return(mtcars[1:2, 1:3], style = "grid", justify="right")
+%>
+```
+
+To disable permanently set alignment, call `set.alignment` with `permanent` parameter being set to `FALSE`.
+
 Beside using `set.alignment` helper or passing parameters directly to `pandoc.table`, you may also set the default alignment styles with [`panderOptions`](#pander-options).
 
-And feel free to use either `centre` or `center` to align cells to the middle :)
+And feel free to use either `centre` or `center` to align cells to the middle.
 
-## Highlight cells
+### Table and cell width
 
-And IMHO the most important feature in `pander` is the ease of highlighting rows, columns or any cells in a table that can be exported to HTML/pdf/MS Word etc. with the help of Pandoc.
-
-This can be achieved by calling `pandoc.table` directly and passing any (or more) of the following arguments:
-
-  * emphasize.rows
-  * emphasize.cols
-  * emphasize.cells
-  * emphasize.strong.rows
-  * emphasize.strong.cols
-  * emphasize.strong.cells
-
-`emphasize` would turn the affected cells to *italic*, while `emphasize.strong` would apply a **bold style** in the cell. Of course a cell can be also ***italic and strong*** at the same time.
-
-Arguments ending in `rows` or `cols` take a vector (e.g. `which` columns or rows to emphasize in a table), while the `cells` argument take either a vector (for one dimensional "tables") or an array-like data structure with two columns holding row and column indexes of cells to be emphasized -- just like what `which(..., arr.ind = TRUE)` returns.
-
-Examples:
+`pandoc.table`˙can deal with the problem of really **wide tables**. Ever had an issue in LaTeX or MS Word when tried to print a correlation matrix of 40 variables? Not a problem any more as `pandoc.table` splits up the table if wider then 80 characters and handles caption too:
 
 ```rout
-> t <- mtcars[1:3, 1:5]
-> emphasize.cols(1)
-> emphasize.rows(1)
-> pandoc.table(t)
+> pandoc.table(mtcars[1:2, ], style = "grid", caption = "Hello caption!")
 <%=
-t <- mtcars[1:3, 1:5]
-emphasize.cols(1)
-emphasize.rows(1)
-t
+pandoc.table.return(mtcars[1:2, ], style = "grid", caption = 'Hello caption!')
 %>
 ```
-Of course the these helper functions works with [`pander` method](#generic-pander-method) or inside of [`Pandoc.brew` documents](#brew-to-pandoc) too:
+
+And too wide cells are also split by line breaks. Maximum number of characters in a cell is specified by `split.cells` parameter (default to 30). `split.cells` can be a single value, vector (values for each column separately) and relative vector (percentages of `split.tables` parameter). E.g.:
 
 ```rout
-> emphasize.strong.cells(which(t > 20, arr.ind = TRUE))
-> pander(t)
+# default value
+> pandoc.table(data.frame(id=1:2, value=c('FOO', 'Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.')))
 <%=
-emphasize.strong.cells(which(t > 20, arr.ind = TRUE))
-t
+pandoc.table.return(data.frame(id=1:2, value=c('FOO', 'Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.')))
 %>
-> Pandoc.brew(text='
-## Title
-
-<\%\=
-set.caption('Formatted table')
-emphasize.rows(1)
-mtcars[1:2, 1:5]
-\%>')
-<%=
-set.caption('Formatted table')
-emphasize.rows(1)
-mtcars[1:2, 1:5]
+# single value for all columns
+> pandoc.table.return(data.frame(a="Pander package", b="Pander package", c="Pander package"), split.cells = c(5))
+<%= 
+pandoc.table.return(data.frame(a="Pander package", b="Pander package", c="Pander package"), split.cells = c(5))
+%>
+# vector of values for each column
+> pandoc.table.return(data.frame(a="Pander package", b="Pander package", c="Pander package"), split.cells = c(5, 20, 5))
+<%= 
+pandoc.table.return(data.frame(a="Pander package", b="Pander package", c="Pander package"), split.cells = c(5, 20, 5))
+%>
+# relative vector of values for each column
+> pandoc.table.return(data.frame(a="Pander package", b="Pander package", c="Pander package"), split.cells = c("20%", "60%", "20%"), split.tables = 40)
+<%= 
+pandoc.table.return(data.frame(a="Pander package", b="Pander package", c="Pander package"), split.cells = c("20%", "60%", "20%"), split.tables = 40)
 %>
 ```
+
+### Keeping line breaks
+
+By default line breaks in cells are discarded and are added based on `split.cells` parameter. To preserve line breaks inside cells `keep.line.breaks` parameter should be used.
+
+```rout
+> pandoc.table(data.frame(a="Pander\npackage"))
+<%=
+pandoc.table.return(data.frame(a="Pander\npackage"))
+%>
+> pandoc.table(data.frame(a="Pander\npackage"), keep.line.breaks = TRUE)
+<%=
+pandoc.table.return(data.frame(a="Pander\npackage"), keep.line.breaks = TRUE)
+%>
+```
+
+### Without markdown markup
+To print tables in plain ascii without any markdown markup, `plain.ascii` parameter should be used.
+
+```rout
+> pandoc.table(mtcars[1:3, 1:3])
+<%=
+pandoc.table.return(mtcars[1:3, 1:3])
+%>
+> pandoc.table(mtcars[1:3, 1:3], plain.ascii = TRUE)
+<%=
+pandoc.table.return(mtcars[1:3, 1:3], plain.ascii = TRUE)
+%>
+```
+
+## Global package options
+
+Beside directly supplying different parameter to `pandoc.table`, one could also set those parameters even before printing the markdown format as default for future renderings using `panderOptions`. Full list of available options can be found with `?panderOptions` or [here](#pander-options).
+
+For example `split.cells`: 
+```rout
+> panderOptions('table.split.cells', 10) # sets split.cells param for pandoc.table for all future calls to 10
+> pandoc.table(mtcars[1:3, 1:4])
+<%=
+pandoc.table.return(mtcars[1:3, 1:4], split.cells = 10) 
+%>
+```
+
+`caption`:
+```rout
+> set.caption('my caption') # sets default caption
+> pandoc.table(mtcars[1:3, 1:4])
+> pandoc.table(iris[1:3, 1:3])
+<%=
+set.caption('my caption'); mtcars[1:3, 1:4];
+%>
+```
+
+`plain.ascii`:
+```rout
+> panderOptions('plain.ascii', TRUE)
+> pandoc.table(mtcars[1:3, 1:4])
+<%=
+pandoc.table.return(mtcars[1:3, 1:4], plain.ascii = TRUE)
+%>
+```
+
 
 # Generic pander method
 
@@ -380,23 +398,40 @@ data.frame(id=1:2, value=c('FOO', 'Lorem ipsum dolor sit amet, consectetur adipi
 %>
 ```
 
-## Methods
+## Supported R classes
 
 The list of currently supported R classes:
 
 ```rout
 > methods(pander)
- [1] pander.anova*      pander.aov*        pander.cast_df*    pander.character*
- [5] pander.data.frame* pander.default*    pander.density*    pander.evals*
- [9] pander.factor*     pander.glm*        pander.htest*      pander.image*
-[13] pander.list*       pander.lm*         pander.logical*    pander.matrix*
-[17] pander.NULL*       pander.numeric*    pander.option      pander.POSIXct*
-[21] pander.POSIXt*     pander.prcomp*     pander.rapport*    pander.return
-[25] pander.table*
-
-   Non-visible functions are asterisked
+ [1] pander.anova           pander.aov             pander.aovlist         pander.call            pander.cast_df        
+ [6] pander.character       pander.clogit          pander.coxph           pander.CrossTable      pander.data.frame     
+[11] pander.Date            pander.default         pander.density         pander.describe        pander.evals          
+[16] pander.factor          pander.formula         pander.ftable          pander.function        pander.glm            
+[21] pander.htest           pander.image           pander.list            pander.lm              pander.lme            
+[26] pander.logical         pander.matrix          pander.microbenchmark  pander.mtable          pander.NULL           
+[31] pander.numeric         pander.option*         pander.POSIXct         pander.POSIXlt         pander.prcomp         
+[36] pander.rapport         pander.return          pander.rlm             pander.sessionInfo     pander.smooth.spline  
+[41] pander.stat.table      pander.summary.aov     pander.summary.aovlist pander.summary.glm     pander.summary.lm     
+[46] pander.summary.prcomp  pander.survdiff        pander.survfit         pander.table           pander.ts             
+[51] pander.zoo            
 ```
+If you think that `pander` lacks support for some other R classes, feel free to leave change request [here](https://github.com/Rapporter/pander/issues) and we will be happy to extend the package.
 
+# Creating Pandoc documents
+
+The package is also capable of creating complex Pandoc documents (reports) with **R objects** in three ways at the moment:
+
+  * create somehow a markdown text file (e.g. with `brew`, `knitr` or any scripts of yours, maybe with `Pandoc.brew` - see just [below](#brew-to-pandoc)) and transform that to other formats (like HTML, odt, pdf, docx etc.) with `Pandoc.convert` -- just like [`pandoc` function in knitr](http://yihui.name/knitr/demo/pandoc/),
+
+  * users might write some reports in a forked version of [brew](http://cran.r-project.org/web/packages/brew/index.html) syntax resulting in a pretty *Pandoc* document (where each R object are automatically transformed to nicely formatted table, list etc.) and also in a **bunch of other formats** (like HTML, odt, pdf, docx etc.),
+
+    *Example*: this [`README.md`](https://github.com/Rapporter/pander/blob/master/README.md) is cooked with `Pandoc.brew` based on [`inst/README.brew`](https://github.com/Rapporter/pander/blob/master/inst/README.brew) and also exported to [HTML](http://rapporter.github.com/pander/). Details can be found [below](#brew-to-pandoc) or head directly to [examples](#examples).
+
+<!-- endlist -->
+
+ * or users might create a report in a live R session by adding some R objects and paragraphs to a `Pandoc` reference class object. Details can be found [below](#live-report-generation).
+ 
 # Brew to Pandoc
 
 Everyone knows and possibly uses [brew](http://cran.r-project.org/web/packages/brew/index.html) but if you would need some smack, the following links really worth visiting:
@@ -532,81 +567,6 @@ myReport$export(tempfile())
 ## You do not want to see the generated report after generation?
 myReport$export(open = FALSE)
 ```
-
-# Pander options
-
-`pander` comes with some globally adjustable options which would have an effect on the result of your reports. You can query and update these options with `panderOptions()`:
-
-  * `digits`: numeric (default: `2`) passed to `format`
-  * `decimal.mark`: string (default: `.`) passed to `format`
-  * `big.mark`: string (default: ``) passed to `format`
-  * `round`: numeric (default: `Inf`) passed to `round`
-  * `keep.trailing.zeros`: boolean (default: `FALSE`) show or remove trailing zeros in numbers (e.g. in numeric vectors or in columns of tables with numeric values)
-  * `date`: string (default: `'%Y/%m/%d %X'`) passed to `format` when printing dates (`POSIXct` or `POSIXt`)
-  * `header.style`: `'atx'` or `'setext'` passed to `pandoc.header`
-  * `list.style`: `'bullet'` (default), `'ordered'` or `'roman'` passed to `pandoc.list`. Please not that this has no effect on `pander` methods.
-  * `table.style`: `'multiline'`, `'grid'` or `'simple'` passed to `pandoc.table`
-  * `table.split.table`: numeric passed to `pandoc.table` and also affects `pander` methods. This option tells `pander` where to split too wide tables. The default value (`80`) suggests the conventional number of characters used in a line, feel free to change (e.g. to `Inf` to disable this feature) if you are not using a VT100 terminal any more :)
-  * `table.split.cells`: numeric (default: `30`) passed to `pandoc.table` and also affects `pander` methods. This option tells `pander` where to split too wide cells with line breaks. Set `Inf` to disable.
-  * `table.caption.prefix`: string (default: `Table: `) passed to `pandoc.table` to be used as caption prefix. Be sure about what you are doing if changing to other than `Table: ` or `:`.
-  * `table.continues`: string (default: `Table continues below`) passed to `pandoc.table` to be used as caption for long (split) without a use defined caption
-  * `table.continues.affix`: string (default: `(continued below)`) passed to `pandoc.table` to be used as an affix concatenated to the user defined caption for long (split) tables
-  * `table.alignment.default`: string (default: `centre`) that defines the default alignment of cells. Can be `left`, `right` or `centre` that latter can be also spelled as `center`
-  * `table.alignment.rownames`: string (default: `centre`) that defines the alignment of rownames in tables. Can be `left`, `right` or `centre` that latter can be also spelled as `center`
-  * `evals.messages`: boolean (default: `TRUE`) passed to `evals`' `pander` method specifying if messages should be rendered
-  * `p.wrap`: a string (default:`'_'`) to wrap vector elements passed to `p` function
-  * `p.sep`: a string (default: `', '`) with the main separator passed to `p` function
-  * `p.copula`: a string (default: `'and'`) a string with ending separator passed to `p` function
-  * `graph.nomargin`: boolean (default: `TRUE`) if trying to keep plots' margins at minimal
-  * `graph.fontfamily`: string (default: `'sans'`) specifying the font family to be used in images. Please note, that using a custom font on Windows requires `grDevices:::windowsFonts` first.
-  * `graph.fontcolor`: string (default: `'black'`) specifying the default font color
-  * `graph.fontsize`: numeric (default: `12`) specifying the *base* font size in pixels. Main title is rendered with `1.2` and labels with `0.8` multiplier.
-  * `graph.grid`: boolean (default: `TRUE`) if a grid should be added to the plot
-  * `graph.grid.minor`: boolean (default: `TRUE`) if a miner grid should be also rendered
-  * `graph.grid.color`: string (default: `'grey'`) specifying the color of the rendered grid
-  * `graph.grid.lty`: string (default: `'dashed'`) specifying the line type of grid
-  * `graph.boxes`: boolean (default: `FALSE`) if to render a border around of plot (and e.g. around strip)
-  * `graph.legend.position`: string (default: `'right'`) specifying the position of the legend: 'top', 'right', 'bottom' or 'left'
-  * `graph.background`: string (default: `'white'`) specifying the plots main background's color
-  * `graph.panel.background`: string (default: `'transparent'`) specifying the plot's main panel background. Please *note*, that this option is not supported with `base` graphics.
-  * `graph.colors`: character vector of default color palette (defaults to a [colorblind theme](http://jfly.iam.u-tokyo.ac.jp/color/)). Please *note* that this update work with `base` plots by appending the `col` argument to the call if not set.
-  * `graph.color.rnd`: boolean (default: `FALSE`) specifying if the palette should be reordered randomly before rendering each plot to get colorful images
-  * `graph.axis.angle`: numeric (default: `1`) specifying the angle of axes' labels. The available options are based on `par(les)` and sets if the labels should be:
-
-      *  `1`: parallel to the axis,
-      *  `2`: horizontal,
-      *  `3`: perpendicular to the axis or
-      *  `4`: vertical.
-
-  *  `graph.symbol`: numeric (default: `1`) specifying a symbol (see the `pch` parameter of `par`)
-
-Besides localization of numeric formats, table/list's and plots' styles there are some technical options too which would effect e.g. [caching](#caching) or the format of rendered image files. You can query/update those with `evalsOptions()` as the main backend of `pander` calls is a custom evaluation function called [`evals`](#evals).
-
-The list of possible options are:
-
-  * `parse`: if `TRUE` the provided `txt` elements would be merged into one string and parsed to logical chunks. This is useful if you would want to get separate results of your code parts - not just the last returned value, but you are passing the whole script in one string. To manually lock lines to each other (e.g. calling a `plot` and on next line adding an `abline` or `text` to it), use a plus char (`+`) at the beginning of each line which should be evaluated with the previous one(s). If set to `FALSE`, [`evals`](#evals) would not try to parse R code, it would get evaluated in separate runs - as provided. Please see the documentation of [`evals`](#evals).
-  * `cache`: [caching](#caching) the result of R calls if set to `TRUE`
-  * `cache.mode`: cached results could be stored in an `environment` in _current_ R session or let it be permanent on `disk`.
-  * `cache.dir`: path to a directory holding cache files if `cache.mode` set to `disk`. Default set to `.cache` in current working directory.
-  * `cache.time`: number of seconds to limit caching based on `proc.time`. If set to `0`, all R commands, if set to `Inf`, none is cached (despite the `cache` parameter).
-  * `cache.copy.images`: copy images to new file names if an image is returned from the *disk* cache? If set to `FALSE` (default), the cached path would be returned.
-  * `classes`: a vector or list of classes which should be returned. If set to `NULL` (by default) all R objects will be returned.
-  * `hooks`: list of hooks to be run for given classes in the form of `list(class = fn)`. If you would also specify some parameters of the function, a list should be provided in the form of `list(fn, param1, param2=NULL)` etc. So the hooks would become `list(class1=list(fn, param1, param2=NULL), ...)`. See example of [`evals`](#evals) for more details. A default hook can be specified too by setting the class to `'default'`. This can be handy if you do not want to define separate methods/functions to each possible class, but automatically apply the default hook to all classes not mentioned in the list. You may also specify only one element in the list like: `hooks=list('default' = pander.return)`. Please note, that nor error/warning messages, nor stdout is captured (so: updated) while running hooks!
-  * `length`: any R object exceeding the specified length will not be returned. The default value (`Inf`) does not filter out any R objects.
-  * `output`: a character vector of required returned values. This might be useful if you are only interested in the `result`, and do not want to save/see e.g. `messages` or `print`ed `output`. See examples of [`evals`](#evals).
-  * `graph.unify`: should `evals` try to unify the style of (`base`, `lattice` and `ggplot2`) plots? If set to `TRUE`, some `panderOptions()` would apply. By default this is disabled not to freak out useRs :)
-  * `graph.name`: set the file name of saved plots which is `%s` by default. A simple character string might be provided where `%d` would be replaced by the index of the generating `txt` source, `%n` with an incremented integer in `graph.dir` with similar file names and `%t` by some unique random characters. When used in a `brew` file, `%i` is also available which would be replaced by the chunk number.
-  * `graph.dir`: path to a directory where to place generated images. If the directory does not exist, [`evals`](#evals) try to create that. Default set to `plots` in current working directory.
-  * `graph.output`: set the required file format of saved plots. Currently it could be any of  `grDevices`: `png`, `bmp`, `jpeg`, `jpg`, `tiff`, `svg` or `pdf`. Set to `NA` not to save plots at all and tweak that setting with `capture.plot()` on demand.
-  * `width`: width of generated plot in pixels for even vector formats
-  * `height`: height of generated plot in pixels for even vector formats
-  * `res`: nominal resolution in `ppi`. The height and width of vector images will be calculated based in this.
-  * `hi.res`: generate high resolution plots also? If set to `TRUE`, each R code parts resulting an image would be run twice.
-  * `hi.res.width`: width of generated high resolution plot in pixels for even vector formats. The `height` and `res` of high resolution image is automatically computed based on the above options to preserve original plot aspect ratio.
-  * `graph.env`: save the environments in which plots were generated to distinct files (based on `graph.name`) with `env` extension?
-  * `graph.recordplot`: save the plot via `recordPlot` to distinct files (based on `graph.name`) with `recodplot` extension?
-  * `graph.RDS` save the raw R object returned (usually with `lattice` or `ggplot2`) while generating the plots to distinct files (based on `graph.name`) with `RDS` extension?
-
 # Caching
 
 As `pander` is using a **custom caching algorithm**, it might be worthwhile to give a short summary of what is going on in the background.
@@ -691,7 +651,7 @@ evals('mean(xx)')
 
 Sorry, no online documentation here ATM. Please check: `?evals`
 
-Or head to the CRAN version of the docs at [help.r-enthusiasts.com](http://help.r-enthusiasts.com/library/pander/html/evals.html)
+Or head to the CRAN version of the docs at [Rdocuments](http://www.rdocumentation.org/packages/pander/functions/evals)
 
 # ESS
 
@@ -714,4 +674,100 @@ Few options of `pander-mode`: `M-x customize-group pander`
 
 To use this small lib, just type: `M-x pander-mode` on any document. It might be useful to add a hook to `markdown-mode` if you find this useful.
 
-[![githalytics.com alpha](https://cruel-carlota.gopagoda.com/9dfac0c1da37bd83d1848289630631fd "githalytics.com")](http://githalytics.com/Rapporter/pander)
+# Pander options
+
+`pander` comes with some globally adjustable options which would have an effect on the result of your reports. You can query and update these options with `panderOptions()`:
+
+  * `digits`: numeric (default: `2`) passed to `format`
+  * `decimal.mark`: string (default: `.`) passed to `format`
+  * `formula.caption.prefix`: string (default: `Formula: `) passed to `pandoc.formula` to be used as caption prefix. Be sure about what you are doing if changing to other than `Formula: ` or `:`.
+  * `big.mark`: string (default: ``) passed to `format`
+  * `round`: numeric (default: `Inf`) passed to `round`
+  * `keep.trailing.zeros`: boolean (default: `FALSE`) show or remove trailing zeros in numbers (e.g. in numeric vectors or in columns of tables with numeric values)
+  * `keep.line.breaks`: boolean (default: `FALSE`) to keep or remove line breaks from cells in a table
+  * `date`: string (default: `'%Y/%m/%d %X'`) passed to `format` when printing dates (`POSIXct` or `POSIXt`)
+  * `header.style`: `'atx'` or `'setext'` passed to `pandoc.header`
+  * `list.style`: `'bullet'` (default), `'ordered'` or `'roman'` passed to `pandoc.list`. Please not that this has no effect on `pander` methods.
+  * `table.style`: `'multiline'`, `'grid'` or `'simple'` passed to `pandoc.table`
+  * `table.split.table`: numeric passed to `pandoc.table` and also affects `pander` methods. This option tells `pander` where to split too wide tables. The default value (`80`) suggests the conventional number of characters used in a line, feel free to change (e.g. to `Inf` to disable this feature) if you are not using a VT100 terminal any more :)
+  * `table.split.cells`: numeric (default: 30) passed to `pandoc.table` and also affects pander methods. This option tells pander where to split too wide cells with line breaks. Set `Inf`` to disable.
+  * `table.caption.prefix`: string (default: `Table: `) passed to `pandoc.table` to be used as caption prefix. Be sure about what you are doing if changing to other than `Table: ` or `:`.
+  * `table.continues`: string (default: `Table continues below`) passed to `pandoc.table` to be used as caption for long (split) without a use defined caption
+  * `table.continues.affix`: string (default: `(continued below)`) passed to `pandoc.table` to be used as an affix concatenated to the user defined caption for long (split) tables
+  * `table.alignment.default`: string (default: `centre`) that defines the default alignment of cells. Can be `left`, `right` or `centre` that latter can be also spelled as `center`
+  * `table.alignment.rownames`: string (default: `centre`) that defines the alignment of rownames in tables. Can be `left`, `right` or `centre` that latter can be also spelled as `center`
+  * `use.hyphening`: boolean (default: `FALSE`) if try to use hyphening when splitting large cells according to table.split.cells. Requires `koRpus` package.
+  * `evals.messages`: boolean (default: `TRUE`) passed to `evals`' `pander` method specifying if messages should be rendered
+  * `p.wrap`: a string (default:`'_'`) to wrap vector elements passed to `p` function
+  * `p.sep`: a string (default: `', '`) with the main separator passed to `p` function
+  * `p.copula`: a string (default: `'and'`) a string with ending separator passed to `p` function
+  * `plain.ascii`: boolean (default: FALSE) to define if output should be in plain ascii or not
+  * `graph.nomargin`: boolean (default: `TRUE`) if trying to keep plots' margins at minimal
+  * `graph.fontfamily`: string (default: `'sans'`) specifying the font family to be used in images. Please note, that using a custom font on Windows requires `grDevices:::windowsFonts` first.
+  * `graph.fontcolor`: string (default: `'black'`) specifying the default font color
+  * `graph.fontsize`: numeric (default: `12`) specifying the *base* font size in pixels. Main title is rendered with `1.2` and labels with `0.8` multiplier.
+  * `graph.grid`: boolean (default: `TRUE`) if a grid should be added to the plot
+  * `graph.grid.minor`: boolean (default: `TRUE`) if a miner grid should be also rendered
+  * `graph.grid.color`: string (default: `'grey'`) specifying the color of the rendered grid
+  * `graph.grid.lty`: string (default: `'dashed'`) specifying the line type of grid
+  * `graph.boxes`: boolean (default: `FALSE`) if to render a border around of plot (and e.g. around strip)
+  * `graph.legend.position`: string (default: `'right'`) specifying the position of the legend: 'top', 'right', 'bottom' or 'left'
+  * `graph.background`: string (default: `'white'`) specifying the plots main background's color
+  * `graph.panel.background`: string (default: `'transparent'`) specifying the plot's main panel background. Please *note*, that this option is not supported with `base` graphics.
+  * `graph.colors`: character vector of default color palette (defaults to a [colorblind theme](http://jfly.iam.u-tokyo.ac.jp/color/)). Please *note* that this update work with `base` plots by appending the `col` argument to the call if not set.
+  * `graph.color.rnd`: boolean (default: `FALSE`) specifying if the palette should be reordered randomly before rendering each plot to get colorful images
+  * `graph.axis.angle`: numeric (default: `1`) specifying the angle of axes' labels. The available options are based on `par(les)` and sets if the labels should be:
+
+      *  `1`: parallel to the axis,
+      *  `2`: horizontal,
+      *  `3`: perpendicular to the axis or
+      *  `4`: vertical.
+
+  *  `graph.symbol`: numeric (default: `1`) specifying a symbol (see the `pch` parameter of `par`)
+
+Besides localization of numeric formats, table/list's and plots' styles there are some technical options too which would effect e.g. [caching](#caching) or the format of rendered image files. You can query/update those with `evalsOptions()` as the main backend of `pander` calls is a custom evaluation function called [`evals`](#evals).
+
+The list of possible options are:
+
+  * `parse`: if `TRUE` the provided `txt` elements would be merged into one string and parsed to logical chunks. This is useful if you would want to get separate results of your code parts - not just the last returned value, but you are passing the whole script in one string. To manually lock lines to each other (e.g. calling a `plot` and on next line adding an `abline` or `text` to it), use a plus char (`+`) at the beginning of each line which should be evaluated with the previous one(s). If set to `FALSE`, [`evals`](#evals) would not try to parse R code, it would get evaluated in separate runs - as provided. Please see the documentation of [`evals`](#evals).
+  * `cache`: [caching](#caching) the result of R calls if set to `TRUE`
+  * `cache.mode`: cached results could be stored in an `environment` in _current_ R session or let it be permanent on `disk`.
+  * `cache.dir`: path to a directory holding cache files if `cache.mode` set to `disk`. Default set to `.cache` in current working directory.
+  * `cache.time`: number of seconds to limit caching based on `proc.time`. If set to `0`, all R commands, if set to `Inf`, none is cached (despite the `cache` parameter).
+  * `cache.copy.images`: copy images to new file names if an image is returned from the *disk* cache? If set to `FALSE` (default), the cached path would be returned.
+  * `classes`: a vector or list of classes which should be returned. If set to `NULL` (by default) all R objects will be returned.
+  * `hooks`: list of hooks to be run for given classes in the form of `list(class = fn)`. If you would also specify some parameters of the function, a list should be provided in the form of `list(fn, param1, param2=NULL)` etc. So the hooks would become `list(class1=list(fn, param1, param2=NULL), ...)`. See example of [`evals`](#evals) for more details. A default hook can be specified too by setting the class to `'default'`. This can be handy if you do not want to define separate methods/functions to each possible class, but automatically apply the default hook to all classes not mentioned in the list. You may also specify only one element in the list like: `hooks=list('default' = pander.return)`. Please note, that nor error/warning messages, nor stdout is captured (so: updated) while running hooks!
+  * `length`: any R object exceeding the specified length will not be returned. The default value (`Inf`) does not filter out any R objects.
+  * `output`: a character vector of required returned values. This might be useful if you are only interested in the `result`, and do not want to save/see e.g. `messages` or `print`ed `output`. See examples of [`evals`](#evals).
+  * `graph.unify`: should `evals` try to unify the style of (`base`, `lattice` and `ggplot2`) plots? If set to `TRUE`, some `panderOptions()` would apply. By default this is disabled not to freak out useRs :)
+  * `graph.name`: set the file name of saved plots which is `%s` by default. A simple character string might be provided where `%d` would be replaced by the index of the generating `txt` source, `%n` with an incremented integer in `graph.dir` with similar file names and `%t` by some unique random characters. When used in a `brew` file, `%i` is also available which would be replaced by the chunk number.
+  * `graph.dir`: path to a directory where to place generated images. If the directory does not exist, [`evals`](#evals) try to create that. Default set to `plots` in current working directory.
+  * `graph.output`: set the required file format of saved plots. Currently it could be any of  `grDevices`: `png`, `bmp`, `jpeg`, `jpg`, `tiff`, `svg` or `pdf`. Set to `NA` not to save plots at all and tweak that setting with `capture.plot()` on demand.
+  * `width`: width of generated plot in pixels for even vector formats
+  * `height`: height of generated plot in pixels for even vector formats
+  * `res`: nominal resolution in `ppi`. The height and width of vector images will be calculated based in this.
+  * `hi.res`: generate high resolution plots also? If set to `TRUE`, each R code parts resulting an image would be run twice.
+  * `hi.res.width`: width of generated high resolution plot in pixels for even vector formats. The `height` and `res` of high resolution image is automatically computed based on the above options to preserve original plot aspect ratio.
+  * `graph.env`: save the environments in which plots were generated to distinct files (based on `graph.name`) with `env` extension?
+  * `graph.recordplot`: save the plot via `recordPlot` to distinct files (based on `graph.name`) with `recodplot` extension?
+  * `graph.RDS` save the raw R object returned (usually with `lattice` or `ggplot2`) while generating the plots to distinct files (based on `graph.name`) with `RDS` extension?
+
+# Difference from other rendering packages
+ 
+**How does `pander` differ from Sweave, brew, knitr, R2HTML etc.?**
+
+  * first of all `pander` can be used as a helper with any other literate programming solution, so you might want to call `pander` inside of `knitr` chunks,
+  * but if you stick with `pander`'s literate tool, then **no need** for calling `ascii`, `xtable`, `Hmisc`, `tables` etc. or even `pander` in the R command chunks to transform an R object to `HTML`, `tex` etc. as `Pandoc.brew` automatically results in Pandoc's *markdown* which can be converted to almost any text document format (like: pdf, HTML, odt, docx, textile, asciidoc, reStructuredText etc.). Conversion can be done automatically after calling `pander` reporting functions ([Pander.brew](#brew-to-pandoc) or [Pandoc](#live-report-generation)).
+  * based on the above *no "traditional" R console output* is shown in the resulting document (nor in markdown, nor in exported docs) but **all R objects are transformed to tables, list etc**. Well, there is an option (`show.src`) to show the original R commands before the formatted output, and `pander`˛calls can be also easily tweaked (just file an issue) to return `print`ed R objects - if you would need that in some strange situation - like writing an R tutorial. But **I really think that nor R code, nor raw R results have anything to do with an exported report** :)
+  * of course all warnings, messages and errors are captured while evaluating R expressions just like `stdout` **beside** the raw R object. So the resulting report can also include the raw R objects for futher edits if needed,
+  * *graphs/plots* are recognized in blocks of R commands without any special setting or marks around code block and saved to disk in a `png` file linked in the resulting document. This means if you create a report (e.g. `brew` a text file) and export it to pdf/docx etc. all the plots/images would be there. There are some parameters to specify the resolution of the image and also the type (e.g. `jpg`, `svg` or `pdf`) besides a **wide variety of [theme options](#pander-options)**. About the latter, please check out `graphs.brew` [below](#examples).
+  * `pander`˛uses its build in (IMHO quite decent) [**caching**](#caching). This means that if evaluation of some R commands take too much time (which can be set by option/parameter), then the results are saved in a file and returned from there on next exact R code's evaluation. This caching algorithm tries to be **smart** as checks not only the passed R sources, but *all variables and functions* inside that and saves the hash of those. This is a quite secure way of caching (see details [below](#caching)), but if you would encounter any issues, just switch off the cache. I've not seen any issues :)
+  * `knitr` *support* is coming too, for details see my [TODO list](https://github.com/Rapporter/pander/blob/master/TODO.md) **Update**: just use `knitr` to generate markdown and pass that to `Pandoc.convert`
+
+# Installing Pandoc
+
+The [installation process of Pandoc](http://johnmacfarlane.net/pandoc/installing.html) is quite straightforward on most-popular operating systems: download and run the binary (a few megabytes), and get a full-blown document converted in a few seconds/minutes. On some Linux distributions, it might be a bit more complicated (as repositories tend to provide out-dated versions of Pandoc, so you would need `cabal-install` to [install from sources](http://johnmacfarlane.net/pandoc/installing.html#all-platforms)). *Please do not forget to restart your R session to update your `PATH` after installation!*
+
+An alternative method (bypassing Pandoc dependency) would be to call the awesome [`markdown`](http://cran.r-project.org/web/packages/markdown/index.html) package to transform markdown (as far as I know: exclusively) to HTML.
+
+ [![githalytics.com alpha](https://cruel-carlota.gopagoda.com/9dfac0c1da37bd83d1848289630631fd "githalytics.com")](http://githalytics.com/Rapporter/pander)

@@ -124,9 +124,13 @@ has.rownames <- function(x) {
 #'
 #' This is a helper function to add a caption to the returning image/table.
 #' @param x string
+#' @param permanent (default \code{FALSE}) if caption is permanent (for all future tables) or not
 #' @export
-set.caption <- function(x)
+set.caption <- function(x, permanent = FALSE){
     assign('caption', x , envir = storage)
+    if (!is.null(x))
+      attr(storage$caption, 'permanent') <- permanent
+}
 
 
 #' Get caption
@@ -143,9 +147,12 @@ get.caption <- function()
 #' This is a helper function to update the alignment (\code{justify} parameter of \code{pandoc.table}) of the returning table. Possible values are: \code{centre} or \code{center}, \code{right}, \code{left}.
 #' @param default character vector which length equals to one (would be repeated \code{n} times) ot \code{n} - where \code{n} equals to the number of columns in the following table
 #' @param row.names string holding the alignment of the (optional) row names
+#' @param permanent (default \code{FALSE}) if alignment is permanent (for all future tables) or not
 #' @export
-set.alignment <- function(default = 'centre', row.names = 'right')
+set.alignment <- function(default = 'centre', row.names = 'right', permanent = FALSE){
     assign('alignment', list(default = default, row.names = row.names) , envir = storage)
+    attr(storage$alignment, 'permanent') <- permanent
+}
 
 
 #' Get alignment
@@ -258,7 +265,8 @@ get.emphasize <- function(df) {
 #' @keywords internal
 get.storage <- function(what) {
     res <- tryCatch(get(what, envir = storage, inherits = FALSE), error = function(e) NULL)
-    assign(what, NULL , envir = storage)
+    if (is.null(attr(res, 'permanent')) || !attr(res, 'permanent'))
+      assign(what, NULL , envir = storage)
     return(res)
 }
 
@@ -308,6 +316,10 @@ cache.on <- function()
 #' @param use.hyphening (default: \code{FALSE}) if try to use hyphening when splitting large cells according to table.split.cells. Requires koRpus package.
 #' @return character string with line breaks
 #' @export
+#' @examples
+#' splitLine("foo bar", 6)
+#' splitLine("foo bar", 7)
+#' splitLine("Pandoc Package", 3, TRUE)
 splitLine <- function(x, max.width = panderOptions('table.split.cells'), use.hyphening = FALSE){
   if (!is.character(x) || !is.null(dim(x)) || length(x) != 1 || x == "")
     return(x)

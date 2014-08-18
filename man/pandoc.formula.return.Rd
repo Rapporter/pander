@@ -10,7 +10,7 @@ pandoc.formula.return(x, text = NULL, max.width = 80, caption,
 \arguments{
 \item{x}{formula}
 
-\item{text}{text to be written before result}
+\item{text}{text to be written before result in the same line. Typically used by calls from other functions in the package}
 
 \item{max.width}{maximum width in characters per line}
 

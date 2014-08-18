@@ -2,6 +2,8 @@
 #include <string.h>
 using namespace Rcpp;
 
+// simplified version of format that fits the need for table.expand
+// checks justify param and adds needed number of whitespaces based on it
 std::string format_cpp(std::string x, std::string justify, int width){
   std::string result = "";
   if (justify == "left"){
@@ -27,21 +29,25 @@ std::string tableExpand_cpp(CharacterVector cells, IntegerVector colsWidth, Char
     std::vector<std::string> cellsC(cells.size()), *resSplit;
     int i, j, maxLengthCells = 0, n = 0;
     bool hasLineBreak = false;
+    
     // check for having a line break and convert to string vector for easiness
     for (i = 0; i < cellsC.size(); i++){
       cellsC[i] = std::string(cells[i]);
       if (cellsC[i].find(endline) != std::string::npos)
         hasLineBreak = true;
     }
+    
     if (hasLineBreak){
+      // in case of line break, we need to recursively call tableExpand_cpp
+      // before that we need to find number of resulting calls (max number of line breaks) and prepare arguments for recursive calls
       if (style == "simple" || style == "rmarkdown")
         stop("Pandoc does not support newlines in simple or Rmarkdown table format!");
       n = cellsC.size();
       resSplit = new std::vector<std::string>[n];
+      // find max number of line breaks by going from cell to cell 
       for (i = 0; i < n; i++){
         line = &cellsC[i];
-        do
-        {
+        do {
           pos = line->find(endline);
           if (line->substr(0, pos) != "")
             resSplit[i].push_back(line->substr(0, pos));
@@ -51,6 +57,7 @@ std::string tableExpand_cpp(CharacterVector cells, IntegerVector colsWidth, Char
         if (resSplit[i].size() > maxLengthCells)
           maxLengthCells = resSplit[i].size();
       }
+      // prepare arguments and do a recursive call
       for (i = 0; i < maxLengthCells; i++){
         CharacterVector newCells(n);
         for (j = 0; j < n; j++)
@@ -60,6 +67,7 @@ std::string tableExpand_cpp(CharacterVector cells, IntegerVector colsWidth, Char
           res += '\n';
       }
     } else {
+      // in case of no line breaks format each cell (add needed number of whitespaces and justify) and concatenate cells
       res = sepCols[0];
       for (i = 0; i < cells.size(); i++){
         res += format_cpp(as<std::string>(cells[i]), as<std::string>(justify[i]), colsWidth[i]);

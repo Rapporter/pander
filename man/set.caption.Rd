@@ -3,10 +3,12 @@
 \alias{set.caption}
 \title{Adds caption in current block}
 \usage{
-set.caption(x)
+set.caption(x, permanent = FALSE)
 }
 \arguments{
 \item{x}{string}
+
+\item{permanent}{(default \code{FALSE}) if caption is permanent (for all future tables) or not}
 }
 \description{
 This is a helper function to add a caption to the returning image/table.

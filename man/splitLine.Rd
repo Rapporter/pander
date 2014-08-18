@@ -19,4 +19,9 @@ character string with line breaks
 \description{
 This is a helper function to insert line breaks depending on (\code{split.cells} parameter of \code{pandoc.table}) of the returning table.
 }
+\examples{
+splitLine("foo bar", 6)
+splitLine("foo bar", 7)
+splitLine("Pandoc Package", 3, TRUE)
+}
 

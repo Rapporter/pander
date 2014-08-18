@@ -38,13 +38,13 @@ pandoc.table.return(t, caption, digits = panderOptions("digits"),
 
 \item{split.tables}{where to split wide tables to separate tables. The default value (\code{80}) suggests the conventional number of characters used in a line, feel free to change (e.g. to \code{Inf} to disable this feature) if you are not using a VT100 terminal any more :)}
 
-\item{split.cells}{where to split cells' text with line breaks. Default to \code{30}, to disable set to \code{Inf}.}
+\item{split.cells}{where to split cells' text with line breaks. Default to \code{30}, to disable set to \code{Inf}. Can be also supplied as a vector, for each cell separately (if length(split.cells) == number of columns + 1, then first value in split.cells if for row names, and others are for columns). Supports relative (percentage) parameters in combination with split.tables.}
 
 \item{keep.trailing.zeros}{to show or remove trailing zeros in numbers on a column basis width}
 
-\item{keep.line.breaks}{to keep or remove line breaks from cells in a table}
+\item{keep.line.breaks}{(default: \code{FALSE}) if to keep or remove line breaks from cells in a table}
 
-\item{plain.ascii}{to define if output should be in plain ascii or not}
+\item{plain.ascii}{(default: \code{FALSE}) if output should be in plain ascii (without markdown markup) or not}
 
 \item{emphasize.rows}{a vector for a two dimensional table specifying which rows to emphasize}
 
@@ -136,6 +136,41 @@ pandoc.table(t)
 
 emphasize.strong.cells(which(t > 20, arr.ind = TRUE))
 pandoc.table(t)
+
+### plain.ascii
+pandoc.table(mtcars[1:3, 1:3], plain.ascii = TRUE)
+
+### keep.line.breaks
+x <- data.frame(a="Pandoc\\nPackage")
+pandoc.table(x)
+pandoc.table(x, keep.line.breaks = TRUE)
+
+## split.cells
+x <- data.frame(a = "foo bar", b = "foo bar")
+pandoc.table(x, split.cells = 4)
+pandoc.table(x, split.cells = 7)
+pandoc.table(x, split.cells = c(4, 7))
+pandoc.table(x, split.cells = c("20\%", "80\%"), split.tables = 30)
+
+y <- c("aa aa aa", "aaa aaa", "a a a a a", "aaaaa", "bbbb bbbb bbbb", "bb bbb bbbb")
+y <- matrix(y, ncol = 3, nrow = 2)
+rownames(y) <- c("rowname one", "rowname two")
+colnames(y) <- c("colname one", "colname two", "colname three")
+pandoc.table(y, split.cells = 2)
+pandoc.table(y, split.cells = 6)
+pandoc.table(y, split.cells = c(2, 6, 10))
+pandoc.table(y, split.cells = c(2, Inf, Inf))
+
+## first value used for rownames
+pander(y, split.cells = c(5, 2, Inf, Inf))
+pandoc.table(y, split.cells = c(5, 2, Inf, 5, 3, 10))
+
+## when not enough reverting to default values
+pandoc.table(y, split.cells = c(5, 2))
+
+## split.cells with hyphenation
+x <- data.frame(a="Can be also supplied as a vector, for each cell separately", b = "Can be also supplied as a vector, for each cell separately")
+pandoc.table(x, split.cells = 10, use.hyphening = TRUE)
 }
 \references{
 John MacFarlane (2012): _Pandoc User's Guide_. \url{http://johnmacfarlane.net/pandoc/README.html}
