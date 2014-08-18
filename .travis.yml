@@ -21,7 +21,9 @@ install:
   - Rscript -e 'install.packages("ggplot2", dep = TRUE, repos = "http://cran.r-project.org")'
   - Rscript -e 'install.packages("testthat", dep = TRUE, repos = "http://cran.r-project.org")'
   - Rscript -e 'install.packages("koRpus", dep = TRUE, repos = "http://cran.r-project.org")'
+  - Rscript -e 'install.packages("descr", dep = TRUE, repos = "http://cran.r-project.org")'  
   - Rscript -e 'install.packages("Rcpp", dep = TRUE, repos = "http://cran.r-project.org")'
+  - Rscript -e 'install.packages("microbenchmark", dep = TRUE, repos = "http://cran.r-project.org")'  
   - Rscript -e 'install.packages("pander", dep = TRUE, repos = "http://cran.r-project.org")'
 
 # run tests
