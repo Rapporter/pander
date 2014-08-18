@@ -1079,7 +1079,7 @@ pander.survfit <- function (x, caption = attr(x, 'caption'), scale = 1, print.rm
     if (length(rmean) == 0) 
       stop("Invalid value for rmean option")
   }
-  temp <- survival:::survmean(x, scale = scale, rmean)
+  temp <- getFromNamespace('survmean', 'survival')(x, scale = scale, rmean)
   mat <- pandoc.table(temp$matrix, caption = ...)
   restrm <- NULL
   if (rmean != "none") {
