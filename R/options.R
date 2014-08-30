@@ -13,6 +13,7 @@
                 'header.style'             = 'atx',
                 'list.style'               = 'bullet',
                 'table.style'              = 'multiline',
+                'table.emphasize.rownames' = TRUE,
                 'table.split.table'        = 80,
                 'table.split.cells'        = 30,
                 'table.caption.prefix'     = 'Table: ',
@@ -204,6 +205,7 @@ masked.plots$plot <- masked.plots$barplot <- masked.plots$lines <- masked.plots$
 #'      \item \code{header.style}: \code{'atx'} or \code{'setext'} passed to \code{\link{pandoc.header}}
 #'      \item \code{list.style}: \code{'bullet'}, \code{'ordered'} or \code{'roman'} passed to \code{\link{pandoc.list}}. Please not that this has no effect on \code{pander} methods.
 #'      \item \code{table.style}: \code{'multiline'}, \code{'grid'}, \code{'simple'} or \code{'rmarkdown'} passed to \code{\link{pandoc.table}}
+#'      \item \code{table.emphasize.rownames}: boolean (default: \code{TRUE}) if row names should be highlighted
 #'      \item \code{table.split.table}: numeric passed to \code{\link{pandoc.table}} and also affects \code{pander} methods. This option tells \code{pander} where to split too wide tables. The default value (\code{80}) suggests the conventional number of characters used in a line, feel free to change (e.g. to \code{Inf} to disable this feature) if you are not using a VT100 terminal any more :)
 #'      \item \code{table.split.cells}: numeric or numeric vector (default: \code{30}) passed to \code{\link{pandoc.table}} and also affects \code{pander} methods. This option tells \code{pander} where to split too wide cells with line breaks. Numeric vector specifies values for cells separately. Set \code{Inf} to disable.
 #'      \item \code{table.caption.prefix}: string (default: \code{'Table: '}) passed to \code{\link{pandoc.table}} to be used as caption prefix. Be sure about what you are doing if changing to other than \code{'Table: '} or \code{':'}.

@@ -13,9 +13,10 @@ pandoc.table.return(t, caption, digits = panderOptions("digits"),
   keep.trailing.zeros = panderOptions("keep.trailing.zeros"),
   keep.line.breaks = panderOptions("keep.line.breaks"),
   plain.ascii = panderOptions("plain.ascii"),
-  use.hyphening = panderOptions("use.hyphening"), emphasize.rows,
-  emphasize.cols, emphasize.cells, emphasize.strong.rows, emphasize.strong.cols,
-  emphasize.strong.cells, ...)
+  use.hyphening = panderOptions("use.hyphening"),
+  emphasize.rownames = panderOptions("table.emphasize.rownames"),
+  emphasize.rows, emphasize.cols, emphasize.cells, emphasize.strong.rows,
+  emphasize.strong.cols, emphasize.strong.cells, ...)
 }
 \arguments{
 \item{t}{data frame, matrix or table}
@@ -30,8 +31,6 @@ pandoc.table.return(t, caption, digits = panderOptions("digits"),
 
 \item{round}{passed to \code{round}}
 
-\item{use.hyphening}{boolean (default: \code{FALSE}) if try to use hyphening when splitting large cells according to table.split.cells. Requires koRpus package.}
-
 \item{justify}{defines alignment in cells passed to \code{format}. Can be \code{left}, \code{right} or \code{centre}, which latter can be also spelled as \code{center}. Defaults to \code{centre}.}
 
 \item{style}{which Pandoc style to use: \code{simple}, \code{multiline}, \code{grid} or \code{rmarkdown}}
@@ -45,6 +44,10 @@ pandoc.table.return(t, caption, digits = panderOptions("digits"),
 \item{keep.line.breaks}{(default: \code{FALSE}) if to keep or remove line breaks from cells in a table}
 
 \item{plain.ascii}{(default: \code{FALSE}) if output should be in plain ascii (without markdown markup) or not}
+
+\item{use.hyphening}{boolean (default: \code{FALSE}) if try to use hyphening when splitting large cells according to table.split.cells. Requires koRpus package.}
+
+\item{emphasize.rownames}{boolean (default: \code{TRUE}) if row names should be highlighted}
 
 \item{emphasize.rows}{a vector for a two dimensional table specifying which rows to emphasize}
 

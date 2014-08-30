@@ -23,17 +23,20 @@ Or download the [sources in a zip file](https://github.com/Rapporter/pander/zipb
 
 ## Dependencies
 
-Few cool packages from CRAN are needed for using `pander`
+Few cool packages from CRAN are needed for installing and/or using `pander`
 
-* *Required*:
-  	* [digest](http://cran.r-project.org/web/packages/digest/index.html) to compute hashes while caching
-	* [Rcpp](http://cran.r-project.org/web/packages/Rcpp/index.html) to compile certain functions used by the package
-* *Suggested*:
-	* [koRpus](http://cran.r-project.org/web/packages/koRpus/index.html) to use hyphenation when splitting large table cells
+*Required*:
 
-### Pandoc 
+ * [digest](http://cran.r-project.org/web/packages/digest/index.html) to compute hashes while caching
+ * [Rcpp](http://cran.r-project.org/web/packages/Rcpp/index.html) to compile certain functions used by the package
 
-`pander` heavily builds on [Pandoc](http://johnmacfarlane.net/pandoc), which should be **pre-installed** before trying to convert your reports to [different formats](http://johnmacfarlane.net/pandoc/). Although **main functions work without Pandoc**, e.g. you can generate a markdown formatted report via [Pandoc.brew](#brew-to-pandoc) or the custom [reference class](#live-report-generation), but installing that great piece of software is suggested! 
+*Suggested*:
+
+ * [koRpus](http://cran.r-project.org/web/packages/koRpus/index.html) to use hyphenation when splitting large table cells
+
+### Pandoc
+
+`pander` heavily builds on [Pandoc](http://johnmacfarlane.net/pandoc), which should be **pre-installed** before trying to convert your reports to [different formats](http://johnmacfarlane.net/pandoc/). Although **main functions work without Pandoc**, e.g. you can generate a markdown formatted report via [Pandoc.brew](#brew-to-pandoc) or the custom [reference class](#live-report-generation), but installing that great piece of software is suggested!
 
 Starting v0.98.932 [RStudio](http://www.rstudio.com/) comes with a bundled `Pandoc` binary, so one can save the tedious steps of installing `Pandoc`. If you are not using `RStudio` or using an older version of `RStudio`, please refer [here](#installing-pandoc) for some notes on installing `Pandoc`.
 
@@ -89,7 +92,7 @@ Which produces the following output:
 ```
 
 Table rendering supports numerous different parameters e.g. [style](#style), [caption](#caption), [cell highlighting](#highlight-cells), [cell alignment](#cell-alignment), [width](#table-and-cell-width), etc.
- 
+
 ### Style
 
 `pandoc` can return **tables** in [four formats supported by Pandoc](http://johnmacfarlane.net/pandoc/README.html#tables)(*multiline*, *simple*, *grid*, *pipe/rmarkdown*). The pipe tables also used in `knitr` and [PHP Markdown Extra format](http://michelf.ca/projects/php-markdown/extra/#table):
@@ -235,17 +238,17 @@ pandoc.table.return(data.frame(id=1:2, value=c('FOO', 'Lorem ipsum dolor sit ame
 %>
 # single value for all columns
 > pandoc.table.return(data.frame(a="Pander package", b="Pander package", c="Pander package"), split.cells = c(5))
-<%= 
+<%=
 pandoc.table.return(data.frame(a="Pander package", b="Pander package", c="Pander package"), split.cells = c(5))
 %>
 # vector of values for each column
 > pandoc.table.return(data.frame(a="Pander package", b="Pander package", c="Pander package"), split.cells = c(5, 20, 5))
-<%= 
+<%=
 pandoc.table.return(data.frame(a="Pander package", b="Pander package", c="Pander package"), split.cells = c(5, 20, 5))
 %>
 # relative vector of values for each column
 > pandoc.table.return(data.frame(a="Pander package", b="Pander package", c="Pander package"), split.cells = c("20%", "60%", "20%"), split.tables = 40)
-<%= 
+<%=
 pandoc.table.return(data.frame(a="Pander package", b="Pander package", c="Pander package"), split.cells = c("20%", "60%", "20%"), split.tables = 40)
 %>
 ```
@@ -283,12 +286,12 @@ pandoc.table.return(mtcars[1:3, 1:3], plain.ascii = TRUE)
 
 Beside directly supplying different parameter to `pandoc.table`, one could also set those parameters even before printing the markdown format as default for future renderings using `panderOptions`. Full list of available options can be found with `?panderOptions` or [here](#pander-options).
 
-For example `split.cells`: 
+For example `split.cells`:
 ```rout
 > panderOptions('table.split.cells', 10) # sets split.cells param for pandoc.table for all future calls to 10
 > pandoc.table(mtcars[1:3, 1:4])
 <%=
-pandoc.table.return(mtcars[1:3, 1:4], split.cells = 10) 
+pandoc.table.return(mtcars[1:3, 1:4], split.cells = 10)
 %>
 ```
 
@@ -404,17 +407,17 @@ The list of currently supported R classes:
 
 ```rout
 > methods(pander)
- [1] pander.anova           pander.aov             pander.aovlist         pander.call            pander.cast_df        
- [6] pander.character       pander.clogit          pander.coxph           pander.CrossTable      pander.data.frame     
-[11] pander.Date            pander.default         pander.density         pander.describe        pander.evals          
-[16] pander.factor          pander.formula         pander.ftable          pander.function        pander.glm            
-[21] pander.htest           pander.image           pander.list            pander.lm              pander.lme            
-[26] pander.logical         pander.matrix          pander.microbenchmark  pander.mtable          pander.NULL           
-[31] pander.numeric         pander.option*         pander.POSIXct         pander.POSIXlt         pander.prcomp         
-[36] pander.rapport         pander.return          pander.rlm             pander.sessionInfo     pander.smooth.spline  
-[41] pander.stat.table      pander.summary.aov     pander.summary.aovlist pander.summary.glm     pander.summary.lm     
-[46] pander.summary.prcomp  pander.survdiff        pander.survfit         pander.table           pander.ts             
-[51] pander.zoo            
+ [1] pander.anova           pander.aov             pander.aovlist         pander.call            pander.cast_df
+ [6] pander.character       pander.clogit          pander.coxph           pander.CrossTable      pander.data.frame
+[11] pander.Date            pander.default         pander.density         pander.describe        pander.evals
+[16] pander.factor          pander.formula         pander.ftable          pander.function        pander.glm
+[21] pander.htest           pander.image           pander.list            pander.lm              pander.lme
+[26] pander.logical         pander.matrix          pander.microbenchmark  pander.mtable          pander.NULL
+[31] pander.numeric         pander.option*         pander.POSIXct         pander.POSIXlt         pander.prcomp
+[36] pander.rapport         pander.return          pander.rlm             pander.sessionInfo     pander.smooth.spline
+[41] pander.stat.table      pander.summary.aov     pander.summary.aovlist pander.summary.glm     pander.summary.lm
+[46] pander.summary.prcomp  pander.survdiff        pander.survfit         pander.table           pander.ts
+[51] pander.zoo
 ```
 If you think that `pander` lacks support for some other R classes, feel free to leave change request [here](https://github.com/Rapporter/pander/issues) and we will be happy to extend the package.
 
@@ -431,7 +434,7 @@ The package is also capable of creating complex Pandoc documents (reports) with 
 <!-- endlist -->
 
  * or users might create a report in a live R session by adding some R objects and paragraphs to a `Pandoc` reference class object. Details can be found [below](#live-report-generation).
- 
+
 # Brew to Pandoc
 
 Everyone knows and possibly uses [brew](http://cran.r-project.org/web/packages/brew/index.html) but if you would need some smack, the following links really worth visiting:
@@ -689,6 +692,7 @@ To use this small lib, just type: `M-x pander-mode` on any document. It might be
   * `header.style`: `'atx'` or `'setext'` passed to `pandoc.header`
   * `list.style`: `'bullet'` (default), `'ordered'` or `'roman'` passed to `pandoc.list`. Please not that this has no effect on `pander` methods.
   * `table.style`: `'multiline'`, `'grid'` or `'simple'` passed to `pandoc.table`
+  * `table.emphasize.rownames`: boolean (default: `TRUE`) if row names should be highlighted
   * `table.split.table`: numeric passed to `pandoc.table` and also affects `pander` methods. This option tells `pander` where to split too wide tables. The default value (`80`) suggests the conventional number of characters used in a line, feel free to change (e.g. to `Inf` to disable this feature) if you are not using a VT100 terminal any more :)
   * `table.split.cells`: numeric (default: 30) passed to `pandoc.table` and also affects pander methods. This option tells pander where to split too wide cells with line breaks. Set `Inf`` to disable.
   * `table.caption.prefix`: string (default: `Table: `) passed to `pandoc.table` to be used as caption prefix. Be sure about what you are doing if changing to other than `Table: ` or `:`.
@@ -753,7 +757,7 @@ The list of possible options are:
   * `graph.RDS` save the raw R object returned (usually with `lattice` or `ggplot2`) while generating the plots to distinct files (based on `graph.name`) with `RDS` extension?
 
 # Difference from other rendering packages
- 
+
 **How does `pander` differ from Sweave, brew, knitr, R2HTML etc.?**
 
   * first of all `pander` can be used as a helper with any other literate programming solution, so you might want to call `pander` inside of `knitr` chunks,

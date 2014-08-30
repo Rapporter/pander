@@ -444,7 +444,6 @@ pandoc.list <- function(...)
 #' @param decimal.mark passed to \code{format}
 #' @param big.mark passed to \code{format}
 #' @param round passed to \code{round}
-#' @param use.hyphening boolean (default: \code{FALSE}) if try to use hyphening when splitting large cells according to table.split.cells. Requires koRpus package.
 #' @param justify defines alignment in cells passed to \code{format}. Can be \code{left}, \code{right} or \code{centre}, which latter can be also spelled as \code{center}. Defaults to \code{centre}.
 #' @param style which Pandoc style to use: \code{simple}, \code{multiline}, \code{grid} or \code{rmarkdown}
 #' @param split.tables where to split wide tables to separate tables. The default value (\code{80}) suggests the conventional number of characters used in a line, feel free to change (e.g. to \code{Inf} to disable this feature) if you are not using a VT100 terminal any more :)
@@ -452,6 +451,8 @@ pandoc.list <- function(...)
 #' @param keep.trailing.zeros to show or remove trailing zeros in numbers on a column basis width
 #' @param keep.line.breaks (default: \code{FALSE}) if to keep or remove line breaks from cells in a table
 #' @param plain.ascii (default: \code{FALSE}) if output should be in plain ascii (without markdown markup) or not
+#' @param use.hyphening boolean (default: \code{FALSE}) if try to use hyphening when splitting large cells according to table.split.cells. Requires koRpus package.
+#' @param emphasize.rownames boolean (default: \code{TRUE}) if row names should be highlighted
 #' @param emphasize.rows a vector for a two dimensional table specifying which rows to emphasize
 #' @param emphasize.cols a vector for a two dimensional table specifying which cols to emphasize
 #' @param emphasize.cells a vector for one-dimensional tables or a matrix like structure with two columns for row and column indexes to be emphasized in two dimensional tables. See e.g. \code{which(..., arr.ind = TRUE)}
@@ -527,22 +528,22 @@ pandoc.list <- function(...)
 #'
 #' emphasize.strong.cells(which(t > 20, arr.ind = TRUE))
 #' pandoc.table(t)
-#' 
+#'
 #' ### plain.ascii
 #' pandoc.table(mtcars[1:3, 1:3], plain.ascii = TRUE)
-#' 
+#'
 #' ### keep.line.breaks
 #' x <- data.frame(a="Pandoc\nPackage")
 #' pandoc.table(x)
 #' pandoc.table(x, keep.line.breaks = TRUE)
-#' 
+#'
 #' ## split.cells
 #' x <- data.frame(a = "foo bar", b = "foo bar")
 #' pandoc.table(x, split.cells = 4)
 #' pandoc.table(x, split.cells = 7)
 #' pandoc.table(x, split.cells = c(4, 7))
 #' pandoc.table(x, split.cells = c("20%", "80%"), split.tables = 30)
-#' 
+#'
 #' y <- c("aa aa aa", "aaa aaa", "a a a a a", "aaaaa", "bbbb bbbb bbbb", "bb bbb bbbb")
 #' y <- matrix(y, ncol = 3, nrow = 2)
 #' rownames(y) <- c("rowname one", "rowname two")
@@ -551,25 +552,24 @@ pandoc.list <- function(...)
 #' pandoc.table(y, split.cells = 6)
 #' pandoc.table(y, split.cells = c(2, 6, 10))
 #' pandoc.table(y, split.cells = c(2, Inf, Inf))
-#' 
+#'
 #' ## first value used for rownames
 #' pander(y, split.cells = c(5, 2, Inf, Inf))
 #' pandoc.table(y, split.cells = c(5, 2, Inf, 5, 3, 10))
-#' 
+#'
 #' ## when not enough reverting to default values
 #' pandoc.table(y, split.cells = c(5, 2))
-#' 
+#'
 #' ## split.cells with hyphenation
-#' x <- data.frame(a="Can be also supplied as a vector, for each cell separately", b = "Can be also supplied as a vector, for each cell separately") 
+#' x <- data.frame(a="Can be also supplied as a vector, for each cell separately", b = "Can be also supplied as a vector, for each cell separately")
 #' pandoc.table(x, split.cells = 10, use.hyphening = TRUE)
-
-pandoc.table.return <- function(t, caption, digits = panderOptions('digits'), decimal.mark = panderOptions('decimal.mark'), big.mark = panderOptions('big.mark'), round = panderOptions('round'), justify, style = c('multiline', 'grid', 'simple', 'rmarkdown'), split.tables = panderOptions('table.split.table'), split.cells = panderOptions('table.split.cells'), keep.trailing.zeros = panderOptions('keep.trailing.zeros'), keep.line.breaks = panderOptions('keep.line.breaks'), plain.ascii = panderOptions('plain.ascii'), use.hyphening = panderOptions('use.hyphening'), emphasize.rows, emphasize.cols, emphasize.cells, emphasize.strong.rows, emphasize.strong.cols, emphasize.strong.cells, ...) {
+pandoc.table.return <- function(t, caption, digits = panderOptions('digits'), decimal.mark = panderOptions('decimal.mark'), big.mark = panderOptions('big.mark'), round = panderOptions('round'), justify, style = c('multiline', 'grid', 'simple', 'rmarkdown'), split.tables = panderOptions('table.split.table'), split.cells = panderOptions('table.split.cells'), keep.trailing.zeros = panderOptions('keep.trailing.zeros'), keep.line.breaks = panderOptions('keep.line.breaks'), plain.ascii = panderOptions('plain.ascii'), use.hyphening = panderOptions('use.hyphening'), emphasize.rownames = panderOptions('table.emphasize.rownames'), emphasize.rows, emphasize.cols, emphasize.cells, emphasize.strong.rows, emphasize.strong.cols, emphasize.strong.cells, ...) {
     ## helper functions
     # expands cells for output
     table.expand <- function(cells, cols.width, justify, sep.cols) {
       .Call('pander_tableExpand_cpp', PACKAGE = 'pander', cells, cols.width, justify, sep.cols, style)
     }
-    
+
     # cell conversion to plain-ascii (deletion of markup characters)
     to.plain.ascii <- function(x){
       x <- gsub("&nbsp;", "", x)  # table non-breaking space
@@ -588,10 +588,10 @@ pandoc.table.return <- function(t, caption, digits = panderOptions('digits'), de
         ## split
         if (nchar(x) == nchar(encodeString(x)) && !use.hyphening) {
           x <- paste(strwrap(x, width = max.width + 1), collapse = '\n')
-        } else {                
+        } else {
           ## dealing with CJK chars + also it does not count \n, \t, etc.
-          ## this happens because width - counts only the number of columns 
-          ## cat will use to print the string in a monospaced font. 
+          ## this happens because width - counts only the number of columns
+          ## cat will use to print the string in a monospaced font.
           if (!keep.line.breaks){
             x <- gsub("\n", " ", x)
             x <- splitLine(x, max.width, use.hyphening)
@@ -599,7 +599,7 @@ pandoc.table.return <- function(t, caption, digits = panderOptions('digits'), de
             lines <- strsplit(x, '\\n')[[1]]
             x <- ""
             for (line in lines){
-              sl <- splitLine(line, max.width, use.hyphening)    
+              sl <- splitLine(line, max.width, use.hyphening)
               x <- paste0(x, sl, sep="\n")
             }
 	        }
@@ -607,17 +607,17 @@ pandoc.table.return <- function(t, caption, digits = panderOptions('digits'), de
       }else{
         x <- gsub("^\\s+|\\s+$", "", x)
       }
-      x      
+      x
     }
-    
+
     split.large.cells <- function(cells, for.rownames = FALSE){ ## use first is for rownames
         if (length(split.cells) == 0){
           warning("split.cells is a vector of length 0, reverting to default value")
           split.cells <- panderOptions('table.split.cells')
         }
-        
+
         # if we have a single value, extend it to a vector to do less checks laters
-        if (length(split.cells) == 1) 
+        if (length(split.cells) == 1)
           split.cells <- rep(split.cells, length(cells))
         if (for.rownames) # in case it is used for rownames, we only need the first value
           split.cells <- rep(split.cells[1], length(cells))
@@ -635,7 +635,7 @@ pandoc.table.return <- function(t, caption, digits = panderOptions('digits'), de
             }
             for (i in 1:length(cells)){
               res <- c(res, split.single.cell(cells[i], max.width = split.cells[i]))
-            } 
+            }
           }
         } else { #matrixes and tables
           if ((length(split.cells) >= dim(cells)[2] + 1))
@@ -647,13 +647,13 @@ pandoc.table.return <- function(t, caption, digits = panderOptions('digits'), de
           for (j in 1:dim(cells)[2]){
             res <- cbind(res,
                          sapply(cells[,j], split.single.cell, max.width = split.cells[j], USE.NAMES = FALSE))
-          }          
+          }
           rownames(res) <- rownames(cells)
           colnames(res) <- colnames(cells)
-        }    
+        }
         res
     }
-    
+
     align.hdr <- function(t.width, justify) {
         justify.vec <- rep(justify, length.out = length(t.width))
         dashes <- mapply(function(justify, width)
@@ -726,7 +726,7 @@ pandoc.table.return <- function(t, caption, digits = panderOptions('digits'), de
         split.cells <- panderOptions("table.split.cells")
       }
     }
-      
+
     ## converting 3D+ tables to 2D
     if (length(dim(t)) > 2)
         t <- ftable(t)
@@ -836,9 +836,9 @@ pandoc.table.return <- function(t, caption, digits = panderOptions('digits'), de
         }
     }
 
-    
+
     ## helper variables & split too long (30+ chars) cells
-    
+
     ## checking for empty data frames
     if (length(dim(t)) > 1 && dim(t)[1] == 0)
       t[1, ] <- NA
@@ -865,8 +865,8 @@ pandoc.table.return <- function(t, caption, digits = panderOptions('digits'), de
         if (all(rownames(t) == 1:nrow(t)) | all(rownames(t) == ''))
             t.rownames <- NULL
 
-        if (!is.null(t.rownames))
-            t.rownames <- pandoc.strong.return(t.rownames)  
+        if (!is.null(t.rownames) && emphasize.rownames)
+            t.rownames <- pandoc.strong.return(t.rownames)
     }
 
     if (length(t.rownames) != 0) {
@@ -874,7 +874,7 @@ pandoc.table.return <- function(t, caption, digits = panderOptions('digits'), de
         if ((length(split.cells) <= dim(t)[2]) && (length(split.cells) > 1))
           split.cells <- c(30, split.cells)
         t.rownames <- split.large.cells(t.rownames, TRUE)
-        
+
         if (!is.null(t.colnames))
             t.colnames <- c('&nbsp;', t.colnames)
         t.width <- c(max(sapply(strsplit(t.rownames, '\n'), function(x) max(nchar(x, type = 'width'), 0))), t.width)
@@ -921,7 +921,7 @@ pandoc.table.return <- function(t, caption, digits = panderOptions('digits'), de
 
         ## recursive call
         res <- paste(
-          pandoc.table.return(res[[1]], caption = caption, digits = digits, decimal.mark = decimal.mark, round = round, justify = justify[[1]], style = style), 
+          pandoc.table.return(res[[1]], caption = caption, digits = digits, decimal.mark = decimal.mark, round = round, justify = justify[[1]], style = style),
           pandoc.table.return(res[[2]], caption = NULL, digits = digits, decimal.mark = decimal.mark, round = round, justify = justify[[2]], style = style))
 
         return(res)
@@ -963,7 +963,7 @@ pandoc.table.return <- function(t, caption, digits = panderOptions('digits'), de
                    sep.hdr <- align.hdr(t.width, justify)
                    sep.col <- c('| ', ' | ', ' |')
                })
-        
+
         if (plain.ascii){
           if (length(dim(t)) < 2){
             if (length(dim(t)) == 0){
@@ -979,7 +979,7 @@ pandoc.table.return <- function(t, caption, digits = panderOptions('digits'), de
           t.rownames <- sapply(t.rownames, to.plain.ascii)
           t.colnames <- sapply(t.colnames, to.plain.ascii)
         }
-        
+
         ## Actual printing starts here
         ## header
         if (length(t.colnames) != 0) {
@@ -1079,7 +1079,7 @@ pandoc.formula <- function(...)
 pandoc.date.return <- function(x, inline = TRUE, simplified = FALSE){
   if (length(x) == 1 || simplified){
     format(x, format = panderOptions('date'))
-  } else {  
+  } else {
     if (inline)
       p(as.character(format(x, format = panderOptions('date'))))
     else
