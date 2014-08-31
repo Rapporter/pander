@@ -1,5 +1,6 @@
 \.git.*
 .travis.yml
+.editorconfig
 Makefile
 TODO.md
 ^.*\.Rproj$
