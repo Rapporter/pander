@@ -1,0 +1,15 @@
+## IDE-independent coding style via EditorConfig: http://editorconfig.org/
+## Please be sure to apply these when submitting a pull request.
+
+root = true
+
+[*]
+indent_style = space
+indent_size = 4
+end_of_line = lf
+charset = utf-8
+trim_trailing_whitespace = true
+insert_final_newline = true
+
+[*.cpp]
+indent_size = 2

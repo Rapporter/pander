@@ -782,7 +782,7 @@ evals <- function(txt, parse = TRUE, cache = TRUE, cache.mode = c('environment',
                                   "call" = getCallParts(x),
                                   digest(x.deparse, 'sha1')
                                   )
-                          }))
+                       }))
             }
 
             ## get the hash of the call based on the hash of all `names`
@@ -1145,7 +1145,7 @@ redraw.recordedplot <- function(file) {
 #' @export
 redrawPlot <- function(recPlot)
 {
-    #this allows us to deal with trellis/grid/ggplot objects as well ...
+    ## this allows us to deal with trellis/grid/ggplot objects as well ...
     if(!is(recPlot, "recordedplot")) {
         res = try(print(recPlot))
         if(is(res, "error"))

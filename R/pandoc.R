@@ -279,9 +279,9 @@ pandoc.header.return <- function(x, level = 1, style = c('atx', 'setext')) {
         stop('Too low level provided!')
 
     res <- switch(style,
-           'atx'    = paste(repChar('#', level), x),
-           'setext' = paste(x, repChar(ifelse(level == 1, '=', '-'), nchar(x, type = 'width')), sep = '\n')
-           )
+                  'atx'    = paste(repChar('#', level), x),
+                  'setext' = paste(x, repChar(ifelse(level == 1, '=', '-'), nchar(x, type = 'width')), sep = '\n')
+                  )
 
     add.blank.lines(res)
 
@@ -564,92 +564,92 @@ pandoc.list <- function(...)
 #' x <- data.frame(a="Can be also supplied as a vector, for each cell separately", b = "Can be also supplied as a vector, for each cell separately")
 #' pandoc.table(x, split.cells = 10, use.hyphening = TRUE)
 pandoc.table.return <- function(t, caption, digits = panderOptions('digits'), decimal.mark = panderOptions('decimal.mark'), big.mark = panderOptions('big.mark'), round = panderOptions('round'), justify, style = c('multiline', 'grid', 'simple', 'rmarkdown'), split.tables = panderOptions('table.split.table'), split.cells = panderOptions('table.split.cells'), keep.trailing.zeros = panderOptions('keep.trailing.zeros'), keep.line.breaks = panderOptions('keep.line.breaks'), plain.ascii = panderOptions('plain.ascii'), use.hyphening = panderOptions('use.hyphening'), emphasize.rownames = panderOptions('table.emphasize.rownames'), emphasize.rows, emphasize.cols, emphasize.cells, emphasize.strong.rows, emphasize.strong.cols, emphasize.strong.cells, ...) {
-    ## helper functions
-    # expands cells for output
+
+    ## expands cells for output
     table.expand <- function(cells, cols.width, justify, sep.cols) {
-      .Call('pander_tableExpand_cpp', PACKAGE = 'pander', cells, cols.width, justify, sep.cols, style)
+        .Call('pander_tableExpand_cpp', PACKAGE = 'pander', cells, cols.width, justify, sep.cols, style)
     }
 
-    # cell conversion to plain-ascii (deletion of markup characters)
+    ## cell conversion to plain-ascii (deletion of markup characters)
     to.plain.ascii <- function(x){
-      x <- gsub("&nbsp;", "", x)  # table non-breaking space
-      x <- gsub("^[*]{1,2}|[*]{1,2}$", "", x) # emphasis and strong
-      x <- gsub("[\\\\]", "", x) # backslashes
-      x <- gsub("^[`]|[`]$", "", x) # verbatium
-      x <- gsub("^[~]{2}|[~]{2}$", "", x) # strikeout
-      gsub("^[_]|[_]$", "", x) # italic
+        x <- gsub("&nbsp;", "", x)  # table non-breaking space
+        x <- gsub("^[*]{1,2}|[*]{1,2}$", "", x) # emphasis and strong
+        x <- gsub("[\\\\]", "", x) # backslashes
+        x <- gsub("^[`]|[`]$", "", x) # verbatium
+        x <- gsub("^[~]{2}|[~]{2}$", "", x) # strikeout
+        gsub("^[_]|[_]$", "", x) # italic
     }
 
-    # split single cell with line breaks based on max.width
+    ## split single cell with line breaks based on max.width
     split.single.cell <- function(x, max.width){
-      if (!is.character(x))
-        x <- as.character(x)
-      if (!style %in% c('simple', 'rmarkdown')) {
-        ## split
-        if (nchar(x) == nchar(encodeString(x)) && !use.hyphening) {
-          x <- paste(strwrap(x, width = max.width + 1), collapse = '\n')
-        } else {
-          ## dealing with CJK chars + also it does not count \n, \t, etc.
-          ## this happens because width - counts only the number of columns
-          ## cat will use to print the string in a monospaced font.
-          if (!keep.line.breaks){
-            x <- gsub("\n", " ", x)
-            x <- splitLine(x, max.width, use.hyphening)
-          } else {
-            lines <- strsplit(x, '\\n')[[1]]
-            x <- ""
-            for (line in lines){
-              sl <- splitLine(line, max.width, use.hyphening)
-              x <- paste0(x, sl, sep="\n")
+        if (!is.character(x))
+            x <- as.character(x)
+        if (!style %in% c('simple', 'rmarkdown')) {
+            ## split
+            if (nchar(x) == nchar(encodeString(x)) && !use.hyphening) {
+                x <- paste(strwrap(x, width = max.width + 1), collapse = '\n')
+            } else {
+                ## dealing with CJK chars + also it does not count \n, \t, etc.
+                ## this happens because width - counts only the number of columns
+                ## cat will use to print the string in a monospaced font.
+                if (!keep.line.breaks){
+                    x <- gsub("\n", " ", x)
+                    x <- splitLine(x, max.width, use.hyphening)
+                } else {
+                    lines <- strsplit(x, '\\n')[[1]]
+                    x <- ""
+                    for (line in lines){
+                        sl <- splitLine(line, max.width, use.hyphening)
+                        x <- paste0(x, sl, sep="\n")
+                    }
+                }
             }
-	        }
+        }else{
+            x <- gsub("^\\s+|\\s+$", "", x)
         }
-      }else{
-        x <- gsub("^\\s+|\\s+$", "", x)
-      }
-      x
+        x
     }
 
     split.large.cells <- function(cells, for.rownames = FALSE){ ## use first is for rownames
         if (length(split.cells) == 0){
-          warning("split.cells is a vector of length 0, reverting to default value")
-          split.cells <- panderOptions('table.split.cells')
+            warning("split.cells is a vector of length 0, reverting to default value")
+            split.cells <- panderOptions('table.split.cells')
         }
 
-        # if we have a single value, extend it to a vector to do less checks laters
+        ## if we have a single value, extend it to a vector to do less checks laters
         if (length(split.cells) == 1)
-          split.cells <- rep(split.cells, length(cells))
+            split.cells <- rep(split.cells, length(cells))
         if (for.rownames) # in case it is used for rownames, we only need the first value
-          split.cells <- rep(split.cells[1], length(cells))
+            split.cells <- rep(split.cells[1], length(cells))
 
         res <- NULL
         if (length(dim(cells)) < 2){ # single value and vectors/lists
-          if (length(cells) == 0){
-            res <- split.single.cell(cells, split.cells[1])
-          } else {
-            if (!for.rownames && (length(split.cells) >= length(cells) + 1))
-              split.cells <- split.cells[-1] ## discard first value which was for rownames
-            if (length(cells) > length(split.cells)){
-              warning("length of split.cells vector is smaller than data. Default value will be used for other cells")
-              split.cells <- c(split.cells, rep(panderOptions('table.split.cells'), length(cells) - length(split.cells)))
+            if (length(cells) == 0){
+                res <- split.single.cell(cells, split.cells[1])
+            } else {
+                if (!for.rownames && (length(split.cells) >= length(cells) + 1))
+                    split.cells <- split.cells[-1] # discard first value which was for rownames
+                if (length(cells) > length(split.cells)){
+                    warning("length of split.cells vector is smaller than data. Default value will be used for other cells")
+                    split.cells <- c(split.cells, rep(panderOptions('table.split.cells'), length(cells) - length(split.cells)))
+                }
+                for (i in 1:length(cells)){
+                    res <- c(res, split.single.cell(cells[i], max.width = split.cells[i]))
+                }
             }
-            for (i in 1:length(cells)){
-              res <- c(res, split.single.cell(cells[i], max.width = split.cells[i]))
-            }
-          }
         } else { #matrixes and tables
-          if ((length(split.cells) >= dim(cells)[2] + 1))
-            split.cells <- split.cells[-1] ## discard first value which was for rownames
-          if (dim(cells)[2] > length(split.cells)){
-            warning("length of split.cells vector is smaller than data. Default value will be used for other cells")
-            split.cells <- c(split.cells, rep(panderOptions('table.split.cells'), dim(cells)[2] - length(split.cells)))
-          }
-          for (j in 1:dim(cells)[2]){
-            res <- cbind(res,
-                         sapply(cells[,j], split.single.cell, max.width = split.cells[j], USE.NAMES = FALSE))
-          }
-          rownames(res) <- rownames(cells)
-          colnames(res) <- colnames(cells)
+            if ((length(split.cells) >= dim(cells)[2] + 1))
+                split.cells <- split.cells[-1] # discard first value which was for rownames
+            if (dim(cells)[2] > length(split.cells)){
+                warning("length of split.cells vector is smaller than data. Default value will be used for other cells")
+                split.cells <- c(split.cells, rep(panderOptions('table.split.cells'), dim(cells)[2] - length(split.cells)))
+            }
+            for (j in 1:dim(cells)[2]){
+                res <- cbind(res,
+                             sapply(cells[,j], split.single.cell, max.width = split.cells[j], USE.NAMES = FALSE))
+            }
+            rownames(res) <- rownames(cells)
+            colnames(res) <- colnames(cells)
         }
         res
     }
@@ -696,35 +696,35 @@ pandoc.table.return <- function(t, caption, digits = panderOptions('digits'), de
 
     ## check for relative split.cells
     if (all(grepl("%$", split.cells))){
-      d <- 0
-      if (length(dim(t)) < 2){
-        if (length(dim(t)) == 0){
-           d <- length(t)
+        d <- 0
+        if (length(dim(t)) < 2){
+            if (length(dim(t)) == 0){
+                d <- length(t)
+            }else{
+                d <- dim(t)[1]
+            }
         }else{
-          d <- dim(t)[1]
+            d <- dim(t)[2]
         }
-      }else{
-          d <- dim(t)[2]
-      }
-      split.cells <- as.numeric(gsub("%$","",split.cells))
-      if (sum(split.cells) == 100){
-        if (is.infinite(split.tables)){
-          warning("Split.tables is an infinite value, so split cells can't be suplied as relative value. Reverting to default")
-          split.cells <- panderOptions("table.split.cells")
-        } else{
-          d <- ifelse(length(rownames(t)) != 0, d, d + 1)
-          if (length(split.cells) < d){
-            cat("d - ", d, "\n")
-            warning("Using relative split.cells require a value for every column and rownames. Reverting to default")
+        split.cells <- as.numeric(gsub("%$","",split.cells))
+        if (sum(split.cells) == 100){
+            if (is.infinite(split.tables)){
+                warning("Split.tables is an infinite value, so split cells can't be suplied as relative value. Reverting to default")
+                split.cells <- panderOptions("table.split.cells")
+            } else{
+                d <- ifelse(length(rownames(t)) != 0, d, d + 1)
+                if (length(split.cells) < d){
+                    cat("d - ", d, "\n")
+                    warning("Using relative split.cells require a value for every column and rownames. Reverting to default")
+                    split.cells <- panderOptions("table.split.cells")
+                } else {
+                    split.cells <- round(split.cells * 0.01 * split.tables)
+                }
+            }
+        } else {
+            warning("Supplied relative values don't add up to 100%. Reverting to default")
             split.cells <- panderOptions("table.split.cells")
-          } else {
-            split.cells <- round(split.cells * 0.01 * split.tables)
-          }
         }
-      } else {
-        warning("Supplied relative values don't add up to 100%. Reverting to default")
-        split.cells <- panderOptions("table.split.cells")
-      }
     }
 
     ## converting 3D+ tables to 2D
@@ -841,16 +841,16 @@ pandoc.table.return <- function(t, caption, digits = panderOptions('digits'), de
 
     ## checking for empty data frames
     if (length(dim(t)) > 1 && dim(t)[1] == 0)
-      t[1, ] <- NA
+        t[1, ] <- NA
     t <- split.large.cells(t)
     t.rownames  <- rownames(t)
     t.colnames  <- colnames(t)
     if (!is.null(t.colnames)) {
-      t.colnames <- replace(t.colnames, which(t.colnames == ''), '&nbsp;')
-      t.colnames <- split.large.cells(t.colnames)
-      t.colnames.width <- sapply(t.colnames, function(x) max(nchar(strsplit(x, '\n')[[1]], type = 'width'), 0), USE.NAMES = FALSE) + 2
+        t.colnames <- replace(t.colnames, which(t.colnames == ''), '&nbsp;')
+        t.colnames <- split.large.cells(t.colnames)
+        t.colnames.width <- sapply(t.colnames, function(x) max(nchar(strsplit(x, '\n')[[1]], type = 'width'), 0), USE.NAMES = FALSE) + 2
     } else {
-      t.colnames.width <- 0
+        t.colnames.width <- 0
     }
     if (length(dim(t)) < 2) {
         if (length(dim(t)) == 0)
@@ -872,7 +872,7 @@ pandoc.table.return <- function(t, caption, digits = panderOptions('digits'), de
     if (length(t.rownames) != 0) {
 
         if ((length(split.cells) <= dim(t)[2]) && (length(split.cells) > 1))
-          split.cells <- c(30, split.cells)
+            split.cells <- c(30, split.cells)
         t.rownames <- split.large.cells(t.rownames, TRUE)
 
         if (!is.null(t.colnames))
@@ -921,8 +921,8 @@ pandoc.table.return <- function(t, caption, digits = panderOptions('digits'), de
 
         ## recursive call
         res <- paste(
-          pandoc.table.return(res[[1]], caption = caption, digits = digits, decimal.mark = decimal.mark, round = round, justify = justify[[1]], style = style),
-          pandoc.table.return(res[[2]], caption = NULL, digits = digits, decimal.mark = decimal.mark, round = round, justify = justify[[2]], style = style))
+            pandoc.table.return(res[[1]], caption = caption, digits = digits, decimal.mark = decimal.mark, round = round, justify = justify[[1]], style = style),
+            pandoc.table.return(res[[2]], caption = NULL, digits = digits, decimal.mark = decimal.mark, round = round, justify = justify[[2]], style = style))
 
         return(res)
 
@@ -965,19 +965,19 @@ pandoc.table.return <- function(t, caption, digits = panderOptions('digits'), de
                })
 
         if (plain.ascii){
-          if (length(dim(t)) < 2){
-            if (length(dim(t)) == 0){
-              t[1:length(t)] <- to.plain.ascii(t)
+            if (length(dim(t)) < 2){
+                if (length(dim(t)) == 0){
+                    t[1:length(t)] <- to.plain.ascii(t)
+                }else{
+                    t[1:dim(t)] <- to.plain.ascii(t)
+                }
             }else{
-              t[1:dim(t)] <- to.plain.ascii(t)
+                if (dim(t)[1] == 0)
+                    t[1, ] <- NA
+                t <- apply(t, c(1,2), to.plain.ascii)
             }
-          }else{
-            if (dim(t)[1] == 0)
-              t[1, ] <- NA
-            t <- apply(t, c(1,2), to.plain.ascii)
-          }
-          t.rownames <- sapply(t.rownames, to.plain.ascii)
-          t.colnames <- sapply(t.colnames, to.plain.ascii)
+            t.rownames <- sapply(t.rownames, to.plain.ascii)
+            t.colnames <- sapply(t.colnames, to.plain.ascii)
         }
 
         ## Actual printing starts here
@@ -989,7 +989,7 @@ pandoc.table.return <- function(t, caption, digits = panderOptions('digits'), de
                 blank.hdr <- paste0('| ', paste(sapply(t.width, function(x) repChar(' ', x)), collapse = ' | '), ' |')
                 res <- paste(res, blank.hdr, sep.hdr, sep='\n')
             } else {
-                    res <- paste(res, sep.top, sep = '\n')
+                res <- paste(res, sep.top, sep = '\n')
             }
         }
 
@@ -1039,28 +1039,28 @@ pandoc.table <- function(...)
 #' pandoc.formula(y ~ x)
 #' pandoc.formula(formula(paste("y ~ ", paste0("x", 1:12, collapse = " + "))))
 pandoc.formula.return <- function(x, text = NULL, max.width = 80, caption, add.line.breaks = FALSE){
-  mc  <- match.call()
-  if (is.null(mc$caption)) {
-    if (is.null(attr(t, 'caption'))) {
-      caption <- get.caption()
-    } else {
-      caption <- attr(t, 'caption')
+    mc  <- match.call()
+    if (is.null(mc$caption)) {
+        if (is.null(attr(t, 'caption'))) {
+            caption <- get.caption()
+        } else {
+            caption <- attr(t, 'caption')
+        }
     }
-  }
-  res <- paste(sub('^[ ]*', '', deparse(x, width.cutoff = max.width)), collapse = '')
-  if (!is.null(text))
-    res <- paste(text, res, sep=" ")
-  if (add.line.breaks)
-    res <- paste(res, "\n\n")
-  ## (optional) caption
-  if (!is.null(caption) && caption != '')
-    res <- paste0(res, panderOptions('formula.caption.prefix'), caption, '\n\n')
-  return(res)
+    res <- paste(sub('^[ ]*', '', deparse(x, width.cutoff = max.width)), collapse = '')
+    if (!is.null(text))
+        res <- paste(text, res, sep=" ")
+    if (add.line.breaks)
+        res <- paste(res, "\n\n")
+    ## (optional) caption
+    if (!is.null(caption) && caption != '')
+        res <- paste0(res, panderOptions('formula.caption.prefix'), caption, '\n\n')
+    return(res)
 }
 
 #' @export
 pandoc.formula <- function(...)
-  cat(pandoc.formula.return(...))
+    cat(pandoc.formula.return(...))
 
 
 #' Dates
@@ -1077,17 +1077,17 @@ pandoc.formula <- function(...)
 #' pandoc.date(Sys.Date() - 1:10)
 #' pandoc.date(Sys.Date() - 1:10, inline = FALSE)
 pandoc.date.return <- function(x, inline = TRUE, simplified = FALSE){
-  if (length(x) == 1 || simplified){
-    format(x, format = panderOptions('date'))
-  } else {
-    if (inline)
-      p(as.character(format(x, format = panderOptions('date'))))
-    else
-      pandoc.list.return(as.list((format(x, format = panderOptions('date')))), add.end.of.list = FALSE)
-  }
+    if (length(x) == 1 || simplified){
+        format(x, format = panderOptions('date'))
+    } else {
+        if (inline)
+            p(as.character(format(x, format = panderOptions('date'))))
+        else
+            pandoc.list.return(as.list((format(x, format = panderOptions('date')))), add.end.of.list = FALSE)
+    }
 }
 
 #' @export
 pandoc.date <- function(...){
-  cat(pandoc.date.return(...))
+    cat(pandoc.date.return(...))
 }

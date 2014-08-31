@@ -9,9 +9,7 @@
 add.minor.ticks <- function (nx = 4, ny = 4, grid = TRUE) {
 
     ax <- function(w, n, grid) {
-        range <- par("usr")[if (w == "x")
-            1:2
-        else 3:4]
+        range <- par("usr")[ifelse(w == "x", 1:2, 3:4)]
         tick.pos <- if (w == "x")
             par("xaxp")
         else par("yaxp")

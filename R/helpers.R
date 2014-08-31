@@ -129,7 +129,7 @@ has.rownames <- function(x) {
 set.caption <- function(x, permanent = FALSE){
     assign('caption', x , envir = storage)
     if (!is.null(x))
-      attr(storage$caption, 'permanent') <- permanent
+        attr(storage$caption, 'permanent') <- permanent
 }
 
 
@@ -266,7 +266,7 @@ get.emphasize <- function(df) {
 get.storage <- function(what) {
     res <- tryCatch(get(what, envir = storage, inherits = FALSE), error = function(e) NULL)
     if (is.null(attr(res, 'permanent')) || !attr(res, 'permanent'))
-      assign(what, NULL , envir = storage)
+        assign(what, NULL , envir = storage)
     return(res)
 }
 
@@ -321,15 +321,15 @@ cache.on <- function()
 #' splitLine("foo bar", 7)
 #' splitLine("Pandoc Package", 3, TRUE)
 splitLine <- function(x, max.width = panderOptions('table.split.cells'), use.hyphening = FALSE){
-  if (!is.character(x) || !is.null(dim(x)) || length(x) != 1 || x == "")
-    return(x)
-  if (suppressWarnings(!is.na(as.numeric(x))))
-    return(x)
-  if (is.infinite(max.width))
-    max.width <- .Machine$integer.max
-  if (use.hyphening && !require(koRpus))
-    use.hyphening <- FALSE
-  hyphen_f <- function(s)
-    hyphen(s, hyph.pattern="en.us", quiet = TRUE)@hyphen[1,2]
-  .Call('pander_splitLine_cpp', PACKAGE = 'pander', x, max.width, use.hyphening, hyphen_f)
+    if (!is.character(x) || !is.null(dim(x)) || length(x) != 1 || x == "")
+        return(x)
+    if (suppressWarnings(!is.na(as.numeric(x))))
+        return(x)
+    if (is.infinite(max.width))
+        max.width <- .Machine$integer.max
+    if (use.hyphening && !require(koRpus))
+        use.hyphening <- FALSE
+    hyphen_f <- function(s)
+        hyphen(s, hyph.pattern="en.us", quiet = TRUE)@hyphen[1,2]
+    .Call('pander_splitLine_cpp', PACKAGE = 'pander', x, max.width, use.hyphening, hyphen_f)
 }
