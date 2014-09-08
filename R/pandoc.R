@@ -883,9 +883,8 @@ pandoc.table.return <- function(t, caption, digits = panderOptions('digits'), de
     }
 
     if (length(justify) != 1) {
-        if (length(t.rownames) != 0)
-            if (length(justify) != length(t.width))
-                stop(sprintf('Wrong number of parameters (%s instead of *%s*) passed: justify', length(justify), length(t.width)))
+        if (length(justify) != length(t.width))
+            stop(sprintf('Wrong number of parameters (%s instead of *%s*) passed: justify', length(justify), length(t.width)))
     } else {
         justify <- rep(justify, length(t.width))
     }
