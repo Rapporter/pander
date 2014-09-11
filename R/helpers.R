@@ -321,6 +321,8 @@ cache.on <- function()
 #' splitLine("foo bar", 7)
 #' splitLine("Pandoc Package", 3, TRUE)
 splitLine <- function(x, max.width = panderOptions('table.split.cells'), use.hyphening = FALSE){
+    if (any(is.na(x)))
+        return(x)
     if (!is.character(x) || !is.null(dim(x)) || length(x) != 1 || x == "")
         return(x)
     if (suppressWarnings(!is.na(as.numeric(x))))
