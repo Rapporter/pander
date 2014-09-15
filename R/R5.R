@@ -95,7 +95,12 @@ Pandoc$methods(show = function(x) {
 
         cat(pandoc.horizontal.rule())
 
-        lapply(.self$body, function(x) pander(x$result))
+        lapply(.self$body, function(x) {
+            for (m in c('messages', 'warnings', 'errors'))
+                if (!is.null(x$msg[[m]]))
+                    cat('\n**', toupper(sub('s$', '', m)), ':** ', x$msg[[m]], sep = '')
+            pander(x$result)
+        })
 
         ## show proc.time
         cat(pandoc.horizontal.rule())
