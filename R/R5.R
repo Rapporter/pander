@@ -72,7 +72,7 @@ Pandoc$methods(initialize = function(author = 'Anonymous', title = base::sprintf
 Pandoc$methods(add = function(x) {
 
     timer           <- proc.time()
-    res             <- evals(deparse(match.call()[[2]]))
+    res             <- evals(deparse(match.call()[[2]]), env = parent.frame())
     .self$body      <- c(.self$body, res)
     .self$proc.time <- .self$proc.time + as.numeric(proc.time() - timer)[3]
 
