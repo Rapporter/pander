@@ -72,7 +72,7 @@ Pandoc$methods(initialize = function(author = 'Anonymous', title = base::sprintf
 Pandoc$methods(add = function(x) {
 
     timer           <- proc.time()
-    res             <- evals(deparse(match.call()[[2]]), env = parent.frame())
+    res             <- evals(deparse(match.call()[[2]]), env = parent.frame(), graph.name = evalsOptions('graph.name'), graph.dir = evalsOptions('graph.dir'), graph.output = evalsOptions('graph.output'), width = evalsOptions('width'), height = evalsOptions('height'))
     .self$body      <- c(.self$body, res)
     .self$proc.time <- .self$proc.time + as.numeric(proc.time() - timer)[3]
 
