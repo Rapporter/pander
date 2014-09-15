@@ -51,9 +51,19 @@ pandoc.add.formatting <- function(x, f) {
     if (!is.vector(x))
         stop('Sorry, vectors only!')
 
+    ## escape chars
     f.e  <- gsub('*', '\\*', f, fixed = TRUE)
+
+    ## remove trailing or leading spaces
     x    <- trim.spaces(x)
+
+    ## do not stack formatting chars
     w    <- which(!grepl(sprintf('^%s.*%s$', f.e, f.e), x) & x != '')
+
+    ## add an extra space if the string starts with a formatting char
+    x[w] <- sapply(x[w], function(x) ifelse(grepl(paste0('^', f.e), x), paste0('\\ ', x), x), USE.NAMES = FALSE)
+
+    ## add formatting chars
     x[w] <- paste0(f, x[w], f)
 
     return(x)
