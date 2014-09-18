@@ -727,7 +727,8 @@ To use this small lib, just type: `M-x pander-mode` on any document. It might be
       *  `3`: perpendicular to the axis or
       *  `4`: vertical.
 
-  *  `graph.symbol`: numeric (default: `1`) specifying a symbol (see the `pch` parameter of `par`)
+  * `graph.symbol`: numeric (default: `1`) specifying a symbol (see the `pch` parameter of `par`)
+  * `knitr.auto.asis`: boolean (default: `TRUE`) if the results of `pander` should be considered as `asis` in `knitr`. Equals to specifying `results='asis'` in the R chunk, so thus there is no need to do so if set tot `TRUE`.
 
 Besides localization of numeric formats, table/list's and plots' styles there are some technical options too which would effect e.g. [caching](#caching) or the format of rendered image files. You can query/update those with `evalsOptions()` as the main backend of `pander` calls is a custom evaluation function called [`evals`](#evals).
 

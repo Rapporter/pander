@@ -42,7 +42,8 @@
                 'graph.colors'             = c("#56B4E9", "#009E73", "#F0E442", "#0072B2", "#D55E00", "#CC79A7", "#999999", "#E69F00"),
                 'graph.color.rnd'          = FALSE,
                 'graph.axis.angle'         = 1,
-                'graph.symbol'             = 1
+                'graph.symbol'             = 1,
+                'knitr.auto.asis'          = TRUE
                 ))
 
     ## evals options
@@ -241,6 +242,7 @@ masked.plots$plot <- masked.plots$barplot <- masked.plots$lines <- masked.plots$
 #'              \item \code{4}: vertical.
 #'      }
 #'      \item \code{graph.symbol}: numeric (default: \code{1}) specifying a symbol (see the \code{pch} parameter of \code{par})
+#'      \item \code{knitr.auto.asis}: boolean (default: \code{TRUE}) if the results of \code{pander} should be considered as \code{'asis'} in \code{knitr}. Equals to specifying \code{results='asis'} in the R chunk, so thus there is no need to do so if set tot \code{TRUE}.
 #' }
 #' @param o option name (string). See below.
 #' @param value value to assign (optional)

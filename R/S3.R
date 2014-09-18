@@ -66,8 +66,28 @@
 #' x <- chisq.test(table(mtcars$am, mtcars$gear))
 #' class(x) <- 'I heave never heard of!'
 #' pander(x)
-pander <- function(x = NULL, ...)
+pander <- function(x = NULL, ...) {
+
+    if (isTRUE(panderOptions('knitr.auto.asis')) && isTRUE(getOption('knitr.in.progress'))) {
+
+        ## grab stdout
+        stdout <- vector("character")
+        con    <- textConnection("stdout", "wr", local=TRUE)
+        sink(con)
+        sink(con, type = 'message')
+
+        ## close
+        on.exit({
+            sink()
+            sink(type = 'message')
+            close(con)
+            return(asis_output(paste(stdout, collapse = '\n')))
+        })
+    }
+
     UseMethod('pander', x)
+
+}
 #' @export pander.return
 pander.return <- function(...)
     capture.output(pander(...))

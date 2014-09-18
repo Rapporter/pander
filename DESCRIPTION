@@ -35,7 +35,8 @@ Suggests:
     zoo,
     nlme,
     descr,
-    MASS
+    MASS,
+    knitr
 SystemRequirements: Pandoc (http://johnmacfarlane.net/pandoc) for exporting
     markdown files to other formats.
 LinkingTo: Rcpp
