@@ -68,7 +68,7 @@
 #' pander(x)
 pander <- function(x = NULL, ...) {
 
-    if (isTRUE(panderOptions('knitr.auto.asis')) && isTRUE(getOption('knitr.in.progress'))) {
+    if (isTRUE(panderOptions('knitr.auto.asis')) && isTRUE(getOption('knitr.in.progress')) && require(knitr, quietly = TRUE)) {
 
         ## grab stdout
         stdout <- vector("character")
