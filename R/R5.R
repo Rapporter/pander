@@ -111,7 +111,7 @@ Pandoc$methods(show = function(x) {
 
 })
 
-Pandoc$methods(export = function(f, open = TRUE, options = '', footer = TRUE) {
+Pandoc$methods(export = function(f, ...) {
 
     if (missing(f))
         f <- tempfile('pander-', getwd())
@@ -123,7 +123,7 @@ Pandoc$methods(export = function(f, open = TRUE, options = '', footer = TRUE) {
     lapply(.self$body, function(x) cat(paste(capture.output(pander(x$result)), collapse = '\n'), file = fp, append = TRUE))
 
     ## convert
-    fe <- Pandoc.convert(fp, format = .self$format, open = open, proc.time = as.numeric(proc.time() - timer)[3], options = options, footer = footer)
+    fe <- Pandoc.convert(fp, format = .self$format, proc.time = as.numeric(proc.time() - timer)[3], ...)
 
     ## return
     cat('\nExported to *', f, '.[md|', format, ']* under ', .self$proc.time + as.numeric(proc.time() - timer)[3], ' seconds.\n\n', sep = '')
