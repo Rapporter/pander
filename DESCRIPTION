@@ -17,7 +17,7 @@ Version: 0.3.9
 Date: 2013-08-29
 URL: http://rapporter.github.io/pander
 BugReports: https://github.com/rapporter/pander/issues
-License: AGPL-3
+License: AGPL-3 | file LICENCE
 Depends:
     R (>= 2.15.0)
 Imports:
