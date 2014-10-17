@@ -625,8 +625,9 @@ evals <- function(txt, parse = TRUE, cache = TRUE, cache.mode = c('environment',
     }
 
     ## lame constants
-    doAddGrid <- TRUE
-    updateFg  <- TRUE
+    doAddGrid    <- TRUE
+    updateFg     <- TRUE
+    areWeLogging <- !is.null(mc$log) && require(futile.logger)
 
     ## parse provided code after concatenating
     if (parse) {
@@ -704,7 +705,7 @@ evals <- function(txt, parse = TRUE, cache = TRUE, cache.mode = c('environment',
     lapply(txt, function(src) {
 
         ## log R expression
-        if (!is.null(mc$log) && require(futile.logger))
+        if (areWeLogging)
             flog.info(src, name = log)
 
         if (!is.na(graph.output)) {
@@ -847,6 +848,7 @@ evals <- function(txt, parse = TRUE, cache = TRUE, cache.mode = c('environment',
 
                         cached.result$result <- file
                         class(cached.result$result) <- 'image'
+
                         return(cached.result)
 
                     } else {
