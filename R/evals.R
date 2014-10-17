@@ -975,6 +975,10 @@ evals <- function(txt, parse = TRUE, cache = TRUE, cache.mode = c('environment',
         ## we have a graph
         if (is.character(graph)) {
 
+            ## log image file name
+            if (areWeLogging)
+                flog.trace(paste('Image file written:', file), name = log)
+
             ## save recorded plot on demand
             if (graph.recordplot)
                 saveRDS(recorded.plot, file = sprintf('%s.recordplot', file.name))
