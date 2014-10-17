@@ -424,6 +424,7 @@ eval.msgs <- function(src, env = NULL, showInvisible = FALSE, graph.unify = eval
 #' @param graph.env save the environments in which plots were generated to distinct files (based on \code{graph.name}) with \code{env} extension?
 #' @param graph.recordplot save the plot via \code{recordPlot} to distinct files (based on \code{graph.name}) with \code{recodplot} extension?
 #' @param graph.RDS save the raw R object returned (usually with \code{lattice} or \code{ggplot2}) while generating the plots to distinct files (based on \code{graph.name}) with \code{RDS} extension?
+#' @param log an optionally passed \emph{logger name} from \pkg{futile.logger} to record all info, trace, debug and error messages. Logging to the console can be done by specifying e.g. \code{flog.namespace()}, and log to a file by previously calling \code{flog.appender} and \code{appender.file} on the given \emph{logger name}.
 #' @param ... optional parameters passed to graphics device (e.g. \code{bg}, \code{pointsize} etc.)
 #' @return a list of parsed elements each containing: \code{src} (the command run), \code{result} (R object: \code{NULL} if nothing returned, path to image file if a plot was generated), \code{print}ed \code{output}, \code{type} (class of returned object if any), informative/wawrning and error messages (if any returned by the command run, otherwise set to \code{NULL}) and possible \code{stdout}t value. See Details above.
 #' @seealso \code{\link{eval.msgs}} \code{\link{evalsOptions}}
@@ -600,10 +601,17 @@ eval.msgs <- function(src, env = NULL, showInvisible = FALSE, graph.unify = eval
 #' # note: if you had not specified 'myenv', the second 'evals' would have failed
 #' evals('x <- c(0,10)')
 #' evals('mean(x)')
+#'
+#' # log
+#' x <- evals('1:10', log = 'foo')
+#' t <- tempfile()
+#' flog.appender(appender.file(t), name = 'evals')
+#' x <- evals('1:10', log = 'evals')
+#' readLines(t)
 #' }
 #' @export
 #' @importFrom digest digest
-evals <- function(txt, parse = TRUE, cache = TRUE, cache.mode = c('environment', 'disk'), cache.dir = '.cache', cache.time = 0.1, cache.copy.images = FALSE, showInvisible = FALSE, classes = NULL, hooks = NULL, length = Inf, output = c('all', 'src', 'result', 'output', 'type', 'msg', 'stdout'), env = NULL, graph.unify = evalsOptions('graph.unify'), graph.name = '%t', graph.dir = 'plots', graph.output = c('png', 'bmp', 'jpeg', 'jpg', 'tiff', 'svg', 'pdf', NA), width = 480, height = 480, res= 72, hi.res = FALSE, hi.res.width = 960, hi.res.height = 960*(height/width), hi.res.res = res*(hi.res.width/width), graph.env = FALSE, graph.recordplot = FALSE, graph.RDS = FALSE, ...){
+evals <- function(txt, parse = TRUE, cache = TRUE, cache.mode = c('environment', 'disk'), cache.dir = '.cache', cache.time = 0.1, cache.copy.images = FALSE, showInvisible = FALSE, classes = NULL, hooks = NULL, length = Inf, output = c('all', 'src', 'result', 'output', 'type', 'msg', 'stdout'), env = NULL, graph.unify = evalsOptions('graph.unify'), graph.name = '%t', graph.dir = 'plots', graph.output = c('png', 'bmp', 'jpeg', 'jpg', 'tiff', 'svg', 'pdf', NA), width = 480, height = 480, res= 72, hi.res = FALSE, hi.res.width = 960, hi.res.height = 960*(height/width), hi.res.res = res*(hi.res.width/width), graph.env = FALSE, graph.recordplot = FALSE, graph.RDS = FALSE, log, ...){
 
     if (missing(txt))
         stop('No R code provided to evaluate!')
@@ -694,6 +702,10 @@ evals <- function(txt, parse = TRUE, cache = TRUE, cache.mode = c('environment',
 
     ## main loop
     lapply(txt, function(src) {
+
+        ## log R expression
+        if (!is.null(mc$log) && require(futile.logger))
+            flog.info(src, name = log)
 
         if (!is.na(graph.output)) {
 
