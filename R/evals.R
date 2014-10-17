@@ -604,6 +604,11 @@ eval.msgs <- function(src, env = NULL, showInvisible = FALSE, graph.unify = eval
 #'
 #' # log
 #' x <- evals('1:10', log = 'foo')
+#' # trace log
+#' evalsOptions('cache.time', 0)
+#' x <- evals('1:10', log = 'foo')
+#' x <- evals('1:10', log = 'foo')
+#' # log to file
 #' t <- tempfile()
 #' flog.appender(appender.file(t), name = 'evals')
 #' x <- evals('1:10', log = 'evals')
@@ -848,22 +853,29 @@ evals <- function(txt, parse = TRUE, cache = TRUE, cache.mode = c('environment',
 
                         cached.result$result <- file
                         class(cached.result$result) <- 'image'
-
+                        if (areWeLogging)
+                            flog.trace(paste('Image copied from cache:', file), name = log)
                         return(cached.result)
 
                     } else {
 
                         ## we are checking in plots' dir if the img file exists
                         cached.image.file <- as.character(cached.result$result)
-                        if (file.exists(cached.image.file))
+                        if (file.exists(cached.image.file)) {
+                            if (areWeLogging)
+                                flog.trace(paste('Image found in cache:', cached.image.file), name = log)
                             return(cached.result)
-                        else
+                        } else {
                             warning(sprintf('The image file referenced in cache (%s) is no longer available: the image is recreated (%s).', shQuote(cached.image.file), shQuote(file)), call. = FALSE)
+                        }
 
                     }
 
-                } else
+                } else {
+                    if (areWeLogging)
+                        flog.trace('Returning cached R object.', name = log)
                     return(cached.result)
+                }
 
             } # cached result not found
 
