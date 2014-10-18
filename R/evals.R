@@ -1149,6 +1149,18 @@ evals <- function(txt, parse = TRUE, cache = TRUE, cache.mode = c('environment',
         if (areWeLogging) {
             if (!is.null(res$msg$warnings))
                 flog.warn(res$msg$warnings, name = log)
+            if (!is.null(res$result))
+                flog.debug(paste0(
+                    'Returned R object: class = ',
+                    res$type,
+                    ', length = ',
+                    length(res$result),
+                    ', dim = ',
+                    paste(dim(res$result), collapse = '/'),
+                    ', size = ',
+                    object.size(res$result),
+                    ' bytes'
+                ), name = log)
         }
 
         ## return
