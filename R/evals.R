@@ -715,7 +715,7 @@ evals <- function(txt, parse = TRUE, cache = TRUE, cache.mode = c('environment',
 
         ## log R expression
         if (areWeLogging)
-            flog.info(paste('Command run:', src), name = log)
+            flog.info(paste('Command run:', gsub('[ ]+', ' ', gsub('\n', ' ', src))), name = log)
 
         if (!is.na(graph.output)) {
 
