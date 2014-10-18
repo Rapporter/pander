@@ -715,7 +715,7 @@ evals <- function(txt, parse = TRUE, cache = TRUE, cache.mode = c('environment',
 
         ## log R expression
         if (areWeLogging)
-            flog.info(src, name = log)
+            flog.info(paste('Command run:', src), name = log)
 
         if (!is.na(graph.output)) {
 
@@ -1155,7 +1155,7 @@ evals <- function(txt, parse = TRUE, cache = TRUE, cache.mode = c('environment',
                 flog.warn(res$msg$warnings, name = log)
             if (!is.null(res$result) && res$type == 'image')
                 flog.debug(paste0(
-                    'Returned R object: class = ',
+                    'Returned object: class = ',
                     res$type,
                     ', length = ',
                     length(res$result),
