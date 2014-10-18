@@ -1145,6 +1145,12 @@ evals <- function(txt, parse = TRUE, cache = TRUE, cache.mode = c('environment',
             }
         }
 
+        ## log
+        if (areWeLogging) {
+            if (!is.null(res$msg$warnings))
+                flog.warn(res$msg$warnings, name = log)
+        }
+
         ## return
         res
 
