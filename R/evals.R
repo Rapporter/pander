@@ -967,6 +967,8 @@ evals <- function(txt, parse = TRUE, cache = TRUE, cache.mode = c('environment',
             class(res) <- 'evals'
             if ('plot.new has not been called yet' %in% res$msg$errors)
                 res$msg$errors <- 'plot.new has not been called yet - Please note that all R commands are parsed and evaluated separately. To override this default behavior, add a plus sign (+) as the first character of the line(s) to evaluate with the prior one(s).'
+            if (areWeLogging)
+                flog.error(res$msg$errors, name = log)
             return(res)
         }
 
@@ -1143,7 +1145,8 @@ evals <- function(txt, parse = TRUE, cache = TRUE, cache.mode = c('environment',
             }
         }
 
-        return(res)
+        ## return
+        res
 
     })
 }
