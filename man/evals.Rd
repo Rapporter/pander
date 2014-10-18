@@ -14,8 +14,8 @@ evals(txt, parse = TRUE, cache = TRUE, cache.mode = c("environment",
   "svg", "pdf", NA), width = 480, height = 480, res = 72,
   hi.res = FALSE, hi.res.width = 960, hi.res.height = 960 *
   (height/width), hi.res.res = res * (hi.res.width/width),
-  graph.env = FALSE, graph.recordplot = FALSE, graph.RDS = FALSE, log,
-  ...)
+  graph.env = FALSE, graph.recordplot = FALSE, graph.RDS = FALSE,
+  log = evalsOptions("log"), ...)
 }
 \arguments{
 \item{txt}{a character vector containing R code. This could be a list/vector of lines of code or a simple string holding R code separated by \code{;} or \code{\\n}.}
@@ -300,10 +300,19 @@ evals('mean(x)')
 
 # log
 x <- evals('1:10', log = 'foo')
+# trace log
+evalsOptions('cache.time', 0)
+x <- evals('1:10', log = 'foo')
+x <- evals('1:10', log = 'foo')
+# log to file
 t <- tempfile()
 flog.appender(appender.file(t), name = 'evals')
 x <- evals('1:10', log = 'evals')
 readLines(t)
+# permanent log for all events
+evalsOptions('log', 'evals')
+flog.threshold(TRACE, 'evals')
+evals('foo')
 }
 }
 \seealso{

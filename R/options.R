@@ -4,7 +4,7 @@
     options('pander' = list(
                 'digits'                   = 4,
                 'decimal.mark'             = '.',
-                'formula.caption.prefix'     = 'Formula: ',
+                'formula.caption.prefix'   = 'Formula: ',
                 'big.mark'                 = '',
                 'round'                    = Inf,
                 'keep.trailing.zeros'      = FALSE,
@@ -71,7 +71,8 @@
                 'hi.res.width'          = 960,
                 'graph.env'             = FALSE,
                 'graph.recordplot'      = FALSE,
-                'graph.RDS'             = FALSE
+                'graph.RDS'             = FALSE,
+                'log'                   = NULL
                 ))
 }
 
@@ -331,6 +332,7 @@ pander.option <- function(x, ...) {
 #'      \item \code{graph.env}: save the environments in which plots were generated to distinct files (based on \code{graph.name}) with \code{env} extension?
 #'      \item \code{graph.recordplot}: save the plot via \code{recordPlot} to distinct files (based on \code{graph.name}) with \code{recodplot} extension?
 #'      \item \code{graph.RDS}: save the raw R object returned (usually with \code{lattice} or \code{ggplot2}) while generating the plots to distinct files (based on \code{graph.name}) with \code{RDS} extension?
+#'      \item \code{log}: \code{NULL} or  an optionally passed \emph{logger name} from \pkg{futile.logger} to record all info, trace, debug and error messages.
 #' }
 #' @param o option name (string). See below.
 #' @param value value to assign (optional)

@@ -613,10 +613,14 @@ eval.msgs <- function(src, env = NULL, showInvisible = FALSE, graph.unify = eval
 #' flog.appender(appender.file(t), name = 'evals')
 #' x <- evals('1:10', log = 'evals')
 #' readLines(t)
+#' # permanent log for all events
+#' evalsOptions('log', 'evals')
+#' flog.threshold(TRACE, 'evals')
+#' evals('foo')
 #' }
 #' @export
 #' @importFrom digest digest
-evals <- function(txt, parse = TRUE, cache = TRUE, cache.mode = c('environment', 'disk'), cache.dir = '.cache', cache.time = 0.1, cache.copy.images = FALSE, showInvisible = FALSE, classes = NULL, hooks = NULL, length = Inf, output = c('all', 'src', 'result', 'output', 'type', 'msg', 'stdout'), env = NULL, graph.unify = evalsOptions('graph.unify'), graph.name = '%t', graph.dir = 'plots', graph.output = c('png', 'bmp', 'jpeg', 'jpg', 'tiff', 'svg', 'pdf', NA), width = 480, height = 480, res= 72, hi.res = FALSE, hi.res.width = 960, hi.res.height = 960*(height/width), hi.res.res = res*(hi.res.width/width), graph.env = FALSE, graph.recordplot = FALSE, graph.RDS = FALSE, log, ...){
+evals <- function(txt, parse = TRUE, cache = TRUE, cache.mode = c('environment', 'disk'), cache.dir = '.cache', cache.time = 0.1, cache.copy.images = FALSE, showInvisible = FALSE, classes = NULL, hooks = NULL, length = Inf, output = c('all', 'src', 'result', 'output', 'type', 'msg', 'stdout'), env = NULL, graph.unify = evalsOptions('graph.unify'), graph.name = '%t', graph.dir = 'plots', graph.output = c('png', 'bmp', 'jpeg', 'jpg', 'tiff', 'svg', 'pdf', NA), width = 480, height = 480, res= 72, hi.res = FALSE, hi.res.width = 960, hi.res.height = 960*(height/width), hi.res.res = res*(hi.res.width/width), graph.env = FALSE, graph.recordplot = FALSE, graph.RDS = FALSE, log = evalsOptions('log'), ...) {
 
     if (missing(txt))
         stop('No R code provided to evaluate!')
@@ -632,7 +636,7 @@ evals <- function(txt, parse = TRUE, cache = TRUE, cache.mode = c('environment',
     ## lame constants
     doAddGrid    <- TRUE
     updateFg     <- TRUE
-    areWeLogging <- !is.null(mc$log) && require(futile.logger)
+    areWeLogging <- !is.null(log) && require(futile.logger)
 
     ## parse provided code after concatenating
     if (parse) {
