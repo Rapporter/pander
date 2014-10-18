@@ -1153,7 +1153,7 @@ evals <- function(txt, parse = TRUE, cache = TRUE, cache.mode = c('environment',
         if (areWeLogging) {
             if (!is.null(res$msg$warnings))
                 flog.warn(res$msg$warnings, name = log)
-            if (!is.null(res$result) && res$type == 'image')
+            if (!is.null(res$result) && res$type != 'image')
                 flog.debug(paste0(
                     'Returned object: class = ',
                     res$type,
