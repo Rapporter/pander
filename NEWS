@@ -1,3 +1,54 @@
+pander 0.5.0 (2014-10-27)
+----------------------------------------------------------------
+
+This is a major release with 200+ new commits since last version:
+  https://github.com/Rapporter/pander/compare/v0.3.8...v0.5.0
+
+Special thanks goes to Roman Tsegelskyi, who worked hard on various
+parts of the package in Google Summer of Code 2014.
+
+New features:
+ * no nede to specify the `asis` option in `knitr` chunks any more when calling `pander`
+ * show Pandoc command on error for easier debugging in document conversion
+ * supporting tables with more than 3 dimensions by converting those to 2D with `ftable`
+ * optionally keep line breaks inside of cells (keep.line.breaks)
+ * optionally remove any markup from the table (plain.ascii)
+ * optionally do not highlight rownames (emphasize.rownames)
+ * flexible column width of tables
+ * `Pandoc` reference class updates on enabling the new features of the package
+
+New classes supported by the `pander` generic S3 method:
+ * CrossTable
+ * ts
+ * formula
+ * coxph
+ * zoo
+ * lme
+ * aovlist
+ * sessionInfo
+ * mtable
+ * survfit
+ * stat.table
+ * smooth.spline
+ * clogit
+ * rlm
+ * function
+ * microbenchmark
+
+Updates:
+ * dual licensing the package with AGPLv3 and OSL based on user requrest
+ * defaults to cairo graphics device if available
+ * removed the `pandoc` alias for `pander` to avoid conflict with `knitr` pkg
+ * replayPlot workaround for distributed R instances
+ * partial Rcpp rewrite of pandoc.table for increased performance
+
+Fixes:
+ * avoid stacking of markup characters in helper functions
+ * remove dummy image files on Windows (#57)
+ * `simple` and `rmarkdown` tables cannot be split (#60)
+ * fix Windows path issues when looking for Pandoc
+ * `p` function does not fail any more on NULL
+ * POSIXltx typo
 
 pander 0.3.8 (2013-08-29)
 ----------------------------------------------------------------
