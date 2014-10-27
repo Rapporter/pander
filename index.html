@@ -756,7 +756,7 @@ attr(,&quot;class&quot;)
 </ul>
 <p>Besides capturing this nifty list of important circumstances, <code>evals</code> can automatically identify if an R expression is returning anything to a graphical device, and can save the resulting image in a variate of file formats along with some extra options, like applying a custom theme on base, <code>lattice</code> or <code>ggplot2</code> plots:</p>
 <pre class="rout"><code>&gt; evals(&#39;hist(mtcars$hp)&#39;)[[1]]$result
-![](plots/39847bb0e6f7.png)</code></pre>
+![](plots/39846ed860e4.png)</code></pre>
 <p>So instead of a captured R object (which would be <code>NULL</code> in this situation by the way), we get the path of the image where the plot was saved:</p>
 <div class="figure">
 <img src="https://raw.githubusercontent.com/Rapporter/pander/gh-pages/plots/graphs-1.png" />
@@ -919,11 +919,12 @@ evals(&#39;mean(xx)&#39;)</code></pre>
         $('img[src="https://travis-ci.org/Rapporter/pander.png?branch=master"]').parent().parent().css('text-align', 'justify');
         $('img[src="https://travis-ci.org/Rapporter/pander.png?branch=master"]').css('border', 'none').css('padding', '0px');
         $('nav').css('height', '100%');
+        $("img").unbind("click");
     });
 </script>
 <p><a href="https://github.com/Rapporter/pander"><img style="position: fixed; top: -5px; right: -5px; border: 0;" src="https://camo.githubusercontent.com/38ef81f8aca64bb9a64448d0d70f1308ef5341ab/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f72696768745f6461726b626c75655f3132313632312e706e67" data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_right_darkblue_121621.png"></a></p>
 <hr />
-<p>This report was generated with <a href="http://www.r-project.org/">R</a> (3.1.1) and <a href="https://github.com/rapporter/pander">pander</a> (0.5.0) in 0.909 sec on x86_64-unknown-linux-gnu platform.</p>
+<p>This report was generated with <a href="http://www.r-project.org/">R</a> (3.1.1) and <a href="https://github.com/rapporter/pander">pander</a> (0.5.0) in 0.882 sec on x86_64-unknown-linux-gnu platform.</p>
 <p align="center">
   Design: <a href="http://rapporter.net"><i>Rapporter</i> Team</a> &copy; 2011-2014 | Backend: <a href="https://github.com/rapporter/pander">pander</a> | License: <a href="http://www.gnu.org/licenses/agpl.html" target="_blank">AGPL3</a> or <a href="http://opensource.org/licenses/OSL-3.0" target="_blank">OSL</a> | Styled with <a href="http://www.getskeleton.com/" target="_blank">skeleton</a>
 </p>
