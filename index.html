@@ -4,7 +4,7 @@
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
   <meta http-equiv="Content-Style-Type" content="text/css" />
   <meta name="generator" content="pandoc" />
-  <title>pander: A Pandoc writer in R</title>
+  <title>pander: An R Pandoc Writer</title>
   <style type="text/css">code{white-space: pre;}</style>
   <style type="text/css">
 table.sourceCode, tr.sourceCode, td.lineNumbers, td.sourceCode {
@@ -54,7 +54,7 @@ code > span.er { color: #ff0000; font-weight: bold; }
 </head>
 <body>
 <div id="header">
-<h1 class="title"><a href="https://github.com/Rapporter/pander">pander: A Pandoc writer in R</a></h1>
+<h1 class="title"><a href="https://github.com/Rapporter/pander">pander: An R Pandoc Writer</a></h1>
 </div>
 <p>The main aim of the <em>pander</em> <a href="http://r-project.org">R</a> package is to provide a minimal and easy tool for rendering <strong>R objects</strong> into <a href="http://johnmacfarlane.net/pandoc/">Pandoc</a>'s <strong>markdown</strong>. The package is also capable of exporting/converting complex Pandoc documents (reports) in <a href="#creating-pandoc-documents">various ways</a>. Regarding the difference between <code>pander</code> and other packages for exporting R objects to different file formats, please refer to this <a href="#difference-from-other-rendering-packages">section</a>.</p>
 <h1 id="installation">Installation</h1>
@@ -79,7 +79,7 @@ code > span.er { color: #ff0000; font-weight: bold; }
 <li>and <em>pander</em> can be also very useful inside of <a href="http://cran.r-project.org/web/packages/knitr/index.html">knitr</a>.</li>
 </ul>
 <h3 id="pandoc">Pandoc</h3>
-<p><em>pander</em> heavily builds on <a href="http://johnmacfarlane.net/pandoc">Pandoc</a>, which should be <strong>pre-installed</strong> before trying to convert your reports to <a href="http://johnmacfarlane.net/pandoc/">different formats</a>. Although <strong>main functions work without Pandoc</strong>, e.g. you can transform R objects into markdown or generate a markdown formatted report via <a href="#brew-to-pandoc">Pandoc.brew</a> or the custom <a href="#live-report-generation">reference class</a>, but installing that great piece of software is suggested if you want to convert markdown to pdf/docx/HTML or other formats.</p>
+<p><em>pander</em> heavily builds on <a href="http://johnmacfarlane.net/pandoc">Pandoc</a>, which should be <strong>pre-installed</strong> before trying to convert your reports to <a href="http://johnmacfarlane.net/pandoc/">different formats</a>. Although <strong>main functions work without Pandoc</strong>, e.g. you can transform R objects into markdown or generate a markdown formatted report via <a href="#brew-to-pandoc">Pandoc.brew</a> or the custom <a href="#live-report-generation">reference class</a>, but installing that great piece of software is suggested if you want to convert markdown to PDF/docx/HTML or other formats.</p>
 <p>Starting v0.98.932 <a href="http://www.rstudio.com/">RStudio</a> comes with a bundled <code>Pandoc</code> binary, so one can save the tedious steps of installing Pandoc.</p>
 <p>If you do not have RStudio installed, please refer to the <a href="http://johnmacfarlane.net/pandoc/installing.html">installation process of Pandoc</a>, which is quite straightforward on most-popular operating systems: download and run the binary (a few megabytes), and get a full-blown document converter in a few seconds/minutes. On some Linux distributions, it might be a bit more complicated (as repositories tend to provide out-dated versions of Pandoc, so you would need <code>cabal-install</code> to <a href="http://johnmacfarlane.net/pandoc/installing.html#all-platforms">install from sources</a>). Please do not forget to restart your R session to update your <code>PATH</code> after installation!</p>
 <h1 id="helper-functions">Helper functions</h1>
@@ -110,7 +110,7 @@ code > span.er { color: #ff0000; font-weight: bold; }
 +<span class="st">        &quot;Second element&quot;</span>,
 +<span class="st">        </span><span class="kw">list</span>(<span class="st">&#39;F&#39;</span>, <span class="st">&#39;B&#39;</span>, <span class="st">&#39;I&#39;</span>, <span class="kw">c</span>(<span class="st">&#39;phone&#39;</span>, <span class="st">&#39;pad&#39;</span>, <span class="st">&#39;talics&#39;</span>)))
 &gt;<span class="st"> </span><span class="kw">pandoc.list</span>(l, <span class="st">&#39;roman&#39;</span>)</code></pre>
-<p>Which produces the following output:</p>
+<p>Which command produces the following output:</p>
 <pre><code>I. First list element 
     I. 1. subelement 
     II. 2. subelement 
@@ -131,7 +131,7 @@ II. Second element
 <h1 id="markdown-tables">Markdown tables</h1>
 <p>One of the most popular feature in <em>pander</em> is <code>pandoc.table</code>, rendering most tabular R objects into markdown tables with various options and settings (e.g. <a href="#style">style</a>, <a href="#caption">caption</a>, <a href="#highlight-cells">cell highlighting</a>, <a href="#cell-alignment">cell alignment</a>, <a href="#table-and-cell-width">width</a>):</p>
 <pre class="sourceCode r"><code class="sourceCode r">&gt;<span class="st"> </span><span class="kw">pandoc.table</span>(mtcars[<span class="dv">1</span>:<span class="dv">3</span>, <span class="dv">1</span>:<span class="dv">4</span>])</code></pre>
-<p>Which produces the following output by default:</p>
+<p>Which command produces the following output by default:</p>
 <pre><code>-------------------------------------------
       &amp;nbsp;         mpg   cyl   disp   hp 
 ------------------- ----- ----- ------ ----
@@ -167,7 +167,7 @@ II. Second element
    **Mazda RX4**     21     6    160  
  **Mazda RX4 Wag**   21     6    160  
 </code></pre>
-<p>My personal favourite, the <a href="http://johnmacfarlane.net/pandoc/README.html#grid-tables"><code>grid</code> format</a> is really handy for <a href="http://emacswiki.org/emacs/TableMode">emacs</a> users and it does support line breaks inside of cells, but cell alignment is not possible in most parsers:</p>
+<p>My personal favorite, the <a href="http://johnmacfarlane.net/pandoc/README.html#grid-tables"><code>grid</code> format</a> is really handy for <a href="http://emacswiki.org/emacs/TableMode">emacs</a> users and it does support line breaks inside of cells, but cell alignment is not possible in most parsers:</p>
 <pre class="rout"><code>&gt; pandoc.table(m, style = &quot;grid&quot;)
 
 +---------------------+-------+-------+--------+
@@ -178,7 +178,7 @@ II. Second element
 |  **Mazda RX4 Wag**  |  21   |   6   |  160   |
 +---------------------+-------+-------+--------+
 </code></pre>
-<p>And the so called <code>rmarkdown</code> or <a href="http://johnmacfarlane.net/pandoc/README.html#pipe-tables">pipe table format</a> is often used directly with <code>knitr</code>, since it was supporterd by the first versions of the <code>markdown</code> package:</p>
+<p>And the so called <code>rmarkdown</code> or <a href="http://johnmacfarlane.net/pandoc/README.html#pipe-tables">pipe table format</a> is often used directly with <code>knitr</code>, since it was supporters by the first versions of the <code>markdown</code> package:</p>
 <pre class="rout"><code>&gt; pandoc.table(m, style = &quot;rmarkdown&quot;)
 
 |       &amp;nbsp;        |  mpg  |  cyl  |  disp  |
@@ -218,7 +218,7 @@ Table: Hello caption!
 <p>Unless <code>permanent</code> option is set for <code>TRUE</code> (by default), caption will be set only for next table. To disable permanently set caption, just call <code>set.caption(NULL)</code> or call <code>set.caption</code> with <code>permanent</code> parameter being set to <code>FALSE</code>.</p>
 <p><a id="highlight-cells"></a></p>
 <h2 id="highlighting-cells">Highlighting cells</h2>
-<p>One of the fanciest features in <em>pander</em> is the ease of highlighting rows, columns or any cells in a table. This is a real markdown feature without custom HTML or LaTeX-only tweaks, so all HTML/pdf/MS Word/OpenOffice etc. formats are supported.</p>
+<p>One of the fanciest features in <em>pander</em> is the ease of highlighting rows, columns or any cells in a table. This is a real markdown feature without custom HTML or LaTeX-only tweaks, so all HTML/PDF/MS Word/OpenOffice etc. formats are supported.</p>
 <p>This can be achieved by calling <code>pandoc.table</code> directly and passing any (or more) of the following arguments <strong>or</strong> calling the R function with the same names before rendering a table with either the <code>pander</code> <a href="#generic-pander-method">generic S3 method</a> or via <code>pandoc.table</code>:</p>
 <ul>
 <li>emphasize.rows</li>
@@ -561,8 +561,8 @@ Table: Kernel density of *mtcars$hp* (bandwidth: 28.04104)
 <h1 id="creating-pandoc-documents">Creating Pandoc documents</h1>
 <p>The package is also capable of creating complex Pandoc documents (reports) from <strong>R objects</strong> in multiple ways:</p>
 <ul>
-<li><p>create somehow a markdown text file (e.g. with <code>brew</code>, <code>knitr</code> or any scripts of yours, maybe with <code>Pandoc.brew</code> - see just <a href="#brew-to-pandoc">below</a>) and transform that to other formats (like HTML, odt, pdf, docx etc.) with <code>Pandoc.convert</code> - similarly to <a href="http://yihui.name/knitr/demo/pandoc/"><code>pandoc</code> function in knitr</a>. Basically this is a wrapper around a <a href="http://johnmacfarlane.net/pandoc/">Pandoc</a> call, which has not much to do with R actually.</p></li>
-<li><p>users might write some reports with literate programming (similar to <code>knitr</code>) in a forked version of <a href="http://cran.r-project.org/web/packages/brew/index.html">brew</a> syntax resulting. This means that the user can include R code chunks in a document, and brewing that results in a pretty Pandoc's markdown document and also in a <strong>bunch of other formats</strong> (like HTML, odt, pdf, docx etc.). The great advantage of this <a href="#brew-to-pandoc">function</a> is that you do not have to transform your R objects to markdown manually, it's all handled automagically.</p>
+<li><p>create somehow a markdown text file (e.g. with <code>brew</code>, <code>knitr</code> or any scripts of yours, maybe with <code>Pandoc.brew</code> - see just <a href="#brew-to-pandoc">below</a>) and transform that to other formats (like HTML, odt, PDF, docx etc.) with <code>Pandoc.convert</code> - similarly to <a href="http://yihui.name/knitr/demo/pandoc/"><code>pandoc</code> function in knitr</a>. Basically this is a wrapper around a <a href="http://johnmacfarlane.net/pandoc/">Pandoc</a> call, which has not much to do with R actually.</p></li>
+<li><p>users might write some reports with literate programming (similar to <code>knitr</code>) in a forked version of <a href="http://cran.r-project.org/web/packages/brew/index.html">brew</a> syntax resulting. This means that the user can include R code chunks in a document, and brewing that results in a pretty Pandoc's markdown document and also in a <strong>bunch of other formats</strong> (like HTML, odt, PDF, docx etc.). The great advantage of this <a href="#brew-to-pandoc">function</a> is that you do not have to transform your R objects to markdown manually, it's all handled automagically.</p>
 <p><em>Example</em>: this <a href="https://github.com/Rapporter/pander/blob/master/README.md"><code>README.md</code></a> is cooked with <a href="#brew-to-pandoc"><code>Pandoc.brew</code></a> based on <a href="https://github.com/Rapporter/pander/blob/master/inst/README.brew"><code>inst/README.brew</code></a> and also exported to <a href="http://rapporter.github.com/pander/">HTML</a>. Details can be found <a href="#brew-to-pandoc">below</a> or head directly to <a href="#examples">examples</a>.</p></li>
 </ul>
 <!-- endlist -->
@@ -662,7 +662,7 @@ List of 2
 </ul>
 <p>Please check out <code>pdf</code>, <code>docx</code>, <code>odt</code> and other formats by changing the above <code>convert</code> option on your machine, and do not forget to <a href="https://github.com/Rapporter/pander/issues">give some feedback</a>!</p>
 <h2 id="live-report-generation">Live report generation</h2>
-<p><code>pander</code> package has a special reference class called <code>Pandoc</code> which could collect some blocks in a live R session and export the whole document to Pandoc/pdf/HTML etc. Without any serious further explanations, please check out the below (self-commenting) example:</p>
+<p><code>pander</code> package has a special reference class called <code>Pandoc</code> which could collect some blocks in a live R session and export the whole document to Pandoc/PDF/HTML etc. Without any serious further explanations, please check out the below (self-commenting) example:</p>
 <pre class="sourceCode r"><code class="sourceCode r">## Initialize a new Pandoc object
 myReport &lt;-<span class="st"> </span>Pandoc$<span class="kw">new</span>()
 
@@ -704,7 +704,7 @@ myReport$<span class="kw">add</span>(<span class="kw">plot</span>(<span class="d
 ## Want to see the report? Just print it:
 myReport
 
-## Exporting to pdf (default)
+## Exporting to PDF (default)
 myReport$<span class="kw">export</span>()
 
 ## Or to docx in tempdir():
@@ -754,9 +754,9 @@ attr(,&quot;class&quot;)
 <li><code>msg</code> is a list of possible messages captured while running the R expression and</li>
 <li><code>stdout</code> contains if anything was written to the standard output.</li>
 </ul>
-<p>Besides capturing this nifty list of important circumstances, <code>evals</code> can automatically identify if an R expression is returning anything to a graphical device, and can save the resulting image in a variate of file formats along with some extra options, like applying a custom theme on base, <code>lattice</code> or <code>ggplot2</code> plots:</p>
+<p>Besides capturing this nifty list of important circumstances, <code>evals</code> can automatically identify if an R expression is returning anything to a graphical device, and can save the resulting image in a variety of file formats along with some extra options, like applying a custom theme on base, <code>lattice</code> or <code>ggplot2</code> plots:</p>
 <pre class="rout"><code>&gt; evals(&#39;hist(mtcars$hp)&#39;)[[1]]$result
-![](plots/39846ed860e4.png)</code></pre>
+![](plots/23ea18297ead.png)</code></pre>
 <p>So instead of a captured R object (which would be <code>NULL</code> in this situation by the way), we get the path of the image where the plot was saved:</p>
 <div class="figure">
 <img src="https://raw.githubusercontent.com/Rapporter/pander/gh-pages/plots/graphs-1.png" />
@@ -892,7 +892,7 @@ evals(&#39;mean(xx)&#39;)</code></pre>
 <p>But if you stick with <code>pander</code>'s literate programming engine, then there's not much need for calling <code>ascii</code>, <code>xtable</code>, <code>Hmisc</code>, <code>tables</code> etc. or even <code>pander</code> in the R command chunks to <strong>transform R objects</strong> into markdown, HTML, tex etc. as <code>Pandoc.brew</code> automatically results in Pandoc's markdown, which can be converted to almost any text document format. Conversion can be done automatically after calling <code>pander</code> reporting functions (<a href="#brew-to-pandoc">Pander.brew</a> or <a href="#live-report-generation">Pandoc</a>).</p>
 <p>Based on the fact that <code>pander</code> transforms R objects into markdown, <strong>no &quot;traditional&quot; R console output is shown</strong> in the resulting document (nor in markdown, nor in exported docs), but <strong>all R objects are transformed to tables, list etc</strong>. Well, there is an option (<code>show.src</code>) to show the original R commands before the formatted output, and <code>pander</code> calls can be also easily tweaked to return the printed version of the R objects - if you would need that in some strange situation - like writing an R tutorial. But really think that nor R code, nor raw R results have anything to do with an exported report.</p>
 <p>Of course <strong>all warnings, messages and errors are captured</strong> while evaluating R expressions just like <code>stdout</code> besides the <strong>raw R objects</strong>. So the resulting report also includes the raw R objects for further edits if needed - which is a very unique feature.</p>
-<p><strong>Graphs and plots are automatically identified</strong> in code chunks and saved to disk in a <code>png</code> file linked in the resulting document. This means that if you create a report (e.g. <code>brew</code> a text file) and export it to pdf/docx etc. all the plots/images would be there. There are some parameters to specify the resolution of the image and also the type (e.g. <code>jpg</code>, <code>svg</code> or <code>pdf</code>) besides a <strong>wide variety of <a href="#pander-options">theme options</a></strong>. About the latter, please check the <code>graphs.brew</code> example <a href="#examples">above</a>.</p>
+<p><strong>Graphs and plots are automatically identified</strong> in code chunks and saved to disk in a <code>png</code> file linked in the resulting document. This means that if you create a report (e.g. <code>brew</code> a text file) and export it to PDF/docx etc. all the plots/images would be there. There are some parameters to specify the resolution of the image and also the type (e.g. <code>jpg</code>, <code>svg</code> or <code>pdf</code>) besides a <strong>wide variety of <a href="#pander-options">theme options</a></strong>. About the latter, please check the <code>graphs.brew</code> example <a href="#examples">above</a>.</p>
 <p>And <code>pander</code> uses its built-in (IMHO quite decent) <a href="#caching"><strong>caching</strong></a> engine. This means that if the evaluation of some R commands takes too long time (which can be set by option/parameter), then the results are saved in a file and returned from there on next similar R code's evaluation. This caching algorithm tries to be smart, as it not only checks the passed R sources, but the content of all variables and functions, and saves the hash of those. This is a quite secure way of caching (see details <a href="#caching">above</a>), but if you would encounter any issues, just switch off the cache. I've not seen any issues for years :)</p>
 <h1 id="ess">ESS</h1>
 <p>I have created some simple LISP functions which would be handy if you are using the best damn IDE for R. These functions and default key-bindings are <a href="https://github.com/Rapporter/pander/tree/master/inst/pander.el">shipped with the package</a>, feel free to personalize.</p>
@@ -924,7 +924,7 @@ evals(&#39;mean(xx)&#39;)</code></pre>
 </script>
 <p><a href="https://github.com/Rapporter/pander"><img style="position: fixed; top: -5px; right: -5px; border: 0;" src="https://camo.githubusercontent.com/38ef81f8aca64bb9a64448d0d70f1308ef5341ab/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f72696768745f6461726b626c75655f3132313632312e706e67" data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_right_darkblue_121621.png"></a></p>
 <hr />
-<p>This report was generated with <a href="http://www.r-project.org/">R</a> (3.1.1) and <a href="https://github.com/rapporter/pander">pander</a> (0.5.0) in 0.882 sec on x86_64-unknown-linux-gnu platform.</p>
+<p>This report was generated with <a href="http://www.r-project.org/">R</a> (3.1.1) and <a href="https://github.com/rapporter/pander">pander</a> (0.5.0) in 0.835 sec on x86_64-unknown-linux-gnu platform.</p>
 <p align="center">
   Design: <a href="http://rapporter.net"><i>Rapporter</i> Team</a> &copy; 2011-2014 | Backend: <a href="https://github.com/rapporter/pander">pander</a> | License: <a href="http://www.gnu.org/licenses/agpl.html" target="_blank">AGPL3</a> or <a href="http://opensource.org/licenses/OSL-3.0" target="_blank">OSL</a> | Styled with <a href="http://www.getskeleton.com/" target="_blank">skeleton</a>
 </p>
