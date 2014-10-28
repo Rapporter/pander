@@ -578,7 +578,35 @@ pandoc.table.return <- function(t, caption, digits = panderOptions('digits'), de
 
     ## expands cells for output
     table.expand <- function(cells, cols.width, justify, sep.cols) {
-        .Call('pander_tableExpand_cpp', PACKAGE = 'pander', cells, cols.width, justify, sep.cols, style)
+
+        if (all(nchar(cells) == nchar(cells, type = 'byte'))) {
+
+            .Call('pander_tableExpand_cpp', PACKAGE = 'pander', cells, cols.width, justify, sep.cols, style)
+
+        } else {
+
+            df  <- data.frame(txt = cells, width = cols.width, justify = justify)
+
+            if (any(grepl('\n', df$txt))) {
+
+                if (style %in% c('simple', 'rmarkdown'))
+                    stop('Pandoc does not support newlines in simple or Rmarkdown table format!')
+
+                res <- lapply(strsplit(as.character(df$txt), '\n'), unlist)
+                res.lines <- max(sapply(res, length))
+                res <- paste(
+                    sapply(1:res.lines,
+                           function(i) table.expand(sapply(res, function(x) ifelse(is.na(x[i]), '  ', x[i])), cols.width, justify, sep.cols)), collapse = '\n')
+                return(res)
+
+            } else {
+
+                res <- apply(df, 1,
+                             function(x) format(x[1], justify = x[3], width = as.numeric(x[2]) + length(which(gregexpr("\\\\", x[1])[[1]] > 0))))
+                return(paste0(sep.cols[1], paste(res, collapse = sep.cols[2]), sep.cols[3]))
+
+            }
+        }
     }
 
     ## cell conversion to plain-ascii (deletion of markup characters)
