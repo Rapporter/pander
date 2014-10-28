@@ -68,7 +68,7 @@
 #' pander(x)
 pander <- function(x = NULL, ...) {
 
-    if (isTRUE(panderOptions('knitr.auto.asis')) && isTRUE(getOption('knitr.in.progress')) && require(knitr, quietly = TRUE)) {
+    if (isTRUE(panderOptions('knitr.auto.asis')) && isTRUE(getOption('knitr.in.progress')) && requireNamespace('knitr', quietly = TRUE)) {
 
         ## grab stdout
         stdout <- vector("character")
@@ -81,7 +81,7 @@ pander <- function(x = NULL, ...) {
             sink()
             sink(type = 'message')
             close(con)
-            return(asis_output(paste(stdout, collapse = '\n')))
+            return(knitr::asis_output(paste(stdout, collapse = '\n')))
         })
     }
 

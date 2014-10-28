@@ -329,9 +329,9 @@ splitLine <- function(x, max.width = panderOptions('table.split.cells'), use.hyp
         return(x)
     if (is.infinite(max.width))
         max.width <- .Machine$integer.max
-    if (use.hyphening && !require(koRpus))
+    if (use.hyphening && !requireNamespace('coRpus', quietly = TRUE))
         use.hyphening <- FALSE
     hyphen_f <- function(s)
-        hyphen(s, hyph.pattern="en.us", quiet = TRUE)@hyphen[1,2]
+        koRpus::hyphen(s, hyph.pattern="en.us", quiet = TRUE)@hyphen[1,2]
     .Call('pander_splitLine_cpp', PACKAGE = 'pander', x, max.width, use.hyphening, hyphen_f)
 }
