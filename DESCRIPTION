@@ -1,6 +1,6 @@
 Package: pander
 Maintainer: Gergely Daróczi <daroczig@rapporter.net>
-Title: An R pandoc writer
+Title: An R Pandoc Writer
 Type: Package
 Encoding: UTF-8
 Description: Contains some functions catching all messages, stdout and other
@@ -8,7 +8,7 @@ Description: Contains some functions catching all messages, stdout and other
     specified text elements (like: header, paragraph, table, image, lists etc.)
     in Pandoc's markdown or several type of R objects similarly automatically
     transformed to markdown format. Also capable of exporting/converting (the
-    resulting) complex Pandoc documents to e.g. HTML, pdf, docx or odt. This
+    resulting) complex Pandoc documents to e.g. HTML, PDF, docx or odt. This
     latter reporting feature is supported in brew syntax or with a custom
     reference class with a smarty caching backend.
 Author: Gergely Daróczi <daroczig@rapporter.net>, Roman Tsegelskyi

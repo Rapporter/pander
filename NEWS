@@ -8,7 +8,7 @@ Special thanks goes to Roman Tsegelskyi, who worked hard on various
 parts of the package in Google Summer of Code 2014.
 
 New features:
- * no nede to specify the `asis` option in `knitr` chunks any more when calling `pander`
+ * no need to specify the `asis` option in `knitr` chunks any more when calling `pander`
  * show Pandoc command on error for easier debugging in document conversion
  * supporting tables with more than 3 dimensions by converting those to 2D with `ftable`
  * optionally keep line breaks inside of cells (keep.line.breaks)
@@ -36,8 +36,8 @@ New classes supported by the `pander` generic S3 method:
  * microbenchmark
 
 Updates:
- * dual licensing the package with AGPLv3 and OSL based on user requrest
- * defaults to cairo graphics device if available
+ * dual licensing the package with AGPLv3 and OSL based on user request
+ * defaults to `cairo` graphics device if available
  * removed the `pandoc` alias for `pander` to avoid conflict with `knitr` pkg
  * replayPlot workaround for distributed R instances
  * partial Rcpp rewrite of pandoc.table for increased performance
@@ -48,7 +48,7 @@ Fixes:
  * `simple` and `rmarkdown` tables cannot be split (#60)
  * fix Windows path issues when looking for Pandoc
  * `p` function does not fail any more on NULL
- * POSIXltx typo
+ * POSIXlt typo
 
 pander 0.3.8 (2013-08-29)
 ----------------------------------------------------------------
@@ -56,9 +56,9 @@ pander 0.3.8 (2013-08-29)
  * dropped custom font for decreased package size (#39)
  * defaults to self contained HTML file (#39)
  * remove file extension for `vignetteEngine` (#44)
- * pander goes starzgazer (#46)
+ * pander goes stargazer (#46)
  * new option for big.mark
- * fix: rounding 2D tabless (#45)
+ * fix: rounding 2D tables (#45)
  * fix: pass optional parameters from S3 method to `pandoc.table`
  * fix: suppress empty rownames
  * further minor fixes: caption, par, text, pander.booelan
@@ -72,7 +72,7 @@ pander 0.3.7 (2013-05-27)
 pander 0.3.6 (2013-05-15)
 ----------------------------------------------------------------
 
- * added Travis-CI for continous integration tests
+ * added Travis-CI for continuous integration tests
  * fixed header and footer line of simple and multiline tables
  * updated `set.alignment` to also work outside of `Pandoc.brew`
  * minor bugfixes for in pandoc helpers, emphasize and S3 methods (#33 #34 among others)
@@ -84,14 +84,14 @@ pander 0.3.5 (2013-04-10)
  * let both US/UK spelling of "center"/"centre" work as alignment parameter for tables (#31)
  * fix `pandoc.table` issue with tables holding only one number (#32)
  * fix `redraw.recodedplot` compatibility issue with R 3.0.0
- * fixing aligmnent of cells with helper outside of `Pandoc.brew`
+ * fixing alignment of cells with helper outside of `Pandoc.brew`
  * minor documentation improvements
 
 pander 0.3.4 (2013-04-05)
 ----------------------------------------------------------------
 
  * new options: table caption prefix and split caption messages (#28)
- * fix for a rather unnoticeable but rapport-related critical bug that restulted in an invisibly returned wrong chunk type (concatenated image URL to the next paragpraph)
+ * fix for a rather unnoticeable but rapport-related critical bug that resulted in an invisibly returned wrong chunk type (concatenated image URL to the next paragraph)
 
 pander 0.3.3 (2013-03-27)
 ----------------------------------------------------------------
