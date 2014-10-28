@@ -320,7 +320,7 @@ cache.on <- function()
 #' splitLine("foo bar", 6)
 #' splitLine("foo bar", 7)
 #' splitLine("Pandoc Package", 3, TRUE)
-splitLine <- function(x, max.width = panderOptions('table.split.cells'), use.hyphening = FALSE){
+splitLine <- function(x, max.width = panderOptions('table.split.cells'), use.hyphening = FALSE) {
     if (any(is.na(x)))
         return(x)
     if (!is.character(x) || !is.null(dim(x)) || length(x) != 1 || x == "")
@@ -329,9 +329,9 @@ splitLine <- function(x, max.width = panderOptions('table.split.cells'), use.hyp
         return(x)
     if (is.infinite(max.width))
         max.width <- .Machine$integer.max
-    if (use.hyphening && !requireNamespace('coRpus', quietly = TRUE))
+    if (use.hyphening && !requireNamespace('koRpus', quietly = TRUE))
         use.hyphening <- FALSE
     hyphen_f <- function(s)
-        koRpus::hyphen(s, hyph.pattern="en.us", quiet = TRUE)@hyphen[1,2]
+        koRpus::hyphen(s, hyph.pattern = 'en.us', quiet = TRUE)@hyphen[1, 2]
     .Call('pander_splitLine_cpp', PACKAGE = 'pander', x, max.width, use.hyphening, hyphen_f)
 }
