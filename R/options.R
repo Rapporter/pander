@@ -284,7 +284,7 @@ panderOptions <- function(o, value) {
 
 }
 
-#' @export
+#' @export pander.option
 pander.option <- function(x, ...) {
     mc <- match.call(panderOptions)
     mc[[1]] <- quote(panderOptions)

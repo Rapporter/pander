@@ -8,7 +8,7 @@
 \item{...}{this is an R5 object without any direct params but it should be documented, right?}
 }
 \description{
-This \code{R5} reference class can hold bunch of elements (text or R objects) from which it tries to create a Pandoc's markdown text file. Exporting the report to several formats (like: pdf, docx, odt etc. - see Pandoc's documentation) is also possible, see examples below.
+This \code{R5} reference class can hold bunch of elements (text or R objects) from which it tries to create a Pandoc's markdown text file. Exporting the report to several formats (like: PDF, docx, odt etc. - see Pandoc's documentation) is also possible, see examples below.
 }
 \section{Methods}{
 
@@ -59,7 +59,7 @@ myReport$add(plot(1:10)) # TODO: caption
 ## Want to see the report? Just print it:
 myReport
 
-## Exporting to pdf (default)
+## Exporting to PDF (default)
 myReport$export()
 
 ## Or to docx in tempdir():

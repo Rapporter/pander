@@ -97,7 +97,7 @@ pander.return <- function(...)
 #' Prints a NULL object in Pandoc's markdown.
 #' @param x a NULL object
 #' @param ... ignored parameters
-#' @export pander.NULL
+#' @export
 pander.NULL <- function(x, ...)
     return(invisible(NULL))
 
@@ -106,7 +106,7 @@ pander.NULL <- function(x, ...)
 #' Prints a logical object in Pandoc's markdown.
 #' @param x a logical object
 #' @param ... ignored parameters
-#' @export pander.logical
+#' @export
 pander.logical <- function(x, ...)
     cat(as.character(x))
 
@@ -117,7 +117,7 @@ pander.logical <- function(x, ...)
 #' @param caption caption (string) to be shown under the table
 #' @param href link that image should be linked with
 #' @param ... ignored parameters
-#' @export pander.image
+#' @export
 pander.image <- function(x, caption = attr(x, 'caption'), href = attr(x, 'href'), ...) {
 
     if (is.null(caption) & !is.null(storage$caption))
@@ -138,7 +138,7 @@ pander.image <- function(x, caption = attr(x, 'caption'), href = attr(x, 'href')
 #' @param x a table object
 #' @param caption caption (string) to be shown under the table
 #' @param ... optional parameters passed to raw \code{pandoc.table} function
-#' @export pander.table
+#' @export
 pander.table <- function(x, caption = attr(x, 'caption'), ...) {
 
     if (is.null(caption) & !is.null(storage$caption))
@@ -154,7 +154,7 @@ pander.table <- function(x, caption = attr(x, 'caption'), ...) {
 #' @param x a data.frame object
 #' @param caption caption (string) to be shown under the table
 #' @param ... optional parameters passed to raw \code{pandoc.table} function
-#' @export pander.data.frame
+#' @export
 pander.data.frame <- function(x, caption = attr(x, 'caption'), ...) {
 
     if (is.null(caption) & !is.null(storage$caption))
@@ -170,7 +170,7 @@ pander.data.frame <- function(x, caption = attr(x, 'caption'), ...) {
 #' @param x a matrix object
 #' @param caption caption (string) to be shown under the table
 #' @param ... optional parameters passed to raw \code{pandoc.table} function
-#' @export pander.matrix
+#' @export
 pander.matrix <- function(x, caption = attr(x, 'caption'),  ...) {
 
     if (is.null(caption) & !is.null(storage$caption))
@@ -186,7 +186,7 @@ pander.matrix <- function(x, caption = attr(x, 'caption'),  ...) {
 #' @param x a cast_df object
 #' @param caption caption (string) to be shown under the table
 #' @param ... optional parameters passed to raw \code{pandoc.table} function
-#' @export pander.cast_df
+#' @export
 pander.cast_df<- function(x, caption = attr(x, 'caption'), ...) {
 
     if (is.null(caption) & !is.null(storage$caption))
@@ -201,7 +201,7 @@ pander.cast_df<- function(x, caption = attr(x, 'caption'), ...) {
 #' Prints a numeric class in Pandoc's markdown.
 #' @param x a numeric object
 #' @param ... igroned parameter
-#' @export pander.numeric
+#' @export
 pander.numeric <- function(x, ...)
     cat(p(x))
 
@@ -210,7 +210,7 @@ pander.numeric <- function(x, ...)
 #' Prints a character class in Pandoc's markdown.
 #' @param x a character object
 #' @param ... igroned parameters
-#' @export pander.character
+#' @export
 pander.character <- function(x, ...) {
 
     if (length(x) < 2)
@@ -225,7 +225,7 @@ pander.character <- function(x, ...) {
 #' Prints a factor object in Pandoc's markdown.
 #' @param x a factor object
 #' @param ... igroned parameters
-#' @export pander.factor
+#' @export
 pander.factor <- function(x, ...)
     cat(p(as.character(x)))
 
@@ -239,7 +239,7 @@ pander.factor <- function(x, ...)
 #' @param summary (defaut:\code{TRUE}) if used for summary.lm or lm
 #' @param ... optional parameters passed to special methods and/or raw \code{pandoc.*} functions
 #' @return By default this function outputs (see: \code{cat}) the result. If you would want to catch the result instead, then call the function ending in \code{.return}.
-#' @export pander.summary.lm
+#' @export
 pander.summary.lm <- function(x, caption = attr(x, 'caption'), covariate.labels, omit, summary = TRUE, ...) {
 
     if (is.null(caption)) {
@@ -299,7 +299,7 @@ pander.summary.lm <- function(x, caption = attr(x, 'caption'), covariate.labels,
 #' @param summary (defaut:\code{TRUE}) if used for summary.lm or lm
 #' @param ... optional parameters passed to special methods and/or raw \code{pandoc.*} functions
 #' @return By default this function outputs (see: \code{cat}) the result. If you would want to catch the result instead, then call the function ending in \code{.return}.
-#' @export pander.summary.glm
+#' @export
 pander.summary.glm <- function(x, caption = attr(x, 'caption'), covariate.labels, omit, summary = TRUE, ...) {
     pander.summary.lm(x, caption = caption, summary = summary, covariate.labels = covariate.labels, omit = omit, ...)
 }
@@ -313,7 +313,7 @@ pander.summary.glm <- function(x, caption = attr(x, 'caption'), covariate.labels
 #' @param covariate.labels vector to replace covariate lables in the table
 #' @param omit vector of variable to omit for priting in resulting table
 #' @param ... optional parameters passed to raw \code{pandoc.table} function
-#' @export pander.lm
+#' @export
 pander.lm <- function(x, caption = attr(x, 'caption'), covariate.labels, omit, ...) {
     pander.summary.lm(summary(x), caption = caption, summary = FALSE, covariate.labels = covariate.labels, omit = omit, ...)
 }
@@ -325,7 +325,7 @@ pander.lm <- function(x, caption = attr(x, 'caption'), covariate.labels, omit, .
 #' @param x a summary.glm object
 #' @param caption caption (string) to be shown under the table
 #' @param ... optional parameters passed to raw \code{pandoc.table} function
-#' @export pander.glm
+#' @export
 pander.glm <- function(x, caption = attr(x, 'caption'), ...) {
 
     if (is.null(caption)) {
@@ -347,7 +347,7 @@ pander.glm <- function(x, caption = attr(x, 'caption'), ...) {
 #' @param x a summary.aov object
 #' @param caption caption (string) to be shown under the table
 #' @param ... optional parameters passed to raw \code{pandoc.table} function
-#' @export pander.summary.aov
+#' @export
 pander.summary.aov <- function(x, caption = attr(x, 'caption'), ...) {
 
     res <- unclass(x)[[1]]
@@ -368,7 +368,7 @@ pander.summary.aov <- function(x, caption = attr(x, 'caption'), ...) {
 #' @param x an aov object
 #' @param caption caption (string) to be shown under the table
 #' @param ... optional parameters passed to raw \code{pandoc.table} function
-#' @export pander.aov
+#' @export
 pander.aov <- function(x, caption = attr(x, 'caption'), ...) {
     pander(summary(x), caption = caption, ...)
 }
@@ -379,7 +379,7 @@ pander.aov <- function(x, caption = attr(x, 'caption'), ...) {
 #' @param x an anova object
 #' @param caption caption (string) to be shown under the table
 #' @param ... optional parameters passed to raw \code{pandoc.table} function
-#' @export pander.anova
+#' @export
 pander.anova <- function(x, caption = attr(x, 'caption'), ...) {
 
     if (is.null(caption))
@@ -399,7 +399,7 @@ pander.anova <- function(x, caption = attr(x, 'caption'), ...) {
 #' @param x a summary.aovlist object
 #' @param caption caption (string) to be shown under the table
 #' @param ... optional parameters passed to raw \code{pandoc.table} function
-#' @export pander.summary.aovlist
+#' @export
 pander.summary.aovlist <- function(x, caption = attr(x, 'caption'), ...) {
     n <- length(x)
     if (n == 1)
@@ -419,7 +419,7 @@ pander.summary.aovlist <- function(x, caption = attr(x, 'caption'), ...) {
 #' @param x an aovlist object
 #' @param caption caption (string) to be shown under the table
 #' @param ... optional parameters passed to raw \code{pandoc.table} function
-#' @export pander.aovlist
+#' @export
 pander.aovlist <- function(x, caption = attr(x, 'caption'), ...) {
     pander(summary(x), caption = caption, ...)
 }
@@ -430,7 +430,7 @@ pander.aovlist <- function(x, caption = attr(x, 'caption'), ...) {
 #' @param x a htest object
 #' @param caption caption (string) to be shown under the table
 #' @param ... optional parameters passed to raw \code{pandoc.table} function
-#' @export pander.htest
+#' @export
 pander.htest <- function(x, caption = attr(x, 'caption'), ...) {
 
     if (is.null(caption)) {
@@ -468,7 +468,7 @@ pander.htest <- function(x, caption = attr(x, 'caption'), ...) {
 #' @param caption caption (string) to be shown under the table
 #' @param summary (default:\code{TRUE}) if extended summary should be printed
 #' @param ... optional parameters passed to raw \code{pandoc.table} function
-#' @export pander.summary.prcomp
+#' @export
 pander.summary.prcomp <- function(x, caption = attr(x, 'caption'), summary = TRUE, ...) {
 
     if (is.null(caption)) {
@@ -489,7 +489,7 @@ pander.summary.prcomp <- function(x, caption = attr(x, 'caption'), summary = TRU
 #' @param x a prcomp object
 #' @param caption caption (string) to be shown under the table
 #' @param ... optional parameters passed to raw \code{pandoc.table} function
-#' @export pander.prcomp
+#' @export
 pander.prcomp <- function(x, caption = attr(x, 'caption'),  ...) {
     pander(summary(x), caption = caption, summary = FALSE, ...)
 }
@@ -500,7 +500,7 @@ pander.prcomp <- function(x, caption = attr(x, 'caption'),  ...) {
 #' @param x a density object
 #' @param caption caption (string) to be shown under the table
 #' @param ... optional parameters passed to raw \code{pandoc.table} function
-#' @export pander.density
+#' @export
 pander.density <- function(x, caption = attr(x, 'caption'), ...) {
 
     if (is.null(caption)) {
@@ -521,7 +521,7 @@ pander.density <- function(x, caption = attr(x, 'caption'), ...) {
 #' Prints a list object in Pandoc's markdown.
 #' @param x a list object
 #' @param ... ignored parameters
-#' @export pander.list
+#' @export
 pander.list <- function(x, ...) {
 
     ## match call
@@ -565,7 +565,7 @@ pander.list <- function(x, ...) {
 #' Method to be used, when no exact S3 method for given object is found. Tries to render object as a list
 #' @param x an object
 #' @param ... optional parameters passed to raw \code{pandoc.list} function
-#' @export pander.default
+#' @export
 pander.default <- function(x, ...) {
     warning(sprintf('No pander.method for "%s", reverting to default.', class(x)))
     class(x) <- 'list'
@@ -577,7 +577,7 @@ pander.default <- function(x, ...) {
 #' Prints a evals object in Pandoc's markdown.
 #' @param x a evals object
 #' @param ... ignored parameters
-#' @export pander.evals
+#' @export
 pander.evals <- function(x, ...) {
 
     o <- pander(x$result)
@@ -600,7 +600,7 @@ pander.evals <- function(x, ...) {
 #' Prints a rapport object in Pandoc's markdown.
 #' @param x a rapport object
 #' @param ... ignored parameters
-#' @export pander.rapport
+#' @export
 pander.rapport <- function(x, ...)
     print(x)
 
@@ -609,7 +609,7 @@ pander.rapport <- function(x, ...)
 #' Prints a POSIXlt object in Pandoc's markdown.
 #' @param x a POSIXlt object
 #' @param ... optional parameters passed to raw \code{pandoc.date} function
-#' @export pander.POSIXlt
+#' @export
 pander.POSIXlt <- function(x, ...)
     pandoc.date(x, ...)
 
@@ -618,7 +618,7 @@ pander.POSIXlt <- function(x, ...)
 #' Prints a POSIXct object in Pandoc's markdown.
 #' @param x a POSIXct object
 #' @param ... optional parameters passed to raw \code{pandoc.date} function
-#' @export pander.POSIXct
+#' @export
 pander.POSIXct <- function(x, ...)
     pandoc.date(x, ...)
 
@@ -627,7 +627,7 @@ pander.POSIXct <- function(x, ...)
 #' Prints a Date object in Pandoc's markdown.
 #' @param x a Date object
 #' @param ... optional parameters passed to raw \code{pandoc.date} function
-#' @export pander.Date
+#' @export
 pander.Date <- function(x, ...)
     pandoc.date(x, ...)
 
@@ -636,7 +636,7 @@ pander.Date <- function(x, ...)
 #' Prints a ftable object in Pandoc's markdown.
 #' @param x a ftable object
 #' @param ... optional parameters passed to raw \code{pandoc.table} function
-#' @export pander.ftable
+#' @export
 pander.ftable <- function(x, ...)
     pandoc.table(x, ...)
 
@@ -646,7 +646,7 @@ pander.ftable <- function(x, ...)
 #' @param x a mtable object
 #' @param caption caption (string) to be shown under the table
 #' @param ... optional parameters passed to raw \code{pandoc.table} function
-#' @export pander.mtable
+#' @export
 pander.mtable <- function(x, caption = attr(x, 'caption'), ...){
     if (is.null(caption) & !is.null(storage$caption))
         caption <- get.caption()
@@ -677,7 +677,7 @@ pander.mtable <- function(x, caption = attr(x, 'caption'), ...){
 #' @param x a CrossTable object
 #' @param caption caption (string) to be shown under the table
 #' @param ... optional parameters passed to raw \code{pandoc.table} function
-#' @export pander.CrossTable
+#' @export
 pander.CrossTable <- function(x, caption = attr(x, 'caption'), ...){
     if (is.null(caption) & !is.null(storage$caption))
         caption <- get.caption()
@@ -730,7 +730,7 @@ pander.CrossTable <- function(x, caption = attr(x, 'caption'), ...){
 #' @param x a timeseries object
 #' @param caption caption (string) to be shown under the table
 #' @param ... optional parameters passed to raw \code{pandoc.table} function
-#' @export pander.ts
+#' @export
 pander.ts <- function(x, caption = attr(x, 'caption'), ...){
     if (is.null(caption) & !is.null(storage$caption))
         caption <- get.caption()
@@ -765,7 +765,7 @@ pander.ts <- function(x, caption = attr(x, 'caption'), ...){
 #' @param max.width maximum width in characters per line
 #' @param caption caption (string) to be shown under the formula
 #' @param ... optional parameters passed to raw \code{pandoc.table} function
-#' @export pander.formula
+#' @export
 pander.formula <- function(x, max.width = 80, caption = attr(x, 'caption'), ...) {
     if (is.null(caption) & !is.null(storage$caption))
         caption <- get.caption()
@@ -777,7 +777,7 @@ pander.formula <- function(x, max.width = 80, caption = attr(x, 'caption'), ...)
 #' Prints a call object in Pandoc's markdown.
 #' @param x a call object
 #' @param ... optional parameters passed to raw \code{pandoc.formula} function
-#' @export pander.call
+#' @export
 pander.call <- function(x, ...) {
     pander.formula(x, ...)
 }
@@ -788,7 +788,7 @@ pander.call <- function(x, ...) {
 #' @param x an coxph object
 #' @param caption caption (string) to be shown under the table
 #' @param ... optional parameters passed to raw \code{pandoc.table} function
-#' @export pander.coxph
+#' @export
 pander.coxph <- function(x, caption = attr(x, 'caption'), ...) {
     if (is.null(caption)) {
         if (is.null(storage$caption))
@@ -834,7 +834,7 @@ pander.coxph <- function(x, caption = attr(x, 'caption'), ...) {
 #' @param x an clogit object
 #' @param caption caption (string) to be shown under the table
 #' @param ... optional parameters passed to raw \code{pandoc.table} function
-#' @export pander.clogit
+#' @export
 pander.clogit <- function (x, caption = attr(x, 'caption'), ...)
 {
     if (is.null(caption)) {
@@ -852,7 +852,7 @@ pander.clogit <- function (x, caption = attr(x, 'caption'), ...)
 #' @param x an zoo object
 #' @param caption caption (string) to be shown under the table
 #' @param ... optional parameters passed to raw \code{pandoc.table} function
-#' @export pander.zoo
+#' @export
 pander.zoo <- function(x, caption = attr(x, 'caption'), ...) {
     if (is.null(caption) & !is.null(storage$caption))
         caption <- get.caption()
@@ -874,7 +874,7 @@ pander.zoo <- function(x, caption = attr(x, 'caption'), ...) {
 #' @param caption caption (string) to be shown under the table
 #' @param summary (default:\code{FALSE}) if to print expender summary
 #' @param ... optional parameters passed to raw \code{pandoc.table} function
-#' @export pander.lme
+#' @export
 pander.lme <- function(x, caption = attr(x, 'caption'), summary = FALSE, ...) {
 
     if (is.null(caption)) {
@@ -913,7 +913,7 @@ pander.lme <- function(x, caption = attr(x, 'caption'), summary = FALSE, ...) {
 #' @param short (default:\code{TRUE}) if to use consise output
 #' @param split.tables (default:\code{60}) split.tables param for pandoc.table function
 #' @param ... optional parameters passed to raw \code{pandoc.table} function
-#' @export pander.describe
+#' @export
 pander.describe <- function(x, caption = attr(x, 'caption'), short = TRUE, split.tables = 60, ...) {
     if (is.null(caption) & !is.null(storage$caption))
         caption <- get.caption()
@@ -1019,7 +1019,7 @@ pander.describe <- function(x, caption = attr(x, 'caption'), short = TRUE, split
 #' @param x an survdiff object
 #' @param caption caption (string) to be shown under the table
 #' @param ... optional parameters passed to raw \code{pandoc.table} function
-#' @export pander.survdiff
+#' @export
 pander.survdiff <- function(x, caption = attr(x, 'caption'), ...) {
     if (is.null(caption)) {
         if (is.null(storage$caption))
@@ -1068,7 +1068,7 @@ pander.survdiff <- function(x, caption = attr(x, 'caption'), ...) {
 #' @param scale	a numeric value to rescale the survival time, e.g., if the input data to survfit were in days, scale=365 would scale the printout to years.
 #' @param print.rmean,rmean	Options for computation and display of the restricted mean.
 #' @param ... optional parameters passed to raw \code{pandoc.table} function
-#' @export pander.survfit
+#' @export
 pander.survfit <- function (x, caption = attr(x, 'caption'), scale = 1, print.rmean = getOption("survfit.print.rmean"), rmean = getOption("survfit.rmean"), ...) {
     if (is.null(caption) & !is.null(storage$caption))
         caption <- get.caption()
@@ -1115,7 +1115,7 @@ pander.survfit <- function (x, caption = attr(x, 'caption'), scale = 1, print.rm
 #' Prints an smooth.spline object in Pandoc's markdown.
 #' @param x an smooth.spline object
 #' @param ... igroned parameters
-#' @export pander.smooth.spline
+#' @export
 pander.smooth.spline <- function(x, ...) {
     x <- as.list(capture.output(x)[-1:-3])
     pandoc.list(x, add.end.of.list = FALSE)
@@ -1127,7 +1127,7 @@ pander.smooth.spline <- function(x, ...) {
 #' @param x an rlm object
 #' @param caption caption (string) to be shown under the table
 #' @param ... optional parameters passed to raw \code{pandoc.table} function
-#' @export pander.rlm
+#' @export
 pander.rlm <- function(x, caption = attr(x, 'caption'), ...) {
     if (is.null(caption)) {
         if (is.null(storage$caption))
@@ -1158,7 +1158,7 @@ pander.rlm <- function(x, caption = attr(x, 'caption'), ...) {
 #' @param x an stat.table object
 #' @param caption caption (string) to be shown under the table
 #' @param ... optional parameters passed to raw \code{pandoc.table} function
-#' @export pander.stat.table
+#' @export
 pander.stat.table <- function(x, caption = attr(x, 'caption'), ...){
     if (is.null(caption) & !is.null(storage$caption))
         caption <- get.caption()
@@ -1191,7 +1191,7 @@ pander.stat.table <- function(x, caption = attr(x, 'caption'), ...){
 #' @param locale (defaut:\code{TRUE}) if to print locale output
 #' @param compact (defaut:\code{TRUE}) if output shoud be compact (ommiting extra line breaks and spaces, inline printing of lists)
 #' @param ... ignored parameters
-#' @export pander.sessionInfo
+#' @export
 pander.sessionInfo <- function (x, locale = TRUE, compact = TRUE, ...)
 {
     mkLabel <- function(L, n) {
@@ -1240,7 +1240,7 @@ pander.sessionInfo <- function (x, locale = TRUE, compact = TRUE, ...)
 #' @param expr.labels expression labels that will replace default ones (similar to rownames, which microbenchmark class table does not have)
 #' @param unit units in which values should be printed (for example second, microseconds, etc.). Should be one of “ns”, “us”, “ms”, “s”, “t”, “hz”, “khz”, “mhz”, “eps”, “f”
 #' @param ... optional parameters passed to raw \code{pandoc.table} function
-#' @export pander.microbenchmark
+#' @export
 pander.microbenchmark <- function(x, caption = attr(x, 'caption'), expr.labels, unit, ...){
     xs <- summary(x, unit = unit)
     if (is.null(caption)) {
@@ -1264,7 +1264,7 @@ pander.microbenchmark <- function(x, caption = attr(x, 'caption'), expr.labels, 
 #' @param verbatim (defaut:\code{TRUE}) if to add tabulation, so pandoc conversion will rander it properly
 #' @param syntax.highlighting (defaut:\code{FALSE}) if to add hyghlighting tag for R syntax
 #' @param ... ignored parameters
-#' @export pander.function
+#' @export
 pander.function <- function(x, add.name = FALSE, verbatim = TRUE, syntax.highlighting = FALSE, ...){
     fname <- substitute(x)
     ps <- ""
