@@ -27,11 +27,12 @@ std::string tableExpand_cpp(CharacterVector cells, IntegerVector colsWidth, Char
   size_t pos;
   char endline = '\n';
   std::vector<std::string> cellsC(cells.size()), *resSplit;
-  int i, j, maxLengthCells = 0, n = 0;
+  int i, j, n = 0;
+  std::size_t maxLengthCells = 0;
   bool hasLineBreak = false;
 
   // check for having a line break and convert to string vector for easiness
-  for (i = 0; i < cellsC.size(); i++){
+  for (std::size_t i = 0; i < cellsC.size(); i++){
     cellsC[i] = std::string(cells[i]);
     if (cellsC[i].find(endline) != std::string::npos)
       hasLineBreak = true;
@@ -58,7 +59,7 @@ std::string tableExpand_cpp(CharacterVector cells, IntegerVector colsWidth, Char
         maxLengthCells = resSplit[i].size();
     }
     // prepare arguments and do a recursive call
-    for (i = 0; i < maxLengthCells; i++){
+    for (std::size_t i = 0; i < maxLengthCells; i++){
       CharacterVector newCells(n);
       for (j = 0; j < n; j++)
         newCells[j] = resSplit[j].size() > i ? resSplit[j][i] : "  ";
