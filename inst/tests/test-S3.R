@@ -354,5 +354,5 @@ test_that('table.expand behaves correctly',{
   expect_equal(pandoc.table.return(data.frame(a="\\1",b="23")), "\n-------\n a   b \n--- ---\n\\1  23 \n-------\n\n")
   
   # unicode string issue
-  expect_equal(pandoc.table.return(data.table(a = 'ßß')), "\n---\n a \n---\nßß \n---\n\n")
+  expect_equal(pandoc.table.return(data.frame(a = 'ßß')), "\n---\n a \n---\nßß \n---\n\n")
 })
