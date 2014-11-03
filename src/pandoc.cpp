@@ -4,18 +4,21 @@ using namespace Rcpp;
 
 // simplified version of format that fits the need for table.expand
 // checks justify param and adds needed number of whitespaces based on it
-std::string format_cpp(std::string x, std::string justify, int width) {
+std::string format_cpp(const std::string &x, const std::string &justify, int width) {
   std::string result = "";
+  int xlen = 0;
+  const char *s = x.c_str();
+  while (*s) xlen += (*s++ & 0xc0) != 0x80;
   if (justify == "left"){
     result += x;
-    result += std::string(width - x.length(), ' ');
+    result += std::string(width - xlen, ' ');
   } else if (justify == "right"){
-    result += std::string(width - x.length(), ' ');
+    result += std::string(width - xlen, ' ');
     result += x;
   } else {
-    result += std::string((width - x.length())/2, ' ');
+    result += std::string((width - xlen)/2, ' ');
     result += x;
-    for (int j = (width + x.length())/2; j < width; j++)
+    for (int j = (width + xlen)/2; j < width; j++)
       result += " ";
   }
   return result;
