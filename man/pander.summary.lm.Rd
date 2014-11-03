@@ -17,6 +17,8 @@
 
 \item{summary}{(defaut:\code{TRUE}) if used for summary.lm or lm}
 
+\item{add.significance.stars}{if significance stars should be shown for P value}
+
 \item{...}{optional parameters passed to special methods and/or raw \code{pandoc.*} functions}
 }
 \value{

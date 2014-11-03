@@ -14,7 +14,7 @@
 
 \item{scale}{a numeric value to rescale the survival time, e.g., if the input data to survfit were in days, scale=365 would scale the printout to years.}
 
-\item{print.rmean,rmean}{Options for computation and display of the restricted mean.}
+\item{print.rmean,rmean}{options for computation and display of the restricted mean}
 
 \item{...}{optional parameters passed to raw \code{pandoc.table} function}
 }
