@@ -237,10 +237,11 @@ pander.factor <- function(x, ...)
 #' @param covariate.labels vector to replace covariate lables in the table
 #' @param omit vector of variable to omit for priting in resulting table
 #' @param summary (defaut:\code{TRUE}) if used for summary.lm or lm
+#' @param add.significance.stars if significance stars should be shown for P value
 #' @param ... optional parameters passed to special methods and/or raw \code{pandoc.*} functions
 #' @return By default this function outputs (see: \code{cat}) the result. If you would want to catch the result instead, then call the function ending in \code{.return}.
 #' @export
-pander.summary.lm <- function(x, caption = attr(x, 'caption'), covariate.labels, omit, summary = TRUE, ...) {
+pander.summary.lm <- function(x, caption = attr(x, 'caption'), covariate.labels, omit, summary = TRUE, add.significance.stars = FALSE, ...) {
 
     if (is.null(caption)) {
         if (is.null(storage$caption))
@@ -259,6 +260,9 @@ pander.summary.lm <- function(x, caption = attr(x, 'caption'), covariate.labels,
 
     if (!missing(covariate.labels))
         row.names(res)[1:length(covariate.labels)] <- covariate.labels
+
+    if (add.significance.stars)
+        res[, 4] <- add.significance.stars(res[, 4])
 
     if (summary) {
         pandoc.table(res, ...)

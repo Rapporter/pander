@@ -4,7 +4,7 @@
 \title{Pander method for summary.lm class}
 \usage{
 \method{pander}{summary.lm}(x, caption = attr(x, "caption"), covariate.labels,
-  omit, summary = TRUE, ...)
+  omit, summary = TRUE, add.significance.stars = FALSE, ...)
 }
 \arguments{
 \item{x}{an summary.lm object}
