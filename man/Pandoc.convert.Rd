@@ -4,7 +4,8 @@
 \title{Converts Pandoc to other format}
 \usage{
 Pandoc.convert(f, text, format = "html", open = TRUE, options = "",
-  footer = TRUE, proc.time, portable.html = TRUE)
+  footer = TRUE, proc.time, portable.html = TRUE,
+  pandoc.binary = panderOptions("pandoc.binary"))
 }
 \arguments{
 \item{f}{Pandoc's markdown format file path. If URL is provided then the generated file's path is \code{tempfile()} but please bear in mind that this way only images with absolute path would shown up in the document.}
@@ -22,6 +23,8 @@ Pandoc.convert(f, text, format = "html", open = TRUE, options = "",
 \item{proc.time}{optionally passed number in seconds which would be shown in the generated document's footer}
 
 \item{portable.html}{instead of using local files, rather linking JS/CSS files to an online CDN for portability and including base64-encoded images if converting to \code{HTML} without custom \code{options}}
+
+\item{pandoc.binary}{path to \code{pandoc}'s binary if not found in the path}
 }
 \value{
 Converted file's path.

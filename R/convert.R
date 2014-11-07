@@ -36,6 +36,7 @@ openFileInOS <- function(f) {
 #' @param footer add footer to document with meta-information
 #' @param proc.time optionally passed number in seconds which would be shown in the generated document's footer
 #' @param portable.html instead of using local files, rather linking JS/CSS files to an online CDN for portability and including base64-encoded images if converting to \code{HTML} without custom \code{options}
+#' @param pandoc.binary path to \code{pandoc}'s binary if not found in the path
 #' @references John MacFarlane (2012): _Pandoc User's Guide_. \url{http://johnmacfarlane.net/pandoc/README.html}
 #' @note This function depends on \code{Pandoc} which should be pre-installed on user's machine. See the \code{INSTALL} file of the package.
 #' @return Converted file's path.
@@ -49,14 +50,16 @@ openFileInOS <- function(f) {
 #' ## online markdown file to other formats with this function, please pre-process the file
 #' ## to have absolute paths instead.
 #' }
-Pandoc.convert <- function(f, text, format = 'html', open = TRUE, options = '', footer = TRUE, proc.time, portable.html = TRUE) {
+Pandoc.convert <- function(f, text, format = 'html', open = TRUE, options = '', footer = TRUE, proc.time, portable.html = TRUE, pandoc.binary = panderOptions('pandoc.binary')) {
 
     ## check for Pandoc
-    if (Sys.which('pandoc') == '') {
+    if (pandoc.binary == '') {
         if (grepl("w|W", .Platform$OS.type))
             message('You may install Pandoc easily with "install.pandoc()" from the "installr" package.')
         stop("It seems Pandoc is not installed or path of binary is not found. Did you restarted R after Pandoc install? See installation details by running:\n\n\t readLines(system.file('includes/html/footer.html', package='pander'))\n")
     }
+    if (!file.exists(pandoc.binary))
+        stop(paste('Pandoc binary is not found at provided location:', pandoc.binary))
 
     ## dealing with provided character vector
     if (!missing(text)) {
@@ -116,7 +119,7 @@ Pandoc.convert <- function(f, text, format = 'html', open = TRUE, options = '', 
     setwd(f.dir)
 
     ## call Pandoc
-    cmd <- sprintf('pandoc -f markdown -s %s %s -o %s', options, shQuote(f), shQuote(f.out))
+    cmd <- sprintf('%s -f markdown -s %s %s -o %s', pandoc.binary, options, shQuote(f), shQuote(f.out))
     if (grepl("w|W", .Platform$OS.type))
         res <- suppressWarnings(tryCatch(shell(cmd, intern = TRUE), error = function(e) e))
     else

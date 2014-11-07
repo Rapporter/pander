@@ -66,6 +66,7 @@ The following \code{pander} options are available:
      }
      \item \code{graph.symbol}: numeric (default: \code{1}) specifying a symbol (see the \code{pch} parameter of \code{par})
      \item \code{knitr.auto.asis}: boolean (default: \code{TRUE}) if the results of \code{pander} should be considered as \code{'asis'} in \code{knitr}. Equals to specifying \code{results='asis'} in the R chunk, so thus there is no need to do so if set tot \code{TRUE}.
+     \item \code{pandoc.binary}: full path of \code{pandoc}'s binary. By default, \code{pandoc} is in the path.
 }
 }
 \note{
