@@ -68,7 +68,13 @@
 #' pander(x)
 pander <- function(x = NULL, ...) {
 
+    ## save current knitr.auto.asis option
+    kaao <- panderOptions('knitr.auto.asis')
+
     if (isTRUE(panderOptions('knitr.auto.asis')) && isTRUE(getOption('knitr.in.progress')) && requireNamespace('knitr', quietly = TRUE)) {
+
+        ## override knitr.auto.asis option for nested calls
+        panderOptions('knitr.auto.asis', FALSE)
 
         ## grab stdout
         stdout <- vector('character')
@@ -78,6 +84,8 @@ pander <- function(x = NULL, ...) {
 
         ## close
         on.exit({
+            if (panderOptions('knitr.auto.asis') != kaao)
+                panderOptions('knitr.auto.asis', kaao)
             sink()
             sink(type = 'message')
             close(con)
