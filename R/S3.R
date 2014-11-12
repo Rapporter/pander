@@ -84,11 +84,20 @@ pander <- function(x = NULL, ...) {
 
         ## close
         on.exit({
+
+            ## restore knitr.auto.asis option
             if (panderOptions('knitr.auto.asis') != kaao)
                 panderOptions('knitr.auto.asis', kaao)
+
+            ## revert R output back to normal
             sink()
             sink(type = 'message')
             close(con)
+
+            ## re-add the final line-break
+            if (tail(stdout, 1) == '')
+                stdout <- c(stdout, '')
+
             return(knitr::asis_output(paste(stdout, collapse = '\n')))
         })
     }
