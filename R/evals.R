@@ -1007,6 +1007,18 @@ evals <- function(txt, parse = TRUE, cache = TRUE, cache.mode = c('environment',
             if (!inherits(result, classes))
                 result <- output <- NULL
 
+        ## caption
+        if (!is.null(storage$caption) & !is.null(result))
+            attr(result, 'caption') <- get.caption()
+
+        ## alignment of tables
+        if (!is.null(storage$alignment) & !is.null(result))
+            attr(result, 'alignment') <- get.alignment(result)
+
+        ## highlight cells
+        if (!is.null(result))
+            result <- get.emphasize(result)
+
         ## run hooks if specified
         if (!is.null(hooks))
             if (inherits(result, names(hooks))) {
@@ -1026,18 +1038,6 @@ evals <- function(txt, parse = TRUE, cache = TRUE, cache.mode = c('environment',
                     result <- do.call(fn, params)
                 }
             }
-
-        ## caption
-        if (!is.null(storage$caption) & !is.null(result))
-            attr(result, 'caption') <- get.caption()
-
-        ## alignment of tables
-        if (!is.null(storage$alignment) & !is.null(result))
-            attr(result, 'alignment') <- get.alignment(result)
-
-        ## highlight cells
-        if (!is.null(result))
-            result <- get.emphasize(result)
 
         ## return list at last
         res <- list(src      = src,
