@@ -211,6 +211,8 @@ pandoc.link <- function(...)
 #' @references John MacFarlane (2012): _Pandoc User's Guide_. \url{http://johnmacfarlane.net/pandoc/README.html}
 pandoc.image.return <- function(img, caption = storage$caption) {
 
+    check_caption(caption)
+
     if (is.null(caption))
         caption <- ''
 
@@ -1021,6 +1023,7 @@ pandoc.table.return <- function(t, caption, digits = panderOptions('digits'), de
             res <- paste0(res, '\n\n')
 
         ## (optional) caption
+        check_caption(caption)
         if (!is.null(caption) && caption != '')
             res <- paste0(res, panderOptions('table.caption.prefix'), caption, '\n\n')
 
@@ -1062,7 +1065,7 @@ pandoc.formula.return <- function(x, text = NULL, max.width = 80, caption, add.l
     if (add.line.breaks)
         res <- paste(res, "\n\n")
     ## (optional) caption
-    if (!is.null(caption) && caption != '')
+    if (!is.null(caption) && caption != '' && check_caption(caption))
         res <- paste0(res, panderOptions('formula.caption.prefix'), caption, '\n\n')
     return(res)
 }

@@ -335,3 +335,17 @@ splitLine <- function(x, max.width = panderOptions('table.split.cells'), use.hyp
         koRpus::hyphen(s, hyph.pattern = 'en.us', quiet = TRUE)@hyphen[1, 2]
     .Call('pander_splitLine_cpp', PACKAGE = 'pander', x, max.width, use.hyphening, hyphen_f)
 }
+
+
+#' Check if caption is valid
+#' @param caption R object to check
+#' @return boolean
+#' @keywords internal
+check_caption <- function(caption) {
+
+    if (length(caption) > 1)
+        stop('The caption should be exactly one string.')
+
+    if (is.character(caption) | is.null(caption))
+        stop('The caption should be string (character class) or NULL.')
+}
