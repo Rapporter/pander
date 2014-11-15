@@ -346,6 +346,6 @@ check_caption <- function(caption) {
     if (length(caption) > 1)
         stop('The caption should be exactly one string.')
 
-    if (is.character(caption) | is.null(caption))
+    if (!(is.character(caption) | is.null(caption)))
         stop('The caption should be string (character class) or NULL.')
 }
