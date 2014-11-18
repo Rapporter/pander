@@ -822,6 +822,10 @@ pandoc.table.return <- function(t, caption, digits = panderOptions('digits'), de
     else
         t <- format(t, trim = TRUE)  ### here adds unneeded zero's
 
+    ## force possible factors to character vectors
+    if (length(dim(t)) == 2)
+        t <- apply(t, 2, as.character)
+
     ## replace missing values
     if (length(w) > 0)
         t[w] <- missing
