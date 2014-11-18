@@ -797,7 +797,7 @@ pandoc.table.return <- function(t, caption, digits = panderOptions('digits'), de
     res <- ''
 
     ## store missing values
-    w <- which(is.na(t), arr.ind = TRUE)
+    wm <- which(is.na(t), arr.ind = TRUE)
 
     ## round numbers & cut digits & apply decimal mark & optionally remove trailing zeros
     if (length(dim(t)) < 2 | !is.null(dim(t)) && length(dim(t)) == 2 && is.data.frame(t))
@@ -825,12 +825,13 @@ pandoc.table.return <- function(t, caption, digits = panderOptions('digits'), de
         t <- format(t, trim = TRUE)  ### here adds unneeded zero's
 
     ## force possible factors to character vectors
-    if (length(dim(t)) == 2)
-        t <- apply(t, 2, as.character)
+    wf <- which(sapply(t, is.factor))
+    if (length(dim(t)) == 2 && length(wf) > 0)
+        t[, wf] <- apply(t[wf], 2, as.character)
 
     ## replace missing values
-    if (length(w) > 0)
-        t[w] <- missing
+    if (length(wm) > 0)
+        t[wm] <- missing
 
     ## adding formatting (emphasis, strong etc.)
     if (length(dim(t)) < 2) {
