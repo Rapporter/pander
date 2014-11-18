@@ -80,23 +80,7 @@ For example there is a helper function rendering R **lists** into markdown:
 > pandoc.list(l, 'roman')
 ```
 Which command produces the following output:
-```
-I. First list element 
-    I. 1. subelement 
-    II. 2. subelement 
-    III. 3. subelement 
-    IV. 4. subelement 
-    V. 5. subelement  
-II. Second element 
-    I. F 
-    II. B 
-    III. I 
-        I. phone 
-        II. pad 
-        III. talics   
-
-<!-- end of list -->
-
+``` **ERROR**^['object' must be a list]
 ```
 
 <a id="tables"></a>
@@ -281,7 +265,7 @@ You can specify the alignment of the cells (left, right or center/centre) in a t
 -------------- ------------- --------------
            5.1      3.5      1.4           
 
-           4.9       3       1.4           
+           4.9      NA       1.4           
 -------------------------------------------
 
 ```
@@ -311,15 +295,7 @@ What's even more fun, you can specify a function that takes the R object as its 
 +   function(df)
 +     ifelse(sapply(df, mean) > 2, 'left', 'right'))
 > pandoc.table(head(iris[,1:3], 2))
-
--------------------------------------------
-Sepal.Length   Sepal.Width     Petal.Length
--------------- ------------- --------------
-5.1            3.5                      1.4
-
-4.9            3                        1.4
--------------------------------------------
-
+ **ERROR**^[Invalid values passed for `justify` that can be "left", "right" or "centre/center".]
 ```
 
 ## Table and cell width
@@ -873,7 +849,7 @@ Besides capturing this nifty list of important circumstances, `evals` can automa
 
 ```rout
 > evals('hist(mtcars$hp)')[[1]]$result
-![](plots/23ea18297ead.png)
+![](plots/676c733c43ca.png)
 ```
 
 So instead of a captured R object (which would be `NULL` in this situation by the way), we get the path of the image where the plot was saved:
@@ -973,6 +949,7 @@ The package comes with a variety of globally adjustable options, which have an e
   * `round`: numeric (default: `Inf`) passed to `round`
   * `keep.trailing.zeros`: boolean (default: `FALSE`) show or remove trailing zeros in numbers (e.g. in numeric vectors or in columns of tables with numeric values)
   * `keep.line.breaks`: boolean (default: `FALSE`) to keep or remove line breaks from cells in a table
+  * `missing`: string (default: `NA`) to replace missing values in vectors, tables etc.
   * `date`: string (default: `'%Y/%m/%d %X'`) passed to `format` when printing dates (`POSIXct` or `POSIXt`)
   * `header.style`: `'atx'` or `'setext'` passed to `pandoc.header`
   * `list.style`: `'bullet'` (default), `'ordered'` or `'roman'` passed to `pandoc.list`. Please not that this has no effect on `pander` methods.
@@ -1094,4 +1071,4 @@ To use this small lib, just type: `M-x pander-mode` on any document. It might be
 
 
 -------
-This report was generated with [R](http://www.r-project.org/) (3.1.1) and [pander](https://github.com/rapporter/pander) (0.5.0) in 0.835 sec on x86_64-unknown-linux-gnu platform.
+This report was generated with [R](http://www.r-project.org/) (3.1.2) and [pander](https://github.com/rapporter/pander) (0.5.2) in 0.994 sec on x86_64-unknown-linux-gnu platform.

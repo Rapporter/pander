@@ -1,4 +1,3 @@
-
 #' Indent text
 #'
 #' Indent all (optionally concatenated) lines of provided text with given level.
@@ -23,6 +22,7 @@ pandoc.indent <- function(x, level = 0) {
     res
 
 }
+
 
 #' Paragraphs
 #'
@@ -374,6 +374,7 @@ pandoc.title <- function(...)
 #' @param add.line.breaks adding a leading and trailing newline before/after the list
 #' @param add.end.of.list adding a separator comment after the list
 #' @param indent.level the level of indent
+#' @param missing string to replace missing values
 #' @return By default this function outputs (see: \code{cat}) the result. If you would want to catch the result instead, then call the function ending in \code{.return}.
 #' @export
 #' @aliases pandoc.list
@@ -400,22 +401,29 @@ pandoc.title <- function(...)
 #' pandoc.list(list('one', list('two')))
 #' pandoc.list(list('one', list(2:3)))
 #' @importFrom utils as.roman
-pandoc.list.return <- function(elements, style = c('bullet', 'ordered', 'roman'), loose = FALSE, add.line.breaks = TRUE, add.end.of.list = TRUE, indent.level = 0) {
+pandoc.list.return <- function(elements, style = c('bullet', 'ordered', 'roman'), loose = FALSE, add.line.breaks = TRUE, add.end.of.list = TRUE, indent.level = 0, missing = panderOptions('missing')) {
 
+    ## checks
     if (!is.logical(loose))
         stop('Wrong argument provided: loose')
 
+    ## default values
     if (missing(style))
         style <- panderOptions('list.style')
     else
         style <- match.arg(style)
 
+    ## replace missing values
+    elements <- rapply(elements, function(x) ifelse(is.na(x), missing, x), how = 'list')
+
+    ## helpers
     elements.l <- length(elements)
     marker     <- switch(style,
                          'bullet'  = rep('* ', elements.l),
                          'ordered' = paste0(1:elements.l, '. '),
                          'roman'   = paste0(as.roman(1:elements.l), '. '))
 
+    ## recursive call
     i.lag <- 0
     res <- ifelse(add.line.breaks, '\n', '')
     res <- paste(sapply(1:elements.l, function(i) {
@@ -427,6 +435,7 @@ pandoc.list.return <- function(elements, style = c('bullet', 'ordered', 'roman')
         }
     }), collapse = '\n', ifelse(loose, '\n', ''))
 
+    ## closing tag
     if (add.end.of.list)
         res <- paste0(res, ifelse(loose, '', '\n\n'), '<!-- end of list -->\n')
     if (add.line.breaks)
@@ -456,6 +465,7 @@ pandoc.list <- function(...)
 #' @param decimal.mark passed to \code{format}
 #' @param big.mark passed to \code{format}
 #' @param round passed to \code{round}
+#' @param missing string to replace missing values
 #' @param justify defines alignment in cells passed to \code{format}. Can be \code{left}, \code{right} or \code{centre}, which latter can be also spelled as \code{center}. Defaults to \code{centre}.
 #' @param style which Pandoc style to use: \code{simple}, \code{multiline}, \code{grid} or \code{rmarkdown}
 #' @param split.tables where to split wide tables to separate tables. The default value (\code{80}) suggests the conventional number of characters used in a line, feel free to change (e.g. to \code{Inf} to disable this feature) if you are not using a VT100 terminal any more :)
@@ -576,10 +586,11 @@ pandoc.list <- function(...)
 #' x <- data.frame(a = "Can be also supplied as a vector, for each cell separately",
 #'        b = "Can be also supplied as a vector, for each cell separately")
 #' pandoc.table(x, split.cells = 10, use.hyphening = TRUE)
-pandoc.table.return <- function(t, caption, digits = panderOptions('digits'), decimal.mark = panderOptions('decimal.mark'), big.mark = panderOptions('big.mark'), round = panderOptions('round'), justify, style = c('multiline', 'grid', 'simple', 'rmarkdown'), split.tables = panderOptions('table.split.table'), split.cells = panderOptions('table.split.cells'), keep.trailing.zeros = panderOptions('keep.trailing.zeros'), keep.line.breaks = panderOptions('keep.line.breaks'), plain.ascii = panderOptions('plain.ascii'), use.hyphening = panderOptions('use.hyphening'), emphasize.rownames = panderOptions('table.emphasize.rownames'), emphasize.rows, emphasize.cols, emphasize.cells, emphasize.strong.rows, emphasize.strong.cols, emphasize.strong.cells, ...) {
-  ## expands cells for output
+pandoc.table.return <- function(t, caption, digits = panderOptions('digits'), decimal.mark = panderOptions('decimal.mark'), big.mark = panderOptions('big.mark'), round = panderOptions('round'), missing = panderOptions('missing'), justify, style = c('multiline', 'grid', 'simple', 'rmarkdown'), split.tables = panderOptions('table.split.table'), split.cells = panderOptions('table.split.cells'), keep.trailing.zeros = panderOptions('keep.trailing.zeros'), keep.line.breaks = panderOptions('keep.line.breaks'), plain.ascii = panderOptions('plain.ascii'), use.hyphening = panderOptions('use.hyphening'), emphasize.rownames = panderOptions('table.emphasize.rownames'), emphasize.rows, emphasize.cols, emphasize.cells, emphasize.strong.rows, emphasize.strong.cols, emphasize.strong.cells, ...) {
+
+    ## expands cells for output
     table.expand <- function(cells, cols.width, justify, sep.cols) {
-      .Call('pander_tableExpand_cpp', PACKAGE = 'pander', cells, cols.width, justify, sep.cols, style)
+        .Call('pander_tableExpand_cpp', PACKAGE = 'pander', cells, cols.width, justify, sep.cols, style)
     }
 
     ## cell conversion to plain-ascii (deletion of markup characters)
@@ -783,6 +794,9 @@ pandoc.table.return <- function(t, caption, digits = panderOptions('digits'), de
     }
     res <- ''
 
+    ## store missing values
+    w <- which(is.na(t), arr.ind = TRUE)
+
     ## round numbers & cut digits & apply decimal mark & optionally remove trailing zeros
     if (length(dim(t)) < 2 | !is.null(dim(t)) && length(dim(t)) == 2 && is.data.frame(t))
         t.n <- as.numeric(which(sapply(t, is.numeric)))
@@ -797,7 +811,8 @@ pandoc.table.return <- function(t, caption, digits = panderOptions('digits'), de
             switch(as.character(length(dim(t))),
                    '0' = t[t.n]   <- sapply(t[t.n], format, trim = TRUE, digits = digits, decimal.mark = decimal.mark, big.mark = big.mark),
                    '1' = t[t.n]   <- apply(t[t.n, drop = FALSE], 1, format, trim = TRUE, digits = digits, decimal.mark = decimal.mark, big.mark = big.mark),
-                   '2' = t[, t.n] <- apply(t[, t.n, drop = FALSE], c(1,2), format, trim = TRUE, digits = digits, decimal.mark = decimal.mark, big.mark = big.mark))
+                   '2' = t[, t.n] <- apply(t[, t.n, drop = FALSE], c(1,2), format, trim = TRUE, digits = digits, decimal.mark = decimal.mark, big.mark = big.mark)
+                   )
         }
     }
 
@@ -806,6 +821,10 @@ pandoc.table.return <- function(t, caption, digits = panderOptions('digits'), de
         t <- format(t, trim = TRUE, digits = digits, decimal.mark = decimal.mark, big.mark = big.mark)
     else
         t <- format(t, trim = TRUE)  ### here adds unneeded zero's
+
+    ## replace missing values
+    if (length(w) > 0)
+        t[w] <- missing
 
     ## adding formatting (emphasis, strong etc.)
     if (length(dim(t)) < 2) {

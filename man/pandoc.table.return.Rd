@@ -7,7 +7,8 @@
 pandoc.table.return(t, caption, digits = panderOptions("digits"),
   decimal.mark = panderOptions("decimal.mark"),
   big.mark = panderOptions("big.mark"), round = panderOptions("round"),
-  justify, style = c("multiline", "grid", "simple", "rmarkdown"),
+  missing = panderOptions("missing"), justify, style = c("multiline",
+  "grid", "simple", "rmarkdown"),
   split.tables = panderOptions("table.split.table"),
   split.cells = panderOptions("table.split.cells"),
   keep.trailing.zeros = panderOptions("keep.trailing.zeros"),
@@ -30,6 +31,8 @@ pandoc.table.return(t, caption, digits = panderOptions("digits"),
 \item{big.mark}{passed to \code{format}}
 
 \item{round}{passed to \code{round}}
+
+\item{missing}{string to replace missing values}
 
 \item{justify}{defines alignment in cells passed to \code{format}. Can be \code{left}, \code{right} or \code{centre}, which latter can be also spelled as \code{center}. Defaults to \code{centre}.}
 

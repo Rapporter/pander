@@ -5,7 +5,8 @@
 \usage{
 p(x, wrap = panderOptions("p.wrap"), sep = panderOptions("p.sep"),
   copula = panderOptions("p.copula"), limit = Inf,
-  keep.trailing.zeros = panderOptions("keep.trailing.zeros"))
+  keep.trailing.zeros = panderOptions("keep.trailing.zeros"),
+  missing = panderOptions("missing"))
 }
 \arguments{
 \item{x}{an atomic vector to get merged for inline printing}
@@ -19,6 +20,8 @@ p(x, wrap = panderOptions("p.wrap"), sep = panderOptions("p.sep"),
 \item{limit}{maximum character length (defaults to \code{Inf}initive  elements)}
 
 \item{keep.trailing.zeros}{to show or remove trailing zeros in numbers}
+
+\item{missing}{string to replace missing values}
 }
 \value{
 a string with concatenated vector contents

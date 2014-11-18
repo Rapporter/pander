@@ -702,6 +702,7 @@ The package comes with a variety of globally adjustable options, which have an e
   * `round`: numeric (default: `Inf`) passed to `round`
   * `keep.trailing.zeros`: boolean (default: `FALSE`) show or remove trailing zeros in numbers (e.g. in numeric vectors or in columns of tables with numeric values)
   * `keep.line.breaks`: boolean (default: `FALSE`) to keep or remove line breaks from cells in a table
+  * `missing`: string (default: `NA`) to replace missing values in vectors, tables etc.
   * `date`: string (default: `'%Y/%m/%d %X'`) passed to `format` when printing dates (`POSIXct` or `POSIXt`)
   * `header.style`: `'atx'` or `'setext'` passed to `pandoc.header`
   * `list.style`: `'bullet'` (default), `'ordered'` or `'roman'` passed to `pandoc.list`. Please not that this has no effect on `pander` methods.

@@ -574,6 +574,9 @@ pander.list <- function(x, ...) {
     else
         indent <- eval(mc$indent, parent.frame(1))
 
+    ## replace missing values
+    x <- rapply(x, function(x) ifelse(is.na(x), panderOptions('missing'), x), how = 'list')
+
     ## grab elements name (if any)
     x.names <- sapply(names(x), function(x) ifelse(x == '', '  *', sprintf('  * **%s**:', x)))
     if (length(x.names) == 0)

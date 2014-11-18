@@ -45,6 +45,7 @@ repChar <- function(x, n, sep = '')
 #' @param copula a string with ending separator - the one that separates the last two vector elements (uses the value set in \code{p.copula} option, \code{"and"} by default)
 #' @param limit maximum character length (defaults to \code{Inf}initive  elements)
 #' @param keep.trailing.zeros to show or remove trailing zeros in numbers
+#' @param missing string to replace missing values
 #' @return a string with concatenated vector contents
 #' @examples
 #' p(c("fee", "fi", "foo", "fam"))
@@ -58,7 +59,7 @@ repChar <- function(x, n, sep = '')
 #' @export
 #' @author Aleksandar Blagotic
 #' @references This function was moved from \code{rapport} package: \url{http://rapport-package.info/}.
-p <- function(x, wrap = panderOptions('p.wrap'), sep = panderOptions('p.sep'), copula = panderOptions('p.copula'), limit = Inf, keep.trailing.zeros = panderOptions('keep.trailing.zeros')){
+p <- function(x, wrap = panderOptions('p.wrap'), sep = panderOptions('p.sep'), copula = panderOptions('p.copula'), limit = Inf, keep.trailing.zeros = panderOptions('keep.trailing.zeros'), missing = panderOptions('missing')){
 
     attributes(x) <- NULL
     stopifnot(is.vector(x))
@@ -67,6 +68,9 @@ p <- function(x, wrap = panderOptions('p.wrap'), sep = panderOptions('p.sep'), c
     if (x.len == 0)
         return('')
     stopifnot(x.len <= limit)
+
+    ## store missing values
+    w <- which(is.na(x))
 
     ## prettify numbers
     if (is.numeric(x)) {
@@ -81,6 +85,10 @@ p <- function(x, wrap = panderOptions('p.wrap'), sep = panderOptions('p.sep'), c
             x <- format(x, trim = TRUE, digits = panderOptions('digits'), decimal.mark = panderOptions('decimal.mark'))
 
     }
+
+    ## replace missing values
+    if (length(w) > 0)
+        x[w] <- missing
 
     if (x.len == 1)
         wrap(x, wrap)
