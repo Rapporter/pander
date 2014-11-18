@@ -414,7 +414,9 @@ pandoc.list.return <- function(elements, style = c('bullet', 'ordered', 'roman')
         style <- match.arg(style)
 
     ## replace missing values
-    elements <- rapply(elements, function(x) ifelse(is.na(x), missing, x), how = 'list')
+    w <- which(is.na(elements))
+    if (length(w) > 0)
+        elements[w] <- missing
 
     ## helpers
     elements.l <- length(elements)
