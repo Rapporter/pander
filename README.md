@@ -80,7 +80,23 @@ For example there is a helper function rendering R **lists** into markdown:
 > pandoc.list(l, 'roman')
 ```
 Which command produces the following output:
-``` **ERROR**^['object' must be a list]
+```
+I. First list element 
+    I. 1. subelement 
+    II. 2. subelement 
+    III. 3. subelement 
+    IV. 4. subelement 
+    V. 5. subelement  
+II. Second element 
+    I. F 
+    II. B 
+    III. I 
+        I. phone 
+        II. pad 
+        III. talics   
+
+<!-- end of list -->
+
 ```
 
 <a id="tables"></a>
@@ -265,7 +281,7 @@ You can specify the alignment of the cells (left, right or center/centre) in a t
 -------------- ------------- --------------
            5.1      3.5      1.4           
 
-           4.9      NA       1.4           
+           4.9       3       1.4           
 -------------------------------------------
 
 ```
@@ -295,7 +311,15 @@ What's even more fun, you can specify a function that takes the R object as its 
 +   function(df)
 +     ifelse(sapply(df, mean) > 2, 'left', 'right'))
 > pandoc.table(head(iris[,1:3], 2))
- **ERROR**^[Invalid values passed for `justify` that can be "left", "right" or "centre/center".]
+
+-------------------------------------------
+Sepal.Length   Sepal.Width     Petal.Length
+-------------- ------------- --------------
+5.1            3.5                      1.4
+
+4.9            3                        1.4
+-------------------------------------------
+
 ```
 
 ## Table and cell width
@@ -849,7 +873,7 @@ Besides capturing this nifty list of important circumstances, `evals` can automa
 
 ```rout
 > evals('hist(mtcars$hp)')[[1]]$result
-![](plots/676c733c43ca.png)
+![](plots/676c6addba64.png)
 ```
 
 So instead of a captured R object (which would be `NULL` in this situation by the way), we get the path of the image where the plot was saved:
@@ -1071,4 +1095,4 @@ To use this small lib, just type: `M-x pander-mode` on any document. It might be
 
 
 -------
-This report was generated with [R](http://www.r-project.org/) (3.1.2) and [pander](https://github.com/rapporter/pander) (0.5.2) in 0.994 sec on x86_64-unknown-linux-gnu platform.
+This report was generated with [R](http://www.r-project.org/) (3.1.2) and [pander](https://github.com/rapporter/pander) (0.5.2) in 0.949 sec on x86_64-unknown-linux-gnu platform.
