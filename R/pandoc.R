@@ -958,8 +958,8 @@ pandoc.table.return <- function(t, caption, digits = panderOptions('digits'), de
 
         ## recursive call
         res <- paste(
-            pandoc.table.return(res[[1]], caption = caption, justify = justify[[1]], style = style),
-            pandoc.table.return(res[[2]], caption = NULL, justify = justify[[2]], style = style))
+            pandoc.table.return(res[[1]], caption = caption, digits = digits, decimal.mark = decimal.mark, round = round, missing = missing, justify = justify[[1]], style = style, split.tables = split.tables, split.cells = split.cells,  keep.trailing.zeros = keep.trailing.zeros, keep.line.breaks = keep.line.breaks, plain.ascii = plain.ascii, use.hyphening = use.hyphening, emphasize.rownames = emphasize.rownames),
+            pandoc.table.return(res[[2]], caption = NULL, digits = digits, decimal.mark = decimal.mark, round = round, justify = justify[[2]], style = style, split.tables = split.tables, split.cells = split.cells,  keep.trailing.zeros = keep.trailing.zeros, keep.line.breaks = keep.line.breaks, plain.ascii = plain.ascii, use.hyphening = use.hyphening, emphasize.rownames = emphasize.rownames))
 
         return(res)
 
