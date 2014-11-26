@@ -918,6 +918,10 @@ pandoc.table.return <- function(t, caption, digits = panderOptions('digits'), de
         t.width <- c(max(sapply(strsplit(t.rownames, '\n'), function(x) max(nchar(x, type = 'width'), 0))), t.width)
         t.width[1] <- t.width[1] + 2
 
+        ## if we have a non-breaking space in the header
+        if (!is.null(t.colnames))
+            t.width[1] <- max(t.width[1], 6)
+
     }
 
     if (length(justify) != 1) {
