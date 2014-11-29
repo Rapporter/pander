@@ -635,8 +635,9 @@ pandoc.table.return <- function(t, caption, digits = panderOptions('digits'), de
         x
     }
 
-    split.large.cells <- function(cells, for.rownames = FALSE){ ## use first is for rownames
-        if (length(split.cells) == 0){
+    split.large.cells <- function(cells, for.rownames = FALSE) {
+
+        if (length(split.cells) == 0) {
             warning("split.cells is a vector of length 0, reverting to default value")
             split.cells <- panderOptions('table.split.cells')
         }
@@ -648,35 +649,50 @@ pandoc.table.return <- function(t, caption, digits = panderOptions('digits'), de
             split.cells <- rep(split.cells[1], length(cells))
 
         res <- NULL
-        if (length(dim(cells)) < 2){ # single value and vectors/lists
-            if (length(cells) == 0){
+
+        ## single value and vectors/lists
+        if (length(dim(cells)) < 2) {
+
+            if (length(cells) == 0) {
+
                 res <- split.single.cell(cells, split.cells[1])
+
             } else {
+
+                ## discard first value which was for rownames
                 if (!for.rownames && (length(split.cells) >= length(cells) + 1))
-                    split.cells <- split.cells[-1] # discard first value which was for rownames
-                if (length(cells) > length(split.cells)){
+                    split.cells <- split.cells[-1]
+
+                if (length(cells) > length(split.cells)) {
                     warning("length of split.cells vector is smaller than data. Default value will be used for other cells")
                     split.cells <- c(split.cells, rep(panderOptions('table.split.cells'), length(cells) - length(split.cells)))
                 }
-                for (i in 1:length(cells)){
+
+                for (i in 1:length(cells))
                     res <- c(res, split.single.cell(cells[i], max.width = split.cells[i]))
-                }
+
             }
-        } else { #matrixes and tables
+
+
+        } else { # matrixes and tables
+
+            ## discard first value which was for rownames
             if ((length(split.cells) >= dim(cells)[2] + 1))
-                split.cells <- split.cells[-1] # discard first value which was for rownames
-            if (dim(cells)[2] > length(split.cells)){
+                split.cells <- split.cells[-1]
+
+            if (dim(cells)[2] > length(split.cells)) {
                 warning("length of split.cells vector is smaller than data. Default value will be used for other cells")
                 split.cells <- c(split.cells, rep(panderOptions('table.split.cells'), dim(cells)[2] - length(split.cells)))
             }
-            for (j in 1:dim(cells)[2]){
-                res <- cbind(res,
-                             sapply(cells[,j], split.single.cell, max.width = split.cells[j], USE.NAMES = FALSE))
-            }
-            rownames(res) <- rownames(cells)
-            colnames(res) <- colnames(cells)
+
+            for (j in 1:dim(cells)[2])
+                res <- cbind(res, sapply(cells[,j], split.single.cell, max.width = split.cells[j], USE.NAMES = FALSE))
+
         }
+
+        ## return
         res
+
     }
 
     align.hdr <- function(t.width, justify) {
@@ -874,15 +890,26 @@ pandoc.table.return <- function(t, caption, digits = panderOptions('digits'), de
         }
     }
 
-
-    ## helper variables & split too long (30+ chars) cells
-
     ## checking for empty data frames
     if (length(dim(t)) > 1 && dim(t)[1] == 0)
         t[1, ] <- NA
+
+    ## get (col/row)names if any
+    t.colnames <- tryCatch(colnames(t), error = function(e) NULL)
+    t.rownames <- tryCatch(rownames(t), error = function(e) NULL)
+    if (!is.null(t.rownames) && length(dim(t)) < 2) {
+        t.rownames <- NULL
+        t.colnames <- names(t)
+    }
+
     t <- split.large.cells(t)
-    t.rownames  <- rownames(t)
-    t.colnames  <- colnames(t)
+
+    ## re-set col/rownames to be passed to split tables
+    if (!is.null(t.rownames))
+        rownames(t) <- t.rownames
+    if (!is.null(t.colnames) && length(dim(t)) == 2)
+        colnames(t) <- t.colnames
+
     if (!is.null(t.colnames)) {
         t.colnames <- replace(t.colnames, which(t.colnames == ''), '&nbsp;')
         t.colnames <- split.large.cells(t.colnames)
@@ -900,7 +927,7 @@ pandoc.table.return <- function(t, caption, digits = panderOptions('digits'), de
         t.width <-  as.numeric(apply(cbind(t.colnames.width, apply(t, 2, function(x) max(sapply(strsplit(x,'\n'), function(x) max(nchar(x, type = 'width'), 0))))), 1, max))
 
         ## remove obvious row.names
-        if (all(rownames(t) == 1:nrow(t)) | all(rownames(t) == ''))
+        if (all(t.rownames == 1:nrow(t)) | all(t.rownames == ''))
             t.rownames <- NULL
 
         if (!is.null(t.rownames) && emphasize.rownames)
