@@ -84,7 +84,9 @@ pandoc.add.formatting <- function(x, f) {
 #' pandoc.strong('FOO')
 #' pandoc.strong(c('FOO', '**FOO**'))
 #' pandoc.strong.return('FOO')
-pandoc.strong.return <- function(x)
+pandoc.strong.return <- 
+  
+  function(x)
     pandoc.add.formatting(x, '**')
 
 #' @export
@@ -839,7 +841,6 @@ pandoc.table.return <- function(t, caption, digits = panderOptions('digits'), de
         t <- format(t, trim = TRUE, digits = digits, decimal.mark = decimal.mark, big.mark = big.mark)
     else
         t <- format(t, trim = TRUE)  ### here adds unneeded zero's
-
     ## force possible factors to character vectors
     wf <- which(sapply(t, is.factor))
     if (length(dim(t)) == 2 && length(wf) > 0)
@@ -918,11 +919,18 @@ pandoc.table.return <- function(t, caption, digits = panderOptions('digits'), de
         t.colnames.width <- 0
     }
     if (length(dim(t)) < 2) {
-        if (length(dim(t)) == 0)
-            t.width <- as.numeric(apply(cbind(t.colnames.width, as.numeric(sapply(t, nchar, type = 'width'))), 1, max))
-        else
-            t.width <- as.numeric(apply(cbind(t.colnames.width, as.numeric(apply(t, 1, nchar, type = 'width'))), 1, max))
+        if (length(dim(t)) == 0){
+          ## remove traling spaces, because they affect formatting negatively
+          t <- sapply(t, function(x) gsub("[[:space:]]*$","",x))
+          t.width <- as.numeric(apply(cbind(t.colnames.width, as.numeric(sapply(t, nchar, type = 'width'))), 1, max))
+        } else {
+          ## remove traling spaces, because they affect formatting negatively
+          t <- apply(t, 1, function(x) gsub("[[:space:]]*$","",x))
+          t.width <- as.numeric(apply(cbind(t.colnames.width, as.numeric(apply(t, 1, nchar, type = 'width'))), 1, max))
+        }
     } else {
+        ## remove traling spaces, because they affect formatting negatively
+        t <- apply(t, c(1,2), function(x) gsub("[[:space:]]*$","",x)) 
         ## also dealing with cells split by newlines
         t.width <-  as.numeric(apply(cbind(t.colnames.width, apply(t, 2, function(x) max(sapply(strsplit(x,'\n'), function(x) max(nchar(x, type = 'width'), 0))))), 1, max))
 
