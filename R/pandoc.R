@@ -84,7 +84,9 @@ pandoc.add.formatting <- function(x, f) {
 #' pandoc.strong('FOO')
 #' pandoc.strong(c('FOO', '**FOO**'))
 #' pandoc.strong.return('FOO')
-pandoc.strong.return <- function(x)
+pandoc.strong.return <- 
+  
+  function(x)
     pandoc.add.formatting(x, '**')
 
 #' @export
@@ -839,7 +841,7 @@ pandoc.table.return <- function(t, caption, digits = panderOptions('digits'), de
         t <- format(t, trim = TRUE, digits = digits, decimal.mark = decimal.mark, big.mark = big.mark)
     else
         t <- format(t, trim = TRUE)  ### here adds unneeded zero's
-
+    t <- gsub("[[:space:]]*$","",t) ## remove traling spaces, because they affect formatting negatively
     ## force possible factors to character vectors
     wf <- which(sapply(t, is.factor))
     if (length(dim(t)) == 2 && length(wf) > 0)
