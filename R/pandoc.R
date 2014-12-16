@@ -599,9 +599,9 @@ pandoc.table.return <- function(t, caption, digits = panderOptions('digits'), de
 
     ## cell conversion to plain-ascii (deletion of markup characters)
     to.plain.ascii <- function(x){
-        x <- gsub("&nbsp;", "", x)  # table non-breaking space
-        x <- gsub("^[*]{1,2}|[*]{1,2}$", "", x) # emphasis and strong
         x <- gsub("[\\\\]", "", x) # backslashes
+        x <- gsub("&nbsp;", "", x)  # table non-breaking space
+        x <- sub("[*]+([^\\*.]*)[*]+", "\\1", x) # emphasis and strong
         x <- gsub("^[`]|[`]$", "", x) # verbatium
         x <- gsub("^[~]{2}|[~]{2}$", "", x) # strikeout
         gsub("^[_]|[_]$", "", x) # italic
