@@ -128,8 +128,65 @@ pander.NULL <- function(x, ...)
 #' @param x a logical object
 #' @param ... ignored parameters
 #' @export
-pander.logical <- function(x, ...)
+pander.logical <- function(x, ...) {
+
+    if (!is.null(names(x)))
+        return(pandoc.table(x))
+
     cat(as.character(x))
+
+}
+
+
+#' Pander method for numeric class
+#'
+#' Prints a numeric class in Pandoc's markdown.
+#' @param x a numeric object
+#' @param ... igroned parameter
+#' @export
+pander.numeric <- function(x, ...) {
+
+    if (!is.null(names(x)))
+        return(pandoc.table(x))
+
+    cat(p(x))
+
+}
+
+
+#' Pander method for character class
+#'
+#' Prints a character class in Pandoc's markdown.
+#' @param x a character object
+#' @param ... igroned parameters
+#' @export
+pander.character <- function(x, ...) {
+
+    if (!is.null(names(x)))
+        return(pandoc.table(x))
+
+    if (length(x) < 2)
+        cat(x)
+    else
+        cat(p(x))
+
+}
+
+
+#' Pander method for factor class
+#'
+#' Prints a factor object in Pandoc's markdown.
+#' @param x a factor object
+#' @param ... igroned parameters
+#' @export
+pander.factor <- function(x, ...) {
+
+    if (!is.null(names(x)))
+        return(pandoc.table(x))
+
+    cat(p(as.character(x)))
+
+}
 
 
 #' Pander method for image class
@@ -221,42 +278,6 @@ pander.cast_df<- function(x, caption = attr(x, 'caption'), ...) {
     pandoc.table(as.data.frame(x), caption = caption, ...)
 
 }
-
-
-#' Pander method for numeric class
-#'
-#' Prints a numeric class in Pandoc's markdown.
-#' @param x a numeric object
-#' @param ... igroned parameter
-#' @export
-pander.numeric <- function(x, ...)
-    cat(p(x))
-
-
-#' Pander method for character class
-#'
-#' Prints a character class in Pandoc's markdown.
-#' @param x a character object
-#' @param ... igroned parameters
-#' @export
-pander.character <- function(x, ...) {
-
-    if (length(x) < 2)
-        cat(x)
-    else
-        cat(p(x))
-
-}
-
-
-#' Pander method for factor class
-#'
-#' Prints a factor object in Pandoc's markdown.
-#' @param x a factor object
-#' @param ... igroned parameters
-#' @export
-pander.factor <- function(x, ...)
-    cat(p(as.character(x)))
 
 
 #' Pander method for summary.lm class
@@ -753,13 +774,13 @@ pander.CrossTable <- function(x, caption = attr(x, 'caption'), ...) {
       k <- k + 1
       data.labels <- c(data.labels, 'Column(%)')
       prop <- cbind(prop, x$prop.col)
-    } 
+    }
     if (!is.na(x$prop.tbl[1])){
       k <- k + 1
       prop <- cbind(prop, x$prop.tbl)
     }
     prop <- apply(prop, c(1,2), to.percent)
-    
+
     totals <- x$t
     row.labels <- row.names(totals)
     row.size <- length(row.labels)
@@ -779,7 +800,7 @@ pander.CrossTable <- function(x, caption = attr(x, 'caption'), ...) {
         constructed.table[i, 1] <- paste(c(pandoc.strong.return(row.labels[i]), data.labels), collapse = '\\  \n')
         for (j in 2:(col.size + 1)) {
           constructed.table[i, j] <- paste(c('&nbsp;', totals[i, j - 1],
-                                           prop[i, ((j - 2) * k + 1) : ((j - 1) * k)]), 
+                                           prop[i, ((j - 2) * k + 1) : ((j - 1) * k)]),
                                            collapse = '\\ \n')
         }
         constructed.table[i, col.size + 2] <- paste('&nbsp;', row.sum[i],
@@ -789,7 +810,7 @@ pander.CrossTable <- function(x, caption = attr(x, 'caption'), ...) {
       row.last <- 'Total'
       for (i in 2:(col.size + 1))
         row.last[i] <- paste(col.sum[i - 1], to.percent(sum(totals[, i - 1])/table.sum), sep = '\\ \n')
-      
+
       row.last[col.size + 2] <- paste(table.sum, '', sep = '\\ \n')
       constructed.table[row.size + 1, ] <- row.last
     } else { # 1D
@@ -797,7 +818,7 @@ pander.CrossTable <- function(x, caption = attr(x, 'caption'), ...) {
         constructed.table[1, 1] <- paste(data.labels, collapse = '\\ \n')
         for (j in 2:(col.size + 1)) {
           constructed.table[1, j] <- paste(c(totals[1, j - 1],
-                                           prop[1, ((j - 2) * k + 1) : ((j - 1) * k)]), 
+                                           prop[1, ((j - 2) * k + 1) : ((j - 1) * k)]),
                                            collapse = '\\ \n')
         }
         constructed.table[1, col.size + 2] <- paste(row.sum[1],
