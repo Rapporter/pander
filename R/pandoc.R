@@ -900,14 +900,20 @@ pandoc.table.return <- function(t, caption, digits = panderOptions('digits'), de
         t.rownames <- NULL
         t.colnames <- names(t)
     }
+    if (is.null(t.rownames) && is.null(t.colnames) && length(dim(t)) < 2)
+        t.colnames <- names(t)
 
     t <- split.large.cells(t)
 
     ## re-set col/rownames to be passed to split tables
     if (!is.null(t.rownames))
         rownames(t) <- t.rownames
-    if (!is.null(t.colnames) && length(dim(t)) == 2)
-        colnames(t) <- t.colnames
+    if (!is.null(t.colnames)) {
+        if (length(dim(t)) == 2)
+            colnames(t) <- t.colnames
+        else
+            names(t) <- t.colnames
+    }
 
     if (!is.null(t.colnames)) {
         t.colnames <- replace(t.colnames, which(t.colnames == ''), '&nbsp;')
