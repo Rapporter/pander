@@ -122,20 +122,28 @@ pander.NULL <- function(x, ...)
     return(invisible(NULL))
 
 
+#' Helper function to deal with atomic vectors
+#' @param x vector
+#' @param ... ignored parameters
+#' @keywords internal
+pander.vector <- function(x, ...) {
+
+    if (!is.null(names(x)))
+        return(pandoc.table(x))
+
+    cat(p(x))
+
+}
+
+
 #' Pander method for logical class
 #'
 #' Prints a logical object in Pandoc's markdown.
 #' @param x a logical object
 #' @param ... ignored parameters
 #' @export
-pander.logical <- function(x, ...) {
-
-    if (!is.null(names(x)))
-        return(pandoc.table(x))
-
-    cat(as.character(x))
-
-}
+pander.logical <- function(x, ...)
+    pander.vector(x, ...)
 
 
 #' Pander method for numeric class
@@ -144,14 +152,18 @@ pander.logical <- function(x, ...) {
 #' @param x a numeric object
 #' @param ... igroned parameter
 #' @export
-pander.numeric <- function(x, ...) {
+pander.numeric <- function(x, ...)
+    pander.vector(x, ...)
 
-    if (!is.null(names(x)))
-        return(pandoc.table(x))
 
-    cat(p(x))
-
-}
+#' Pander method for factor class
+#'
+#' Prints a factor object in Pandoc's markdown.
+#' @param x a factor object
+#' @param ... igroned parameters
+#' @export
+pander.factor <- function(x, ...)
+    pander.vector(x, ...)
 
 
 #' Pander method for character class
@@ -169,22 +181,6 @@ pander.character <- function(x, ...) {
         cat(x)
     else
         cat(p(x))
-
-}
-
-
-#' Pander method for factor class
-#'
-#' Prints a factor object in Pandoc's markdown.
-#' @param x a factor object
-#' @param ... igroned parameters
-#' @export
-pander.factor <- function(x, ...) {
-
-    if (!is.null(names(x)))
-        return(pandoc.table(x))
-
-    cat(p(as.character(x)))
 
 }
 
