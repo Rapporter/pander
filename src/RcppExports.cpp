@@ -5,6 +5,21 @@
 
 using namespace Rcpp;
 
+// timesTwo
+SEXP timesTwo(CharacterVector x);
+RcppExport SEXP pander_timesTwo(SEXP xSEXP) {
+BEGIN_RCPP
+    SEXP __sexp_result;
+    {
+        Rcpp::RNGScope __rngScope;
+        Rcpp::traits::input_parameter< CharacterVector >::type x(xSEXP );
+        SEXP __result = timesTwo(x);
+        PROTECT(__sexp_result = Rcpp::wrap(__result));
+    }
+    UNPROTECT(1);
+    return __sexp_result;
+END_RCPP
+}
 // splitLine_cpp
 std::string splitLine_cpp(std::string str, int max_width, bool use_hyphening, Rcpp::Function hyphen);
 RcppExport SEXP pander_splitLine_cpp(SEXP strSEXP, SEXP max_widthSEXP, SEXP use_hypheningSEXP, SEXP hyphenSEXP) {
