@@ -15,7 +15,7 @@
                 'list.style'               = 'bullet',
                 'table.style'              = 'multiline',
                 'table.emphasize.rownames' = TRUE,
-                'table.split.table'        = 80,
+                'table.split.table'        = Inf,
                 'table.split.cells'        = 30,
                 'table.caption.prefix'     = 'Table: ',
                 'table.continues'          = 'Table continues below',
