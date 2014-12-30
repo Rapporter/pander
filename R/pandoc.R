@@ -470,7 +470,7 @@ pandoc.list <- function(...)
 #' @param missing string to replace missing values
 #' @param justify defines alignment in cells passed to \code{format}. Can be \code{left}, \code{right} or \code{centre}, which latter can be also spelled as \code{center}. Defaults to \code{centre}.
 #' @param style which Pandoc style to use: \code{simple}, \code{multiline}, \code{grid} or \code{rmarkdown}
-#' @param split.tables where to split wide tables to separate tables. The default value (\code{Inf}) suggests the conventional number of characters used in a line, feel free to change (e.g. to \code{Inf} to disable this feature) if you are not using a VT100 terminal any more :)
+#' @param split.tables where to split wide tables to separate tables. The default value (\code{80}) suggests the conventional number of characters used in a line, feel free to change (e.g. to \code{Inf} to disable this feature) if you are not using a VT100 terminal any more :)
 #' @param split.cells where to split cells' text with line breaks. Default to \code{30}, to disable set to \code{Inf}. Can be also supplied as a vector, for each cell separately (if length(split.cells) == number of columns + 1, then first value in split.cells if for row names, and others are for columns). Supports relative (percentage) parameters in combination with split.tables.
 #' @param keep.trailing.zeros to show or remove trailing zeros in numbers on a column basis width
 #' @param keep.line.breaks (default: \code{FALSE}) if to keep or remove line breaks from cells in a table

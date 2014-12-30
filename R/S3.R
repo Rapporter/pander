@@ -753,13 +753,7 @@ pander.mtable <- function(x, caption = attr(x, 'caption'), ...) {
 #' Prints a CrossTable object in Pandoc's markdown.
 #' @param x a CrossTable object
 #' @param caption caption (string) to be shown under the table
-#' @param ... optional parameters passed to raw \code{pandoc.table} function
-#' @export
-#' Pander method for CrossTable class
-#'
-#' Prints a CrossTable object in Pandoc's markdown.
-#' @param x a CrossTable object
-#' @param caption caption (string) to be shown under the table
+#' @param digits number of digits of precision
 #' @param ... optional parameters passed to raw \code{pandoc.table} function
 #' @export
 pander.CrossTable <- function(x, caption = attr(x, 'caption'), digits = panderOptions("digits"), ...) {
