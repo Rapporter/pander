@@ -8,11 +8,8 @@ std::string format_cpp(const std::string &x, const std::string &justify, int wid
   std::string result = "";
   Rcpp::Function nchar("nchar");
   int xlen = 0;
-  const char *s = x.c_str();
-  while (*s) xlen += (*s++ & 0xc0) != 0x80;
-  Rcout << "xlen = " << xlen << std::endl;
-  Rcout << "nchar = " << as<int>(nchar(x, Rcpp::Named("type") = "width")) << std::endl;
-   Rcout << "width = " << width << std::endl;
+//  const char *s = x.c_str();
+//  while (*s) xlen += (*s++ & 0xc0) != 0x80;
   xlen = as<int>(nchar(x, Rcpp::Named("type") = "width"));
   if (justify == "left"){
     result += x;
@@ -22,16 +19,10 @@ std::string format_cpp(const std::string &x, const std::string &justify, int wid
     result += x;
   } else {
     result += std::string((width - xlen)/2, ' ');
-          Rcout << "res 1 = '" << result << "'" << std::endl;
     result += x;
-          Rcout << "res 2 = '" << result << "'" << std::endl;
     for (int j = (width + xlen)/2; j < width; j++){
       result += " ";
-          Rcout << "res 3 = '" << result << "'" << std::endl;
-
     }
-     Rcout << "======" << std::endl;
-
   }
   return result;
 }
