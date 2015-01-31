@@ -4,12 +4,15 @@
 \alias{pander.CrossTable}
 \title{Pander method for CrossTable class}
 \usage{
-\method{pander}{CrossTable}(x, caption = attr(x, "caption"), ...)
+\method{pander}{CrossTable}(x, caption = attr(x, "caption"),
+  digits = panderOptions("digits"), ...)
 }
 \arguments{
 \item{x}{a CrossTable object}
 
 \item{caption}{caption (string) to be shown under the table}
+
+\item{digits}{number of digits of precision}
 
 \item{...}{optional parameters passed to raw \code{pandoc.table} function}
 }

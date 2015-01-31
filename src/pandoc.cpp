@@ -6,9 +6,11 @@ using namespace Rcpp;
 // checks justify param and adds needed number of whitespaces based on it
 std::string format_cpp(const std::string &x, const std::string &justify, int width) {
   std::string result = "";
+  Rcpp::Function nchar("nchar");
   int xlen = 0;
-  const char *s = x.c_str();
-  while (*s) xlen += (*s++ & 0xc0) != 0x80;
+//  const char *s = x.c_str();
+//  while (*s) xlen += (*s++ & 0xc0) != 0x80;
+  xlen = as<int>(nchar(x, Rcpp::Named("type") = "width"));
   if (justify == "left"){
     result += x;
     result += std::string(width - xlen, ' ');
@@ -18,8 +20,9 @@ std::string format_cpp(const std::string &x, const std::string &justify, int wid
   } else {
     result += std::string((width - xlen)/2, ' ');
     result += x;
-    for (int j = (width + xlen)/2; j < width; j++)
+    for (int j = (width + xlen)/2; j < width; j++){
       result += " ";
+    }
   }
   return result;
 }

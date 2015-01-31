@@ -753,76 +753,127 @@ pander.mtable <- function(x, caption = attr(x, 'caption'), ...) {
 #' Prints a CrossTable object in Pandoc's markdown.
 #' @param x a CrossTable object
 #' @param caption caption (string) to be shown under the table
+#' @param digits number of digits of precision
 #' @param ... optional parameters passed to raw \code{pandoc.table} function
 #' @export
-pander.CrossTable <- function(x, caption = attr(x, 'caption'), ...) {
-
+pander.CrossTable <- function(x, caption = attr(x, 'caption'), digits = panderOptions("digits"), ...) {
     if (is.null(caption) & !is.null(storage$caption))
         caption <- get.caption()
-
-    to.percent <- function(x, digits = 0)
-        paste(round(x * 100, digits), '%', sep = '')
-
-    data.labels <- c('N', 'Row(%)')
-    k <- 1
-    prop <- x$prop.row
+    nr <- dim(x$t)[1]
+    nc <- dim(x$t)[2]
+    if (!is.null(rownames(x$t)))
+        nt <- cbind(rownames(x$t), x$t, x$rs)
+    else 
+        nt <- cbind("&nbsp;", x$t, x$rs)
+    hdd <- 100
+    if (!is.na(x$expected) && x$expected == TRUE) {
+        xex <- outer(x$rs, x$cs, "*")
+        xex <- xex/x$gt
+        if (is.null(digits)) 
+            digits = 1
+        xx <- format(round(xex, digits), ...)
+        xx <- cbind(rep("", nr), xx, rep("", nr))
+        nt <- rbind(nt, xx)
+        idx <- integer()
+        for (i in 1:nr) idx <- c(idx, i, i + nr)
+            nt <- nt[idx, ]
+    }
+    appendlines <- function(nt, xx, hasttl = FALSE, haslbl = FALSE) {
+        if (!hasttl) 
+            xx <- cbind(xx, rep("", nr))
+        if (!haslbl) 
+            xx <- cbind(rep("", nr), xx)
+        n <- dim(nt)[1]/nr
+        nt <- rbind(nt, xx)
+        idx <- integer()
+        k <- 1
+        l <- nr * n + 1
+        for (i in 1:nr) {
+            for (j in 1:n) {
+                idx <- c(idx, k)
+                k <- k + 1
+            }
+            idx <- c(idx, l)
+            l <- l + 1
+        }
+        nt <- nt[idx, ]
+        nt
+    }
+    if (x$prop.chisq) {
+        xx <- ((x$CST$expected - x$t)^2)/x$CST$expected
+        xx <- format(round(xx, digits), trim = TRUE, ...)
+        xx <- cbind("Chi-square", xx)
+        nt <- appendlines(nt, xx, haslbl = TRUE)
+    }
+    if (!is.na(x$prop.row[1])) {
+        xx <- cbind(x$prop.row, x$rs/x$gt)
+        xx <- format(round(xx * hdd, digits), trim = TRUE, ...)
+        xx <- matrix(paste(xx, "%", sep = ""), nrow = nr, 
+                 ncol = nc + 1)
+        xx <- cbind("Row(%)", xx)
+        nt <- appendlines(nt, xx, TRUE, haslbl = TRUE)
+    }
     if (!is.na(x$prop.col[1])) {
-      k <- k + 1
-      data.labels <- c(data.labels, 'Column(%)')
-      prop <- cbind(prop, x$prop.col)
+        xx <- format(round(x$prop.col * hdd, digits), trim = TRUE, 
+                 ...)
+        xx <- matrix(paste(xx, "%", sep = ""), nrow = nr, 
+                 ncol = nc)
+        xx <- cbind("Column(%)", xx)
+        nt <- appendlines(nt, xx, haslbl = TRUE)
     }
-    if (!is.na(x$prop.tbl[1])){
-      k <- k + 1
-      prop <- cbind(prop, x$prop.tbl)
+    if (!is.na(x$prop.tbl[1])) {
+        xx <- format(round(x$prop.tbl * hdd, digits), trim = TRUE, 
+                 ...)
+        xx <- matrix(paste(xx, "%", sep = ""), nrow = nr, 
+                 ncol = nc)
+        xx <- cbind("Total(%)", xx)
+        nt <- appendlines(nt, xx, haslbl = TRUE)
     }
-    prop <- apply(prop, c(1,2), to.percent)
-
-    totals <- x$t
-    row.labels <- row.names(totals)
-    row.size <- length(row.labels)
-    row.name <- x$RowData
-    row.sum<- x$rs
-    table.sum <- x$gt
-    col.labels <- colnames(totals)
-    col.size <- length(col.labels)
-    col.name <- x$ColData
-    col.sum <- x$cs
-    zeros <- rep(0, (col.size + 2) * (row.size + 1))
-    constructed.table<- matrix(zeros, ncol = (col.size + 2))
-    constructed.table <- as.table(constructed.table)
-    colnames(constructed.table) <- c('&nbsp;', col.labels, 'Total')
-    if (!is.na(x$ColData[1])) { # 2D table
-      for (i in 1:row.size) {
-        constructed.table[i, 1] <- paste(c(pandoc.strong.return(row.labels[i]), data.labels), collapse = '\\  \n')
-        for (j in 2:(col.size + 1)) {
-          constructed.table[i, j] <- paste(c('&nbsp;', totals[i, j - 1],
-                                           prop[i, ((j - 2) * k + 1) : ((j - 1) * k)]),
-                                           collapse = '\\ \n')
+    if (!is.na(x$resid) && x$resid == TRUE && x$expected == TRUE) {
+        xx <- x$t - xex
+        xx <- format(round(xx, digits), trim = TRUE, ...)
+        nt <- appendlines(nt, xx)
+    }
+    if (!is.na(x$sresid) && x$sresid == TRUE && x$expected == 
+          TRUE) {
+        xx <- x$CST$residual
+        xx <- format(round(xx, digits), trim = TRUE, ...)
+        nt <- appendlines(nt, xx)
+    }
+    if (!is.na(x$asr[1])) {
+        xx <- format(round(x$asr, digits), trim = TRUE, ...)
+        nt <- appendlines(nt, xx)
+    }
+    n <- dim(nt)[1]/nr
+    idx <- seq(1, dim(nt)[1], n)
+    nt <- rbind(nt, c(gettext("Total", domain = "R-descr"), x$cs, 
+                    x$gt))
+    if (!is.na(x$prop.col[1])) 
+        nt <- rbind(nt, c("", sapply(round(hdd * x$cs/x$gt, digits), function(x) paste(x, "%", sep = "")), ""))
+    len <- dim(nt)[1]
+    rownames(nt) <- as.character(1:len)
+  
+    # merging and print
+    ts <- ifelse(!is.na(x$prop.col[1]), 2, 1)
+    or <- (nrow(nt) - ts) / nr
+    nt.nr <- nrow(nt)
+    nc <- ncol(nt)
+    res <- NULL
+    for (i in 1:nr) {
+        res.r <- paste(pandoc.strong.return(nt[1+or*(i - 1), 1]), "N", paste(nt[((2+or*(i - 1)) : (i * or)),1], collapse = "\\ \n"), 
+                   sep = "\\ \n")
+        for (j in 2:nc) {
+            res.r <- cbind(res.r, paste("&nbsp;", paste(nt[((1+or*(i - 1)) : (i * or)),j], collapse = "\\  \n"), sep = "\\ \n"))
         }
-        constructed.table[i, col.size + 2] <- paste('&nbsp;', row.sum[i],
-                                                    to.percent(sum(totals[i, ]/table.sum)),
-                                                    sep = '\\ \n')
-      }
-      row.last <- 'Total'
-      for (i in 2:(col.size + 1))
-        row.last[i] <- paste(col.sum[i - 1], to.percent(sum(totals[, i - 1])/table.sum), sep = '\\ \n')
-
-      row.last[col.size + 2] <- paste(table.sum, '', sep = '\\ \n')
-      constructed.table[row.size + 1, ] <- row.last
-    } else { # 1D
-      row.labels <- col.labels
-        constructed.table[1, 1] <- paste(data.labels, collapse = '\\ \n')
-        for (j in 2:(col.size + 1)) {
-          constructed.table[1, j] <- paste(c(totals[1, j - 1],
-                                           prop[1, ((j - 2) * k + 1) : ((j - 1) * k)]),
-                                           collapse = '\\ \n')
-        }
-        constructed.table[1, col.size + 2] <- paste(row.sum[1],
-                                                    to.percent(sum(totals[1, ]/table.sum)),
-                                                    sep = '\\ \n')
-      }
-    row.names(constructed.table) <- NULL
-    pandoc.table(constructed.table, caption = caption, keep.line.breaks = TRUE, ...)
+        res <- rbind(res, res.r)
+    }
+    res.r <- NULL
+    for (j in 1:nc) {
+        res.r <- cbind(res.r, paste(nt[(nt.nr-ts + 1) : nt.nr, j], collapse = "\\ \n"))
+    }
+    res <- rbind(res, res.r)
+    colnames(res) <- c('&nbsp;', colnames(x$t), 'Total')
+    pandoc.table(res, caption = caption, keep.line.breaks = TRUE,...)
 }
 
 
