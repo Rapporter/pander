@@ -99,7 +99,7 @@ Which command produces the following output by default:
 ```<%=mtcars[1:3, 1:4]%>
 ```
 
-<a id="style"></a><a id="styles"></a><a id="formats"></a>
+<a id="style"></a><a id="styles"></a>
 
 Please note that all below features are also supported by the more concise `pander` [generic S3 method](#generic-pander-method)!
 
