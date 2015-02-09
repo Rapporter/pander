@@ -967,7 +967,14 @@ pandoc.table.return <- function(t, caption, digits = panderOptions('digits'), de
         if (length(justify) != length(t.width))
             stop(sprintf('Wrong number of parameters (%s instead of *%s*) passed: justify', length(justify), length(t.width)))
     } else {
-        justify <- rep(justify, length(t.width))
+        if (all (strsplit(justify, "")[[1]] %in% c("c", "l", "r") )) {
+          if (nchar(justify) != length(t.width))
+            stop(sprintf('Wrong number of parameters (%s instead of *%s*) passed: justify', nchar(justify), length(t.width)))
+          
+          justify <- c(l = "left", c = "centre", r = "right")[ strsplit(justify, "")[[1]] ]  
+        } else {
+          justify <- rep(justify, length(t.width))
+        }
     }
     justify <- sub('^center$', 'centre', justify)
     if (!all(justify %in% c('left', 'right', 'centre')))
