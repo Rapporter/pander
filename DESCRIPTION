@@ -24,7 +24,7 @@ Imports:
     methods,
     digest,
     tools,
-    Rcpp
+    Rcpp,
 Suggests:
     grid,
     lattice,

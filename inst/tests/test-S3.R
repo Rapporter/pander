@@ -1,3 +1,6 @@
+library(testthat)
+library(pander)
+
 context('pandoc.table')
 
 tables <- list(
