@@ -1,3 +1,6 @@
+library(testthat)
+library(pander)
+
 context('replacing missing values')
 
 pom <- panderOptions('missing')

@@ -1,4 +1,6 @@
 ## test_file('test-evals.R')
+library(testthat)
+library(pander)
 
 cache.dir <- evalsOptions('cache.dir')
 graph.dir <- evalsOptions('graph.dir')

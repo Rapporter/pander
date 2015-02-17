@@ -1,3 +1,5 @@
+library(testthat)
+library(pander)
 context('has.rownames')
 
 test_that('has.rownames: TRUE', {

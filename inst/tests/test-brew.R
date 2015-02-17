@@ -1,3 +1,5 @@
+library(testthat)
+library(pander)
 context('Pandoc.brew')
 
 test_that('expected result', {
