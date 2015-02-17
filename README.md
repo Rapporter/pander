@@ -11,7 +11,6 @@ install.packages('pander')
 ```
 
 On the other hand, I welcome everyone to use the most recent version of the package with quick-fixes, new features and probably new bugs. It's currently hosted on [GitHub](https://github.com/Rapporter/pander), and the current build status is: [![](https://travis-ci.org/Rapporter/pander.png?branch=master)](https://travis-ci.org/Rapporter/pander)
-[![Coverage Status](https://coveralls.io/repos/RomanTsegelskyi/pander/badge.svg?branch=covr_support)](https://coveralls.io/r/RomanTsegelskyi/pander?branch=covr_support)
 
 It can be installed easily with the nifty function of the `devtools` package from [CRAN](http://cran.r-project.org/web/packages/devtools/index.html):
 
