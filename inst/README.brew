@@ -1,4 +1,4 @@
-% [pander: An R Pandoc Writer](https://github.com/Rapporter/pander)
+# [pander: An R Pandoc Writer](https://github.com/Rapporter/pander)
 
 The main aim of the *pander* [R](http://r-project.org) package is to provide a minimal and easy tool for rendering **R objects** into [Pandoc](http://johnmacfarlane.net/pandoc/)'s **markdown**. The package is also capable of exporting/converting complex Pandoc documents (reports) in [various ways](#creating-pandoc-documents). Regarding the difference between `pander` and other packages for exporting R objects to different file formats, please refer to this [section](#difference-from-other-rendering-packages).
 
@@ -10,7 +10,9 @@ The stable version can be found on [CRAN](http://cran.r-project.org/web/packages
 install.packages('pander')
 ```
 
-On the other hand, I welcome everyone to use the most recent version of the package with quick-fixes, new features and probably new bugs. It's currently hosted on [GitHub](https://github.com/Rapporter/pander), and the current build status is: [![](https://travis-ci.org/Rapporter/pander.png?branch=master)](https://travis-ci.org/Rapporter/pander)
+On the other hand, I welcome everyone to use the most recent version of the package with quick-fixes, new features and probably new bugs. It's currently hosted on [GitHub](https://github.com/Rapporter/pander)
+
+Current build and test coverage status: [![](https://travis-ci.org/Rapporter/pander.png?branch=master)](https://travis-ci.org/Rapporter/pander) [![](https://coveralls.io/repos/Rapporter/pander/badge.svg?branch=master)](https://coveralls.io/r/Rapporter/pander?branch=master)
 
 It can be installed easily with the nifty function of the `devtools` package from [CRAN](http://cran.r-project.org/web/packages/devtools/index.html):
 
@@ -816,8 +818,8 @@ To use this small lib, just type: `M-x pander-mode` on any document. It might be
 <script type="text/javascript">
     $(document).ready(function() {
         $('#logo').empty();
-        $('img[src="https://travis-ci.org/Rapporter/pander.png?branch=master"]').parent().parent().css('text-align', 'justify');
-        $('img[src="https://travis-ci.org/Rapporter/pander.png?branch=master"]').css('border', 'none').css('padding', '0px');
+        $('img[src="https://travis-ci.org/Rapporter/pander.png?branch=master"]').css('border', 'none').css('padding', '0px').parent().parent().css('text-align', 'justify');
+        $('img[src="https://coveralls.io/repos/Rapporter/pander/badge.svg?branch=master"]')..css('border', 'none').css('padding', '0px').parent().parent().css('text-align', 'justify');
         $('nav').css('height', '100%');
         $("img").unbind("click");
     });

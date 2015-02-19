@@ -1,4 +1,4 @@
-% [pander: An R Pandoc Writer](https://github.com/Rapporter/pander)
+# [pander: An R Pandoc Writer](https://github.com/Rapporter/pander)
 
 The main aim of the *pander* [R](http://r-project.org) package is to provide a minimal and easy tool for rendering **R objects** into [Pandoc](http://johnmacfarlane.net/pandoc/)'s **markdown**. The package is also capable of exporting/converting complex Pandoc documents (reports) in [various ways](#creating-pandoc-documents). Regarding the difference between `pander` and other packages for exporting R objects to different file formats, please refer to this [section](#difference-from-other-rendering-packages).
 
@@ -10,7 +10,9 @@ The stable version can be found on [CRAN](http://cran.r-project.org/web/packages
 install.packages('pander')
 ```
 
-On the other hand, I welcome everyone to use the most recent version of the package with quick-fixes, new features and probably new bugs. It's currently hosted on [GitHub](https://github.com/Rapporter/pander), and the current build status is: [![](https://travis-ci.org/Rapporter/pander.png?branch=master)](https://travis-ci.org/Rapporter/pander)
+On the other hand, I welcome everyone to use the most recent version of the package with quick-fixes, new features and probably new bugs. It's currently hosted on [GitHub](https://github.com/Rapporter/pander)
+
+Current build and test coverage status: [![](https://travis-ci.org/Rapporter/pander.png?branch=master)](https://travis-ci.org/Rapporter/pander) [![](https://coveralls.io/repos/Rapporter/pander/badge.svg?branch=master)](https://coveralls.io/r/Rapporter/pander?branch=master)
 
 It can be installed easily with the nifty function of the `devtools` package from [CRAN](http://cran.r-project.org/web/packages/devtools/index.html):
 
@@ -122,7 +124,7 @@ Which command produces the following output by default:
 
 ```
 
-<a id="style"></a><a id="styles"></a><a id="formats"></a>
+<a id="style"></a><a id="styles"></a>
 
 Please note that all below features are also supported by the more concise `pander` [generic S3 method](#generic-pander-method)!
 
@@ -442,8 +444,22 @@ A nested list can be seen above with a table and all (optional) list names. As a
 > pander(x)
  **WARNING**^[Chi-squared approximation may be incorrect]
 
-  * **statistic**: _20.94_
-  * **parameter**: _2_
+  * **statistic**:
+
+    -----------
+     X-squared
+    -----------
+       20.94
+    -----------
+
+  * **parameter**:
+
+    ----
+     df
+    ----
+     2
+    ----
+
   * **p.value**: _2.831e-05_
   * **method**: Pearson's Chi-squared test
   * **data.name**: table(mtcars$am, mtcars$gear)
@@ -873,7 +889,7 @@ Besides capturing this nifty list of important circumstances, `evals` can automa
 
 ```rout
 > evals('hist(mtcars$hp)')[[1]]$result
-![](plots/676c6addba64.png)
+![](plots/plot-1.png)
 ```
 
 So instead of a captured R object (which would be `NULL` in this situation by the way), we get the path of the image where the plot was saved:
@@ -1085,8 +1101,8 @@ To use this small lib, just type: `M-x pander-mode` on any document. It might be
 <script type="text/javascript">
     $(document).ready(function() {
         $('#logo').empty();
-        $('img[src="https://travis-ci.org/Rapporter/pander.png?branch=master"]').parent().parent().css('text-align', 'justify');
-        $('img[src="https://travis-ci.org/Rapporter/pander.png?branch=master"]').css('border', 'none').css('padding', '0px');
+        $('img[src="https://travis-ci.org/Rapporter/pander.png?branch=master"]').css('border', 'none').css('padding', '0px').parent().parent().css('text-align', 'justify');
+        $('img[src="https://coveralls.io/repos/Rapporter/pander/badge.svg?branch=master"]')..css('border', 'none').css('padding', '0px').parent().parent().css('text-align', 'justify');
         $('nav').css('height', '100%');
         $("img").unbind("click");
     });
@@ -1095,4 +1111,4 @@ To use this small lib, just type: `M-x pander-mode` on any document. It might be
 
 
 -------
-This report was generated with [R](http://www.r-project.org/) (3.1.2) and [pander](https://github.com/rapporter/pander) (0.5.2) in 0.949 sec on x86_64-unknown-linux-gnu platform.
+This report was generated with [R](http://www.r-project.org/) (3.1.2) and [pander](https://github.com/rapporter/pander) (0.5.2) in 0.849 sec on x86_64-unknown-linux-gnu platform.
