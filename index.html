@@ -4,7 +4,7 @@
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
   <meta http-equiv="Content-Style-Type" content="text/css" />
   <meta name="generator" content="pandoc" />
-  <title>pander: An R Pandoc Writer</title>
+  <title></title>
   <style type="text/css">code{white-space: pre;}</style>
   <style type="text/css">
 table.sourceCode, tr.sourceCode, td.lineNumbers, td.sourceCode {
@@ -53,14 +53,13 @@ code > span.er { color: #ff0000; font-weight: bold; }
 <script type="text/javascript" src="javascripts/jcaption.min.js" /></script>
 </head>
 <body>
-<div id="header">
-<h1 class="title"><a href="https://github.com/Rapporter/pander">pander: An R Pandoc Writer</a></h1>
-</div>
+<h1 id="pander-an-r-pandoc-writer"><a href="https://github.com/Rapporter/pander">pander: An R Pandoc Writer</a></h1>
 <p>The main aim of the <em>pander</em> <a href="http://r-project.org">R</a> package is to provide a minimal and easy tool for rendering <strong>R objects</strong> into <a href="http://johnmacfarlane.net/pandoc/">Pandoc</a>'s <strong>markdown</strong>. The package is also capable of exporting/converting complex Pandoc documents (reports) in <a href="#creating-pandoc-documents">various ways</a>. Regarding the difference between <code>pander</code> and other packages for exporting R objects to different file formats, please refer to this <a href="#difference-from-other-rendering-packages">section</a>.</p>
 <h1 id="installation">Installation</h1>
 <p>The stable version can be found on <a href="http://cran.r-project.org/web/packages/pander/">CRAN</a> and can be installed easily in the R console like any other package:</p>
 <pre class="sourceCode r"><code class="sourceCode r"><span class="kw">install.packages</span>(<span class="st">&#39;pander&#39;</span>)</code></pre>
-<p>On the other hand, I welcome everyone to use the most recent version of the package with quick-fixes, new features and probably new bugs. It's currently hosted on <a href="https://github.com/Rapporter/pander">GitHub</a>, and the current build status is: <a href="https://travis-ci.org/Rapporter/pander"><img src="https://travis-ci.org/Rapporter/pander.png?branch=master" /></a></p>
+<p>On the other hand, I welcome everyone to use the most recent version of the package with quick-fixes, new features and probably new bugs. It's currently hosted on <a href="https://github.com/Rapporter/pander">GitHub</a></p>
+<p>Current build and test coverage status: <a href="https://travis-ci.org/Rapporter/pander"><img src="https://travis-ci.org/Rapporter/pander.png?branch=master" /></a> <a href="https://coveralls.io/r/Rapporter/pander?branch=master"><img src="https://coveralls.io/repos/Rapporter/pander/badge.svg?branch=master" /></a></p>
 <p>It can be installed easily with the nifty function of the <code>devtools</code> package from <a href="http://cran.r-project.org/web/packages/devtools/index.html">CRAN</a>:</p>
 <pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(devtools)
 <span class="kw">install_github</span>(<span class="st">&#39;pander&#39;</span>, <span class="st">&#39;Rapporter&#39;</span>)</code></pre>
@@ -142,7 +141,7 @@ II. Second element
   **Datsun 710**    22.8    4    108    93 
 -------------------------------------------
 </code></pre>
-<p><a id="style"></a><a id="styles"></a><a id="formats"></a></p>
+<p><a id="style"></a><a id="styles"></a></p>
 <p>Please note that all below features are also supported by the more concise <code>pander</code> <a href="#generic-pander-method">generic S3 method</a>!</p>
 <h2 id="formats">Formats</h2>
 <p>All <a href="http://johnmacfarlane.net/pandoc/README.html#tables">four Pandoc formats</a> are supported by <em>pander</em>. From those (<em>multiline</em>, <em>simple</em>, <em>grid</em>, <em>pipe/rmarkdown</em>), I'd suggest sticking to the default <code>multiline</code> format with the most features, although <code>rmarkdown</code> v1.0 fanatics might better like the <code>pipe</code> table format. Please see a few examples below:</p>
@@ -377,8 +376,22 @@ foo-
 &gt; pander(x)
  **WARNING**^[Chi-squared approximation may be incorrect]
 
-  * **statistic**: _20.94_
-  * **parameter**: _2_
+  * **statistic**:
+
+    -----------
+     X-squared
+    -----------
+       20.94
+    -----------
+
+  * **parameter**:
+
+    ----
+     df
+    ----
+     2
+    ----
+
   * **p.value**: _2.831e-05_
   * **method**: Pearson&#39;s Chi-squared test
   * **data.name**: table(mtcars$am, mtcars$gear)
@@ -756,10 +769,11 @@ attr(,&quot;class&quot;)
 </ul>
 <p>Besides capturing this nifty list of important circumstances, <code>evals</code> can automatically identify if an R expression is returning anything to a graphical device, and can save the resulting image in a variety of file formats along with some extra options, like applying a custom theme on base, <code>lattice</code> or <code>ggplot2</code> plots:</p>
 <pre class="rout"><code>&gt; evals(&#39;hist(mtcars$hp)&#39;)[[1]]$result
-![](plots/676c6addba64.png)</code></pre>
+![](plots/plot-1.png)</code></pre>
 <p>So instead of a captured R object (which would be <code>NULL</code> in this situation by the way), we get the path of the image where the plot was saved:</p>
 <div class="figure">
 <img src="https://raw.githubusercontent.com/Rapporter/pander/gh-pages/plots/graphs-1.png" />
+
 </div>
 <p>Well, this is not a standard histogram usually returned by the <code>hist</code> function, right? As mentioned before, <code>evals</code> have some extra features like applying the user defined theme on various plots automatically. Please see the <code>graphs.brew</code> example <a href="#examples">above</a> for further details, or check the related <a href="#evals-options">global options</a>. If you do not like this feature, simply add <code>evalsOptions('graph.unify</code>, FALSE)<code>to your</code>.Rprofile`.</p>
 <p>Further features are described in the <a href="http://www.rdocumentation.org/packages/pander/functions/evals">technical docs</a>, and now I'll only give a brief introduction to another important feature of <code>evals</code>.</p>
@@ -913,19 +927,20 @@ evals(&#39;mean(xx)&#39;)</code></pre>
 <p>To use this small lib, just type: <code>M-x pander-mode</code> on any document. It might be useful to add a hook to <code>markdown-mode</code> if you find this useful.</p>
 <div class="figure">
 <img src="https://cruel-carlota.gopagoda.com/9dfac0c1da37bd83d1848289630631fd" title="githalytics.com" />
+
 </div>
 <script type="text/javascript">
     $(document).ready(function() {
         $('#logo').empty();
-        $('img[src="https://travis-ci.org/Rapporter/pander.png?branch=master"]').parent().parent().css('text-align', 'justify');
-        $('img[src="https://travis-ci.org/Rapporter/pander.png?branch=master"]').css('border', 'none').css('padding', '0px');
+        $('img[src="https://travis-ci.org/Rapporter/pander.png?branch=master"]').css('border', 'none').css('padding', '0px').parent().parent().css('text-align', 'justify');
+        $('img[src="https://coveralls.io/repos/Rapporter/pander/badge.svg?branch=master"]')..css('border', 'none').css('padding', '0px').parent().parent().css('text-align', 'justify');
         $('nav').css('height', '100%');
         $("img").unbind("click");
     });
 </script>
 <p><a href="https://github.com/Rapporter/pander"><img style="position: fixed; top: -5px; right: -5px; border: 0;" src="https://camo.githubusercontent.com/38ef81f8aca64bb9a64448d0d70f1308ef5341ab/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f72696768745f6461726b626c75655f3132313632312e706e67" data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_right_darkblue_121621.png"></a></p>
 <hr />
-<p>This report was generated with <a href="http://www.r-project.org/">R</a> (3.1.2) and <a href="https://github.com/rapporter/pander">pander</a> (0.5.2) in 0.949 sec on x86_64-unknown-linux-gnu platform.</p>
+<p>This report was generated with <a href="http://www.r-project.org/">R</a> (3.1.2) and <a href="https://github.com/rapporter/pander">pander</a> (0.5.2) in 0.849 sec on x86_64-unknown-linux-gnu platform.</p>
 <p align="center">
   Design: <a href="http://rapporter.net"><i>Rapporter</i> Team</a> &copy; 2011-2014 | Backend: <a href="https://github.com/rapporter/pander">pander</a> | License: <a href="http://www.gnu.org/licenses/agpl.html" target="_blank">AGPL3</a> or <a href="http://opensource.org/licenses/OSL-3.0" target="_blank">OSL</a> | Styled with <a href="http://www.getskeleton.com/" target="_blank">skeleton</a>
 </p>
