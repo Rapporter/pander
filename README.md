@@ -1102,7 +1102,7 @@ To use this small lib, just type: `M-x pander-mode` on any document. It might be
     $(document).ready(function() {
         $('#logo').empty();
         $('img[src="https://travis-ci.org/Rapporter/pander.png?branch=master"]').css('border', 'none').css('padding', '0px').parent().parent().css('text-align', 'justify');
-        $('img[src="https://coveralls.io/repos/Rapporter/pander/badge.svg?branch=master"]')..css('border', 'none').css('padding', '0px').parent().parent().css('text-align', 'justify');
+        $('img[src="https://coveralls.io/repos/Rapporter/pander/badge.svg?branch=master"]').css('border', 'none').css('padding', '0px').parent().parent().css('text-align', 'justify');
         $('nav').css('height', '100%');
         $("img").unbind("click");
     });
@@ -1111,4 +1111,4 @@ To use this small lib, just type: `M-x pander-mode` on any document. It might be
 
 
 -------
-This report was generated with [R](http://www.r-project.org/) (3.1.2) and [pander](https://github.com/rapporter/pander) (0.5.2) in 0.849 sec on x86_64-unknown-linux-gnu platform.
+This report was generated with [R](http://www.r-project.org/) (3.1.2) and [pander](https://github.com/rapporter/pander) (0.5.2) in 1.746 sec on x86_64-unknown-linux-gnu platform.

@@ -819,7 +819,7 @@ To use this small lib, just type: `M-x pander-mode` on any document. It might be
     $(document).ready(function() {
         $('#logo').empty();
         $('img[src="https://travis-ci.org/Rapporter/pander.png?branch=master"]').css('border', 'none').css('padding', '0px').parent().parent().css('text-align', 'justify');
-        $('img[src="https://coveralls.io/repos/Rapporter/pander/badge.svg?branch=master"]')..css('border', 'none').css('padding', '0px').parent().parent().css('text-align', 'justify');
+        $('img[src="https://coveralls.io/repos/Rapporter/pander/badge.svg?branch=master"]').css('border', 'none').css('padding', '0px').parent().parent().css('text-align', 'justify');
         $('nav').css('height', '100%');
         $("img").unbind("click");
     });
