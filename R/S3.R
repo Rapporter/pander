@@ -1504,3 +1504,26 @@ pander.function <- function(x, add.name = FALSE, verbatim = TRUE, syntax.highlig
         cat('```')
 
 }
+
+#' Pander method for tabular class
+#'
+#' @param x an tabular object
+#' @param ... ignored parameters
+#' @export
+pander.tabular <- function(x, ...) {
+  colLabels <- attr(x, 'colLabels')
+  rowLabels <- attr(x, 'rowLabels')
+  content <- format(x)
+  
+  colLabels[is.na(colLabels)] <- ''
+  
+  header <- matrix(data="", nrow(colLabels))
+  header[nrow(colLabels)] <- colnames(rowLabels)
+  header <- cbind(header, colLabels)
+  
+  colnames(rowLabels) <- NULL
+  table <- cbind(rowLabels, content)
+  colnames(table) <- apply(header, 2, paste, collapse= '\\ \n')
+  
+  pander.table(table, keep.line.breaks = TRUE)
+}
