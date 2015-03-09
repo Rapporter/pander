@@ -1514,9 +1514,9 @@ pander.tabular <- function(x, ...) {
   # Get the cols and rows header
   colLabels <- attr(x, 'colLabels')
   rowLabels <- attr(x, 'rowLabels')
-  content <- format(x)
+  content <- format(x, ...)
   
-  # Replaces the NA with empty strings
+  # Replace NA values with empty strings
   colLabels[is.na(colLabels)] <- ''
   rowLabels[is.na(rowLabels)] <- ''
   
@@ -1530,5 +1530,5 @@ pander.tabular <- function(x, ...) {
   table <- cbind(rowLabels, content)
   colnames(table) <- apply(header, 2, paste, collapse= '\\ \n')
   
-  pander.table(table, keep.line.breaks = TRUE)
+  pander.table(table, keep.line.breaks = TRUE, ...)
 }
