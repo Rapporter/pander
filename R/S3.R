@@ -1511,14 +1511,19 @@ pander.function <- function(x, add.name = FALSE, verbatim = TRUE, syntax.highlig
 #' @param ... ignored parameters
 #' @export
 pander.tabular <- function(x, ...) {
+  # Get the cols and rows header
   colLabels <- attr(x, 'colLabels')
   rowLabels <- attr(x, 'rowLabels')
   content <- format(x)
   
+  # Replaces the NA with empty strings
   colLabels[is.na(colLabels)] <- ''
+  rowLabels[is.na(rowLabels)] <- ''
   
-  header <- matrix(data="", nrow(colLabels))
-  header[nrow(colLabels)] <- colnames(rowLabels)
+  # Create an empty matrix to get the same size
+  header <- matrix(data="", nrow = nrow(colLabels), ncol = ncol(rowLabels))
+  header[nrow(colLabels), 1:ncol(rowLabels)] <- colnames(rowLabels)
+  # Add the row labels to the table header
   header <- cbind(header, colLabels)
   
   colnames(rowLabels) <- NULL
