@@ -863,19 +863,19 @@ pandoc.table.return <- function(t, caption, digits = panderOptions('digits'), de
     } else {
         if (!is.null(emphasize.rows)) {
             check.highlight.parameters(emphasize.rows, nrow(t))
-            t[emphasize.rows, ] <- apply(t[emphasize.rows, , drop = FALSE], c(1, 2), pandoc.emphasis.return)
+            t[emphasize.rows, ] <- apply(t[emphasize.rows, , drop = FALSE], c(1), pandoc.emphasis.return)
         }
         if (!is.null(emphasize.strong.rows)) {
             check.highlight.parameters(emphasize.strong.rows, nrow(t))
-            t[emphasize.strong.rows, ] <- apply(t[emphasize.strong.rows, , drop = FALSE], c(1, 2), pandoc.strong.return)
+            t[emphasize.strong.rows, ] <- apply(t[emphasize.strong.rows, , drop = FALSE], c(1), pandoc.strong.return)
         }
         if (!is.null(emphasize.cols)) {
             check.highlight.parameters(emphasize.cols, ncol(t))
-            t[, emphasize.cols] <- apply(t[, emphasize.cols, drop = FALSE], c(1, 2), pandoc.emphasis.return)
+            t[, emphasize.cols] <- apply(t[, emphasize.cols, drop = FALSE], c(2), pandoc.emphasis.return)
         }
         if (!is.null(emphasize.strong.cols)) {
             check.highlight.parameters(emphasize.strong.cols, ncol(t))
-            t[, emphasize.strong.cols] <- apply(t[, emphasize.strong.cols, drop = FALSE], c(1, 2), pandoc.strong.return)
+            t[, emphasize.strong.cols] <- apply(t[, emphasize.strong.cols, drop = FALSE], c(2), pandoc.strong.return)
         }
         if (!is.null(emphasize.cells)) {
             t <- as.matrix(t)

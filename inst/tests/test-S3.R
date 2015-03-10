@@ -93,6 +93,10 @@ test_that('emphasize: error', {
     expect_that(pandoc.table(t, emphasize.strong.cols = 1.5), throws_error())
 })
 
+test_that('no warning for highlight NA/empty strings', {
+    expect_that(pandoc.table(data.frame(x = 1:2, y = c(1,NA)), emphasize.cols = 2), not(gives_warning()))
+})
+
 context('captions')
 
 tables <- list(
@@ -355,7 +359,7 @@ test_that('table.expand behaves correctly',{
   expect_equal(pandoc.table.return(data.frame(a="\\1 \\ 32",b="23")),"\n-----------\n   a     b \n------- ---\n\\1 \\ 32 23 \n-----------\n\n")
   expect_equal(pandoc.table.return(data.frame(a="\\1 \\ 32",b="23"), justify = 'right'), "\n-----------\n      a   b\n------- ---\n\\1 \\ 32  23\n-----------\n\n")
   expect_equal(pandoc.table.return(data.frame(a="\\1",b="23")), "\n-------\n a   b \n--- ---\n\\1  23 \n-------\n\n")
-  
+
   # unicode string issue
   expect_equal(pandoc.table.return(data.frame(a = 'ßß')), "\n---\n a \n---\nßß \n---\n\n")
 })
