@@ -363,3 +363,18 @@ test_that('table.expand behaves correctly',{
   # unicode string issue
   expect_equal(pandoc.table.return(data.frame(a = 'ßß')), "\n---\n a \n---\nßß \n---\n\n")
 })
+
+context('pander.tabular')
+test_that('pander.tabular behaves prefectly', {
+  # Contruct a matrix, convert it to tabular and check whether pander.tabular works well
+  data <- matrix(NA, 1, 3)
+  data[1,2] <- 1.399
+  data[1,3] <- 'str'
+  colnames(data) <- c('col1', 'col2', 'col3')
+  rownames(data) <- c('row1')
+  x <- tables::as.tabular(data)
+  ans <- pander.return(x, digits=2, emphasize.rownames=FALSE)
+
+  expect_equal(ans[3], '       col1 col2 col3')
+  expect_equal(ans[5], ' row1   NA  1.4  str ')
+})

@@ -1522,11 +1522,13 @@ pander.tabular <- function(x, caption = attr(x, 'caption'), digits = panderOptio
     cl[is.na(cl)] <- ''
     rows <- cl
 
+    # Append data
     numRows <- dim(x)[1]
     numCols <- dim(x)[2]
     for (i in 1:numRows) {
         row <- NULL
         for (j in 1:numCols) {
+            # cell may not be numeric
             cell <- suppressWarnings(as.numeric(x[i,j]))
             if (is.na(cell))
                 cell <- as.character(x[i,j])
@@ -1537,6 +1539,7 @@ pander.tabular <- function(x, caption = attr(x, 'caption'), digits = panderOptio
         rows <- rbind(rows, row)
     }
 
+    # Contruct rownames
     rl <- attr(x, 'rowLabels')
     rl <- c(colnames(rl), rl[,])
     numEmptyCell <- dim(rows)[1] - length(rl)
