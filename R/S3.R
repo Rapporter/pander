@@ -592,7 +592,9 @@ pander.list <- function(x, ...) {
         indent <- eval(mc$indent, parent.frame(1))
 
     ## replace missing values
-    x <- rapply(x, function(x) ifelse(is.na(x), panderOptions('missing'), x), how = 'list')
+    w <- which(is.na(x))
+    if (length(w) > 0)
+        x[w] <- panderOptions('missing')
 
     ## grab elements name (if any)
     x.names <- sapply(names(x), function(x) ifelse(x == '', '  *', sprintf('  * **%s**:', x)))
@@ -763,13 +765,13 @@ pander.CrossTable <- function(x, caption = attr(x, 'caption'), digits = panderOp
     nc <- dim(x$t)[2]
     if (!is.null(rownames(x$t)))
         nt <- cbind(rownames(x$t), x$t, x$rs)
-    else 
+    else
         nt <- cbind("&nbsp;", x$t, x$rs)
     hdd <- 100
     if (!is.na(x$expected) && x$expected == TRUE) {
         xex <- outer(x$rs, x$cs, "*")
         xex <- xex/x$gt
-        if (is.null(digits)) 
+        if (is.null(digits))
             digits = 1
         xx <- format(round(xex, digits), ...)
         xx <- cbind(rep("", nr), xx, rep("", nr))
@@ -779,9 +781,9 @@ pander.CrossTable <- function(x, caption = attr(x, 'caption'), digits = panderOp
             nt <- nt[idx, ]
     }
     appendlines <- function(nt, xx, hasttl = FALSE, haslbl = FALSE) {
-        if (!hasttl) 
+        if (!hasttl)
             xx <- cbind(xx, rep("", nr))
-        if (!haslbl) 
+        if (!haslbl)
             xx <- cbind(rep("", nr), xx)
         n <- dim(nt)[1]/nr
         nt <- rbind(nt, xx)
@@ -808,23 +810,23 @@ pander.CrossTable <- function(x, caption = attr(x, 'caption'), digits = panderOp
     if (!is.na(x$prop.row[1])) {
         xx <- cbind(x$prop.row, x$rs/x$gt)
         xx <- format(round(xx * hdd, digits), trim = TRUE, ...)
-        xx <- matrix(paste(xx, "%", sep = ""), nrow = nr, 
+        xx <- matrix(paste(xx, "%", sep = ""), nrow = nr,
                  ncol = nc + 1)
         xx <- cbind("Row(%)", xx)
         nt <- appendlines(nt, xx, TRUE, haslbl = TRUE)
     }
     if (!is.na(x$prop.col[1])) {
-        xx <- format(round(x$prop.col * hdd, digits), trim = TRUE, 
+        xx <- format(round(x$prop.col * hdd, digits), trim = TRUE,
                  ...)
-        xx <- matrix(paste(xx, "%", sep = ""), nrow = nr, 
+        xx <- matrix(paste(xx, "%", sep = ""), nrow = nr,
                  ncol = nc)
         xx <- cbind("Column(%)", xx)
         nt <- appendlines(nt, xx, haslbl = TRUE)
     }
     if (!is.na(x$prop.tbl[1])) {
-        xx <- format(round(x$prop.tbl * hdd, digits), trim = TRUE, 
+        xx <- format(round(x$prop.tbl * hdd, digits), trim = TRUE,
                  ...)
-        xx <- matrix(paste(xx, "%", sep = ""), nrow = nr, 
+        xx <- matrix(paste(xx, "%", sep = ""), nrow = nr,
                  ncol = nc)
         xx <- cbind("Total(%)", xx)
         nt <- appendlines(nt, xx, haslbl = TRUE)
@@ -834,7 +836,7 @@ pander.CrossTable <- function(x, caption = attr(x, 'caption'), digits = panderOp
         xx <- format(round(xx, digits), trim = TRUE, ...)
         nt <- appendlines(nt, xx)
     }
-    if (!is.na(x$sresid) && x$sresid == TRUE && x$expected == 
+    if (!is.na(x$sresid) && x$sresid == TRUE && x$expected ==
           TRUE) {
         xx <- x$CST$residual
         xx <- format(round(xx, digits), trim = TRUE, ...)
@@ -846,13 +848,13 @@ pander.CrossTable <- function(x, caption = attr(x, 'caption'), digits = panderOp
     }
     n <- dim(nt)[1]/nr
     idx <- seq(1, dim(nt)[1], n)
-    nt <- rbind(nt, c(gettext("Total", domain = "R-descr"), x$cs, 
+    nt <- rbind(nt, c(gettext("Total", domain = "R-descr"), x$cs,
                     x$gt))
-    if (!is.na(x$prop.col[1])) 
+    if (!is.na(x$prop.col[1]))
         nt <- rbind(nt, c("", sapply(round(hdd * x$cs/x$gt, digits), function(x) paste(x, "%", sep = "")), ""))
     len <- dim(nt)[1]
     rownames(nt) <- as.character(1:len)
-  
+
     # merging and print
     ts <- ifelse(!is.na(x$prop.col[1]), 2, 1)
     or <- (nrow(nt) - ts) / nr
@@ -860,7 +862,7 @@ pander.CrossTable <- function(x, caption = attr(x, 'caption'), digits = panderOp
     nc <- ncol(nt)
     res <- NULL
     for (i in 1:nr) {
-        res.r <- paste(pandoc.strong.return(nt[1+or*(i - 1), 1]), "N", paste(nt[((2+or*(i - 1)) : (i * or)),1], collapse = "\\ \n"), 
+        res.r <- paste(pandoc.strong.return(nt[1+or*(i - 1), 1]), "N", paste(nt[((2+or*(i - 1)) : (i * or)),1], collapse = "\\ \n"),
                    sep = "\\ \n")
         for (j in 2:nc) {
             res.r <- cbind(res.r, paste("&nbsp;", paste(nt[((1+or*(i - 1)) : (i * or)),j], collapse = "\\  \n"), sep = "\\ \n"))
