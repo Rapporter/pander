@@ -1547,9 +1547,7 @@ pander.tabular <- function(x, caption = attr(x, 'caption'), emphasize.rownames =
                                       ncol = length(cl)),
                                colnames(rlabels)), 
                          clabels)
-    } else {
-        rownames(data) <- rlabels
-    }
+    } 
     clabels <- apply(clabels, c(2), paste, collapse = "\\ \n")
     colnames(data) <- clabels
     if (emphasize.rownames)
