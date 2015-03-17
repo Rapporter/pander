@@ -35,7 +35,7 @@ pandoc.table.return(t, caption, digits = panderOptions("digits"),
 
 \item{missing}{string to replace missing values}
 
-\item{justify}{defines alignment in cells passed to \code{format}. Can be \code{left}, \code{right} or \code{centre}, which latter can be also spelled as \code{center}. Defaults to \code{centre}.}
+\item{justify}{defines alignment in cells passed to \code{format}. Can be \code{left}, \code{right} or \code{centre}, which latter can be also spelled as \code{center}. Defaults to \code{centre}. Can be abbreviated to a string consisting of the letters \code{l}, \code{c} and \code{r} (e.g. 'lcr' instead of c('left', 'centre', 'right').}
 
 \item{style}{which Pandoc style to use: \code{simple}, \code{multiline}, \code{grid} or \code{rmarkdown}}
 
@@ -106,6 +106,7 @@ m <- data.frame(a = c(1, -500, 10320, 23, 77),
   c = c('a', 'bb', 'ccc', 'dddd', 'eeeee'))
 pandoc.table(m)
 pandoc.table(m, justify = c('right', 'left', 'centre'))
+pandoc.table(m, justify = 'rlc') # Same as upper statement
 
 ## splitting up too wide tables
 pandoc.table(mtcars)
