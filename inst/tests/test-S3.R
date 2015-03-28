@@ -362,6 +362,9 @@ test_that('table.expand behaves correctly',{
 
 context("pander.tabular")
 test_that('tables::tabular behaves correctly', {
+  if(!suppressMessages(require('tables'))) {
+    skip('Package tables not installed : skipping pander.tabular tests')
+  }
   # checking nested columns
   x <- tabular((Species + 1) ~ (n=1) + Format(digits=2) * (Sepal.Length + Sepal.Width)*(mean + sd), data=iris)
   tabularmd <- pander.return(x);
