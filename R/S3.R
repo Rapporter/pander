@@ -1530,5 +1530,5 @@ pander.tabular <- function(x, ...) {
   table <- cbind(rowLabels, content)
   colnames(table) <- apply(header, 2, paste, collapse= '\\ \n')
   
-  pander.table(table, keep.line.breaks = TRUE, ...)
+  pandoc.table(table, keep.line.breaks = TRUE, ...)
 }
