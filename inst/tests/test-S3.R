@@ -359,3 +359,20 @@ test_that('table.expand behaves correctly',{
   # unicode string issue
   expect_equal(pandoc.table.return(data.frame(a = 'ßß')), "\n---\n a \n---\nßß \n---\n\n")
 })
+
+context("pander.tabular")
+test_that('tables::tabular behaves correctly', {
+  # checking nested columns
+  x <- tabular((Species + 1) ~ (n=1) + Format(digits=2) * (Sepal.Length + Sepal.Width)*(mean + sd), data=iris)
+  tabularmd <- pander.return(x);
+  
+  expect_equal(tabularmd[3], "    \\       \\    Sepal.Length\\    \\    Sepal.Width\\    \\  ")
+  expect_equal(tabularmd[4], " Species    n         mean        sd       mean        sd ")
+  
+  # checking nested rows
+  x <- tabular(as.factor(am) * (mean+median) ~ (mpg+hp+qsec), data = mtcars)
+  tabularmd <- pander.return(x);
+  
+  expect_equal(tabularmd[5], "       0          mean   17.15 160.3 18.18 ")
+  expect_equal(tabularmd[7], "                 median  17.30 175.0 17.82 ")
+})
