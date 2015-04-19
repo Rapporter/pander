@@ -14,7 +14,7 @@ Description: Contains some functions catching all messages, stdout and other
 Author: Gergely Daróczi <daroczig@rapporter.net>, Roman Tsegelskyi
     <roman.tsegelskyi@gmail.com>
 Version: 0.5.2
-Date: 2014-10-29
+Date: 2015-04-19
 URL: http://rapporter.github.io/pander
 BugReports: https://github.com/rapporter/pander/issues
 License: AGPL-3 | file LICENSE

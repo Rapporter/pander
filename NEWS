@@ -1,8 +1,30 @@
+pander 0.5.2 (2015-04-19)
+----------------------------------------------------------------
+
+New fetures:
+ * optionally add significance stars for P values (#94)
+ * specify full path of the pandoc binary (#127)
+ * define custom "missing value" text in pander outputs (#131)
+ * more general CrossTable renderer (started at #135)
+ * LaTeX-style column-alignment (#149)
+
+Fixes:
+ * Rcpp support for Unicode characters (#144)
+ * S3 method for a bunch of (lm, glm) summary objects
+ * disable "knitr.auto.asis" option for recursive calls (#129)
+ * evals hook trigger
+ * collapse multiple captions instead of rendering multiple captions (#130)
+ * preserve digits, decimal mark etc. settings for splitted tables (#133)
+ * narrower columns without a header (#136)
+ * read default params of set.alignment from panderOptions (#137)
+ * render header for 1D tables (#138)
+ * emphasize cells with missing/empty values (#156)
+
 pander 0.5.1 (2014-10-29)
 ----------------------------------------------------------------
 
  * refix S3 method exports in NAMESPACE
- * revert to non-Rcpp solution with Uincode characters
+ * revert to non-Rcpp solution with Unicode characters
 
 pander 0.5.0 (2014-10-27)
 ----------------------------------------------------------------
