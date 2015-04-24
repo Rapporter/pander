@@ -1506,3 +1506,31 @@ pander.function <- function(x, add.name = FALSE, verbatim = TRUE, syntax.highlig
         cat('```')
 
 }
+
+#' Pander method for tabular class
+#'
+#' @param x an tabular object
+#' @param ... ignored parameters
+#' @export
+pander.tabular <- function(x, ...) {
+  # Get the cols and rows header
+  colLabels <- attr(x, 'colLabels')
+  rowLabels <- attr(x, 'rowLabels')
+  content <- format(x, ...)
+  
+  # Replace NA values with empty strings
+  colLabels[is.na(colLabels)] <- ''
+  rowLabels[is.na(rowLabels)] <- ''
+  
+  # Create an empty matrix to get the same size
+  header <- matrix(data="", nrow = nrow(colLabels), ncol = ncol(rowLabels))
+  header[nrow(colLabels), 1:ncol(rowLabels)] <- colnames(rowLabels)
+  # Add the row labels to the table header
+  header <- cbind(header, colLabels)
+  
+  colnames(rowLabels) <- NULL
+  table <- cbind(rowLabels, content)
+  colnames(table) <- apply(header, 2, paste, collapse= '\\ \n')
+  
+  pandoc.table(table, keep.line.breaks = TRUE, ...)
+}
