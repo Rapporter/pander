@@ -1506,3 +1506,47 @@ pander.function <- function(x, add.name = FALSE, verbatim = TRUE, syntax.highlig
         cat('```')
 
 }
+
+#' Pander method for tables::tabular class
+#'
+#' Prints a tables::tabular object in Pandoc's markdown.
+#' @param x a tables::tabular object
+#' @param caption caption (string) to be shown under the table
+#' @param digits number of digits of precision
+#' @param ... optional parameters passed to raw \code{pandoc.table} function
+#' @export
+pander.tabular <- function(x, caption = attr(x, 'caption'), digits = panderOptions("digits"), ...) {
+
+    if (is.null(caption) & !is.null(storage$caption))
+        caption <- get.caption()
+
+    cl <- attr(x, 'colLabels')[,]
+    cl[is.na(cl)] <- ''
+    rows <- cl
+
+    # Append data
+    numRows <- dim(x)[1]
+    numCols <- dim(x)[2]
+    for (i in 1:numRows) {
+        row <- NULL
+        for (j in 1:numCols) {
+            # cell may not be numeric
+            cell <- suppressWarnings(as.numeric(x[i,j]))
+            if (is.na(cell))
+                cell <- as.character(x[i,j])
+            else
+                cell <- format(round(cell, digits), ...)
+            row <- c(row, cell)
+        }
+        rows <- rbind(rows, row)
+    }
+
+    # Contruct rownames
+    rl <- attr(x, 'rowLabels')
+    rl <- c(colnames(rl), rl[,])
+    numEmptyCell <- dim(rows)[1] - length(rl)
+    rl <- c(rep('', numEmptyCell), rl)
+    rownames(rows) <- rl
+
+    pandoc.table(rows, caption = caption, ...)
+}

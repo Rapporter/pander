@@ -313,8 +313,8 @@ And please note, that all above mentioned features are also supported by the `pa
 [31] pander.numeric         pander.option*         pander.POSIXct         pander.POSIXlt         pander.prcomp
 [36] pander.rapport         pander.return          pander.rlm             pander.sessionInfo     pander.smooth.spline
 [41] pander.stat.table      pander.summary.aov     pander.summary.aovlist pander.summary.glm     pander.summary.lm
-[46] pander.summary.prcomp  pander.survdiff        pander.survfit         pander.table           pander.ts
-[51] pander.zoo
+[46] pander.summary.prcomp  pander.survdiff        pander.survfit         pander.table           pander.tabular
+[51] pander.ts              pander.zoo
 ```
 
 If you think that `pander` lacks support for any other R class(es), please feel free to leave change request [here](https://github.com/Rapporter/pander/issues) and we will be happy to extend the package.
