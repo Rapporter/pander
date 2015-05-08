@@ -1506,3 +1506,55 @@ pander.function <- function(x, add.name = FALSE, verbatim = TRUE, syntax.highlig
         cat('```')
 
 }
+
+
+#' Pander method for tabular class
+#'
+#' Renders an tabular object in Pandoc's markdown.
+#' @param x an function object
+#' @param caption 
+#' @param digits number of digits of precision
+#' @param emphasize.rownames (defaut:\code{TRUE}) if rownames should be highlighted
+#' @param ... optional parameters passed to raw \code{pandoc.table} function
+#' @export
+#' @examples
+#' pander(tabular(as.factor(am) ~ (mpg+hp+qsec) * (mean+median), data = mtcars), split.tables = Inf)
+#' pander(tabular( (Species + 1) ~ (n=1) + Format(digits=2)*
+#' (Sepal.Length + Sepal.Width)*(mean + sd), data=iris ), split.tables = Inf)
+#' Sex <- factor(sample(c("Male", "Female"), 100, rep=TRUE))
+#' Status <- factor(sample(c("low", "medium", "high"), 100, rep=TRUE))
+#' z <- rnorm(100)+5
+#' fmt <- function(x) {
+#'    s <- format(x, digits=2)
+#'    even <- ((1:length(s)) %% 2) == 0
+#'    s[even] <- sprintf("(%s)", s[even])
+#'    s
+#' }
+#' tab <- tabular( Justify(c)*Heading()*z*Sex*Heading(Statistic)*Format(fmt())*(mean+sd) 
+#'                ~ Status )
+#' pander(tab, emphasize.rownames = FALSE)               
+pander.tabular <- function(x, caption = attr(x, 'caption'), emphasize.rownames = TRUE, digits = panderOptions('digits'), ...) {
+    if (is.null(caption) & !is.null(storage$caption))
+        caption <- get.caption()
+    data <- as.matrix(x, format = T, rowLabels = F, colLabels = F, digits = digits)
+    rlabels <- attr(x, "rowLabels")
+    rlabels[is.na(rlabels)] <- ""
+    clabels <- attr(x, "colLabels")
+    clabels[is.na(clabels)] <- ""
+    if (!is.null(colnames(rlabels))) { # needed for case of more complex tabular structure (see examples)
+        cl <- colnames(rlabels)
+        data <- cbind(rlabels, data)
+        clabels <- cbind(rbind(matrix("", 
+                                      nrow = (nrow(clabels) - 1), 
+                                      ncol = length(cl)),
+                               colnames(rlabels)), 
+                         clabels)
+    } 
+    clabels <- apply(clabels, c(2), paste, collapse = "\\ \n")
+    colnames(data) <- clabels
+    if (emphasize.rownames)
+        pandoc.table(data, caption = caption, keep.line.breaks = TRUE, emphasize.cols = 1:length(cl), ...)
+    else
+        pandoc.table(data, caption = caption, keep.line.breaks = TRUE, ...)
+}
+
