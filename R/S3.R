@@ -860,6 +860,8 @@ pander.CrossTable <- function(x, caption = attr(x, 'caption'), digits = panderOp
     or <- (nrow(nt) - ts) / nr
     nt.nr <- nrow(nt)
     nc <- ncol(nt)
+    RowData <- x$RowData
+    ColData <- x$ColData
     res <- NULL
     for (i in 1:nr) {
         res.r <- paste(pandoc.strong.return(nt[1+or*(i - 1), 1]), "N", paste(nt[((2+or*(i - 1)) : (i * or)),1], collapse = "\\ \n"),
@@ -874,7 +876,12 @@ pander.CrossTable <- function(x, caption = attr(x, 'caption'), digits = panderOp
         res.r <- cbind(res.r, paste(nt[(nt.nr-ts + 1) : nt.nr, j], collapse = "\\ \n"))
     }
     res <- rbind(res, res.r)
-    colnames(res) <- c('&nbsp;', colnames(x$t), 'Total')
+    cln <- c(if (RowData != "") RowData else '&nbsp;', colnames(x$t), 'Total')
+    if (ColData != "") {
+        cln.t <- paste(c("&nbsp;", ColData, rep("&nbsp;", nc - 2)), rep("\\\n", nc - 1), sep="")
+        cln <- paste(cln.t, cln, sep="")
+    }
+    colnames(res) <- cln
     pandoc.table(res, caption = caption, keep.line.breaks = TRUE,...)
 }
 
