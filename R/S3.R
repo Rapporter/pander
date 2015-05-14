@@ -1519,12 +1519,13 @@ pander.function <- function(x, add.name = FALSE, verbatim = TRUE, syntax.highlig
 #'
 #' Renders an tabular object in Pandoc's markdown.
 #' @param x an function object
-#' @param caption 
+#' @param caption caption (string) to be shown under the table
 #' @param digits number of digits of precision
 #' @param emphasize.rownames (defaut:\code{TRUE}) if rownames should be highlighted
 #' @param ... optional parameters passed to raw \code{pandoc.table} function
 #' @export
 #' @examples
+#' library(tables)
 #' pander(tabular(as.factor(am) ~ (mpg+hp+qsec) * (mean+median), data = mtcars), split.tables = Inf)
 #' pander(tabular( (Species + 1) ~ (n=1) + Format(digits=2)*
 #' (Sepal.Length + Sepal.Width)*(mean + sd), data=iris ), split.tables = Inf)

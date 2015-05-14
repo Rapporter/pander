@@ -10,7 +10,7 @@
 \arguments{
 \item{x}{an function object}
 
-\item{caption}{}
+\item{caption}{caption (string) to be shown under the table}
 
 \item{emphasize.rownames}{(defaut:\code{TRUE}) if rownames should be highlighted}
 
@@ -22,6 +22,7 @@
 Renders an tabular object in Pandoc's markdown.
 }
 \examples{
+library(tables)
 pander(tabular(as.factor(am) ~ (mpg+hp+qsec) * (mean+median), data = mtcars), split.tables = Inf)
 pander(tabular( (Species + 1) ~ (n=1) + Format(digits=2)*
 (Sepal.Length + Sepal.Width)*(mean + sd), data=iris ), split.tables = Inf)
