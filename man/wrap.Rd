@@ -27,6 +27,6 @@ wrap(c("fee", "fi", "foo", "fam"), "_")
 Aleksandar Blagotic
 }
 \references{
-This function was moved from \code{rapport} package: \url{http://rapport-package.info/}.
+This function was moved from \code{rapport} package: \url{http://rapport-package.info}.
 }
 

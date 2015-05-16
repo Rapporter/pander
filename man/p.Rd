@@ -44,6 +44,6 @@ p(c("Thelma", "Louise"), wrap = "", copula = "&")
 Aleksandar Blagotic
 }
 \references{
-This function was moved from \code{rapport} package: \url{http://rapport-package.info/}.
+This function was moved from \code{rapport} package: \url{http://rapport-package.info}.
 }
 

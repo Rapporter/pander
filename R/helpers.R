@@ -58,7 +58,7 @@ repChar <- function(x, n, sep = '')
 #' ## [1] "Thelma & Louise"
 #' @export
 #' @author Aleksandar Blagotic
-#' @references This function was moved from \code{rapport} package: \url{http://rapport-package.info/}.
+#' @references This function was moved from \code{rapport} package: \url{http://rapport-package.info}.
 p <- function(x, wrap = panderOptions('p.wrap'), sep = panderOptions('p.sep'), copula = panderOptions('p.copula'), limit = Inf, keep.trailing.zeros = panderOptions('keep.trailing.zeros'), missing = panderOptions('missing')){
 
     attributes(x) <- NULL
@@ -111,7 +111,7 @@ p <- function(x, wrap = panderOptions('p.wrap'), sep = panderOptions('p.sep'), c
 #' }
 #' @export
 #' @author Aleksandar Blagotic
-#' @references This function was moved from \code{rapport} package: \url{http://rapport-package.info/}.
+#' @references This function was moved from \code{rapport} package: \url{http://rapport-package.info}.
 wrap <- function(x, wrap = '"'){
     attributes(x) <- NULL
     stopifnot(is.vector(x))
