@@ -252,7 +252,6 @@ masked.plots$plot <- masked.plots$barplot <- masked.plots$lines <- masked.plots$
 #' @param value value to assign (optional)
 #' @export
 #' @seealso \code{\link{evalsOptions}}
-#' @aliases pander.option
 #' @note \code{pander.option} is deprecated and is to be removed in future releases.
 #' @examples \dontrun{
 #' panderOptions()
@@ -288,12 +287,19 @@ panderOptions <- function(o, value) {
 
 }
 
+
+#' Deprecated panderOptions
+#' @usage pander.option(x, ...)
+#' @param x passed to \code{panderOptions}
+#' @param ... passed to \code{panderOptions}
 #' @export pander.option
+#' @seealso panderOptions
 pander.option <- function(x, ...) {
     mc <- match.call(panderOptions)
     mc[[1]] <- quote(panderOptions)
     eval(mc)
 }
+
 
 #' Querying/setting evals option
 #'

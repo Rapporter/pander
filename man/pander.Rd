@@ -2,7 +2,6 @@
 % Please edit documentation in R/S3.R
 \name{pander}
 \alias{pander}
-\alias{pander.return}
 \title{Generic pander method}
 \usage{
 pander(x = NULL, ...)

@@ -11,7 +11,6 @@
 #'   \item Hlavac, Marek (2013): _stargazer: LaTeX code for well-formatted regression and summary statistics tables._ \url{http://CRAN.R-project.org/package=stargazer}
 #' }
 #' @export
-#' @aliases pander.return
 #' @examples
 #'
 #' ## Vectors
@@ -107,7 +106,13 @@ pander <- function(x = NULL, ...) {
 }
 
 
+#' Pander and capture output
+#'
+#' This is a wrapper function around \code{pander} but instead of printing to \code{stdout}, this function returns a character vector of the captured lines.
+#' @param ... everything passed to \code{pander}
 #' @export pander.return
+#' @usage pander.return(...)
+#' @seealso pander
 pander.return <- function(...)
     capture.output(pander(...))
 
