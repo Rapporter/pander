@@ -24,7 +24,7 @@ Imports:
     methods,
     digest,
     tools,
-    Rcpp,
+    Rcpp
 Suggests:
     grid,
     lattice,
@@ -36,7 +36,8 @@ Suggests:
     nlme,
     descr,
     MASS,
-    knitr
+    knitr, 
+    tables
 SystemRequirements: pandoc (http://johnmacfarlane.net/pandoc) for exporting
     markdown files to other formats.
 LinkingTo: Rcpp

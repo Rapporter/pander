@@ -363,3 +363,22 @@ test_that('table.expand behaves correctly',{
   # unicode string issue
   expect_equal(pandoc.table.return(data.frame(a = 'ßß')), "\n---\n a \n---\nßß \n---\n\n")
 })
+
+context("S3 methods")
+
+test_that('pander.tabular behaves correctly', {
+    suppressMessages(require(tables))
+    tab <- pander.return(tables::tabular(as.factor(am) ~ (mpg+hp+qsec) * (mean+median), data = mtcars), emphasize.rownames = FALSE, split.tables = Inf)
+    expect_equal(length(tab), 10)
+    tab <- pander.return(tables::tabular( (Species + 1) ~ (n=1) + Format(digits=2)* (Sepal.Length + Sepal.Width)*(mean + sd), data=iris ), split.tables = Inf)
+    expect_equal(length(tab), 14)
+})
+
+test_that('pander.CrossTable behaves correctly', {
+    suppressMessages(require(descr))
+    # issue https://github.com/Rapporter/pander/issues/163
+    x <- CrossTable(mtcars$cyl, mtcars$gear, prop.c = FALSE, prop.t = FALSE, chisq = FALSE, prop.chisq = FALSE)
+    res <- pander.return(x)
+    expect_true(any(grepl(gsub("\\$", "\\\\$", x$ColData), res)))
+    expect_true(any(grepl(gsub("\\$", "\\\\$", x$RowData), res)))
+})
