@@ -295,6 +295,7 @@ panderOptions <- function(o, value) {
 #' @export pander.option
 #' @seealso panderOptions
 pander.option <- function(x, ...) {
+    .Deprecated('panderOptions')
     mc <- match.call(panderOptions)
     mc[[1]] <- quote(panderOptions)
     eval(mc)

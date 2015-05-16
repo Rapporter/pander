@@ -106,14 +106,26 @@ pander <- function(x = NULL, ...) {
 }
 
 
-#' Pander and capture output
+#' Deprecated pander_return
 #'
 #' This is a wrapper function around \code{pander} but instead of printing to \code{stdout}, this function returns a character vector of the captured lines.
 #' @param ... everything passed to \code{pander}
 #' @export pander.return
 #' @usage pander.return(...)
 #' @seealso pander
-pander.return <- function(...)
+pander.return <- function(...) {
+    .Deprecated('pander_return')
+    capture.output(pander(...))
+}
+
+
+#' Pander and capture output
+#'
+#' This is a wrapper function around \code{pander} but instead of printing to \code{stdout}, this function returns a character vector of the captured lines.
+#' @param ... everything passed to \code{pander}
+#' @export
+#' @seealso pander
+pander_return <- function(...)
     capture.output(pander(...))
 
 
@@ -1543,9 +1555,9 @@ pander.function <- function(x, add.name = FALSE, verbatim = TRUE, syntax.highlig
 #'    s[even] <- sprintf("(%s)", s[even])
 #'    s
 #' }
-#' tab <- tabular( Justify(c)*Heading()*z*Sex*Heading(Statistic)*Format(fmt())*(mean+sd) 
+#' tab <- tabular( Justify(c)*Heading()*z*Sex*Heading(Statistic)*Format(fmt())*(mean+sd)
 #'                ~ Status )
-#' pander(tab, emphasize.rownames = FALSE)               
+#' pander(tab, emphasize.rownames = FALSE)
 pander.tabular <- function(x, caption = attr(x, 'caption'), emphasize.rownames = TRUE, digits = panderOptions('digits'), ...) {
     if (is.null(caption) & !is.null(storage$caption))
         caption <- get.caption()
@@ -1557,12 +1569,12 @@ pander.tabular <- function(x, caption = attr(x, 'caption'), emphasize.rownames =
     if (!is.null(colnames(rlabels))) { # needed for case of more complex tabular structure (see examples)
         cl <- colnames(rlabels)
         data <- cbind(rlabels, data)
-        clabels <- cbind(rbind(matrix("", 
-                                      nrow = (nrow(clabels) - 1), 
+        clabels <- cbind(rbind(matrix("",
+                                      nrow = (nrow(clabels) - 1),
                                       ncol = length(cl)),
-                               colnames(rlabels)), 
+                               colnames(rlabels)),
                          clabels)
-    } 
+    }
     clabels <- apply(clabels, c(2), paste, collapse = "\\ \n")
     colnames(data) <- clabels
     if (emphasize.rownames)
@@ -1570,4 +1582,3 @@ pander.tabular <- function(x, caption = attr(x, 'caption'), emphasize.rownames =
     else
         pandoc.table(data, caption = caption, keep.line.breaks = TRUE, ...)
 }
-
