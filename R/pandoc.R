@@ -610,6 +610,10 @@ pandoc.table.return <- function(t, caption, digits = panderOptions('digits'), de
     split.single.cell <- function(x, max.width){
         if (!is.character(x))
             x <- as.character(x)
+        ## as.character(NA) remains NA, which causes isses with nchar since 2015-04-23
+        ## https://stat.ethz.ch/pipermail/r-devel/2015-April/071007.html
+        if (is.na(x))
+            x <- 'NA'
         if (!style %in% c('simple', 'rmarkdown')) {
             ## split
             if (nchar(x) == nchar(encodeString(x)) && !use.hyphening) {
@@ -971,8 +975,8 @@ pandoc.table.return <- function(t, caption, digits = panderOptions('digits'), de
         if (all (strsplit(justify, "")[[1]] %in% c("c", "l", "r") )) {
           if (nchar(justify) != length(t.width))
             stop(sprintf('Wrong number of parameters (%s instead of *%s*) passed: justify', nchar(justify), length(t.width)))
-          
-          justify <- c(l = "left", c = "centre", r = "right")[ strsplit(justify, "")[[1]] ]  
+
+          justify <- c(l = "left", c = "centre", r = "right")[ strsplit(justify, "")[[1]] ]
         } else {
           justify <- rep(justify, length(t.width))
         }
