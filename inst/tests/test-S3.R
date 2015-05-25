@@ -51,7 +51,7 @@ dm <- panderOptions('decimal.mark')
 panderOptions('decimal.mark', ',')
 test_that('decimal mark', {
     for (t in tables)
-        expect_true(grepl(',', paste(pander.return(t), collapse = '\n')))
+        expect_true(grepl(',', paste(pander_return(t), collapse = '\n')))
 })
 
 ## ## manual test
@@ -114,7 +114,7 @@ tables <- list(
 has.caption <- function(ttt, evals = FALSE) {
     set.caption('foo')
     if (!evals)
-        any(grepl('Table:', pander.return(ttt)))
+        any(grepl('Table:', pander_return(ttt)))
     else
         !is.null(attr(evals('get("ttt")', env = parent.frame())[[1]]$result, 'caption'))
 }
@@ -368,9 +368,12 @@ context("S3 methods")
 
 test_that('pander.tabular behaves correctly', {
     suppressMessages(require(tables))
-    tab <- pander.return(tables::tabular(as.factor(am) ~ (mpg+hp+qsec) * (mean+median), data = mtcars), emphasize.rownames = FALSE, split.tables = Inf)
+    tab <- pander_return(tables::tabular(as.factor(am) ~ (mpg+hp+qsec) * (mean+median), data = mtcars), 
+                         emphasize.rownames = FALSE, 
+                         split.tables = Inf)
     expect_equal(length(tab), 10)
-    tab <- pander.return(tables::tabular( (Species + 1) ~ (n=1) + Format(digits=2)* (Sepal.Length + Sepal.Width)*(mean + sd), data=iris ), split.tables = Inf)
+    tab <- pander_return(tables::tabular( (Species + 1) ~ (n=1) + Format(digits=2)* (Sepal.Length + Sepal.Width)*(mean + sd), data=iris ), 
+                         split.tables = Inf)
     expect_equal(length(tab), 14)
 })
 
@@ -378,7 +381,48 @@ test_that('pander.CrossTable behaves correctly', {
     suppressMessages(require(descr))
     # issue https://github.com/Rapporter/pander/issues/163
     x <- CrossTable(mtcars$cyl, mtcars$gear, prop.c = FALSE, prop.t = FALSE, chisq = FALSE, prop.chisq = FALSE)
-    res <- pander.return(x)
+    res <- pander_return(x)
     expect_true(any(grepl(gsub("\\$", "\\\\$", x$ColData), res)))
     expect_true(any(grepl(gsub("\\$", "\\\\$", x$RowData), res)))
+})
+
+test_that('pander.NULL behaves correctly', {
+    expect_equal(length(pander_return(NULL)), 0)
+    expect_equal(length(pander_return(c(NULL, NULL))), 0)
+})
+
+test_that('pander.cast_df behaves correctly', {
+    df <- data.frame(type=c(1, 1, 2, 2, 3, 3), variable="n", value=c(71, 72, 68, 80, 21, 20))
+    df.cast <- reshape::cast(df, type~., sum)
+    expect_equal(pander_return(df.cast, style='simple'), 
+                 c('','',' type   (all) ','------ -------','  1      143  ','  2      148  ','  3      41   ',''))
+})
+
+test_that('pander.lm/pander.summary.lm behaves correctly', {
+    ctl <- c(4.17,5.58,5.18,6.11,4.50,4.61,5.17,4.53,5.33,5.14)
+    trt <- c(4.81,4.17,4.41,3.59,5.87,3.83,6.03,4.89,4.32,4.69)
+    group <- gl(2, 10, 20, labels = c("Ctl","Trt"))
+    weight <- c(ctl, trt)
+    lm.D9 <- lm(weight ~ group)
+    res1 <- pander_return(lm.D9)
+    expect_equal(length(res1), 11)
+    expect_equal(max(nchar(res1)), 62)
+    res <- pander_return(summary(lm.D9))
+    expect_true(any(grepl('Fitting linear model', res)))
+    expect_true(any(grepl('Observations', res)))
+    expect_equal(length(res), 18)
+})
+
+test_that('pander.glm/pander.summary.glm behaves correctly', {
+    clotting <- data.frame(
+        u = c(5,10,15,20,30,40,60,80,100),
+        lot1 = c(118,58,42,35,27,25,21,19,18),
+        lot2 = c(69,35,26,21,18,16,13,12,12))
+    glmm <- glm(lot1 ~ log(u), data = clotting, family = Gamma)
+    pglmm <- pander_return(glmm)
+    expect_equal(length(pglmm), 11)
+    expect_equal(max(nchar(pglmm)), 70)
+    res <- pander_return(summary(glmm))
+    expect_true(any(grepl('Null deviance', res)))
+    expect_equal(length(res), 21)
 })
