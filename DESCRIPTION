@@ -37,7 +37,7 @@ Suggests:
     descr,
     MASS,
     knitr,
-    tables, 
+    tables,
     reshape
 SystemRequirements: pandoc (http://johnmacfarlane.net/pandoc) for exporting
     markdown files to other formats.
