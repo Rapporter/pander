@@ -434,3 +434,19 @@ test_that('pander.aov/pander.summary.aov behaves correctly', {
     expect_equal(paov, psaov) # choice of similar result for summary and standard
     expect_equal(length(psaov), 23)
 })
+
+test_that('pander.anova behaves correctly', {
+    fit <- lm(sr ~ ., data = LifeCycleSavings)
+    a <- anova(fit)
+    pa <- pander_return(a, style = 'simple')
+    expect_true(all(sapply(names(a)[-5], grepl, pa[3])))
+    #more complicated run
+    fit0 <- lm(sr ~ 1, data = LifeCycleSavings)
+    fit1 <- update(fit0, . ~ . + pop15)
+    fit2 <- update(fit1, . ~ . + pop75)
+    fit3 <- update(fit2, . ~ . + dpi)
+    fit4 <- update(fit3, . ~ . + ddpi)
+    a <- anova(fit0, fit1, fit2, fit3, fit4, test = "F")
+    pa <- pander_return(a, style='simple')
+    expect_true(all(sapply(names(a)[-6], grepl, pa[3])))
+})
