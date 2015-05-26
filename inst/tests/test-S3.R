@@ -426,3 +426,11 @@ test_that('pander.glm/pander.summary.glm behaves correctly', {
     expect_true(any(grepl('Null deviance', res)))
     expect_equal(length(res), 21)
 })
+
+test_that('pander.aov/pander.summary.aov behaves correctly', {
+    npk.aovE <- aov(yield ~  N*P*K + Error(block), npk)
+    paov <- pander_return(npk.aovE)
+    psaov <- pander_return(summary(npk.aovE))
+    expect_equal(paov, psaov) # choice of similar result for summary and standard
+    expect_equal(length(psaov), 23)
+})
