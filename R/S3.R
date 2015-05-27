@@ -738,34 +738,43 @@ pander.ftable <- function(x, ...)
 #' @param ... optional parameters passed to raw \code{pandoc.table} function
 #' @export
 pander.mtable <- function(x, caption = attr(x, 'caption'), ...) {
-
     if (is.null(caption) & !is.null(storage$caption))
         caption <- get.caption()
-
+    horizontal <- FALSE
     coefs <- ftable(as.table(x$coefficients), row.vars = rev(x$as.row), col.vars = rev(x$as.col))
-    coefs <- as.data.frame(rbind(coefs, x$summaries))
-    col.size <- length(colnames(coefs))
+    col.size <- if (length(dimnames(x$coefficients)) > 3) length(dimnames(x$coefficients)[[4]]) else 1
     row.size <- length(dimnames(x$coefficients)[[3]])
+    nrows.coefs <- nrow(coefs)
+    k <- nrows.coefs / row.size
+    if (k == 1)
+        horizontal <- TRUE
+    
     zeros <- rep(0, (col.size) * (row.size))
     temp <- matrix(zeros, ncol = (col.size))
     temp <- as.table(temp)
-
-    for (i in 1:row.size) {
-        tmp.row <- vector()
-        s <- as.vector(rbind(as.vector(as.matrix(coefs[2 *i - 1, ])), as.vector(as.matrix(coefs[2*i, ]))))
-        for (j in 1:col.size)
-            tmp.row <- c(tmp.row, paste(s[2*j - 1], s[2 * j], sep = '\\ \n'))
-        temp[i, ] <- tmp.row
+    
+    if (horizontal) {
+        for (i in 1:row.size) {
+            s <- coefs[i, ]
+            tmp.row <- vector()
+            for (j in 1:col.size)
+                tmp.row <- c(tmp.row, paste(s[2*j - 1], s[2 * j], sep = '\\ \n'))
+            temp[i, ] <- tmp.row
+        }
+    } else {
+        for (i in 1:row.size) {
+            tmp.row <- vector()
+            s <- as.matrix(coefs[(i*k-k+1):(i*k), ])
+            for (j in 1:col.size)
+                tmp.row <- c(tmp.row, paste(s[,j], collapse = '\\ \n'))
+            temp[i, ] <- tmp.row
+        }
     }
-
     temp <- rbind(temp, x$summaries)
     rownames(temp) <- c(dimnames(x$coefficients)[[3]], rownames(x$summaries))
-    colnames(temp) <- colnames(coefs)
-
+    colnames(temp) <- colnames(x$summaries)
     pandoc.table(temp, caption = caption, keep.line.breaks = TRUE, ...)
-
 }
-
 
 #' Pander method for CrossTable class
 #'
