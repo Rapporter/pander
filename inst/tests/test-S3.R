@@ -465,3 +465,32 @@ test_that('pander.aovlist/pander.summary.aovlist behaves correctly', {
     pa <- pander_return(a, style='simple')
     expect_equal(length(pa), 14)
 })
+
+test_that('pander.mtable behaves correctly', {
+    suppressMessages(require(memisc))
+    lm0 <- lm(sr ~ pop15 + pop75,              data = LifeCycleSavings)
+    pm <- pander_return(memisc::mtable(lm0), style='grid') # produces 2 columns, corner case
+    expect_equal(length(strsplit(pm[3], "\\+")[[1]]), 3) 
+    expect_equal(length(pm), 35)
+
+    berkeley <- Aggregate(Table(Admit,Freq)~.,data=UCBAdmissions)
+    berk0 <- glm(cbind(Admitted,Rejected)~1,data=berkeley,family="binomial")
+    berk1 <- glm(cbind(Admitted,Rejected)~Gender,data=berkeley,family="binomial")
+    berk2 <- glm(cbind(Admitted,Rejected)~Gender+Dept,data=berkeley,family="binomial")
+    pm <- pander_return(mtable(berk0, summary.stats=NULL), style='grid') # only one row
+    expect_equal(length(pm), 7)
+    
+    # horizontal, produced an error before
+    x <- memisc::mtable(berk0,berk1,berk2,
+           coef.style="horizontal",
+           summary.stats=c("Deviance","AIC","N"))
+    pm <- pander_return(x, style='grid')
+    expect_equal(length(pm), 33)
+    expect_true(all(sapply(colnames(x$coeficient), grepl, pm[4])))
+    
+    # more complex mtable
+    pm <- pander_return(memisc::mtable(berk0,berk1,berk2,
+           coef.style="all",
+           summary.stats=c("Deviance","AIC","N")), style = 'grid')
+    expect_equal(length(pm), 47)
+})
