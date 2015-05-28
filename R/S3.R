@@ -3,7 +3,7 @@
 #' Prints an R object in Pandoc's markdown.
 #' @param x an R object
 #' @param ... optional parameters passed to special methods and/or raw \code{pandoc.*} functions
-#' @return By default this function outputs (see: \code{cat}) the result. If you would want to catch the result instead, then call the function ending in \code{.return}.
+#' @return This function outputs (see: \code{cat}) the result.
 #' @note This function can be called by \code{pander} and \code{pandoc} too.
 #' @references \itemize{
 #'   \item John MacFarlane (2013): _Pandoc User's Guide_. \url{http://johnmacfarlane.net/pandoc/README.html}
@@ -114,7 +114,7 @@ pander <- function(x = NULL, ...) {
 #' @usage pander.return(...)
 #' @seealso pander
 pander.return <- function(...) {
-    .Deprecated('pander_return')
+    .Deprecated('pander')
     capture.output(pander(...))
 }
 
@@ -125,8 +125,10 @@ pander.return <- function(...) {
 #' @param ... everything passed to \code{pander}
 #' @export
 #' @seealso pander
-pander_return <- function(...)
+pander_return <- function(...) {
+    .Deprecated('pander')
     capture.output(pander(...))
+}
 
 
 #' Pander method for a NULL object
@@ -215,7 +217,7 @@ pander.image <- function(x, caption = attr(x, 'caption'), href = attr(x, 'href')
     if (is.null(caption) & !is.null(storage$caption))
         caption <- get.caption()
 
-    res <- pandoc.image.return(as.character(x), caption)
+    res <- capture.output(pandoc.image(as.character(x), caption))
 
     if (is.null(href))
         cat(res)
@@ -303,13 +305,13 @@ pander.cast_df<- function(x, caption = attr(x, 'caption'), ...) {
 #' @param summary (defaut:\code{TRUE}) if used for summary.lm or lm
 #' @param add.significance.stars if significance stars should be shown for P value
 #' @param ... optional parameters passed to special methods and/or raw \code{pandoc.*} functions
-#' @return By default this function outputs (see: \code{cat}) the result. If you would want to catch the result instead, then call the function ending in \code{.return}.
+#' @return This function outputs (see: \code{cat}) the result.
 #' @export
 pander.summary.lm <- function(x, caption = attr(x, 'caption'), covariate.labels, omit, summary = TRUE, add.significance.stars = FALSE, ...) {
 
     if (is.null(caption)) {
         if (is.null(storage$caption))
-            caption <- pandoc.formula.return(x$call$formula, text = 'Fitting linear model:')
+            caption <- capture.output(pandoc.formula(x$call$formula, text = 'Fitting linear model:'))
         else
             caption <- get.caption()
     }
@@ -367,7 +369,6 @@ pander.summary.lm <- function(x, caption = attr(x, 'caption'), covariate.labels,
 #' @param omit vector of variable to omit for priting in resulting table
 #' @param summary (defaut:\code{TRUE}) if used for summary.lm or lm
 #' @param ... optional parameters passed to special methods and/or raw \code{pandoc.*} functions
-#' @return By default this function outputs (see: \code{cat}) the result. If you would want to catch the result instead, then call the function ending in \code{.return}.
 #' @export
 pander.summary.glm <- function(x, caption = attr(x, 'caption'), covariate.labels, omit, summary = TRUE, ...)
     pander.summary.lm(x, caption = caption, summary = summary, covariate.labels = covariate.labels, omit = omit, ...)
@@ -399,7 +400,7 @@ pander.glm <- function(x, caption = attr(x, 'caption'), ...) {
         if (is.null(storage$caption))
             caption <- sprintf('Fitting generalized (%s) linear model: %s',
                                paste(x$family$family, x$family$link, sep = '/'),
-                               pandoc.formula.return(x$call$formula))
+                               capture.output(pandoc.formula(x$call$formula)))
         else
             caption <- get.caption()
     }
@@ -668,11 +669,11 @@ pander.evals <- function(x, ...) {
 
     if(panderOptions('evals.messages')) {
         if (!is.null(x$msg$messages))
-            o <- paste0(o, ' **MESSAGE**', pandoc.footnote.return(x$msg$messages))
+            o <- paste0(o, ' **MESSAGE**', capture.output(pandoc.footnote(x$msg$messages)))
         if (!is.null(x$msg$warnings))
-            o <- paste0(o, ' **WARNING**', pandoc.footnote.return(x$msg$warnings))
+            o <- paste0(o, ' **WARNING**', capture.output(pandoc.footnote(x$msg$warnings)))
         if (!is.null(x$msg$error))
-            o <- paste0(o, ' **ERROR**', pandoc.footnote.return(x$msg$errors))
+            o <- paste0(o, ' **ERROR**', capture.output(pandoc.footnote(x$msg$errors)))
     }
 
     cat(o)
@@ -890,8 +891,8 @@ pander.CrossTable <- function(x, caption = attr(x, 'caption'), digits = panderOp
     ColData <- x$ColData
     res <- NULL
     for (i in 1:nr) {
-        res.r <- paste(pandoc.strong.return(nt[1+or*(i - 1), 1]), "N", paste(nt[((2+or*(i - 1)) : (i * or)),1], collapse = "\\ \n"),
-                   sep = "\\ \n")
+        res.r <- paste(capture.output(pandoc.strong(nt[1+or*(i - 1), 1]), "N", paste(nt[((2+or*(i - 1)) : (i * or)),1], collapse = "\\ \n"),
+                   sep = "\\ \n"))
         for (j in 2:nc) {
             res.r <- cbind(res.r, paste("&nbsp;", paste(nt[((1+or*(i - 1)) : (i * or)),j], collapse = "\\  \n"), sep = "\\ \n"))
         }
@@ -990,7 +991,7 @@ pander.coxph <- function(x, caption = attr(x, 'caption'), ...) {
 
     if (is.null(caption)) {
         if (is.null(storage$caption))
-            caption <- pandoc.formula.return(x$call$formula, text = 'Fitting Proportional Hazards Regression Model:')
+            caption <- capture.output(pandoc.formula(x$call$formula, text = 'Fitting Proportional Hazards Regression Model:'))
         else
             caption <- get.caption()
     }
@@ -1042,7 +1043,7 @@ pander.clogit <- function (x, caption = attr(x, 'caption'), ...) {
 
     if (is.null(caption)) {
         if (is.null(storage$caption))
-            caption <- pandoc.formula.return(x$userCall, text = 'Fitting Conditional logistic regression:')
+            caption <- capture.output(pandoc.formula(x$userCall, text = 'Fitting Conditional logistic regression:'))
         else
             caption <- get.caption()
     }
@@ -1065,7 +1066,7 @@ pander.zoo <- function(x, caption = attr(x, 'caption'), ...) {
         caption <- get.caption()
 
     c.tab <- as.data.frame(x)
-    c.tab <- cbind(pandoc.date.return(trunc(time(x)), simplified = TRUE), c.tab)
+    c.tab <- cbind(capture.output(pandoc.date(trunc(time(x)), simplified = TRUE), c.tab))
 
     if (length(colnames(x)) != 0)
         colnames(c.tab) <- c('Period', colnames(x))
@@ -1092,7 +1093,7 @@ pander.lme <- function(x, caption = attr(x, 'caption'), summary = FALSE, ...) {
         if (is.null(storage$caption))
             caption <- sprintf('Linear mixed-effects model fit by %s : %s',
                                paste(sub('^[ ]*', '', ifelse(x$method == 'REML', 'REML', 'maximum likelihood'))),
-                               pandoc.formula.return(x$call$fixed), collapse = '')
+                               capture.output(pandoc.formula(x$call$fixed), collapse = ''))
         else
             caption <- get.caption()
     }
@@ -1101,7 +1102,7 @@ pander.lme <- function(x, caption = attr(x, 'caption'), summary = FALSE, ...) {
     res <- as.data.frame(xs$tTable)
 
     if (summary) {
-        pandoc.table(res, caption = pandoc.formula.return(x$call$fixed, text = 'Fixed effects: '),split.tables = Inf, ...)
+        pandoc.table(res, caption = capture.output(pandoc.formula(x$call$fixed, text = 'Fixed effects: '),split.tables = Inf, ...))
         pandoc.table(xs$residuals, caption = 'Standardized Within-Group Residuals')
         pandoc.table(data.frame(
             'Observations'        = x$dims[["N"]],
@@ -1143,7 +1144,7 @@ pander.describe <- function(x, caption = attr(x, 'caption'), short = TRUE, split
             counts <- matrix(as.character(x$count), dim.counts[1], dim.counts[2])
         }
         names(counts) <- names(x$count)
-        counts <- pandoc.table.return(counts, caption = caption, split.tables = split.tables, ...)
+        counts <- capture.output(pandoc.table.(counts, caption = caption, split.tables = split.tables, ...))
         val <- x$values
         if (length(val)) {
             if (!is.matrix(val)) {
@@ -1155,7 +1156,7 @@ pander.describe <- function(x, caption = attr(x, 'caption'), short = TRUE, split
                             val <- as.list(c(low, hi))
                         else
                             val <- as.list(paste(low, hi, sep = ', '))
-                        val <- pandoc.list.return(val, add.end.of.list = FALSE, ...)
+                        val <- capture.output(pandoc.list(val, add.end.of.list = FALSE, ...))
                     } else {
                         if (is.null(dim(val))) {
                             val <- as.character(val)
@@ -1164,7 +1165,7 @@ pander.describe <- function(x, caption = attr(x, 'caption'), short = TRUE, split
                                           dim(val)[2])
                         }
                         names(val) <- names(x$values)
-                        val <- pandoc.table.return(val, split.tables = split.tables, caption = caption, ...)
+                        val <- capture.output(pandoc.table(val, split.tables = split.tables, caption = caption, ...))
                     }
                 } else {
                     val <- paste(names(val),
@@ -1185,7 +1186,7 @@ pander.describe <- function(x, caption = attr(x, 'caption'), short = TRUE, split
                             z <- w
                         else z <- paste(z, w, sep = ', ')
                     }
-                    val <- pander.return(z)
+                    val <- capture.output(pander(z))
                 } else {
                     dim.val <- dim(val)
                     if (is.null(dim.val)) {
@@ -1196,7 +1197,7 @@ pander.describe <- function(x, caption = attr(x, 'caption'), short = TRUE, split
                     }
                     rownames(val) <- rownames(x$values)
                     colnames(val) <- colnames(x$values)
-                    val <- pandoc.table.return(val, split.tables = split.tables, caption = caption, ...)
+                    val <- capture.output(pandoc.table(val, split.tables = split.tables, caption = caption, ...))
                 }
             }
         }
@@ -1236,7 +1237,7 @@ pander.survdiff <- function(x, caption = attr(x, 'caption'), ...) {
 
     if (is.null(caption)) {
         if (is.null(storage$caption))
-            caption <- pandoc.formula.return(x$call$formula, text = 'Call:')
+            caption <- capture.output(pandoc.formula(x$call$formula, text = 'Call:'))
         else
             caption <- get.caption()
     }
@@ -1359,7 +1360,9 @@ pander.rlm <- function(x, caption = attr(x, 'caption'), ...) {
     if (is.null(caption)) {
         if (is.null(storage$caption))
             if (!is.null(x$call))
-                caption <- pandoc.formula.return(x$call$formula, text = 'Fitting linear model by robust regression:')
+                caption <- capture.output(
+                    pandoc.formula(x$call$formula, text = 'Fitting linear model by robust regression:')
+                )
             else
                 caption <- 'Fitting linear model by robust regression'
         else
@@ -1450,13 +1453,13 @@ pander.sessionInfo <- function (x, locale = TRUE, compact = TRUE, ...) {
     }
 
     if (compact) {
-        attached.base.packages <- pander.return(x$basePkgs, quote = FALSE, ...)
-        other.attached.packages <- pander.return(mkLabel(x, 'otherPkgs'), quote = FALSE, ...)
-        load.via.namespaces <- pander.return(mkLabel(x, 'loadedOnly'), quote = FALSE, ...)
+        attached.base.packages <- capture.output(pander(x$basePkgs, quote = FALSE, ...))
+        other.attached.packages <- capture.output(pander(mkLabel(x, 'otherPkgs'), quote = FALSE, ...))
+        load.via.namespaces <- capture.output(pander(mkLabel(x, 'loadedOnly'), quote = FALSE, ...))
     } else {
-        attached.base.packages <- pandoc.list.return(x$basePkgs, add.end.of.list = FALSE, ...)
-        other.attached.packages <- pandoc.list.return(mkLabel(x, 'otherPkgs'), add.end.of.list = FALSE, ...)
-        load.via.namespaces <- pandoc.list.return(mkLabel(x, 'loadedOnly'), add.end.of.list = FALSE, ...)
+        attached.base.packages <- capture.output(pandoc.list(x$basePkgs, add.end.of.list = FALSE, ...))
+        other.attached.packages <- capture.output(pandoc.list(mkLabel(x, 'otherPkgs'), add.end.of.list = FALSE, ...))
+        load.via.namespaces <- capture.output(pandoc.list(mkLabel(x, 'loadedOnly'), add.end.of.list = FALSE, ...))
     }
 
     cat('\n')
