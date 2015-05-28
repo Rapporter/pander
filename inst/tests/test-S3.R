@@ -426,3 +426,71 @@ test_that('pander.glm/pander.summary.glm behaves correctly', {
     expect_true(any(grepl('Null deviance', res)))
     expect_equal(length(res), 21)
 })
+
+test_that('pander.aov/pander.summary.aov behaves correctly', {
+    npk.aovE <- aov(yield ~  N*P*K + Error(block), npk)
+    paov <- pander_return(npk.aovE)
+    psaov <- pander_return(summary(npk.aovE))
+    expect_equal(paov, psaov) # choice of similar result for summary and standard
+    expect_equal(length(psaov), 23)
+})
+
+test_that('pander.anova behaves correctly', {
+    fit <- lm(sr ~ ., data = LifeCycleSavings)
+    a <- anova(fit)
+    pa <- pander_return(a, style = 'simple')
+    expect_true(all(sapply(names(a)[-5], grepl, pa[3])))
+    #more complicated run
+    fit0 <- lm(sr ~ 1, data = LifeCycleSavings)
+    fit1 <- update(fit0, . ~ . + pop15)
+    fit2 <- update(fit1, . ~ . + pop75)
+    fit3 <- update(fit2, . ~ . + dpi)
+    fit4 <- update(fit3, . ~ . + ddpi)
+    a <- anova(fit0, fit1, fit2, fit3, fit4, test = "F")
+    pa <- pander_return(a, style='simple')
+    expect_true(all(sapply(names(a)[-6], grepl, pa[3])))
+})
+
+test_that('pander.aovlist/pander.summary.aovlist behaves correctly', {
+    options(contrasts=c("contr.helmert", "contr.poly"))
+    N <- c(0,1,0,1,1,1,0,0,0,1,1,0,1,1,0,0,1,0,1,0,1,1,0,0)
+    P <- c(1,1,0,0,0,1,0,1,1,1,0,0,0,1,0,1,1,0,0,1,0,1,1,0)
+    K <- c(1,0,0,1,0,1,1,0,0,1,0,1,0,1,1,0,0,0,1,1,1,0,1,0)
+    yield <- c(49.5,62.8,46.8,57.0,59.8,58.5,55.5,56.0,62.8,55.8,69.5,
+               55.0, 62.0,48.8,45.5,44.2,52.0,51.5,49.8,48.8,57.2,59.0,53.2,56.0)
+    
+    npk <- data.frame(block=gl(6,4), N=factor(N), P=factor(P),
+                      K=factor(K), yield=yield)
+    a <- aov(yield ~  N*P*K + Error(block), npk)
+    pa <- pander_return(a, style='simple')
+    expect_equal(length(pa), 14)
+})
+
+test_that('pander.mtable behaves correctly', {
+    suppressMessages(require(memisc))
+    lm0 <- lm(sr ~ pop15 + pop75,              data = LifeCycleSavings)
+    pm <- pander_return(memisc::mtable(lm0), style='grid') # produces 2 columns, corner case
+    expect_equal(length(strsplit(pm[3], "\\+")[[1]]), 3) 
+    expect_equal(length(pm), 35)
+
+    berkeley <- Aggregate(Table(Admit,Freq)~.,data=UCBAdmissions)
+    berk0 <- glm(cbind(Admitted,Rejected)~1,data=berkeley,family="binomial")
+    berk1 <- glm(cbind(Admitted,Rejected)~Gender,data=berkeley,family="binomial")
+    berk2 <- glm(cbind(Admitted,Rejected)~Gender+Dept,data=berkeley,family="binomial")
+    pm <- pander_return(mtable(berk0, summary.stats=NULL), style='grid') # only one row
+    expect_equal(length(pm), 7)
+    
+    # horizontal, produced an error before
+    x <- memisc::mtable(berk0,berk1,berk2,
+           coef.style="horizontal",
+           summary.stats=c("Deviance","AIC","N"))
+    pm <- pander_return(x, style='grid')
+    expect_equal(length(pm), 33)
+    expect_true(all(sapply(colnames(x$coeficient), grepl, pm[4])))
+    
+    # more complex mtable
+    pm <- pander_return(memisc::mtable(berk0,berk1,berk2,
+           coef.style="all",
+           summary.stats=c("Deviance","AIC","N")), style = 'grid')
+    expect_equal(length(pm), 47)
+})
