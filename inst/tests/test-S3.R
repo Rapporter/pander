@@ -17,19 +17,19 @@ tables <- list(
 
 test_that('no error: multiline', {
     for (t in tables)
-        expect_that(pandoc.table.return(t, style = 'multiline'), is_a('character'))
+        expect_that(capture.output(pandoc.table(t, style = 'multiline')), is_a('character'))
 })
 test_that('no error: simple', {
     for (t in tables)
-        expect_that(pandoc.table.return(t, style = 'simple'), is_a('character'))
+        expect_that(capture.output(pandoc.table(t, style = 'simple')), is_a('character'))
 })
 test_that('no error: grid', {
     for (t in tables)
-        expect_that(pandoc.table.return(t, style = 'grid'), is_a('character'))
+        expect_that(capture.output(pandoc.table(t, style = 'grid')), is_a('character'))
 })
 test_that('no error: rmarkdown', {
     for (t in tables)
-        expect_that(pandoc.table.return(t, style = 'rmarkdown'), is_a('character'))
+        expect_that(capture.output(pandoc.table(t, style = 'rmarkdown')), is_a('character'))
 })
 
 tables <- list(
@@ -51,12 +51,8 @@ dm <- panderOptions('decimal.mark')
 panderOptions('decimal.mark', ',')
 test_that('decimal mark', {
     for (t in tables)
-        expect_true(grepl(',', paste(pander_return(t), collapse = '\n')))
+        expect_true(grepl(',', paste(capture.output(pander(t)), collapse = '\n')))
 })
-
-## ## manual test
-## for (t in tables)
-##     pander(t)
 
 panderOptions('decimal.mark', dm)
 
@@ -64,26 +60,26 @@ context('highlight tables')
 
 t <- mtcars[1:3, 1:5]
 test_that('highlight 1D: no error', {
-    expect_that(pandoc.table.return(t$mpg, emphasize.cells = 1), is_a('character'))
-    expect_that(pandoc.table.return(t$mpg, emphasize.cells = 1:2), is_a('character'))
-    expect_that(pandoc.table.return(t$mpg, emphasize.strong.cells = 1), is_a('character'))
-    expect_that(pandoc.table.return(t$mpg, emphasize.strong.cells = 1:2), is_a('character'))
+    expect_that(capture.output(pandoc.table(t$mpg, emphasize.cells = 1)), is_a('character'))
+    expect_that(capture.output(pandoc.table(t$mpg, emphasize.cells = 1:2)), is_a('character'))
+    expect_that(capture.output(pandoc.table(t$mpg, emphasize.strong.cells = 1)), is_a('character'))
+    expect_that(capture.output(pandoc.table(t$mpg, emphasize.strong.cells = 1:2)), is_a('character'))
 })
 
 t <- table(mtcars$am, mtcars$gear)
 test_that('emphasize 2D: no error', {
-    expect_that(pandoc.table.return(t, emphasize.rows = 1), is_a('character'))
-    expect_that(pandoc.table.return(t, emphasize.rows = 1:2), is_a('character'))
-    expect_that(pandoc.table.return(t, emphasize.cols = 1), is_a('character'))
-    expect_that(pandoc.table.return(t, emphasize.cols = 1:2), is_a('character'))
-    expect_that(pandoc.table.return(t, emphasize.cells = which(t > 10, arr.ind = TRUE)), is_a('character'))
-    expect_that(pandoc.table.return(t, emphasize.cells = which(t > 20, arr.ind = TRUE)), is_a('character'))
-    expect_that(pandoc.table.return(t, emphasize.strong.rows = 1), is_a('character'))
-    expect_that(pandoc.table.return(t, emphasize.strong.rows = 1:2), is_a('character'))
-    expect_that(pandoc.table.return(t, emphasize.strong.cols = 1), is_a('character'))
-    expect_that(pandoc.table.return(t, emphasize.strong.cols = 1:2), is_a('character'))
-    expect_that(pandoc.table.return(t, emphasize.strong.cells = which(t > 10, arr.ind = TRUE)), is_a('character'))
-    expect_that(pandoc.table.return(t, emphasize.strong.cells = which(t > 20, arr.ind = TRUE)), is_a('character'))
+    expect_that(capture.output(pandoc.table(t, emphasize.rows = 1)), is_a('character'))
+    expect_that(capture.output(pandoc.table(t, emphasize.rows = 1:2)), is_a('character'))
+    expect_that(capture.output(pandoc.table(t, emphasize.cols = 1)), is_a('character'))
+    expect_that(capture.output(pandoc.table(t, emphasize.cols = 1:2)), is_a('character'))
+    expect_that(capture.output(pandoc.table(t, emphasize.cells = which(t > 10, arr.ind = TRUE))), is_a('character'))
+    expect_that(capture.output(pandoc.table(t, emphasize.cells = which(t > 20, arr.ind = TRUE))), is_a('character'))
+    expect_that(capture.output(pandoc.table(t, emphasize.strong.rows = 1)), is_a('character'))
+    expect_that(capture.output(pandoc.table(t, emphasize.strong.rows = 1:2)), is_a('character'))
+    expect_that(capture.output(pandoc.table(t, emphasize.strong.cols = 1)), is_a('character'))
+    expect_that(capture.output(pandoc.table(t, emphasize.strong.cols = 1:2)), is_a('character'))
+    expect_that(capture.output(pandoc.table(t, emphasize.strong.cells = which(t > 10, arr.ind = TRUE))), is_a('character'))
+    expect_that(capture.output(pandoc.table(t, emphasize.strong.cells = which(t > 20, arr.ind = TRUE))), is_a('character'))
 })
 
 test_that('emphasize: error', {
@@ -114,7 +110,7 @@ tables <- list(
 has.caption <- function(ttt, evals = FALSE) {
     set.caption('foo')
     if (!evals)
-        any(grepl('Table:', pander_return(ttt)))
+        any(grepl('Table:', capture.output(pander(ttt))))
     else
         !is.null(attr(evals('get("ttt")', env = parent.frame())[[1]]$result, 'caption'))
 }
@@ -159,7 +155,7 @@ panderOptions('table.alignment.default', 'centre')
 panderOptions('table.alignment.rownames', 'right')
 test_that('no error: allright', {
     for (t in tables)
-        expect_that(pandoc.table.return(t, style = 'multiline'), is_a('character'))
+        expect_that(capture.output(pandoc.table(t, style = 'multiline')), is_a('character'))
 })
 
 f <- function(df) {
@@ -171,7 +167,7 @@ f <- function(df) {
 panderOptions('table.alignment.default', f)
 test_that('no error: functions', {
     for (t in tables)
-        expect_that(pandoc.table.return(t, style = 'multiline'), is_a('character'))
+        expect_that(capture.output(pandoc.table(t, style = 'multiline')), is_a('character'))
 })
 panderOptions('table.alignment.default', tad)
 panderOptions('table.alignment.rownames', tar)
@@ -180,34 +176,34 @@ context("keep.line.breaks")
 test_that('keep.line.breaks works correctly', {
   # keeping line breaks in a simple data.frame with one line breaks differs lines amount by one
   x <- data.frame(a="Pander\nPackage")
-  lines.x.no.breaks <- length(strsplit(pandoc.table.return(x, keep.line.breaks = FALSE), "\n")[[1]])
-  lines.x.keep.breaks <- length(strsplit(pandoc.table.return(x, keep.line.breaks = TRUE), "\n")[[1]])
+  lines.x.no.breaks <- length(capture.output(pandoc.table(x, keep.line.breaks = FALSE)))
+  lines.x.keep.breaks <- length(capture.output(pandoc.table(x, keep.line.breaks = TRUE)))
   expect_equal(lines.x.no.breaks + 1, lines.x.keep.breaks)
 
   # keeping line breaks in a simple data.frame with 2 rows with 1 line breaks differst lines amount by 2
   x <- data.frame(a=c("Pander\nPackage","Pander\nPackage"))
-  lines.x.no.breaks <- length(strsplit(pandoc.table.return(x, keep.line.breaks = FALSE), "\n")[[1]])
-  lines.x.keep.breaks <- length(strsplit(pandoc.table.return(x, keep.line.breaks = TRUE), "\n")[[1]])
+  lines.x.no.breaks <- length(capture.output(pandoc.table(x, keep.line.breaks = FALSE)))
+  lines.x.keep.breaks <- length(capture.output(pandoc.table(x, keep.line.breaks = TRUE)))
   expect_equal(lines.x.no.breaks + 2, lines.x.keep.breaks)
 
   #if there are no line breaks originally, they do not get introduced
   x <- data.frame(a=c("Pander Package","Pander Package"))
-  lines.x.no.breaks <- length(strsplit(pandoc.table.return(x, keep.line.breaks = FALSE), "\n")[[1]])
-  lines.x.keep.breaks <- length(strsplit(pandoc.table.return(x, keep.line.breaks = TRUE), "\n")[[1]])
+  lines.x.no.breaks <- length(capture.output(pandoc.table(x, keep.line.breaks = FALSE)))
+  lines.x.keep.breaks <- length(capture.output(pandoc.table(x, keep.line.breaks = TRUE)))
   expect_equal(lines.x.no.breaks, lines.x.keep.breaks)
 
   # works with random number of rows added
   rows <- sample(1:100, 1)
   x <- data.frame(a=rep("Pander\nPackage", rows))
-  lines.x.no.breaks <- length(strsplit(pandoc.table.return(x, keep.line.breaks = FALSE), "\n")[[1]])
-  lines.x.keep.breaks <- length(strsplit(pandoc.table.return(x, keep.line.breaks = TRUE), "\n")[[1]])
+  lines.x.no.breaks <- length(capture.output(pandoc.table(x, keep.line.breaks = FALSE)))
+  lines.x.keep.breaks <- length(capture.output(pandoc.table(x, keep.line.breaks = TRUE)))
   expect_equal(lines.x.no.breaks + rows, lines.x.keep.breaks)
 
   # random number of line breaks in one cell
   n <- sample(1:10, 1)
   x <- data.frame(a=paste(rep("pander", n), collapse="\n"))
-  lines.x.no.breaks <- length(strsplit(pandoc.table.return(x, keep.line.breaks = FALSE, split.cells = Inf), "\n")[[1]])
-  lines.x.keep.breaks <- length(strsplit(pandoc.table.return(x, keep.line.breaks = TRUE), "\n")[[1]])
+  lines.x.no.breaks <- length(capture.output(pandoc.table(x, keep.line.breaks = FALSE, split.cells = Inf)))
+  lines.x.keep.breaks <- length(capture.output(pandoc.table(x, keep.line.breaks = TRUE)))
   expect_equal(lines.x.no.breaks + n - 1, lines.x.keep.breaks)
 
   # random number of line breaks in cells, 3 columns
@@ -215,14 +211,14 @@ test_that('keep.line.breaks works correctly', {
   x <- data.frame(a=paste(rep("pander", n[1]), collapse="\n"),
                   b = paste(rep("pander", n[2]), collapse="\n"),
                   c = paste(rep("pander", n[3]), collapse="\n"))
-  lines.x.no.breaks <- length(strsplit(pandoc.table.return(x, keep.line.breaks = FALSE, split.cells = Inf, split.tables = Inf), "\n")[[1]])
-  lines.x.keep.breaks <- length(strsplit(pandoc.table.return(x, keep.line.breaks = TRUE), "\n")[[1]])
+  lines.x.no.breaks <- length(capture.output(pandoc.table(x, keep.line.breaks = FALSE, split.cells = Inf, split.tables = Inf)))
+  lines.x.keep.breaks <- length(capture.output(pandoc.table(x, keep.line.breaks = TRUE)))
   expect_equal(lines.x.no.breaks + max(n) - 1, lines.x.keep.breaks)
 
   # 3 columns, 2 rows
   x <- rbind(x,x)
-  lines.x.no.breaks <- length(strsplit(pandoc.table.return(x, keep.line.breaks = FALSE, split.cells = Inf, split.tables = Inf), "\n")[[1]])
-  lines.x.keep.breaks <- length(strsplit(pandoc.table.return(x, keep.line.breaks = TRUE), "\n")[[1]])
+  lines.x.no.breaks <- length(capture.output(pandoc.table(x, keep.line.breaks = FALSE, split.cells = Inf, split.tables = Inf)))
+  lines.x.keep.breaks <- length(capture.output(pandoc.table(x, keep.line.breaks = TRUE)))
   expect_equal(lines.x.no.breaks + 2 * max(n) - 2, lines.x.keep.breaks)
 })
 
@@ -230,22 +226,22 @@ context("split.cells")
 test_that('split.cells works correctly',{
   x <- data.frame(a = "foo bar\nfo bar")
   # single line break behaves correctly combines with keep line breaks
-  expect_equal(pandoc.table.return(x, keep.line.breaks = T, split.cells = 7), "\n-------\n   a   \n-------\nfoo bar\nfo bar \n-------\n\n")
-  expect_equal(pandoc.table.return(x, keep.line.breaks = T, split.cells = 6), "\n------\n  a   \n------\n foo  \n bar  \nfo bar\n------\n\n")
+  expect_equal(capture.output(pandoc.table(x, keep.line.breaks = T, split.cells = 7)), capture.output(cat("\n-------\n   a   \n-------\nfoo bar\nfo bar \n-------\n\n")))
+  expect_equal(capture.output(pandoc.table(x, keep.line.breaks = T, split.cells = 6)), capture.output(cat("\n------\n  a   \n------\n foo  \n bar  \nfo bar\n------\n\n")))
   # Corner values of split.cells
   x <- data.frame(a = "foo bar", b = "foo bar")
-  expect_equal(length(strsplit(pandoc.table.return(x, split.cells = c(6, Inf)), "\n")[[1]]), 8)
-  expect_equal(pandoc.table.return(x, split.cells = c(6, Inf)), "\n-----------\n a     b   \n--- -------\nfoo foo bar\nbar        \n-----------\n\n")
-  expect_equal(pandoc.table.return(x, split.cells = c(Inf, 6)), "\n-----------\n   a     b \n------- ---\nfoo bar foo\n        bar\n-----------\n\n")
-  expect_equal(pandoc.table.return(x, split.cells = c(7, 7)), "\n---------------\n   a       b   \n------- -------\nfoo bar foo bar\n---------------\n\n")
-  expect_equal(pandoc.table.return(x, split.cells = c(7, 7)), pandoc.table.return(x, split.cells = Inf))
-  expect_equal(pandoc.table.return(x, split.cells = c(6 ,6)), pandoc.table.return(x, split.cells = 6))
-  expect_equal(pandoc.table.return(x, split.cells = c(7 ,7)), pandoc.table.return(x, split.cells = 7))
-  expect_equal(pandoc.table.return(x, split.cells = c(7 ,7)), pandoc.table.return(x, split.cells = 7))
+  expect_equal(length(capture.output(pandoc.table(x, split.cells = c(6, Inf)))), 8)
+  expect_equal(capture.output(pandoc.table(x, split.cells = c(6, Inf))), capture.output(cat("\n-----------\n a     b   \n--- -------\nfoo foo bar\nbar        \n-----------\n\n")))
+  expect_equal(capture.output(pandoc.table(x, split.cells = c(Inf, 6))), capture.output(cat("\n-----------\n   a     b \n------- ---\nfoo bar foo\n        bar\n-----------\n\n")))
+  expect_equal(capture.output(pandoc.table(x, split.cells = c(7, 7))), capture.output(cat("\n---------------\n   a       b   \n------- -------\nfoo bar foo bar\n---------------\n\n")))
+  expect_equal(capture.output(pandoc.table(x, split.cells = c(7, 7))), capture.output(pandoc.table(x, split.cells = Inf)))
+  expect_equal(capture.output(pandoc.table(x, split.cells = c(6 ,6))), capture.output(pandoc.table(x, split.cells = 6)))
+  expect_equal(capture.output(pandoc.table(x, split.cells = c(7 ,7))), capture.output(pandoc.table(x, split.cells = 7)))
+  expect_equal(capture.output(pandoc.table(x, split.cells = c(7 ,7))), capture.output(pandoc.table(x, split.cells = 7)))
   # relative split.cells
-  expect_equal(pandoc.table.return(x, split.cells = c("50%", "50%")), pandoc.table.return(x, split.cells = c(7)))
-  expect_equal(pandoc.table.return(x, split.cells = c("20%", "80%"), split.tables = 30), pandoc.table.return(x, split.cells = c(6, Inf)))
-  expect_equal(pandoc.table.return(x, split.cells = c("80%", "20%"), split.tables = 30), pandoc.table.return(x, split.cells = c(Inf, 6)))
+  expect_equal(capture.output(pandoc.table(x, split.cells = c("50%", "50%"))), capture.output(pandoc.table(x, split.cells = c(7))))
+  expect_equal(capture.output(pandoc.table(x, split.cells = c("20%", "80%"), split.tables = 30)), capture.output(pandoc.table(x, split.cells = c(6, Inf))))
+  expect_equal(capture.output(pandoc.table(x, split.cells = c("80%", "20%"), split.tables = 30)), capture.output(pandoc.table(x, split.cells = c(Inf, 6))))
 })
 
 test_that('split.cells param produces expected warnings',{
@@ -356,24 +352,24 @@ test_that('table.expand behaves correctly',{
   expect_equal(res, "        ")
 
   # backslashes issue (#22)
-  expect_equal(pandoc.table.return(data.frame(a="\\1 \\ 32",b="23")),"\n-----------\n   a     b \n------- ---\n\\1 \\ 32 23 \n-----------\n\n")
-  expect_equal(pandoc.table.return(data.frame(a="\\1 \\ 32",b="23"), justify = 'right'), "\n-----------\n      a   b\n------- ---\n\\1 \\ 32  23\n-----------\n\n")
-  expect_equal(pandoc.table.return(data.frame(a="\\1",b="23")), "\n-------\n a   b \n--- ---\n\\1  23 \n-------\n\n")
+  expect_equal(capture.output(pandoc.table(data.frame(a="\\1 \\ 32",b="23"))),capture.output(cat("\n-----------\n   a     b \n------- ---\n\\1 \\ 32 23 \n-----------\n\n")))
+  expect_equal(capture.output(pandoc.table(data.frame(a="\\1 \\ 32",b="23"), justify = 'right')), capture.output(cat("\n-----------\n      a   b\n------- ---\n\\1 \\ 32  23\n-----------\n\n")))
+  expect_equal(capture.output(pandoc.table(data.frame(a="\\1",b="23"))), capture.output(cat("\n-------\n a   b \n--- ---\n\\1  23 \n-------\n\n")))
 
   # unicode string issue
-  expect_equal(pandoc.table.return(data.frame(a = 'ßß')), "\n---\n a \n---\nßß \n---\n\n")
+  expect_equal(capture.output(pandoc.table(data.frame(a = 'ßß'))), capture.output(cat("\n---\n a \n---\nßß \n---\n\n")))
 })
 
 context("S3 methods")
 
 test_that('pander.tabular behaves correctly', {
     suppressMessages(require(tables))
-    tab <- pander_return(tables::tabular(as.factor(am) ~ (mpg+hp+qsec) * (mean+median), data = mtcars), 
+    tab <- capture.output(pander(tables::tabular(as.factor(am) ~ (mpg+hp+qsec) * (mean+median), data = mtcars), 
                          emphasize.rownames = FALSE, 
-                         split.tables = Inf)
+                         split.tables = Inf))
     expect_equal(length(tab), 10)
-    tab <- pander_return(tables::tabular( (Species + 1) ~ (n=1) + Format(digits=2)* (Sepal.Length + Sepal.Width)*(mean + sd), data=iris ), 
-                         split.tables = Inf)
+    tab <- capture.output(pander(tables::tabular( (Species + 1) ~ (n=1) + Format(digits=2)* (Sepal.Length + Sepal.Width)*(mean + sd), data=iris ), 
+                         split.tables = Inf))
     expect_equal(length(tab), 14)
 })
 
@@ -381,20 +377,20 @@ test_that('pander.CrossTable behaves correctly', {
     suppressMessages(require(descr))
     # issue https://github.com/Rapporter/pander/issues/163
     x <- CrossTable(mtcars$cyl, mtcars$gear, prop.c = FALSE, prop.t = FALSE, chisq = FALSE, prop.chisq = FALSE)
-    res <- pander_return(x)
+    res <- capture.output(pander(x))
     expect_true(any(grepl(gsub("\\$", "\\\\$", x$ColData), res)))
     expect_true(any(grepl(gsub("\\$", "\\\\$", x$RowData), res)))
 })
 
 test_that('pander.NULL behaves correctly', {
-    expect_equal(length(pander_return(NULL)), 0)
-    expect_equal(length(pander_return(c(NULL, NULL))), 0)
+    expect_equal(length(capture.output(pander(NULL))), 0)
+    expect_equal(length(capture.output(pander(c(NULL, NULL)))), 0)
 })
 
 test_that('pander.cast_df behaves correctly', {
     df <- data.frame(type=c(1, 1, 2, 2, 3, 3), variable="n", value=c(71, 72, 68, 80, 21, 20))
     df.cast <- reshape::cast(df, type~., sum)
-    expect_equal(pander_return(df.cast, style='simple'), 
+    expect_equal(capture.output(pander(df.cast, style='simple')), 
                  c('','',' type   (all) ','------ -------','  1      143  ','  2      148  ','  3      41   ',''))
 })
 
@@ -404,10 +400,10 @@ test_that('pander.lm/pander.summary.lm behaves correctly', {
     group <- gl(2, 10, 20, labels = c("Ctl","Trt"))
     weight <- c(ctl, trt)
     lm.D9 <- lm(weight ~ group)
-    res1 <- pander_return(lm.D9)
+    res1 <- capture.output(pander(lm.D9))
     expect_equal(length(res1), 11)
     expect_equal(max(nchar(res1)), 62)
-    res <- pander_return(summary(lm.D9))
+    res <- capture.output(pander(summary(lm.D9)))
     expect_true(any(grepl('Fitting linear model', res)))
     expect_true(any(grepl('Observations', res)))
     expect_equal(length(res), 18)
@@ -419,18 +415,18 @@ test_that('pander.glm/pander.summary.glm behaves correctly', {
         lot1 = c(118,58,42,35,27,25,21,19,18),
         lot2 = c(69,35,26,21,18,16,13,12,12))
     glmm <- glm(lot1 ~ log(u), data = clotting, family = Gamma)
-    pglmm <- pander_return(glmm)
+    pglmm <- capture.output(pander(glmm))
     expect_equal(length(pglmm), 11)
     expect_equal(max(nchar(pglmm)), 70)
-    res <- pander_return(summary(glmm))
+    res <- capture.output(pander(summary(glmm)))
     expect_true(any(grepl('Null deviance', res)))
     expect_equal(length(res), 21)
 })
 
 test_that('pander.aov/pander.summary.aov behaves correctly', {
     npk.aovE <- aov(yield ~  N*P*K + Error(block), npk)
-    paov <- pander_return(npk.aovE)
-    psaov <- pander_return(summary(npk.aovE))
+    paov <- capture.output(pander(npk.aovE))
+    psaov <- capture.output(pander(summary(npk.aovE)))
     expect_equal(paov, psaov) # choice of similar result for summary and standard
     expect_equal(length(psaov), 23)
 })
@@ -438,7 +434,7 @@ test_that('pander.aov/pander.summary.aov behaves correctly', {
 test_that('pander.anova behaves correctly', {
     fit <- lm(sr ~ ., data = LifeCycleSavings)
     a <- anova(fit)
-    pa <- pander_return(a, style = 'simple')
+    pa <- capture.output(pander(a, style = 'simple'))
     expect_true(all(sapply(names(a)[-5], grepl, pa[3])))
     #more complicated run
     fit0 <- lm(sr ~ 1, data = LifeCycleSavings)
@@ -447,7 +443,7 @@ test_that('pander.anova behaves correctly', {
     fit3 <- update(fit2, . ~ . + dpi)
     fit4 <- update(fit3, . ~ . + ddpi)
     a <- anova(fit0, fit1, fit2, fit3, fit4, test = "F")
-    pa <- pander_return(a, style='simple')
+    pa <- capture.output(pander(a, style='simple'))
     expect_true(all(sapply(names(a)[-6], grepl, pa[3])))
 })
 
@@ -462,14 +458,14 @@ test_that('pander.aovlist/pander.summary.aovlist behaves correctly', {
     npk <- data.frame(block=gl(6,4), N=factor(N), P=factor(P),
                       K=factor(K), yield=yield)
     a <- aov(yield ~  N*P*K + Error(block), npk)
-    pa <- pander_return(a, style='simple')
+    pa <- capture.output(pander(a, style='simple'))
     expect_equal(length(pa), 14)
 })
 
 test_that('pander.mtable behaves correctly', {
     suppressMessages(require(memisc))
     lm0 <- lm(sr ~ pop15 + pop75,              data = LifeCycleSavings)
-    pm <- pander_return(memisc::mtable(lm0), style='grid') # produces 2 columns, corner case
+    pm <- capture.output(pander(memisc::mtable(lm0), style='grid')) # produces 2 columns, corner case
     expect_equal(length(strsplit(pm[3], "\\+")[[1]]), 3) 
     expect_equal(length(pm), 35)
 
@@ -477,20 +473,20 @@ test_that('pander.mtable behaves correctly', {
     berk0 <- glm(cbind(Admitted,Rejected)~1,data=berkeley,family="binomial")
     berk1 <- glm(cbind(Admitted,Rejected)~Gender,data=berkeley,family="binomial")
     berk2 <- glm(cbind(Admitted,Rejected)~Gender+Dept,data=berkeley,family="binomial")
-    pm <- pander_return(mtable(berk0, summary.stats=NULL), style='grid') # only one row
+    pm <- capture.output(pander(mtable(berk0, summary.stats=NULL), style='grid')) # only one row
     expect_equal(length(pm), 7)
     
     # horizontal, produced an error before
     x <- memisc::mtable(berk0,berk1,berk2,
            coef.style="horizontal",
            summary.stats=c("Deviance","AIC","N"))
-    pm <- pander_return(x, style='grid')
+    pm <- capture.output(pander(x, style='grid'))
     expect_equal(length(pm), 33)
     expect_true(all(sapply(colnames(x$coeficient), grepl, pm[4])))
     
     # more complex mtable
-    pm <- pander_return(memisc::mtable(berk0,berk1,berk2,
+    pm <- capture.output(pander(memisc::mtable(berk0,berk1,berk2,
            coef.style="all",
-           summary.stats=c("Deviance","AIC","N")), style = 'grid')
+           summary.stats=c("Deviance","AIC","N")), style = 'grid'))
     expect_equal(length(pm), 47)
 })

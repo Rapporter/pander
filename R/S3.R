@@ -891,8 +891,8 @@ pander.CrossTable <- function(x, caption = attr(x, 'caption'), digits = panderOp
     ColData <- x$ColData
     res <- NULL
     for (i in 1:nr) {
-        res.r <- paste(capture.output(pandoc.strong(nt[1+or*(i - 1), 1]), "N", paste(nt[((2+or*(i - 1)) : (i * or)),1], collapse = "\\ \n"),
-                   sep = "\\ \n"))
+        res.r <- paste(capture.output(pandoc.strong(nt[1+or*(i - 1), 1])), "N", paste(nt[((2+or*(i - 1)) : (i * or)),1], collapse = "\\ \n"),
+                   sep = "\\ \n")
         for (j in 2:nc) {
             res.r <- cbind(res.r, paste("&nbsp;", paste(nt[((1+or*(i - 1)) : (i * or)),j], collapse = "\\  \n"), sep = "\\ \n"))
         }
