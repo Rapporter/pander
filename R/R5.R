@@ -78,7 +78,7 @@ Pandoc$methods(add = function(x) {
 
 })
 
-Pandoc$methods(add.paragraph = function(x) .self$body <- c(.self$body, list(list(result = capture.output(pandoc.p(x)))))
+Pandoc$methods(add.paragraph = function(x) .self$body <- c(.self$body, list(list(result = capture.output(pandoc.p(x))))))
 
 Pandoc$methods(show = function(x) {
 
