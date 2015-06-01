@@ -968,7 +968,6 @@ pander.formula <- function(x, max.width = 80, caption = attr(x, 'caption'), ...)
         caption <- get.caption()
 
     pandoc.formula(x, max.width = max.width, caption = caption)
-
 }
 
 
@@ -998,11 +997,15 @@ pander.coxph <- function(x, caption = attr(x, 'caption'), ...) {
             caption <- get.caption()
     }
 
-    cox <- x
-    beta <- cox$coef
-    se <- sqrt(diag(cox$var))
+    if (!is.null(x$fail)) { # nocov start
+        cat("  Coxph failed.", x$fail, "\n")
+        return(invlisible())
+    } # nocov end
+    
+    beta <- x$coef
+    se <- sqrt(diag(x$var))
 
-    if (is.null(cox$naive.var)) {
+    if (is.null(x$naive.var)) {
         c.tab <- cbind(beta, exp(beta), se, beta / se, 1 - pchisq((beta / se)^2, 1))
         dimnames(c.tab) <- list(names(beta), c('coef', 'exp(coef)', 'se(coef)', 'z', 'p'))
     } else {
@@ -1013,23 +1016,25 @@ pander.coxph <- function(x, caption = attr(x, 'caption'), ...) {
     pandoc.table(c.tab, caption = caption, ...)
     logtest <- -2 * (x$loglik[1] - x$loglik[2])
 
-    if (is.null(x$df))
+    if (is.null(x$df)) {
         df <- sum(!is.na(beta))
-    else
+    } else {
         df <- round(sum(x$df), 2)
-
-    cat('\n')
+    }
+    
     cat('Likelihood ratio test=', format(round(logtest, 2)), '  on ', df, ' df,', ' p=', format(1 - pchisq(logtest, df)), sep = '')
 
     omit <- x$na.action
     cat('  n=', x$n)
-    if (!is.null(x$nevent))
+    if (!is.null(x$nevent)) {
         cat(', number of events=', x$nevent, '\n')
-    else
+    } else {
         cat('\n')
+    }
 
-    if (length(omit))
+    if (length(omit)) {
         cat('   (', naprint(omit), ')\n', sep = '')
+    }
 
 }
 
