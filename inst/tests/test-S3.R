@@ -501,3 +501,14 @@ test_that('pander.mtable behaves correctly', {
            summary.stats=c("Deviance","AIC","N")), style = 'grid')
     expect_equal(length(pm), 47)
 })
+
+test_that('pander.ts behaves correctly', {
+    # ncol NULL
+    res <- capture.output(pander(ts(1:10, frequency = 4, start = c(1959, 2)), style = 'simple'))
+    expect_equal(res[3], "  &nbsp;    Q1   Q2   Q3   Q4 ")
+    expect_equal(length(res), 8)
+    # ncol not NULL
+    res <- capture.output(pander(ts(matrix(rnorm(30), 10, 3), start = c(1961, 1), frequency = 12), style = 'simple'))
+    expect_equal(res[3], "    &nbsp;      Series.1   Series.2   Series.3 ")
+    expect_equal(length(res), 15)
+})
