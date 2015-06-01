@@ -524,3 +524,16 @@ test_that('pander.coxph behaves correctly', {
     expect_equal(res[3], "&nbsp;   coef   exp(coef)   se(coef)    z      p   ")
     expect_equal(length(res), 10)
 })
+
+test_that('pander.clogit works correctly', {
+    resp <- levels(logan$occupation)
+    n <- nrow(logan)
+    indx <- rep(1:n, length(resp))
+    logan2 <- data.frame(logan[indx,],
+                         id = indx,
+                         tocc = factor(rep(resp, each=n)))
+    logan2$case <- (logan2$occupation == logan2$tocc)
+    res <- capture.output(pander(clogit(case ~ tocc + tocc:education + strata(id), logan2)))
+    expect_true(grepl("Fitting Conditional logistic regression", res[24]))
+    expect_equal(length(res), 49)
+})
