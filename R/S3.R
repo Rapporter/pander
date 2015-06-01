@@ -794,18 +794,6 @@ pander.CrossTable <- function(x, caption = attr(x, 'caption'), digits = panderOp
     else
         nt <- cbind("&nbsp;", x$t, x$rs)
     hdd <- 100
-    if (!is.na(x$expected) && x$expected == TRUE) {
-        xex <- outer(x$rs, x$cs, "*")
-        xex <- xex/x$gt
-        if (is.null(digits))
-            digits = 1
-        xx <- format(round(xex, digits), ...)
-        xx <- cbind(rep("", nr), xx, rep("", nr))
-        nt <- rbind(nt, xx)
-        idx <- integer()
-        for (i in 1:nr) idx <- c(idx, i, i + nr)
-            nt <- nt[idx, ]
-    }
     appendlines <- function(nt, xx, hasttl = FALSE, haslbl = FALSE) {
         if (!hasttl)
             xx <- cbind(xx, rep("", nr))
@@ -826,6 +814,18 @@ pander.CrossTable <- function(x, caption = attr(x, 'caption'), digits = panderOp
         }
         nt <- nt[idx, ]
         nt
+    }
+    if (!is.na(x$expected) && x$expected == TRUE) {
+        xex <- outer(x$rs, x$cs, "*")
+        xex <- xex/x$gt
+        if (is.null(digits))
+            digits = 1
+        xx <- format(round(xex, digits), ...)
+        xx <- cbind(rep("Expected N", nr), xx, rep("", nr))
+        nt <- rbind(nt, xx)
+        idx <- integer()
+        for (i in 1:nr) idx <- c(idx, i, i + nr)
+            nt <- nt[idx, ]
     }
     if (x$prop.chisq) {
         xx <- ((x$CST$expected - x$t)^2)/x$CST$expected
@@ -860,17 +860,20 @@ pander.CrossTable <- function(x, caption = attr(x, 'caption'), digits = panderOp
     if (!is.na(x$resid) && x$resid == TRUE && x$expected == TRUE) {
         xx <- x$t - xex
         xx <- format(round(xx, digits), trim = TRUE, ...)
-        nt <- appendlines(nt, xx)
+        xx <- cbind("Residual", xx)
+        nt <- appendlines(nt, xx, haslbl = TRUE)
     }
     if (!is.na(x$sresid) && x$sresid == TRUE && x$expected ==
           TRUE) {
         xx <- x$CST$residual
         xx <- format(round(xx, digits), trim = TRUE, ...)
-        nt <- appendlines(nt, xx)
+        xx <- cbind("Std Residual", xx)
+        nt <- appendlines(nt, xx, haslbl = TRUE)
     }
     if (!is.na(x$asr[1])) {
         xx <- format(round(x$asr, digits), trim = TRUE, ...)
-        nt <- appendlines(nt, xx)
+        xx <- cbind("Adj Std Resid", xx)
+        nt <- appendlines(nt, xx, haslbl = TRUE)
     }
     n <- dim(nt)[1]/nr
     idx <- seq(1, dim(nt)[1], n)

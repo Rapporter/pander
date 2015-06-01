@@ -384,6 +384,13 @@ test_that('pander.CrossTable behaves correctly', {
     res <- pander_return(x)
     expect_true(any(grepl(gsub("\\$", "\\\\$", x$ColData), res)))
     expect_true(any(grepl(gsub("\\$", "\\\\$", x$RowData), res)))
+    # expected N, residual, std residual, adj std residual rownames was not included
+    x <- CrossTable(mtcars$cyl, mtcars$gear, expected = T, resid = T, sresid = T, asresid = T)
+    res <- capture.output(pander(x))
+    expect_true(any(grepl("Expected N", res)))
+    expect_true(any(grepl("Residual", res)))
+    expect_true(any(grepl("Std Residual", res)))
+    expect_true(any(grepl("Adj Std Resid", res)))
 })
 
 test_that('pander.NULL behaves correctly', {
