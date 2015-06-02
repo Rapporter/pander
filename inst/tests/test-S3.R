@@ -564,12 +564,11 @@ test_that('pander.lme/pander.summary.lme behaves correctly', {
 
 test_that('pander.describe works correctly', {
     suppressMessages(require(psych))
-    data(sat.act)
-    res <- capture.output(pander(describe(sat.act)))
+    res <- capture.output(pander(describe(mtcars)))
     expect_equal(length(res), 55)
     expect_equal(length(grep('Table', res)), 2)
-    res <- capture.output(pander(describe(sat.act), split.tables = Inf))
-    expect_equal(length(res), 17)
+    res <- capture.output(pander(describe(mtcars), split.tables = Inf))
+    expect_equal(length(res), 27)
 })
 
 test_that('pander.survdiff works correctly', {
