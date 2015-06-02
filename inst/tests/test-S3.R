@@ -585,3 +585,15 @@ test_that('pander.survdiff works correctly', {
     expect_equal(res[3], " Observed   Expected    Z     p ")
     expect_equal(length(res), 9)
 })
+
+test_that('pander.survfit works correctly', {
+    suppressMessages(require(survival))
+    res <- capture.output(pander(survfit(Surv(time, status) ~ x, data = aml)))
+    expect_equal(length(res), 20)
+    expect_true(any(grepl('Table', res)))
+    # using additional options
+    res <- capture.output(pander(survfit(Surv(time, status) ~ x, data = aml), print.rmean = T))
+    expect_equal(length(res), 32)
+    expect_equal(res[32], "* restricted mean with upper limit =  103" )
+
+})
