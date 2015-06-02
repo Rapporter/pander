@@ -537,3 +537,15 @@ test_that('pander.clogit works correctly', {
     expect_true(grepl("Fitting Conditional logistic regression", res[24]))
     expect_equal(length(res), 49)
 })
+
+test_that('pander.zoo works correctly', {
+    suppressMessages(require(zoo))
+    x.Date <- as.Date("2003-02-01") + c(1, 3, 7, 9, 14) - 1
+    res <- capture.output(pander(zoo(rnorm(5), x.Date), style='simple'))
+    expect_equal(res[3], "      Period         Value ")
+    expect_equal(length(res), 10)
+    # more complex example with colnames
+    res <- capture.output(pander(zoo(cbind(foo = rnorm(5), bar = rnorm(5))), style='simple'))
+    expect_equal(res[3], " Period    foo     bar  ")
+    expect_equal(length(res), 10)
+})
