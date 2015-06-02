@@ -549,3 +549,15 @@ test_that('pander.zoo works correctly', {
     expect_equal(res[3], " Period    foo     bar  ")
     expect_equal(length(res), 10)
 })
+
+test_that('pander.lme/pander.summary.lme behaves correctly', {
+    suppressMessages(require(nlme))
+    l1 <- lme(distance ~ age, Orthodont, random = ~ age | Subject)
+    sl <- summary(l1)
+    pl <- capture.output(pander(l1))
+    spl <- capture.output(pander(sl))
+    expect_equal(length(pl), 20)
+    expect_equal(length(grep('Table', pl)), 1)
+    expect_equal(length(spl), 29)
+    expect_equal(length(grep('Table', spl)), 3)
+})
