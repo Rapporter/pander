@@ -1196,7 +1196,7 @@ pander.survdiff <- function(x, caption = attr(x, 'caption'), ...) {
     }
 
     temp <- as.data.frame(temp, checknames = FALSE)
-    pandoc.table(temp, caption = caption)
+    pandoc.table(temp, caption = caption, ...)
 
 }
 

@@ -571,3 +571,17 @@ test_that('pander.describe works correctly', {
     res <- capture.output(pander(describe(sat.act), split.tables = Inf))
     expect_equal(length(res), 17)
 })
+
+test_that('pander.survdiff works correctly', {
+    suppressMessages(require(survival))
+    res <- capture.output(pander(survdiff(Surv(futime, fustat) ~ rx,data=ovarian)))
+    expect_equal(length(res), 12)
+    expect_equal(res[3], "  &nbsp;    N   Observed   Expected   (O-E)^2/E   (O-E)^2/V ")
+    # length(x$n) == 1
+    expect <- survexp(futime ~ ratetable(age=(accept.dt - birth.dt),
+                                         sex=1,year=accept.dt,race="white"), jasa, cohort=FALSE,
+                      ratetable=survexp.usr)
+    res <- capture.output(pander(survdiff(Surv(jasa$futime, jasa$fustat) ~ offset(expect))))
+    expect_equal(res[3], " Observed   Expected    Z     p ")
+    expect_equal(length(res), 9)
+})
