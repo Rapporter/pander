@@ -594,6 +594,5 @@ test_that('pander.survfit works correctly', {
     # using additional options
     res <- capture.output(pander(survfit(Surv(time, status) ~ x, data = aml), print.rmean = T))
     expect_equal(length(res), 32)
-    expect_equal(res[32], "* restricted mean with upper limit =  103" )
-
+    expect_equal(res[32], "* restricted mean with upper limit =  103")
 })

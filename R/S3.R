@@ -1329,8 +1329,10 @@ pander.stat.table <- function(x, caption = attr(x, 'caption'), ...) {
     if (is.null(caption) & !is.null(storage$caption))
         caption <- get.caption()
 
-    if (length(dim(x)) == 2)
-        results <- pandoc.table(t(x), caption = caption, ...)
+    if (length(dim(x)) == 2) {
+        pandoc.table(t(x), caption = caption, ...)
+        return(invisible())
+    }
 
     if (length(dim(x)) == 3) {
 
@@ -1347,7 +1349,7 @@ pander.stat.table <- function(x, caption = attr(x, 'caption'), ...) {
         c.s <- length(dn[[3]])
         xx <- rbind(colnames(xx), xx)
         xx <- cbind(unlist(lgroup), xx)
-        xx <- rbind(c(rep('', c.s), tgroup), xx)
+        xx <- rbind(c(rep('', c.s - 1), tgroup, ''), xx)
         colnames(xx) <- NULL
         pandoc.table(xx, caption = caption, emphasize.rows = c(1, 2), emphasize.cols = 1, ...)
     }
