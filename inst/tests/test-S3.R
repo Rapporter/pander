@@ -542,11 +542,11 @@ test_that('pander.zoo works correctly', {
     suppressMessages(require(zoo))
     x.Date <- as.Date("2003-02-01") + c(1, 3, 7, 9, 14) - 1
     res <- capture.output(pander(zoo(rnorm(5), x.Date), style='simple'))
-    expect_equal(res[3], "      Period         Value ")
+    expect_true(grepl("Value", res[3]))
     expect_equal(length(res), 10)
     # more complex example with colnames
     res <- capture.output(pander(zoo(cbind(foo = rnorm(5), bar = rnorm(5))), style='simple'))
-    expect_equal(res[3], " Period    foo     bar  ")
+    expect_true(grepl("foo", res[3]))
     expect_equal(length(res), 10)
 })
 
@@ -560,4 +560,14 @@ test_that('pander.lme/pander.summary.lme behaves correctly', {
     expect_equal(length(grep('Table', pl)), 1)
     expect_equal(length(spl), 29)
     expect_equal(length(grep('Table', spl)), 3)
+})
+
+test_that('pander.describe works correctly', {
+    suppressMessages(require(psych))
+    data(sat.act)
+    res <- capture.output(pander(describe(sat.act)))
+    expect_equal(length(res), 55)
+    expect_equal(length(grep('Table', res)), 2)
+    res <- capture.output(pander(describe(sat.act), split.tables = Inf))
+    expect_equal(length(res), 17)
 })

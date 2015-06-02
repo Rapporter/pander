@@ -1088,7 +1088,7 @@ pander.zoo <- function(x, caption = attr(x, 'caption'), ...) {
 #' Pander method for summary.lme class
 #'
 #' Prints a lme object in Pandoc's markdown.
-#' @param x a lme object
+#' @param xs a lme object
 #' @param caption caption (string) to be shown under the table
 #' @param summary (default:\code{TRUE}) if to print expender summary
 #' @param ... optional parameters passed to raw \code{pandoc.table} function
@@ -1138,106 +1138,22 @@ pander.lme <- function(x, caption = attr(x, 'caption'), ...)
 #' Prints a describe object in Pandoc's markdown.
 #' @param x an describe object
 #' @param caption caption (string) to be shown under the table
-#' @param short (default:\code{TRUE}) if to use consise output
-#' @param split.tables (default:\code{60}) split.tables param for pandoc.table function
+#' @param digits number of digits of precision
 #' @param ... optional parameters passed to raw \code{pandoc.table} function
 #' @export
-pander.describe <- function(x, caption = attr(x, 'caption'), short = TRUE, split.tables = 60, ...) {
-
+pander.describe <- function(x, caption = attr(x, 'caption'), digits = panderOptions('digits'), ...) {
     if (is.null(caption) & !is.null(storage$caption))
         caption <- get.caption()
-    describe.single <- function(x, caption, short, split.tables, ...) {
-        if (length(x$units))
-            des <- paste(des, ' [', x$units, ']', sep = '')
-        if (length(x$format))
-            des <- paste(des, '  Format:', x$format, sep = '')
-        dim.counts <- dim(x$count)
-        if (is.null(dim.counts)) {
-            counts <- as.character(x$count)
-        }
-        else {
-            counts <- matrix(as.character(x$count), dim.counts[1], dim.counts[2])
-        }
-        names(counts) <- names(x$count)
-        counts <- pandoc.table.return(counts, caption = caption, split.tables = split.tables, ...)
-        val <- x$values
-        if (length(val)) {
-            if (!is.matrix(val)) {
-                if (length(val) == 10) {
-                    if (short) {
-                        low <- paste('lowest:', paste(val[1:5], collapse = ' '))
-                        hi  <- paste('highest:', paste(val[6:10], collapse = ' '))
-                        if (nchar(low) + nchar(hi) + 2 > 80)
-                            val <- as.list(c(low, hi))
-                        else
-                            val <- as.list(paste(low, hi, sep = ', '))
-                        val <- pandoc.list.return(val, add.end.of.list = FALSE, ...)
-                    } else {
-                        if (is.null(dim(val))) {
-                            val <- as.character(val)
-                        }else {
-                            val <- matrix(as.character(val), dim(val)[1],
-                                          dim(val)[2])
-                        }
-                        names(val) <- names(x$values)
-                        val <- pandoc.table.return(val, split.tables = split.tables, caption = caption, ...)
-                    }
-                } else {
-                    val <- paste(names(val),
-                                 ifelse(val > 1, paste(' (', val, ')', sep = ''), ''), sep = '')
-                    val <- strwrap(val, exdent = 4)
-                    val <- as.list(sub('(^    )(.*)', '\t\\2', val))
-                    val <- pandoc.table(val, ...)
-                }
-            } else {
-                lev <- dimnames(val)[[2]]
-                if (short && (mean(nchar(lev)) > 10 | length(lev) <
-                              5)) {
-                    z <- ""
-                    len <- 0
-                    for (i in 1:length(lev)) {
-                        w <- paste(lev[i], ' (', val[1, i], ', ', val[2, i], '%)', sep = '')
-                        if (i == 1)
-                            z <- w
-                        else z <- paste(z, w, sep = ', ')
-                    }
-                    val <- pander.return(z)
-                } else {
-                    dim.val <- dim(val)
-                    if (is.null(dim.val)) {
-                        val <- as.character(val)
-                    }
-                    else {
-                        val <- matrix(as.character(val), dim.val[1], dim.val[2])
-                    }
-                    rownames(val) <- rownames(x$values)
-                    colnames(val) <- colnames(x$values)
-                    val <- pandoc.table.return(val, split.tables = split.tables, caption = caption, ...)
-                }
-            }
-        }
-        cat(counts)
-        cat(val, '\n')
+    
+    if (length(dim(x)) == 1) {
+        class(x) <- "list"
+        attr(x, "call") <- NULL
+        pander(x, digits = digits, caption = caption, ...)
+    } else {
+        class(x) <- "data.frame"
+        pander(x, digits = digits, caption = caption, ...)
     }
-    at <- attributes(x)
-    if (length(at$dimensions)) {
-        cat(at$descript, '\n\n', at$dimensions[2], ' Variables\t', at$dimensions[1], ' Observations\n')
-        if (length(at$naprint))
-            cat('\n', at$naprint, '\n')
-        for (z in x) {
-            if (length(z) == 0)
-                next
-            describe.single(z, caption = paste('Variable ', z$descript, sep = ''), short = short, split.tables = split.tables, ...)
-        }
-        if (length(at$missing.vars)) {
-            cat('\nVariables with all observations missing:\n\n')
-            pander(at$missing.vars, quote = FALSE)
-        }
-    } else
-        describe.single(x, caption = caption, short = short, split.tables = split.tables, ...)
-
     invisible()
-
 }
 
 
