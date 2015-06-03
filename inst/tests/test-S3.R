@@ -562,15 +562,15 @@ test_that('pander.lme/pander.summary.lme behaves correctly', {
     expect_equal(length(grep('Table', spl)), 3)
 })
 
-test_that('pander.describe works correctly', {
-    suppressMessages(require(psych))
-    x <- data.frame(a=rnorm(10), b=rnorm(10, 2, 2), c=rnorm(10, 3, 4))
-    res <- capture.output(pander(describe(x)))
-    expect_equal(length(res), 37)
-    expect_equal(length(grep('Table', res)), 2)
-    res <- capture.output(pander(describe(x), split.tables = Inf))
-    expect_equal(length(res), 11)
-})
+# test_that('pander.describe works correctly', {
+#     suppressMessages(require(psych))
+#     x <- data.frame(a=rnorm(10), b=rnorm(10, 2, 2), c=rnorm(10, 3, 4))
+#     res <- capture.output(pander(describe(x)))
+#     expect_equal(length(res), 37)
+#     expect_equal(length(grep('Table', res)), 2)
+#     res <- capture.output(pander(describe(x), split.tables = Inf))
+#     expect_equal(length(res), 11)
+# })
 
 test_that('pander.survdiff works correctly', {
     suppressMessages(require(survival))
