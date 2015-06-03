@@ -564,11 +564,12 @@ test_that('pander.lme/pander.summary.lme behaves correctly', {
 
 test_that('pander.describe works correctly', {
     suppressMessages(require(psych))
-    res <- capture.output(pander(describe(mtcars)))
-    expect_equal(length(res), 55)
+    x <- data.frame(a=rnorm(10), b=rnorm(10, 2, 2), c=rnorm(10, 3, 4))
+    res <- capture.output(pander(describe(x)))
+    expect_equal(length(res), 37)
     expect_equal(length(grep('Table', res)), 2)
-    res <- capture.output(pander(describe(mtcars), split.tables = Inf))
-    expect_equal(length(res), 27)
+    res <- capture.output(pander(describe(x), split.tables = Inf))
+    expect_equal(length(res), 11)
 })
 
 test_that('pander.survdiff works correctly', {
@@ -594,4 +595,14 @@ test_that('pander.survfit works correctly', {
     res <- capture.output(pander(survfit(Surv(time, status) ~ x, data = aml), print.rmean = T))
     expect_equal(length(res), 32)
     expect_equal(res[32], "* restricted mean with upper limit =  103")
+})
+
+test_that('pander.sessionInfo works correctly', {
+    suppressMessages(require(utils))
+    res <- capture.output(pander(sessionInfo()))
+    expect_true(any(grepl('locale', res)))
+    expect_true(any(grepl('attached base package', res)))
+    res <- capture.output(pander(sessionInfo(), locale = F, compact = F))
+    expect_false(any(grepl('locale', res)))
+    expect_true(any(grepl('utils', res)))
 })
