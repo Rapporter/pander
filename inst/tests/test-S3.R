@@ -608,11 +608,29 @@ test_that('pander.sessionInfo works correctly', {
 })
 
 test_that('pander.stat.table works correctly', {
-    suppressMessage(require(Epi))
+    suppressMessages(require(Epi))
     res <- capture.output(pander(stat.table(tension,list(count(),mean(breaks)),data=warpbreaks)))
-    expect_equal(length(res), 10)
+    expect_equal(length(res), 11)
     expect_equal(res[3], "&nbsp;   count()   mean(breaks) ")
     res <- capture.output(pander(stat.table(index=list(tension,wool),mean(breaks),data=warpbreaks)))
     expect_equal(length(res), 13)
     # here add test
+})
+
+test_that('pander.microbenchmark works correctly', {
+    suppressMessages(require(microbenchmark))
+    res <- capture.output(pander(microbenchmark(paste(1:10), paste0(1:10))))
+    expect_true(any(grepl('Unit', res)))
+    expect_equal(length(res), 20)
+    res <- capture.output(pander(microbenchmark(paste(1:10), paste0(1:10)), split.tables = Inf, expr.labels = c("A")))
+    expect_true(any(grepl('A', res)))
+    expect_true(any(grepl('paste0\\(1:10\\)', res)))
+    res <- capture.output(pander(microbenchmark(paste(1:10), paste0(1:10)), split.tables = Inf, expr.labels = c("A", "B")))
+    expect_true(any(grepl('A', res)))
+    expect_true(any(grepl('B', res)))
+    expect_false(any(grepl('paste0\\(1:10\\)', res)))
+    res <- capture.output(pander(microbenchmark(paste(1:10), paste0(1:10)), split.tables = Inf, expr.labels = c("A", "B", "C")))
+    expect_true(any(grepl('A', res)))
+    expect_true(any(grepl('B', res)))
+    expect_false(any(grepl('paste0\\(1:10\\)', res)))
 })

@@ -1436,7 +1436,8 @@ pander.microbenchmark <- function(x, caption = attr(x, 'caption'), expr.labels, 
 
     if (!missing(expr.labels)) {
         xs[, 1] <- as.vector(xs[, 1])
-        xs[1:length(expr.labels), 1] <- expr.labels
+        rl <- min(length(expr.labels), nrow(xs))
+        xs[1:rl, 1] <- if (rl < nrow(xs)) expr.labels else expr.labels[1:rl]
     }
 
     pander(xs, caption = caption, ...)
