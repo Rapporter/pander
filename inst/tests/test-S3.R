@@ -97,6 +97,17 @@ test_that('no warning for highlight NA/empty strings', {
     expect_that(pandoc.table(data.frame(x = 1:2, y = c(1,NA)), emphasize.cols = 2), not(gives_warning()))
 })
 
+test_that('emphasize.rows works correctly', {
+    # test for issue 176
+    df <- data.frame(a=1:3, b=1:3, c=1:3)
+    res <- capture.output(pander(df, emphasize.rows = c(1,2), style = 'simple'))
+    expect_equal(res[5], "*1* *1* *1*")
+    expect_equal(res[6], "*2* *2* *2*")
+    res <- capture.output(pander(df, emphasize.strong.rows = c(1,2), style = 'simple'))
+    expect_equal(res[5], "**1** **1** **1**")
+    expect_equal(res[6], "**2** **2** **2**")
+})
+
 context('captions')
 
 tables <- list(

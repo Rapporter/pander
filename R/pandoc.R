@@ -605,6 +605,7 @@ pandoc.table.return <- function(t, caption, digits = panderOptions('digits'), de
         x <- gsub("^[~]{2}|[~]{2}$", "", x) # strikeout
         gsub("^[_]|[_]$", "", x) # italic
     }
+    transpose <- base::t
 
     ## split single cell with line breaks based on max.width
     split.single.cell <- function(x, max.width){
@@ -868,11 +869,11 @@ pandoc.table.return <- function(t, caption, digits = panderOptions('digits'), de
     } else {
         if (!is.null(emphasize.rows)) {
             check.highlight.parameters(emphasize.rows, nrow(t))
-            t[emphasize.rows, ] <- apply(t[emphasize.rows, , drop = FALSE], c(1), pandoc.emphasis.return)
+            t[emphasize.rows, ] <- transpose(apply(t[emphasize.rows, , drop = FALSE], c(1), pandoc.emphasis.return))
         }
         if (!is.null(emphasize.strong.rows)) {
             check.highlight.parameters(emphasize.strong.rows, nrow(t))
-            t[emphasize.strong.rows, ] <- apply(t[emphasize.strong.rows, , drop = FALSE], c(1), pandoc.strong.return)
+            t[emphasize.strong.rows, ] <- transpose(apply(t[emphasize.strong.rows, , drop = FALSE], c(1), pandoc.strong.return))
         }
         if (!is.null(emphasize.cols)) {
             check.highlight.parameters(emphasize.cols, ncol(t))
