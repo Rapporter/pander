@@ -606,3 +606,13 @@ test_that('pander.sessionInfo works correctly', {
     expect_false(any(grepl('locale', res)))
     expect_true(any(grepl('utils', res)))
 })
+
+test_that('pander.stat.table works correctly', {
+    suppressMessage(require(Epi))
+    res <- capture.output(pander(stat.table(tension,list(count(),mean(breaks)),data=warpbreaks)))
+    expect_equal(length(res), 10)
+    expect_equal(res[3], "&nbsp;   count()   mean(breaks) ")
+    res <- capture.output(pander(stat.table(index=list(tension,wool),mean(breaks),data=warpbreaks)))
+    expect_equal(length(res), 13)
+    # here add test
+})
