@@ -1,3 +1,14 @@
+pander DEV (xxxx-xx-xx)
+----------------------------------------------------------------
+
+New fetures:
+ *
+Fixes:
+ *
+
+Other changes:
+ * Pandoc.convert will not add a footer to the document by dafault (#173)
+
 pander 0.5.2 (2015-04-19)
 ----------------------------------------------------------------
 

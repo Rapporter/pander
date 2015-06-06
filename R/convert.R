@@ -50,7 +50,7 @@ openFileInOS <- function(f) {
 #' ## online markdown file to other formats with this function, please pre-process the file
 #' ## to have absolute paths instead.
 #' }
-Pandoc.convert <- function(f, text, format = 'html', open = TRUE, options = '', footer = TRUE, proc.time, portable.html = TRUE, pandoc.binary = panderOptions('pandoc.binary')) {
+Pandoc.convert <- function(f, text, format = 'html', open = TRUE, options = '', footer = FALSE, proc.time, portable.html = TRUE, pandoc.binary = panderOptions('pandoc.binary')) {
 
     ## check for Pandoc
     if (pandoc.binary == '') {
