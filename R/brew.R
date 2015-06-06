@@ -104,7 +104,7 @@ Pandoc.brew <- function(file = stdin(), output = stdout(), convert = FALSE, open
         ## format 'em
         for (r in res) {
 
-            r.pander <- tryCatch(pander.return(r), error = function(e) e)
+            r.pander <- tryCatch(capture.output(pander(r)), error = function(e) e)
             if (inherits(r.pander, 'error'))
                 r.pander <- paste0('Internal `pander` error: `', r.pander$message, '` while running: `', r$src,'`\n\nPlease [report the issue](https://github.com/Rapporter/pander/issues/new) with a reproducible example to help developers fix this ASAP.')
             r$output <- r.pander

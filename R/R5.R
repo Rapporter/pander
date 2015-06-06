@@ -78,7 +78,7 @@ Pandoc$methods(add = function(x) {
 
 })
 
-Pandoc$methods(add.paragraph = function(x) .self$body <- c(.self$body, list(list(result = pandoc.p.return(x)))))
+Pandoc$methods(add.paragraph = function(x) .self$body <- c(.self$body, list(list(result = capture.output(pandoc.p(x))))))
 
 Pandoc$methods(show = function(x) {
 
@@ -119,7 +119,7 @@ Pandoc$methods(export = function(f, ...) {
     timer <- proc.time()
 
     ## create pandoc file
-    cat(pandoc.title.return(.self$title, .self$author, .self$date), file = fp)
+    cat(capture.output(pandoc.title(.self$title, .self$author, .self$date)), file = fp)
     lapply(.self$body, function(x) cat(paste(capture.output(pander(x$result)), collapse = '\n'), file = fp, append = TRUE))
 
     ## convert
