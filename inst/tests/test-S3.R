@@ -636,11 +636,15 @@ test_that('pander.microbenchmark works correctly', {
 })
 
 test_that('pander.function works correctly', {
-    res <- pander_return(pander)
+    testf <- function(x) {
+        y <- x + 1
+        y
+    }
+    res <- pander_return(testf)
     expect_true(all(grepl('\t', res)))
-    expect_equal(length(res), 22)
-    res <- pander_return(pander, syntax.highlighting = T, add.name = T)
-    expect_equal(length(res), 24)
+    expect_equal(length(res), 5)
+    res <- pander_return(testf, syntax.highlighting = T, add.name = T)
+    expect_equal(length(res), 7)
     expect_equal(res[1], '```r')
-    expect_true(grepl('pander', res[2]))
+    expect_true(grepl('testf', res[2]))
 })
