@@ -634,3 +634,13 @@ test_that('pander.microbenchmark works correctly', {
     expect_true(any(grepl('B', res)))
     expect_false(any(grepl('paste0\\(1:10\\)', res)))
 })
+
+test_that('pander.function works correctly', {
+    res <- pander_return(pander)
+    expect_true(all(grepl('\t', res)))
+    expect_equal(length(res), 22)
+    res <- pander_return(pander, syntax.highlighting = T, add.name = T)
+    expect_equal(length(res), 24)
+    expect_equal(res[1], '```r')
+    expect_true(grepl('pander', res[2]))
+})

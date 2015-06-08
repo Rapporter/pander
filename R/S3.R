@@ -1459,19 +1459,22 @@ pander.function <- function(x, add.name = FALSE, verbatim = TRUE, syntax.highlig
     fname <- substitute(x)
     ps <- ''
 
-    if (syntax.highlighting)
+    if (syntax.highlighting) {
         cat('```r\n')
-    else
+    } else {
         ps <- ifelse(verbatim, '\t', '')
+    }
 
-    if (!is.null(add.name) && add.name)
+    if (!is.null(add.name) && add.name) {
         cat(ps, fname, ' <- ', sep = '')
+    }
 
     for (line in deparse(x))
         cat(ps, line, '\n', sep = '')
 
-    if (syntax.highlighting)
+    if (syntax.highlighting) {
         cat('```')
+    }
 
 }
 
