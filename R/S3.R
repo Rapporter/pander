@@ -159,8 +159,8 @@ pander.vector <- function(x, ...) {
 #' @param x a logical object
 #' @param ... ignored parameters
 #' @export
-pander.logical <- function(x, ...)
-    pander.vector(x, ...)
+pander.logical <- function(x, ...) # nocov start
+    pander.vector(x, ...) 
 
 
 #' Pander method for numeric class
@@ -169,8 +169,8 @@ pander.logical <- function(x, ...)
 #' @param x a numeric object
 #' @param ... igroned parameter
 #' @export
-pander.numeric <- function(x, ...)
-    pander.vector(x, ...)
+pander.numeric <- function(x, ...) # nocov
+    pander.vector(x, ...) # nocov
 
 
 #' Pander method for factor class
@@ -180,7 +180,7 @@ pander.numeric <- function(x, ...)
 #' @param ... igroned parameters
 #' @export
 pander.factor <- function(x, ...)
-    pander.vector(x, ...)
+    pander.vector(x, ...) # nocov end
 
 
 #' Pander method for character class
@@ -266,14 +266,14 @@ pander.data.frame <- function(x, caption = attr(x, 'caption'), ...) {
 #' @param caption caption (string) to be shown under the table
 #' @param ... optional parameters passed to raw \code{pandoc.table} function
 #' @export
-pander.matrix <- function(x, caption = attr(x, 'caption'),  ...) {
+pander.matrix <- function(x, caption = attr(x, 'caption'),  ...) { # nocov start
 
     if (is.null(caption) & !is.null(storage$caption))
         caption <- get.caption()
 
     pandoc.table(x, caption = caption, ...)
 
-}
+} # nocov end
 
 
 #' Pander method for cast_df class
@@ -696,7 +696,7 @@ pander.rapport <- function(x, ...)
 #' @param x a POSIXlt object
 #' @param ... optional parameters passed to raw \code{pandoc.date} function
 #' @export
-pander.POSIXlt <- function(x, ...)
+pander.POSIXlt <- function(x, ...) # nocov start
     pandoc.date(x, ...)
 
 
@@ -727,7 +727,7 @@ pander.Date <- function(x, ...)
 #' @param ... optional parameters passed to raw \code{pandoc.table} function
 #' @export
 pander.ftable <- function(x, ...)
-    pandoc.table(x, ...)
+    pandoc.table(x, ...) # nocov end
 
 
 #' Pander method for mtable class
@@ -962,13 +962,13 @@ pander.ts <- function(x, caption = attr(x, 'caption'), ...) {
 #' @param caption caption (string) to be shown under the formula
 #' @param ... optional parameters passed to raw \code{pandoc.table} function
 #' @export
-pander.formula <- function(x, max.width = 80, caption = attr(x, 'caption'), ...) {
+pander.formula <- function(x, max.width = 80, caption = attr(x, 'caption'), ...) { # nocov start
 
     if (is.null(caption) & !is.null(storage$caption))
         caption <- get.caption()
 
     pandoc.formula(x, max.width = max.width, caption = caption)
-}
+} # nocov end
 
 
 #' Pander method for call class
@@ -977,8 +977,8 @@ pander.formula <- function(x, max.width = 80, caption = attr(x, 'caption'), ...)
 #' @param x a call object
 #' @param ... optional parameters passed to raw \code{pandoc.formula} function
 #' @export
-pander.call <- function(x, ...)
-    pander.formula(x, ...)
+pander.call <- function(x, ...) # nocov
+    pander.formula(x, ...) # nocov
 
 
 #' Pander method for coxph class
