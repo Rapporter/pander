@@ -553,10 +553,10 @@ eval.msgs <- function(src, env = NULL, showInvisible = FALSE, graph.unify = eval
 #'
 #' ## hooks
 #' txt <- 'runif(1:4); matrix(runif(25), 5, 5); 1:5'
-#' hooks <- list('numeric' = round, 'matrix' = pander.return)
+#' hooks <- list('numeric' = round, 'matrix' = pander_return)
 #' evals(txt, hooks = hooks)
 #' ## using pander's default hook
-#' evals(txt, hooks = list('default' = pander.return))
+#' evals(txt, hooks = list('default' = pander_return))
 #' evals('22/7', hooks = list('numeric' = round))
 #' evals('matrix(runif(25), 5, 5)', hooks = list('matrix' = round))
 #'
@@ -589,7 +589,7 @@ eval.msgs <- function(src, env = NULL, showInvisible = FALSE, graph.unify = eval
 #'
 #' # hooks & filtering
 #' evals('matrix(5,5,5)',
-#'   hooks = list('matrix' = pander.return),
+#'   hooks = list('matrix' = pander_return),
 #'   output = 'result')
 #'
 #' # eval-ing chunks in given environment
