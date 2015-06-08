@@ -1298,10 +1298,11 @@ pander.rlm <- function(x, caption = attr(x, 'caption'), ...) {
             caption <- get.caption()
     }
 
-    if (x$converged)
+    if (x$converged) {
         cat('Converged in', length(x$conv), 'iterations\n')
-    else
+    } else {
         cat('Ran', length(x$conv), 'iterations without convergence\n')
+    }
 
     coef <- x$coefficients
     pandoc.table(coef, caption = caption, ...)
@@ -1309,8 +1310,9 @@ pander.rlm <- function(x, caption = attr(x, 'caption'), ...) {
     rdf <- nobs - length(coef)
     cat('Degrees of freedom:', nobs, 'total;', rdf, 'residual\n\n')
 
-    if (nzchar(mess <- naprint(x$na.action)))
+    if (nzchar(mess <- naprint(x$na.action))) {
         cat('  (', mess, ')\n', sep = '')
+    }
 
     cat('Scale estimate:', format(signif(x$s, 3)), '\n')
 

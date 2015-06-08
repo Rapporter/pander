@@ -648,3 +648,12 @@ test_that('pander.function works correctly', {
     expect_equal(res[1], '```r')
     expect_true(grepl('testf', res[2]))
 })
+
+test_that('pander.rlm works correctly', {
+    res <- pander_return(rlm(stack.loss ~ ., stackloss))
+    expect_equal(res[4], " (Intercept)   Air.Flow   Water.Temp   Acid.Conc. ")
+    expect_equal(length(res), 13)
+    res <- pander_return(rlm(stack.loss ~ ., stackloss, psi = psi.hampel, init = "lts"))
+    expect_equal(res[11], "Degrees of freedom: 21 total; 17 residual")
+    expect_equal(length(res), 13)
+})
