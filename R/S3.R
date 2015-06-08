@@ -106,7 +106,7 @@ pander <- function(x = NULL, ...) {
 }
 
 
-#' Deprecated pander_return
+#' Deprecated pander.return
 #'
 #' This is a wrapper function around \code{pander} but instead of printing to \code{stdout}, this function returns a character vector of the captured lines.
 #' @param ... everything passed to \code{pander}
@@ -1185,7 +1185,7 @@ pander.describe <- function(x, caption = attr(x, 'caption'), short = TRUE, split
                             z <- w
                         else z <- paste(z, w, sep = ', ')
                     }
-                    val <- pander.return(z)
+                    val <- pander_return(z)
                 } else {
                     dim.val <- dim(val)
                     if (is.null(dim.val)) {
@@ -1450,9 +1450,9 @@ pander.sessionInfo <- function (x, locale = TRUE, compact = TRUE, ...) {
     }
 
     if (compact) {
-        attached.base.packages <- pander.return(x$basePkgs, quote = FALSE, ...)
-        other.attached.packages <- pander.return(mkLabel(x, 'otherPkgs'), quote = FALSE, ...)
-        load.via.namespaces <- pander.return(mkLabel(x, 'loadedOnly'), quote = FALSE, ...)
+        attached.base.packages <- pander_return(x$basePkgs, quote = FALSE, ...)
+        other.attached.packages <- pander_return(mkLabel(x, 'otherPkgs'), quote = FALSE, ...)
+        load.via.namespaces <- pander_return(mkLabel(x, 'loadedOnly'), quote = FALSE, ...)
     } else {
         attached.base.packages <- pandoc.list.return(x$basePkgs, add.end.of.list = FALSE, ...)
         other.attached.packages <- pandoc.list.return(mkLabel(x, 'otherPkgs'), add.end.of.list = FALSE, ...)
