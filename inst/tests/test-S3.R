@@ -395,6 +395,13 @@ test_that('pander.CrossTable behaves correctly', {
     res <- pander_return(x)
     expect_true(any(grepl(gsub("\\$", "\\\\$", x$ColData), res)))
     expect_true(any(grepl(gsub("\\$", "\\\\$", x$RowData), res)))
+    # expected N, residual, std residual, adj std residual rownames was not included
+    x <- CrossTable(mtcars$cyl, mtcars$gear, expected = T, resid = T, sresid = T, asresid = T)
+    res <- pander_return(x)
+    expect_true(any(grepl("Expected N", res)))
+    expect_true(any(grepl("Residual", res)))
+    expect_true(any(grepl("Std Residual", res)))
+    expect_true(any(grepl("Adj Std Resid", res)))
 })
 
 test_that('pander.NULL behaves correctly', {
@@ -504,4 +511,160 @@ test_that('pander.mtable behaves correctly', {
            coef.style="all",
            summary.stats=c("Deviance","AIC","N")), style = 'grid')
     expect_equal(length(pm), 47)
+})
+
+test_that('pander.ts behaves correctly', {
+    # ncol NULL
+    res <- pander_return(ts(1:10, frequency = 4, start = c(1959, 2)), style = 'simple')
+    expect_equal(res[3], "  &nbsp;    Q1   Q2   Q3   Q4 ")
+    expect_equal(length(res), 8)
+    # ncol not NULL
+    res <- pander_return(ts(matrix(rnorm(30), 10, 3), start = c(1961, 1), frequency = 12), style = 'simple')
+    expect_equal(res[3], "    &nbsp;      Series.1   Series.2   Series.3 ")
+    expect_equal(length(res), 15)
+})
+
+test_that('pander.coxph behaves correctly', {
+    suppressMessages(require(survival))
+    test1 <- list(time=c(4,3,1,1,2,2,3), 
+                  status=c(1,1,1,0,1,1,0), 
+                  x=c(0,2,1,1,1,0,0), 
+                  sex=c(0,0,0,0,1,1,1)) 
+    # Fit a stratified model 
+    res <- pander_return(coxph(Surv(time, status) ~ x + strata(sex), test1))
+    expect_equal(res[3], "&nbsp;   coef   exp(coef)   se(coef)    z      p   ")
+    expect_equal(length(res), 10)
+})
+
+test_that('pander.clogit works correctly', {
+    resp <- levels(logan$occupation)
+    n <- nrow(logan)
+    indx <- rep(1:n, length(resp))
+    logan2 <- data.frame(logan[indx,],
+                         id = indx,
+                         tocc = factor(rep(resp, each=n)))
+    logan2$case <- (logan2$occupation == logan2$tocc)
+    res <- pander_return(clogit(case ~ tocc + tocc:education + strata(id), logan2))
+    expect_true(grepl("Fitting Conditional logistic regression", res[24]))
+    expect_equal(length(res), 49)
+})
+
+test_that('pander.zoo works correctly', {
+    suppressMessages(require(zoo))
+    x.Date <- as.Date("2003-02-01") + c(1, 3, 7, 9, 14) - 1
+    res <- pander_return(zoo(rnorm(5), x.Date), style='simple')
+    expect_true(grepl("Value", res[3]))
+    expect_equal(length(res), 10)
+    # more complex example with colnames
+    res <- pander_return(zoo(cbind(foo = rnorm(5), bar = rnorm(5))), style='simple')
+    expect_true(grepl("foo", res[3]))
+    expect_equal(length(res), 10)
+})
+
+test_that('pander.lme/pander.summary.lme behaves correctly', {
+    suppressMessages(require(nlme))
+    l1 <- lme(distance ~ age, Orthodont, random = ~ age | Subject)
+    sl <- summary(l1)
+    pl <- pander_return(l1)
+    spl <- pander_return(sl)
+    expect_equal(length(pl), 20)
+    expect_equal(length(grep('Table', pl)), 1)
+    expect_equal(length(spl), 29)
+    expect_equal(length(grep('Table', spl)), 3)
+})
+
+# test_that('pander.describe works correctly', {
+#     suppressMessages(require(psych))
+#     x <- data.frame(a=rnorm(10), b=rnorm(10, 2, 2), c=rnorm(10, 3, 4))
+#     res <- pander_return(describe(x))
+#     expect_equal(length(res), 37)
+#     expect_equal(length(grep('Table', res)), 2)
+#     res <- pander_return(describe(x), split.tables = Inf)
+#     expect_equal(length(res), 11)
+# })
+
+test_that('pander.survdiff works correctly', {
+    suppressMessages(require(survival))
+    res <- pander_return(survdiff(Surv(futime, fustat) ~ rx,data=ovarian))
+    expect_equal(length(res), 12)
+    expect_equal(res[3], "  &nbsp;    N   Observed   Expected   (O-E)^2/E   (O-E)^2/V ")
+    # length(x$n) == 1
+    expect <- survexp(futime ~ ratetable(age=(accept.dt - birth.dt),
+                                         sex=1,year=accept.dt,race="white"), jasa, cohort=FALSE,
+                      ratetable=survexp.usr)
+    res <- pander_return(survdiff(Surv(jasa$futime, jasa$fustat) ~ offset(expect)))
+    expect_equal(res[3], " Observed   Expected    Z     p ")
+    expect_equal(length(res), 9)
+})
+
+test_that('pander.survfit works correctly', {
+    suppressMessages(require(survival))
+    res <- pander_return(survfit(Surv(time, status) ~ x, data = aml))
+    expect_equal(length(res), 20)
+    expect_true(any(grepl('Table', res)))
+    # using additional options
+    res <- pander_return(survfit(Surv(time, status) ~ x, data = aml), print.rmean = T)
+    expect_equal(length(res), 32)
+    expect_equal(res[32], "* restricted mean with upper limit =  103")
+})
+
+test_that('pander.sessionInfo works correctly', {
+    suppressMessages(require(utils))
+    res <- pander_return(sessionInfo())
+    expect_true(any(grepl('locale', res)))
+    expect_true(any(grepl('attached base package', res)))
+    res <- pander_return(sessionInfo(), locale = F, compact = F)
+    expect_false(any(grepl('locale', res)))
+    expect_true(any(grepl('utils', res)))
+})
+
+test_that('pander.stat.table works correctly', {
+    suppressMessages(require(Epi))
+    res <- pander_return(stat.table(tension,list(count(),mean(breaks)),data=warpbreaks))
+    expect_equal(length(res), 11)
+    expect_equal(res[3], "&nbsp;   count()   mean(breaks) ")
+    res <- pander_return(stat.table(index=list(tension,wool),mean(breaks),data=warpbreaks))
+    expect_equal(length(res), 13)
+    # here add test
+})
+
+test_that('pander.microbenchmark works correctly', {
+    suppressMessages(require(microbenchmark))
+    res <- pander_return(microbenchmark(paste(1:10), paste0(1:10)))
+    expect_true(any(grepl('Unit', res)))
+    expect_equal(length(res), 20)
+    res <- pander_return(microbenchmark(paste(1:10), paste0(1:10)), split.tables = Inf, expr.labels = c("A"))
+    expect_true(any(grepl('A', res)))
+    expect_true(any(grepl('paste0\\(1:10\\)', res)))
+    res <- pander_return(microbenchmark(paste(1:10), paste0(1:10)), split.tables = Inf, expr.labels = c("A", "B"))
+    expect_true(any(grepl('A', res)))
+    expect_true(any(grepl('B', res)))
+    expect_false(any(grepl('paste0\\(1:10\\)', res)))
+    res <- pander_return(microbenchmark(paste(1:10), paste0(1:10)), split.tables = Inf, expr.labels = c("A", "B", "C"))
+    expect_true(any(grepl('A', res)))
+    expect_true(any(grepl('B', res)))
+    expect_false(any(grepl('paste0\\(1:10\\)', res)))
+})
+
+test_that('pander.function works correctly', {
+    testf <- function(x) {
+        y <- x + 1
+        y
+    }
+    res <- pander_return(testf)
+    expect_true(all(grepl('\t', res)))
+    expect_equal(length(res), 5)
+    res <- pander_return(testf, syntax.highlighting = T, add.name = T)
+    expect_equal(length(res), 7)
+    expect_equal(res[1], '```r')
+    expect_true(grepl('testf', res[2]))
+})
+
+test_that('pander.rlm works correctly', {
+    res <- pander_return(rlm(stack.loss ~ ., stackloss))
+    expect_equal(res[4], " (Intercept)   Air.Flow   Water.Temp   Acid.Conc. ")
+    expect_equal(length(res), 13)
+    res <- pander_return(rlm(stack.loss ~ ., stackloss, psi = psi.hampel, init = "lts"))
+    expect_equal(res[11], "Degrees of freedom: 21 total; 17 residual")
+    expect_equal(length(res), 13)
 })

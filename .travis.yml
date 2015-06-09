@@ -18,7 +18,7 @@ install:
   - "[ ! -d ~/R ] && mkdir ~/R"
   - R --version
   - R -e '.libPaths(); sessionInfo()'
-  - Rscript -e 'install.packages(c("ggplot2", "testthat", "koRpus", "descr", "Rcpp", "microbenchmark", "pander", "devtools", "XML", "tables", "reshape", "memisc"), dep = TRUE, repos = "http://cran.r-project.org")'
+  - Rscript -e 'install.packages(c("ggplot2", "testthat", "koRpus", "descr", "Rcpp", "microbenchmark", "pander", "devtools", "XML", "tables", "reshape", "memisc", "zoo", "nlme", "phych", "survival", "Epi"), dep = TRUE, repos = "http://cran.r-project.org")'
   - Rscript -e 'devtools::install_github("jimhester/covr")'
 
 # run tests

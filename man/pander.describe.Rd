@@ -4,17 +4,15 @@
 \alias{pander.describe}
 \title{Pander method for describe class}
 \usage{
-\method{pander}{describe}(x, caption = attr(x, "caption"), short = TRUE,
-  split.tables = 60, ...)
+\method{pander}{describe}(x, caption = attr(x, "caption"),
+  digits = panderOptions("digits"), ...)
 }
 \arguments{
 \item{x}{an describe object}
 
 \item{caption}{caption (string) to be shown under the table}
 
-\item{short}{(default:\code{TRUE}) if to use consise output}
-
-\item{split.tables}{(default:\code{60}) split.tables param for pandoc.table function}
+\item{digits}{number of digits of precision}
 
 \item{...}{optional parameters passed to raw \code{pandoc.table} function}
 }
