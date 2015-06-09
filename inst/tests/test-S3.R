@@ -398,6 +398,28 @@ test_that('Behavior for empty objects is correct', {
     expect_equal(length(res), 7)
 })
 
+context("plain.ascii")
+
+test_that('plain.ascii option works correctly', {
+    # dim is NULL
+    x <- 1:10
+    res <- pandoc.table.return(x, emphasize.cells=c(3,4), plain.ascii = T)
+    res <- strsplit(res, '\n')[[1]]
+    expect_false(any(grepl('\\*', res)))
+    expect_equal(res[3], "1 2  3   4  5 6 7 8 9 10")
+    # length(dim) == 1
+    x <- array(1:10)
+    res <- pandoc.table.return(x, emphasize.cells=c(3,4), plain.ascii = T)
+    res <- strsplit(res, '\n')[[1]]
+    expect_false(any(grepl('\\*', res)))
+    expect_equal(res[3], "1 2  3   4  5 6 7 8 9 10")
+    # length(dim) > 1
+    x <- mtcars[1:3, 1:4]
+    res <- pandoc.table.return(x, emphasize.rows = 2, plain.ascii = T)
+    expect_false(grepl('&nbsp;', res))
+    expect_false(grepl('\\*', res))
+})
+
 context("S3 methods")
 
 test_that('pander.tabular behaves correctly', {
