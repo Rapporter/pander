@@ -159,7 +159,7 @@ pander.vector <- function(x, ...) {
 #' @param x a logical object
 #' @param ... ignored parameters
 #' @export
-pander.logical <- function(x, ...) # nocov start
+pander.logical <- function(x, ...)
     pander.vector(x, ...) 
 
 
@@ -169,8 +169,8 @@ pander.logical <- function(x, ...) # nocov start
 #' @param x a numeric object
 #' @param ... igroned parameter
 #' @export
-pander.numeric <- function(x, ...) # nocov
-    pander.vector(x, ...) # nocov
+pander.numeric <- function(x, ...)
+    pander.vector(x, ...)
 
 
 #' Pander method for factor class
@@ -180,7 +180,7 @@ pander.numeric <- function(x, ...) # nocov
 #' @param ... igroned parameters
 #' @export
 pander.factor <- function(x, ...)
-    pander.vector(x, ...) # nocov end
+    pander.vector(x, ...)
 
 
 #' Pander method for character class
@@ -266,14 +266,11 @@ pander.data.frame <- function(x, caption = attr(x, 'caption'), ...) {
 #' @param caption caption (string) to be shown under the table
 #' @param ... optional parameters passed to raw \code{pandoc.table} function
 #' @export
-pander.matrix <- function(x, caption = attr(x, 'caption'),  ...) { # nocov start
-
+pander.matrix <- function(x, caption = attr(x, 'caption'),  ...) {
     if (is.null(caption) & !is.null(storage$caption))
         caption <- get.caption()
-
     pandoc.table(x, caption = caption, ...)
-
-} # nocov end
+}
 
 
 #' Pander method for cast_df class
@@ -696,7 +693,7 @@ pander.rapport <- function(x, ...)
 #' @param x a POSIXlt object
 #' @param ... optional parameters passed to raw \code{pandoc.date} function
 #' @export
-pander.POSIXlt <- function(x, ...) # nocov start
+pander.POSIXlt <- function(x, ...)
     pandoc.date(x, ...)
 
 
@@ -727,7 +724,7 @@ pander.Date <- function(x, ...)
 #' @param ... optional parameters passed to raw \code{pandoc.table} function
 #' @export
 pander.ftable <- function(x, ...)
-    pandoc.table(x, ...) # nocov end
+    pandoc.table(x, ...)
 
 
 #' Pander method for mtable class
@@ -962,13 +959,11 @@ pander.ts <- function(x, caption = attr(x, 'caption'), ...) {
 #' @param caption caption (string) to be shown under the formula
 #' @param ... optional parameters passed to raw \code{pandoc.table} function
 #' @export
-pander.formula <- function(x, max.width = 80, caption = attr(x, 'caption'), ...) { # nocov start
-
+pander.formula <- function(x, max.width = 80, caption = attr(x, 'caption'), ...) {
     if (is.null(caption) & !is.null(storage$caption))
         caption <- get.caption()
-
     pandoc.formula(x, max.width = max.width, caption = caption)
-} # nocov end
+}
 
 
 #' Pander method for call class
@@ -977,8 +972,8 @@ pander.formula <- function(x, max.width = 80, caption = attr(x, 'caption'), ...)
 #' @param x a call object
 #' @param ... optional parameters passed to raw \code{pandoc.formula} function
 #' @export
-pander.call <- function(x, ...) # nocov
-    pander.formula(x, ...) # nocov
+pander.call <- function(x, ...)
+    pander.formula(x, ...)
 
 
 #' Pander method for coxph class
@@ -997,10 +992,10 @@ pander.coxph <- function(x, caption = attr(x, 'caption'), ...) {
             caption <- get.caption()
     }
 
-    if (!is.null(x$fail)) { # nocov start
+    if (!is.null(x$fail)) {
         cat("  Coxph failed.", x$fail, "\n")
         return(invlisible())
-    } # nocov end
+    }
     
     beta <- x$coef
     se <- sqrt(diag(x$var))
@@ -1094,7 +1089,6 @@ pander.zoo <- function(x, caption = attr(x, 'caption'), ...) {
 #' @param ... optional parameters passed to raw \code{pandoc.table} function
 #' @export
 pander.summary.lme <- function(xs, caption = attr(xs, 'caption'), summary = TRUE, ...) {
-    
     if (is.null(caption)) {
         if (is.null(storage$caption))
             caption <- sprintf('Linear mixed-effects model fit by %s : %s',
@@ -1103,9 +1097,7 @@ pander.summary.lme <- function(xs, caption = attr(xs, 'caption'), summary = TRUE
         else
             caption <- get.caption()
     }
-    
     res <- as.data.frame(xs$tTable)
-    
     if (summary) {
         pandoc.table(res, caption = pandoc.formula.return(xs$call$fixed, text = 'Fixed effects: '), split.tables = Inf, ...)
         pandoc.table(xs$residuals, caption = 'Standardized Within-Group Residuals') 
@@ -1115,11 +1107,8 @@ pander.summary.lme <- function(xs, caption = attr(xs, 'caption'), summary = TRUE
             'Log-restricted-likelihood' = xs$logLik,
             check.names = FALSE), keep.trailing.zeros = TRUE, caption = caption, digits = 4)
     } else {
-        
         pandoc.table(res, caption = caption, ...)
-        
     }
-    
 }
 
 #' Pander method for lme class
