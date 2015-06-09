@@ -668,3 +668,18 @@ test_that('pander.rlm works correctly', {
     expect_equal(res[11], "Degrees of freedom: 21 total; 17 residual")
     expect_equal(length(res), 13)
 })
+
+test_that('pander.summary.table works correctly', {
+    ts <- summary(xtabs(cbind(ncases, ncontrols) ~ ., data = esoph))
+    res <- pander_return(ts)
+    expect_equal(res[6], " Chisq   df   p.value " )
+    expect_equal(length(res), 13)
+    res <- pander_return(ts, print.call = F)
+    expect_false(any(grepl('Calls', res)))
+    expect_equal(length(res), 12)
+    res <- pander_return(ts, caption = "Factor")
+    expect_equal(res[11], "Table: Factor")
+    res <- pander_return(summary(table(1:3)))
+    expect_false(any(grepl('-', res)))
+    expect_equal(length(res), 2)
+})
