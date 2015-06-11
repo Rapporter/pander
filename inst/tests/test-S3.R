@@ -706,3 +706,18 @@ test_that('pander.summary.table works correctly', {
     expect_false(any(grepl('-', res)))
     expect_equal(length(res), 2)
 })
+
+test_that('pander.randomForest works correctly', {
+    suppressMessages(require(randomForest))
+    set.seed(71)
+    iris.rf <- randomForest(Species ~ ., data=iris, importance=TRUE,
+                            proximity=TRUE)
+    res <- pander_return(iris.rf)
+    expect_equal(length(res), 20)
+    expect_equal(res[19], 'Table: Confusion Matrix')
+    ozone.rf <- randomForest(Ozone ~ ., data=airquality, mtry=3,
+                             importance=TRUE, na.action=na.omit)
+    res <- pander_return(ozone.rf)
+    expect_equal(length(res), 8)
+    expect_false(any(grep('-', res)))
+})
