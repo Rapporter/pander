@@ -835,37 +835,29 @@ pandoc.table.return <- function(t, caption, digits = panderOptions('digits'), de
     wm <- which(is.na(t), arr.ind = TRUE)
 
     ## round numbers & cut digits & apply decimal mark & optionally remove trailing zeros
-    if (length(dim(t)) < 2 | !is.null(dim(t)) && length(dim(t)) == 2 && is.data.frame(t))
-        t.n <- as.numeric(which(sapply(t, is.numeric)))
-    else
-        t.n <- as.numeric(which(apply(t, 2, is.numeric)))
+    t.n <- as.numeric(which(apply(t, 2, is.numeric)))
     if (length(t.n) > 0) {
-        if (length(dim(t)) == 2)
-            t[, t.n] <- apply(t[, t.n, drop = FALSE], 2, round, digits = round)
-        else
-            t[t.n]   <- round(t[t.n], round)
-        if (!keep.trailing.zeros) {
-            switch(as.character(length(dim(t))),
-                   '0' = t[t.n]   <- sapply(t[t.n], format, trim = TRUE, digits = digits, decimal.mark = decimal.mark, big.mark = big.mark),
-                   '1' = t[t.n]   <- apply(t[t.n, drop = FALSE], 1, format, trim = TRUE, digits = digits, decimal.mark = decimal.mark, big.mark = big.mark),
-                   '2' = t[, t.n] <- apply(t[, t.n, drop = FALSE], c(1,2), format, trim = TRUE, digits = digits, decimal.mark = decimal.mark, big.mark = big.mark)
-                   )
-        }
+        t[, t.n] <- apply(t[, t.n, drop = FALSE], 2, round, digits = round)
+        if (!keep.trailing.zeros)
+            t[, t.n] <- apply(t[, t.n, drop = FALSE], c(1,2), format, trim = TRUE, digits = digits, decimal.mark = decimal.mark, big.mark = big.mark)
     }
 
     ## drop unexpected classes and revert back to a common format
-    if (keep.trailing.zeros)
+    if (keep.trailing.zeros) {
         t <- format(t, trim = TRUE, digits = digits, decimal.mark = decimal.mark, big.mark = big.mark)
-    else
+    } else {
         t <- format(t, trim = TRUE)  ### here adds unneeded zero's
+    }
     ## force possible factors to character vectors
     wf <- which(sapply(t, is.factor))
-    if (length(dim(t)) == 2 && length(wf) > 0)
+    if (length(dim(t)) == 2 && length(wf) > 0) {
         t[, wf] <- apply(t[wf], 2, as.character)
+    }
 
     ## replace missing values
-    if (length(wm) > 0)
+    if (length(wm) > 0) {
         t[wm] <- missing
+    }
 
     ## adding formatting (emphasis, strong etc.)
     if (length(dim(t)) < 2) {
