@@ -375,6 +375,29 @@ test_that('table.expand behaves correctly',{
   expect_equal(pandoc.table.return(data.frame(a = 'ßß')), "\n---\n a \n---\nßß \n---\n\n")
 })
 
+context("Empty objects")
+
+test_that('Behavior for empty objects is correct', {
+    mt <- mtcars[mtcars$mpg < 0, 1:4]
+    res <- pander_return(mt)
+    expect_equal(res[3], " mpg   cyl   disp   hp ")
+    expect_equal(res[5], " NA    NA     NA    NA ")
+    expect_equal(length(res), 7)
+    colnames(mt) <- NULL
+    res <- pander_return(mt)
+    expect_equal(length(res), 0)
+    expect_warning(pander_return(mt))
+    mt <- matrix(0, nrow = 0, ncol = 5)
+    res <- pander_return(mt)
+    expect_equal(length(res), 0)
+    expect_warning(pander_return(mt))
+    colnames(mt) <- 1:5
+    res <- pander_return(mt)
+    expect_equal(res[3], " 1   2   3   4   5 ")
+    expect_equal(res[5], "NA  NA  NA  NA  NA ")
+    expect_equal(length(res), 7)
+})
+
 context("S3 methods")
 
 test_that('pander.tabular behaves correctly', {

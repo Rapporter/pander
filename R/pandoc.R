@@ -820,6 +820,17 @@ pandoc.table.return <- function(t, caption, digits = panderOptions('digits'), de
     ## store missing values
     wm <- which(is.na(t), arr.ind = TRUE)
 
+    ## checking for empty data frames
+    if (length(dim(t)) > 1 && dim(t)[1] == 0) {
+        if (!is.null(colnames(t))) {
+            t <- as.data.frame(t)
+            t[1, ] <- NA
+        } else {
+            warning("Object is empty and without header. No output will be produced")
+            return(invisible())
+        }
+    }
+    
     ## round numbers & cut digits & apply decimal mark & optionally remove trailing zeros
     if (length(dim(t)) < 2 | !is.null(dim(t)) && length(dim(t)) == 2 && is.data.frame(t))
         t.n <- as.numeric(which(sapply(t, is.numeric)))
@@ -894,9 +905,6 @@ pandoc.table.return <- function(t, caption, digits = panderOptions('digits'), de
         }
     }
 
-    ## checking for empty data frames
-    if (length(dim(t)) > 1 && dim(t)[1] == 0)
-        t[1, ] <- NA
 
     ## get (col/row)names if any
     t.colnames <- tryCatch(colnames(t), error = function(e) NULL)
