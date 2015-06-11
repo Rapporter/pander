@@ -773,9 +773,23 @@ pandoc.table.return <- function(t, caption, digits = panderOptions('digits'), de
         }
     }
 
-    ## converting 3D+ tables to 2D
-    if (length(dim(t)) > 2)
+    ## converting a table to intermediate representation
+    if (length(dim(t)) > 2){
         t <- ftable(t)
+    } else if (length(dim(t)) < 2) {
+        tn <- names(t)
+        t <- rbind(matrix(nrow = 0, ncol = length(t)), t)
+        colnames(t) <- tn
+        rownames(t) <- NULL
+    } else if (dim(t)[1] == 0) { # check for empty objects
+        if (!is.null(colnames(t))) {
+            t <- as.data.frame(t)
+            t[1, ] <- NA
+        } else {
+            warning("Object is empty and without header. No output will be produced")
+            return(invisible())
+        }
+    }
 
     ## initializing
     mc  <- match.call()
@@ -820,17 +834,6 @@ pandoc.table.return <- function(t, caption, digits = panderOptions('digits'), de
     ## store missing values
     wm <- which(is.na(t), arr.ind = TRUE)
 
-    ## checking for empty data frames
-    if (length(dim(t)) > 1 && dim(t)[1] == 0) {
-        if (!is.null(colnames(t))) {
-            t <- as.data.frame(t)
-            t[1, ] <- NA
-        } else {
-            warning("Object is empty and without header. No output will be produced")
-            return(invisible())
-        }
-    }
-    
     ## round numbers & cut digits & apply decimal mark & optionally remove trailing zeros
     if (length(dim(t)) < 2 | !is.null(dim(t)) && length(dim(t)) == 2 && is.data.frame(t))
         t.n <- as.numeric(which(sapply(t, is.numeric)))
