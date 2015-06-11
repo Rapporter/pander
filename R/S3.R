@@ -1518,3 +1518,34 @@ pander.tabular <- function(x, caption = attr(x, 'caption'), emphasize.rownames =
     else
         pandoc.table(data, caption = caption, keep.line.breaks = TRUE, ...)
 }
+
+#' Pander method for summary.table class
+#'
+#' Renders an summary.table object in Pandoc's markdown.
+#' @param x an function object
+#' @param caption caption (string) to be shown under the table
+#' @param print.call (defaut:\code{TRUE}) if call should be printed
+#' @param ... optional parameters passed to raw \code{pandoc.table} function
+#' @export
+pander.summary.table <- function(x, caption = attr(x, 'caption'), print.call = T, ...) {
+    if (is.null(caption)) {
+        if (!is.null(storage$caption)) {
+            caption <- get.caption()
+        } else {
+            caption <- 'Test for independence of all factors'
+        }
+    }
+    if (!is.null(x$call) && print.call) {
+        cat("Call: ")
+        print(x$call)
+    }
+    cat("Number of cases in table:", x$n.cases, "\n")
+    cat("Number of factors:", x$n.vars, "\n")
+    if (x$n.vars > 1) {
+        ch <- x$statistic
+        tdf <- data.frame('Chisq'=ch, 'df'=x$parameter, 'p-value'=x$p.value)
+        pandoc.table(tdf, caption=caption, ...)
+        if (!x$approx.ok)
+            cat("Chi-squared approximation may be incorrect\n")
+    }
+}

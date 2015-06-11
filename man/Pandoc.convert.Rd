@@ -5,7 +5,7 @@
 \title{Converts Pandoc to other format}
 \usage{
 Pandoc.convert(f, text, format = "html", open = TRUE, options = "",
-  footer = TRUE, proc.time, portable.html = TRUE,
+  footer = FALSE, proc.time, portable.html = TRUE,
   pandoc.binary = panderOptions("pandoc.binary"))
 }
 \arguments{
