@@ -716,18 +716,13 @@ pandoc.table.return <- function(t, caption, digits = panderOptions('digits'), de
     is.wholenumber <- function(x, tol = .Machine$double.eps^0.5)
         abs(x - round(x)) < tol
     check.highlight.parameters <- function(x, num, num2) {
-        if (missing(num2)) {
-            if (!is.vector(x))
-                stop('Only a vector or NULL can be passed to highlight table cell(s), row(s) or column(s).')
-        } else {
-            if (length(dim(t)) != 2)
-                stop('A matrix like structure can be passed to highlight cells in a table with two columns for row and column indexes.')
-        }
         if (!all(is.wholenumber(x)))
             stop('Only integers (whole numbers) can be passed to highlight table cell(s), row(s) or column(s).')
         if (!all(x > 0))
             stop(('Only positive numbers can be passed to highlight table cell(s), row(s) or column(s).'))
         if (missing(num2)) {
+            if (!is.vector(x))
+                stop('Only a vector or NULL can be passed to highlight table cell(s), row(s) or column(s).')
             if (!all(x < (num + 1)))
                 stop(paste('Too high number passed that should be kept below', num + 1))
         } else {
@@ -737,6 +732,30 @@ pandoc.table.return <- function(t, caption, digits = panderOptions('digits'), de
                 stop(paste('Too high number passed for row indexes that should be kept below', num + 1))
             if (!all(x[, 2] < (num2 + 1)))
                 stop(paste('Too high number passed for column indexes that should be kept below', num + 1))
+        }
+    }
+    ## converting a table to intermediate representation
+    empC <- function(x)
+        cbind(rep(1, length(x)), x)
+    if (length(dim(t)) > 2){
+        t <- ftable(t)
+    } else if (length(dim(t)) < 2) {
+        tn <- names(t)
+        t <- rbind(matrix(nrow = 0, ncol = length(t)), t)
+        colnames(t) <- tn
+        rownames(t) <- NULL
+        # special conversion for emphasize.cells, emphasize.strong.cells
+        if (!missing(emphasize.cells))
+            emphasize.cells <- empC(emphasize.cells)
+        if (!missing(emphasize.strong.cells))
+            emphasize.strong.cells <- empC(emphasize.strong.cells)
+    } else if (dim(t)[1] == 0) { # check for empty objects
+        if (!is.null(colnames(t))) {
+            t <- as.data.frame(t)
+            t[1, ] <- NA
+        } else {
+            warning("Object is empty and without header. No output will be produced")
+            return(invisible())
         }
     }
 
@@ -773,23 +792,7 @@ pandoc.table.return <- function(t, caption, digits = panderOptions('digits'), de
         }
     }
 
-    ## converting a table to intermediate representation
-    if (length(dim(t)) > 2){
-        t <- ftable(t)
-    } else if (length(dim(t)) < 2) {
-        tn <- names(t)
-        t <- rbind(matrix(nrow = 0, ncol = length(t)), t)
-        colnames(t) <- tn
-        rownames(t) <- NULL
-    } else if (dim(t)[1] == 0) { # check for empty objects
-        if (!is.null(colnames(t))) {
-            t <- as.data.frame(t)
-            t[1, ] <- NA
-        } else {
-            warning("Object is empty and without header. No output will be produced")
-            return(invisible())
-        }
-    }
+
 
     ## initializing
     mc  <- match.call()
@@ -860,44 +863,31 @@ pandoc.table.return <- function(t, caption, digits = panderOptions('digits'), de
     }
 
     ## adding formatting (emphasis, strong etc.)
-    if (length(dim(t)) < 2) {
-        if (!is.null(emphasize.rows) | !is.null(emphasize.cols) | !is.null(emphasize.strong.rows) | !is.null(emphasize.strong.cols))
-            stop('There is no sense in highlighting rows/columns in 1 dimensional tables. Hint: highlight cells instead. ')
-        if (!is.null(emphasize.cells)) {
-            check.highlight.parameters(emphasize.cells, length(t))
-            t[emphasize.cells] <- pandoc.emphasis.return(t[emphasize.cells])
-        }
-        if (!is.null(emphasize.strong.cells)) {
-            check.highlight.parameters(emphasize.strong.cells, length(t))
-            t[emphasize.strong.cells] <- pandoc.strong.return(t[emphasize.strong.cells])
-        }
-    } else {
-        if (!is.null(emphasize.rows)) {
-            check.highlight.parameters(emphasize.rows, nrow(t))
-            t[emphasize.rows, ] <- base::t(apply(t[emphasize.rows, , drop = FALSE], c(1), pandoc.emphasis.return))
-        }
-        if (!is.null(emphasize.strong.rows)) {
-            check.highlight.parameters(emphasize.strong.rows, nrow(t))
-            t[emphasize.strong.rows, ] <- base::t(apply(t[emphasize.strong.rows, , drop = FALSE], c(1), pandoc.strong.return))
-        }
-        if (!is.null(emphasize.cols)) {
-            check.highlight.parameters(emphasize.cols, ncol(t))
-            t[, emphasize.cols] <- apply(t[, emphasize.cols, drop = FALSE], c(2), pandoc.emphasis.return)
-        }
-        if (!is.null(emphasize.strong.cols)) {
-            check.highlight.parameters(emphasize.strong.cols, ncol(t))
-            t[, emphasize.strong.cols] <- apply(t[, emphasize.strong.cols, drop = FALSE], c(2), pandoc.strong.return)
-        }
-        if (!is.null(emphasize.cells)) {
-            t <- as.matrix(t)
-            check.highlight.parameters(emphasize.cells, nrow(t), ncol(t))
-            t[emphasize.cells] <- pandoc.emphasis.return(t[emphasize.cells])
-        }
-        if (!is.null(emphasize.strong.cells)) {
-            t <- as.matrix(t)
-            check.highlight.parameters(emphasize.strong.cells, nrow(t), ncol(t))
-            t[emphasize.strong.cells] <- pandoc.strong.return(t[emphasize.strong.cells])
-        }
+    if (!is.null(emphasize.rows)) {
+        check.highlight.parameters(emphasize.rows, nrow(t))
+        t[emphasize.rows, ] <- base::t(apply(t[emphasize.rows, , drop = FALSE], c(1), pandoc.emphasis.return))
+    }
+    if (!is.null(emphasize.strong.rows)) {
+        check.highlight.parameters(emphasize.strong.rows, nrow(t))
+        t[emphasize.strong.rows, ] <- base::t(apply(t[emphasize.strong.rows, , drop = FALSE], c(1), pandoc.strong.return))
+    }
+    if (!is.null(emphasize.cols)) {
+        check.highlight.parameters(emphasize.cols, ncol(t))
+        t[, emphasize.cols] <- apply(t[, emphasize.cols, drop = FALSE], c(2), pandoc.emphasis.return)
+    }
+    if (!is.null(emphasize.strong.cols)) {
+        check.highlight.parameters(emphasize.strong.cols, ncol(t))
+        t[, emphasize.strong.cols] <- apply(t[, emphasize.strong.cols, drop = FALSE], c(2), pandoc.strong.return)
+    }
+    if (!is.null(emphasize.cells)) {
+        t <- as.matrix(t)
+        check.highlight.parameters(emphasize.cells, nrow(t), ncol(t))
+        t[emphasize.cells] <- pandoc.emphasis.return(t[emphasize.cells])
+    }
+    if (!is.null(emphasize.strong.cells)) {
+        t <- as.matrix(t)
+        check.highlight.parameters(emphasize.strong.cells, nrow(t), ncol(t))
+        t[emphasize.strong.cells] <- pandoc.strong.return(t[emphasize.strong.cells])
     }
 
 
