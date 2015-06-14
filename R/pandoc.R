@@ -842,7 +842,7 @@ pandoc.table.return <- function(t, caption, digits = panderOptions('digits'), de
     }
     ## force possible factors to character vectors
     wf <- which(sapply(t, is.factor))
-    if (length(dim(t)) == 2 && length(wf) > 0) {
+    if (length(wf) > 0) {
         t[, wf] <- apply(t[wf], 2, as.character)
     }
 
@@ -883,24 +883,14 @@ pandoc.table.return <- function(t, caption, digits = panderOptions('digits'), de
     ## get (col/row)names if any
     t.colnames <- tryCatch(colnames(t), error = function(e) NULL)
     t.rownames <- tryCatch(rownames(t), error = function(e) NULL)
-    if (!is.null(t.rownames) && length(dim(t)) < 2) {
-        t.rownames <- NULL
-        t.colnames <- names(t)
-    }
-    if (is.null(t.rownames) && is.null(t.colnames) && length(dim(t)) < 2)
-        t.colnames <- names(t)
 
     t <- split.large.cells(t)
 
     ## re-set col/rownames to be passed to split tables
     if (!is.null(t.rownames))
         rownames(t) <- t.rownames
-    if (!is.null(t.colnames)) {
-        if (length(dim(t)) == 2)
-            colnames(t) <- t.colnames
-        else
-            names(t) <- t.colnames
-    }
+    if (!is.null(t.colnames))
+        colnames(t) <- t.colnames
 
     if (!is.null(t.colnames)) {
         t.colnames <- replace(t.colnames, which(t.colnames == ''), '&nbsp;')
@@ -909,29 +899,17 @@ pandoc.table.return <- function(t, caption, digits = panderOptions('digits'), de
     } else {
         t.colnames.width <- 0
     }
-    if (length(dim(t)) < 2) {
-        if (length(dim(t)) == 0){
-          ## remove traling spaces, because they affect formatting negatively
-          t <- sapply(t, function(x) gsub('[[:space:]]*$', '', x))
-          t.width <- as.numeric(apply(cbind(t.colnames.width, as.numeric(sapply(t, nchar, type = 'width'))), 1, max))
-        } else {
-          ## remove traling spaces, because they affect formatting negatively
-          t <- apply(t, 1, function(x) gsub('[[:space:]]*$', '', x))
-          t.width <- as.numeric(apply(cbind(t.colnames.width, as.numeric(apply(t, 1, nchar, type = 'width'))), 1, max))
-        }
-    } else {
-        ## remove traling spaces, because they affect formatting negatively
-        t <- apply(t, c(1,2), function(x) gsub('[[:space:]]*$', '', x))
-        ## also dealing with cells split by newlines
-        t.width <-  as.numeric(apply(cbind(t.colnames.width, apply(t, 2, function(x) max(sapply(strsplit(x,'\n'), function(x) max(nchar(x, type = 'width'), 0))))), 1, max))
+    ## remove traling spaces, because they affect formatting negatively
+    t <- apply(t, c(1,2), function(x) gsub('[[:space:]]*$', '', x))
+    ## also dealing with cells split by newlines
+    t.width <-  as.numeric(apply(cbind(t.colnames.width, apply(t, 2, function(x) max(sapply(strsplit(x,'\n'), function(x) max(nchar(x, type = 'width'), 0))))), 1, max))
 
-        ## remove obvious row.names
-        if (all(t.rownames == 1:nrow(t)) | all(t.rownames == ''))
-            t.rownames <- NULL
+    ## remove obvious row.names
+    if (all(t.rownames == 1:nrow(t)) | all(t.rownames == ''))
+        t.rownames <- NULL
 
-        if (!is.null(t.rownames) && emphasize.rownames)
-            t.rownames <- pandoc.strong.return(t.rownames)
-    }
+    if (!is.null(t.rownames) && emphasize.rownames)
+        t.rownames <- pandoc.strong.return(t.rownames)
 
     if (length(t.rownames) != 0) {
 
@@ -988,10 +966,7 @@ pandoc.table.return <- function(t, caption, digits = panderOptions('digits'), de
             justify <- list(justify[1:(t.split)], justify[c((t.split + 1):length(t.width))])
         }
 
-        if (length(dim(t)) > 1)
-            res <- list(t[, 1:(t.split), drop = FALSE], t[, (t.split + 1):ncol(t), drop = FALSE])
-        else
-            res <- list(t[1:t.split, drop = FALSE], t[(t.split + 1):length(t), drop = FALSE])
+        res <- list(t[, 1:(t.split), drop = FALSE], t[, (t.split + 1):ncol(t), drop = FALSE])
 
         ## recursive call
         res <- paste(
@@ -1039,18 +1014,7 @@ pandoc.table.return <- function(t, caption, digits = panderOptions('digits'), de
                })
 
         if (plain.ascii){
-            if (length(dim(t)) < 2){
-                if (length(dim(t)) == 0){
-                    t[1:length(t)] <- to.plain.ascii(t)
-                }else{
-                    t[1:dim(t)] <- to.plain.ascii(t)
-                }
-            }else{
-                if (dim(t)[1] == 0) { # case of empty data.frame
-                    t[1, ] <- NA
-                }
-                t <- apply(t, c(1,2), to.plain.ascii)
-            }
+            t <- apply(t, c(1,2), to.plain.ascii)
             t.rownames <- sapply(t.rownames, to.plain.ascii)
             t.colnames <- sapply(t.colnames, to.plain.ascii)
         }
@@ -1075,10 +1039,7 @@ pandoc.table.return <- function(t, caption, digits = panderOptions('digits'), de
         if (length(t.rownames) != 0)
             b <- cbind(t.rownames, b)
 
-        if (length(dim(t)) > 1)
-            res <- paste0(res, paste(apply(b, 1, function(x) paste0(table.expand(x, t.width, justify, sep.col), sep.row)), collapse = '\n'))
-        else
-            res <- paste0(res, paste0(table.expand(b, t.width, justify, sep.col), sep.row), collapse = '\n')
+        res <- paste0(res, paste(apply(b, 1, function(x) paste0(table.expand(x, t.width, justify, sep.col), sep.row)), collapse = '\n'))
 
         ## footer
         if (style != 'grid')
