@@ -761,16 +761,7 @@ pandoc.table.return <- function(t, caption, digits = panderOptions('digits'), de
 
     ## check for relative split.cells
     if (all(grepl("%$", split.cells))){
-        d <- 0
-        if (length(dim(t)) < 2){
-            if (length(dim(t)) == 0){
-                d <- length(t)
-            }else{
-                d <- dim(t)[1]
-            }
-        }else{
-            d <- dim(t)[2]
-        }
+        d <- dim(t)[2]
         split.cells <- as.numeric(gsub("%$","",split.cells))
         if (sum(split.cells) == 100){
             if (is.infinite(split.tables)){
@@ -791,8 +782,6 @@ pandoc.table.return <- function(t, caption, digits = panderOptions('digits'), de
             split.cells <- panderOptions("table.split.cells")
         }
     }
-
-
 
     ## initializing
     mc  <- match.call()
@@ -817,8 +806,8 @@ pandoc.table.return <- function(t, caption, digits = panderOptions('digits'), de
             caption <- attr(t, 'caption')
         }
     }
-    emphasize.parameters <- c('emphasize.rows', 'emphasize.cols', 'emphasize.cells', 'emphasize.strong.rows', 'emphasize.strong.cols', 'emphasize.strong.cells')
     ## check if emphasize parameters were passed
+    emphasize.parameters <- c('emphasize.rows', 'emphasize.cols', 'emphasize.cells', 'emphasize.strong.rows', 'emphasize.strong.cols', 'emphasize.strong.cells')
     if (all(sapply(emphasize.parameters, function(p) is.null(mc[[p]]), USE.NAMES = FALSE))) {
         ## check if emphasize parameters were set in attributes
         if (all(sapply(emphasize.parameters, function(p) is.null(attr(t, p)), USE.NAMES = FALSE)))
