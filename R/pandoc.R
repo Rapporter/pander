@@ -658,12 +658,6 @@ pandoc.table.return <- function(t, caption, digits = panderOptions('digits'), de
         ## single value and vectors/lists
         if (length(dim(cells)) < 2) {
 
-            if (length(cells) == 0) {
-
-                res <- split.single.cell(cells, split.cells[1])
-
-            } else {
-
                 ## discard first value which was for rownames
                 if (!for.rownames && (length(split.cells) >= length(cells) + 1))
                     split.cells <- split.cells[-1]
@@ -672,12 +666,7 @@ pandoc.table.return <- function(t, caption, digits = panderOptions('digits'), de
                     warning("length of split.cells vector is smaller than data. Default value will be used for other cells")
                     split.cells <- c(split.cells, rep(panderOptions('table.split.cells'), length(cells) - length(split.cells)))
                 }
-
-                for (i in 1:length(cells))
-                    res <- c(res, split.single.cell(cells[i], max.width = split.cells[i]))
-
-            }
-
+                res <- sapply(seq_along(cells), function(x, i) split.single.cell(x[i], max.width = split.cells[i]), x = cells, USE.NAMES = FALSE)
 
         } else { # matrixes and tables
 
@@ -735,8 +724,6 @@ pandoc.table.return <- function(t, caption, digits = panderOptions('digits'), de
         }
     }
     ## converting a table to intermediate representation
-    empC <- function(x)
-        cbind(rep(1, length(x)), x)
     if (length(dim(t)) > 2){
         t <- ftable(t)
     } else if (length(dim(t)) < 2) {
@@ -746,9 +733,9 @@ pandoc.table.return <- function(t, caption, digits = panderOptions('digits'), de
         rownames(t) <- NULL
         # special conversion for emphasize.cells, emphasize.strong.cells
         if (!missing(emphasize.cells))
-            emphasize.cells <- empC(emphasize.cells)
+            emphasize.cells <- cbind(rep(1, length(emphasize.cells)), emphasize.cells)
         if (!missing(emphasize.strong.cells))
-            emphasize.strong.cells <- empC(emphasize.strong.cells)
+            emphasize.strong.cells <- cbind(rep(1, length(emphasize.strong.cells)), emphasize.strong.cells)
     } else if (dim(t)[1] == 0) { # check for empty objects
         if (!is.null(colnames(t))) {
             t <- as.data.frame(t)
@@ -965,7 +952,6 @@ pandoc.table.return <- function(t, caption, digits = panderOptions('digits'), de
         } else {
             justify <- list(justify[1:(t.split)], justify[c((t.split + 1):length(t.width))])
         }
-
         res <- list(t[, 1:(t.split), drop = FALSE], t[, (t.split + 1):ncol(t), drop = FALSE])
 
         ## recursive call
