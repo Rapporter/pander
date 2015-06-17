@@ -706,3 +706,31 @@ test_that('pander.summary.table works correctly', {
     expect_false(any(grepl('-', res)))
     expect_equal(length(res), 2)
 })
+
+test_that('pander.randomForest works correctly', {
+    suppressMessages(require(randomForest))
+    iris.rf <- randomForest(Species ~ ., data=iris, importance=TRUE,
+                            proximity=TRUE)
+    res <- pander_return(iris.rf)
+    expect_equal(length(res), 20)
+    expect_equal(res[19], 'Table: Confusion Matrix')
+    ozone.rf <- randomForest(Ozone ~ ., data=airquality, mtry=3,
+                             importance=TRUE, na.action=na.omit)
+    res <- pander_return(ozone.rf)
+    expect_equal(length(res), 8)
+    expect_false(any(grep('-', res)))
+    # with test
+    index <- 1:nrow(iris)
+    trainindex <- sample(index, trunc(length(index)/2))
+    trainset <- iris[trainindex, ]
+    testset <- iris[-trainindex, ]
+    res <- pander_return(randomForest(x=trainset[ ,-1], y=trainset[ ,1], xtest=testset[ ,-1], ytest=testset[ ,1]))
+    expect_equal(length(res), 10)
+    expect_true(any(grepl('Test set MSE', res)))
+    res <- pander_return(randomForest(x=trainset[ ,-ncol(trainset)],
+                                      y=trainset[ ,ncol(trainset)],
+                                      xtest=testset[ ,-ncol(testset)],
+                                      ytest=testset[ ,ncol(testset)]))
+    expect_equal(length(res), 34)
+    expect_equal(res[33], "Table: Test Confusion Matrix")
+})
