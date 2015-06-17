@@ -994,7 +994,7 @@ pander.coxph <- function(x, caption = attr(x, 'caption'), ...) {
 
     if (!is.null(x$fail)) {
         cat("  Coxph failed.", x$fail, "\n")
-        return(invlisible())
+        return(invisible())
     }
     
     beta <- x$coef
@@ -1083,28 +1083,28 @@ pander.zoo <- function(x, caption = attr(x, 'caption'), ...) {
 #' Pander method for summary.lme class
 #'
 #' Prints a lme object in Pandoc's markdown.
-#' @param xs a lme object
+#' @param x a lme object
 #' @param caption caption (string) to be shown under the table
 #' @param summary (default:\code{TRUE}) if to print expender summary
 #' @param ... optional parameters passed to raw \code{pandoc.table} function
 #' @export
-pander.summary.lme <- function(xs, caption = attr(xs, 'caption'), summary = TRUE, ...) {
+pander.summary.lme <- function(x, caption = attr(x, 'caption'), summary = TRUE, ...) {
     if (is.null(caption)) {
         if (is.null(storage$caption))
             caption <- sprintf('Linear mixed-effects model fit by %s : %s',
-                               paste(sub('^[ ]*', '', ifelse(xs$method == 'REML', 'REML', 'maximum likelihood'))),
-                               pandoc.formula.return(xs$call$fixed), collapse = '')
+                               paste(sub('^[ ]*', '', ifelse(x$method == 'REML', 'REML', 'maximum likelihood'))),
+                               pandoc.formula.return(x$call$fixed), collapse = '')
         else
             caption <- get.caption()
     }
-    res <- as.data.frame(xs$tTable)
+    res <- as.data.frame(x$tTable)
     if (summary) {
-        pandoc.table(res, caption = pandoc.formula.return(xs$call$fixed, text = 'Fixed effects: '), split.tables = Inf, ...)
-        pandoc.table(xs$residuals, caption = 'Standardized Within-Group Residuals') 
+        pandoc.table(res, caption = pandoc.formula.return(x$call$fixed, text = 'Fixed effects: '), split.tables = Inf, ...)
+        pandoc.table(x$residuals, caption = 'Standardized Within-Group Residuals') 
         pandoc.table(data.frame(
-            'Observations'        = xs$dims[["N"]],
-            'Groups'              = xs$dims$ngrps[1:xs$dims$Q],
-            'Log-restricted-likelihood' = xs$logLik,
+            'Observations'        = x$dims[["N"]],
+            'Groups'              = x$dims$ngrps[1:x$dims$Q],
+            'Log-restricted-likelihood' = x$logLik,
             check.names = FALSE), keep.trailing.zeros = TRUE, caption = caption, digits = 4)
     } else {
         pandoc.table(res, caption = caption, ...)
