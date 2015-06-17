@@ -4,11 +4,11 @@
 \alias{pander.summary.lme}
 \title{Pander method for summary.lme class}
 \usage{
-\method{pander}{summary.lme}(xs, caption = attr(xs, "caption"),
+\method{pander}{summary.lme}(x, caption = attr(x, "caption"),
   summary = TRUE, ...)
 }
 \arguments{
-\item{xs}{a lme object}
+\item{x}{a lme object}
 
 \item{caption}{caption (string) to be shown under the table}
 

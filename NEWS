@@ -2,9 +2,20 @@ pander DEV (xxxx-xx-xx)
 ----------------------------------------------------------------
 
 New fetures:
- *
+ * 
+
 Fixes:
- *
+ * correct rendering for empty objects (#180)
+ * correct emphasizing for rows (#176)
+ * missing column and row titles in CrossTable (#163)
+ * removal of calls to deprecated functions (#172)
+ * correct rendering for horizontal mtables (#174)
+
+New classes supported by the `pander` generic S3 method:
+ * summary.table
+ * randomForest
+ * tabular
+ * summary.lme
 
 Other changes:
  * Pandoc.convert will not add a footer to the document by dafault (#173)

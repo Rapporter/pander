@@ -384,11 +384,11 @@ test_that('Behavior for empty objects is correct', {
     expect_equal(res[5], " NA    NA     NA    NA ")
     expect_equal(length(res), 7)
     colnames(mt) <- NULL
-    res <- pander_return(mt)
+    res <- suppressWarnings(pander_return(mt))
     expect_equal(length(res), 0)
     expect_warning(pander_return(mt))
     mt <- matrix(0, nrow = 0, ncol = 5)
-    res <- pander_return(mt)
+    res <- suppressWarnings(pander_return(mt))
     expect_equal(length(res), 0)
     expect_warning(pander_return(mt))
     colnames(mt) <- 1:5
@@ -396,6 +396,28 @@ test_that('Behavior for empty objects is correct', {
     expect_equal(res[3], " 1   2   3   4   5 ")
     expect_equal(res[5], "NA  NA  NA  NA  NA ")
     expect_equal(length(res), 7)
+})
+
+context("plain.ascii")
+
+test_that('plain.ascii option works correctly', {
+    # dim is NULL
+    x <- 1:10
+    res <- pandoc.table.return(x, emphasize.cells=c(3,4), plain.ascii = T)
+    res <- strsplit(res, '\n')[[1]]
+    expect_false(any(grepl('\\*', res)))
+    expect_equal(res[3], "1 2  3   4  5 6 7 8 9 10")
+    # length(dim) == 1
+    x <- array(1:10)
+    res <- pandoc.table.return(x, emphasize.cells=c(3,4), plain.ascii = T)
+    res <- strsplit(res, '\n')[[1]]
+    expect_false(any(grepl('\\*', res)))
+    expect_equal(res[3], "1 2  3   4  5 6 7 8 9 10")
+    # length(dim) > 1
+    x <- mtcars[1:3, 1:4]
+    res <- pandoc.table.return(x, emphasize.rows = 2, plain.ascii = T)
+    expect_false(grepl('&nbsp;', res))
+    expect_false(grepl('\\*', res))
 })
 
 context("S3 methods")
@@ -419,7 +441,7 @@ test_that('pander.CrossTable behaves correctly', {
     expect_true(any(grepl(gsub("\\$", "\\\\$", x$ColData), res)))
     expect_true(any(grepl(gsub("\\$", "\\\\$", x$RowData), res)))
     # expected N, residual, std residual, adj std residual rownames was not included
-    x <- CrossTable(mtcars$cyl, mtcars$gear, expected = T, resid = T, sresid = T, asresid = T)
+    x <- suppressWarnings(CrossTable(mtcars$cyl, mtcars$gear, expected = T, resid = T, sresid = T, asresid = T))
     res <- pander_return(x)
     expect_true(any(grepl("Expected N", res)))
     expect_true(any(grepl("Residual", res)))
@@ -567,7 +589,7 @@ test_that('pander.clogit works correctly', {
                          id = indx,
                          tocc = factor(rep(resp, each=n)))
     logan2$case <- (logan2$occupation == logan2$tocc)
-    res <- pander_return(clogit(case ~ tocc + tocc:education + strata(id), logan2))
+    res <- pander_return(suppressWarnings(clogit(case ~ tocc + tocc:education + strata(id), logan2)))
     expect_true(grepl("Fitting Conditional logistic regression", res[24]))
     expect_equal(length(res), 49)
 })
