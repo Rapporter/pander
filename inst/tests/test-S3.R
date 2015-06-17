@@ -384,11 +384,11 @@ test_that('Behavior for empty objects is correct', {
     expect_equal(res[5], " NA    NA     NA    NA ")
     expect_equal(length(res), 7)
     colnames(mt) <- NULL
-    res <- pander_return(mt)
+    res <- suppressWarnings(pander_return(mt))
     expect_equal(length(res), 0)
     expect_warning(pander_return(mt))
     mt <- matrix(0, nrow = 0, ncol = 5)
-    res <- pander_return(mt)
+    res <- suppressWarnings(pander_return(mt))
     expect_equal(length(res), 0)
     expect_warning(pander_return(mt))
     colnames(mt) <- 1:5
@@ -441,7 +441,7 @@ test_that('pander.CrossTable behaves correctly', {
     expect_true(any(grepl(gsub("\\$", "\\\\$", x$ColData), res)))
     expect_true(any(grepl(gsub("\\$", "\\\\$", x$RowData), res)))
     # expected N, residual, std residual, adj std residual rownames was not included
-    x <- CrossTable(mtcars$cyl, mtcars$gear, expected = T, resid = T, sresid = T, asresid = T)
+    x <- suppressWarnings(CrossTable(mtcars$cyl, mtcars$gear, expected = T, resid = T, sresid = T, asresid = T))
     res <- pander_return(x)
     expect_true(any(grepl("Expected N", res)))
     expect_true(any(grepl("Residual", res)))
@@ -589,7 +589,7 @@ test_that('pander.clogit works correctly', {
                          id = indx,
                          tocc = factor(rep(resp, each=n)))
     logan2$case <- (logan2$occupation == logan2$tocc)
-    res <- pander_return(clogit(case ~ tocc + tocc:education + strata(id), logan2))
+    res <- pander_return(suppressWarnings(clogit(case ~ tocc + tocc:education + strata(id), logan2)))
     expect_true(grepl("Fitting Conditional logistic regression", res[24]))
     expect_equal(length(res), 49)
 })
