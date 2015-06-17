@@ -1573,7 +1573,7 @@ pander.randomForest <- function (x, digits = panderOptions('digits'), ...)
                     round(x$test$err.rate[x$ntree, 'Test'] * 100, digits = 2),
                     '%\n',
                     sep = '')
-                pandoc.table(x$test$confusion, caption = 'Confusion Matrix', digits = digits, ...)
+                pandoc.table(x$test$confusion, caption = 'Test Confusion Matrix', digits = digits, ...)
             }
         }
     }
@@ -1585,7 +1585,7 @@ pander.randomForest <- function (x, digits = panderOptions('digits'), ...)
                 cat('Test set MSE: ',
                     round(x$test$mse[length(x$test$mse)], digits = digits),
                     '\n', sep = '')
-                cat('% Var explained: ',
+                cat('% Test Var explained: ',
                     round(100 * x$test$rsq[length(x$test$rsq)],
                           digits = 2), '\n', sep = '')
             }
