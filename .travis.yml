@@ -1,32 +1,16 @@
-#
-# Forked from Yihui's `knitr` version: https://raw.github.com/yihui/knitr/master/.travis.yml
-#
+language: r
 
-# it is not really python, but there is no R support on Travis CI yet
-language: python
+r_binary_packages:
+  - Rcpp
+  - testthat
 
-# environment variables
-env:
-  - R_LIBS_USER=~/R
+r_github_packages:
+  - jimhester/covr
 
-# install dependencies
-install:
-  - sudo add-apt-repository 'deb http://cran.r-project.org/bin/linux/ubuntu precise/'
-  - sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-keys E084DAB9
-  - sudo apt-get update
-  - sudo apt-get install r-base-dev pandoc qpdf texinfo texlive-latex-extra texlive-fonts-recommended texlive-fonts-extra libxml2-dev
-  - "[ ! -d ~/R ] && mkdir ~/R"
-  - R --version
-  - R -e '.libPaths(); sessionInfo()'
-  - Rscript -e 'install.packages(c("ggplot2", "testthat", "koRpus", "descr", "Rcpp", "microbenchmark", "pander", "devtools", "XML", "tables", "reshape", "memisc", "zoo", "nlme", "phych", "survival", "Epi"), dep = TRUE, repos = "http://cran.r-project.org")'
-  - Rscript -e 'devtools::install_github("jimhester/covr")'
-
-# run tests
 script:
   - make install
   - make check
   - make test
 
-# test coverage
 after_success:
-  - Rscript -e 'library(covr);coveralls()'
+  - Rscript -e 'covr::coveralls()'
