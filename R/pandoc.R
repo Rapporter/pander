@@ -608,12 +608,14 @@ pandoc.table.return <- function(t, caption, digits = panderOptions('digits'), de
 
     ## split single cell with line breaks based on max.width
     split.single.cell <- function(x, max.width){
-        if (!is.character(x))
+        if (!is.character(x)) {
             x <- as.character(x)
+        }
         ## as.character(NA) remains NA, which causes isses with nchar since 2015-04-23
         ## https://stat.ethz.ch/pipermail/r-devel/2015-April/071007.html
-        if (is.na(x))
+        if (is.na(x)) {
             x <- 'NA'
+        }
         if (!style %in% c('simple', 'rmarkdown')) {
             ## split
             if (nchar(x) == nchar(encodeString(x)) && !use.hyphening) {
@@ -648,10 +650,12 @@ pandoc.table.return <- function(t, caption, digits = panderOptions('digits'), de
         }
 
         ## if we have a single value, extend it to a vector to do less checks laters
-        if (length(split.cells) == 1)
+        if (length(split.cells) == 1) {
             split.cells <- rep(split.cells, length(cells))
-        if (for.rownames) # in case it is used for rownames, we only need the first value
+        }
+        if (for.rownames) { # in case it is used for rownames, we only need the first value
             split.cells <- rep(split.cells[1], length(cells))
+        }
 
         res <- NULL
 
@@ -659,8 +663,9 @@ pandoc.table.return <- function(t, caption, digits = panderOptions('digits'), de
         if (length(dim(cells)) < 2) {
 
                 ## discard first value which was for rownames
-                if (!for.rownames && (length(split.cells) >= length(cells) + 1))
+                if (!for.rownames && (length(split.cells) >= length(cells) + 1)) {
                     split.cells <- split.cells[-1]
+                }
 
                 if (length(cells) > length(split.cells)) {
                     warning("length of split.cells vector is smaller than data. Default value will be used for other cells")
@@ -679,8 +684,9 @@ pandoc.table.return <- function(t, caption, digits = panderOptions('digits'), de
                 split.cells <- c(split.cells, rep(panderOptions('table.split.cells'), dim(cells)[2] - length(split.cells)))
             }
 
-            for (j in 1:dim(cells)[2])
+            for (j in 1:dim(cells)[2]) {
                 res <- cbind(res, sapply(cells[,j], split.single.cell, max.width = split.cells[j], USE.NAMES = FALSE))
+            }
 
         }
 
@@ -732,10 +738,12 @@ pandoc.table.return <- function(t, caption, digits = panderOptions('digits'), de
         colnames(t) <- tn
         rownames(t) <- NULL
         # special conversion for emphasize.cells, emphasize.strong.cells
-        if (!missing(emphasize.cells))
+        if (!missing(emphasize.cells)) {
             emphasize.cells <- cbind(rep(1, length(emphasize.cells)), emphasize.cells)
-        if (!missing(emphasize.strong.cells))
+        }
+        if (!missing(emphasize.strong.cells)) {
             emphasize.strong.cells <- cbind(rep(1, length(emphasize.strong.cells)), emphasize.strong.cells)
+        }
     } else if (dim(t)[1] == 0) { # check for empty objects
         if (!is.null(colnames(t))) {
             t <- as.data.frame(t)
@@ -772,10 +780,11 @@ pandoc.table.return <- function(t, caption, digits = panderOptions('digits'), de
 
     ## initializing
     mc  <- match.call()
-    if (is.null(mc$style))
+    if (is.null(mc$style)) {
         style <- panderOptions('table.style')
-    else
+    } else {
         style <- match.arg(style)
+    }
     if (is.null(mc$justify)) {
         if (is.null(attr(t, 'alignment'))) {
             if (inherits(t, 'ftable'))
@@ -797,16 +806,20 @@ pandoc.table.return <- function(t, caption, digits = panderOptions('digits'), de
     emphasize.parameters <- c('emphasize.rows', 'emphasize.cols', 'emphasize.cells', 'emphasize.strong.rows', 'emphasize.strong.cols', 'emphasize.strong.cells')
     if (all(sapply(emphasize.parameters, function(p) is.null(mc[[p]]), USE.NAMES = FALSE))) {
         ## check if emphasize parameters were set in attributes
-        if (all(sapply(emphasize.parameters, function(p) is.null(attr(t, p)), USE.NAMES = FALSE)))
+        if (all(sapply(emphasize.parameters, function(p) is.null(attr(t, p)), USE.NAMES = FALSE))) {
             t <- get.emphasize(t)
+        }
         ## set emphasize parameters at last
-        for (p in emphasize.parameters)
+        for (p in emphasize.parameters) {
             assign(p, attr(t, p))
+        }
     } else {
         ## some emphasize parameters passed, other should be set to NULL
-        for (p in emphasize.parameters)
-            if (is.null(mc[[p]]))
+        for (p in emphasize.parameters) {
+            if (is.null(mc[[p]])) {
                 assign(p, NULL)
+            }
+        }
     }
     res <- ''
 
@@ -817,8 +830,9 @@ pandoc.table.return <- function(t, caption, digits = panderOptions('digits'), de
     t.n <- as.numeric(which(apply(t, 2, is.numeric)))
     if (length(t.n) > 0) {
         t[, t.n] <- apply(t[, t.n, drop = FALSE], 2, round, digits = round)
-        if (!keep.trailing.zeros)
+        if (!keep.trailing.zeros) {
             t[, t.n] <- apply(t[, t.n, drop = FALSE], c(1,2), format, trim = TRUE, digits = digits, decimal.mark = decimal.mark, big.mark = big.mark)
+        }
     }
 
     ## drop unexpected classes and revert back to a common format
@@ -874,10 +888,12 @@ pandoc.table.return <- function(t, caption, digits = panderOptions('digits'), de
     t <- split.large.cells(t)
 
     ## re-set col/rownames to be passed to split tables
-    if (!is.null(t.rownames))
+    if (!is.null(t.rownames)) {
         rownames(t) <- t.rownames
-    if (!is.null(t.colnames))
+    }
+    if (!is.null(t.colnames)) {
         colnames(t) <- t.colnames
+    }
 
     if (!is.null(t.colnames)) {
         t.colnames <- replace(t.colnames, which(t.colnames == ''), '&nbsp;')
@@ -892,58 +908,67 @@ pandoc.table.return <- function(t, caption, digits = panderOptions('digits'), de
     t.width <-  as.numeric(apply(cbind(t.colnames.width, apply(t, 2, function(x) max(sapply(strsplit(x,'\n'), function(x) max(nchar(x, type = 'width'), 0))))), 1, max))
 
     ## remove obvious row.names
-    if (all(t.rownames == 1:nrow(t)) | all(t.rownames == ''))
+    if (all(t.rownames == 1:nrow(t)) | all(t.rownames == '')) {
         t.rownames <- NULL
+    }
 
-    if (!is.null(t.rownames) && emphasize.rownames)
+    if (!is.null(t.rownames) && emphasize.rownames) {
         t.rownames <- pandoc.strong.return(t.rownames)
+    }
 
     if (length(t.rownames) != 0) {
 
-        if ((length(split.cells) <= dim(t)[2]) && (length(split.cells) > 1))
+        if ((length(split.cells) <= dim(t)[2]) && (length(split.cells) > 1)) {
             split.cells <- c(panderOptions("table.split.cells"), split.cells)
+        }
         t.rownames <- split.large.cells(t.rownames, TRUE)
 
-        if (!is.null(t.colnames))
+        if (!is.null(t.colnames)) {
             t.colnames <- c('&nbsp;', t.colnames)
+        }
         t.width <- c(max(sapply(strsplit(t.rownames, '\n'), function(x) max(nchar(x, type = 'width'), 0))), t.width)
         t.width[1] <- t.width[1] + 2
 
         ## if we have a non-breaking space in the header
-        if (!is.null(t.colnames))
+        if (!is.null(t.colnames)) {
             t.width[1] <- max(t.width[1], 6)
+        }
 
     }
 
     if (length(justify) != 1) {
-        if (length(justify) != length(t.width))
+        if (length(justify) != length(t.width)) {
             stop(sprintf('Wrong number of parameters (%s instead of *%s*) passed: justify', length(justify), length(t.width)))
+        }
     } else {
         if (all (strsplit(justify, "")[[1]] %in% c("c", "l", "r") )) {
-          if (nchar(justify) != length(t.width))
+          if (nchar(justify) != length(t.width)) {
             stop(sprintf('Wrong number of parameters (%s instead of *%s*) passed: justify', nchar(justify), length(t.width)))
-
+          }
           justify <- c(l = "left", c = "centre", r = "right")[ strsplit(justify, "")[[1]] ]
         } else {
           justify <- rep(justify, length(t.width))
         }
     }
     justify <- sub('^center$', 'centre', justify)
-    if (!all(justify %in% c('left', 'right', 'centre')))
+    if (!all(justify %in% c('left', 'right', 'centre'))) {
         stop('Invalid values passed for `justify` that can be "left", "right" or "centre/center".')
+    }
 
     ## split too wide tables
     if (sum(t.width + 4) > split.tables & length(t.width) > 1 + (length(t.rownames) != 0)) {
 
         t.split <- max(which(cumsum(t.width + 4) > split.tables)[1] - 1, 1)
-        if (t.split == 1 & length(t.rownames) != 0)
+        if (t.split == 1 & length(t.rownames) != 0) {
             t.split <- 2
+        }
 
         ## update caption
-        if (!is.null(caption))
+        if (!is.null(caption)) {
             caption <- paste(caption, panderOptions('table.continues.affix'))
-        else
+        } else {
             caption <- panderOptions('table.continues')
+        }
 
         ## split
         if (length(t.rownames) != 0) {
@@ -1022,21 +1047,24 @@ pandoc.table.return <- function(t, caption, digits = panderOptions('digits'), de
         res <- paste0(res, '\n')
         b   <- t
 
-        if (length(t.rownames) != 0)
+        if (length(t.rownames) != 0) {
             b <- cbind(t.rownames, b)
+        }
 
         res <- paste0(res, paste(apply(b, 1, function(x) paste0(table.expand(x, t.width, justify, sep.col), sep.row)), collapse = '\n'))
 
         ## footer
-        if (style != 'grid')
+        if (style != 'grid') {
             res <- paste0(res, sep.btn, '\n\n')
-        else
+        } else {
             res <- paste0(res, '\n\n')
+        }
 
         ## (optional) caption
         check_caption(caption)
-        if (!is.null(caption) && caption != '')
+        if (!is.null(caption) && caption != '') {
             res <- paste0(res, panderOptions('table.caption.prefix'), caption, '\n\n')
+        }
 
         return(res)
 
