@@ -901,7 +901,7 @@ pandoc.table.return <- function(t, caption, digits = panderOptions('digits'), de
     if (length(t.rownames) != 0) {
 
         if ((length(split.cells) <= dim(t)[2]) && (length(split.cells) > 1))
-            split.cells <- c(30, split.cells)
+            split.cells <- c(panderOptions("table.split.cells"), split.cells)
         t.rownames <- split.large.cells(t.rownames, TRUE)
 
         if (!is.null(t.colnames))
