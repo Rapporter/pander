@@ -80,6 +80,26 @@ test_that('rmarkdown pipe-delimited table is correct (#186)', {
     expect_true(any(grep('my missing cell', res)))
 })
 
+test_that('pandoc.table.return behaves correctly', { # misc tests for uncovered parts
+    expect_warning(pander_return(mtcars[,1:2], split.tables = Inf, split.cells = c("50%", "50%")))
+    t <- mtcars[1:3, 1:2]
+    attr(t, 'alignment') <- 'left'
+    attr(t, 'caption') <- 'simplified mtcars'
+    res <- pander_return(t, emphasize.rownames = F)
+    expect_false(any(grep("^[[:space:]]", res))) # because of left alignment
+    expect_true(any(grep("simplified mtcars", res)))
+    expect_error(pander_return(t, justify = c("left", "right"))) # needs 3 because of rownames
+    expect_error(pander_return(t, justify = "lr")) # needs 3 because of rownames
+    res <- pander_return(t, justify = "lrr")
+    expect_false(any(grep("[[:space:]]$", res)))
+    expect_error(pander_return(t, justify="laft")) 
+    res <- pander_return(t, split.tables = 1)
+    expect_equal(length(res), 25)
+    res <- pander_return(t, split.cells = c(10, 10, 10))
+    expect_equal(length(res), 16)
+    expect_warning(pander_return(t, split.cells = vector()))
+})
+
 dm <- panderOptions('decimal.mark')
 panderOptions('decimal.mark', ',')
 test_that('decimal mark', {

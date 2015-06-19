@@ -11,6 +11,7 @@ Fixes:
  * removal of calls to deprecated functions (#172)
  * correct rendering for horizontal mtables (#174)
  * correct splitting of tables based on style (#164)
+ * correct rendering for rmarkdown tables with | (#186)
 
 New classes supported by the `pander` generic S3 method:
  * summary.table

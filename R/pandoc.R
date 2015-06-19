@@ -644,11 +644,6 @@ pandoc.table.return <- function(t, caption, digits = panderOptions('digits'), de
 
     split.large.cells <- function(cells, for.rownames = FALSE) {
 
-        if (length(split.cells) == 0) {
-            warning("split.cells is a vector of length 0, reverting to default value")
-            split.cells <- panderOptions('table.split.cells')
-        }
-
         ## if we have a single value, extend it to a vector to do less checks laters
         if (length(split.cells) == 1) {
             split.cells <- rep(split.cells, length(cells))
@@ -754,6 +749,12 @@ pandoc.table.return <- function(t, caption, digits = panderOptions('digits'), de
         }
     }
     
+    ## check correct split.cells param
+    if (length(split.cells) == 0) {
+        warning("split.cells is a vector of length 0, reverting to default value")
+        split.cells <- panderOptions('table.split.cells')
+    }
+
     ## check for relative split.cells
     if (all(grepl("%$", split.cells))){
         d <- dim(t)[2]
