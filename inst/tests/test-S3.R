@@ -94,7 +94,7 @@ test_that('pandoc.table.return behaves correctly', { # misc tests for uncovered 
     expect_false(any(grep("[[:space:]]$", res)))
     expect_error(pander_return(t, justify="laft")) 
     res <- pander_return(t, split.tables = 1)
-    expect_equal(length(res), 25)
+    expect_equal(length(res), 24)
     res <- pander_return(t, split.cells = c(10, 10, 10))
     expect_equal(length(res), 16)
     expect_warning(pander_return(t, split.cells = vector()))
