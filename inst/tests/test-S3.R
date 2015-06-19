@@ -65,6 +65,21 @@ test_that('split.tables', {
     expect_true(any(grepl('Table', res_simple)))
 })
 
+test_that('rmarkdown pipe-delimited table is correct (#186)', {
+    d <- data.frame(a = 'foo|bar', b = 'my missing cell')
+    res <- pander_return(d, style='rmarkdown')
+    expect_true(any(grep('foo', res)))
+    expect_true(any(grep('bar', res)))
+    expect_true(any(grep('my missing cell', res)))
+    rownames(d) <- "x|y"
+    res <- pander_return(d, style='rmarkdown')
+    expect_true(any(grep('x', res)))
+    expect_true(any(grep('y', res)))
+    expect_true(any(grep('foo', res)))
+    expect_true(any(grep('bar', res)))
+    expect_true(any(grep('my missing cell', res)))
+})
+
 dm <- panderOptions('decimal.mark')
 panderOptions('decimal.mark', ',')
 test_that('decimal mark', {

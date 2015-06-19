@@ -753,7 +753,7 @@ pandoc.table.return <- function(t, caption, digits = panderOptions('digits'), de
             return(invisible())
         }
     }
-
+    
     ## check for relative split.cells
     if (all(grepl("%$", split.cells))){
         d <- dim(t)[2]
@@ -885,6 +885,12 @@ pandoc.table.return <- function(t, caption, digits = panderOptions('digits'), de
     t.colnames <- tryCatch(colnames(t), error = function(e) NULL)
     t.rownames <- tryCatch(rownames(t), error = function(e) NULL)
 
+    # fixed for incorrect pipilining with rmarkdown (#186)
+    if (style == 'rmarkdown') {
+        t <- apply(t, c(1,2), function(x) gsub("\\|", "\\\\|", x))
+        t.rownames <- sapply(t.rownames, function(x) gsub("\\|", "\\\\|", x))
+    }
+    
     t <- split.large.cells(t)
 
     ## re-set col/rownames to be passed to split tables
@@ -1049,13 +1055,12 @@ pandoc.table.return <- function(t, caption, digits = panderOptions('digits'), de
 
         ## body
         res <- paste0(res, '\n')
-        b   <- t
 
         if (length(t.rownames) != 0) {
-            b <- cbind(t.rownames, b)
+            t <- cbind(t.rownames, t)
         }
 
-        res <- paste0(res, paste(apply(b, 1, function(x) paste0(table.expand(x, t.width, justify, sep.col), sep.row)), collapse = '\n'))
+        res <- paste0(res, paste(apply(t, 1, function(x) paste0(table.expand(x, t.width, justify, sep.col), sep.row)), collapse = '\n'))
 
         ## footer
         if (style != 'grid') {
