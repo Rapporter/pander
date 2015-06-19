@@ -956,9 +956,13 @@ pandoc.table.return <- function(t, caption, digits = panderOptions('digits'), de
     }
 
     ## split too wide tables
-    if (sum(t.width + 4) > split.tables & length(t.width) > 1 + (length(t.rownames) != 0)) {
+    extra.spaces.width <- switch(style, # detrmine wheather separator influences column's width (#164)
+                                 'grid'=, 'rmarkdown' = 3, # 3 because 2 spaces and one sep
+                                 'multiline' = ,'simple' = 0)
+    if (sum(t.width + extra.spaces.width) + 1 > split.tables # +1 for the middle separator
+        & length(t.width) > 1 + (length(t.rownames) != 0)) {
 
-        t.split <- max(which(cumsum(t.width + 4) > split.tables)[1] - 1, 1)
+        t.split <- max(which(cumsum(t.width + extra.spaces.width + 1) > split.tables + 1)[1] - 1, 1)
         if (t.split == 1 & length(t.rownames) != 0) {
             t.split <- 2
         }
