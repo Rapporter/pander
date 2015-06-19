@@ -47,16 +47,65 @@ tables <- list(
     table(mtcars$am, mtcars$gear, mtcars$carb) + 0.1
     )
 
+test_that('split.tables', {
+    # test exact values (#164)
+    t <- data.frame(a = '7 chars', b = paste(rep('Δ', 5), collapse = ' '))
+    expect_equal(nchar('Δ Δ Δ Δ Δ', type='width'), 9)
+    res_grid <- pander_return(t, style='grid', split.tables = 23)
+    expect_equal(length(res_grid), 8)
+    expect_false(any(grepl('Table', res_grid)))
+    res_grid <- pander_return(t, style='grid', split.tables = 22)
+    expect_equal(length(res_grid), 18)
+    expect_true(any(grepl('Table', res_grid)))
+    res_simple <- pander_return(t, style='simple', split.tables = 17)
+    expect_equal(length(res_simple), 6)
+    expect_false(any(grepl('Table', res_simple)))
+    res_simple <- pander_return(t, style='simple', split.tables = 16)
+    expect_equal(length(res_simple), 14)
+    expect_true(any(grepl('Table', res_simple)))
+})
+
+test_that('rmarkdown pipe-delimited table is correct (#186)', {
+    d <- data.frame(a = 'foo|bar', b = 'my missing cell')
+    res <- pander_return(d, style='rmarkdown')
+    expect_true(any(grep('foo', res)))
+    expect_true(any(grep('bar', res)))
+    expect_true(any(grep('my missing cell', res)))
+    rownames(d) <- "x|y"
+    res <- pander_return(d, style='rmarkdown')
+    expect_true(any(grep('x', res)))
+    expect_true(any(grep('y', res)))
+    expect_true(any(grep('foo', res)))
+    expect_true(any(grep('bar', res)))
+    expect_true(any(grep('my missing cell', res)))
+})
+
+test_that('pandoc.table.return behaves correctly', { # misc tests for uncovered parts
+    expect_warning(pander_return(mtcars[,1:2], split.tables = Inf, split.cells = c("50%", "50%")))
+    t <- mtcars[1:3, 1:2]
+    attr(t, 'alignment') <- 'left'
+    attr(t, 'caption') <- 'simplified mtcars'
+    res <- pander_return(t, emphasize.rownames = F)
+    expect_false(any(grep("^[[:space:]]", res))) # because of left alignment
+    expect_true(any(grep("simplified mtcars", res)))
+    expect_error(pander_return(t, justify = c("left", "right"))) # needs 3 because of rownames
+    expect_error(pander_return(t, justify = "lr")) # needs 3 because of rownames
+    res <- pander_return(t, justify = "lrr")
+    expect_false(any(grep("[[:space:]]$", res)))
+    expect_error(pander_return(t, justify="laft")) 
+    res <- pander_return(t, split.tables = 1)
+    expect_equal(length(res), 24)
+    res <- pander_return(t, split.cells = c(10, 10, 10))
+    expect_equal(length(res), 16)
+    expect_warning(pander_return(t, split.cells = vector()))
+})
+
 dm <- panderOptions('decimal.mark')
 panderOptions('decimal.mark', ',')
 test_that('decimal mark', {
     for (t in tables)
         expect_true(grepl(',', paste(pander_return(t), collapse = '\n')))
 })
-
-## ## manual test
-## for (t in tables)
-##     pander(t)
 
 panderOptions('decimal.mark', dm)
 
@@ -591,7 +640,7 @@ test_that('pander.clogit works correctly', {
     logan2$case <- (logan2$occupation == logan2$tocc)
     res <- pander_return(suppressWarnings(clogit(case ~ tocc + tocc:education + strata(id), logan2)))
     expect_true(grepl("Fitting Conditional logistic regression", res[24]))
-    expect_equal(length(res), 49)
+    expect_equal(length(res), 26)
 })
 
 test_that('pander.zoo works correctly', {
@@ -612,7 +661,7 @@ test_that('pander.lme/pander.summary.lme behaves correctly', {
     sl <- summary(l1)
     pl <- pander_return(l1)
     spl <- pander_return(sl)
-    expect_equal(length(pl), 20)
+    expect_equal(length(pl), 11)
     expect_equal(length(grep('Table', pl)), 1)
     expect_equal(length(spl), 29)
     expect_equal(length(grep('Table', spl)), 3)
@@ -649,8 +698,8 @@ test_that('pander.survfit works correctly', {
     expect_true(any(grepl('Table', res)))
     # using additional options
     res <- pander_return(survfit(Surv(time, status) ~ x, data = aml), print.rmean = T)
-    expect_equal(length(res), 32)
-    expect_equal(res[32], "* restricted mean with upper limit =  103")
+    expect_equal(length(res), 21)
+    expect_equal(res[21], "* restricted mean with upper limit =  103")
 })
 
 test_that('pander.sessionInfo works correctly', {
@@ -677,7 +726,7 @@ test_that('pander.microbenchmark works correctly', {
     suppressMessages(require(microbenchmark))
     res <- pander_return(microbenchmark(paste(1:10), paste0(1:10)))
     expect_true(any(grepl('Unit', res)))
-    expect_equal(length(res), 20)
+    expect_equal(length(res), 11)
     res <- pander_return(microbenchmark(paste(1:10), paste0(1:10)), split.tables = Inf, expr.labels = c("A"))
     expect_true(any(grepl('A', res)))
     expect_true(any(grepl('paste0\\(1:10\\)', res)))
