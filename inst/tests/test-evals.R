@@ -206,6 +206,29 @@ test_that('long lines with line breaks', {
     expect_that(length(evals('x <- "this is a very-very looooooooooong line which might be split on `parse`, but that is not a big deal at all"\nx\n1')), equals(3))
 })
 
+test_that('cache.dir option works correctly', {
+    dir <- tempdir()
+    suppressWarnings(file.remove(list.files(dir)))
+    t1 <- system.time(evals('1:1e7', cache.mode = 'disk', cache.dir = dir))
+    expect_true(length(list.files(dir)) > 0)
+    t2 <- system.time(evals('1:1e7', cache.mode = 'disk', cache.dir = dir))
+    expect_true(t2[2] < t1[2])
+    # plots
+    suppressWarnings(file.remove(list.files(dir)))
+    t1 <- system.time(evals('plot(mtcars)', cache.mode = 'disk', cache.dir = dir))
+    expect_true(length(list.files(dir)) > 0)
+    t2 <- system.time(evals('plot(mtcars)', cache.mode = 'disk', cache.dir = dir))
+    expect_true(t2[2] < t1[2])
+})
+
+test_that('caching works correctly', { # tests to cover code in caching
+    env <- new.env()
+    evals('x <- 1:1e6', env = env)
+    evals('x <- 1:1e5', env = env)
+    res <- evals('x', env = env)
+    expect_equal(res[[1]]$result, 1:1e5)
+})
+
 evalsOptions('cache.dir',  cache.dir)
 evalsOptions('graph.dir',  graph.dir)
 setwd(wd)
