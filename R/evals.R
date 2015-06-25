@@ -1063,6 +1063,8 @@ evals <- function(txt, parse = TRUE, cache = TRUE, cache.mode = c('environment',
                     params <- list(result, fn[[-1]])
                     fn <- fn[[1]]
                 }
+                if (areWeLogging)
+                    flog.trace(paste('Calling hook for', class(result)), name = log)
                 result <- do.call(fn, params)
             } else {
                 if ('default' %in% names(hooks)) {
@@ -1071,6 +1073,8 @@ evals <- function(txt, parse = TRUE, cache = TRUE, cache.mode = c('environment',
                         params <- list(result, fn[[-1]])
                         fn <- fn[[1]]
                     }
+                    if (areWeLogging)
+                        flog.trace('Calling default hook', name = log)
                     result <- do.call(fn, params)
                 }
             }
@@ -1132,6 +1136,8 @@ evals <- function(txt, parse = TRUE, cache = TRUE, cache.mode = c('environment',
                             file.copy(sprintf('%s-hires.%s', file.name, graph.output), paste0(cached, '-hires.', graph.output))
 
                     }
+                    if (areWeLogging)
+                        flog.trace('Cached result', name = log)
                 }
 
             } else {
@@ -1145,6 +1151,8 @@ evals <- function(txt, parse = TRUE, cache = TRUE, cache.mode = c('environment',
                     if (length(changed) > 0)
                         assign(cached, mget(changed, envir = env), envir = cached.environments)
 
+                    if (areWeLogging)
+                        flog.trace('Cached result', name = log)
                 }
             }
         }
