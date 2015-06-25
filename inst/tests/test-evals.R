@@ -206,6 +206,51 @@ test_that('long lines with line breaks', {
     expect_that(length(evals('x <- "this is a very-very looooooooooong line which might be split on `parse`, but that is not a big deal at all"\nx\n1')), equals(3))
 })
 
+
+test_that('cache.dir option works correctly', {
+    dir <- tempdir()
+    suppressWarnings(file.remove(list.files(dir)))
+    t1 <- system.time(evals('1:1e5', cache.mode = 'disk', cache.dir = dir, cache.time = 0))
+    lf <- list.files(dir)
+    expect_true(length(lf) > 0)
+    t2 <- system.time(evals('1:1e5', cache.mode = 'disk', cache.dir = dir, cache.time = 0))
+    expect_equal(list.files(dir), lf)
+    # plots
+    suppressWarnings(file.remove(list.files(dir)))
+    t1 <- system.time(evals('plot(mtcars)', cache.mode = 'disk', cache.dir = dir, cache.time = 0, cache.copy.images = T))
+    lf <- list.files(dir)
+    expect_true(length(lf) > 0)
+    t2 <- system.time(evals('plot(mtcars)', cache.mode = 'disk', cache.dir = dir, cache.time = 0, cache.copy.images = T))
+    expect_equal(list.files(dir), lf)
+})
+
+test_that('caching works correctly', { # tests to cover code in caching
+    env <- new.env()
+    evals('x <- 1:10', env = env, cache.time = 0)
+    expect_true(length(ls(pander:::cached.results)) > 0)
+    evals('x <- 1:100', env = env, cache.time = 0)
+    res <- evals('x', env = env)
+    expect_equal(res[[1]]$result, 1:100)
+    t1 <- system.time(evals('plot(mtcars)', hi.res = T))
+    lf <- list.files('plots')
+    t2 <- system.time(evals('plot(mtcars)', hi.res = T))
+    expect_equal(list.files('plots'), lf)
+})
+
+test_that('plots', {
+    r1 <- evals('ggplot(mtcars, aes(wt, mpg)) + geom_point() + geom_smooth(aes(wt,mpg), method = lm, se=FALSE)', graph.unify = T)
+    r2 <- evals('xyplot(wt ~ mpg, mtcars, type = c("p","smooth"))', graph.unify = T)
+    expect_equal(r1$type, r2$type)
+    dir <- 'temp'
+    r1 <- evals('plot(mtcars)', graph.recordplot = T, cache.time = 0, cache.copy.images = T, cache.mode = 'disk', cache.dir = dir)
+    lf <- list.files(dir)
+    expect_true(length(list.files(dir, pattern = "recordedplot$")) > 0)
+    png(filename=file.path(dir, "recorded.png"))
+    redraw.recordedplot(list.files(dir, pattern = "recordedplot$", full.names = T)[1])
+    dev.off()
+    expect_equal(length(lf) + 1, length(list.files(dir)))
+})
+
 evalsOptions('cache.dir',  cache.dir)
 evalsOptions('graph.dir',  graph.dir)
 setwd(wd)
