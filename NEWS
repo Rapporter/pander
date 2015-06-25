@@ -2,7 +2,7 @@ pander DEV (xxxx-xx-xx)
 ----------------------------------------------------------------
 
 New fetures:
- * 
+ * added logging for evals using futile.logger (#124)
 
 Fixes:
  * correct rendering for empty objects (#180)

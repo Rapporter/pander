@@ -14,7 +14,7 @@ eval.msgs(src, env = NULL, showInvisible = FALSE,
 
 \item{showInvisible}{return \code{invisible} results?}
 
-\item{graph.unify}{boolean (default: \code{FALSE}) that determines if \code{evals} should try to unify the style of (\code{base}, \code{lattice} and \code{ggplot2}) plots? If set to \code{TRUE}, some \code{panderOptions()} would apply.}
+\item{graph.unify}{should \code{eval.msgs} try to unify the style of (\code{lattice} and \code{ggplot2}) plots? If set to \code{TRUE} (by default), some \code{panderOptions()} would apply. Please note that this argument has no effect on \code{base} plots, use \code{evals} instead.}
 }
 \value{
 a list of parsed elements each containing: \code{src} (the command run), \code{result} (R object: \code{NULL} if nothing returned), \code{print}ed \code{output}, \code{type} (class of returned object if any), informative/wawrning and error messages (if any returned by the command run, otherwise set to \code{NULL}) and possible \code{stdout}t value. See Details above.
