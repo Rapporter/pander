@@ -93,7 +93,7 @@ Returned result values: list with the following elements
     \item \emph{src} - character vector of specified R code.
     \item \emph{result} - result of evaluation. \code{NULL} if nothing is returned. If any R code returned an R object while evaluating then the \emph{last} R object will be returned as a raw R object. If a graph is plotted in the given text, the returned object is a string (with \code{class} set to \code{image}) specifying the path to the saved image file. If graphic device was touched, then no other R objects will be returned.
      \item \emph{output} - character vector of printed version (\code{capture.output}) of \code{result}
-    \item \emph{type} - class of generated output. "NULL" if nothing is returned, "error" if some error occurred.
+    \item \emph{type} - class of generated output. 'NULL' if nothing is returned, 'error' if some error occurred.
     \item \emph{msg} - possible messages grabbed while evaluating specified R code with the following structure:
     \itemize{
         \item \emph{messages} - character vector of possible diagnostic message(s)
@@ -128,9 +128,9 @@ Please check the examples carefully below to get a detailed overview of \code{\l
 # parsing several lines of R code
 txt <- readLines(textConnection('x <- rnorm(100)
   runif(10)
-  warning("Lorem ipsum foo-bar-foo!")
+  warning('Lorem ipsum foo-bar-foo!')
   plot(1:10)
-  qplot(rating, data = movies, geom = "histogram")
+  qplot(rating, data = movies, geom = 'histogram')
   y <- round(runif(100))
   cor.test(x, y)
   crl <- cor.test(runif(10), runif(10))
@@ -145,7 +145,7 @@ txt <- list('df <- mtcars',
 evals(txt)
 
 ## the same commands in one string but also evaluating the `plot` with `text`
-## (note the leading "+" on the beginning of `text...` line)
+## (note the leading '+' on the beginning of `text...` line)
 txt <- 'df <- mtcars
  plot(mtcars$hp, pch = 19)
  +text(mtcars$hp, label = rownames(mtcars), pos = 4)
@@ -242,7 +242,7 @@ evalsOptions('cache', TRUE)
 
 ## returning only a few classes
 txt <- readLines(textConnection('rnorm(100)
-  list(x = 10:1, y = "Godzilla!")
+  list(x = 10:1, y = 'Godzilla!')
   c(1,2,3)
    matrix(0,3,5)'))
 evals(txt, classes = 'numeric')

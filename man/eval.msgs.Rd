@@ -28,7 +28,7 @@ This function takes text(s) of R code and \code{eval}s all at one run - returnin
     \item \emph{src} - character vector of specified R code.
     \item \emph{result} - result of evaluation. \code{NULL} if nothing is returned. If any R code returned an R object while evaluating then the \emph{last} R object will be returned as a raw R object. If a graph is plotted in the end of the given R code (remember: \emph{last} R object), it would be automatically printed (see e.g. \code{lattice} and \code{ggplot2}).
      \item \emph{output} - character vector of printed version (\code{capture.output}) of \code{result}
-    \item \emph{type} - class of generated output. "NULL" if nothing is returned, "error" if some error occurred.
+    \item \emph{type} - class of generated output. 'NULL' if nothing is returned, 'error' if some error occurred.
     \item \emph{msg} - possible messages grabbed while evaluating specified R code with the following structure:
     \itemize{
         \item \emph{messages} - character vector of possible diagnostic message(s)
