@@ -30,6 +30,7 @@ Suggests:
     lattice,
     ggplot2 (>= 0.9.2),
     koRpus,
+    futile.logger,
     survival,
     microbenchmark,
     zoo,

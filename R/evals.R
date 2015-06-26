@@ -424,6 +424,7 @@ eval.msgs <- function(src, env = NULL, showInvisible = FALSE, graph.unify = eval
 #' @param graph.env save the environments in which plots were generated to distinct files (based on \code{graph.name}) with \code{env} extension?
 #' @param graph.recordplot save the plot via \code{recordPlot} to distinct files (based on \code{graph.name}) with \code{recodplot} extension?
 #' @param graph.RDS save the raw R object returned (usually with \code{lattice} or \code{ggplot2}) while generating the plots to distinct files (based on \code{graph.name}) with \code{RDS} extension?
+#' @param log an optionally passed \emph{logger name} from \pkg{futile.logger} to record all info, trace, debug and error messages. Logging to the console can be done by specifying e.g. \code{flog.namespace()}, and log to a file by previously calling \code{flog.appender} and \code{appender.file} on the given \emph{logger name}.
 #' @param ... optional parameters passed to graphics device (e.g. \code{bg}, \code{pointsize} etc.)
 #' @return a list of parsed elements each containing: \code{src} (the command run), \code{result} (R object: \code{NULL} if nothing returned, path to image file if a plot was generated), \code{print}ed \code{output}, \code{type} (class of returned object if any), informative/wawrning and error messages (if any returned by the command run, otherwise set to \code{NULL}) and possible \code{stdout}t value. See Details above.
 #' @seealso \code{\link{eval.msgs}} \code{\link{evalsOptions}}
@@ -600,10 +601,26 @@ eval.msgs <- function(src, env = NULL, showInvisible = FALSE, graph.unify = eval
 #' # note: if you had not specified 'myenv', the second 'evals' would have failed
 #' evals('x <- c(0,10)')
 #' evals('mean(x)')
+#'
+#' # log
+#' x <- evals('1:10', log = 'foo')
+#' # trace log
+#' evalsOptions('cache.time', 0)
+#' x <- evals('1:10', log = 'foo')
+#' x <- evals('1:10', log = 'foo')
+#' # log to file
+#' t <- tempfile()
+#' flog.appender(appender.file(t), name = 'evals')
+#' x <- evals('1:10', log = 'evals')
+#' readLines(t)
+#' # permanent log for all events
+#' evalsOptions('log', 'evals')
+#' flog.threshold(TRACE, 'evals')
+#' evals('foo')
 #' }
 #' @export
 #' @importFrom digest digest
-evals <- function(txt, parse = TRUE, cache = TRUE, cache.mode = c('environment', 'disk'), cache.dir = '.cache', cache.time = 0.1, cache.copy.images = FALSE, showInvisible = FALSE, classes = NULL, hooks = NULL, length = Inf, output = c('all', 'src', 'result', 'output', 'type', 'msg', 'stdout'), env = NULL, graph.unify = evalsOptions('graph.unify'), graph.name = '%t', graph.dir = 'plots', graph.output = c('png', 'bmp', 'jpeg', 'jpg', 'tiff', 'svg', 'pdf', NA), width = 480, height = 480, res= 72, hi.res = FALSE, hi.res.width = 960, hi.res.height = 960*(height/width), hi.res.res = res*(hi.res.width/width), graph.env = FALSE, graph.recordplot = FALSE, graph.RDS = FALSE, ...){
+evals <- function(txt, parse = TRUE, cache = TRUE, cache.mode = c('environment', 'disk'), cache.dir = '.cache', cache.time = 0.1, cache.copy.images = FALSE, showInvisible = FALSE, classes = NULL, hooks = NULL, length = Inf, output = c('all', 'src', 'result', 'output', 'type', 'msg', 'stdout'), env = NULL, graph.unify = evalsOptions('graph.unify'), graph.name = '%t', graph.dir = 'plots', graph.output = c('png', 'bmp', 'jpeg', 'jpg', 'tiff', 'svg', 'pdf', NA), width = 480, height = 480, res= 72, hi.res = FALSE, hi.res.width = 960, hi.res.height = 960*(height/width), hi.res.res = res*(hi.res.width/width), graph.env = FALSE, graph.recordplot = FALSE, graph.RDS = FALSE, log = evalsOptions('log'), ...) {
 
     if (missing(txt))
         stop('No R code provided to evaluate!')
@@ -617,8 +634,9 @@ evals <- function(txt, parse = TRUE, cache = TRUE, cache.mode = c('environment',
     }
 
     ## lame constants
-    doAddGrid <- TRUE
-    updateFg  <- TRUE
+    doAddGrid    <- TRUE
+    updateFg     <- TRUE
+    areWeLogging <- !is.null(log) && require(futile.logger)
 
     ## parse provided code after concatenating
     if (parse) {
@@ -694,6 +712,10 @@ evals <- function(txt, parse = TRUE, cache = TRUE, cache.mode = c('environment',
 
     ## main loop
     lapply(txt, function(src) {
+
+        ## log R expression
+        if (areWeLogging)
+            flog.info(paste('Command run:', gsub('[ ]+', ' ', gsub('\n', ' ', src))), name = log)
 
         if (!is.na(graph.output)) {
 
@@ -835,21 +857,29 @@ evals <- function(txt, parse = TRUE, cache = TRUE, cache.mode = c('environment',
 
                         cached.result$result <- file
                         class(cached.result$result) <- 'image'
+                        if (areWeLogging)
+                            flog.trace(paste('Image copied from cache:', file), name = log)
                         return(cached.result)
 
                     } else {
 
                         ## we are checking in plots' dir if the img file exists
                         cached.image.file <- as.character(cached.result$result)
-                        if (file.exists(cached.image.file))
+                        if (file.exists(cached.image.file)) {
+                            if (areWeLogging)
+                                flog.trace(paste('Image found in cache:', cached.image.file), name = log)
                             return(cached.result)
-                        else
+                        } else {
                             warning(sprintf('The image file referenced in cache (%s) is no longer available: the image is recreated (%s).', shQuote(cached.image.file), shQuote(file)), call. = FALSE)
+                        }
 
                     }
 
-                } else
+                } else {
+                    if (areWeLogging)
+                        flog.trace('Returning cached R object.', name = log)
                     return(cached.result)
+                }
 
             } # cached result not found
 
@@ -941,6 +971,8 @@ evals <- function(txt, parse = TRUE, cache = TRUE, cache.mode = c('environment',
             class(res) <- 'evals'
             if ('plot.new has not been called yet' %in% res$msg$errors)
                 res$msg$errors <- 'plot.new has not been called yet - Please note that all R commands are parsed and evaluated separately. To override this default behavior, add a plus sign (+) as the first character of the line(s) to evaluate with the prior one(s).'
+            if (areWeLogging)
+                flog.error(res$msg$errors, name = log)
             return(res)
         }
 
@@ -948,6 +980,10 @@ evals <- function(txt, parse = TRUE, cache = TRUE, cache.mode = c('environment',
 
         ## we have a graph
         if (is.character(graph)) {
+
+            ## log image file name
+            if (areWeLogging)
+                flog.trace(paste('Image file written:', file), name = log)
 
             ## save recorded plot on demand
             if (graph.recordplot)
@@ -1027,6 +1063,8 @@ evals <- function(txt, parse = TRUE, cache = TRUE, cache.mode = c('environment',
                     params <- list(result, fn[[-1]])
                     fn <- fn[[1]]
                 }
+                if (areWeLogging)
+                    flog.trace(paste('Calling hook for', class(result)), name = log)
                 result <- do.call(fn, params)
             } else {
                 if ('default' %in% names(hooks)) {
@@ -1035,6 +1073,8 @@ evals <- function(txt, parse = TRUE, cache = TRUE, cache.mode = c('environment',
                         params <- list(result, fn[[-1]])
                         fn <- fn[[1]]
                     }
+                    if (areWeLogging)
+                        flog.trace('Calling default hook', name = log)
                     result <- do.call(fn, params)
                 }
             }
@@ -1096,6 +1136,8 @@ evals <- function(txt, parse = TRUE, cache = TRUE, cache.mode = c('environment',
                             file.copy(sprintf('%s-hires.%s', file.name, graph.output), paste0(cached, '-hires.', graph.output))
 
                     }
+                    if (areWeLogging)
+                        flog.trace('Cached result', name = log)
                 }
 
             } else {
@@ -1109,11 +1151,32 @@ evals <- function(txt, parse = TRUE, cache = TRUE, cache.mode = c('environment',
                     if (length(changed) > 0)
                         assign(cached, mget(changed, envir = env), envir = cached.environments)
 
+                    if (areWeLogging)
+                        flog.trace('Cached result', name = log)
                 }
             }
         }
 
-        return(res)
+        ## log
+        if (areWeLogging) {
+            if (!is.null(res$msg$warnings))
+                flog.warn(res$msg$warnings, name = log)
+            if (!is.null(res$result) && res$type != 'image')
+                flog.debug(paste0(
+                    'Returned object: class = ',
+                    res$type,
+                    ', length = ',
+                    length(res$result),
+                    ', dim = ',
+                    paste(dim(res$result), collapse = '/'),
+                    ', size = ',
+                    object.size(res$result),
+                    ' bytes'
+                ), name = log)
+        }
+
+        ## return
+        res
 
     })
 }
