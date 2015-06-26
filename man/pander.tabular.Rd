@@ -21,22 +21,4 @@
 \description{
 Renders an tabular object in Pandoc's markdown.
 }
-\examples{
-library(tables)
-pander(tabular(as.factor(am) ~ (mpg+hp+qsec) * (mean+median), data = mtcars), split.tables = Inf)
-pander(tabular( (Species + 1) ~ (n=1) + Format(digits=2)*
-(Sepal.Length + Sepal.Width)*(mean + sd), data=iris ), split.tables = Inf)
-Sex <- factor(sample(c("Male", "Female"), 100, rep=TRUE))
-Status <- factor(sample(c("low", "medium", "high"), 100, rep=TRUE))
-z <- rnorm(100)+5
-fmt <- function(x) {
-   s <- format(x, digits=2)
-   even <- ((1:length(s)) \%\% 2) == 0
-   s[even] <- sprintf("(\%s)", s[even])
-   s
-}
-tab <- tabular( Justify(c)*Heading()*z*Sex*Heading(Statistic)*Format(fmt())*(mean+sd)
-               ~ Status )
-pander(tab, emphasize.rownames = FALSE)
-}
 
