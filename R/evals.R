@@ -1121,28 +1121,18 @@ evals <- function(txt, parse = TRUE, cache = TRUE, cache.mode = c('environment',
 
         ## run hooks if specified
         if (!is.null(hooks)) {
-            if (inherits(result, names(hooks))) {
-                fn <- hooks[[class(result)]]; params <- list(result)
+            hook.name <- ifelse(inherits(result, names(hooks)), class(result), 'default')
+            fn <- hooks[[hook.name]];
+            params <- list(result)
+            if (!is.null(fn)) {
                 if (is.list(fn)) {
                     params <- list(result, fn[[-1]])
                     fn <- fn[[1]]
                 }
                 if (areWeLogging) {
-                    flog.trace(paste('Calling hook for', class(result)), name = log)
+                    flog.trace(paste('Calling hook for', hook.name), name = log)
                 }
                 result <- do.call(fn, params)
-            } else {
-                if ('default' %in% names(hooks)) {
-                    fn <- hooks[['default']]; params <- list(result)
-                    if (is.list(fn)) {
-                        params <- list(result, fn[[-1]])
-                        fn <- fn[[1]]
-                    }
-                    if (areWeLogging) {
-                        flog.trace('Calling default hook', name = log)
-                    }
-                    result <- do.call(fn, params)
-                }
             }
         }
 
