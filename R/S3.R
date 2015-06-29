@@ -160,7 +160,7 @@ pander.vector <- function(x, ...) {
 #' @param ... ignored parameters
 #' @export
 pander.logical <- function(x, ...)
-    pander.vector(x, ...) 
+    pander.vector(x, ...)
 
 
 #' Pander method for numeric class
@@ -745,11 +745,11 @@ pander.mtable <- function(x, caption = attr(x, 'caption'), ...) {
     k <- nrows.coefs / row.size
     if (k == 1)
         horizontal <- TRUE
-    
+
     zeros <- rep(0, (col.size) * (row.size))
     temp <- matrix(zeros, ncol = (col.size))
     temp <- as.table(temp)
-    
+
     if (horizontal) {
         for (i in 1:row.size) {
             s <- coefs[i, ]
@@ -973,8 +973,15 @@ pander.formula <- function(x, max.width = 80, caption = attr(x, 'caption'), ...)
 #' @param ... optional parameters passed to raw \code{pandoc.formula} function
 #' @export
 pander.call <- function(x, ...)
-    pander.formula(x, ...)
+    pandoc.verbatim(deparse(x))
 
+#' Pander method for name class
+#'
+#' Prints a call object in Pandoc's markdown.
+#' @param x a name language object
+#' @export
+pander.name <- function(x, ...)
+    pander(deparse(x))
 
 #' Pander method for coxph class
 #'
@@ -996,7 +1003,7 @@ pander.coxph <- function(x, caption = attr(x, 'caption'), ...) {
         cat("  Coxph failed.", x$fail, "\n")
         return(invisible())
     }
-    
+
     beta <- x$coef
     se <- sqrt(diag(x$var))
 
@@ -1016,7 +1023,7 @@ pander.coxph <- function(x, caption = attr(x, 'caption'), ...) {
     } else {
         df <- round(sum(x$df), 2)
     }
-    
+
     cat('Likelihood ratio test=', format(round(logtest, 2)), '  on ', df, ' df,', ' p=', format(1 - pchisq(logtest, df)), sep = '')
 
     omit <- x$na.action
@@ -1100,7 +1107,7 @@ pander.summary.lme <- function(x, caption = attr(x, 'caption'), summary = TRUE, 
     res <- as.data.frame(x$tTable)
     if (summary) {
         pandoc.table(res, caption = pandoc.formula.return(x$call$fixed, text = 'Fixed effects: '), split.tables = Inf, ...)
-        pandoc.table(x$residuals, caption = 'Standardized Within-Group Residuals') 
+        pandoc.table(x$residuals, caption = 'Standardized Within-Group Residuals')
         pandoc.table(data.frame(
             'Observations'        = x$dims[["N"]],
             'Groups'              = x$dims$ngrps[1:x$dims$Q],
@@ -1118,7 +1125,7 @@ pander.summary.lme <- function(x, caption = attr(x, 'caption'), summary = TRUE, 
 #' @param caption caption (string) to be shown under the table
 #' @param ... optional parameters passed to raw \code{pandoc.table} function
 #' @export
-pander.lme <- function(x, caption = attr(x, 'caption'), ...) 
+pander.lme <- function(x, caption = attr(x, 'caption'), ...)
     pander(summary(x), caption = caption, summary = FALSE, ...)
 
 
