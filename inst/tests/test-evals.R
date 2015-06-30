@@ -12,11 +12,12 @@ evalsOptions('graph.dir',  file.path(tempdir(), 'plots'))
 context('eval.msgs')
 
 test_that('returns', {
-    expect_that(eval.msgs('1:5')$result, equals(1:5))
-    expect_that(eval.msgs('mtcars')$result, equals(mtcars))
-    expect_that(eval.msgs('x <- mtcars')$result, equals(NULL))
-    expect_that(evals('plot(mtcars)')$result, equals(NULL))
-    expect_that(eval.msgs('cat(1:5);1:5')$result, equals(1:5))
+    expect_equal(eval.msgs('1:5')$result, 1:5)
+    expect_equal(eval.msgs('mtcars')$result, mtcars)
+    expect_null(eval.msgs('x <- mtcars')$result)
+    expect_null(evals('plot(mtcars)')$result)
+    expect_equal(eval.msgs('cat(1:5);1:5')$result, 1:5)
+    expect_null(eval.msgs('#comment')$result)
 })
 
 test_that('messages', {
@@ -55,6 +56,14 @@ test_that('errors', {
     expect_that(eval.msgs('runiff(2)')$msg$errors, is_a('character'))
     expect_that(eval.msgs('runif would be nice to run')$msg$errors, is_a('character'))
     expect_that(eval.msgs('no.R.object.like.that')$msg$errors, is_a('character'))
+    expect_error(evals())
+    expect_error(evals('1:5', cache.mode = 'disk', cache.dir = '/usr/123'))
+    expect_error(evals('1:5', graph.dir = '/usr/123'))
+    expect_error(evals('1:5', hooks=1:10))
+    expect_error(evals('plot(mtcars)', graph.name = 1))
+    env <- new.env()
+    env$plot <- 1
+    expect_error(evals(1:10, env = env))
 })
 
 test_that('output', {
