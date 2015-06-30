@@ -425,6 +425,11 @@ pandoc.list.return <- function(elements, style = c('bullet', 'ordered', 'roman')
                          'ordered' = paste0(1:elements.l, '. '),
                          'roman'   = paste0(as.roman(1:elements.l), '. '))
 
+    ## number of elements should be more than one
+    if (elements.l == 0) {
+        return('')
+    }
+
     ## recursive call
     i.lag <- 0
     res <- ifelse(add.line.breaks, '\n', '')
@@ -748,7 +753,7 @@ pandoc.table.return <- function(t, caption, digits = panderOptions('digits'), de
             return(invisible())
         }
     }
-    
+
     ## check correct split.cells param
     if (length(split.cells) == 0) {
         warning("split.cells is a vector of length 0, reverting to default value")
@@ -891,7 +896,7 @@ pandoc.table.return <- function(t, caption, digits = panderOptions('digits'), de
         t <- apply(t, c(1,2), function(x) gsub("\\|", "\\\\|", x))
         t.rownames <- sapply(t.rownames, function(x) gsub("\\|", "\\\\|", x))
     }
-    
+
     t <- split.large.cells(t)
 
     ## re-set col/rownames to be passed to split tables
