@@ -18,6 +18,7 @@ test_that('returns', {
     expect_null(evals('plot(mtcars)')$result)
     expect_equal(eval.msgs('cat(1:5);1:5')$result, 1:5)
     expect_null(eval.msgs('#comment')$result)
+    expect_null(eval.msgs('')$result)
 })
 
 test_that('messages', {
@@ -258,6 +259,23 @@ test_that('plots', {
     redraw.recordedplot(list.files(dir, pattern = "recordedplot$", full.names = T)[1])
     dev.off()
     expect_equal(length(lf) + 1, length(list.files(dir)))
+})
+
+test_that('hooks work correctly', {
+    set.seed(1)
+    txt <- 'runif(1:4); matrix(runif(25), 5, 5); 1:5'
+    hooks <- list('numeric' = round, 'matrix' = pander_return)
+    res <- evals(txt, hooks = hooks)
+    set.seed(1)
+    expect_equal(res[[1]]$result, round(runif(1:4)))
+    expect_equal(res[[2]]$result, pander_return(matrix(runif(25), 5, 5)))
+    ## using pander's default hook
+    set.seed(1)
+    res <- evals(txt, hooks = list('default' = pander_return))
+    set.seed(1)
+    expect_equal(res[[1]]$result, pander_return(runif(1:4)))
+    expect_equal(res[[2]]$result, pander_return(matrix(runif(25), 5, 5)))
+    expect_equal(res[[3]]$result, pander_return(1:5))
 })
 
 evalsOptions('cache.dir',  cache.dir)

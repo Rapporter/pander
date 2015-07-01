@@ -698,7 +698,7 @@ evals <- function(txt, parse = TRUE, cache = TRUE, cache.mode = c('environment',
         output <- c('src', 'result', 'output', 'type', 'msg', 'stdout')
     }
 
-    if (!is.null(hooks) && is.list(hooks)) {
+    if (!is.null(hooks) && !is.list(hooks)) {
         stop('Wrong list of hooks provided!')
     }
 
@@ -922,9 +922,7 @@ evals <- function(txt, parse = TRUE, cache = TRUE, cache.mode = c('environment',
         ## clear graphics device (if there would be any open)
         clear.devs <- function() {
             if (!is.na(graph.output)) {
-                while (!is.null(dev.list())) {
-                    dev.off(as.numeric(dev.list()[1]))
-                }
+                sapply(dev.list(), dev.off)
             }
         }
         clear.devs()
@@ -1120,10 +1118,6 @@ evals <- function(txt, parse = TRUE, cache = TRUE, cache.mode = c('environment',
             fn <- hooks[[hook.name]];
             params <- list(result)
             if (!is.null(fn)) {
-                if (is.list(fn)) {
-                    params <- list(result, fn[[-1]])
-                    fn <- fn[[1]]
-                }
                 if (areWeLogging) {
                     flog.trace(paste('Calling hook for', hook.name), name = log)
                 }
