@@ -278,6 +278,14 @@ test_that('hooks work correctly', {
     expect_equal(res[[3]]$result, pander_return(1:5))
 })
 
+test_that('output param works correctly', {
+    res <- evals('1:10', output = 'all')
+    expect_equal(names(res[[1]]), c('src', 'result', 'output', 'type', 'msg', 'stdout'))
+    res <- evals('1:10', output = c('src', 'result'))
+    expect_equal(names(res[[1]]), c('src', 'result'))
+    expect_error(evals('1:10', output = c('src', 'result', '123')))
+})
+
 evalsOptions('cache.dir',  cache.dir)
 evalsOptions('graph.dir',  graph.dir)
 setwd(wd)

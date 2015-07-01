@@ -178,9 +178,8 @@ eval.msgs <- function(src, env = NULL, showInvisible = FALSE, graph.unify = eval
                             })
                     ## legend
                     if (!is.null(rv$legend)) {
-                        l <- rv$legend[1]
-                        names(l) <- panderOptions('graph.legend.position')
-                        rv$legend <- l
+                        rv$legend <- rv$legend[1]
+                        names(rv$legend) <- panderOptions('graph.legend.position')
                     }
 
                 }
@@ -625,7 +624,11 @@ eval.msgs <- function(src, env = NULL, showInvisible = FALSE, graph.unify = eval
 #' }
 #' @export
 #' @importFrom digest digest
-evals <- function(txt, parse = TRUE, cache = TRUE, cache.mode = c('environment', 'disk'), cache.dir = '.cache', cache.time = 0.1, cache.copy.images = FALSE, showInvisible = FALSE, classes = NULL, hooks = NULL, length = Inf, output = c('all', 'src', 'result', 'output', 'type', 'msg', 'stdout'), env = NULL, graph.unify = evalsOptions('graph.unify'), graph.name = '%t', graph.dir = 'plots', graph.output = c('png', 'bmp', 'jpeg', 'jpg', 'tiff', 'svg', 'pdf', NA), width = 480, height = 480, res= 72, hi.res = FALSE, hi.res.width = 960, hi.res.height = 960*(height/width), hi.res.res = res*(hi.res.width/width), graph.env = FALSE, graph.recordplot = FALSE, graph.RDS = FALSE, log = evalsOptions('log'), ...) {
+evals <- function(txt, parse = TRUE, cache = TRUE, cache.mode = c('environment', 'disk'), cache.dir = '.cache', cache.time = 0.1, cache.copy.images = FALSE, 
+                  showInvisible = FALSE, classes = NULL, hooks = NULL, length = Inf, output = evalsOptions('output'), env = NULL, 
+                  graph.unify = evalsOptions('graph.unify'), graph.name = '%t', graph.dir = 'plots', graph.output = c('png', 'bmp', 'jpeg', 'jpg', 'tiff', 'svg', 'pdf', NA), 
+                  width = 480, height = 480, res= 72, hi.res = FALSE, hi.res.width = 960, hi.res.height = 960*(height/width), hi.res.res = res*(hi.res.width/width), 
+                  graph.env = FALSE, graph.recordplot = FALSE, graph.RDS = FALSE, log = evalsOptions('log'), ...) {
 
     if (missing(txt)) {
         stop('No R code provided to evaluate!')
@@ -693,9 +696,10 @@ evals <- function(txt, parse = TRUE, cache = TRUE, cache.mode = c('environment',
     }
 
     ## check provided parameters
-    output <- match.arg(output, several.ok = TRUE)
-    if (sum(grepl('all', output)) > 0) {
+    if ('all' %in% output) {
         output <- c('src', 'result', 'output', 'type', 'msg', 'stdout')
+    } else if (length(setdiff(output, c('src', 'result', 'output', 'type', 'msg', 'stdout'))) != 0) {
+        stop("Wrong parameter supplied to output")
     }
 
     if (!is.null(hooks) && !is.list(hooks)) {
