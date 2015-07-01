@@ -682,17 +682,14 @@ evals <- function(txt, parse = TRUE, cache = TRUE, cache.mode = c('environment',
     }
 
     ## check provided dirs
-    if (!identical(file.info(graph.dir)$isdir, TRUE)) {
-        if (!dir.create(graph.dir, showWarnings = FALSE, recursive = TRUE)) {
-            stop(sprintf('Something is definitely wrong with `graph.dir`: %s!', graph.dir))
-        }
+    if (!identical(file.info(graph.dir)$isdir, TRUE) &&
+        !dir.create(graph.dir, showWarnings = FALSE, recursive = TRUE)) {
+        stop(sprintf('Something is definitely wrong with `graph.dir`: %s!', graph.dir))
     }
-    if (cache.mode == 'disk') {
-        if (!identical(file.info(cache.dir)$isdir, TRUE)) {
-            if (!dir.create(cache.dir, showWarnings = FALSE, recursive = TRUE)) {
+    if (cache.mode == 'disk' &&
+        !identical(file.info(cache.dir)$isdir, TRUE) &&
+        !dir.create(cache.dir, showWarnings = FALSE, recursive = TRUE)) {
                 stop(sprintf('Something is definitely wrong with `cache.dir`: %s!', cache.dir))
-            }
-        }
     }
 
     ## check provided parameters
@@ -701,7 +698,7 @@ evals <- function(txt, parse = TRUE, cache = TRUE, cache.mode = c('environment',
         output <- c('src', 'result', 'output', 'type', 'msg', 'stdout')
     }
 
-    if (!any(is.list(hooks), is.null(hooks))) {
+    if (!is.null(hooks) && is.list(hooks)) {
         stop('Wrong list of hooks provided!')
     }
 
@@ -717,13 +714,11 @@ evals <- function(txt, parse = TRUE, cache = TRUE, cache.mode = c('environment',
     }
 
     ## env for running all lines of code
-    if (is.null(env)) {
+    if (is.null(env) || !is.environment(env)) {
         env <- new.env()
     }
-    if (!is.environment(env)) {
-        stop('Wrong env parameter (not an environment) provided!')
-    }
-    for (p in c('plot', 'barplot', 'lines', 'pie', 'boxplot', 'polygon', 'points','legend', 'hist', 'pairs', 'stripchart')) {
+    for (p in c('plot', 'barplot', 'lines', 'pie', 'boxplot', 'polygon',
+                'points','legend', 'hist', 'pairs', 'stripchart')) {
         if (exists(p, envir = env, inherits = FALSE)) {
             stop(paste0('Using a reserved word as variable: `', p, '`'))
         }
@@ -823,19 +818,19 @@ evals <- function(txt, parse = TRUE, cache = TRUE, cache.mode = c('environment',
 
             getCallParts <- function(call) {
                 ## extracting each function's and variable's hash from the call
-                lapply(call, function(x)
-                       lapply(x, function(x) {
-                           x.deparse <- deparse(x)
+                lapply(call, function(x){
                            switch(mode(x),
-                                  'name' = hashOfEvalOrDeparse(x, x.deparse),
+                                  'name' = hashOfEvalOrDeparse(x, deparse(x)),
                                   'call' = getCallParts(x),
-                                  digest(x.deparse, 'sha1')
+                                  digest(deparse(x), 'sha1')
                                   )
-                       }))
+                       })
             }
 
             ## get the hash of the call based on the hash of all `names`
-            cached <- digest(list(call = getCallParts(parse(text = src)), storage = digest(list(storage, panderOptions(), evalsOptions()), 'sha1')), 'sha1')
+            cached <- digest(list(call = getCallParts(parse(text = src)),
+                                  storage = digest(list(storage, panderOptions(), evalsOptions()), 'sha1')),
+                             'sha1')
 
             if (cache.mode == 'disk') {
 
