@@ -284,6 +284,9 @@ test_that('output param works correctly', {
     res <- evals('1:10', output = c('src', 'result'))
     expect_equal(names(res[[1]]), c('src', 'result'))
     expect_error(evals('1:10', output = c('src', 'result', '123')))
+    res <- evals('matrix(5,5,5)',
+          hooks = list('matrix' = list(pander_return, 'Cap')))[[1]]$result
+    expect_equal(res[14], "Table: Cap")
 })
 
 evalsOptions('cache.dir',  cache.dir)

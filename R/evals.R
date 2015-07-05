@@ -1122,6 +1122,10 @@ evals <- function(txt, parse = TRUE, cache = TRUE, cache.mode = c('environment',
             fn <- hooks[[hook.name]];
             params <- list(result)
             if (!is.null(fn)) {
+                if (is.list(fn)) {
+                    params <- list(result, fn[[-1]])
+                    fn <- fn[[1]]
+                }
                 if (areWeLogging) {
                     flog.trace(paste('Calling hook for', hook.name), name = log)
                 }
