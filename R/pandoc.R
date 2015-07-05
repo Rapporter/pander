@@ -600,7 +600,7 @@ pandoc.table.return <- function(t, caption, digits = panderOptions('digits'), de
     to.plain.ascii <- function(x){
         x <- gsub("[\\\\]", "", x) # backslashes
         x <- gsub("&nbsp;", " ", x)  # table non-breaking space
-        x <- sub("[*]+([^\\*.]*)[*]+", "\\1", x) # emphasis and strong
+        x <- gsub("[*]+([^\\*.]*)[*]+", "\\1", x) # emphasis and strong
         x <- gsub("^[`]|[`]$", "", x) # verbatium
         x <- gsub("^[~]{2}|[~]{2}$", "", x) # strikeout
         gsub("^[_]|[_]$", "", x) # italic
@@ -828,20 +828,39 @@ pandoc.table.return <- function(t, caption, digits = panderOptions('digits'), de
     wm <- which(is.na(t), arr.ind = TRUE)
 
     ## round numbers & cut digits & apply decimal mark & optionally remove trailing zeros
+    digits <- check_digits(digits, 'digits', ncol(t))
+    # we need a temporary conversion of matrix to data.frame, because matrix columns
+    # can't be formated separately (as soon as first column is formatted all others are fomatted too).
+    # Formatting each column separately is needed to support digits and round params as vectors with values for each column.
+    temp.t <- if ("matrix" %in% class(t)) as.data.frame(t) else t
+    cln <- colnames(t)
     t.n <- as.numeric(which(apply(t, 2, is.numeric)))
     if (length(t.n) > 0) {
-        t[, t.n] <- apply(t[, t.n, drop = FALSE], 2, round, digits = round)
+        round <- check_digits(round, 'round', ncol(t))
+        # for-loop is needed to preserve row/col names and use index to get appropriate value from round vector
+        for (j in 1:ncol(temp.t)) {
+            if (j %in% t.n)
+                temp.t[, j] <- round(temp.t[, j], digits=round[j])
+        }
         if (!keep.trailing.zeros) {
-            t[, t.n] <- apply(t[, t.n, drop = FALSE], c(1,2), format, trim = TRUE, digits = digits, decimal.mark = decimal.mark, big.mark = big.mark)
+            # for-loop is needed to preserve row/col names and use index to get appropriate value from digits vector
+            for (j in 1:ncol(temp.t)) {
+                temp.t[, j] <- format(temp.t[, j], trim = TRUE, digits = digits[j], decimal.mark = decimal.mark, big.mark = big.mark)
+            }
         }
     }
 
     ## drop unexpected classes and revert back to a common format
     if (keep.trailing.zeros) {
-        t <- format(t, trim = TRUE, digits = digits, decimal.mark = decimal.mark, big.mark = big.mark)
+        # for-loop is needed to preserve row/col names and use index to get appropriate value from digits vector
+        for (j in 1:ncol(t)) {
+            temp.t[, j] <- format(temp.t[, j], trim = TRUE, digits = digits[j], decimal.mark = decimal.mark, big.mark = big.mark)
+        }
     } else {
-        t <- format(t, trim = TRUE)  ### here adds unneeded zero's
+        temp.t <- format(temp.t, trim = TRUE)  ### here adds unneeded zero's
     }
+    t <- as.matrix(temp.t)
+    colnames(t) <- cln
     ## force possible factors to character vectors
     wf <- which(sapply(t, is.factor))
     if (length(wf) > 0) {
@@ -854,28 +873,28 @@ pandoc.table.return <- function(t, caption, digits = panderOptions('digits'), de
     }
 
     ## adding formatting (emphasis, strong etc.)
-    if (!is.null(emphasize.rows)) {
+    if (!is.null(emphasize.rows) && !plain.ascii) {
         check.highlight.parameters(emphasize.rows, nrow(t))
         t[emphasize.rows, ] <- base::t(apply(t[emphasize.rows, , drop = FALSE], c(1), pandoc.emphasis.return))
     }
-    if (!is.null(emphasize.strong.rows)) {
+    if (!is.null(emphasize.strong.rows) && !plain.ascii) {
         check.highlight.parameters(emphasize.strong.rows, nrow(t))
         t[emphasize.strong.rows, ] <- base::t(apply(t[emphasize.strong.rows, , drop = FALSE], c(1), pandoc.strong.return))
     }
-    if (!is.null(emphasize.cols)) {
+    if (!is.null(emphasize.cols) && !plain.ascii) {
         check.highlight.parameters(emphasize.cols, ncol(t))
         t[, emphasize.cols] <- apply(t[, emphasize.cols, drop = FALSE], c(2), pandoc.emphasis.return)
     }
-    if (!is.null(emphasize.strong.cols)) {
+    if (!is.null(emphasize.strong.cols) && !plain.ascii) {
         check.highlight.parameters(emphasize.strong.cols, ncol(t))
         t[, emphasize.strong.cols] <- apply(t[, emphasize.strong.cols, drop = FALSE], c(2), pandoc.strong.return)
     }
-    if (!is.null(emphasize.cells)) {
+    if (!is.null(emphasize.cells) && !plain.ascii) {
         t <- as.matrix(t)
         check.highlight.parameters(emphasize.cells, nrow(t), ncol(t))
         t[emphasize.cells] <- pandoc.emphasis.return(t[emphasize.cells])
     }
-    if (!is.null(emphasize.strong.cells)) {
+    if (!is.null(emphasize.strong.cells) && !plain.ascii) {
         t <- as.matrix(t)
         check.highlight.parameters(emphasize.strong.cells, nrow(t), ncol(t))
         t[emphasize.strong.cells] <- pandoc.strong.return(t[emphasize.strong.cells])

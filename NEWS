@@ -3,6 +3,7 @@ pander DEV (xxxx-xx-xx)
 
 New fetures:
  * added logging for evals using futile.logger (#124)
+ * added support for digits/round as a vector(#146)
 
 Fixes:
  * correct rendering for empty objects (#180)
