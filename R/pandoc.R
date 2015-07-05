@@ -463,10 +463,10 @@ pandoc.list <- function(...)
 #' For more details please see the parameters above and passed arguments of \code{\link{panderOptions}}.
 #' @param t data frame, matrix or table
 #' @param caption caption (string) to be shown under the table
-#' @param digits passed to \code{format}
+#' @param digits passed to \code{format}. Can be a vector specifying values for each column.
 #' @param decimal.mark passed to \code{format}
 #' @param big.mark passed to \code{format}
-#' @param round passed to \code{round}
+#' @param round passed to \code{round}. Can be a vector specifying values for each column.
 #' @param missing string to replace missing values
 #' @param justify defines alignment in cells passed to \code{format}. Can be \code{left}, \code{right} or \code{centre}, which latter can be also spelled as \code{center}. Defaults to \code{centre}. Can be abbreviated to a string consisting of the letters \code{l}, \code{c} and \code{r} (e.g. 'lcr' instead of c('left', 'centre', 'right').
 #' @param style which Pandoc style to use: \code{simple}, \code{multiline}, \code{grid} or \code{rmarkdown}
