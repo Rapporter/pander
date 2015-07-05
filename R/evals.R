@@ -548,6 +548,14 @@ eval.msgs <- function(src, env = NULL, showInvisible = FALSE, graph.unify = eval
 #' ## and switch on later
 #' evalsOptions('cache', TRUE)
 #'
+#' ## evaluate assignments inside call to evals
+#' ## changes to environments are cached properly and retreived
+#' evalsOptions('cache.time', 0)
+#' x <- 2
+#' evals('x <- x^2')[[1]]$result
+#' evals('x <- x^2; x + 1')[[2]]$result
+#' evalsOptions('cache.time', 0.1)
+#'
 #' ## returning only a few classes
 #' txt <- readLines(textConnection('rnorm(100)
 #'   list(x = 10:1, y = 'Godzilla!')
@@ -858,7 +866,8 @@ evals <- function(txt, parse = TRUE, cache = TRUE, cache.mode = c('environment',
                     cached.result <- get(cached, envir = cached.results)
                 }
 
-                ## load the modified R objects of the cached code
+                ## if the cached expression changed the environment (for example assignment),
+                ## retrieve the respected changes too (see examples)
                 if (exists(cached, envir = cached.environments, inherits = FALSE)) {
                     cached.objs <- get(cached, envir = cached.environments)
                     sapply(names(cached.objs), function(x) assign(x, cached.objs[[x]], envir = env))
@@ -1208,7 +1217,8 @@ evals <- function(txt, parse = TRUE, cache = TRUE, cache.mode = c('environment',
                     ## save cached result
                     assign(cached, res, envir = cached.results)
 
-                    ## save the modified R objects of the cached code
+                    ## save changes to environment so when expression result is retreived from cache
+                    ## changes to environment will be retreived also (see example)
                     if (length(changed) > 0) {
                         assign(cached, mget(changed, envir = env), envir = cached.environments)
                     }
