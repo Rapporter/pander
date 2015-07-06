@@ -463,10 +463,10 @@ pandoc.list <- function(...)
 #' For more details please see the parameters above and passed arguments of \code{\link{panderOptions}}.
 #' @param t data frame, matrix or table
 #' @param caption caption (string) to be shown under the table
-#' @param digits passed to \code{format}. Can be a vector specifying values for each column.
+#' @param digits passed to \code{format}. Can be a vector specifying values for each column (has to be the same length as number of columns).
 #' @param decimal.mark passed to \code{format}
 #' @param big.mark passed to \code{format}
-#' @param round passed to \code{round}. Can be a vector specifying values for each column.
+#' @param round passed to \code{round}. Can be a vector specifying values for each column (has to be the same length as number of columns). Values for non-numeric columns will be disregarded.
 #' @param missing string to replace missing values
 #' @param justify defines alignment in cells passed to \code{format}. Can be \code{left}, \code{right} or \code{centre}, which latter can be also spelled as \code{center}. Defaults to \code{centre}. Can be abbreviated to a string consisting of the letters \code{l}, \code{c} and \code{r} (e.g. 'lcr' instead of c('left', 'centre', 'right').
 #' @param style which Pandoc style to use: \code{simple}, \code{multiline}, \code{grid} or \code{rmarkdown}
@@ -832,7 +832,11 @@ pandoc.table.return <- function(t, caption, digits = panderOptions('digits'), de
     # we need a temporary conversion of matrix to data.frame, because matrix columns
     # can't be formated separately (as soon as first column is formatted all others are fomatted too).
     # Formatting each column separately is needed to support digits and round params as vectors with values for each column.
-    temp.t <- if ("matrix" %in% class(t)) as.data.frame(t) else t
+    if (inherits(t, "matrix")) {
+      temp.t <- as.data.frame(t)
+    } else {
+      temp.t <- t
+    }
     cln <- colnames(t)
     t.n <- as.numeric(which(apply(t, 2, is.numeric)))
     if (length(t.n) > 0) {
@@ -840,7 +844,7 @@ pandoc.table.return <- function(t, caption, digits = panderOptions('digits'), de
         # for-loop is needed to preserve row/col names and use index to get appropriate value from round vector
         for (j in 1:ncol(temp.t)) {
             if (j %in% t.n)
-                temp.t[, j] <- round(temp.t[, j], digits=round[j])
+                temp.t[, j] <- round(temp.t[, j], digits = round[j])
         }
         if (!keep.trailing.zeros) {
             # for-loop is needed to preserve row/col names and use index to get appropriate value from digits vector
