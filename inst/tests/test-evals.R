@@ -12,11 +12,13 @@ evalsOptions('graph.dir',  file.path(tempdir(), 'plots'))
 context('eval.msgs')
 
 test_that('returns', {
-    expect_that(eval.msgs('1:5')$result, equals(1:5))
-    expect_that(eval.msgs('mtcars')$result, equals(mtcars))
-    expect_that(eval.msgs('x <- mtcars')$result, equals(NULL))
-    expect_that(evals('plot(mtcars)')$result, equals(NULL))
-    expect_that(eval.msgs('cat(1:5);1:5')$result, equals(1:5))
+    expect_equal(eval.msgs('1:5')$result, 1:5)
+    expect_equal(eval.msgs('mtcars')$result, mtcars)
+    expect_null(eval.msgs('x <- mtcars')$result)
+    expect_null(evals('plot(mtcars)')$result)
+    expect_equal(eval.msgs('cat(1:5);1:5')$result, 1:5)
+    expect_null(eval.msgs('#comment')$result)
+    expect_null(eval.msgs('')$result)
 })
 
 test_that('messages', {
@@ -55,6 +57,14 @@ test_that('errors', {
     expect_that(eval.msgs('runiff(2)')$msg$errors, is_a('character'))
     expect_that(eval.msgs('runif would be nice to run')$msg$errors, is_a('character'))
     expect_that(eval.msgs('no.R.object.like.that')$msg$errors, is_a('character'))
+    expect_error(evals())
+    expect_error(evals('1:5', cache.mode = 'disk', cache.dir = '/usr/123'))
+    expect_error(evals('1:5', graph.dir = '/usr/123'))
+    expect_error(evals('1:5', hooks=1:10))
+    expect_error(evals('plot(mtcars)', graph.name = 1))
+    env <- new.env()
+    env$plot <- 1
+    expect_error(evals(1:10, env = env))
 })
 
 test_that('output', {
@@ -249,6 +259,34 @@ test_that('plots', {
     redraw.recordedplot(list.files(dir, pattern = "recordedplot$", full.names = T)[1])
     dev.off()
     expect_equal(length(lf) + 1, length(list.files(dir)))
+})
+
+test_that('hooks work correctly', {
+    set.seed(1)
+    txt <- 'runif(1:4); matrix(runif(25), 5, 5); 1:5'
+    hooks <- list('numeric' = round, 'matrix' = pander_return)
+    res <- evals(txt, hooks = hooks)
+    set.seed(1)
+    expect_equal(res[[1]]$result, round(runif(1:4)))
+    expect_equal(res[[2]]$result, pander_return(matrix(runif(25), 5, 5)))
+    ## using pander's default hook
+    set.seed(1)
+    res <- evals(txt, hooks = list('default' = pander_return))
+    set.seed(1)
+    expect_equal(res[[1]]$result, pander_return(runif(1:4)))
+    expect_equal(res[[2]]$result, pander_return(matrix(runif(25), 5, 5)))
+    expect_equal(res[[3]]$result, pander_return(1:5))
+})
+
+test_that('output param works correctly', {
+    res <- evals('1:10', output = 'all')
+    expect_equal(names(res[[1]]), c('src', 'result', 'output', 'type', 'msg', 'stdout'))
+    res <- evals('1:10', output = c('src', 'result'))
+    expect_equal(names(res[[1]]), c('src', 'result'))
+    expect_error(evals('1:10', output = c('src', 'result', '123')))
+    res <- evals('matrix(5,5,5)',
+          hooks = list('matrix' = list(pander_return, 'Cap')))[[1]]$result
+    expect_equal(res[14], "Table: Cap")
 })
 
 evalsOptions('cache.dir',  cache.dir)

@@ -85,8 +85,8 @@ debug$nested      <- 0
 debug$nestedID    <- 0
 
 ## cache storage
-cached.results <- new.env()
-cached.environments <- new.env()
+cached.results <- new.env() # cache of results from evals
+cached.environments <- new.env() # cache of changes to the environment (assignments in particular)
 
 ## cache hash storage
 hash.cache.obj       <- new.env() # raw R objects of which hash was computed before
