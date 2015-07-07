@@ -18,14 +18,14 @@ Date: 2015-05-16
 URL: http://rapporter.github.io/pander
 BugReports: https://github.com/rapporter/pander/issues
 License: AGPL-3 | file LICENSE
-Depends:
+Depends: 
     R (>= 2.15.0)
-Imports:
+Imports: 
     methods,
     digest,
     tools,
     Rcpp
-Suggests:
+Suggests: 
     grid,
     lattice,
     ggplot2 (>= 0.9.2),
@@ -46,3 +46,4 @@ Suggests:
 SystemRequirements: pandoc (http://johnmacfarlane.net/pandoc) for exporting
     markdown files to other formats.
 LinkingTo: Rcpp
+VignetteBuilder: knitr

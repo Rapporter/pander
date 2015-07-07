@@ -1,0 +1,52 @@
+---
+title: "Evals"
+author: "Roman Tsegelskyi "
+date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Evals}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, echo = FALSE, message = FALSE}
+knitr::opts_chunk$set(collapse = T, comment = "#>")
+library(pander)
+```
+
+`evals` is aimed at collecting as much information as possible while evaluating R code. It can evaluate a character vector of R expressions, and it returns a list of captured information while running those:
+
+* `src` holds the R expression,
+* `result` contains the raw R object as is,
+* `output` represents how the R object is printed to the standard output,
+* `type` is the class of the returned R object,
+* `msg` is a list of possible messages captured while running the R expression and
+* `stdout` contains if anything was written to the standard output.
+
+Besides capturing evaluation information, `evals` is able to automatically identify if an R expression is returning anything to a graphical device, and can save the resulting image in a variety of file formats.
+
+Another interesting feature that `evals` provides is caching the results of evaluated expressions. For more details read the section about Caching.
+
+## Basic Usage
+
+Let's start with basic example of evaluating `1:10` and collecting all information about it:
+```{r}
+evals('1:10')
+```
+
+### Errors/Warings
+```{r}
+evals('x')[[1]]$msg
+```
+
+### Graps and Graphical Options
+
+### General graph capture
+
+### Style unification
+
+## Result Caching
+
+### How it works
+
+### Examples
