@@ -871,6 +871,9 @@ evals <- function(txt, parse = TRUE, cache = TRUE, cache.mode = c('environment',
                 if (exists(cached, envir = cached.environments, inherits = FALSE)) {
                     cached.objs <- get(cached, envir = cached.environments)
                     sapply(names(cached.objs), function(x) assign(x, cached.objs[[x]], envir = env))
+                    if (areWeLogging) {
+                        flog.trace('Restoring changes to environment by cached expression', name = log)
+                    }
                 }
 
             }
@@ -1220,6 +1223,9 @@ evals <- function(txt, parse = TRUE, cache = TRUE, cache.mode = c('environment',
                     ## save changes to environment so when expression result is retreived from cache
                     ## changes to environment will be retreived also (see example)
                     if (length(changed) > 0) {
+                        if (areWeLogging) {
+                            flog.trace('Caching changes to environment', name = log)
+                        }
                         assign(cached, mget(changed, envir = env), envir = cached.environments)
                     }
 

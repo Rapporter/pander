@@ -46,11 +46,38 @@ evals('1:10', output = c('result', 'output'))
 evals('x')[[1]]$msg
 ```
 
-### Graps and Graphical Options
-
-### General graph capture
+### Graphs and Graphical Options
 
 ### Style unification
+
+## Hooks
+
+`evals` provdes facilities to call user specified functions (hooks) for specific types of objects. It can be achieved by specifying `hooks` parameter with named list where names are object types and elements are functions to be called. For example image, you want to automatically `round` all `numeric` objects:
+
+```{r}
+evals('1:10/10', hooks = list('numeric' = round))[[1]]$result
+```
+
+Or `unlist` a `list`:
+
+```{r}
+evals('as.list(1:10)', hooks = list('list' = unlist))[[1]]$result
+```
+
+Hooks in `evals` are implemented using `do.call` logic, which also allows to supply parameters to each hook by making elements of `hooks` parameter lists where arguments start at second position. Extending previous examples:
+
+```{r}
+evals('1:10/10', hooks = list('numeric' = list(round, 1)))[[1]]$result
+```
+
+Or
+
+```{r}
+hooks <- list('numeric' = list(round, 2), 'matrix' = list(round, digits=1))
+res <- evals('1:10/1000; matrix(1:10/100, nrow=2)', hooks = hooks)
+res[[1]]$result
+res[[2]]$result
+```
 
 ## Logging
 
@@ -72,9 +99,9 @@ x <- evals('1:10', cache.time = 0)
 
 ```{r}
 t <- tempfile()
-flog.appender(appender.file(t), name = 'evals')
+#flog.appender(appender.file(t), name = 'evals')
 x <- evals('1:10', log = 'evals')
-readLines(t)
+#readLines(t)
 ```
 
 ````{r, echo = FALSE, message = FALSE}
@@ -96,11 +123,16 @@ x <- capture.output(appender.console())
 
 ### Examples
 
-Let's start with small example. We will set `cache.time` to 0, to cache all expressions regardless of time they took to evaluate.
+We will set `cache.time` to 0, to cache all expressions regardless of time they took to evaluate. We will also use the logging facilites described above to simplify the understanding of how caching works.
 
-```{r, echo = FALSE, message = FALSE}
+```{r}
 evalsOptions('cache.time', 0)
+evalsOptions('log', 'evals')
+flog.threshold(TRACE, 'evals')
 ```
+
+Let's start with small example.
+
 ```{r}
 system.time(evals('1:1e5'))
 system.time(evals('1:1e5'))
@@ -110,7 +142,7 @@ Since the hash for caching computed based on the *structure* and *content* of th
 
 ```{r}
 x <- mtcars$hp
-y <- 1e4
+y <- 1e3
 system.time(evals('sapply(rep(x, y), mean)'))
 ```
 
@@ -121,7 +153,7 @@ f <- sapply
 g <- rep
 h <- mean
 X <- mtcars$hp * 1
-Y <- 10000
+Y <- 1000
 system.time(evals('f(g(X, Y), h)'))
 ```
 
@@ -129,12 +161,20 @@ Another important feature of `evals` is that it takes notes the changes in the e
 
 ```{r}
 x <- 1
-system.time(evals('x <- 1:10; x[2] - 1'))
+res <- evals('x <- 1:10;')
 ```
 
-`x <- x + 2` will be cached, so if the same assignment occurs again we won't need to evaluate it. But what about the change of `x` when we get the result from the cache? `evals` takes care of that.
+`x <- 1:10` will be cached, so if the same assignment occurs again we won't need to evaluate it. But what about the change of `x` when we get the result from the cache? `evals` takes care of that. 
+
+So in the following example we can see that `x <- 1:10` is not evaluated, but retrieved from cache with the the change to `x` in the environment.
 
 ```{r}
-system.time(evals('x <- 1:10; x[3]'))
+evals('x <- 1:10; x[3]')[[2]]$result
 ```
 
+Also `evals` is able to cache output to graphical devices produces during evaluation:
+
+```{r}
+system.time(evals('plot(mtcars)'))
+system.time(evals('plot(mtcars)'))  
+```
