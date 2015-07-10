@@ -20,14 +20,14 @@ library(pander)
 * `result` contains the raw R object as is,
 * `output` represents how the R object is printed to the standard output,
 * `type` is the class of the returned R object,
-* `msg` is a list of possible messages captured while running the R expression and
+* `msg` is a list of possible messages captured while evaluating the R expression and. Among other messages, warnings/errors will appear here.
 * `stdout` contains if anything was written to the standard output.
 
 Besides capturing evaluation information, `evals` is able to automatically identify if an R expression is returning anything to a graphical device, and can save the resulting image in a variety of file formats.
 
-Another interesting feature that `evals` provides is caching the results of evaluated expressions. For more details read the section about Caching.
+Another interesting feature that `evals` provides is caching the results of evaluated expressions. For more details read the section about [caching](#result-caching).
 
-## Basic Usage
+`evals` has a large number of options, which allow users to customize the call exectly as needed. Here we will focus on most useful features, but full list of options with explanation can be view by calling `?evalsOptions`. Also `evals` support permanent options that will persist for all calls to `evals`, this can be acheived by calling `evalsOptions`.
 
 Let's start with basic example of evaluating `1:10` and collecting all information about it:
 
@@ -35,20 +35,90 @@ Let's start with basic example of evaluating `1:10` and collecting all informati
 evals('1:10')
 ```
 
-It is possible to capture only some of the information, by specifying `output` parameter:
+Not all the information might be useful, so `evals` makes it is possible to capture only some of the information, by specifying `output` parameter:
 
 ```{r}
 evals('1:10', output = c('result', 'output'))
 ```
 
-### Errors/Warings
+One of the neat features of `evals` that it catches errors/warnings without interrupting the evaluation and saves them. 
 ```{r}
 evals('x')[[1]]$msg
+evals('as.numeric("1.1a")')[[1]]$msg
 ```
 
-### Graphs and Graphical Options
+
+## Graphs and Graphical Options
+
+As mentioned before, `evals` capture the output to graphical devices and saves it:
+
+```{r}
+evals('plot(mtcars)')[[1]]$result
+```
+
+![](plots/413063071a04.png)
+
+You can specify output directory using `graph.dir` parameter and output type using `graph.output` parameter. Currently it could be any of grDevices: png, bmp, jpeg, jpg, tiff, svg or pdf.
+
+```{r}
+evals('plot(mtcars)', graph.dir = 'my_plots', graph.output = 'png')[[1]]$result
+```
+
+Moreover, `evals` provides facilities to:
+
+* save the environments in which plots were generated
+* save the plot via recordPlot to distinct files with `recodplot` extension
+* save the raw R object returned (usually with `lattice` or `ggplot2`) while generating the plots to distinct files with `RDS` extension
 
 ### Style unification
+
+`evals` provides a very powerful facilities to unify with styling each of your images produced by different packages like `ggplot2` or `lattice`. 
+
+Let's prepare the data for plotting first:
+
+```{r}
+## generating dataset
+set.seed(1)
+df <- mtcars[, c('hp', 'wt')]
+df$factor <- sample(c('Foo', 'Bar', 'Foo bar'), size = nrow(df), replace = TRUE)
+df$factor2 <- sample(c('Foo', 'Bar', 'Foo bar'), size = nrow(df), replace = TRUE)
+df$time <- 1:nrow(df)
+```
+
+```{r echo=FALSE}
+## loading packages
+require(ggplot2, quietly = TRUE)
+require(lattice, quietly = TRUE)
+```
+
+Now let's plot the histograms:
+
+```{r}
+evalsOptions('graph.unify', TRUE)
+evals('histogram(df$hp, main = "Histogram with lattice")')[[1]]$result
+evals('ggplot(df) + geom_histogram(aes(x = hp), binwidth = 50) + ggtitle("Histogram with ggplot2")')[[1]]$result
+evalsOptions('graph.unify', FALSE)
+```
+
+![](plots/cd47943791c.png)
+![](plots/cd430da67b6.png)
+
+Options for unification can be set with `panderOptions`, for example:
+
+```r
+panderOptions('graph.fontfamily', "Comic Sans MS")
+panderOptions('graph.fontsize', 18)
+panderOptions('graph.fontcolor', 'blue')
+panderOptions('graph.grid.color', 'blue')
+panderOptions('graph.axis.angle', 3)
+panderOptions('graph.boxes', T)
+panderOptions('graph.legend.position', 'top')
+panderOptions('graph.colors', rainbow(5))
+panderOptions('graph.grid', FALSE)
+panderOptions('graph.symbol', 22)
+```
+
+More information and example on style unification can be obtained from by `Pandoc.brew`ing the tutorial about it which is available [here](https://github.com/Rapporter/pander/blob/master/inst/examples/graphs.brew).
 
 ## Hooks
 
@@ -136,6 +206,13 @@ Let's start with small example.
 ```{r}
 system.time(evals('1:1e5'))
 system.time(evals('1:1e5'))
+```
+
+Results cached by `evals` can be stored in an *environment* in current `R` session or permanently on disk by setting `cache.mode` parameter appropriately.
+
+```{r}
+res <- evals('1:1e5', cache.mode = 'disk', cache.dir = 'cachedir')
+list.files('cachedir')
 ```
 
 Since the hash for caching computed based on the *structure* and *content* of the R commands instead of the used variable names or R expressions, `evals` is able to achieve great results:
