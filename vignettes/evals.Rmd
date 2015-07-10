@@ -56,7 +56,7 @@ As mentioned before, `evals` capture the output to graphical devices and saves i
 evals('plot(mtcars)')[[1]]$result
 ```
 
-![](plots/413063071a04.png)
+![](plots/mtcars.png)
 
 You can specify output directory using `graph.dir` parameter and output type using `graph.output` parameter. Currently it could be any of grDevices: png, bmp, jpeg, jpg, tiff, svg or pdf.
 
@@ -100,8 +100,8 @@ evals('ggplot(df) + geom_histogram(aes(x = hp), binwidth = 50) + ggtitle("Histog
 evalsOptions('graph.unify', FALSE)
 ```
 
-![](plots/cd47943791c.png)
-![](plots/cd430da67b6.png)
+![](plots/lattice.png)
+![](plots/ggplot2.png)
 
 Options for unification can be set with `panderOptions`, for example:
 
@@ -119,35 +119,6 @@ panderOptions('graph.symbol', 22)
 ```
 
 More information and example on style unification can be obtained from by `Pandoc.brew`ing the tutorial about it which is available [here](https://github.com/Rapporter/pander/blob/master/inst/examples/graphs.brew).
-
-## Hooks
-
-`evals` provdes facilities to call user specified functions (hooks) for specific types of objects. It can be achieved by specifying `hooks` parameter with named list where names are object types and elements are functions to be called. For example image, you want to automatically `round` all `numeric` objects:
-
-```{r}
-evals('1:10/10', hooks = list('numeric' = round))[[1]]$result
-```
-
-Or `unlist` a `list`:
-
-```{r}
-evals('as.list(1:10)', hooks = list('list' = unlist))[[1]]$result
-```
-
-Hooks in `evals` are implemented using `do.call` logic, which also allows to supply parameters to each hook by making elements of `hooks` parameter lists where arguments start at second position. Extending previous examples:
-
-```{r}
-evals('1:10/10', hooks = list('numeric' = list(round, 1)))[[1]]$result
-```
-
-Or
-
-```{r}
-hooks <- list('numeric' = list(round, 2), 'matrix' = list(round, digits=1))
-res <- evals('1:10/1000; matrix(1:10/100, nrow=2)', hooks = hooks)
-res[[1]]$result
-res[[2]]$result
-```
 
 ## Logging
 
