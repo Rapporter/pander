@@ -357,3 +357,20 @@ check_caption <- function(caption) {
     if (!(is.character(caption) | is.null(caption)))
         stop('The caption should be string (character class) or NULL.')
 }
+
+
+#' Check if vector parameter for round/digits and adjust accodingly
+#' @param param vector to be checked
+#' @param name parameter name
+#' @param n needed size of vector 
+#' @return original vector if size is good, vector of default values otherwise
+#' @keywords internal
+check_digits <- function(param, name, n) {
+    if (length(param) == 1) {
+        param <- rep(param, n)
+    } else if (length(param) < n) {
+        warning(sprintf('%s is not equal to ncol(t), reverting to default value', name))
+        param <- rep(panderOptions(name), n)
+    }
+    param
+}

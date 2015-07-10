@@ -236,6 +236,27 @@ test_that('no error: functions', {
 panderOptions('table.alignment.default', tad)
 panderOptions('table.alignment.rownames', tar)
 
+test_that('digits param', {
+    m <- matrix(rep(0.111111, 6), nrow = 2)
+    res <- pander_return(m, digits = c(2,4,1))
+    expect_equal(res[3], "0.11 0.1111 0.1")
+    expect_warning(pander_return(m, digits=c(1,2)))
+    res <- pander_return(m, digits = c(2))
+    expect_equal(res[3],"0.11 0.11 0.11")
+    mt <- mtcars[1:4, 5:8]
+    res <- pander_return(mt, digits = c(1,4,3,4), keep.trailing.zeros = T)
+    expect_equal(res[5], "   **Mazda RX4**       4    2.620  16.5   0  ")
+})
+
+test_that('round param', {
+    m <- matrix(rep(0.111111, 6), nrow = 2)
+    res <- pander_return(m, round = c(2,4,1))
+    expect_equal(res[3], "0.11 0.1111 0.1")
+    expect_warning(pander_return(m, round=c(1,2)))
+    res <- pander_return(m, round = c(2))
+    expect_equal(res[3],"0.11 0.11 0.11")
+})
+
 context("keep.line.breaks")
 test_that('keep.line.breaks works correctly', {
   # keeping line breaks in a simple data.frame with one line breaks differs lines amount by one
@@ -455,13 +476,13 @@ test_that('plain.ascii option works correctly', {
     res <- pandoc.table.return(x, emphasize.cells=c(3,4), plain.ascii = T)
     res <- strsplit(res, '\n')[[1]]
     expect_false(any(grepl('\\*', res)))
-    expect_equal(res[3], "1 2  3   4  5 6 7 8 9 10")
+    expect_equal(res[3], "1 2 3 4 5 6 7 8 9 10")
     # length(dim) == 1
     x <- array(1:10)
     res <- pandoc.table.return(x, emphasize.cells=c(3,4), plain.ascii = T)
     res <- strsplit(res, '\n')[[1]]
     expect_false(any(grepl('\\*', res)))
-    expect_equal(res[3], "1 2  3   4  5 6 7 8 9 10")
+    expect_equal(res[3], "1 2 3 4 5 6 7 8 9 10")
     # length(dim) > 1
     x <- mtcars[1:3, 1:4]
     res <- pandoc.table.return(x, emphasize.rows = 2, plain.ascii = T)

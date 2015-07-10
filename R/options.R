@@ -198,10 +198,10 @@ masked.plots$plot <- masked.plots$barplot <- masked.plots$lines <- masked.plots$
 #' The following \code{pander} options are available:
 #'
 #' \itemize{
-#'      \item \code{digits}: numeric (default: \code{2}) passed to \code{format}
+#'      \item \code{digits}: numeric (default: \code{2}) passed to \code{format}. Can be a vector specifying values for each column (has to be the same length as number of columns). Values for non-numeric columns will be disregarded.
 #'      \item \code{decimal.mark}: string (default: \code{.}) passed to \code{format}
 #'      \item \code{formula.caption.prefix}: string (default: \code{'Formula: '}) passed to \code{\link{pandoc.formula}} to be used as caption prefix. Be sure about what you are doing if changing to other than \code{'Formula: '} or \code{':'}.
-#'      \item \code{big.mark}: string (default: '') passed to \code{format}
+#'      \item \code{big.mark}: string (default: '') passed to \code{format}. Can be a vector specifying values for each column (has to be the same length as number of columns). Values for non-numeric columns will be disregarded.
 #'      \item \code{round}: numeric (default: \code{Inf}) passed to \code{round}
 #'      \item \code{keep.trailing.zeros}: boolean (default: \code{FALSE}) to show or remove trailing zeros in numbers
 #'      \item \code{keep.line.breaks}: boolean (default: \code{FALSE}) to keep or remove line breaks from cells in a table
