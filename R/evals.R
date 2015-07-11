@@ -67,7 +67,7 @@ eval.msgs <- function(src, env = NULL, showInvisible = FALSE, graph.unify = eval
 
     ## grab stdout
     stdout <- vector('character')
-    con <- textConnection('stdout', 'wr', local=TRUE)
+    con <- textConnection('stdout', 'wr', local = TRUE)
     sink(con, split = FALSE)
 
     result <- suppressMessages(withCallingHandlers(tryCatch(withVisible(eval(parse(text = src), envir = env)),
@@ -315,13 +315,13 @@ eval.msgs <- function(src, env = NULL, showInvisible = FALSE, graph.unify = eval
 
             ## grab output
             output <- vector('character')
-            con <- textConnection('output', 'wr', local=TRUE)
+            con <- textConnection('output', 'wr', local = TRUE)
             sink(con, split = FALSE)
 
             p.result <- tryCatch(print(rv), error = function(e) e)
 
             ## error while printing
-            if(inherits(p.result, 'error')) {
+            if (inherits(p.result, 'error')) {
                 error  <- p.result$message
             }
 
@@ -632,10 +632,10 @@ eval.msgs <- function(src, env = NULL, showInvisible = FALSE, graph.unify = eval
 #' }
 #' @export
 #' @importFrom digest digest
-evals <- function(txt, parse = TRUE, cache = TRUE, cache.mode = c('environment', 'disk'), cache.dir = '.cache', cache.time = 0.1, cache.copy.images = FALSE, 
-                  showInvisible = FALSE, classes = NULL, hooks = NULL, length = Inf, output = evalsOptions('output'), env = NULL, 
-                  graph.unify = evalsOptions('graph.unify'), graph.name = '%t', graph.dir = 'plots', graph.output = c('png', 'bmp', 'jpeg', 'jpg', 'tiff', 'svg', 'pdf', NA), 
-                  width = 480, height = 480, res= 72, hi.res = FALSE, hi.res.width = 960, hi.res.height = 960*(height/width), hi.res.res = res*(hi.res.width/width), 
+evals <- function(txt, parse = TRUE, cache = TRUE, cache.mode = c('environment', 'disk'), cache.dir = '.cache', cache.time = 0.1, cache.copy.images = FALSE,
+                  showInvisible = FALSE, classes = NULL, hooks = NULL, length = Inf, output = evalsOptions('output'), env = NULL,
+                  graph.unify = evalsOptions('graph.unify'), graph.name = '%t', graph.dir = 'plots', graph.output = c('png', 'bmp', 'jpeg', 'jpg', 'tiff', 'svg', 'pdf', NA),
+                  width = 480, height = 480, res= 72, hi.res = FALSE, hi.res.width = 960, hi.res.height = 960 * (height / width), hi.res.res = res * (hi.res.width / width),
                   graph.env = FALSE, graph.recordplot = FALSE, graph.RDS = FALSE, log = evalsOptions('log'), ...) {
 
     if (missing(txt)) {
@@ -651,10 +651,8 @@ evals <- function(txt, parse = TRUE, cache = TRUE, cache.mode = c('environment',
         }
     }
 
-    ## lame constants
-    doAddGrid    <- TRUE
-    updateFg     <- TRUE
-    areWeLogging <- !is.null(log) && require(futile.logger)
+    ## logging constant
+    logging <- !is.null(log) && require(futile.logger)
 
     ## parse provided code after concatenating
     if (parse) {
@@ -683,8 +681,8 @@ evals <- function(txt, parse = TRUE, cache = TRUE, cache.mode = c('environment',
             }
 
             ## (re)merge lines on demand (based on `+` at the beginning of line)
-            txt.sep <- c(which(!grepl('^\\+', txt)), length(txt)+1)
-            txt <-  lapply(1:(length(txt.sep)-1), function(i) txt[txt.sep[i]:(txt.sep[i+1]-1)])
+            txt.sep <- c(which(!grepl('^\\+', txt)), length(txt) + 1)
+            txt <-  lapply(1:(length(txt.sep) - 1), function(i) txt[txt.sep[i]:(txt.sep[i + 1] - 1)])
             txt <- rapply(txt, function(x) sub('^\\+', '', x), how = 'replace')
 
         }
@@ -742,7 +740,7 @@ evals <- function(txt, parse = TRUE, cache = TRUE, cache.mode = c('environment',
     lapply(txt, function(src) {
 
         ## log R expression
-        if (areWeLogging) {
+        if (logging) {
             flog.info(paste('Command run:', gsub('[ ]+', ' ', gsub('\n', ' ', src))), name = log)
         }
 
@@ -804,16 +802,16 @@ evals <- function(txt, parse = TRUE, cache = TRUE, cache.mode = c('environment',
         if (cache) {
 
             ## helper functions
-            hashOfEvalOrDeparse <- function(x, x.deparse) {
+            hash_of_eval_or_deparse <- function(x, x.deparse) {
                 ## compute the hash of the given 'name' by evaluating that or by deparsing if the prior would fail
                 v <- tryCatch(eval(x, envir = env), error = function(e) e)
                 if (inherits(v, 'error')) {
                     return(digest(x.deparse))
                 }
-                hashFromCache(v, x.deparse)
+                hash_from_cache(v, x.deparse)
             }
 
-            hashFromCache <- function(x, x.deparse) {
+            hash_from_cache <- function(x, x.deparse) {
                 ## get the hash of the object from local cache if possible, compute it and save to cache otherwise
                 if (exists(x.deparse, envir = hash.cache.obj, inherits = FALSE)) {
                     if (identical(x, get(x.deparse, envir = hash.cache.obj))) {
@@ -828,19 +826,19 @@ evals <- function(txt, parse = TRUE, cache = TRUE, cache.mode = c('environment',
                 return(x.hash)
             }
 
-            getCallParts <- function(call) {
+            get_call_parts <- function(call) {
                 ## extracting each function's and variable's hash from the call
                 lapply(call, function(x){
                            switch(mode(x),
-                                  'name' = hashOfEvalOrDeparse(x, deparse(x)),
-                                  'call' = getCallParts(x),
+                                  'name' = hash_of_eval_or_deparse(x, deparse(x)),
+                                  'call' = get_call_parts(x),
                                   digest(deparse(x), 'sha1')
                                   )
                        })
             }
 
             ## get the hash of the call based on the hash of all `names`
-            cached <- digest(list(call = getCallParts(parse(text = src)),
+            cached <- digest(list(call = get_call_parts(parse(text = src)),
                                   storage = digest(list(storage, panderOptions(), evalsOptions()), 'sha1')),
                              'sha1')
 
@@ -859,7 +857,7 @@ evals <- function(txt, parse = TRUE, cache = TRUE, cache.mode = c('environment',
                     load(file = cached.env, envir = env)
                 }
 
-            } else { # cache is in environment
+            } else {# cache is in environment
 
                 ## load cached result
                 if (exists(cached, envir = cached.results, inherits = FALSE)) {
@@ -901,7 +899,7 @@ evals <- function(txt, parse = TRUE, cache = TRUE, cache.mode = c('environment',
 
                         cached.result$result <- file
                         class(cached.result$result) <- 'image'
-                        if (areWeLogging) {
+                        if (logging) {
                             flog.trace(paste('Image copied from cache:', file), name = log)
                         }
                         return(cached.result)
@@ -911,7 +909,7 @@ evals <- function(txt, parse = TRUE, cache = TRUE, cache.mode = c('environment',
                         ## we are checking in plots' dir if the img file exists
                         cached.image.file <- as.character(cached.result$result)
                         if (file.exists(cached.image.file)) {
-                            if (areWeLogging) {
+                            if (logging) {
                                 flog.trace(paste('Image found in cache:', cached.image.file), name = log)
                             }
                             return(cached.result)
@@ -922,7 +920,7 @@ evals <- function(txt, parse = TRUE, cache = TRUE, cache.mode = c('environment',
                     }
 
                 } else {
-                    if (areWeLogging) {
+                    if (logging) {
                         flog.trace('Returning cached R object.', name = log)
                     }
                     return(cached.result)
@@ -969,7 +967,7 @@ evals <- function(txt, parse = TRUE, cache = TRUE, cache.mode = c('environment',
         if (cache) {
             objs <- ls(envir = env)
             objs <- setdiff(objs, c('.storage', 'showCode', 'showText'))
-            objs.hash <- sapply(objs, function(x) hashOfEvalOrDeparse(as.name(x), x))
+            objs.hash <- sapply(objs, function(x) hash_of_eval_or_deparse(as.name(x), x))
         }
 
         ## add modified base plot functions to update colors, `par` settings and adding a grid
@@ -1031,7 +1029,7 @@ evals <- function(txt, parse = TRUE, cache = TRUE, cache.mode = c('environment',
             if ('plot.new has not been called yet' %in% res$msg$errors) {
                 res$msg$errors <- 'plot.new has not been called yet - Please note that all R commands are parsed and evaluated separately. To override this default behavior, add a plus sign (+) as the first character of the line(s) to evaluate with the prior one(s).'
             }
-            if (areWeLogging) {
+            if (logging) {
                 flog.error(res$msg$errors, name = log)
             }
             return(res)
@@ -1043,7 +1041,7 @@ evals <- function(txt, parse = TRUE, cache = TRUE, cache.mode = c('environment',
         if (is.character(graph)) {
 
             ## log image file name
-            if (areWeLogging) {
+            if (logging) {
                 flog.trace(paste('Image file written:', file), name = log)
             }
 
@@ -1083,9 +1081,9 @@ evals <- function(txt, parse = TRUE, cache = TRUE, cache.mode = c('environment',
 
                 } else {
 
-                    if (.Platform$OS.type == 'unix'){    # a symlink would be fine for vector formats on a unix-like OS
+                    if (.Platform$OS.type == 'unix') {# a symlink would be fine for vector formats on a unix-like OS
                         file.symlink(file, file.hi.res)
-                    } else {                                # we have no option to do so on Windows (to be backward compatible)
+                    } else {# we have no option to do so on Windows (to be backward compatible)
                         do.call(graph.output, list(file.hi.res, width = hi.res.width/hi.res.res, height = hi.res.height/hi.res.res, bg = pbg, ...)) # TODO: font-family?
                     }
                 }
@@ -1138,7 +1136,7 @@ evals <- function(txt, parse = TRUE, cache = TRUE, cache.mode = c('environment',
                     params <- list(result, fn[[-1]])
                     fn <- fn[[1]]
                 }
-                if (areWeLogging) {
+                if (logging) {
                     flog.trace(paste('Calling hook for', hook.name), name = log)
                 }
                 result <- do.call(fn, params)
@@ -1171,14 +1169,14 @@ evals <- function(txt, parse = TRUE, cache = TRUE, cache.mode = c('environment',
             ## comparing the resulting environment's objects' hashes with the original ones
             objs.res      <- ls(envir = env)
             objs.res      <- setdiff(objs.res, c('.storage', 'showCode', 'showText', '.graph.dir', '.graph.name'))
-            objs.res.hash <- sapply(objs.res, function(x) hashOfEvalOrDeparse(as.name(x), x))
+            objs.res.hash <- sapply(objs.res, function(x) hash_of_eval_or_deparse(as.name(x), x))
             change        <- setdiff(objs.res, objs)
             common        <- intersect(objs.res, objs)
             changed       <- c(change, unlist(sapply(common, function(x) {
-                if (objs.hash[[x]] != objs.res.hash[[x]])
-                    return(x)
-            }, USE.NAMES = FALSE)))
-
+                                                                if (objs.hash[[x]] != objs.res.hash[[x]])
+                                                                    return(x)
+                                                            },
+                                                     USE.NAMES = FALSE)))
             if (cache.mode == 'disk') {
                 if (as.numeric(proc.time() - timer)[3] > cache.time) {
 
@@ -1208,7 +1206,7 @@ evals <- function(txt, parse = TRUE, cache = TRUE, cache.mode = c('environment',
                             file.copy(sprintf('%s-hires.%s', file.name, graph.output), paste0(cached, '-hires.', graph.output))
                         }
                     }
-                    if (areWeLogging) {
+                    if (logging) {
                         flog.trace('Cached result', name = log)
                     }
                 }
@@ -1229,7 +1227,7 @@ evals <- function(txt, parse = TRUE, cache = TRUE, cache.mode = c('environment',
                         assign(cached, mget(changed, envir = env), envir = cached.environments)
                     }
 
-                    if (areWeLogging) {
+                    if (logging) {
                         flog.trace('Cached result', name = log)
                     }
                 }
@@ -1237,7 +1235,7 @@ evals <- function(txt, parse = TRUE, cache = TRUE, cache.mode = c('environment',
         }
 
         ## log
-        if (areWeLogging) {
+        if (logging) {
             if (!is.null(res$msg$warnings)) {
                 flog.warn(res$msg$warnings, name = log)
             }
@@ -1283,46 +1281,45 @@ redraw.recordedplot <- function(file) {
 
 #' Redraw a recordedplot, grid, trellis, or ggplot2 plot.
 #'
-#' This function redraws the plot represented by \code{recPlot}. It can redraw grid/trellis/ggplot2/etc plots, as well as \code{recordedplot} objects. For \code{recordedplot} objects it acts as a wrapper around \code{replayPlot} with memory tweaks to fix native symbol address errors when the recordedplot was loaded from an rda/rds file.
-#' @param recPlot the plot object to redraw
+#' This function redraws the plot represented by \code{rec_plot}. It can redraw grid/trellis/ggplot2/etc plots, as well as \code{recordedplot} objects. For \code{recordedplot} objects it acts as a wrapper around \code{replayPlot} with memory tweaks to fix native symbol address errors when the recordedplot was loaded from an rda/rds file.
+#' @param rec_plot the plot object to redraw
 #' @references Thanks to Jeroen Ooms \url{http://permalink.gmane.org/gmane.comp.lang.r.devel/29897}, JJ Allaire \url{https://github.com/rstudio/rstudio/commit/eb5f6f1db4717132c2ff111f068ffa6e8b2a5f0b}, and Gabriel Becker.
 #' @seealso \code{\link{redraw.recordedplot}}
 #' @export
-redrawPlot <- function(recPlot)
-{
+redrawPlot <- function(rec_plot) {
     ## this allows us to deal with trellis/grid/ggplot objects as well ...
-    if(!is(recPlot, 'recordedplot')) {
-        res = try(print(recPlot))
-        if(is(res, 'error')) {
+    if (!is(rec_plot, 'recordedplot')) {
+        res <- try(print(rec_plot))
+        if (is(res, 'error')) {
             stop(res)
         }
     } else {
         if (getRversion() < '3.0.0') {
-            for (i in 1:length(recPlot[[1]])) { #@jeroenooms
-                if ('NativeSymbolInfo' %in% class(recPlot[[1]][[i]][[2]][[1]])) {
-                    recPlot[[1]][[i]][[2]][[1]] <- getNativeSymbolInfo(recPlot[[1]][[i]][[2]][[1]]$name)
+            for (i in 1:length(rec_plot[[1]])) {#@jeroenooms
+                if ('NativeSymbolInfo' %in% class(rec_plot[[1]][[i]][[2]][[1]])) {
+                    rec_plot[[1]][[i]][[2]][[1]] <- getNativeSymbolInfo(rec_plot[[1]][[i]][[2]][[1]]$name)
                 }
             }
         } else {
-            for (i in 1:length(recPlot[[1]])) { #@jjallaire
-                symbol <- recPlot[[1]][[i]][[2]][[1]]
+            for (i in 1:length(rec_plot[[1]])) {#@jjallaire
+                symbol <- rec_plot[[1]][[i]][[2]][[1]]
                 if ('NativeSymbolInfo' %in% class(symbol)) {
                     if (!is.null(symbol$package)) {
                         name <- symbol$package[['name']]
                     } else {
                         name <- symbol$dll[['name']]
                     }
-                    pkgDLL <- getLoadedDLLs()[[name]]
-                    nativeSymbol <- getNativeSymbolInfo(name = symbol$name,
-                                                        PACKAGE = pkgDLL, withRegistrationInfo = TRUE)
-                    recPlot[[1]][[i]][[2]][[1]] <- nativeSymbol
+                    pkg_dll <- getLoadedDLLs()[[name]]
+                    native_sumbol <- getNativeSymbolInfo(name = symbol$name,
+                                                        PACKAGE = pkg_dll, withRegistrationInfo = TRUE)
+                    rec_plot[[1]][[i]][[2]][[1]] <- native_sumbol
                 }
             }
         }
-        if (is.null(attr(recPlot, 'pid')) || attr(recPlot, 'pid') != Sys.getpid()) {
+        if (is.null(attr(rec_plot, 'pid')) || attr(rec_plot, 'pid') != Sys.getpid()) {
             warning('Loading plot snapshot from a different session with possible side effects or errors.')
-            attr(recPlot, 'pid') <- Sys.getpid()
+            attr(rec_plot, 'pid') <- Sys.getpid()
         }
-        suppressWarnings(grDevices::replayPlot(recPlot))
+        suppressWarnings(grDevices::replayPlot(rec_plot))
     }
 }
