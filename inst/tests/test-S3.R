@@ -826,3 +826,15 @@ test_that('pander.randomForest works correctly', {
     expect_equal(length(res), 34)
     expect_equal(res[33], "Table: Test Confusion Matrix")
 })
+
+test_that('pander.irts works correctly', {
+    suppressMessages(require(tseries))
+    n <- 10
+    t <- cumsum(rexp(n, rate = 0.1))
+    v <- rnorm(n)
+    res <- pander_return(as.irts(cbind(t, v)))
+    expect_equal(length(res), 25)
+    u <- rnorm(n)
+    res <- pander_return(irts(t, cbind(u, v)))
+    expect_equal(length(res), 25)
+})

@@ -7,12 +7,11 @@
 evals(txt, parse = TRUE, cache = TRUE, cache.mode = c("environment",
   "disk"), cache.dir = ".cache", cache.time = 0.1,
   cache.copy.images = FALSE, showInvisible = FALSE, classes = NULL,
-  hooks = NULL, length = Inf, output = c("all", "src", "result", "output",
-  "type", "msg", "stdout"), env = NULL,
-  graph.unify = evalsOptions("graph.unify"), graph.name = "\%t",
-  graph.dir = "plots", graph.output = c("png", "bmp", "jpeg", "jpg", "tiff",
-  "svg", "pdf", NA), width = 480, height = 480, res = 72,
-  hi.res = FALSE, hi.res.width = 960, hi.res.height = 960 *
+  hooks = NULL, length = Inf, output = evalsOptions("output"),
+  env = NULL, graph.unify = evalsOptions("graph.unify"),
+  graph.name = "\%t", graph.dir = "plots", graph.output = c("png", "bmp",
+  "jpeg", "jpg", "tiff", "svg", "pdf", NA), width = 480, height = 480,
+  res = 72, hi.res = FALSE, hi.res.width = 960, hi.res.height = 960 *
   (height/width), hi.res.res = res * (hi.res.width/width),
   graph.env = FALSE, graph.recordplot = FALSE, graph.RDS = FALSE,
   log = evalsOptions("log"), ...)
@@ -239,6 +238,14 @@ evals('f(g(A, B))')#'
 evalsOptions('cache', FALSE)
 ## and switch on later
 evalsOptions('cache', TRUE)
+
+## evaluate assignments inside call to evals
+## changes to environments are cached properly and retreived
+evalsOptions('cache.time', 0)
+x <- 2
+evals('x <- x^2')[[1]]$result
+evals('x <- x^2; x + 1')[[2]]$result
+evalsOptions('cache.time', 0.1)
 
 ## returning only a few classes
 txt <- readLines(textConnection('rnorm(100)
