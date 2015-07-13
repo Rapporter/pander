@@ -1599,5 +1599,8 @@ pander.irts <- function(x, caption = attr(x, 'caption'), format = panderOptions(
     if (is.null(caption) & !is.null(storage$caption)) {
             caption <- get.caption()
     }
-    pander(data.frame('Time' = format(x$time, format = format), 'Value' = x$value), caption = caption, ...)   
+    m <- as.matrix(x$value)
+    colnames(m) <- NULL
+    rownames(m) <- format(x$time, format = format)
+    pander(m, caption = caption, ...)
 }
