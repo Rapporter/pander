@@ -847,4 +847,12 @@ test_that('pander.manova/summary.manova works correctly', {
     res2 <- pander_return(xs)
     expect_equal(res1, res2)
     expect_equal(length(res1), 21)
+
+test_that('pander.gtable works correctly', {
+    suppressMessages(require(gtable))
+    a <- gtable(unit(1:3, c("cm")), unit(5, "cm"))
+    rect <- rectGrob(gp = gpar(fill = "black"))
+    a <- gtable_add_grob(a, rect, 1, 1)
+    res <- pander_return(a)
+    expect_equal(length(res), 7)
 })
