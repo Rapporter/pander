@@ -25,13 +25,13 @@ pandoc.table.return(t, caption, digits = panderOptions("digits"),
 
 \item{caption}{caption (string) to be shown under the table}
 
-\item{digits}{passed to \code{format}. Can be a vector specifying values for each column.}
+\item{digits}{passed to \code{format}. Can be a vector specifying values for each column (has to be the same length as number of columns).}
 
 \item{decimal.mark}{passed to \code{format}}
 
 \item{big.mark}{passed to \code{format}}
 
-\item{round}{passed to \code{round}. Can be a vector specifying values for each column.}
+\item{round}{passed to \code{round}. Can be a vector specifying values for each column (has to be the same length as number of columns). Values for non-numeric columns will be disregarded.}
 
 \item{missing}{string to replace missing values}
 

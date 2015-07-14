@@ -1587,3 +1587,20 @@ pander.randomForest <- function (x, digits = panderOptions('digits'), ...)
         }
     }
 }
+
+#' Prints an irts object from tseries package in Pandoc's markdown.
+#' @param x an irts object
+#' @param caption caption (string) to be shown under the table
+#' @param format string (default: '%Y/%m/%d %X') passed to format when printing dates (POSIXct or POSIXt)
+#' @param ... optional parameters passed to raw \code{pandoc.table} function
+#' @export
+pander.irts <- function(x, caption = attr(x, 'caption'), format = panderOptions('date'), ...) {
+        
+    if (is.null(caption) & !is.null(storage$caption)) {
+            caption <- get.caption()
+    }
+    m <- as.matrix(x$value)
+    colnames(m) <- NULL
+    rownames(m) <- format(x$time, format = format)
+    pander(m, caption = caption, ...)
+}

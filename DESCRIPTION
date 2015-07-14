@@ -42,7 +42,8 @@ Suggests:
     reshape,
     memisc,
     Epi,
-    randomForest
+    randomForest,
+    tseries
 SystemRequirements: pandoc (http://johnmacfarlane.net/pandoc) for exporting
     markdown files to other formats.
 LinkingTo: Rcpp
