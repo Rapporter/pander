@@ -59,7 +59,9 @@
 #' str(Pandoc.brew(text='<%for (i in 1:5) {%>
 #' Pi has a lot (<%=i%>) of power: <%=pi^i%><%}%>'))
 #' }
-Pandoc.brew <- function(file = stdin(), output = stdout(), convert = FALSE, open = TRUE, graph.name, graph.dir, graph.hi.res = FALSE, text = NULL, envir = parent.frame(), append = FALSE, ...) {
+Pandoc.brew <- function(file = stdin(), output = stdout(), convert = FALSE, open = TRUE,
+                        graph.name, graph.dir, graph.hi.res = FALSE, text = NULL,
+                        envir = parent.frame(), append = FALSE, ...) {
 
     timer <- proc.time()
     output.stdout <- deparse(substitute(output)) == 'stdout()'
@@ -106,7 +108,11 @@ Pandoc.brew <- function(file = stdin(), output = stdout(), convert = FALSE, open
 
             r.pander <- tryCatch(pander_return(r), error = function(e) e)
             if (inherits(r.pander, 'error'))
-                r.pander <- paste0('Internal `pander` error: `', r.pander$message, '` while running: `', r$src,'`\n\nPlease [report the issue](https://github.com/Rapporter/pander/issues/new) with a reproducible example to help developers fix this ASAP.')
+                r.pander <- paste0('Internal `pander` error: `',
+                                   r.pander$message,
+                                   '` while running: `',
+                                   r$src,
+                                   '`\n\nPlease [report the issue](https://github.com/Rapporter/pander/issues/new) with a reproducible example to help developers fix this ASAP.') #nolint
             r$output <- r.pander
             cat(paste(r.pander, collapse = '\n'))
 
@@ -114,16 +120,23 @@ Pandoc.brew <- function(file = stdin(), output = stdout(), convert = FALSE, open
             localstorage.last <- tail(localstorage, 1)[[1]]
             localstorage.last.text <- ifelse(is.null(localstorage.last$text$eval), '', localstorage.last$text$eval)
 
-            if (('image' %in% r$type) | (length(r.pander) > 1) | grepl('\n$', localstorage.last.text) | is.null(localstorage.last$text$eval))
+            if ('image' %in% r$type
+                || length(r.pander) > 1
+                || grepl('\n$', localstorage.last.text)
+                || is.null(localstorage.last$text$eval))
                 type <- 'block'
             else
                 type <- 'inline'
 
             if (type == 'inline') {
 
-                localstorage[[length(localstorage)]]$text <- list(raw = paste0(localstorage.last$text$raw, paste0('<%=', r$src, '%>')), eval = paste0(localstorage.last$text$eval, r.pander))
-                localstorage[[length(localstorage)]]$chunks <- list(raw = c(localstorage.last$chunks$raw, paste0('<%=', r$src, '%>')), eval = c(localstorage.last$chunks$eval, ifelse(length(r.pander) == 0, '', r.pander)))
-                localstorage[[length(localstorage)]]$msg <- list(messages = c(localstorage.last$msg$messages, r$msg$messages), warnings = c(localstorage.last$msg$warnings, r$msg$warnings), errors = c(localstorage.last$msg$errors, r$msg$errors))
+                localstorage[[length(localstorage)]]$text <- list(raw = paste0(localstorage.last$text$raw, paste0('<%=', r$src, '%>')), #nolint
+                                                                  eval = paste0(localstorage.last$text$eval, r.pander)) #nolint
+                localstorage[[length(localstorage)]]$chunks <- list(raw = c(localstorage.last$chunks$raw, paste0('<%=', r$src, '%>')), #nolint
+                                                                    eval = c(localstorage.last$chunks$eval, ifelse(length(r.pander) == 0, '', r.pander))) #nolint
+                localstorage[[length(localstorage)]]$msg <- list(messages = c(localstorage.last$msg$messages, r$msg$messages), #nolint
+                                                                 warnings = c(localstorage.last$msg$warnings, r$msg$warnings), #nolint
+                                                                 errors = c(localstorage.last$msg$errors, r$msg$errors)) #nolint
 
             } else
                 localstorage <- c(localstorage, list(list(type = 'block', robject = r)))
@@ -204,7 +217,7 @@ DELIM[[BRCATCODE]] <- c("<%=","%>")
         stop('Invalid environment')
 
     state <- BRTEXT
-    text <- code <- tpl <- character(0)
+    text <- code <- character(0)
     textLen <- codeLen <- as.integer(0)
     textStart <- as.integer(1)
     line <- ''
@@ -223,7 +236,7 @@ DELIM[[BRCATCODE]] <- c("<%=","%>")
             if (length(spl) > 1){
 
                 if (nchar(spl[1])) {
-                    text[textLen+1] <- spl[1]
+                    text[textLen + 1] <- spl[1]
                     textLen <- textLen + 1
                 }
                 line <- paste(spl[-1],collapse='<%')
@@ -240,12 +253,12 @@ DELIM[[BRCATCODE]] <- c("<%=","%>")
                 }
 
                 if (textStart <= textLen) {
-                    code[codeLen+1] <- paste('showText(',textStart,',',textLen,')',sep='')
+                    code[codeLen + 1] <- paste('showText(',textStart,',',textLen,')',sep='')
                     codeLen <- codeLen + 1
                     textStart <- textLen + 1
                 }
             } else {
-                text[textLen+1] <- line
+                text[textLen + 1] <- line
                 textLen <- textLen + 1
                 line <- ''
             }
@@ -258,28 +271,31 @@ DELIM[[BRCATCODE]] <- c("<%=","%>")
                 ## test  for '-' immediately preceding %> will strip trailing newline from line
                 if (n > 0) {
                     if (substr(spl[1],n,n) == '-') {
-                        line <- substr(line,1,nchar(line)-1)
-                        spl[1] <- substr(spl[1],1,n-1)
+                        line <- substr(line,1,nchar(line) - 1)
+                        spl[1] <- substr(spl[1],1,n - 1)
                     }
-                    text[textLen+1] <- spl[1]
+                    text[textLen + 1] <- spl[1]
                     textLen <- textLen + 1
                 }
 
                 ## We've found the end of a brew section, but we only care if the
                 ## section is a BRCODE or BRCATCODE. We just implicitly drop BRCOMMENT sections
                 if (state == BRCODE){
-                    code[codeLen+1] <- paste(text[textStart:textLen],collapse='')
+                    code[codeLen + 1] <- paste(text[textStart:textLen],collapse='')
                     codeLen <- codeLen + 1
                 } else if (state == BRCATCODE){
-                    code[codeLen + 1] <- paste0("showCode(", deparse(paste(text[textStart:textLen], collapse = "\n")), ")")
+                    code[codeLen + 1] <- paste0("showCode(",
+                                                deparse(paste(text[textStart:textLen],collapse = "\n")), ")")
                     codeLen <- codeLen + 1
                 }
                 textStart <- textLen + 1
                 state <- BRTEXT
             } else if (regexpr("<%",line,perl=TRUE) > 0){
-                stop("Oops! Someone forgot to close a tag. We saw: ",DELIM[[state]][1],' and we need ',DELIM[[state]][2])
+                stop("Oops! Someone forgot to close a tag. We saw: ",
+                     DELIM[[state]][1],' and we need ',
+                     DELIM[[state]][2])
             } else {
-                text[textLen+1] <- line
+                text[textLen + 1] <- line
                 textLen <- textLen + 1
                 line <- ''
             }
@@ -287,12 +303,14 @@ DELIM[[BRCATCODE]] <- c("<%=","%>")
     }
     if (state == BRTEXT){
         if (textStart <= textLen) {
-            code[codeLen+1] <- paste('showText(',textStart,',',textLen,')',sep='')
+            code[codeLen + 1] <- paste('showText(',textStart,',',textLen,')',sep='')
             codeLen <- codeLen + 1
             textStart <- textLen + 1
         }
     } else {
-        stop("Oops! Someone forgot to close a tag. We saw: ",DELIM[[state]][1],' and we need ',DELIM[[state]][2], call. = FALSE)
+        stop("Oops! Someone forgot to close a tag. We saw: ",
+             DELIM[[state]][1],' and we need ',
+             DELIM[[state]][2], call. = FALSE)
     }
 
     showText <- function(from, to) {
@@ -318,7 +336,7 @@ DELIM[[BRCATCODE]] <- c("<%=","%>")
                 localstorage.last.pander  <- localstorage.last$robject$output
 
                 ## we had an inline chunk in the beginning of the line converted to block
-                if (!('image' %in% localstorage.last$robject$type) & (length(localstorage.last.pander) <= 1))
+                if (!'image' %in% localstorage.last$robject$type && length(localstorage.last.pander) <= 1)
                     localstorage <- c(localstorage[-length(localstorage)],
                                       list(list(type = 'text',
                                            text = list(
@@ -337,17 +355,27 @@ DELIM[[BRCATCODE]] <- c("<%=","%>")
                 ## leave that block as is and add localtext as new
                 else
 
-                    localstorage <- c(localstorage, list(list(type = type, text = list(raw = localtext, eval = localtext), chunks = list(raw = NULL, eval = NULL), msg = list(messages = NULL, warnings = NULL, errors = NULL))))
+                    localstorage <- c(localstorage,
+                                      list(list(type = type,
+                                                text = list(raw = localtext, eval = localtext),
+                                                chunks = list(raw = NULL, eval = NULL),
+                                                msg = list(messages = NULL, warnings = NULL, errors = NULL))))
 
             } else {
 
                 ## text continues
-                if (is.character(localstorage.last.text) & (type == 'text') & ifelse(localstorage.last.type == 'heading', !grepl('\n', localstorage.last.text), TRUE))
-                    localstorage[[length(localstorage)]]$text <- list(raw = paste0(localstorage.last$text$raw, localtext), eval = paste0(localstorage.last.text, localtext))
+                if (is.character(localstorage.last.text) &&
+                    (type == 'text') &&
+                    ifelse(localstorage.last.type == 'heading', !grepl('\n', localstorage.last.text), TRUE))
+                    localstorage[[length(localstorage)]]$text <- list(raw = paste0(localstorage.last$text$raw, localtext), eval = paste0(localstorage.last.text, localtext)) #nolint
 
                 ## new text starts here
                 else
-                    localstorage <- c(localstorage, list(list(type = type, text = list(raw = localtext, eval = localtext), chunks = list(raw = NULL, eval = NULL), msg = list(messages = NULL, warnings = NULL, errors = NULL))))
+                    localstorage <- c(localstorage,
+                                      list(list(type = type,
+                                                text = list(raw = localtext, eval = localtext),
+                                                chunks = list(raw = NULL, eval = NULL),
+                                                msg = list(messages = NULL, warnings = NULL, errors = NULL))))
 
             }
 
@@ -373,7 +401,9 @@ DELIM[[BRCATCODE]] <- c("<%=","%>")
         if (length(brcodes) > 0) {
             brcodes <- p(brcodes, wrap = '`')
             if (grepl('[Uu]nexpected', msg))
-                stop(paste0('`', sub('.*([Uu]nexpected [a-zA-Z0-9\\(\\)\'\\{\\} ]*)( at character|\n).*', '\\1', msg), '` in your BRCODEs: ', brcodes), call. = FALSE)
+                stop(paste0('`',
+                            sub('.*([Uu]nexpected [a-zA-Z0-9\\(\\)\'\\{\\} ]*)( at character|\n).*', '\\1', msg),
+                            '` in your BRCODEs: ', brcodes), call. = FALSE)
             else
                 stop(sprintf('Error (`%s`) in your BRCODEs: %s', msg, brcodes), call. = FALSE)
         } else
