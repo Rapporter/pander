@@ -70,7 +70,9 @@ pander <- function(x = NULL, ...) {
     ## save current knitr.auto.asis option
     kaao <- panderOptions('knitr.auto.asis')
 
-    if (isTRUE(panderOptions('knitr.auto.asis')) && isTRUE(getOption('knitr.in.progress')) && requireNamespace('knitr', quietly = TRUE)) {
+    if (isTRUE(panderOptions('knitr.auto.asis')) &&
+        isTRUE(getOption('knitr.in.progress')) &&
+        requireNamespace('knitr', quietly = TRUE)) {
 
         ## override knitr.auto.asis option for nested calls
         panderOptions('knitr.auto.asis', FALSE)
@@ -280,7 +282,7 @@ pander.matrix <- function(x, caption = attr(x, 'caption'),  ...) {
 #' @param caption caption (string) to be shown under the table
 #' @param ... optional parameters passed to raw \code{pandoc.table} function
 #' @export
-pander.cast_df<- function(x, caption = attr(x, 'caption'), ...) {
+pander.cast_df <- function(x, caption = attr(x, 'caption'), ...) {
 
     if (is.null(caption) & !is.null(storage$caption))
         caption <- get.caption()
@@ -302,7 +304,8 @@ pander.cast_df<- function(x, caption = attr(x, 'caption'), ...) {
 #' @param ... optional parameters passed to special methods and/or raw \code{pandoc.*} functions
 #' @return By default this function outputs (see: \code{cat}) the result. If you would want to catch the result instead, then call the function ending in \code{.return}.
 #' @export
-pander.summary.lm <- function(x, caption = attr(x, 'caption'), covariate.labels, omit, summary = TRUE, add.significance.stars = FALSE, ...) {
+pander.summary.lm <- function(x, caption = attr(x, 'caption'), covariate.labels,
+                              omit, summary = TRUE, add.significance.stars = FALSE, ...) {
 
     if (is.null(caption)) {
         if (is.null(storage$caption))
@@ -332,9 +335,10 @@ pander.summary.lm <- function(x, caption = attr(x, 'caption'), covariate.labels,
                 format(x$dispersion), ')\n\n')
             stats <- cbind(paste(format(c('Null', 'Residual'), justify = 'right'), 'deviance:'),
                            apply(cbind(
-                               format(unlist(x[c('null.deviance', 'deviance')]), digits = panderOptions('digits')), ' on',
+                               format(unlist(x[c('null.deviance', 'deviance')]), digits = panderOptions('digits')),
+                               ' on',
                                format(unlist(x[c('df.null', 'df.residual')])), ' degrees of freedom\n'),
-                                 1L, paste, collapse = ' '))
+                               1L, paste, collapse = ' '))
             rownames(stats) <- NULL
             colnames(stats) <- NULL
             pandoc.table(stats, keep.trailing.zeros = TRUE, ...)
@@ -380,7 +384,11 @@ pander.summary.glm <- function(x, caption = attr(x, 'caption'), covariate.labels
 #' @param ... optional parameters passed to raw \code{pandoc.table} function
 #' @export
 pander.lm <- function(x, caption = attr(x, 'caption'), covariate.labels, omit, ...)
-    pander.summary.lm(summary(x), caption = caption, summary = FALSE, covariate.labels = covariate.labels, omit = omit, ...)
+    pander.summary.lm(summary(x),
+                      caption = caption,
+                      summary = FALSE,
+                      covariate.labels = covariate.labels,
+                      omit = omit, ...)
 
 
 #' Pander method for summary.glm class
@@ -521,13 +529,13 @@ pander.htest <- function(x, caption = attr(x, 'caption'), ...) {
 
     ## add what we know
     if (!is.null(x$statistic))
-        res$'Test statistic' = as.numeric(x$statistic)
+        res$'Test statistic' <- as.numeric(x$statistic)
     if (!is.null(x$parameter))
-        res[names(x$parameter)] = x$parameter
+        res[names(x$parameter)] <- x$parameter
     if (!is.null(x$p.value))
-        res$'P value' = add.significance.stars(x$p.value)
+        res$'P value' <- add.significance.stars(x$p.value)
     if (!is.null(x$alternative))
-        res['Alternative hypothesis'] = x$alternative
+        res['Alternative hypothesis'] <- x$alternative
 
     ## drop placeholder
     res$placeholder <- NULL
@@ -589,7 +597,9 @@ pander.density <- function(x, caption = attr(x, 'caption'), ...) {
             caption <- get.caption()
     }
 
-    res <- data.frame(Coordinates = as.numeric(summary(x$x)), 'Density values' = as.numeric(summary(x$y)), check.names = FALSE)
+    res <- data.frame('Coordinates' = as.numeric(summary(x$x)),
+                      'Density values' = as.numeric(summary(x$y)),
+                      check.names = FALSE)
     rownames(res) <- names(summary(1))
 
     pandoc.table(res, caption = caption, ...)
@@ -632,7 +642,7 @@ pander.list <- function(x, ...) {
 
         paste(x.names[i], res.i)
 
-    })), collapse = '\n')
+    })), collapse = '\n') #nolint
 
     ## indent output
     res <- pandoc.indent(res, indent)
@@ -761,13 +771,13 @@ pander.mtable <- function(x, caption = attr(x, 'caption'), ...) {
             s <- coefs[i, ]
             tmp.row <- vector()
             for (j in 1:col.size)
-                tmp.row <- c(tmp.row, paste(s[2*j - 1], s[2 * j], sep = '\\ \n'))
+                tmp.row <- c(tmp.row, paste(s[2 * j - 1], s[2 * j], sep = '\\ \n'))
             temp[i, ] <- tmp.row
         }
     } else {
         for (i in 1:row.size) {
             tmp.row <- vector()
-            s <- as.matrix(coefs[(i*k-k+1):(i*k), ])
+            s <- as.matrix(coefs[ (i * k - k + 1) : (i * k), ])
             for (j in 1:col.size)
                 tmp.row <- c(tmp.row, paste(s[,j], collapse = '\\ \n'))
             temp[i, ] <- tmp.row
@@ -802,7 +812,7 @@ pander.CrossTable <- function(x, caption = attr(x, 'caption'), digits = panderOp
             xx <- cbind(xx, rep("", nr))
         if (!haslbl)
             xx <- cbind(rep("", nr), xx)
-        n <- dim(nt)[1]/nr
+        n <- dim(nt)[1] / nr
         nt <- rbind(nt, xx)
         idx <- integer()
         k <- 1
@@ -820,9 +830,9 @@ pander.CrossTable <- function(x, caption = attr(x, 'caption'), digits = panderOp
     }
     if (!is.na(x$expected) && x$expected == TRUE) {
         xex <- outer(x$rs, x$cs, "*")
-        xex <- xex/x$gt
+        xex <- xex / x$gt
         if (is.null(digits))
-            digits = 1
+            digits <- 1
         xx <- format(round(xex, digits), ...)
         xx <- cbind(rep("Expected N", nr), xx, rep("", nr))
         nt <- rbind(nt, xx)
@@ -831,13 +841,13 @@ pander.CrossTable <- function(x, caption = attr(x, 'caption'), digits = panderOp
             nt <- nt[idx, ]
     }
     if (x$prop.chisq) {
-        xx <- ((x$CST$expected - x$t)^2)/x$CST$expected
+        xx <- (x$CST$expected - x$t) ^ 2 / x$CST$expected
         xx <- format(round(xx, digits), trim = TRUE, ...)
         xx <- cbind("Chi-square", xx)
         nt <- appendlines(nt, xx, haslbl = TRUE)
     }
     if (!is.na(x$prop.row[1])) {
-        xx <- cbind(x$prop.row, x$rs/x$gt)
+        xx <- cbind(x$prop.row, x$rs / x$gt)
         xx <- format(round(xx * hdd, digits), trim = TRUE, ...)
         xx <- matrix(paste(xx, "%", sep = ""), nrow = nr,
                  ncol = nc + 1)
@@ -878,12 +888,12 @@ pander.CrossTable <- function(x, caption = attr(x, 'caption'), digits = panderOp
         xx <- cbind("Adj Std Resid", xx)
         nt <- appendlines(nt, xx, haslbl = TRUE)
     }
-    n <- dim(nt)[1]/nr
+    n <- dim(nt)[1] / nr
     idx <- seq(1, dim(nt)[1], n)
     nt <- rbind(nt, c(gettext("Total", domain = "R-descr"), x$cs,
                     x$gt))
     if (!is.na(x$prop.col[1]))
-        nt <- rbind(nt, c("", sapply(round(hdd * x$cs/x$gt, digits), function(x) paste(x, "%", sep = "")), ""))
+        nt <- rbind(nt, c("", sapply(round(hdd * x$cs / x$gt, digits), function(x) paste(x, "%", sep = "")), ""))
     len <- dim(nt)[1]
     rownames(nt) <- as.character(1:len)
 
@@ -896,16 +906,21 @@ pander.CrossTable <- function(x, caption = attr(x, 'caption'), digits = panderOp
     ColData <- x$ColData
     res <- NULL
     for (i in 1:nr) {
-        res.r <- paste(pandoc.strong.return(nt[1+or*(i - 1), 1]), "N", paste(nt[((2+or*(i - 1)) : (i * or)),1], collapse = "\\ \n"),
+        res.r <- paste(pandoc.strong.return(nt[1 + or * (i - 1), 1]),
+                       "N",
+                       paste(nt[ (2 + or * (i - 1)) : (i * or), 1],collapse = "\\ \n"),
                    sep = "\\ \n")
         for (j in 2:nc) {
-            res.r <- cbind(res.r, paste("&nbsp;", paste(nt[((1+or*(i - 1)) : (i * or)),j], collapse = "\\  \n"), sep = "\\ \n"))
+            res.r <- cbind(res.r,
+                           paste("&nbsp;",
+                                 paste(nt[ (1 + or * (i - 1)) : (i * or),j], collapse = "\\  \n"),
+                                 sep = "\\ \n"))
         }
         res <- rbind(res, res.r)
     }
     res.r <- NULL
     for (j in 1:nc) {
-        res.r <- cbind(res.r, paste(nt[(nt.nr-ts + 1) : nt.nr, j], collapse = "\\ \n"))
+        res.r <- cbind(res.r, paste(nt[ (nt.nr - ts + 1) : nt.nr, j], collapse = "\\ \n"))
     }
     res <- rbind(res, res.r)
     cln <- c(if (RowData != "") RowData else '&nbsp;', colnames(x$t), 'Total')
@@ -1014,10 +1029,10 @@ pander.coxph <- function(x, caption = attr(x, 'caption'), ...) {
     se <- sqrt(diag(x$var))
 
     if (is.null(x$naive.var)) {
-        c.tab <- cbind(beta, exp(beta), se, beta / se, 1 - pchisq((beta / se)^2, 1))
+        c.tab <- cbind(beta, exp(beta), se, beta / se, 1 - pchisq( (beta / se) ^ 2, 1))
         dimnames(c.tab) <- list(names(beta), c('coef', 'exp(coef)', 'se(coef)', 'z', 'p'))
     } else {
-        c.tab <- cbind(beta, exp(beta), se, beta / se, signif(1 - pchisq((beta / se)^2, 1), 1))
+        c.tab <- cbind(beta, exp(beta), se, beta / se, signif(1 - pchisq( (beta / se) ^ 2, 1), 1))
         dimnames(c.tab) <- list(names(beta), c('coef', 'exp(coef)', 'robust se', 'z', 'p'))
     }
 
@@ -1030,7 +1045,8 @@ pander.coxph <- function(x, caption = attr(x, 'caption'), ...) {
         df <- round(sum(x$df), 2)
     }
 
-    cat('Likelihood ratio test=', format(round(logtest, 2)), '  on ', df, ' df,', ' p=', format(1 - pchisq(logtest, df)), sep = '')
+    cat('Likelihood ratio test=', format(round(logtest, 2)), '  on ',
+        df, ' df,', ' p=', format(1 - pchisq(logtest, df)), sep = '')
 
     omit <- x$na.action
     cat('  n=', x$n)
@@ -1112,7 +1128,8 @@ pander.summary.lme <- function(x, caption = attr(x, 'caption'), summary = TRUE, 
     }
     res <- as.data.frame(x$tTable)
     if (summary) {
-        pandoc.table(res, caption = pandoc.formula.return(x$call$fixed, text = 'Fixed effects: '), split.tables = Inf, ...)
+        pandoc.table(res, caption = pandoc.formula.return(x$call$fixed, text = 'Fixed effects: '),
+                     split.tables = Inf, ...)
         pandoc.table(x$residuals, caption = 'Standardized Within-Group Residuals')
         pandoc.table(data.frame(
             'Observations'        = x$dims[["N"]],
@@ -1179,7 +1196,6 @@ pander.survdiff <- function(x, caption = attr(x, 'caption'), ...) {
         temp <- c(x$obs, x$exp, z, signif(1 - pchisq(x$chisq, 1), panderOptions('digits')))
         names(temp) <- c('Observed', 'Expected', 'Z', 'p')
         temp <- t(temp)
-        include.rownames = FALSE
     } else {
         if (is.matrix(x$obs)) {
             otmp <- apply(x$obs, 1, sum)
@@ -1190,8 +1206,7 @@ pander.survdiff <- function(x, caption = attr(x, 'caption'), ...) {
         }
         df <- sum(1 * (etmp > 0)) - 1
         p <- 1 - pchisq(x$chisq, df[!is.na(df)])
-        temp <- cbind(x$n, otmp, etmp, ((otmp - etmp)^2)/etmp,
-                      ((otmp - etmp)^2)/diag(x$var))
+        temp <- cbind(x$n, otmp, etmp, (otmp - etmp) ^ 2 / etmp, (otmp - etmp) ^ 2 / diag(x$var))
         dimnames(temp) <- list(names(x$n), c('N', 'Observed', 'Expected', '(O-E)^2/E', '(O-E)^2/V'))
         caption <- paste(caption, sprintf('Chisq = %f \non %d degrees of freedom, p = %f', x$chisq, df, p), sep = ' ')
     }
@@ -1212,16 +1227,17 @@ pander.survdiff <- function(x, caption = attr(x, 'caption'), ...) {
 #' @param print.rmean,rmean options for computation and display of the restricted mean
 #' @param ... optional parameters passed to raw \code{pandoc.table} function
 #' @export
-pander.survfit <- function (x, caption = attr(x, 'caption'), scale = 1, print.rmean = getOption('survfit.print.rmean'), rmean = getOption('survfit.rmean'), ...) {
+pander.survfit <- function (x, caption = attr(x, 'caption'),
+                            scale = 1, print.rmean = getOption('survfit.print.rmean'),
+                            rmean = getOption('survfit.rmean'), ...) {
 
     if (is.null(caption) & !is.null(storage$caption))
         caption <- get.caption()
 
     omit <- x$na.action
-    na <- NULL
 
     if (length(omit))
-        na <- pander(list(naprint(omit)), list.type = 'none')
+        pander(list(naprint(omit)), list.type = 'none')
 
     if (!missing(print.rmean) && is.logical(print.rmean) && missing(rmean)) {
         if (print.rmean)
@@ -1254,14 +1270,13 @@ pander.survfit <- function (x, caption = attr(x, 'caption'), scale = 1, print.rm
     }
 
     temp <- getFromNamespace('survmean', 'survival')(x, scale = scale, rmean)
-    mat <- pandoc.table(temp$matrix, caption = ...)
-    restrm <- NULL
+    pandoc.table(temp$matrix, caption = ...)
 
     if (rmean != 'none') {
         if (rmean == 'individual')
-            restrm <- pander('* restricted mean with variable upper limit')
+            pander('* restricted mean with variable upper limit')
         else
-            restrm <- pander(paste('* restricted mean with upper limit = ', format(temp$end.time[1])))
+            pander(paste('* restricted mean with upper limit = ', format(temp$end.time[1])))
     }
 
 }
@@ -1490,7 +1505,8 @@ pander.function <- function(x, add.name = FALSE, verbatim = TRUE, syntax.highlig
 #' @param emphasize.rownames (defaut:\code{TRUE}) if rownames should be highlighted
 #' @param ... optional parameters passed to raw \code{pandoc.table} function
 #' @export
-pander.tabular <- function(x, caption = attr(x, 'caption'), emphasize.rownames = TRUE, digits = panderOptions('digits'), ...) {
+pander.tabular <- function(x, caption = attr(x, 'caption'),
+                           emphasize.rownames = TRUE, digits = panderOptions('digits'), ...) {
     if (is.null(caption) & !is.null(storage$caption))
         caption <- get.caption()
     data <- as.matrix(x, format = T, rowLabels = F, colLabels = F, digits = digits)
@@ -1498,7 +1514,8 @@ pander.tabular <- function(x, caption = attr(x, 'caption'), emphasize.rownames =
     rlabels[is.na(rlabels)] <- ""
     clabels <- attr(x, "colLabels")
     clabels[is.na(clabels)] <- ""
-    if (!is.null(colnames(rlabels))) { # needed for case of more complex tabular structure (see examples)
+    if (!is.null(colnames(rlabels))) {
+        # needed for case of more complex tabular structure (see examples)
         cl <- colnames(rlabels)
         data <- cbind(rlabels, data)
         clabels <- cbind(rbind(matrix("",
@@ -1553,8 +1570,7 @@ pander.summary.table <- function(x, caption = attr(x, 'caption'), print.call = T
 #' @param digits number of digits of precision
 #' @param ... optional parameters passed to raw \code{pandoc.table} function
 #' @export
-pander.randomForest <- function (x, digits = panderOptions('digits'), ...)
-{
+pander.randomForest <- function (x, digits = panderOptions('digits'), ...) {
     cat('\nCall: ', pandoc.formula.return(x$call), '\n')
     cat('Type of random forest: ', x$type, '\n', sep = '')
     cat('Number of trees: ', x$ntree, '\n', sep = '')
