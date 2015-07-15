@@ -838,3 +838,23 @@ test_that('pander.irts works correctly', {
     res <- pander_return(irts(t, cbind(u, v)))
     expect_equal(length(res), 23)
 })
+
+test_that('pander.nls/pander.summary.nls works correctly', {
+    utils::data(muscle, package = "MASS")
+    with(muscle, table(Strip))
+    musc.1 <- nls(Length ~ cbind(1, exp(-Conc/th)), muscle,
+                start = list(th = 1), algorithm = "plinear")
+    res <- pander_return(musc.1, show.convergence = T)
+    expect_equal(length(res), 17)
+    res <- pander_return(musc.1)
+    expect_equal(length(res), 14)
+    musc.1.s <- summary(musc.1)
+    res <- pander_return(musc.1.s)
+    expect_equal(length(res), 18)
+    res <- pander_return(musc.1.s, show.convergence = T)
+    expect_equal(length(res), 21)
+    musc.1.s <- summary(musc.1, correlation = T)
+    res <- pander_return(musc.1.s)
+    expect_true(any(grepl('Correlation', res)))
+    expect_equal(length(res), 31)
+})
