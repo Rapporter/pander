@@ -1591,7 +1591,7 @@ pander.randomForest <- function (x, digits = panderOptions('digits'), ...)
 #' Prints an irts object from tseries package in Pandoc's markdown.
 #' @param x an irts object
 #' @param caption caption (string) to be shown under the table
-#' @param format string (default: '%Y/%m/%d %X') passed to format when printing dates (POSIXct or POSIXt)
+#' @param format string passed to format when printing dates (POSIXct or POSIXt)
 #' @param ... optional parameters passed to raw \code{pandoc.table} function
 #' @export
 pander.irts <- function(x, caption = attr(x, 'caption'), format = panderOptions('date'), ...) {
@@ -1603,4 +1603,60 @@ pander.irts <- function(x, caption = attr(x, 'caption'), format = panderOptions(
     colnames(m) <- NULL
     rownames(m) <- format(x$time, format = format)
     pander(m, caption = caption, ...)
+}
+
+#' Prints an summary.nls object from stats package in Pandoc's markdown.
+#' @param x an summary.nls object
+#' @param summary (defaut:\code{TRUE}) if used for summary.lm or lm
+#' @param add.significance.stars if significance stars should be shown for P value
+#' @param digits number of digits of precision
+#' @param show.convergence (defaut:\code{FALSE}) if to print convergence info
+#' @param ... optional parameters passed to raw \code{pandoc.table} function
+#' @export
+pander.summary.nls <- function(x, summary = T, add.significance.stars = F, digits = panderOptions('digits'), show.convergence = FALSE, ...) {
+  cat("\n")
+  pandoc.formula(x$call$formula, text = 'Fitting nonlinear regression model:', add.line.breaks = T)
+  
+  if (summary) {
+    coef <- x$coefficients
+    if (add.significance.stars) {
+      coef[, 4] <- pander::add.significance.stars(coef[, 4])
+    }
+    pander(x$coefficients, caption = 'Parameters', ...)
+    if (add.significance.stars)
+      cat('\nSignif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1\n')
+    if (!is.null(x$correlation) && NCOL(x$correlation) > 1) {
+      pander(x$correlation, caption = "Correlation of Parameter Estimates", ...)
+    }
+    cat("\nResidual standard error:",
+        format(signif(x$sigma, digits)), "on", x$df[2L], "degrees of freedom\n")
+  } else {
+    pandoc.table(x$coefficients[, 1], caption = "Parameter Estimates", digits = digits, ...)
+    cat("\nresidual sum-of-squares:", format(signif(x$sigma, digits)), "\n")
+  }
+
+  if (show.convergence && !is.null(x$convInfo)) {
+    if (identical(x$call$algorithm, "port")) {
+      cat("\nAlgorithm \"port\", convergence message: ",
+          x$convInfo$stopMessage, "\n", sep = "")
+    } else {
+      cat("\nNumber of iterations", ifelse(x$convInfo$isConv, "to convergence:", "till stop:"),
+          x$convInfo$finIter, "\nAchieved convergence tolerance:",
+          format(x$convInfo$finTol, digits = digits), "\n")
+      if (!x$convInfo$isConv) {
+        cat("Reason stopped:", x$convInfo$stopMessage, "\n")
+      }
+    }
+  }
+}
+
+#' Prints an nls object from stats package in Pandoc's markdown.
+#' @param x an nls object
+#' @param show.convergence (defaut:\code{FALSE}) if to print convergence info
+#' @param digits number of digits of precision
+#' @param ... optional parameters passed to raw \code{pandoc.table} function
+#' @export
+pander.nls <- function(x, digits = panderOptions('digits'), show.convergence = FALSE, ...) {
+  pander.summary.nls(summary(x), summary = F, add.significance.stars = F,
+                     digits = digits, show.convergence = show.convergence, ...)
 }
