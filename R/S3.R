@@ -1613,7 +1613,8 @@ pander.irts <- function(x, caption = attr(x, 'caption'), format = panderOptions(
 #' @param show.convergence (defaut:\code{FALSE}) if to print convergence info
 #' @param ... optional parameters passed to raw \code{pandoc.table} function
 #' @export
-pander.summary.nls <- function(x, summary = T, add.significance.stars = F, digits = panderOptions('digits'), show.convergence = FALSE, ...) {
+pander.summary.nls <- function(x, summary = TRUE, add.significance.stars = FALSE,
+                               digits = panderOptions('digits'), show.convergence = FALSE, ...) {
     cat("\n")
     pandoc.formula(x$call$formula, text = 'Fitting nonlinear regression model:', add.line.breaks = T)
 
@@ -1658,6 +1659,6 @@ pander.summary.nls <- function(x, summary = T, add.significance.stars = F, digit
 #' @param ... optional parameters passed to raw \code{pandoc.table} function
 #' @export
 pander.nls <- function(x, digits = panderOptions('digits'), show.convergence = FALSE, ...) {
-    pander.summary.nls(summary(x), summary = F, add.significance.stars = F,
+    pander.summary.nls(summary(x), summary = FALSE, add.significance.stars = FALSE,
                        digits = digits, show.convergence = show.convergence, ...)
 }
