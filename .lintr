@@ -1,2 +1,6 @@
 linters: with_defaults(line_length_linter(120), single_quotes_linter = NULL, camel_case_linter = NULL, snake_case_linter = NULL, multiple_dots_linter = NULL)
+<<<<<<< HEAD
 exclusions: list("R/evals.R" = 135)
+=======
+exclusions: list()
+>>>>>>> Linted graph.R
