@@ -80,7 +80,7 @@ test_that('rmarkdown pipe-delimited table is correct (#186)', {
     expect_true(any(grep('my missing cell', res)))
 })
 
-test_that('pandoc.table.return behaves correctly', { # misc tests for uncovered parts
+test_that('pandoc.table.return behaves correctly', {
     expect_warning(pander_return(mtcars[,1:2], split.tables = Inf, split.cells = c("50%", "50%")))
     t <- mtcars[1:3, 1:2]
     attr(t, 'alignment') <- 'left'
@@ -92,7 +92,7 @@ test_that('pandoc.table.return behaves correctly', { # misc tests for uncovered 
     expect_error(pander_return(t, justify = "lr")) # needs 3 because of rownames
     res <- pander_return(t, justify = "lrr")
     expect_false(any(grep("[[:space:]]$", res)))
-    expect_error(pander_return(t, justify="laft")) 
+    expect_error(pander_return(t, justify="laft"))
     res <- pander_return(t, split.tables = 1)
     expect_equal(length(res), 24)
     res <- pander_return(t, split.cells = c(10, 10, 10))
@@ -296,13 +296,13 @@ test_that('keep.line.breaks works correctly', {
   x <- data.frame(a=paste(rep("pander", n[1]), collapse="\n"),
                   b = paste(rep("pander", n[2]), collapse="\n"),
                   c = paste(rep("pander", n[3]), collapse="\n"))
-  lines.x.no.breaks <- length(strsplit(pandoc.table.return(x, keep.line.breaks = FALSE, split.cells = Inf, split.tables = Inf), "\n")[[1]])
+  lines.x.no.breaks <- length(strsplit(pandoc.table.return(x, keep.line.breaks = FALSE, split.cells = Inf, split.tables = Inf), "\n")[[1]]) #nolint
   lines.x.keep.breaks <- length(strsplit(pandoc.table.return(x, keep.line.breaks = TRUE), "\n")[[1]])
   expect_equal(lines.x.no.breaks + max(n) - 1, lines.x.keep.breaks)
 
   # 3 columns, 2 rows
   x <- rbind(x,x)
-  lines.x.no.breaks <- length(strsplit(pandoc.table.return(x, keep.line.breaks = FALSE, split.cells = Inf, split.tables = Inf), "\n")[[1]])
+  lines.x.no.breaks <- length(strsplit(pandoc.table.return(x, keep.line.breaks = FALSE, split.cells = Inf, split.tables = Inf), "\n")[[1]]) #nolint
   lines.x.keep.breaks <- length(strsplit(pandoc.table.return(x, keep.line.breaks = TRUE), "\n")[[1]])
   expect_equal(lines.x.no.breaks + 2 * max(n) - 2, lines.x.keep.breaks)
 })
@@ -311,22 +311,30 @@ context("split.cells")
 test_that('split.cells works correctly',{
   x <- data.frame(a = "foo bar\nfo bar")
   # single line break behaves correctly combines with keep line breaks
-  expect_equal(pandoc.table.return(x, keep.line.breaks = T, split.cells = 7), "\n-------\n   a   \n-------\nfoo bar\nfo bar \n-------\n\n")
-  expect_equal(pandoc.table.return(x, keep.line.breaks = T, split.cells = 6), "\n------\n  a   \n------\n foo  \n bar  \nfo bar\n------\n\n")
+  expect_equal(pandoc.table.return(x, keep.line.breaks = T, split.cells = 7),
+               "\n-------\n   a   \n-------\nfoo bar\nfo bar \n-------\n\n")
+  expect_equal(pandoc.table.return(x, keep.line.breaks = T, split.cells = 6),
+               "\n------\n  a   \n------\n foo  \n bar  \nfo bar\n------\n\n")
   # Corner values of split.cells
   x <- data.frame(a = "foo bar", b = "foo bar")
   expect_equal(length(strsplit(pandoc.table.return(x, split.cells = c(6, Inf)), "\n")[[1]]), 8)
-  expect_equal(pandoc.table.return(x, split.cells = c(6, Inf)), "\n-----------\n a     b   \n--- -------\nfoo foo bar\nbar        \n-----------\n\n")
-  expect_equal(pandoc.table.return(x, split.cells = c(Inf, 6)), "\n-----------\n   a     b \n------- ---\nfoo bar foo\n        bar\n-----------\n\n")
-  expect_equal(pandoc.table.return(x, split.cells = c(7, 7)), "\n---------------\n   a       b   \n------- -------\nfoo bar foo bar\n---------------\n\n")
+  expect_equal(pandoc.table.return(x, split.cells = c(6, Inf)),
+               "\n-----------\n a     b   \n--- -------\nfoo foo bar\nbar        \n-----------\n\n")
+  expect_equal(pandoc.table.return(x, split.cells = c(Inf, 6)),
+               "\n-----------\n   a     b \n------- ---\nfoo bar foo\n        bar\n-----------\n\n")
+  expect_equal(pandoc.table.return(x, split.cells = c(7, 7)),
+               "\n---------------\n   a       b   \n------- -------\nfoo bar foo bar\n---------------\n\n")
   expect_equal(pandoc.table.return(x, split.cells = c(7, 7)), pandoc.table.return(x, split.cells = Inf))
   expect_equal(pandoc.table.return(x, split.cells = c(6 ,6)), pandoc.table.return(x, split.cells = 6))
   expect_equal(pandoc.table.return(x, split.cells = c(7 ,7)), pandoc.table.return(x, split.cells = 7))
   expect_equal(pandoc.table.return(x, split.cells = c(7 ,7)), pandoc.table.return(x, split.cells = 7))
   # relative split.cells
-  expect_equal(pandoc.table.return(x, split.cells = c("50%", "50%")), pandoc.table.return(x, split.cells = c(7)))
-  expect_equal(pandoc.table.return(x, split.cells = c("20%", "80%"), split.tables = 30), pandoc.table.return(x, split.cells = c(6, Inf)))
-  expect_equal(pandoc.table.return(x, split.cells = c("80%", "20%"), split.tables = 30), pandoc.table.return(x, split.cells = c(Inf, 6)))
+  expect_equal(pandoc.table.return(x, split.cells = c("50%", "50%")),
+               pandoc.table.return(x, split.cells = c(7)))
+  expect_equal(pandoc.table.return(x, split.cells = c("20%", "80%"), split.tables = 30),
+               pandoc.table.return(x, split.cells = c(6, Inf)))
+  expect_equal(pandoc.table.return(x, split.cells = c("80%", "20%"), split.tables = 30),
+               pandoc.table.return(x, split.cells = c(Inf, 6)))
 })
 
 test_that('split.cells param produces expected warnings',{
@@ -350,81 +358,99 @@ table.expand <- function(cells, cols.width, justify, sep.cols, style) {
 }
 
 test_that('table.expand behaves correctly',{
-  # Saved results of original table expand written in R and now as a safe check that new table.expand returns the same results for different styles and justify
   ## multiline style check
-  argv <-  structure(list(txt = structure(c(1L, 4L, 2L, 3L), .Label = c("&nbsp;",  "cyl", "disp", "mpg"), class = "factor"), width = c(19, 5, 5,  6), justify = structure(c(1L, 1L, 1L, 1L), .Label = "centre", class = "factor")), .Names = c("txt",  "width", "justify"), row.names = c(NA, -4L), class = "data.frame")
+  argv <-  structure(list(txt = structure(c(1L, 4L, 2L, 3L), .Label = c("&nbsp;",  "cyl", "disp", "mpg"), class = "factor"), width = c(19, 5, 5,  6), justify = structure(c(1L, 1L, 1L, 1L), .Label = "centre", class = "factor")), .Names = c("txt",  "width", "justify"), row.names = c(NA, -4L), class = "data.frame") #nolint
   sep.cols <-  c("", " ", "")
   style <-  "multiline"
   res <- table.expand(argv[,1], argv[,2], argv[,3], sep.cols, style)
-  expect_equal(max(sapply(strsplit(as.character(argv[,1]), "\n"), length)), length(strsplit(res, "\n")[[1]])) # max number of line breaks equals number of lines in the result
-  expect_equal(nchar(res), nchar(sep.cols)[1] + (length(argv[,2]) - 1) * nchar(sep.cols)[2] + nchar(sep.cols)[3] + sum(argv[,2]))
+  # max number of line breaks equals number of lines in the result
+  expect_equal(max(sapply(strsplit(as.character(argv[,1]), "\n"), length)),
+               length(strsplit(res, "\n")[[1]]))
+  expect_equal(nchar(res),
+               nchar(sep.cols)[1] + (length(argv[,2]) - 1) * nchar(sep.cols)[2] + nchar(sep.cols)[3] + sum(argv[,2]))
   expect_equal(res, "      &nbsp;         mpg   cyl   disp ");
 
   ## grid style check
-  argv <-  structure(list(txt = structure(c(1L, 5L, 2L, 3L, 4L), .Label = c("&nbsp;",  "cyl", "disp", "hp", "mpg"), class = "factor"), width = c(20,  5, 5, 6, 4), justify = structure(c(1L, 1L, 1L, 1L, 1L), .Label = "centre", class = "factor")), .Names = c("txt",  "width", "justify"), row.names = c(NA, -5L), class = "data.frame")
+  argv <-  structure(list(txt = structure(c(1L, 5L, 2L, 3L, 4L), .Label = c("&nbsp;",  "cyl", "disp", "hp", "mpg"), class = "factor"), width = c(20,  5, 5, 6, 4), justify = structure(c(1L, 1L, 1L, 1L, 1L), .Label = "centre", class = "factor")), .Names = c("txt",  "width", "justify"), row.names = c(NA, -5L), class = "data.frame") #nolint
   sep.cols <-  c("| ", " | ", " |")
   res <- table.expand(argv[,1], argv[,2], argv[,3], sep.cols, style)
-  expect_equal(max(sapply(strsplit(as.character(argv[,1]), "\n"), length)), length(strsplit(res, "\n")[[1]])) # max number of line breaks equals number of lines in the result
-  expect_equal(nchar(res), nchar(sep.cols)[1] + (length(argv[,2]) - 1) * nchar(sep.cols)[2] + nchar(sep.cols)[3] + sum(argv[,2]))
+  # max number of line breaks equals number of lines in the result
+  expect_equal(max(sapply(strsplit(as.character(argv[,1]), "\n"), length)), length(strsplit(res, "\n")[[1]]))
+  expect_equal(nchar(res), nchar(sep.cols)[1] + (length(argv[,2]) - 1) * nchar(sep.cols)[2] + nchar(sep.cols)[3] + sum(argv[,2])) #nolint
   expect_equal(res, "|        &nbsp;        |  mpg  |  cyl  |  disp  |  hp  |" )
 
   ## rmarkdown style check
-  argv <-  structure(list(txt = structure(c(1L, 4L, 5L, 3L, 2L), .Label = c("**Mazda RX4**",  "110", "160", "21", "6"), class = "factor"), width = c(20, 5,  5, 6, 4), justify = structure(c(1L, 1L, 1L, 1L, 1L), .Label = "centre", class = "factor")), .Names = c("txt",  "width", "justify"), row.names = c("t.rownames", "mpg", "cyl",  "disp", "hp"), class = "data.frame")
+  argv <-  structure(list(txt = structure(c(1L, 4L, 5L, 3L, 2L), .Label = c("**Mazda RX4**",  "110", "160", "21", "6"), class = "factor"), width = c(20, 5,  5, 6, 4), justify = structure(c(1L, 1L, 1L, 1L, 1L), .Label = "centre", class = "factor")), .Names = c("txt",  "width", "justify"), row.names = c("t.rownames", "mpg", "cyl",  "disp", "hp"), class = "data.frame") #nolint
   sep.cols <-  c("| ", " | ", " |")
   style <-  "rmarkdown"
   res <- table.expand(argv[,1], argv[,2], argv[,3], sep.cols, style)
-  expect_equal(max(sapply(strsplit(as.character(argv[,1]), "\n"), length)), length(strsplit(res, "\n")[[1]])) # max number of line breaks equals number of lines in the result
-  expect_equal(nchar(res), nchar(sep.cols)[1] + (length(argv[,2]) - 1) * nchar(sep.cols)[2] + nchar(sep.cols)[3] + sum(argv[,2]))
+  # max number of line breaks equals number of lines in the result
+  expect_equal(max(sapply(strsplit(as.character(argv[,1]), "\n"), length)), length(strsplit(res, "\n")[[1]]))
+  expect_equal(nchar(res),
+               nchar(sep.cols)[1] + (length(argv[,2]) - 1) * nchar(sep.cols)[2] + nchar(sep.cols)[3] + sum(argv[,2]))
   expect_equal(res, "|    **Mazda RX4**     |  21   |   6   |  160   | 110  |")
 
   ## simple style check
-  argv <-  structure(list(txt = structure(c(1L, 3L, 4L, 2L, 5L), .Label = c("**Datsun 710**",  "108", "22.8", "4", "93"), class = "factor"), width = c(20, 5,  5, 6, 4), justify = structure(c(1L, 1L, 1L, 1L, 1L), .Label = "centre", class = "factor")), .Names = c("txt",  "width", "justify"), row.names = c("t.rownames", "mpg", "cyl",  "disp", "hp"), class = "data.frame")
+  argv <-  structure(list(txt = structure(c(1L, 3L, 4L, 2L, 5L), .Label = c("**Datsun 710**",  "108", "22.8", "4", "93"), class = "factor"), width = c(20, 5,  5, 6, 4), justify = structure(c(1L, 1L, 1L, 1L, 1L), .Label = "centre", class = "factor")), .Names = c("txt",  "width", "justify"), row.names = c("t.rownames", "mpg", "cyl",  "disp", "hp"), class = "data.frame") #nolint
   sep.cols <-  c("", " ", "")
   style <-  "simple"
   res <- table.expand(argv[,1], argv[,2], argv[,3], sep.cols, style)
-  expect_equal(max(sapply(strsplit(as.character(argv[,1]), "\n"), length)), length(strsplit(res, "\n")[[1]])) # max number of line breaks equals number of lines in the result
-  expect_equal(nchar(res), nchar(sep.cols)[1] + (length(argv[,2]) - 1) * nchar(sep.cols)[2] + nchar(sep.cols)[3] + sum(argv[,2]))
+  # max number of line breaks equals number of lines in the result
+  expect_equal(max(sapply(strsplit(as.character(argv[,1]), "\n"), length)), length(strsplit(res, "\n")[[1]]))
+  expect_equal(nchar(res),
+               nchar(sep.cols)[1] + (length(argv[,2]) - 1) * nchar(sep.cols)[2] + nchar(sep.cols)[3] + sum(argv[,2]))
   expect_equal(res, "   **Datsun 710**    22.8    4    108    93 ")
 
   ## left justification
-  argv <-  structure(list(txt = structure(c(1L, 4L, 5L, 3L, 2L), .Label = c("**Mazda",  "110", "160", "21", "6"), class = "factor"), width = c(10, 5,  5, 6, 4), justify = structure(c(1L, 1L, 1L, 1L, 1L), .Label = "left", class = "factor")), .Names = c("txt",  "width", "justify"), row.names = c(NA, -5L), class = "data.frame")
+  argv <-  structure(list(txt = structure(c(1L, 4L, 5L, 3L, 2L), .Label = c("**Mazda",  "110", "160", "21", "6"), class = "factor"), width = c(10, 5,  5, 6, 4), justify = structure(c(1L, 1L, 1L, 1L, 1L), .Label = "left", class = "factor")), .Names = c("txt",  "width", "justify"), row.names = c(NA, -5L), class = "data.frame") #nolint
   sep.cols <-  c("", " ", "")
   style <-  "multiline"
   res <- table.expand(argv[,1], argv[,2], argv[,3], sep.cols, style)
-  expect_equal(max(sapply(strsplit(as.character(argv[,1]), "\n"), length)), length(strsplit(res, "\n")[[1]])) # max number of line breaks equals number of lines in the result
-  expect_equal(nchar(res), nchar(sep.cols)[1] + (length(argv[,2]) - 1) * nchar(sep.cols)[2] + nchar(sep.cols)[3] + sum(argv[,2]))
+  # max number of line breaks equals number of lines in the result
+  expect_equal(max(sapply(strsplit(as.character(argv[,1]), "\n"), length)), length(strsplit(res, "\n")[[1]]))
+  expect_equal(nchar(res),
+               nchar(sep.cols)[1] + (length(argv[,2]) - 1) * nchar(sep.cols)[2] + nchar(sep.cols)[3] + sum(argv[,2]))
   expect_equal(res, "**Mazda    21    6     160    110 ");
 
   ## right justification
-  argv <-  structure(list(txt = structure(c(1L, 3L, 5L, 4L, 2L), .Label = c("**Hornet 4 Drive**",  "110", "21.4", "258", "6"), class = "factor"), width = c(20,  5, 5, 6, 4), justify = structure(c(1L, 1L, 1L, 1L, 1L), .Label = "right", class = "factor")), .Names = c("txt",  "width", "justify"), row.names = c("t.rownames", "mpg", "cyl",  "disp", "hp"), class = "data.frame")
+  argv <-  structure(list(txt = structure(c(1L, 3L, 5L, 4L, 2L), .Label = c("**Hornet 4 Drive**",  "110", "21.4", "258", "6"), class = "factor"), width = c(20,  5, 5, 6, 4), justify = structure(c(1L, 1L, 1L, 1L, 1L), .Label = "right", class = "factor")), .Names = c("txt",  "width", "justify"), row.names = c("t.rownames", "mpg", "cyl",  "disp", "hp"), class = "data.frame") #nolint
   sep.cols <-  c("", " ", "")
   style <-  "simple"
   res <- table.expand(argv[,1], argv[,2], argv[,3], sep.cols, style)
-  expect_equal(max(sapply(strsplit(as.character(argv[,1]), "\n"), length)), length(strsplit(res, "\n")[[1]])) # max number of line breaks equals number of lines in the result
-  expect_equal(nchar(res), nchar(sep.cols)[1] + (length(argv[,2]) - 1) * nchar(sep.cols)[2] + nchar(sep.cols)[3] + sum(argv[,2]))
+  # max number of line breaks equals number of lines in the result
+  expect_equal(max(sapply(strsplit(as.character(argv[,1]), "\n"), length)), length(strsplit(res, "\n")[[1]]))
+  expect_equal(nchar(res),
+               nchar(sep.cols)[1] + (length(argv[,2]) - 1) * nchar(sep.cols)[2] + nchar(sep.cols)[3] + sum(argv[,2]))
   expect_equal(res, "  **Hornet 4 Drive**  21.4     6    258  110" );
 
   ## multiple lines
-  argv <-  structure(list(txt = structure(c(1L, 3L, 5L, 4L, 2L), .Label = c("**Hornet\n4\nDrive**",  "110", "21.4", "258", "6"), class = "factor"), width = c(10,  5, 5, 6, 4), justify = structure(c(1L, 1L, 1L, 1L, 1L), .Label = "left", class = "factor")), .Names = c("txt",  "width", "justify"), row.names = c("t.rownames", "mpg", "cyl",  "disp", "hp"), class = "data.frame")
+  argv <-  structure(list(txt = structure(c(1L, 3L, 5L, 4L, 2L), .Label = c("**Hornet\n4\nDrive**",  "110", "21.4", "258", "6"), class = "factor"), width = c(10,  5, 5, 6, 4), justify = structure(c(1L, 1L, 1L, 1L, 1L), .Label = "left", class = "factor")), .Names = c("txt",  "width", "justify"), row.names = c("t.rownames", "mpg", "cyl",  "disp", "hp"), class = "data.frame") #nolint
   sep.cols <-  c("", " ", "")
   style <-  "multiline"
   res <- table.expand(argv[,1], argv[,2], argv[,3], sep.cols, style)
-  expect_equal(max(sapply(strsplit(as.character(argv[,1]), "\n"), length)), length(strsplit(res, "\n")[[1]])) # max number of line breaks equals number of lines in the result
-  expect_equal(res, "**Hornet   21.4  6     258    110 \n4                                 \nDrive**                           ");
+  # max number of line breaks equals number of lines in the result
+  expect_equal(max(sapply(strsplit(as.character(argv[,1]), "\n"), length)),
+               length(strsplit(res, "\n")[[1]]))
+  # max number of line breaks equals number of lines in the result
+  expect_equal(res, "**Hornet   21.4  6     258    110 \n4                                 \nDrive**                           "); #nolint
 
-  argv <-  structure(list(txt = structure(c(1L, 3L, 4L, 2L, 5L), .Label = c("**Datsun\n710**",  "108", "22.8", "4", "93"), class = "factor"), width = c(10, 5,  5, 6, 4), justify = structure(c(1L, 1L, 1L, 1L, 1L), .Label = "left", class = "factor")), .Names = c("txt",  "width", "justify"), row.names = c("t.rownames", "mpg", "cyl",  "disp", "hp"), class = "data.frame")
+
+  argv <-  structure(list(txt = structure(c(1L, 3L, 4L, 2L, 5L), .Label = c("**Datsun\n710**",  "108", "22.8", "4", "93"), class = "factor"), width = c(10, 5,  5, 6, 4), justify = structure(c(1L, 1L, 1L, 1L, 1L), .Label = "left", class = "factor")), .Names = c("txt",  "width", "justify"), row.names = c("t.rownames", "mpg", "cyl",  "disp", "hp"), class = "data.frame") #nolint
   sep.cols <-  c("", " ", "")
   style <-  "multiline"
   res <- table.expand(argv[,1], argv[,2], argv[,3], sep.cols, style)
-  expect_equal(max(sapply(strsplit(as.character(argv[,1]), "\n"), length)), length(strsplit(res, "\n")[[1]])) # max number of line breaks equals number of lines in the result
+  # max number of line breaks equals number of lines in the result
+  expect_equal(max(sapply(strsplit(as.character(argv[,1]), "\n"), length)),
+               length(strsplit(res, "\n")[[1]]))
   expect_equal(res, "**Datsun   22.8  4     108    93  \n710**                             ");
 
-  argv <-  structure(list(txt = structure(c(1L, 4L, 5L, 3L, 2L), .Label = c("**Mazda\nRX4\nWag**",  "110", "160", "21", "6"), class = "factor"), width = c(10, 5,  5, 6, 4), justify = structure(c(1L, 1L, 1L, 1L, 1L), .Label = "left", class = "factor")), .Names = c("txt",  "width", "justify"), row.names = c("t.rownames", "mpg", "cyl",  "disp", "hp"), class = "data.frame")
+  argv <-  structure(list(txt = structure(c(1L, 4L, 5L, 3L, 2L), .Label = c("**Mazda\nRX4\nWag**",  "110", "160", "21", "6"), class = "factor"), width = c(10, 5,  5, 6, 4), justify = structure(c(1L, 1L, 1L, 1L, 1L), .Label = "left", class = "factor")), .Names = c("txt",  "width", "justify"), row.names = c("t.rownames", "mpg", "cyl",  "disp", "hp"), class = "data.frame") #nolint
   sep.cols <-  c("", " ", "")
   style <-  "multiline"
   res <- table.expand(argv[,1], argv[,2], argv[,3], sep.cols, style)
-  expect_equal(max(sapply(strsplit(as.character(argv[,1]), "\n"), length)), length(strsplit(res, "\n")[[1]])) # max number of line breaks equals number of lines in the result
-  expect_equal(res, "**Mazda    21    6     160    110 \nRX4                               \nWag**                             ");
+  # max number of line breaks equals number of lines in the result
+  expect_equal(max(sapply(strsplit(as.character(argv[,1]), "\n"), length)), length(strsplit(res, "\n")[[1]]))
+  expect_equal(res, "**Mazda    21    6     160    110 \nRX4                               \nWag**                             "); #nolint
 
   # empty cells
   cells <- c("","","")
@@ -432,14 +458,19 @@ test_that('table.expand behaves correctly',{
   justify <- c("centre", "centre", "centre")
   sep.cols <- c("", " ", "")
   res <- table.expand(cells, cols.width, justify, sep.cols, "multiline")
-  expect_equal(max(sapply(strsplit(as.character(cells), "\n"), length)), 0) # max number of line breaks equals number of lines in the result
-  expect_equal(nchar(res), nchar(sep.cols)[1] + (length(cells) - 1) * nchar(sep.cols)[2] + nchar(sep.cols)[3] + sum(cols.width))
+  # when max.width param is small, every word is a line
+  expect_equal(max(sapply(strsplit(as.character(cells), "\n"), length)), 0)
+  expect_equal(nchar(res),
+               nchar(sep.cols)[1] + (length(cells) - 1) * nchar(sep.cols)[2] + nchar(sep.cols)[3] + sum(cols.width))
   expect_equal(res, "        ")
 
   # backslashes issue (#22)
-  expect_equal(pandoc.table.return(data.frame(a="\\1 \\ 32",b="23")),"\n-----------\n   a     b \n------- ---\n\\1 \\ 32 23 \n-----------\n\n")
-  expect_equal(pandoc.table.return(data.frame(a="\\1 \\ 32",b="23"), justify = 'right'), "\n-----------\n      a   b\n------- ---\n\\1 \\ 32  23\n-----------\n\n")
-  expect_equal(pandoc.table.return(data.frame(a="\\1",b="23")), "\n-------\n a   b \n--- ---\n\\1  23 \n-------\n\n")
+  expect_equal(pandoc.table.return(data.frame(a="\\1 \\ 32",b="23")),
+               "\n-----------\n   a     b \n------- ---\n\\1 \\ 32 23 \n-----------\n\n")
+  expect_equal(pandoc.table.return(data.frame(a="\\1 \\ 32",b="23"), justify = 'right'),
+               "\n-----------\n      a   b\n------- ---\n\\1 \\ 32  23\n-----------\n\n")
+  expect_equal(pandoc.table.return(data.frame(a="\\1",b="23")),
+               "\n-------\n a   b \n--- ---\n\\1  23 \n-------\n\n")
 
   # unicode string issue
   expect_equal(pandoc.table.return(data.frame(a = 'ßß')), "\n---\n a \n---\nßß \n---\n\n")
@@ -496,11 +527,12 @@ context("S3 methods")
 
 test_that('pander.tabular behaves correctly', {
     suppressMessages(require(tables))
-    tab <- pander_return(tables::tabular(as.factor(am) ~ (mpg+hp+qsec) * (mean+median), data = mtcars), 
-                         emphasize.rownames = FALSE, 
+    tab <- pander_return(tables::tabular(as.factor(am) ~ (mpg + hp + qsec) * (mean + median),
+                                         data = mtcars),
+                         emphasize.rownames = FALSE,
                          split.tables = Inf)
     expect_equal(length(tab), 10)
-    tab <- pander_return(tables::tabular( (Species + 1) ~ (n=1) + Format(digits=2)* (Sepal.Length + Sepal.Width)*(mean + sd), data=iris ), 
+    tab <- pander_return(tables::tabular( (Species + 1) ~ (n = 1) + Format(digits = 2) * (Sepal.Length + Sepal.Width) * (mean + sd), data=iris ), #nolint
                          split.tables = Inf)
     expect_equal(length(tab), 14)
 })
@@ -510,8 +542,8 @@ test_that('pander.CrossTable behaves correctly', {
     # issue https://github.com/Rapporter/pander/issues/163
     x <- CrossTable(mtcars$cyl, mtcars$gear, prop.c = FALSE, prop.t = FALSE, chisq = FALSE, prop.chisq = FALSE)
     res <- pander_return(x)
-    expect_true(any(grepl(gsub("\\$", "\\\\$", x$ColData), res)))
-    expect_true(any(grepl(gsub("\\$", "\\\\$", x$RowData), res)))
+    expect_true(any(grepl(gsub("\\$", "\\\\$", x$ColData), res))) #nolint
+    expect_true(any(grepl(gsub("\\$", "\\\\$", x$RowData), res))) #nolint
     # expected N, residual, std residual, adj std residual rownames was not included
     x <- suppressWarnings(CrossTable(mtcars$cyl, mtcars$gear, expected = T, resid = T, sresid = T, asresid = T))
     res <- pander_return(x)
@@ -529,7 +561,7 @@ test_that('pander.NULL behaves correctly', {
 test_that('pander.cast_df behaves correctly', {
     df <- data.frame(type=c(1, 1, 2, 2, 3, 3), variable="n", value=c(71, 72, 68, 80, 21, 20))
     df.cast <- reshape::cast(df, type~., sum)
-    expect_equal(pander_return(df.cast, style='simple'), 
+    expect_equal(pander_return(df.cast, style='simple'),
                  c('','',' type   (all) ','------ -------','  1      143  ','  2      148  ','  3      41   ',''))
 })
 
@@ -563,7 +595,7 @@ test_that('pander.glm/pander.summary.glm behaves correctly', {
 })
 
 test_that('pander.aov/pander.summary.aov behaves correctly', {
-    npk.aovE <- aov(yield ~  N*P*K + Error(block), npk)
+    npk.aovE <- aov(yield ~  N * P * K + Error(block), npk)
     paov <- pander_return(npk.aovE)
     psaov <- pander_return(summary(npk.aovE))
     expect_equal(paov, psaov) # choice of similar result for summary and standard
@@ -593,10 +625,9 @@ test_that('pander.aovlist/pander.summary.aovlist behaves correctly', {
     K <- c(1,0,0,1,0,1,1,0,0,1,0,1,0,1,1,0,0,0,1,1,1,0,1,0)
     yield <- c(49.5,62.8,46.8,57.0,59.8,58.5,55.5,56.0,62.8,55.8,69.5,
                55.0, 62.0,48.8,45.5,44.2,52.0,51.5,49.8,48.8,57.2,59.0,53.2,56.0)
-    
     npk <- data.frame(block=gl(6,4), N=factor(N), P=factor(P),
                       K=factor(K), yield=yield)
-    a <- aov(yield ~  N*P*K + Error(block), npk)
+    a <- aov(yield ~  N * P * K + Error(block), npk)
     pa <- pander_return(a, style='simple')
     expect_equal(length(pa), 14)
 })
@@ -605,16 +636,15 @@ test_that('pander.mtable behaves correctly', {
     suppressMessages(require(memisc))
     lm0 <- lm(sr ~ pop15 + pop75,              data = LifeCycleSavings)
     pm <- pander_return(memisc::mtable(lm0), style='grid') # produces 2 columns, corner case
-    expect_equal(length(strsplit(pm[3], "\\+")[[1]]), 3) 
+    expect_equal(length(strsplit(pm[3], "\\+")[[1]]), 3)
     expect_equal(length(pm), 35)
 
     berkeley <- Aggregate(Table(Admit,Freq)~.,data=UCBAdmissions)
     berk0 <- glm(cbind(Admitted,Rejected)~1,data=berkeley,family="binomial")
     berk1 <- glm(cbind(Admitted,Rejected)~Gender,data=berkeley,family="binomial")
-    berk2 <- glm(cbind(Admitted,Rejected)~Gender+Dept,data=berkeley,family="binomial")
+    berk2 <- glm(cbind(Admitted,Rejected)~Gender + Dept,data=berkeley,family="binomial")
     pm <- pander_return(mtable(berk0, summary.stats=NULL), style='grid') # only one row
     expect_equal(length(pm), 7)
-    
     # horizontal, produced an error before
     x <- memisc::mtable(berk0,berk1,berk2,
            coef.style="horizontal",
@@ -622,7 +652,7 @@ test_that('pander.mtable behaves correctly', {
     pm <- pander_return(x, style='grid')
     expect_equal(length(pm), 33)
     expect_true(all(sapply(colnames(x$coeficient), grepl, pm[4])))
-    
+
     # more complex mtable
     pm <- pander_return(memisc::mtable(berk0,berk1,berk2,
            coef.style="all",
@@ -643,11 +673,11 @@ test_that('pander.ts behaves correctly', {
 
 test_that('pander.coxph behaves correctly', {
     suppressMessages(require(survival))
-    test1 <- list(time=c(4,3,1,1,2,2,3), 
-                  status=c(1,1,1,0,1,1,0), 
-                  x=c(0,2,1,1,1,0,0), 
-                  sex=c(0,0,0,0,1,1,1)) 
-    # Fit a stratified model 
+    test1 <- list(time=c(4,3,1,1,2,2,3),
+                  status=c(1,1,1,0,1,1,0),
+                  x=c(0,2,1,1,1,0,0),
+                  sex=c(0,0,0,0,1,1,1))
+    # Fit a stratified model
     res <- pander_return(coxph(Surv(time, status) ~ x + strata(sex), test1))
     expect_equal(res[3], "&nbsp;   coef   exp(coef)   se(coef)    z      p   ")
     expect_equal(length(res), 10)
@@ -706,9 +736,11 @@ test_that('pander.survdiff works correctly', {
     expect_equal(length(res), 12)
     expect_equal(res[3], "  &nbsp;    N   Observed   Expected   (O-E)^2/E   (O-E)^2/V ")
     # length(x$n) == 1
-    expect <- survexp(futime ~ ratetable(age=(accept.dt - birth.dt),
-                                         sex=1,year=accept.dt,race="white"), jasa, cohort=FALSE,
-                      ratetable=survexp.usr)
+    expect <- survexp(futime ~ ratetable(age = (accept.dt - birth.dt),
+                                         sex = 1,
+                                         year = accept.dt,
+                                         race = "white"),
+                      jasa, cohort = FALSE, ratetable = survexp.usr)
     res <- pander_return(survdiff(Surv(jasa$futime, jasa$fustat) ~ offset(expect)))
     expect_equal(res[3], " Observed   Expected    Z     p ")
     expect_equal(length(res), 9)
@@ -815,7 +847,7 @@ test_that('pander.randomForest works correctly', {
     expect_false(any(grep('-', res)))
     # with test
     index <- 1:nrow(iris)
-    trainindex <- sample(index, trunc(length(index)/2))
+    trainindex <- sample(index, trunc(length(index) / 2))
     trainset <- iris[trainindex, ]
     testset <- iris[-trainindex, ]
     res <- pander_return(randomForest(x=trainset[ ,-1], y=trainset[ ,1], xtest=testset[ ,-1], ytest=testset[ ,1]))
@@ -879,4 +911,3 @@ test_that('pander.nls/pander.summary.nls works correctly', {
     expect_true(any(grepl('Correlation', res)))
     expect_equal(length(res), 31)
 })
-
