@@ -59,7 +59,7 @@ repChar <- function(x, n, sep = '')
 #' @export
 #' @author Aleksandar Blagotic
 #' @references This function was moved from \code{rapport} package: \url{http://rapport-package.info}.
-p <- function(x, wrap = panderOptions('p.wrap'), sep = panderOptions('p.sep'), copula = panderOptions('p.copula'), limit = Inf, keep.trailing.zeros = panderOptions('keep.trailing.zeros'), missing = panderOptions('missing')){
+p <- function(x, wrap = panderOptions('p.wrap'), sep = panderOptions('p.sep'), copula = panderOptions('p.copula'), limit = Inf, keep.trailing.zeros = panderOptions('keep.trailing.zeros'), missing = panderOptions('missing')){ #nolint
 
     attributes(x) <- NULL
     stopifnot(is.vector(x))
@@ -79,7 +79,7 @@ p <- function(x, wrap = panderOptions('p.wrap'), sep = panderOptions('p.sep'), c
 
         ## optionally remove trailing zeros by running format separately on each element of the vector
         if (!keep.trailing.zeros)
-            x <- sapply(x, format, trim = TRUE, digits = panderOptions('digits'), decimal.mark = panderOptions('decimal.mark'))
+            x <- sapply(x, format, trim = TRUE, digits = panderOptions('digits'), decimal.mark = panderOptions('decimal.mark')) #nolint
         ## otherwise force using the same number format for all vector elements
         else
             x <- format(x, trim = TRUE, digits = panderOptions('digits'), decimal.mark = panderOptions('decimal.mark'))
@@ -157,7 +157,7 @@ get.caption <- function()
 #' @param row.names string holding the alignment of the (optional) row names
 #' @param permanent (default \code{FALSE}) if alignment is permanent (for all future tables) or not. It's cleaner to use \code{panderOptions} instead.
 #' @export
-set.alignment <- function(default = panderOptions('table.alignment.default'), row.names = panderOptions('table.alignment.rownames'), permanent = FALSE) {
+set.alignment <- function(default = panderOptions('table.alignment.default'), row.names = panderOptions('table.alignment.rownames'), permanent = FALSE) { #nolint
     assign('alignment', list(default = default, row.names = row.names) , envir = storage)
     attr(storage$alignment, 'permanent') <- permanent
 }
@@ -259,7 +259,12 @@ emphasize.strong.cells <- emphasize.rows
 #' @return R object passed as \code{df} with possibly added \code{attr}s captured from internal buffer
 #' @keywords internal
 get.emphasize <- function(df) {
-    for (v in c('emphasize.rows', 'emphasize.cols', 'emphasize.cells', 'emphasize.strong.rows', 'emphasize.strong.cols', 'emphasize.strong.cells'))
+    for (v in c('emphasize.rows',
+                'emphasize.cols',
+                'emphasize.cells',
+                'emphasize.strong.rows',
+                'emphasize.strong.cols',
+                'emphasize.strong.cells'))
         if (is.null(attr(df, v)))
             attr(df, v) <- get.storage(v)
     return(df)
