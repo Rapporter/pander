@@ -686,24 +686,12 @@ eval.msgs <- function(src, env = NULL, showInvisible = FALSE, graph.unify = eval
 #' }
 #' @export
 #' @importFrom digest digest
-evals <- function(txt, parse = TRUE, cache = TRUE, cache.mode = c('environment', 'disk'), cache.dir = '.cache', cache.time = 0.1, cache.copy.images = FALSE,
-                  showInvisible = FALSE, classes = NULL, hooks = NULL, length = Inf, output = evalsOptions('output'), env = NULL,
-                  graph.unify = evalsOptions('graph.unify'), graph.name = '%t', graph.dir = 'plots', graph.output = c('png', 'bmp', 'jpeg', 'jpg', 'tiff', 'svg', 'pdf', NA),
-                  width = 480, height = 480, res= 72, hi.res = FALSE, hi.res.width = 960, hi.res.height = 960 * (height / width), hi.res.res = res * (hi.res.width / width),
-                  graph.env = FALSE, graph.recordplot = FALSE, graph.RDS = FALSE, log = evalsOptions('log'), ...) {
+evals <- function(txt, parse = evalsOptions('parse'), cache = evalsOptions('cache'), cache.mode = evalsOptions('cache.mode'), cache.dir = evalsOptions('cache.dir'), cache.time = evalsOptions('cache.time'), cache.copy.images = evalsOptions('cache.copy.images'), showInvisible = FALSE, classes = evalsOptions('classes'), hooks = evalsOptions('hooks'), length = evalsOptions('length'), output = evalsOptions('output'), env = NULL, graph.unify = evalsOptions('graph.unify'), graph.name = evalsOptions('graph.name'), graph.dir = evalsOptions('graph.dir'), graph.output = evalsOptions('graph.output'), width = evalsOptions('width'), height = evalsOptions('height'), res = evalsOptions('res'), hi.res = evalsOptions('hi.res'), hi.res.width = evalsOptions('hi.res.width'), hi.res.height = 960 * (height / width), hi.res.res = res * (hi.res.width / width), graph.env = evalsOptions('graph.env'), graph.recordplot = evalsOptions('graph.recordplot'), graph.RDS = evalsOptions('graph.RDS'), log = evalsOptions('log'), ...) { #nolint
 
     if (missing(txt)) {
         stop('No R code provided to evaluate!')
     }
     txt.original <- paste(txt, collapse = '\n')
-
-    ## override missing parameters with options
-    mc <- match.call()
-    for (param in names(evalsOptions())) {
-        if (is.null(mc[[param]])) {
-            assign(param, evalsOptions(param))
-        }
-    }
 
     ## logging constant
     logging <- !is.null(log) && require(futile.logger)
@@ -770,11 +758,8 @@ evals <- function(txt, parse = TRUE, cache = TRUE, cache.mode = c('environment',
         stop('Wrong graph.name (!character) specified!')
     }
 
-    if (!is.na(graph.output)) {
-        graph.output <- match.arg(graph.output)
-        if (graph.output == 'jpg') {
-            graph.output <- 'jpeg'
-        }
+    if (!is.na(graph.output) && graph.output == 'jpg') {
+        graph.output <- 'jpeg'
     }
 
     ## env for running all lines of code
