@@ -19,6 +19,7 @@ New classes supported by the `pander` generic S3 method:
  * randomForest
  * tabular
  * summary.lme
+ * manova/summary.manova
 
 Other changes:
  * Pandoc.convert will not add a footer to the document by dafault (#173)
