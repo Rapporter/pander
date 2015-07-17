@@ -293,8 +293,7 @@ add.significance.stars <- function(p) {
         if (length(p) > 1) {
             sapply(p, add.significance.stars)
         } else {
-            s <- ifelse(p > 0.05, '', ifelse(p > 0.01, ' *', ifelse(p > 0.001, ' * *', ' * * *')))
-            paste0(p(p), s)
+            ifelse(p > 0.05, '', ifelse(p > 0.01, ' *', ifelse(p > 0.001, ' * *', ' * * *')))
         }
     }
 }

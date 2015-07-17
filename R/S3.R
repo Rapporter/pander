@@ -323,7 +323,7 @@ pander.summary.lm <- function(x, caption = attr(x, 'caption'), covariate.labels,
         row.names(res)[1:length(covariate.labels)] <- covariate.labels
 
     if (add.significance.stars)
-        res[, 4] <- add.significance.stars(res[, 4])
+        res <- cbind(res, ' '=add.significance.stars(res[, 4]))
 
     if (summary) {
         pandoc.table(res, ...)
