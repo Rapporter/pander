@@ -445,9 +445,10 @@ pander.aov <- function(x, caption = attr(x, 'caption'), ...) {
 #' Prints an anova object in Pandoc's markdown.
 #' @param x an anova object
 #' @param caption caption (string) to be shown under the table
+#' @param add.significance.stars if significance stars should be shown for P value
 #' @param ... optional parameters passed to raw \code{pandoc.table} function
 #' @export
-pander.anova <- function(x, caption = attr(x, 'caption'), ...) {
+pander.anova <- function(x, caption = attr(x, 'caption'), add.significance.stars=FALSE, ...) {
 
     if (is.null(caption))
         if (is.null(storage$caption))
@@ -456,6 +457,8 @@ pander.anova <- function(x, caption = attr(x, 'caption'), ...) {
     if (is.null(caption))
         caption <- get.caption()
 
+    if(add.significance.stars && !is.null(x$`Pr(>F)`))
+      x$` ` <- format(stars.pval(x$`Pr(>F)`))
     pandoc.table(x, caption = caption, ...)
 
 }
