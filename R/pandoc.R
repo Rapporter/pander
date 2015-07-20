@@ -745,7 +745,7 @@ pandoc.table.return <- function(t, caption, digits = panderOptions('digits'), de
             emphasize.strong.cells <- cbind(rep(1, length(emphasize.strong.cells)), emphasize.strong.cells)
         }
     } else if (dim(t)[1] == 0) { # check for empty objects
-        if (!is.null(colnames(t))) {
+        if (!is.null(colnames(t)) && length(colnames(t)) > 0) {
             t <- as.data.frame(t)
             t[1, ] <- NA
         } else {
