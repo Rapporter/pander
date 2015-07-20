@@ -1594,6 +1594,7 @@ pander.randomForest <- function (x, digits = panderOptions('digits'), ...)
     }
 }
 
+<<<<<<< HEAD
 #' Prints an irts object from tseries package in Pandoc's markdown.
 #' @param x an irts object
 #' @param caption caption (string) to be shown under the table
@@ -1637,4 +1638,25 @@ pander.summary.manova <- function (x, caption = attr(x, 'caption'), add.signific
 #' @export
 pander.manova <- function(x, caption = attr(x, 'caption'), add.significance.stars = FALSE, ...) {
     pander(summary(x), caption = caption, add.significance.stars = add.significance.stars, ...)
+
+#' Pander method for gtable class
+#'
+#' Renders an gtable object in Pandoc's markdown.
+#' @param x an gtable object
+#' @param zsort Sort by z values? Default \code{FALSE}
+#' @param ... optional parameters passed to raw \code{pandoc.table} function
+#' @export
+pander.gtable <- function(x, zsort = FALSE, ...)
+{
+    if (nrow(x$layout) == 0)
+        return()
+    pos <- as.data.frame(format(as.matrix(x$layout[c("t", "r",
+                                                     "b", "l")])), stringsAsFactors = FALSE)
+    grobNames <- vapply(x$grobs, as.character, character(1))
+    info <- data.frame(z = x$layout$z, cells = paste("(", pos$t,
+                                                     "-", pos$b, ",", pos$l, "-", pos$r, ")", sep = ""), name = x$layout$name,
+                       grob = grobNames)
+    if (zsort)
+        info <- info[order(x$layout$z), ]
+    pander(info)
 }
