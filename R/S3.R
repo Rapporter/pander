@@ -1594,7 +1594,6 @@ pander.randomForest <- function (x, digits = panderOptions('digits'), ...)
     }
 }
 
-<<<<<<< HEAD
 #' Prints an irts object from tseries package in Pandoc's markdown.
 #' @param x an irts object
 #' @param caption caption (string) to be shown under the table
@@ -1636,7 +1635,7 @@ pander.summary.manova <- function (x, caption = attr(x, 'caption'), add.signific
 #' @param add.significance.stars if significance stars should be shown for P value
 #' @param ... optional parameters passed to raw \code{pandoc.table} function
 #' @export
-pander.manova <- function(x, caption = attr(x, 'caption'), add.significance.stars = FALSE, ...) {
+pander.manova <- function(x, caption = attr(x, 'caption'), add.significance.stars = FALSE, ...)
     pander(summary(x), caption = caption, add.significance.stars = add.significance.stars, ...)
 
 #' Pander method for gtable class
