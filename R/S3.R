@@ -445,19 +445,25 @@ pander.aov <- function(x, caption = attr(x, 'caption'), ...) {
 #' Prints an anova object in Pandoc's markdown.
 #' @param x an anova object
 #' @param caption caption (string) to be shown under the table
+#' @param add.significance.stars if significance stars should be shown for P value
 #' @param ... optional parameters passed to raw \code{pandoc.table} function
 #' @export
-pander.anova <- function(x, caption = attr(x, 'caption'), ...) {
+pander.anova <- function(x, caption = attr(x, 'caption'), add.significance.stars = FALSE, ...) {
 
     if (is.null(caption))
         if (is.null(storage$caption))
             if (!is.null(attr(x, 'heading')))
                 caption <- strsplit(attr(x, 'heading'), '\n')[[1]][1]
-    if (is.null(caption))
+    if (is.null(caption)) {
         caption <- get.caption()
-
+    }
+    if (add.significance.stars) {
+        x[, 5] <- add.significance.stars(x[, 5]) 
+    }
     pandoc.table(x, caption = caption, ...)
-
+    if (add.significance.stars) {
+        cat('Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1\n')
+    }
 }
 
 
@@ -1603,4 +1609,32 @@ pander.irts <- function(x, caption = attr(x, 'caption'), format = panderOptions(
     colnames(m) <- NULL
     rownames(m) <- format(x$time, format = format)
     pander(m, caption = caption, ...)
+}
+
+#' Prints an summary.manova object from stats package in Pandoc's markdown.
+#' @param x an summary.manova object
+#' @param add.significance.stars if significance stars should be shown for P value
+#' @param caption caption (string) to be shown under the table
+#' @param ... optional parameters passed to raw \code{pandoc.table} function
+#' @export
+pander.summary.manova <- function (x, caption = attr(x, 'caption'), add.significance.stars = FALSE, ...) {
+    if (length(stats <- x$stats)) {
+        pander.anova(stats, caption = caption, add.significance.stars = add.significance.stars, ...)
+    } else {
+        cat("No error degrees of freedom\n\n")
+        pander(data.frame(Df = x$Df, row.names = x$row.names), caption = caption, ...)
+    }
+    invisible(x)
+}
+
+#' Pander method for manova class
+#'
+#' Prints an manova object in Pandoc's markdown.
+#' @param x an manovv object
+#' @param caption caption (string) to be shown under the table
+#' @param add.significance.stars if significance stars should be shown for P value
+#' @param ... optional parameters passed to raw \code{pandoc.table} function
+#' @export
+pander.manova <- function(x, caption = attr(x, 'caption'), add.significance.stars = FALSE, ...) {
+    pander(summary(x), caption = caption, add.significance.stars = add.significance.stars, ...)
 }

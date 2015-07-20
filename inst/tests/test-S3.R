@@ -838,3 +838,13 @@ test_that('pander.irts works correctly', {
     res <- pander_return(irts(t, cbind(u, v)))
     expect_equal(length(res), 23)
 })
+
+test_that('pander.manova/summary.manova works correctly', {
+    npk2 <- within(npk, foo <- rnorm(24))
+    x <- manova(cbind(yield, foo) ~ block + N*P*K, npk2)
+    res1 <- pander_return(x)
+    xs <- summary(x)
+    res2 <- pander_return(xs)
+    expect_equal(res1, res2)
+    expect_equal(length(res1), 21)
+})
