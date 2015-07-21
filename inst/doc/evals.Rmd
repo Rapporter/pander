@@ -1,0 +1,228 @@
+---
+title: "Evals"
+author: "Roman Tsegelskyi "
+date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Evals}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, echo = FALSE, message = FALSE}
+knitr::opts_chunk$set(collapse = T, comment = "#>")
+library(pander)
+```
+
+`evals` is aimed at collecting as much information as possible while evaluating R code. It can evaluate a character vector of R expressions, and it returns a list of captured information while running those:
+
+* `src` holds the R expression,
+* `result` contains the raw R object as is,
+* `output` represents how the R object is printed to the standard output,
+* `type` is the class of the returned R object,
+* `msg` is a list of possible messages captured while evaluating the R expression and. Among other messages, warnings/errors will appear here.
+* `stdout` contains if anything was written to the standard output.
+
+Besides capturing evaluation information, `evals` is able to automatically identify if an R expression is returning anything to a graphical device, and can save the resulting image in a variety of file formats.
+
+Another interesting feature that `evals` provides is caching the results of evaluated expressions. For more details read the section about [caching](#result-caching).
+
+`evals` has a large number of options, which allow users to customize the call exectly as needed. Here we will focus on most useful features, but full list of options with explanation can be view by calling `?evalsOptions`. Also `evals` support permanent options that will persist for all calls to `evals`, this can be acheived by calling `evalsOptions`.
+
+Let's start with basic example of evaluating `1:10` and collecting all information about it:
+
+```{r}
+evals('1:10')
+```
+
+Not all the information might be useful, so `evals` makes it is possible to capture only some of the information, by specifying `output` parameter:
+
+```{r}
+evals('1:10', output = c('result', 'output'))
+```
+
+One of the neat features of `evals` that it catches errors/warnings without interrupting the evaluation and saves them. 
+```{r}
+evals('x')[[1]]$msg
+evals('as.numeric("1.1a")')[[1]]$msg
+```
+
+
+## Graphs and Graphical Options
+
+As mentioned before, `evals` capture the output to graphical devices and saves it:
+
+```{r}
+evals('plot(mtcars)')[[1]]$result
+```
+
+![](plots/mtcars.png)
+
+You can specify output directory using `graph.dir` parameter and output type using `graph.output` parameter. Currently it could be any of grDevices: png, bmp, jpeg, jpg, tiff, svg or pdf.
+
+```{r}
+evals('plot(mtcars)', graph.dir = 'my_plots', graph.output = 'png')[[1]]$result
+```
+
+Moreover, `evals` provides facilities to:
+
+* save the environments in which plots were generated
+* save the plot via recordPlot to distinct files with `recodplot` extension
+* save the raw R object returned (usually with `lattice` or `ggplot2`) while generating the plots to distinct files with `RDS` extension
+
+### Style unification
+
+`evals` provides a very powerful facilities to unify with styling each of your images produced by different packages like `ggplot2` or `lattice`. 
+
+Let's prepare the data for plotting first:
+
+```{r}
+## generating dataset
+set.seed(1)
+df <- mtcars[, c('hp', 'wt')]
+df$factor <- sample(c('Foo', 'Bar', 'Foo bar'), size = nrow(df), replace = TRUE)
+df$factor2 <- sample(c('Foo', 'Bar', 'Foo bar'), size = nrow(df), replace = TRUE)
+df$time <- 1:nrow(df)
+```
+
+```{r echo=FALSE}
+## loading packages
+require(ggplot2, quietly = TRUE)
+require(lattice, quietly = TRUE)
+```
+
+Now let's plot the histograms:
+
+```{r}
+evalsOptions('graph.unify', TRUE)
+evals('histogram(df$hp, main = "Histogram with lattice")')[[1]]$result
+evals('ggplot(df) + geom_histogram(aes(x = hp), binwidth = 50) + ggtitle("Histogram with ggplot2")')[[1]]$result
+evalsOptions('graph.unify', FALSE)
+```
+
+![](plots/lattice.png)
+![](plots/ggplot2.png)
+
+Options for unification can be set with `panderOptions`, for example:
+
+```r
+panderOptions('graph.fontfamily', "Comic Sans MS")
+panderOptions('graph.fontsize', 18)
+panderOptions('graph.fontcolor', 'blue')
+panderOptions('graph.grid.color', 'blue')
+panderOptions('graph.axis.angle', 3)
+panderOptions('graph.boxes', T)
+panderOptions('graph.legend.position', 'top')
+panderOptions('graph.colors', rainbow(5))
+panderOptions('graph.grid', FALSE)
+panderOptions('graph.symbol', 22)
+```
+
+More information and example on style unification can be obtained from by `Pandoc.brew`ing the tutorial about it which is available [here](https://github.com/Rapporter/pander/blob/master/inst/examples/graphs.brew).
+
+## Logging
+
+To make execution and debug more understandable `evals` provides a possibility for logging with `log` parameter. Logging in `evals` relies on [futile.logger](cran.r-project.org/web/packages/futile.logger/futile.logger.pdf) package which provides logging API similar to `log4j`. Basic example:
+
+```{r}
+x <- evals('1:10', log = 'foo')
+```
+
+`futile.logger`'s thresholds range from most verbose to least verbose: `TRACE`, `DEBUG`, `INFO`, `WARN`, `ERROR`, `FATAL`. By default threshold is set to `INFO` which will hide some unessential information. To permanently set the threshold for logger use `flog.threshold`:
+
+```{r}
+evalsOptions('log', 'evals')
+flog.threshold(TRACE, 'evals')
+x <- evals('1:10', cache.time = 0)
+```
+
+`futile.logger` also provides a very useful functionality of write logs to files instead of printing them to promt:
+
+```{r}
+t <- tempfile()
+#flog.appender(appender.file(t), name = 'evals')
+x <- evals('1:10', log = 'evals')
+#readLines(t)
+```
+
+````{r, echo = FALSE, message = FALSE}
+x <- capture.output(appender.console())
+```
+
+## Result Caching
+
+`evals` is using a custom caching algorithm to cache the results of evaluated R expressions.
+
+### How it works
+
+* All R code passed to `evals` is split into single expressions and parsed.
+* For each R expression (function call, assignment, etc.), `evals` extracts symbols in a separate list in `getCallParts`. This list describes the unique structure and the content of the passed R expressions
+* A hash is computed for each list element and cached too in `pander`'s local environments. This is useful if you are using large data frames, just imagine: the caching algorithm would have to compute the hash for the same data frame each time it's touched! This way the hash is recomputed only if the R object with the given name is changed.
+* The list of such R objects is serialized, then an SHA-1 hash is computed taking into consideration `panderOptions` and `evalsOptions`, which all together is unique and there is no real risk of collision.
+* If `evals` can find the cached results in the appropriate environment (if `cache.mode set` to enviroment) or in a file named to the computed hash (if `ċache.mode` set to `disk`), then it is returned on the spot. The objects modified/created by the cached code are also updated.
+* Otherwise the call is evaluated and the results and the modified R objects of the environment are optionally saved to cache (e.g. if `cache` is active and if the evaluation `proc.time()` > `cache.time` parameter). Cached results are saved in `cached.results` in `pander`'s namespace. `evals` also remembers if R expressions change the evaluation environment (for example assignments) and saves such changes in `cached.environemnts` in `pander`'s namespace.
+
+### Examples
+
+We will set `cache.time` to 0, to cache all expressions regardless of time they took to evaluate. We will also use the logging facilites described above to simplify the understanding of how caching works.
+
+```{r}
+evalsOptions('cache.time', 0)
+evalsOptions('log', 'evals')
+flog.threshold(TRACE, 'evals')
+```
+
+Let's start with small example.
+
+```{r}
+system.time(evals('1:1e5'))
+system.time(evals('1:1e5'))
+```
+
+Results cached by `evals` can be stored in an *environment* in current `R` session or permanently on disk by setting `cache.mode` parameter appropriately.
+
+```{r}
+res <- evals('1:1e5', cache.mode = 'disk', cache.dir = 'cachedir')
+list.files('cachedir')
+```
+
+Since the hash for caching computed based on the *structure* and *content* of the R commands instead of the used variable names or R expressions, `evals` is able to achieve great results:
+
+```{r}
+x <- mtcars$hp
+y <- 1e3
+system.time(evals('sapply(rep(x, y), mean)'))
+```
+
+Let us create some custom functions and variables, which are not identical to the above call:
+
+```{r}
+f <- sapply
+g <- rep
+h <- mean
+X <- mtcars$hp * 1
+Y <- 1000
+system.time(evals('f(g(X, Y), h)'))
+```
+
+Another important feature of `evals` is that it takes notes the changes in the evaluation environment. For example:
+
+```{r}
+x <- 1
+res <- evals('x <- 1:10;')
+```
+
+`x <- 1:10` will be cached, so if the same assignment occurs again we won't need to evaluate it. But what about the change of `x` when we get the result from the cache? `evals` takes care of that. 
+
+So in the following example we can see that `x <- 1:10` is not evaluated, but retrieved from cache with the the change to `x` in the environment.
+
+```{r}
+evals('x <- 1:10; x[3]')[[2]]$result
+```
+
+Also `evals` is able to cache output to graphical devices produces during evaluation:
+
+```{r}
+system.time(evals('plot(mtcars)'))
+system.time(evals('plot(mtcars)'))  
+```
