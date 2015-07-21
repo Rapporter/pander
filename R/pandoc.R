@@ -876,17 +876,11 @@ pandoc.table.return <- function(t, caption, digits = panderOptions('digits'), de
     digits <- check_digits(digits, 'digits', ncol(t))
     # we need a temporary conversion of matrix to data.frame, because matrix columns
     # can't be formated separately (as soon as first column is formatted all others are fomatted too).
-<<<<<<< HEAD
     # Formatting each column separately is needed to support digits and round params as vectors with values for each column.
     rn <- rownames(t)
     cln <- colnames(t)
     if (inherits(t, "matrix")) {
       rownames(t) <- NULL
-=======
-    # Formatting each column separately is needed
-    # to support digits and round params as vectors with values for each column.
-    if (inherits(t, 'matrix')) {
->>>>>>> Lint and style pandoc.R
       temp.t <- as.data.frame(t)
     } else {
       temp.t <- t
