@@ -466,6 +466,8 @@ test_that('Behavior for empty objects is correct', {
     expect_equal(res[3], " 1   2   3   4   5 ")
     expect_equal(res[5], "NA  NA  NA  NA  NA ")
     expect_equal(length(res), 7)
+    expect_equal(length(pander_return(data.frame())), 0)
+    expect_warning(pander_return(data.frame()))
 })
 
 context("plain.ascii")
