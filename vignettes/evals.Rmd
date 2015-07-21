@@ -224,5 +224,5 @@ Also `evals` is able to cache output to graphical devices produces during evalua
 
 ```{r}
 system.time(evals('plot(mtcars)'))
-system.time(evals('plot(mtcars)'))  
+system.time(evals('plot(mtcars)'))
 ```

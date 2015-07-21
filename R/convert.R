@@ -6,22 +6,29 @@
 #' @export
 openFileInOS <- function(f) {
 
-    if (missing(f))
+    if (missing(f)) {
         stop('No file to open!')
+    }
 
     f <- path.expand(f)
 
-    if (!file.exists(f))
+    if (!file.exists(f)) {
         stop('File not found!')
+    }
 
     if (grepl("w|W", .Platform$OS.type)) {
         # we are on Windows
         shell.exec(f) #nolint
     } else {
-        if (grepl("darwin", version$os))   # Mac
+        if (grepl("darwin", version$os)) {
+            # Mac
             system(paste(shQuote("open"), shQuote(f)), wait = FALSE, ignore.stderr = TRUE)
-        else                               # Linux-like
-            system(paste(shQuote("/usr/bin/xdg-open"), shQuote(f)), wait = FALSE, ignore.stdout = TRUE) #nolint
+        } else {
+            # Linux-like
+            system(paste(shQuote("/usr/bin/xdg-open"), shQuote(f)), #nolint
+                   wait = FALSE,
+                   ignore.stdout = TRUE)
+        }
     }
 
 }
@@ -61,8 +68,9 @@ Pandoc.convert <- function(f, text, format = 'html', open = TRUE, options = '',
             message('You may install Pandoc easily with "install.pandoc()" from the "installr" package.')
         stop("It seems Pandoc is not installed or path of binary is not found. Did you restarted R after Pandoc install? See installation details by running:\n\n\t readLines(system.file('includes/html/footer.html', package='pander'))\n") #nolint
     }
-    if (!file.exists(pandoc.binary))
+    if (!file.exists(pandoc.binary)) {
         stop(paste('Pandoc binary is not found at provided location:', pandoc.binary))
+    }
 
     ## dealing with provided character vector
     if (!missing(text)) {
@@ -97,15 +105,17 @@ Pandoc.convert <- function(f, text, format = 'html', open = TRUE, options = '',
 
             options <- sprintf('-A "%s"', system.file('includes/html/footer.html', package='pander'))
 
-            if (portable.html)
+            if (portable.html) {
                 options <- paste('--self-contain', options)
+            }
 
         }
 
     } else {
 
-        if (options == '' && any(grepl('^#', rl)))
+        if (options == '' && any(grepl('^#', rl))) {
             options <- '--toc'
+        }
 
     }
 
@@ -113,9 +123,11 @@ Pandoc.convert <- function(f, text, format = 'html', open = TRUE, options = '',
     ## TODO
 
     ## add footer to file
-    if (footer)
-        if (length(rl) > 0 && !grepl('This report was generated', tail(rl, 1)))
+    if (footer) {
+        if (length(rl) > 0 && !grepl('This report was generated', tail(rl, 1))) {
             cat(sprintf('\n\n-------\nThis report was generated with [R](http://www.r-project.org/) (%s) and [pander](https://github.com/rapporter/pander) (%s)%son %s platform.', sprintf('%s.%s', R.version$major, R.version$minor), packageDescription("pander")$Version, ifelse(missing(proc.time), ' ', sprintf(' in %s sec ', format(proc.time))), R.version$platform), file = f, append = TRUE) #nolint
+        }
+    }
 
     ## set specified dir
     wd <- getwd()
@@ -123,10 +135,11 @@ Pandoc.convert <- function(f, text, format = 'html', open = TRUE, options = '',
 
     ## call Pandoc
     cmd <- sprintf('%s -f markdown -s %s %s -o %s', pandoc.binary, options, shQuote(f), shQuote(f.out))
-    if (grepl("w|W", .Platform$OS.type))
-        res <- suppressWarnings(tryCatch(shell(cmd, intern = TRUE), error = function(e) e))
-    else
+    if (grepl("w|W", .Platform$OS.type)) {
+        res <- suppressWarnings(tryCatch(shell(cmd, intern = TRUE), error = function(e) e)) #nolint
+    } else {
         res <- suppressWarnings(tryCatch(system(cmd, intern = TRUE), error = function(e) e))
+    }
 
     ## inject HTML header
     if (format == 'html'
@@ -136,10 +149,11 @@ Pandoc.convert <- function(f, text, format = 'html', open = TRUE, options = '',
         he <- grep('</head>', rl)
         ho <- readLines(system.file('includes/html/header.html', package='pander'), warn = FALSE)
 
-        if (portable.html)
+        if (portable.html) {
             ch <- ho
-        else
+        } else {
             ch <- gsub('http://cdn.rapporter.net/pander', system.file('includes/', package='pander'), ho)
+        }
 
         writeLines(c(rl[1 : (he - 1)], ch, rl[he:length(rl)]), f.out)
 
@@ -154,8 +168,9 @@ Pandoc.convert <- function(f, text, format = 'html', open = TRUE, options = '',
                        format, ': \n\n', paste(res, collapse = '\n'),
                        '\n\nPandoc was called as:\n\n\t', cmd))
     } else {
-        if (open)
+        if (open) {
             openFileInOS(f.out)
+        }
         return(f.out)
     }
 

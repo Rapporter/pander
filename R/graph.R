@@ -10,39 +10,42 @@ add.minor.ticks <- function (nx = 4, ny = 4, grid = TRUE) {
 
     ax <- function(w, n, grid) {
         range <- par("usr")[ifelse(w == "x", 1:2, 3:4)]
-        tick.pos <- if (w == "x")
-            par("xaxp")
-        else par("yaxp")
+        tick.pos <- ifelse(w == "x", par("xaxp"), par("yaxp"))
         distance.between.minor <- (tick.pos[2] - tick.pos[1]) / tick.pos[3] / n
         possible.minors <- tick.pos[1] - (0:100) * distance.between.minor
         low.minor <- min(possible.minors[possible.minors >= range[1]])
-        if (is.na(low.minor))
+        if (is.na(low.minor)) {
             low.minor <- tick.pos[1]
+        }
         possible.minors <- tick.pos[2] + (0:100) * distance.between.minor
         hi.minor <- max(possible.minors[possible.minors <= range[2]])
-        if (is.na(hi.minor))
+        if (is.na(hi.minor)) {
             hi.minor <- tick.pos[2]
+        }
         ticks.at <- seq(low.minor, hi.minor, by = distance.between.minor)
         axis(if (w == "x")
              1
         else 2, ticks.at,
              labels = FALSE, tcl = par("tcl"))
-        if (w == 'x')
+        if (w == 'x') {
             abline(v = ticks.at,
                    col = panderOptions('graph.grid.color'),
                    lwd = 0.2,
                    lty = panderOptions('graph.grid.lty'))
-        else
+        } else {
             abline(h = ticks.at,
                    col = panderOptions('graph.grid.color'),
                    lwd = 0.2,
                    lty = panderOptions('graph.grid.lty'))
+        }
     }
 
-    if (nx > 1)
+    if (nx > 1) {
         ax("x", nx, grid = grid)
-    if (ny > 1)
+    }
+    if (ny > 1) {
         ax("y", ny, grid = grid)
+    }
 
     invisible()
 
@@ -88,10 +91,12 @@ add.lattice.grid <- function (side = c("top", "bottom", "left", "right"), ..., t
                           ...,
                           line.col = panderOptions('graph.grid.color'))
 
-    if (side %in% c("top", "left"))
+    if (side %in% c("top", "left")) {
         return()
-    if (scales$draw == FALSE)
+    }
+    if (scales$draw == FALSE) {
         return()
+    }
     ref.line <- lattice::trellis.par.get("reference.line")
 
     if (side == "bottom") {
@@ -101,8 +106,9 @@ add.lattice.grid <- function (side = c("top", "bottom", "left", "right"), ..., t
                                alpha = ref.line$alpha * tck / max(tck, na.rm = TRUE))
     }
     if (side == "right") {
-        if (!is.list(mycomps))
+        if (!is.list(mycomps)) {
             mycomps <- components[["left"]]
+        }
         tck <- abs(mycomps$ticks$tck)
         lattice::panel.refline(h = mycomps$ticks$at,
                                lwd = ref.line$lwd * tck,

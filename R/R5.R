@@ -110,9 +110,11 @@ Pandoc$methods(show = function(x) {
         cat(pandoc.horizontal.rule())
 
         lapply(.self$body, function(x) {
-            for (m in c('messages', 'warnings', 'errors'))
-                if (!is.null(x$msg[[m]]))
+            for (m in c('messages', 'warnings', 'errors')) {
+                if (!is.null(x$msg[[m]])) {
                     cat('\n**', toupper(sub('s$', '', m)), ':** ', x$msg[[m]], sep = '')
+                }
+            }
             pander(x$result)
         })
 
@@ -120,15 +122,17 @@ Pandoc$methods(show = function(x) {
         cat(pandoc.horizontal.rule())
         cat('\nProc. time: ', .self$proc.time + as.numeric(proc.time() - timer)[3], 'seconds. \n\n')
 
-    } else
+    } else {
         cat('\n)')
+    }
 
 })
 
 Pandoc$methods(export = function(f, ...) {
 
-    if (missing(f))
+    if (missing(f)) {
         f <- tempfile('pander-', getwd())
+    }
     fp    <- sprintf('%s.md', f)
     timer <- proc.time()
 

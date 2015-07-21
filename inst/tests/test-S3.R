@@ -875,7 +875,7 @@ test_that('pander.irts works correctly', {
 
 test_that('pander.manova/summary.manova works correctly', {
     npk2 <- within(npk, foo <- rnorm(24))
-    x <- manova(cbind(yield, foo) ~ block + N*P*K, npk2)
+    x <- manova(cbind(yield, foo) ~ block + N * P * K, npk2)
     res1 <- pander_return(x)
     xs <- summary(x)
     res2 <- pander_return(xs)
@@ -895,7 +895,7 @@ test_that('pander.gtable works correctly', {
 test_that('pander.nls/pander.summary.nls works correctly', {
     utils::data(muscle, package = "MASS")
     with(muscle, table(Strip))
-    musc.1 <- nls(Length ~ cbind(1, exp(-Conc/th)), muscle,
+    musc.1 <- nls(Length ~ cbind(1, exp(-Conc / th)), muscle,
                 start = list(th = 1), algorithm = "plinear")
     res <- pander_return(musc.1, show.convergence = T)
     expect_equal(length(res), 17)

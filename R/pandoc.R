@@ -659,7 +659,7 @@ pandoc.table.return <- function(t, caption, digits = panderOptions('digits'), de
                 } else {
                     lines <- strsplit(x, '\\n')[[1]]
                     x <- ''
-                    for (line in lines){
+                    for (line in lines) {
                         sl <- splitLine(line, max.width, use.hyphening)
                         x <- paste0(x, sl, sep='\n')
                     }
@@ -778,7 +778,8 @@ pandoc.table.return <- function(t, caption, digits = panderOptions('digits'), de
         if (!missing(emphasize.strong.cells)) {
             emphasize.strong.cells <- cbind(rep(1, length(emphasize.strong.cells)), emphasize.strong.cells)
         }
-    } else if (dim(t)[1] == 0) { # check for empty objects
+    } else if (dim(t)[1] == 0) {
+        # check for empty objects
         if (!is.null(colnames(t)) && length(colnames(t)) > 0) {
             t <- as.data.frame(t)
             t[1, ] <- NA
@@ -876,7 +877,8 @@ pandoc.table.return <- function(t, caption, digits = panderOptions('digits'), de
     digits <- check_digits(digits, 'digits', ncol(t))
     # we need a temporary conversion of matrix to data.frame, because matrix columns
     # can't be formated separately (as soon as first column is formatted all others are fomatted too).
-    # Formatting each column separately is needed to support digits and round params as vectors with values for each column.
+    # Formatting each column separately is needed
+    #to support digits and round params as vectors with values for each column.
     rn <- rownames(t)
     cln <- colnames(t)
     if (inherits(t, "matrix")) {
@@ -1098,10 +1100,11 @@ pandoc.table.return <- function(t, caption, digits = panderOptions('digits'), de
                'multiline' = {
                    sep.row <- '\n'
                    sep.hdr <- paste(sapply(t.width, function(x) repChar('-', x)), collapse = ' ')
-                   if (length(t.colnames) != 0)
+                   if (length(t.colnames) != 0) {
                        sep.top <- gsub(' ', '-', sep.hdr)
-                   else
+                   } else {
                        sep.top <- paste(sapply(t.width, function(x) repChar('-', x)), collapse = ' ')
+                   }
                    sep.btn <- sep.top
                    sep.col <- c('', ' ', '')
                },
@@ -1110,8 +1113,9 @@ pandoc.table.return <- function(t, caption, digits = panderOptions('digits'), de
                    if (length(t.colnames) == 0) {
                        sep.top <- paste(sapply(t.width, function(x) repChar('-', x)), collapse = ' ')
                        sep.btn <- paste0('\n', sep.top)
-                   } else
+                   } else {
                        sep.top <- sep.btn <- ''
+                   }
                    sep.hdr <- paste(sapply(t.width, function(x) repChar('-', x)), collapse = ' ')
                    sep.col <- c('', ' ', '')
                },

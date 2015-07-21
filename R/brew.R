@@ -66,27 +66,34 @@ Pandoc.brew <- function(file = stdin(), output = stdout(), convert = FALSE, open
     timer <- proc.time()
     output.stdout <- deparse(substitute(output)) == 'stdout()'
 
-    if (identical(convert, FALSE))
+    if (identical(convert, FALSE)) {
         open <- FALSE
-    else
-        if (output.stdout)
+    } else {
+        if (output.stdout) {
             stop('A file name should be provided while converting a document.')
+        }
+    }
 
     if (!output.stdout) {
         basedir    <- dirname(output)
-        if (missing(graph.name))
+        if (missing(graph.name)) {
             graph.name <- paste0(basename(output), '-%n')
-        if (missing(graph.dir))
+        }
+        if (missing(graph.dir)) {
             graph.dir  <- file.path(basedir, 'plots')
+        }
     } else {
-        if (missing(graph.name))
+        if (missing(graph.name)) {
             graph.name <- '%t'
-        if (missing(graph.dir))
+        }
+        if (missing(graph.dir)) {
             graph.dir  <- file.path(tempdir(), 'plots')
+        }
     }
 
-    if (is.null(text))
+    if (is.null(text)) {
         text <- paste(readLines(file, warn = FALSE), collapse = '\n')
+    }
 
     ## id of chunk
     assign('cmdID', 0, envir = debug)
@@ -107,12 +114,13 @@ Pandoc.brew <- function(file = stdin(), output = stdout(), convert = FALSE, open
         for (r in res) {
 
             r.pander <- tryCatch(pander_return(r), error = function(e) e)
-            if (inherits(r.pander, 'error'))
+            if (inherits(r.pander, 'error')) {
                 r.pander <- paste0('Internal `pander` error: `',
                                    r.pander$message,
                                    '` while running: `',
                                    r$src,
                                    '`\n\nPlease [report the issue](https://github.com/Rapporter/pander/issues/new) with a reproducible example to help developers fix this ASAP.') #nolint
+            }
             r$output <- r.pander
             cat(paste(r.pander, collapse = '\n'))
 
@@ -123,10 +131,11 @@ Pandoc.brew <- function(file = stdin(), output = stdout(), convert = FALSE, open
             if ('image' %in% r$type
                 || length(r.pander) > 1
                 || grepl('\n$', localstorage.last.text)
-                || is.null(localstorage.last$text$eval))
+                || is.null(localstorage.last$text$eval)) {
                 type <- 'block'
-            else
+            } else {
                 type <- 'inline'
+            }
 
             if (type == 'inline') {
 
@@ -138,8 +147,9 @@ Pandoc.brew <- function(file = stdin(), output = stdout(), convert = FALSE, open
                                                                  warnings = c(localstorage.last$msg$warnings, r$msg$warnings), #nolint
                                                                  errors = c(localstorage.last$msg$errors, r$msg$errors)) #nolint
 
-            } else
+            } else {
                 localstorage <- c(localstorage, list(list(type = 'block', robject = r)))
+            }
 
             assign('.storage', localstorage, envir = envir)
 
@@ -151,13 +161,15 @@ Pandoc.brew <- function(file = stdin(), output = stdout(), convert = FALSE, open
     res <- capture.output(brew(text = text, envir = envir))
 
     ## remove absolute path from image links
-    if (!output.stdout)
+    if (!output.stdout) {
         res <- gsub(sprintf(']\\(%s/', basedir), ']\\(', res, fixed = TRUE)
+    }
 
     cat(remove.extra.newlines(paste(res, collapse = '\n')), '\n', file = output, append = append)
 
-    if (is.character(convert))
+    if (is.character(convert)) {
         Pandoc.convert(output, format = convert, open = open, proc.time = as.numeric(proc.time() - timer)[3], ...)
+    }
 
     ## remove trailing line-break text
     ## if (tail(get('.storage', envir = envir), 1)[[1]]$text$eval == '\n')
@@ -167,8 +179,9 @@ Pandoc.brew <- function(file = stdin(), output = stdout(), convert = FALSE, open
     assign('chunkID', NULL, envir = debug)
     assign('cmdID', NULL, envir = debug)
     assign('nested', debug$nested - 1, envir = debug)
-    if (debug$nested == 0)
+    if (debug$nested == 0) {
         assign('nestedID', 0, envir = debug)
+    }
 
     invisible(get('.storage', envir = envir))
 
@@ -208,13 +221,15 @@ DELIM[[BRCATCODE]] <- c("<%=","%>")
 #' @keywords internal
 `brew` <- function(text = NULL, envir = parent.frame()) {
 
-    if (is.character(text) && nchar(text[1]) > 0)
+    if (is.character(text) && nchar(text[1]) > 0) {
         icon <- textConnection(text[1])
-    else
+    } else {
         stop('Invalid input.')
+    }
 
-    if (!is.environment(envir))
+    if (!is.environment(envir)) {
         stop('Invalid environment')
+    }
 
     state <- BRTEXT
     text <- code <- character(0)
@@ -225,7 +240,9 @@ DELIM[[BRCATCODE]] <- c("<%=","%>")
     while(TRUE){
         if (!nchar(line)){
             line <- readLines(icon,1)
-            if (length(line) != 1) break
+            if (length(line) != 1){
+                break
+            }
             line <- paste(line,"\n",sep='')
         }
         if (state == BRTEXT){
@@ -324,8 +341,9 @@ DELIM[[BRCATCODE]] <- c("<%=","%>")
                 heading.level <- nchar(gsub("^(#{1,6})[ \t]+.*", "\\1", localtext))
                 localtext <- gsub('^#{1,6}[ \t]+', '', localtext)
                 type <- 'heading'
-            } else
+            } else {
                 type <- 'text'
+            }
 
             localstorage <- get('.storage', envir = envir)
             localstorage.last <- tail(localstorage, 1)[[1]]
@@ -336,7 +354,7 @@ DELIM[[BRCATCODE]] <- c("<%=","%>")
                 localstorage.last.pander  <- localstorage.last$robject$output
 
                 ## we had an inline chunk in the beginning of the line converted to block
-                if (!'image' %in% localstorage.last$robject$type && length(localstorage.last.pander) <= 1)
+                if (!'image' %in% localstorage.last$robject$type && length(localstorage.last.pander) <= 1) {
                     localstorage <- c(localstorage[-length(localstorage)],
                                       list(list(type = 'text',
                                            text = list(
@@ -351,36 +369,35 @@ DELIM[[BRCATCODE]] <- c("<%=","%>")
                                                warnings = localstorage.last$robject$msg$warnings,
                                                errors   = localstorage.last$robject$msg$errors
                                                ))))
-
+                } else {
                 ## leave that block as is and add localtext as new
-                else
-
                     localstorage <- c(localstorage,
                                       list(list(type = type,
                                                 text = list(raw = localtext, eval = localtext),
                                                 chunks = list(raw = NULL, eval = NULL),
                                                 msg = list(messages = NULL, warnings = NULL, errors = NULL))))
+                }
 
             } else {
 
                 ## text continues
                 if (is.character(localstorage.last.text) &&
                     (type == 'text') &&
-                    ifelse(localstorage.last.type == 'heading', !grepl('\n', localstorage.last.text), TRUE))
+                    ifelse(localstorage.last.type == 'heading', !grepl('\n', localstorage.last.text), TRUE)) {
                     localstorage[[length(localstorage)]]$text <- list(raw = paste0(localstorage.last$text$raw, localtext), eval = paste0(localstorage.last.text, localtext)) #nolint
-
+                } else {
                 ## new text starts here
-                else
                     localstorage <- c(localstorage,
                                       list(list(type = type,
                                                 text = list(raw = localtext, eval = localtext),
                                                 chunks = list(raw = NULL, eval = NULL),
                                                 msg = list(messages = NULL, warnings = NULL, errors = NULL))))
-
+                }
             }
 
-            if (type == 'heading')
+            if (type == 'heading') {
                 localstorage[[length(localstorage)]]$level <- heading.level
+            }
 
             assign('.storage', localstorage, envir = envir)
 
@@ -400,18 +417,20 @@ DELIM[[BRCATCODE]] <- c("<%=","%>")
         brcodes <- code[!grepl('^show', code)]
         if (length(brcodes) > 0) {
             brcodes <- p(brcodes, wrap = '`')
-            if (grepl('[Uu]nexpected', msg))
+            if (grepl('[Uu]nexpected', msg)) {
                 stop(paste0('`',
                             sub('.*([Uu]nexpected [a-zA-Z0-9\\(\\)\'\\{\\} ]*)( at character|\n).*', '\\1', msg),
                             '` in your BRCODEs: ', brcodes), call. = FALSE)
-            else
+            } else {
                 stop(sprintf('Error (`%s`) in your BRCODEs: %s', msg, brcodes), call. = FALSE)
-        } else
+            }
+        } else {
 
             stop(paste0('Error: ', p(msg, wrap = '`')), call. = FALSE)
-
-    } else
+        }
+    } else {
         assign('last', list(code = code, text = text, result = e), envir = debug) # debug
+    }
 
     ## safety check: not leaving any `sink` open
     ## while (sink.number() != 0)

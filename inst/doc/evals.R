@@ -89,5 +89,4 @@ evals('x <- 1:10; x[3]')[[2]]$result
 
 ## ------------------------------------------------------------------------
 system.time(evals('plot(mtcars)'))
-system.time(evals('plot(mtcars)'))  
-
+system.time(evals('plot(mtcars)'))
