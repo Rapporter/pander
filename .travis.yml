@@ -1,5 +1,8 @@
 language: r
 
+env:
+  - LINTR_COMMENT_BOT=true
+
 r_binary_packages:
   - Rcpp
   - testthat
