@@ -4,8 +4,9 @@
 \alias{pander.summary.nls}
 \title{Prints an summary.nls object from stats package in Pandoc's markdown.}
 \usage{
-\method{pander}{summary.nls}(x, summary = T, add.significance.stars = F,
-  digits = panderOptions("digits"), show.convergence = FALSE, ...)
+\method{pander}{summary.nls}(x, summary = TRUE,
+  add.significance.stars = FALSE, digits = panderOptions("digits"),
+  show.convergence = FALSE, ...)
 }
 \arguments{
 \item{x}{an summary.nls object}
@@ -13,6 +14,8 @@
 \item{summary}{(defaut:\code{TRUE}) if used for summary.lm or lm}
 
 \item{add.significance.stars}{if significance stars should be shown for P value}
+
+\item{digits}{number of digits of precision}
 
 \item{show.convergence}{(defaut:\code{FALSE}) if to print convergence info}
 

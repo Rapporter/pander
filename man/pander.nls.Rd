@@ -10,7 +10,7 @@
 \arguments{
 \item{x}{an nls object}
 
-\item{digits}{}
+\item{digits}{number of digits of precision}
 
 \item{show.convergence}{(defaut:\code{FALSE}) if to print convergence info}
 
