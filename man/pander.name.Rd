@@ -8,6 +8,8 @@
 }
 \arguments{
 \item{x}{a name language object}
+
+\item{...}{ignored parameters}
 }
 \description{
 Prints a call object in Pandoc's markdown.

@@ -491,7 +491,7 @@ pander.anova <- function(x, caption = attr(x, 'caption'), add.significance.stars
     }
     pandoc.table(x, caption = caption, ...)
     if (add.significance.stars) {
-        cat('Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1\n')
+        cat('Signif. codes:  0 \'***\' 0.001 \'**\' 0.01 \'*\' 0.05 \'.\' 0.1 \' \' 1\n')
     }
 }
 
@@ -1050,6 +1050,7 @@ pander.call <- function(x, ...)
 #'
 #' Prints a call object in Pandoc's markdown.
 #' @param x a name language object
+#' @param ... ignored parameters
 #' @export
 pander.name <- function(x, ...)
     pander(deparse(x))
@@ -1501,7 +1502,7 @@ pander.sessionInfo <- function (x, locale = TRUE, compact = TRUE, ...) {
 #' @param x an microbenchmark object
 #' @param caption caption (string) to be shown under the table
 #' @param expr.labels expression labels that will replace default ones (similar to rownames, which microbenchmark class table does not have)
-#' @param unit units in which values should be printed (for example second, microseconds, etc.). Should be one of “ns”, “us”, “ms”, “s”, “t”, “hz”, “khz”, “mhz”, “eps”, “f”
+#' @param unit units in which values should be printed (for example second, microseconds, etc.). Should be one of ns, us, ms, s, t, hz, khz, mhz, eps, f
 #' @param ... optional parameters passed to raw \code{pandoc.table} function
 #' @export
 pander.microbenchmark <- function(x, caption = attr(x, 'caption'), expr.labels, unit, ...) {
@@ -1767,7 +1768,7 @@ pander.summary.nls <- function(x, summary = TRUE, add.significance.stars = FALSE
         }
         pander(x$coefficients, caption = 'Parameters', ...)
         if (add.significance.stars) {
-            cat('\nSignif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1\n')
+            cat('\nSignif. codes:  0 \'***\' 0.001 \'**\' 0.01 \'*\' 0.05 \'.\' 0.1 \' \' 1\n')
         }
         if (!is.null(x$correlation) && NCOL(x$correlation) > 1) {
             pander(x$correlation, caption = "Correlation of Parameter Estimates", ...)
