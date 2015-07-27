@@ -100,7 +100,7 @@ Now let's plot the histograms:
 ```{r}
 evalsOptions('graph.unify', TRUE)
 evals('histogram(df$hp, main = "Histogram with lattice")')[[1]]$result
-evals('ggplot(df) + geom_histogram(aes(x = hp), binwidth = 50,) + ggtitle("Histogram with ggplot2")')[[1]]$result
+evals('ggplot(df) + geom_histogram(aes(x = hp), binwidth = 50) + ggtitle("Histogram with ggplot2")')[[1]]$result
 evalsOptions('graph.unify', FALSE)
 ```
 

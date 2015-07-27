@@ -694,7 +694,7 @@ evals <- function(txt, parse = evalsOptions('parse'), cache = evalsOptions('cach
     txt.original <- paste(txt, collapse = '\n')
 
     ## logging constant
-    logging <- !is.null(log) && "futile.logger" %in% rownames(installed.packages())
+    logging <- !is.null(log) && requireNamespace('futile.logger', quietly = TRUE)
 
     ## parse provided code after concatenating
     if (parse) {
