@@ -1,0 +1,44 @@
+---
+title: "Pandoc.table"
+author: "Roman Tsegelskyi "
+date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Pandoc.table}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, echo = FALSE, message = FALSE}
+knitr::opts_chunk$set(collapse = T, comment = "#>")
+library(pander)
+```
+
+Core functionality of `pander` is centered around `pandoc.table` which is aimed at rendering tables in `markdown`. `pandoc.table` has big variety of options ((caption)[#caption], (formats)[#formats], etc.) and this vignette aims to give a more details overview of most common options.
+
+## Formats/Style/Flavour
+
+Since `pander` aims at rendering R objects into [Pandoc](http://pandoc.org/)'s markdown all four [Pandoc](http://johnmacfarlane.net/pandoc/README.html#tables) formats are supported.
+
+### multiline tables
+
+### simple tables
+
+### grid tables
+
+### simple tables
+
+## Highlighting cells
+
+## Cell alighnment
+
+## Table and Cell width
+
+## Minor options
+
+Hyphening, plain.ascii, caption and etc.
+
+## panderOptions
+
+
+
