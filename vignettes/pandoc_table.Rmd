@@ -46,7 +46,7 @@ pandoc.table(m, keep.line.breaks = TRUE, style='simple')
 
 ### grid tables
 
-`grid` format is really handy for `emacs` users ([Emacs table mod](http://table.sourceforge.net/)) and it does support block elements (multiple paragraphs, code blocks, lists, etc.) inside cells. Alignments are not supported by most parsers, meaning that even though `pander` will produce a table with alightnment, it will be lost during conversion from `markdown` to `pdf/html/docx`, and cells can't span multiple columns or rows.
+`grid` format is really handy for `emacs` users ([Emacs table mod](http://table.sourceforge.net/)) and it does support block elements (multiple paragraphs, code blocks, lists, etc.) inside cells. Alignments are not supported by most parsers, meaning that even though `pander` will produce a table with alightnment, it will be lost during conversion from `markdown` to `HTML/PDF/DOCX`, and cells can't span multiple columns or rows.
 
 ```{r, error=TRUE}
 m <- mtcars[1:3, 1:4]
@@ -70,7 +70,34 @@ pandoc.table(m, keep.line.breaks = TRUE, style='rmarkdown')
 
 ## Cell alighnment
 
+
+
 ## Highlighting cells
+
+One of the great features of `pander` is the ease of highlighting rows, columns and cells in a table. This is a native `markdown` feature without custom `HTML` or `LaTeX`-only tweaks, so all `HTML/PDF/MS Word/OpenOffice` etc. formats are supported. 
+
+This can be achieved by specifying one of the arguments below when calling `pander`/`pandoc.table` or change default style using `panderOptions`:
+
+* emphasize.rows
+* emphasize.cols
+* emphasize.cells
+* emphasize.strong.rows
+* emphasize.strong.cols
+* emphasize.strong.cells
+
+The `emphasize` helpers would turn the affected cells to *italic*, while `emphasize.strong` would apply a **bold** style to the cell. A cell can be also *italic* and **bold** at the same time.
+
+Those functions and arguments ending in rows or cols take a vector (like which columns or rows to emphasize in a table), while the cells argument take either a vector (for one dimensional "tables") or an array-like data structure with two columns holding row and column indexes of cells to be emphasized -- just like what `which(..., arr.ind = TRUE)` returns:
+
+```{r}
+t <- mtcars[1:3, 1:5]
+emphasize.cols(1)
+emphasize.rows(1)
+emphasize.strong.cells(which(t > 20, arr.ind = TRUE))
+pandoc.table(t)
+```
+
+For more ellaborative examples, please see our blog post - [Highlight cells in markdown tables](http://blog.rapporter.net/2013/04/hihglight-cells-in-markdown-tables.html).
 
 ## Table and Cell width
 
