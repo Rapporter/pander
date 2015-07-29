@@ -56,9 +56,17 @@
 #' myReport$export(open = FALSE)
 #' }
 #' @importFrom methods setRefClass
-Pandoc <- setRefClass('Pandoc', fields = list('author' = 'character', 'title' = 'character', 'date' = 'character', 'body' = 'list', 'format' = 'character', 'proc.time' = 'numeric'))
+Pandoc <- setRefClass('Pandoc', fields = list('author' = 'character',
+                                              'title' = 'character',
+                                              'date' = 'character',
+                                              'body' = 'list',
+                                              'format' = 'character',
+                                              'proc.time' = 'numeric'))
 
-Pandoc$methods(initialize = function(author = 'Anonymous', title = base::sprintf('%s\'s report', author), date = base::date(), format = 'pdf', ...) {
+Pandoc$methods(initialize = function(author = 'Anonymous',
+                                     title = base::sprintf('%s\'s report', author),
+                                     date = base::date(),
+                                     format = 'pdf', ...) {
 
     .self$author    <- author
     .self$title     <- title
@@ -72,7 +80,13 @@ Pandoc$methods(initialize = function(author = 'Anonymous', title = base::sprintf
 Pandoc$methods(add = function(x) {
 
     timer           <- proc.time()
-    res             <- evals(deparse(match.call()[[2]]), env = parent.frame(), graph.name = evalsOptions('graph.name'), graph.dir = evalsOptions('graph.dir'), graph.output = evalsOptions('graph.output'), width = evalsOptions('width'), height = evalsOptions('height'))
+    res             <- evals(deparse(match.call()[[2]]),
+                             env = parent.frame(),
+                             graph.name = evalsOptions('graph.name'),
+                             graph.dir = evalsOptions('graph.dir'),
+                             graph.output = evalsOptions('graph.output'),
+                             width = evalsOptions('width'),
+                             height = evalsOptions('height'))
     .self$body      <- c(.self$body, res)
     .self$proc.time <- .self$proc.time + as.numeric(proc.time() - timer)[3]
 
@@ -96,9 +110,11 @@ Pandoc$methods(show = function(x) {
         cat(pandoc.horizontal.rule())
 
         lapply(.self$body, function(x) {
-            for (m in c('messages', 'warnings', 'errors'))
-                if (!is.null(x$msg[[m]]))
+            for (m in c('messages', 'warnings', 'errors')) {
+                if (!is.null(x$msg[[m]])) {
                     cat('\n**', toupper(sub('s$', '', m)), ':** ', x$msg[[m]], sep = '')
+                }
+            }
             pander(x$result)
         })
 
@@ -106,27 +122,31 @@ Pandoc$methods(show = function(x) {
         cat(pandoc.horizontal.rule())
         cat('\nProc. time: ', .self$proc.time + as.numeric(proc.time() - timer)[3], 'seconds. \n\n')
 
-    } else
+    } else {
         cat('\n)')
+    }
 
 })
 
 Pandoc$methods(export = function(f, ...) {
 
-    if (missing(f))
+    if (missing(f)) {
         f <- tempfile('pander-', getwd())
+    }
     fp    <- sprintf('%s.md', f)
     timer <- proc.time()
 
     ## create pandoc file
     cat(pandoc.title.return(.self$title, .self$author, .self$date), file = fp)
-    lapply(.self$body, function(x) cat(paste(capture.output(pander(x$result)), collapse = '\n'), file = fp, append = TRUE))
+    lapply(.self$body,
+           function(x) cat(paste(capture.output(pander(x$result)), collapse = '\n'), file = fp, append = TRUE))
 
     ## convert
     fe <- Pandoc.convert(fp, format = .self$format, proc.time = as.numeric(proc.time() - timer)[3], ...)
 
     ## return
-    cat('\nExported to *', f, '.[md|', format, ']* under ', .self$proc.time + as.numeric(proc.time() - timer)[3], ' seconds.\n\n', sep = '')
+    cat('\nExported to *', f, '.[md|', format, ']* under ',
+        .self$proc.time + as.numeric(proc.time() - timer)[3], ' seconds.\n\n', sep = '')
 
     return(invisible(fe))
 

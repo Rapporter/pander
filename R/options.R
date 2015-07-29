@@ -1,5 +1,4 @@
-.onLoad <- function(libname, pkgname)
-{
+.onLoad <- function(libname, pkgname) {
     ## pander settings
     options('pander' = list(
                 'digits'                   = 4,
@@ -40,7 +39,7 @@
                 'graph.legend.position'    = 'right',
                 'graph.background'         = 'white',
                 'graph.panel.background'   = 'transparent',
-                'graph.colors'             = c("#56B4E9", "#009E73", "#F0E442", "#0072B2", "#D55E00", "#CC79A7", "#999999", "#E69F00"),
+                'graph.colors'             = c("#56B4E9", "#009E73", "#F0E442", "#0072B2", "#D55E00", "#CC79A7", "#999999", "#E69F00"), #nolint
                 'graph.color.rnd'          = FALSE,
                 'graph.axis.angle'         = 1,
                 'graph.symbol'             = 1,
@@ -95,7 +94,7 @@ hash.cache.last.used <- new.env() # when was the hash last queried
 
 ## masked plots
 masked.plots <- new.env()
-masked.plots$plot <- masked.plots$barplot <- masked.plots$lines <- masked.plots$pie <- masked.plots$boxplot <- masked.plots$polygon <- masked.plots$points <- masked.plots$legend <- masked.plots$hist <- masked.plots$pairs <- masked.plots$stripchart <- masked.plots$clusplot <- masked.plots$text <- function (...) {
+masked.plots$plot <- masked.plots$barplot <- masked.plots$lines <- masked.plots$pie <- masked.plots$boxplot <- masked.plots$polygon <- masked.plots$points <- masked.plots$legend <- masked.plots$hist <- masked.plots$pairs <- masked.plots$stripchart <- masked.plots$clusplot <- masked.plots$text <- function (...) { #nolint
 
     mc      <- match.call()
     fn      <- deparse(mc[[1]])
@@ -110,7 +109,7 @@ masked.plots$plot <- masked.plots$barplot <- masked.plots$lines <- masked.plots$
         fbs <- panderOptions('graph.fontsize')
         bc  <- panderOptions('graph.background')
         gc  <- panderOptions('graph.grid.color')
-        cex <- fbs/12
+        cex <- fbs / 12
         cs <- panderOptions('graph.colors')
         if (panderOptions('graph.color.rnd'))
             cs <- sample(cs)
@@ -121,7 +120,7 @@ masked.plots$plot <- masked.plots$barplot <- masked.plots$lines <- masked.plots$
             par(
                 family   = panderOptions('graph.fontfamily'),
                 cex      = cex, cex.axis = cex * 0.8, cex.lab = cex, cex.main = cex * 1.2, cex.sub = cex,
-                bg       = bc, # TODO: how could we color only the inner plot area globally? Not like: https://stat.ethz.ch/pipermail/r-help/2003-May/033971.html
+                bg       = bc, # nolint TODO: how could we color only the inner plot area globally? Not like: https://stat.ethz.ch/pipermail/r-help/2003-May/033971.html
                 las      = panderOptions('graph.axis.angle'),
                 lwd      = 2,
                 pch      = panderOptions('graph.symbol'),
@@ -179,13 +178,16 @@ masked.plots$plot <- masked.plots$barplot <- masked.plots$lines <- masked.plots$
     ## grid
     if (all(par()$mfrow == 1) & panderOptions('graph.grid') & doAddGrid & !(!is.null(mc$plot) && !mc$plot)) {
 
-        g <- tryCatch(grid(lty = panderOptions('graph.grid.lty'), col = panderOptions('graph.grid.color'), lwd = 0.5), error = function(e) e)
+        g <- tryCatch(grid(lty = panderOptions('graph.grid.lty'),
+                           col = panderOptions('graph.grid.color'),
+                           lwd = 0.5),
+                      error = function(e) e)
         if (!inherits(g, 'error')) {
             if (panderOptions('graph.grid.minor'))
                 g <- tryCatch(add.minor.ticks(2, 2, grid = TRUE), error = function(e) e)
         }
         if (inherits(g, 'error'))
-            warning('Applying default formatting to image is somehow compromised (the result could differ from what you specified in `panderOptions`). Hints: printing `lattice`/`ggplot2` is not needed and tweaking `base` plots with `par` might have some side-effects!')
+            warning('Applying default formatting to image is somehow compromised (the result could differ from what you specified in `panderOptions`). Hints: printing `lattice`/`ggplot2` is not needed and tweaking `base` plots with `par` might have some side-effects!') #nolint
 
     }
 }

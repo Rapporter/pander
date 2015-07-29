@@ -5,4 +5,4 @@ Makefile
 TODO.md
 ^.*\.Rproj$
 ^\.Rproj\.user$
-pull.sh
+\.lintr

@@ -27,6 +27,6 @@ Pandoc's mardown formula.
 }
 \examples{
 pandoc.formula(y ~ x)
-pandoc.formula(formula(paste("y ~ ", paste0("x", 1:12, collapse = " + "))))
+pandoc.formula(formula(paste('y ~ ', paste0('x', 1:12, collapse = ' + '))))
 }
 

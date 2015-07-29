@@ -59,14 +59,15 @@ repChar <- function(x, n, sep = '')
 #' @export
 #' @author Aleksandar Blagotic
 #' @references This function was moved from \code{rapport} package: \url{http://rapport-package.info}.
-p <- function(x, wrap = panderOptions('p.wrap'), sep = panderOptions('p.sep'), copula = panderOptions('p.copula'), limit = Inf, keep.trailing.zeros = panderOptions('keep.trailing.zeros'), missing = panderOptions('missing')){
+p <- function(x, wrap = panderOptions('p.wrap'), sep = panderOptions('p.sep'), copula = panderOptions('p.copula'), limit = Inf, keep.trailing.zeros = panderOptions('keep.trailing.zeros'), missing = panderOptions('missing')){ #nolint
 
     attributes(x) <- NULL
     stopifnot(is.vector(x))
     stopifnot(all(sapply(list(wrap, sep, copula), function(x) is.character(x) && length(x) == 1)))
     x.len <- length(x)
-    if (x.len == 0)
+    if (x.len == 0) {
         return('')
+    }
     stopifnot(x.len <= limit)
 
     ## store missing values
@@ -78,24 +79,27 @@ p <- function(x, wrap = panderOptions('p.wrap'), sep = panderOptions('p.sep'), c
         x <- round(x, panderOptions('round'))
 
         ## optionally remove trailing zeros by running format separately on each element of the vector
-        if (!keep.trailing.zeros)
-            x <- sapply(x, format, trim = TRUE, digits = panderOptions('digits'), decimal.mark = panderOptions('decimal.mark'))
-        ## otherwise force using the same number format for all vector elements
-        else
+        if (!keep.trailing.zeros) {
+            x <- sapply(x, format, trim = TRUE, digits = panderOptions('digits'), decimal.mark = panderOptions('decimal.mark')) #nolint
+        } else {
+            ## otherwise force using the same number format for all vector elements
             x <- format(x, trim = TRUE, digits = panderOptions('digits'), decimal.mark = panderOptions('decimal.mark'))
+        }
 
     }
 
     ## replace missing values
-    if (length(w) > 0)
+    if (length(w) > 0) {
         x[w] <- missing
+    }
 
-    if (x.len == 1)
+    if (x.len == 1) {
         wrap(x, wrap)
-    else if (x.len == 2)
+    } else if (x.len == 2) {
         paste(wrap(x, wrap), collapse = copula)
-    else
+    } else {
         paste0(paste(wrap(head(x, -1), wrap), collapse = sep), copula, wrap(tail(x, 1), wrap))
+    }
 }
 
 
@@ -136,8 +140,9 @@ has.rownames <- function(x) {
 #' @export
 set.caption <- function(x, permanent = FALSE){
     assign('caption', x , envir = storage)
-    if (!is.null(x))
+    if (!is.null(x)) {
         attr(storage$caption, 'permanent') <- permanent
+    }
 }
 
 
@@ -157,7 +162,7 @@ get.caption <- function()
 #' @param row.names string holding the alignment of the (optional) row names
 #' @param permanent (default \code{FALSE}) if alignment is permanent (for all future tables) or not. It's cleaner to use \code{panderOptions} instead.
 #' @export
-set.alignment <- function(default = panderOptions('table.alignment.default'), row.names = panderOptions('table.alignment.rownames'), permanent = FALSE) {
+set.alignment <- function(default = panderOptions('table.alignment.default'), row.names = panderOptions('table.alignment.rownames'), permanent = FALSE) { #nolint
     assign('alignment', list(default = default, row.names = row.names) , envir = storage)
     attr(storage$alignment, 'permanent') <- permanent
 }
@@ -177,18 +182,21 @@ get.alignment <- function(df) {
         if (is.null(a)) {
             ad <- panderOptions('table.alignment.default')
             ar <- panderOptions('table.alignment.rownames')
-            if (!has.rownames(df))
+            if (!has.rownames(df)) {
                 ar <- NULL
-            if (is.function(ar))
+            }
+            if (is.function(ar)) {
                 ar <- ar()
+            }
             if (is.function(ad)) {
                 return(c(ar, ad(df)))
             }
             a <- list(default = ad, row.names = ar)
         }
 
-        if (length(a) == 1)
+        if (length(a) == 1) {
             a <- list(default = as.character(a), row.names = as.character(a))
+        }
 
         if (length(dim(df)) < 2) {
             w <- length(df)
@@ -196,14 +204,16 @@ get.alignment <- function(df) {
         } else {
             w <- ncol(df)
             n <- rownames(df)
-            if (all(n == 1:nrow(df)))
+            if (all(n == 1:nrow(df))) {
                 n <- NULL
+            }
         }
 
-        if (is.null(n))
+        if (is.null(n)) {
             return(rep(a$default, length.out = w))
-        else
+        } else {
             return(c(a$row.names, rep(a$default, length.out = w)))
+        }
 
     }
 
@@ -259,9 +269,16 @@ emphasize.strong.cells <- emphasize.rows
 #' @return R object passed as \code{df} with possibly added \code{attr}s captured from internal buffer
 #' @keywords internal
 get.emphasize <- function(df) {
-    for (v in c('emphasize.rows', 'emphasize.cols', 'emphasize.cells', 'emphasize.strong.rows', 'emphasize.strong.cols', 'emphasize.strong.cells'))
-        if (is.null(attr(df, v)))
+    for (v in c('emphasize.rows',
+                'emphasize.cols',
+                'emphasize.cells',
+                'emphasize.strong.rows',
+                'emphasize.strong.cols',
+                'emphasize.strong.cells')) {
+        if (is.null(attr(df, v))) {
             attr(df, v) <- get.storage(v)
+        }
+    }
     return(df)
 }
 
@@ -273,8 +290,9 @@ get.emphasize <- function(df) {
 #' @keywords internal
 get.storage <- function(what) {
     res <- tryCatch(get(what, envir = storage, inherits = FALSE), error = function(e) NULL)
-    if (is.null(attr(res, 'permanent')) || !attr(res, 'permanent'))
+    if (is.null(attr(res, 'permanent')) || !attr(res, 'permanent')) {
         assign(what, NULL , envir = storage)
+    }
     return(res)
 }
 
@@ -328,16 +346,21 @@ cache.on <- function()
 #' splitLine("foo bar", 7)
 #' splitLine("Pandoc Package", 3, TRUE)
 splitLine <- function(x, max.width = panderOptions('table.split.cells'), use.hyphening = FALSE) {
-    if (any(is.na(x)))
+    if (any(is.na(x))) {
         return(x)
-    if (!is.character(x) || !is.null(dim(x)) || length(x) != 1 || x == "")
+    }
+    if (!is.character(x) || !is.null(dim(x)) || length(x) != 1 || x == "") {
         return(x)
-    if (suppressWarnings(!is.na(as.numeric(x))))
+    }
+    if (suppressWarnings(!is.na(as.numeric(x)))) {
         return(x)
-    if (is.infinite(max.width))
+    }
+    if (is.infinite(max.width)) {
         max.width <- .Machine$integer.max
-    if (use.hyphening && !requireNamespace('koRpus', quietly = TRUE))
+    }
+    if (use.hyphening && !requireNamespace('koRpus', quietly = TRUE)) {
         use.hyphening <- FALSE
+    }
     hyphen_f <- function(s)
         koRpus::hyphen(s, hyph.pattern = 'en.us', quiet = TRUE)@hyphen[1, 2]
     .Call('pander_splitLine_cpp', PACKAGE = 'pander', x, max.width, use.hyphening, hyphen_f)
@@ -350,11 +373,13 @@ splitLine <- function(x, max.width = panderOptions('table.split.cells'), use.hyp
 #' @keywords internal
 check_caption <- function(caption) {
 
-    if (length(caption) > 1)
+    if (length(caption) > 1) {
         stop('The caption should be exactly one string.')
+    }
 
-    if (!(is.character(caption) | is.null(caption)))
+    if (!(is.character(caption) | is.null(caption))){
         stop('The caption should be string (character class) or NULL.')
+    }
 }
 
 

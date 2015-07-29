@@ -14,7 +14,7 @@
 
 \item{expr.labels}{expression labels that will replace default ones (similar to rownames, which microbenchmark class table does not have)}
 
-\item{unit}{units in which values should be printed (for example second, microseconds, etc.). Should be one of “ns”, “us”, “ms”, “s”, “t”, “hz”, “khz”, “mhz”, “eps”, “f”}
+\item{unit}{units in which values should be printed (for example second, microseconds, etc.). Should be one of ns, us, ms, s, t, hz, khz, mhz, eps, f}
 
 \item{...}{optional parameters passed to raw \code{pandoc.table} function}
 }
