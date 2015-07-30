@@ -934,3 +934,25 @@ test_that('pander.arima works correctly', {
     expect_equal(length(res), 15)
     expect_false(any(grep('s\\.e', res)))
 })
+
+test_that('pander.ols works correctly', {
+    suppressMessages(require(rms))
+    set.seed(123)
+    n <- 1000
+    age <- rnorm(n, 50, 10)
+    cholesterol <- rnorm(n, 200, 25)
+    sex <- factor(sample(c("female", "male"), n, TRUE))
+    health <- data.frame(age, cholesterol)
+    dd <- datadist(age, sex)
+    fit1 <- ols(cholesterol ~ age)
+    fit2 <- ols(cholesterol ~ age + sex)
+
+    res1 <- pander_return(fit1)
+    expect_equal(length(res1), 40)
+    expect_equal(res1[8], '  1000         7.507            0.007479    ')
+    expect_equal(length(grep('Table', res1)), 3)
+    res2 <- pander_return(fit2, coefs = FALSE)
+    expect_equal(length(res2), 29)
+    expect_equal(length(grep('Table', res2)), 2)
+})
+

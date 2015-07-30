@@ -1844,3 +1844,90 @@ pander.Arima <- function(x, digits = panderOptions('digits'), se = TRUE,...) {
              '\n', sep = '')
     invisible(x)
 }
+
+#' Prints an ols object from rms package in Pandoc's markdown.
+#' @param x an ols object
+#' @param long if to print the correlation matrix of parameter estimates. default(\code{FALSE})
+#' @param coefs if to the table of model coefficients, standard errors, etc. default(\code{TRUE})
+#' @param digits passed to \code{format}. Can be a vector specifying values for each column (has to be the same length as number of columns).
+#' @param round passed to \code{round}. Can be a vector specifying values for each column (has to be the same length as number of columns). Values for non-numeric columns will be disregarded.
+#' @param ... optional parameters passed to raw \code{pandoc.table} function
+#' @export
+pander.ols <- function (x, long = FALSE, coefs = TRUE,
+                        digits = panderOptions("digits"), round = panderOptions("round"), ...) {
+    requireNamespace("rms", quietly = TRUE)
+    stats <- x$stats
+    pen <- length(x$penalty.matrix) > 0
+    resid <- x$residuals
+    n <- length(resid)
+    p <- length(x$coef) - (names(x$coef)[1] == "Intercept")
+    if (length(stats) == 0) {
+        cat("n=", n, "   p=", p, "\n\n", sep = "")
+    }
+    ndf <- stats["d.f."]
+    df <- c(ndf, n - ndf - 1, ndf)
+    r2 <- stats["R2"]
+    sigma <- stats["Sigma"]
+    rdf <- df[2]
+    rsqa <- 1 - (1 - r2) * (n - 1)/rdf
+    lrchisq <- stats["Model L.R."]
+    ci <- x$clusterInfo
+    if (lst <- length(stats)) {
+        misc <- reVector(Obs = stats["n"], sigma = sigma, d.f. = df[2], `Cluster on` = ci$name, Clusters = ci$n)
+        lr <- reVector(`LR chi2` = lrchisq, d.f. = ndf, `Pr(> chi2)` = 1 - pchisq(lrchisq, ndf))
+        disc <- reVector(R2 = r2, `R2 adj` = rsqa, g = stats["g"])
+        sdf <- data.frame(matrix(0, ncol = 3, nrow = 6))
+        for (i in 1:3) {
+            sdf[2 * i - 1, ] <- c(names(misc)[i], names(lr)[i], names(disc)[i])
+            sdf[2 * i, ] <- sapply(c(misc[i], lr[i], disc[i]),
+                                   function(x) format(round(x, digits = round), digits = digits))
+        }
+        rownames(sdf) <- NULL
+        colnames(sdf) <- c("", "Model Likelihood\nRatio Test", "Discrimination\nIndexes")
+        caption <- pandoc.formula.return(x$call$formula, text = "Fitting linear model:")
+        pandoc.table(sdf, keep.line.breaks = TRUE, caption = caption, ...)
+    }
+    if (rdf > 5) {
+        if (length(dim(resid)) == 2) {
+            rq <- apply(t(resid), 1, quantile)
+            dimnames(rq) <- list(c("Min", "1Q", "Median", "3Q",
+                                   "Max"), dimnames(resid)[[2]])
+        } else {
+            rq <- quantile(resid)
+            names(rq) <- c("Min", "1Q", "Median", "3Q", "Max")
+        }
+        pandoc.table(rq, caption = "Residuals", ...)
+    }
+    else if (rdf > 0) {
+        pandoc.table(resid, caption = "Residuals", ...)
+    }
+    if (nsingular <- df[3] - df[1]) {
+        cat(nsingular, "coefficients not defined because of singularities", "\n")
+    }
+    se <- sqrt(diag(x$var))
+    obj <- list(coef = x$coefficients, se = se, errordf = rdf)
+    if (coefs) {
+        errordf <- obj$errordf
+        beta <- obj$coef
+        se <- obj$se
+        Z <- beta/se
+        P <- ifelse(length(errordf), 2 * (1 - pt(abs(Z), errordf)), 1 - pchisq(Z^2, 1))
+        U <- cbind(beta, se, Z, P)
+        colnames(U) <- c("Coef", "S.E.", "Wald Z", "Pr(>|Z|)")
+        pandoc.table(U, caption = "Coeficients", ...)
+    }
+    if (!pen) {
+        if (long && p > 0) {
+            correl <- diag(1/se) %*% x$var %*% diag(1/se)
+            dimnames(correl) <- dimnames(x$var)
+            ll <- lower.tri(correl)
+            correl[ll] <- format(round(correl[ll], digits = round), digits = digits, ...)
+            correl[!ll] <- ""
+            pandoc.table(correl[-1, -(p + 1), drop = FALSE],
+                         caption ="Correlation of Coefficients",
+                         digits = digits,
+                         round = round, ...)
+        }
+    }
+    invisible()
+}
