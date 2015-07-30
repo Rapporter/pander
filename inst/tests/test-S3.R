@@ -911,3 +911,15 @@ test_that('pander.nls/pander.summary.nls works correctly', {
     expect_true(any(grepl('Correlation', res)))
     expect_equal(length(res), 31)
 })
+
+test_that('pander.arima works correctly', {
+    res <- pander_return(arima(lh, order = c(1,0,0)))
+    expect_equal(length(res), 17)
+    expect_true(any(grep("s\\.e", res)))
+    res <- pander_return(arima(lh, order = c(3,0,0)))
+    expect_equal(length(res), 17)
+    expect_true(any(grep("s\\.e", res)))
+    res <- pander_return(arima(lh, order = c(3,0,0), method = "CSS"), se = FALSE)
+    expect_equal(length(res), 15)
+    expect_false(any(grep("s\\.e", res)))
+})

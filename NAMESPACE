@@ -2,6 +2,7 @@
 
 S3method(pander,"NULL")
 S3method(pander,"function")
+S3method(pander,Arima)
 S3method(pander,CrossTable)
 S3method(pander,Date)
 S3method(pander,POSIXct)
