@@ -1,0 +1,16 @@
+---
+title: "Using pander with knitr"
+author: "Roman Tsegelskyi, Gergely Daróczi"
+date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Pandoc.table}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, echo = FALSE, message = FALSE}
+knitr::opts_chunk$set(collapse = T, comment = "#>")
+library(pander)
+library(knitr)
+```
