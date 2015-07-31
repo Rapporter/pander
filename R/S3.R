@@ -1805,3 +1805,31 @@ pander.nls <- function(x, digits = panderOptions('digits'), show.convergence = F
     pander.summary.nls(summary(x), summary = FALSE, add.significance.stars = FALSE,
                        digits = digits, show.convergence = show.convergence, ...)
 }
+
+#' Prints an arima object from stats package in Pandoc's markdown.
+#' @param x an arima object
+#' @param digits number of digits of precision
+#' @param se if to include standard error in coefficients table (default \code{TRUE})
+#' @param ... optional parameters passed to raw \code{pandoc.table} function
+#' @export
+pander.Arima <- function(x, digits = panderOptions('digits'), se = TRUE,...) {
+    cat('\nCall:', pandoc.formula.return(x$call), '', sep = '\n')
+    cn <- names(x$coef)
+    coef <- matrix(x$coef, nrow = 1)
+    colnames(coef) <- cn
+    if (se && nrow(x$var.coef)) {
+        ses <- rep_len(0, length(coef))
+        ses[x$mask] <- sqrt(diag(x$var.coef))
+        coef <- rbind(coef, s.e. = ses)
+    }
+    pandoc.table(coef, caption = 'Coefficients', digits = digits, ...)
+    cm <- x$call$method
+    if (is.null(cm) || cm != 'CSS')
+        cat('\nsigma^2 estimated as ', format(x$sigma2, digits = digits),
+            ':  log likelihood = ', format(round(x$loglik, 2)),
+            ',  aic = ', format(round(x$aic, 2)), '\n', sep = '')
+    else cat('\nsigma^2 estimated as ', format(x$sigma2, digits = digits),
+             ':  part log likelihood = ', format(round(x$loglik, 2)),
+             '\n', sep = '')
+    invisible(x)
+}
