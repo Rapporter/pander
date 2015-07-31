@@ -1817,6 +1817,7 @@ pander.nls <- function(x, digits = panderOptions('digits'), show.convergence = F
                        digits = digits, show.convergence = show.convergence, ...)
 }
 
+<<<<<<< HEAD
 #' Prints an arima object from stats package in Pandoc's markdown.
 #' @param x an arima object
 #' @param digits number of digits of precision
@@ -1843,6 +1844,20 @@ pander.Arima <- function(x, digits = panderOptions('digits'), se = TRUE,...) {
              ':  part log likelihood = ', format(round(x$loglik, 2)),
              '\n', sep = '')
     invisible(x)
+=======
+multitable <- function(...) {
+    v <- list(...)
+    ml <- max(sapply(v, length))
+    mod <- lapply(1:length(v),
+                  function(i)  {
+                      uv <- unlist(c(rbind(names(v[[i]]),
+                                           sapply(v[[i]], p, wrap=''))))
+                      if (length(v[[i]]) < ml)
+                          uv <- c(uv, rep("", 2* (ml - length(v[[i]]))))
+                      uv
+                  })
+    do.call(cbind, mod)
+>>>>>>> First version of lrm
 }
 
 #' Prints an ols object from rms package in Pandoc's markdown.
@@ -1876,13 +1891,7 @@ pander.ols <- function (x, long = FALSE, coefs = TRUE,
         misc <- reVector(Obs = stats["n"], sigma = sigma, d.f. = df[2], `Cluster on` = ci$name, Clusters = ci$n)
         lr <- reVector(`LR chi2` = lrchisq, d.f. = ndf, `Pr(> chi2)` = 1 - pchisq(lrchisq, ndf))
         disc <- reVector(R2 = r2, `R2 adj` = rsqa, g = stats["g"])
-        sdf <- data.frame(matrix(0, ncol = 3, nrow = 6))
-        for (i in 1:3) {
-            sdf[2 * i - 1, ] <- c(names(misc)[i], names(lr)[i], names(disc)[i])
-            sdf[2 * i, ] <- sapply(c(misc[i], lr[i], disc[i]),
-                                   function(x) format(round(x, digits = round), digits = digits))
-        }
-        rownames(sdf) <- NULL
+        sdf <- multitable(misc, lr, disc)
         colnames(sdf) <- c("", "Model Likelihood\nRatio Test", "Discrimination\nIndexes")
         caption <- pandoc.formula.return(x$call$formula, text = "Fitting linear model:")
         pandoc.table(sdf, keep.line.breaks = TRUE, caption = caption, ...)
@@ -1928,6 +1937,98 @@ pander.ols <- function (x, long = FALSE, coefs = TRUE,
                          digits = digits,
                          round = round, ...)
         }
+    }
+    invisible()
+}
+
+#' Prints an lrm object from rms package in Pandoc's markdown.
+#' @param x an ols object
+#' @param long if to print the correlation matrix of parameter estimates. default(\code{FALSE})
+#' @param strata.coefs if to the table of model coefficients, standard errors, etc. default(\code{TRUE})
+#' @param coefs if to the table of model coefficients, standard errors, etc. default(\code{TRUE})
+#' @param digits passed to \code{format}. Can be a vector specifying values for each column (has to be the same length as number of columns).
+#' @param round passed to \code{round}. Can be a vector specifying values for each column (has to be the same length as number of columns). Values for non-numeric columns will be disregarded.
+#' @param ... optional parameters passed to raw \code{pandoc.table} function
+#' @export
+pander.lrm <- function (x, strata.coefs = FALSE, coefs = TRUE, ...)  {
+    ns <- x$non.slopes
+    nstrata <- x$nstrata
+    if (!length(nstrata)) {
+        nstrata <- 1
+    }
+    pm <- x$penalty.matrix
+    penaltyFactor <- NULL
+    if (length(pm)) {
+        psc <- ifelse(length(pm) == 1, sqrt(pm), sqrt(diag(pm)))
+        penalty.scale <- c(rep(0, ns), psc)
+        cof <- matrix(x$coef[-(1:ns)], ncol = 1)
+        pandoc.table(as.data.frame(x$penalty, row.names = ""), caption = "Penalty factors", ...)
+        penaltyFactor <- as.vector(t(cof) %*% pm %*% cof)
+    }
+    est.exp <- 1:ns
+    if (length(x$est)) {
+        est.exp <- c(est.exp, ns + x$est[x$est + ns <= length(x$coefficients)])
+    }
+    vv <- diag(x$var)
+    cof <- x$coef
+    if (strata.coefs) {
+        cof <- c(cof, x$strata.coef)
+        # vv <- c(vv, x$Varcov(x, which = "strata.var.diag"))
+        if (length(pm)) {
+            penalty.scale <- c(penalty.scale, rep(NA, x$nstrata - 1))
+        }
+    }
+    score.there <- nstrata == 1 && (length(x$est) < length(x$coef) - ns)
+    stats <- x$stats
+    maxd <- signif(stats["Max Deriv"], 1)
+    ci <- x$clusterInfo
+    misc <- reVector(Obs = stats["Obs"],
+                     `Sum of weights` = stats["Sum of Weights"],
+                     Strata = if (nstrata > 1) nstrata,
+                     `Cluster on` = ci$name, Clusters = ci$n,
+                     `max |deriv|` = maxd)
+    if (length(x$freq) < 4) {
+        names(x$freq) <- paste(" ", names(x$freq), sep = "")
+        misc <- c(misc[1], x$freq, misc[-1])
+    }
+    lr <- reVector(`LR chi2` = stats["Model L.R."],
+                   d.f. = round(stats["d.f."], 3),
+                   `Pr(> chi2)` = stats["P"],
+                   Penalty = penaltyFactor)
+    disc <- reVector(R2 = stats["R2"], g = stats["g"], gr = stats["gr"],
+                     gp = stats["gp"], Brier = stats["Brier"])
+    discr <- reVector(C = stats["C"], Dxy = stats["Dxy"], gamma = stats["Gamma"],
+                      `tau-a` = stats["Tau-a"])
+    sdf <- multitable(misc, lr, disc, discr)
+    colnames(sdf) <- c("", "Model Likelihood\nRatio Test",
+                       "Discrimination\nIndexes", "Rank Discrim.\nIndexes")
+    pandoc.table(sdf, keep.line.breaks = TRUE, ...)
+    obj <- list(coef = cof, se = sqrt(vv), aux = if (length(pm)) penalty.scale, auxname = "Penalty Scale")
+    if (coefs) {
+        errordf <- obj$errordf
+        beta <- obj$coef
+        se <- obj$se
+        Z <- beta/se
+        P <- ifelse(length(errordf), 2 * (1 - pt(abs(Z), errordf)), 1 - pchisq(Z^2, 1))
+        U <- cbind(beta, se, Z, P)
+        colnames(U) <- c("Coef", "S.E.", "Wald Z", "Pr(>|Z|)")
+        if (length(errordf))  {
+            colnames(U)[3:4] <- c("t", "Pr(>|t|)")
+        }
+        rownames(U) <- names(beta)
+        if (length(obj$aux)) {
+            U <- cbind(U, obj$aux)
+            colnames(U)[ncol(U)] <- obj$auxname
+        }
+        pandoc.table(U, caption = "Coeficients", ...)
+    }
+    if (score.there) {
+        q <- (1:length(cof))[-est.exp]
+        vv <- ifelse(length(q) == 1, vv <- x$var[q, q], vv <- diag(x$var[q, q]))
+        Z <- x$u[q]/sqrt(vv)
+        stats <- cbind(Z, 1 - pchisq(Z^2, 1))
+        dimnames(stats) <- list(names(cof[q]), c("Score Z", "P"))
+        pandoc.table(stats, ...)
     }
     invisible()
 }
