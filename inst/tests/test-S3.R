@@ -977,3 +977,20 @@ test_that('pander.lrm works correctly', {
     expect_equal(length(grep('Table', res)), 3)
 })
 
+test_that('pander.orm works correctly', {
+    suppressMessages(require(rms))
+    n <- 100
+    y <- round(runif(n), 2)
+    x1 <- sample(c(-1,0,1), n, TRUE)
+    x2 <- sample(c(-1,0,1), n, TRUE)
+    res <- pander_return(orm(y ~ x1 + x2, eps=1e-5))
+    expect_equal(length(res), 39)
+    expect_true(any(grep('y ~ x1 \\+ x2', res)))
+    expect_equal(length(grep('Table', res)), 2)
+
+    res <- pander_return(orm(y ~ x1 + x2, eps=1e-5), coefs = FALSE)
+    expect_equal(length(res), 28)
+    expect_true(any(grep('y ~ x1 \\+ x2', res)))
+    expect_equal(length(grep('Table', res)), 1)
+})
+

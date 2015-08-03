@@ -422,3 +422,33 @@ multitable <- function(v) {
                   })
     do.call(cbind, mod)
 }
+
+#' Calculate coef matrix for models from rms package
+#' Forked from prModFit from rms
+#'
+#' @param obj object list
+#' @param coefs numeric value if to print only the first n regression coefficients in the model.
+#' @return coeficients matrix
+coef_mat <- function(obj, coefs) {
+    errordf <- obj$errordf
+    beta <- obj$coef
+    se <- obj$se
+    Z <- beta / se
+    P <- ifelse(length(errordf), 2 * (1 - pt(abs(Z), errordf)), 1 - pchisq(Z ^ 2, 1))
+    U <- cbind(beta, se, Z, P)
+    colnames(U) <- c("Coef", "S.E.", "Wald Z",
+                     "Pr(>|Z|)")
+    if (length(errordf))
+        colnames(U)[3:4] <- c("t", "Pr(>|t|)")
+    rownames(U) <- names(beta)
+    if (length(obj$aux)) {
+        U <- cbind(U, obj$aux)
+        colnames(U)[ncol(U)] <- obj$auxname
+    }
+    if (is.numeric(coefs)) {
+        U <- U[1:coefs, , drop = FALSE]
+        U <- rbind(U, rep("", ncol(U)))
+        rownames(U)[nrow(U)] <- ". . ."
+    }
+    U
+}

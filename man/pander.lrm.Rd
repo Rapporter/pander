@@ -7,7 +7,7 @@
 \method{pander}{lrm}(x, coefs = TRUE, ...)
 }
 \arguments{
-\item{x}{an ols object}
+\item{x}{an lrm object}
 
 \item{coefs}{if to the table of model coefficients, standard errors, etc. default(\code{TRUE})}
 

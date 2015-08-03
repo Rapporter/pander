@@ -1913,15 +1913,9 @@ pander.ols <- function (x, long = FALSE, coefs = TRUE,
         cat(nsingular, "coefficients not defined because of singularities", "\n")
     }
     se <- sqrt(diag(x$var))
-    obj <- list(coef = x$coefficients, se = se, errordf = rdf)
     if (coefs) {
-        errordf <- obj$errordf
-        beta <- obj$coef
-        se <- obj$se
-        Z <- beta / se
-        P <- ifelse(length(errordf), 2 * (1 - pt(abs(Z), errordf)), 1 - pchisq(Z ^ 2, 1))
-        U <- cbind(beta, se, Z, P)
-        colnames(U) <- c("Coef", "S.E.", "Wald Z", "Pr(>|Z|)")
+        obj <- list(coef = x$coefficients, se = se, errordf = rdf)
+        U <- coef_mat(obj, coefs = coefs)
         pandoc.table(U, caption = "Coeficients", ...)
     }
     if (!pen) {
@@ -1941,11 +1935,12 @@ pander.ols <- function (x, long = FALSE, coefs = TRUE,
 }
 
 #' Prints an lrm object from rms package in Pandoc's markdown.
-#' @param x an ols object
+#' @param x an lrm object
 #' @param coefs if to the table of model coefficients, standard errors, etc. default(\code{TRUE})
 #' @param ... optional parameters passed to raw \code{pandoc.table} function
 #' @export
 pander.lrm <- function (x, coefs = TRUE, ...)  {
+    requireNamespace("rms", quietly = TRUE)
     ns <- x$non.slopes
     nstrata <- x$nstrata
     if (!length(nstrata)) {
@@ -1979,7 +1974,7 @@ pander.lrm <- function (x, coefs = TRUE, ...)  {
         misc <- c(misc[1], x$freq, misc[-1])
     }
     lr <- reVector(`LR chi2` = stats["Model L.R."],
-                   d.f. = round(stats["d.f."], 3),
+                   d.f. = stats["d.f."],
                    `Pr(> chi2)` = stats["P"],
                    Penalty = penaltyFactor)
     disc <- reVector(R2 = stats["R2"], g = stats["g"], gr = stats["gr"],
@@ -1991,23 +1986,90 @@ pander.lrm <- function (x, coefs = TRUE, ...)  {
                        "Discrimination\nIndexes", "Rank Discrim.\nIndexes")
     caption <- pandoc.formula.return(x$call$formula, text = "Fitting logistic regression model:")
     pandoc.table(sdf, keep.line.breaks = TRUE, caption, ...)
-    obj <- list(coef = cof, se = sqrt(vv), aux = if (length(pm)) penalty.scale, auxname = "Penalty Scale")
     if (coefs) {
-        errordf <- obj$errordf
-        beta <- obj$coef
-        se <- obj$se
-        Z <- beta / se
-        P <- ifelse(length(errordf), 2 * (1 - pt(abs(Z), errordf)), 1 - pchisq(Z ^ 2, 1))
-        U <- cbind(beta, se, Z, P)
-        colnames(U) <- c("Coef", "S.E.", "Wald Z", "Pr(>|Z|)")
-        if (length(errordf))  {
-            colnames(U)[3:4] <- c("t", "Pr(>|t|)")
+        obj <- list(coef = cof, se = sqrt(vv), aux = if (length(pm)) penalty.scale, auxname = "Penalty Scale")
+        U <- coef_mat(obj, coefs = coefs)
+        pandoc.table(U, caption = "Coeficients", ...)
+    }
+    invisible()
+}
+
+#' Prints an orm object from rms package in Pandoc's markdown.
+#' @param x an orm object
+#' @param coefs if to the table of model coefficients, standard errors, etc. default(\code{TRUE})
+#' @param ... optional parameters passed to raw \code{pandoc.table} function
+#' @export
+pander.orm <- function (x, coefs = TRUE, intercepts = x$non.slopes < 10, ...) {
+    requireNamespace("rms", quietly = TRUE)
+    ns <- x$non.slopes
+    cik <- attr(x$coef, "intercepts")
+    if (length(cik) && intercepts) {
+        warning("intercepts=TRUE not implemented for fit.mult.impute objects")
+        intercepts <- FALSE
+    }
+    pm <- x$penalty.matrix
+    penaltyFactor <- NULL
+    if (length(pm)) {
+        psc <- ifelse(length(pm) == 1, sqrt(pm), sqrt(diag(pm)))
+        penalty.scale <- c(rep(0, ns), psc)
+        cof <- matrix(x$coef[ - (1:ns)], ncol = 1)
+        pandoc.table(as.data.frame(x$penalty, row.names = ""), caption = "Penalty factors", ...)
+        penaltyFactor <- as.vector(t(cof) %*% pm %*% cof)
+    }
+    vv <- diag(vcov(x, intercepts = ifelse(intercepts, "all", "none")))
+    if (!intercepts) {
+        if (!length(cik)) {
+            nints <- ns
+        } else if (length(cik) == 1 && cik == 0) {
+            nints <- 0
+        } else {
+            length(cik)
         }
-        rownames(U) <- names(beta)
-        if (length(obj$aux)) {
-            U <- cbind(U, obj$aux)
-            colnames(U)[ncol(U)] <- obj$auxname
+        ints.to.delete <- vector()
+        if (ns != 0 && nints != 0) {
+            ints.to.delete <- 1:nints
         }
+        vv <- c(rep(NA, nints), vv)
+    }
+    cof <- x$coef
+    stats <- x$stats
+    maxd <- signif(stats["Max Deriv"], 1)
+    ci <- x$clusterInfo
+    misc <- reVector(Obs = stats["Obs"], `Unique Y` = stats["Unique Y"],
+                     `Cluster on` = ci$name, Clusters = ci$n, `Median Y` = stats["Median Y"],
+                     `max |deriv|` = maxd)
+    if (length(x$freq) < 4) {
+        names(x$freq) <- paste(" ", names(x$freq), sep = "")
+        misc <- c(misc[1], x$freq, misc[-1])
+    }
+    lr <- reVector(`LR chi2` = stats["Model L.R."],
+                   d.f. = stats["d.f."],
+                   `Pr(> chi2)` = stats["P"],
+                   `Score chi2` = stats["Score"],
+                   `Pr(> chi2)` = stats["Score P"], Penalty = penaltyFactor)
+    disc <- reVector(R2 = stats["R2"], g = stats["g"], gr = stats["gr"],
+                     `|Pr(Y>=median)-0.5|` = stats["pdm"])
+    discr <- reVector(rho = stats["rho"])
+    sdf <- multitable(list(misc, lr, disc, discr))
+    colnames(sdf) <- c("", "Model Likelihood\nRatio Test",
+                       "Discrimination\nIndexes", "Rank Discrim.\nIndexes")
+    caption <- switch(x$family, logistic = "Logistic (Proportional Odds)",
+                      probit = "Probit", cauchit = "Cauchy", loglog = "-log-log",
+                      cloglog = "Complementary log-log")
+    caption <- paste(caption, "Ordinal Regression Model")
+    caption <- pandoc.formula.return(x$call$formula, text = caption)
+    pandoc.table(sdf, keep.line.breaks = TRUE, caption, ...)
+    if (coefs) {
+        if (!intercepts) {
+            j <- -ints.to.delete
+            cof <- cof[j]
+            vv <- vv[j]
+            if (length(pm)) {
+                penalty.scale <- penalty.scale[j]
+            }
+        }
+        obj <- list(coef = cof, se = sqrt(vv), aux = if (length(pm)) penalty.scale, auxname = "Penalty Scale")
+        U <- coef_mat(obj, coefs = coefs)
         pandoc.table(U, caption = "Coeficients", ...)
     }
     invisible()
