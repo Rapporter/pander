@@ -949,10 +949,31 @@ test_that('pander.ols works correctly', {
 
     res1 <- pander_return(fit1)
     expect_equal(length(res1), 40)
-    expect_equal(res1[8], '  1000         7.507            0.007479    ')
     expect_equal(length(grep('Table', res1)), 3)
     res2 <- pander_return(fit2, coefs = FALSE)
     expect_equal(length(res2), 29)
     expect_equal(length(grep('Table', res2)), 2)
+})
+
+test_that('pander.lrm works correctly', {
+    suppressMessages(require(rms))
+    x    <- 1:5
+    y    <- c(0,1,0,1,0)
+    reps <- c(1,2,3,2,1)
+    res <- pander_return(lrm(y ~ x))
+    expect_equal(length(res), 39)
+    expect_true(any(grep('y ~ x', res)))
+    expect_equal(length(grep('Table', res)), 2)
+
+    x <- rep(x, reps)
+    y <- rep(y, reps)
+    res <- pander_return(lrm(y ~ x), coefs = FALSE)
+    expect_equal(length(res), 28)
+    expect_true(any(grep('y ~ x', res)))
+    expect_equal(length(grep('Table', res)), 1)
+
+    res <- pander_return(lrm(y ~ x, penalty = 0.1), coefs = TRUE)
+    expect_true(any(grep('y ~ x', res)))
+    expect_equal(length(grep('Table', res)), 3)
 })
 

@@ -398,3 +398,27 @@ check_digits <- function(param, name, n) {
     }
     param
 }
+
+#' Create a multitable used for rendering objects from rms package
+#'
+#' When ols/lrm/orm from rms package get rendered, main statistics are group in table of tables.
+#' Since pandoc doesn't support row or col-span,
+#' we chose to group those statistics in a column each.
+#' This function takes care of that
+#' @param v list of vectors/lists to be merge in the table
+#' @return data.frame in specified format
+#' @examples
+#' pander:::multitable(list(list(a=1, b=2),list(c=3, d=4)))
+#' @keywords internal
+multitable <- function(v) {
+    ml <- max(sapply(v, length))
+    mod <- lapply(1:length(v),
+                  function(i)  {
+                      uv <- unlist(c(rbind(pandoc.strong.return(names(v[[i]])),
+                                           sapply(v[[i]], p, wrap=''))))
+                      if (length(v[[i]]) < ml)
+                          uv <- c(uv, rep("", 2* (ml - length(v[[i]]))))
+                      uv
+                  })
+    do.call(cbind, mod)
+}
