@@ -2075,8 +2075,8 @@ pander.orm <- function (x, coefs = TRUE, intercepts = x$non.slopes < 10, ...) {
     invisible()
 }
 
-#' Prints an orm object from rms package in Pandoc's markdown.
-#' @param x an orm object
+#' Prints an Grm object from rms package in Pandoc's markdown.
+#' @param x an Grm object
 #' @param coefs if to the table of model coefficients, standard errors, etc. default(\code{TRUE})
 #' @param ... optional parameters passed to raw \code{pandoc.table} function
 #' @export
@@ -2099,6 +2099,57 @@ pander.Glm <- function (x, coefs = TRUE, ...) {
         obj <- list(coef = cof, se = se)
         U <- coef_mat(obj, coefs = coefs)
         pandoc.table(U, caption = "Coeficients", ...)
+    }
+    invisible()
+}
+
+#' Prints an cph object from rms package in Pandoc's markdown.
+#' @param x an cph object
+#' @param table if to print event frequency statistics. default(\code{TRUE})
+#' @param conf.int set to e.g. .95 to print 0.95 confidence intervals on simple hazard ratios (which are usually meaningless as one-unit changes are seldom relevant and most models contain multiple terms per predictor)
+#' @param coefs if to the table of model coefficients, standard errors, etc. default(\code{TRUE})
+#' @param ... optional parameters passed to raw \code{pandoc.table} function
+#' @export
+pander.cph <- function (x, table = TRUE, conf.int = FALSE, coefs = TRUE, ...) {
+    requireNamespace("rms", quietly = TRUE)
+    if (table && length(x$n) && is.matrix(x$n)) {
+       pandoc.table(x$n, caption = "Status", ...)
+    }
+    if (length(x$coef)) {
+        stats <- x$stats
+        ci <- x$clusterInfo
+        misc <- reVector(Obs = stats["Obs"], Events = stats["Events"],
+                         `Cluster on` = ci$name, Clusters = ci$n,
+                         Center = x$center)
+        lr <- reVector(`LR chi2` = stats["Model L.R."], d.f. = stats["d.f."],
+                       `Pr(> chi2)` = stats["P"], `Score chi2` = stats["Score"],
+                       `Pr(> chi2)` = stats["Score P"])
+        disc <- reVector(R2 = stats["R2"], Dxy = stats["Dxy"],
+                         g = stats["g"], gr = stats["gr"])
+        sdf <- multitable(list(misc, lr, disc))
+        colnames(sdf) <- c("", "Model Likelihood\nRatio Test",
+                           "Discrimination\nIndexes")
+        caption <- pandoc.formula.return(x$call$formula, text = "Cox Proportional Hazards Model")
+        pandoc.table(sdf, keep.line.breaks = TRUE, caption, ...)
+        beta <- x$coef
+        se <- sqrt(diag(x$var))
+        if (coefs) {
+            se <- sqrt(diag(x$var))
+            obj <- list(coef = x$coef, se = se)
+            U <- coef_mat(obj, coefs = coefs)
+            pandoc.table(U, caption = "Coeficients", ...)
+        }
+        if (conf.int) {
+            zcrit <- qnorm((1 + conf.int)/2)
+            tmp <- cbind(exp(beta), exp(-beta),
+                         exp(beta - zcrit * se),
+                         exp(beta + zcrit * se))
+            dimnames(tmp) <- list(names(beta),
+                                  c("exp(coef)","exp(-coef)",
+                                    paste("lower ", p(conf.int, wrap = ''), sep = ""),
+                                    paste("upper ", p(conf.int, wrap = ''), sep = "")))
+            pandoc.table(tmp, caption = "Confidence interval", ...)
+        }
     }
     invisible()
 }
