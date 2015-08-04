@@ -994,3 +994,19 @@ test_that('pander.orm works correctly', {
     expect_equal(length(grep('Table', res)), 1)
 })
 
+test_that('pander.Glm works correctly', {
+    suppressMessages(require(rms))
+    counts <- c(18,17,15,20,10,20,25,13,12)
+    outcome <- gl(3,1,9)
+    treatment <- gl(3,3)
+    f <- Glm(counts ~ outcome + treatment, family=poisson())
+    res <- pander_return(f)
+    expect_equal(length(res), 37)
+    expect_true(any(grep('counts ~ outcome \\+ treatment', res)))
+    expect_equal(length(grep('Table', res)), 2)
+    res <- pander_return(f, coefs = FALSE)
+    expect_equal(length(res), 20)
+    expect_true(any(grep('counts ~ outcome \\+ treatment', res)))
+    expect_equal(length(grep('Table', res)), 1)
+})
+

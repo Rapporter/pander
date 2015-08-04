@@ -434,12 +434,17 @@ coef_mat <- function(obj, coefs) {
     beta <- obj$coef
     se <- obj$se
     Z <- beta / se
-    P <- ifelse(length(errordf), 2 * (1 - pt(abs(Z), errordf)), 1 - pchisq(Z ^ 2, 1))
+    if(length(errordf)) {
+        P <- 2 * (1 - pt(abs(Z), errordf))
+    } else {
+        P <- 1 - pchisq(Z ^ 2, 1)
+    }
     U <- cbind(beta, se, Z, P)
     colnames(U) <- c("Coef", "S.E.", "Wald Z",
                      "Pr(>|Z|)")
-    if (length(errordf))
+    if (length(errordf)) {
         colnames(U)[3:4] <- c("t", "Pr(>|t|)")
+    }
     rownames(U) <- names(beta)
     if (length(obj$aux)) {
         U <- cbind(U, obj$aux)

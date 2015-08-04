@@ -2074,3 +2074,31 @@ pander.orm <- function (x, coefs = TRUE, intercepts = x$non.slopes < 10, ...) {
     }
     invisible()
 }
+
+#' Prints an orm object from rms package in Pandoc's markdown.
+#' @param x an orm object
+#' @param coefs if to the table of model coefficients, standard errors, etc. default(\code{TRUE})
+#' @param ... optional parameters passed to raw \code{pandoc.table} function
+#' @export
+pander.Glm <- function (x, coefs = TRUE, ...) {
+    requireNamespace("rms", quietly = TRUE)
+    cof <- coef(x)
+    lr <- x$null.deviance - x$deviance
+    dof <- x$rank - (names(cof)[1] == "Intercept")
+    pval <- 1 - pchisq(lr, dof)
+    ci <- x$clusterInfo
+    misc <- reVector(Obs = length(x$residuals), `Residual d.f.` = x$df.residual,
+                     `Cluster on` = ci$name, Clusters = ci$n, g = x$g)
+    lr <- reVector(`LR chi2` = lr, d.f. = dof, `Pr(> chi2)` = pval)
+    sdf <- multitable(list(misc, lr))
+    colnames(sdf) <- c("", "Model Likelihood\nRatio Test")
+    caption <- pandoc.formula.return(x$call$formula, text = "General Linear Model")
+    pandoc.table(sdf, keep.line.breaks = TRUE, caption, ...)
+    if (coefs) {
+        se <- sqrt(diag(vcov(x)))
+        obj <- list(coef = cof, se = se)
+        U <- coef_mat(obj, coefs = coefs)
+        pandoc.table(U, caption = "Coeficients", ...)
+    }
+    invisible()
+}
