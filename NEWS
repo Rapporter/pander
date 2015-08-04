@@ -48,6 +48,7 @@ Fixes:
  * read default params of set.alignment from panderOptions (#137)
  * render header for 1D tables (#138)
  * emphasize cells with missing/empty values (#156)
+ * total.r and total.c support for CrossTable (#211)
 
 pander 0.5.1 (2014-10-29)
 ----------------------------------------------------------------

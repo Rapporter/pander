@@ -551,6 +551,17 @@ test_that('pander.CrossTable behaves correctly', {
     expect_true(any(grepl("Residual", res)))
     expect_true(any(grepl("Std Residual", res)))
     expect_true(any(grepl("Adj Std Resid", res)))
+    # issue 211 support for total.r total.c
+    x <- CrossTable(mtcars$cyl, mtcars$gear)
+    res <- pander_return(x, total.c = FALSE)
+    expect_equal(length(res), 27)
+    expect_equal(length(grep('Total', res)), 4)
+    res <- pander_return(x, total.r = FALSE)
+    expect_equal(length(res), 30)
+    expect_equal(length(grep('Total', res)), 4)
+    res <- pander_return(x)
+    expect_equal(length(res), 30)
+    expect_equal(length(grep('Total', res)), 5)
 })
 
 test_that('pander.NULL behaves correctly', {
