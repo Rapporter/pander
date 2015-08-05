@@ -747,7 +747,7 @@ evals <- function(txt, parse = evalsOptions('parse'), cache = evalsOptions('cach
     if ('all' %in% output) {
         output <- c('src', 'result', 'output', 'type', 'msg', 'stdout')
     } else if (length(setdiff(output, c('src', 'result', 'output', 'type', 'msg', 'stdout'))) != 0) {
-        stop("Wrong parameter supplied to output")
+        stop('Wrong parameter supplied to output')
     }
 
     if (!is.null(hooks) && !is.list(hooks)) {

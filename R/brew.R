@@ -198,10 +198,10 @@ BRCODE <- 2
 BRCOMMENT <- 3
 BRCATCODE <- 4
 DELIM <- list()
-DELIM[[BRTEXT]] <- c("","")
-DELIM[[BRCODE]] <- c("<%","%>")
-DELIM[[BRCOMMENT]] <- c("<%#","%>")
-DELIM[[BRCATCODE]] <- c("<%=","%>")
+DELIM[[BRTEXT]] <- c('','')
+DELIM[[BRCODE]] <- c('<%','%>')
+DELIM[[BRCOMMENT]] <- c('<%#','%>')
+DELIM[[BRCATCODE]] <- c('<%=','%>')
 
 #' Patched brew
 #'
@@ -243,7 +243,7 @@ DELIM[[BRCATCODE]] <- c("<%=","%>")
             if (length(line) != 1){
                 break
             }
-            line <- paste(line,"\n",sep='')
+            line <- paste(line,'\n',sep='')
         }
         if (state == BRTEXT){
 
@@ -280,8 +280,8 @@ DELIM[[BRCATCODE]] <- c("<%=","%>")
                 line <- ''
             }
         } else {
-            if (regexpr("%>",line,perl=TRUE) > 0){
-                spl <- strsplit(line,"%>",fixed=TRUE)[[1]]
+            if (regexpr('%>',line,perl=TRUE) > 0){
+                spl <- strsplit(line,'%>',fixed=TRUE)[[1]]
                 line <- paste(spl[-1],collapse='%>')
 
                 n <- nchar(spl[1])
@@ -301,14 +301,14 @@ DELIM[[BRCATCODE]] <- c("<%=","%>")
                     code[codeLen + 1] <- paste(text[textStart:textLen],collapse='')
                     codeLen <- codeLen + 1
                 } else if (state == BRCATCODE){
-                    code[codeLen + 1] <- paste0("showCode(",
-                                                deparse(paste(text[textStart:textLen],collapse = "\n")), ")")
+                    code[codeLen + 1] <- paste0('showCode(',
+                                                deparse(paste(text[textStart:textLen],collapse = '\n')), ')')
                     codeLen <- codeLen + 1
                 }
                 textStart <- textLen + 1
                 state <- BRTEXT
-            } else if (regexpr("<%",line,perl=TRUE) > 0){
-                stop("Oops! Someone forgot to close a tag. We saw: ",
+            } else if (regexpr('<%',line,perl=TRUE) > 0){
+                stop('Oops! Someone forgot to close a tag. We saw: ',
                      DELIM[[state]][1],' and we need ',
                      DELIM[[state]][2])
             } else {
@@ -325,7 +325,7 @@ DELIM[[BRCATCODE]] <- c("<%=","%>")
             textStart <- textLen + 1
         }
     } else {
-        stop("Oops! Someone forgot to close a tag. We saw: ",
+        stop('Oops! Someone forgot to close a tag. We saw: ',
              DELIM[[state]][1],' and we need ',
              DELIM[[state]][2], call. = FALSE)
     }
@@ -338,7 +338,7 @@ DELIM[[BRCATCODE]] <- c("<%=","%>")
             cat(localtext)
 
             if (grepl('^#+[ \t]+', localtext)) {
-                heading.level <- nchar(gsub("^(#{1,6})[ \t]+.*", "\\1", localtext))
+                heading.level <- nchar(gsub('^(#{1,6})[ \t]+.*', '\\1', localtext))
                 localtext <- gsub('^#{1,6}[ \t]+', '', localtext)
                 type <- 'heading'
             } else {

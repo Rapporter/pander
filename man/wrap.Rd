@@ -19,8 +19,8 @@ Wraps vector elements with string provided in \code{wrap} argument.
 }
 \examples{
 \dontrun{
-wrap("foobar")
-wrap(c("fee", "fi", "foo", "fam"), "_")
+wrap('foobar')
+wrap(c('fee', 'fi', 'foo', 'fam'), '_')
 }
 }
 \author{

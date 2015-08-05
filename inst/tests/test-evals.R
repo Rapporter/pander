@@ -78,8 +78,8 @@ test_that('stdout', {
     expect_null(eval.msgs('mtcars')$stdout)
     expect_null(eval.msgs('x <- mtcars')$stdout)
     expect_null(evals('plot(mtcars)')$stdout)
-    expect_equal(eval.msgs('cat(1:5)')$stdout, "1 2 3 4 5")
-    expect_equal(eval.msgs('cat(1:5);1:5')$stdout, "1 2 3 4 5")
+    expect_equal(eval.msgs('cat(1:5)')$stdout, '1 2 3 4 5')
+    expect_equal(eval.msgs('cat(1:5);1:5')$stdout, '1 2 3 4 5')
 })
 
 context('evals')
@@ -105,7 +105,7 @@ test_that('Basic: numerics', {
 })
 
 test_that('Basic: character', {
-    expect_equal(evals('"Hello world!"')[[1]]$result, "Hello world!")
+    expect_equal(evals('"Hello world!"')[[1]]$result, 'Hello world!')
 })
 
 test_that('Basic: list', {
@@ -272,9 +272,9 @@ test_that('plots', {
         cache.mode = 'disk',
         cache.dir = dir)
     lf <- list.files(dir)
-    expect_true(length(list.files(dir, pattern = "recordedplot$")) > 0)
-    png(filename=file.path(dir, "recorded.png"))
-    redraw.recordedplot(list.files(dir, pattern = "recordedplot$", full.names = T)[1])
+    expect_true(length(list.files(dir, pattern = 'recordedplot$')) > 0)
+    png(filename=file.path(dir, 'recorded.png'))
+    redraw.recordedplot(list.files(dir, pattern = 'recordedplot$', full.names = T)[1])
     dev.off()
 })
 
@@ -303,7 +303,7 @@ test_that('output param works correctly', {
     expect_error(evals('1:10', output = c('src', 'result', '123')))
     res <- evals('matrix(5,5,5)',
           hooks = list('matrix' = list(pander_return, 'Cap')))[[1]]$result
-    expect_equal(res[14], "Table: Cap")
+    expect_equal(res[14], 'Table: Cap')
 })
 
 evalsOptions('cache.dir',  cache.dir)
