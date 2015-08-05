@@ -3,7 +3,7 @@ ess.pander.evals <- function(x, show.src = TRUE) {
     require(pander, quietly = T)
     wd <- getwd()
     setwd(tempdir())
-    cat("\n")
+    cat('\n')
     res <- evals(x)
     for (x in res) {
         if (show.src) {
@@ -12,7 +12,7 @@ ess.pander.evals <- function(x, show.src = TRUE) {
         cat(pander(x), sep = '\n')
     }
     setwd(wd)
-    cat("\n")
+    cat('\n')
 }
 
 #' @keywords internal
@@ -20,8 +20,8 @@ ess.evals <- function(x) {
     require(pander, quietly = T)
     wd <- getwd()
     setwd(tempdir())
-    cat("\n")
+    cat('\n')
     evals(x)
     setwd(wd)
-    cat("\n")
+    cat('\n')
 }

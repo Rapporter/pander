@@ -1,14 +1,14 @@
 library(testthat)
 library(pander)
-context("Pandoc.convert")
+context('Pandoc.convert')
 
 test_that('openFileInOS works correctly', {
-    tf <- paste(tempfile(), ".txt", sep="")
+    tf <- paste(tempfile(), '.txt', sep='')
     sink(file = tf)
     cat('Some info')
     sink()
 #    expect_equal(openFileInOS(tf), 0)
-    expect_error(openFileInOS("NEWS2"))
+    expect_error(openFileInOS('NEWS2'))
 })
 
 test_that('Pandoc.convert works correctly', {

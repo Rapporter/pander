@@ -9,8 +9,8 @@
 add.minor.ticks <- function (nx = 4, ny = 4, grid = TRUE) {
 
     ax <- function(w, n, grid) {
-        range <- par("usr")[ifelse(w == "x", 1:2, 3:4)]
-        tick.pos <- ifelse(w == "x", par("xaxp"), par("yaxp"))
+        range <- par('usr')[ifelse(w == 'x', 1:2, 3:4)]
+        tick.pos <- ifelse(w == 'x', par('xaxp'), par('yaxp'))
         distance.between.minor <- (tick.pos[2] - tick.pos[1]) / tick.pos[3] / n
         possible.minors <- tick.pos[1] - (0:100) * distance.between.minor
         low.minor <- min(possible.minors[possible.minors >= range[1]])
@@ -23,10 +23,10 @@ add.minor.ticks <- function (nx = 4, ny = 4, grid = TRUE) {
             hi.minor <- tick.pos[2]
         }
         ticks.at <- seq(low.minor, hi.minor, by = distance.between.minor)
-        axis(if (w == "x")
+        axis(if (w == 'x')
              1
         else 2, ticks.at,
-             labels = FALSE, tcl = par("tcl"))
+             labels = FALSE, tcl = par('tcl'))
         if (w == 'x') {
             abline(v = ticks.at,
                    col = panderOptions('graph.grid.color'),
@@ -41,10 +41,10 @@ add.minor.ticks <- function (nx = 4, ny = 4, grid = TRUE) {
     }
 
     if (nx > 1) {
-        ax("x", nx, grid = grid)
+        ax('x', nx, grid = grid)
     }
     if (ny > 1) {
-        ax("y", ny, grid = grid)
+        ax('y', ny, grid = grid)
     }
 
     invisible()
@@ -63,7 +63,7 @@ add.minor.ticks <- function (nx = 4, ny = 4, grid = TRUE) {
 #' @param line.col see \code{latticeExtra::axis.grid}
 #' @keywords internal
 #' @references This function is a forked version of \code{latticeExtra::axis.grid}
-add.lattice.grid <- function (side = c("top", "bottom", "left", "right"), ..., ticks = c("default", "yes", "no"), scales, components, line.col) { #nolint
+add.lattice.grid <- function (side = c('top', 'bottom', 'left', 'right'), ..., ticks = c('default', 'yes', 'no'), scales, components, line.col) { #nolint
 
     side <- match.arg(side)
     ticks <- match.arg(ticks)
@@ -73,15 +73,15 @@ add.lattice.grid <- function (side = c("top", "bottom", "left", "right"), ..., t
 
     if (is.list(mycomps)) {
         lab <- as.character(mycomps$labels$labels)
-        if (any(lab != "")) {
+        if (any(lab != '')) {
             tck <- mycomps$ticks$tck
             if (any(tck * scales.tck != 0)) {
                 tck <- rep(tck, length = length(lab))
-                comps.major[[side]]$ticks$tck <- ifelse(lab == "", NA, tck)
+                comps.major[[side]]$ticks$tck <- ifelse(lab == '', NA, tck)
             }
         }
     } else {
-        ticks <- "no"
+        ticks <- 'no'
     }
 
     lattice::axis.default(side,
@@ -91,23 +91,23 @@ add.lattice.grid <- function (side = c("top", "bottom", "left", "right"), ..., t
                           ...,
                           line.col = panderOptions('graph.grid.color'))
 
-    if (side %in% c("top", "left")) {
+    if (side %in% c('top', 'left')) {
         return()
     }
     if (scales$draw == FALSE) {
         return()
     }
-    ref.line <- lattice::trellis.par.get("reference.line")
+    ref.line <- lattice::trellis.par.get('reference.line')
 
-    if (side == "bottom") {
+    if (side == 'bottom') {
         tck <- abs(mycomps$ticks$tck)
         lattice::panel.refline(v = mycomps$ticks$at,
                                lwd = ref.line$lwd * tck,
                                alpha = ref.line$alpha * tck / max(tck, na.rm = TRUE))
     }
-    if (side == "right") {
+    if (side == 'right') {
         if (!is.list(mycomps)) {
-            mycomps <- components[["left"]]
+            mycomps <- components[['left']]
         }
         tck <- abs(mycomps$ticks$tck)
         lattice::panel.refline(h = mycomps$ticks$at,
@@ -134,7 +134,7 @@ add.lattice.xsubticks <- function (lim, ..., n = 2) {
     ans$bottom$ticks$at <- c(ticks, ticks2)
     ans$bottom$ticks$tck <- c(rep(1, length(ticks)), rep(0.5, length(ticks2)))
     ans$bottom$labels$at <- ans$bottom$ticks$at
-    ans$bottom$labels$labels <- c(ans$bottom$labels$labels, rep(" ", length(ticks2)))
+    ans$bottom$labels$labels <- c(ans$bottom$labels$labels, rep(' ', length(ticks2)))
     ans$bottom$labels$check.overlap <- FALSE
     ans
 
@@ -149,7 +149,7 @@ add.lattice.ysubticks <- function (lim, ..., n = 2) {
     ans$left$ticks$at <- c(ticks, ticks2)
     ans$left$ticks$tck <- c(rep(1, length(ticks)), rep(0.5, length(ticks2)))
     ans$left$labels$at <- ans$left$ticks$at
-    ans$left$labels$labels <- c(ans$left$labels$labels, rep(" ", length(ticks2)))
+    ans$left$labels$labels <- c(ans$left$labels$labels, rep(' ', length(ticks2)))
     ans$left$labels$check.overlap <- FALSE
     ans
 

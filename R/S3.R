@@ -839,7 +839,7 @@ pander.mtable <- function(x, caption = attr(x, 'caption'), ...) {
 #' @param total.r if to print column totals. Default values is taken from CrossTable object
 #' @param ... optional parameters passed to raw \code{pandoc.table} function
 #' @export
-pander.CrossTable <- function(x, caption = attr(x, 'caption'), digits = panderOptions("digits"),
+pander.CrossTable <- function(x, caption = attr(x, 'caption'), digits = panderOptions('digits'),
                               total.r = x$total.r, total.c = x$total.c, ...) {
     if (is.null(caption) & !is.null(storage$caption)) {
         caption <- get.caption()
@@ -849,15 +849,15 @@ pander.CrossTable <- function(x, caption = attr(x, 'caption'), digits = panderOp
     if (!is.null(rownames(x$t))) {
         nt <- cbind(rownames(x$t), x$t, x$rs)
     } else {
-        nt <- cbind("&nbsp;", x$t, x$rs)
+        nt <- cbind('&nbsp;', x$t, x$rs)
     }
     hdd <- 100
     appendlines <- function(nt, xx, hasttl = FALSE, haslbl = FALSE) {
         if (!hasttl) {
-            xx <- cbind(xx, rep("", nr))
+            xx <- cbind(xx, rep('', nr))
         }
         if (!haslbl) {
-            xx <- cbind(rep("", nr), xx)
+            xx <- cbind(rep('', nr), xx)
         }
         n <- dim(nt)[1] / nr
         nt <- rbind(nt, xx)
@@ -876,13 +876,13 @@ pander.CrossTable <- function(x, caption = attr(x, 'caption'), digits = panderOp
         nt
     }
     if (!is.na(x$expected) && x$expected == TRUE) {
-        xex <- outer(x$rs, x$cs, "*")
+        xex <- outer(x$rs, x$cs, '*')
         xex <- xex / x$gt
         if (is.null(digits)) {
             digits <- 1
         }
         xx <- format(round(xex, digits), ...)
-        xx <- cbind(rep("Expected N", nr), xx, rep("", nr))
+        xx <- cbind(rep('Expected N', nr), xx, rep('', nr))
         nt <- rbind(nt, xx)
         idx <- integer()
         for (i in 1:nr) {
@@ -893,57 +893,57 @@ pander.CrossTable <- function(x, caption = attr(x, 'caption'), digits = panderOp
     if (x$prop.chisq) {
         xx <- (x$CST$expected - x$t) ^ 2 / x$CST$expected
         xx <- format(round(xx, digits), trim = TRUE, ...)
-        xx <- cbind("Chi-square", xx)
+        xx <- cbind('Chi-square', xx)
         nt <- appendlines(nt, xx, haslbl = TRUE)
     }
     if (!is.na(x$prop.row[1])) {
         xx <- cbind(x$prop.row, x$rs / x$gt)
         xx <- format(round(xx * hdd, digits), trim = TRUE, ...)
-        xx <- matrix(paste(xx, "%", sep = ""), nrow = nr,
+        xx <- matrix(paste(xx, '%', sep = ''), nrow = nr,
                  ncol = nc + 1)
-        xx <- cbind("Row(%)", xx)
+        xx <- cbind('Row(%)', xx)
         nt <- appendlines(nt, xx, TRUE, haslbl = TRUE)
     }
     if (!is.na(x$prop.col[1])) {
         xx <- format(round(x$prop.col * hdd, digits), trim = TRUE,
                  ...)
-        xx <- matrix(paste(xx, "%", sep = ""), nrow = nr,
+        xx <- matrix(paste(xx, '%', sep = ''), nrow = nr,
                  ncol = nc)
-        xx <- cbind("Column(%)", xx)
+        xx <- cbind('Column(%)', xx)
         nt <- appendlines(nt, xx, haslbl = TRUE)
     }
     if (!is.na(x$prop.tbl[1])) {
         xx <- format(round(x$prop.tbl * hdd, digits), trim = TRUE,
                  ...)
-        xx <- matrix(paste(xx, "%", sep = ""), nrow = nr,
+        xx <- matrix(paste(xx, '%', sep = ''), nrow = nr,
                  ncol = nc)
-        xx <- cbind("Total(%)", xx)
+        xx <- cbind('Total(%)', xx)
         nt <- appendlines(nt, xx, haslbl = TRUE)
     }
     if (!is.na(x$resid) && x$resid == TRUE && x$expected == TRUE) {
         xx <- x$t - xex
         xx <- format(round(xx, digits), trim = TRUE, ...)
-        xx <- cbind("Residual", xx)
+        xx <- cbind('Residual', xx)
         nt <- appendlines(nt, xx, haslbl = TRUE)
     }
     if (!is.na(x$sresid) && x$sresid == TRUE
         && x$expected == TRUE) {
         xx <- x$CST$residual
         xx <- format(round(xx, digits), trim = TRUE, ...)
-        xx <- cbind("Std Residual", xx)
+        xx <- cbind('Std Residual', xx)
         nt <- appendlines(nt, xx, haslbl = TRUE)
     }
     if (!is.na(x$asr[1])) {
         xx <- format(round(x$asr, digits), trim = TRUE, ...)
-        xx <- cbind("Adj Std Resid", xx)
+        xx <- cbind('Adj Std Resid', xx)
         nt <- appendlines(nt, xx, haslbl = TRUE)
     }
     n <- dim(nt)[1] / nr
     idx <- seq(1, dim(nt)[1], n)
-    nt <- rbind(nt, c(gettext("Total", domain = "R-descr"), x$cs,
+    nt <- rbind(nt, c(gettext('Total', domain = 'R-descr'), x$cs,
                     x$gt))
     if (!is.na(x$prop.col[1])) {
-        nt <- rbind(nt, c("", sapply(round(hdd * x$cs / x$gt, digits), function(x) paste(x, "%", sep = "")), ""))
+        nt <- rbind(nt, c('', sapply(round(hdd * x$cs / x$gt, digits), function(x) paste(x, '%', sep = '')), ''))
     }
     len <- dim(nt)[1]
     rownames(nt) <- as.character(1:len)
@@ -961,31 +961,31 @@ pander.CrossTable <- function(x, caption = attr(x, 'caption'), digits = panderOp
     res <- NULL
     for (i in 1:nr) {
         res.r <- paste(pandoc.strong.return(nt[1 + or * (i - 1), 1]),
-                       "N",
-                       paste(nt[ (2 + or * (i - 1)) : (i * or), 1],collapse = "\\ \n"),
-                   sep = "\\ \n")
+                       'N',
+                       paste(nt[ (2 + or * (i - 1)) : (i * or), 1],collapse = '\\ \n'),
+                   sep = '\\ \n')
         for (j in 2:nc) {
             res.r <- cbind(res.r,
-                           paste("&nbsp;",
-                                 paste(nt[ (1 + or * (i - 1)) : (i * or),j], collapse = "\\  \n"),
-                                 sep = "\\ \n"))
+                           paste('&nbsp;',
+                                 paste(nt[ (1 + or * (i - 1)) : (i * or),j], collapse = '\\  \n'),
+                                 sep = '\\ \n'))
         }
         res <- rbind(res, res.r)
     }
     res.r <- NULL
     if (is.null(total.c) || total.c) {
         for (j in 1:nc) {
-            res.r <- cbind(res.r, paste(nt[ (nt.nr - ts + 1) : nt.nr, j], collapse = "\\ \n"))
+            res.r <- cbind(res.r, paste(nt[ (nt.nr - ts + 1) : nt.nr, j], collapse = '\\ \n'))
         }
         res <- rbind(res, res.r)
     }
-    cln <- c(ifelse(RowData != "", RowData, '&nbsp;'), colnames(x$t))
+    cln <- c(ifelse(RowData != '', RowData, '&nbsp;'), colnames(x$t))
     if (is.null(total.r) || total.r) {
         cln <- c(cln, 'Total')
     }
-    if (ColData != "") {
-        cln.t <- paste(c("&nbsp;", ColData, rep("&nbsp;", nc - 2)), rep("\\\n", nc - 1), sep="")
-        cln <- paste(cln.t, cln, sep="")
+    if (ColData != '') {
+        cln.t <- paste(c('&nbsp;', ColData, rep('&nbsp;', nc - 2)), rep('\\\n', nc - 1), sep='')
+        cln <- paste(cln.t, cln, sep='')
     }
     colnames(res) <- cln
     pandoc.table(res, caption = caption, keep.line.breaks = TRUE,...)
@@ -1084,7 +1084,7 @@ pander.coxph <- function(x, caption = attr(x, 'caption'), ...) {
     }
 
     if (!is.null(x$fail)) {
-        cat("  Coxph failed.", x$fail, "\n")
+        cat('  Coxph failed.', x$fail, '\n')
         return(invisible())
     }
 
@@ -1199,7 +1199,7 @@ pander.summary.lme <- function(x, caption = attr(x, 'caption'), summary = TRUE, 
                      split.tables = Inf, ...)
         pandoc.table(x$residuals, caption = 'Standardized Within-Group Residuals')
         pandoc.table(data.frame(
-            'Observations'        = x$dims[["N"]],
+            'Observations'        = x$dims[['N']],
             'Groups'              = x$dims$ngrps[1:x$dims$Q],
             'Log-restricted-likelihood' = x$logLik,
             check.names = FALSE), keep.trailing.zeros = TRUE, caption = caption, digits = 4)
@@ -1232,11 +1232,11 @@ pander.describe <- function(x, caption = attr(x, 'caption'), digits = panderOpti
         caption <- get.caption()
     }
     if (length(dim(x)) == 1) {
-        class(x) <- "list"
-        attr(x, "call") <- NULL
+        class(x) <- 'list'
+        attr(x, 'call') <- NULL
         pander(x, digits = digits, caption = caption, ...)
     } else {
-        class(x) <- "data.frame"
+        class(x) <- 'data.frame'
         pander(x, digits = digits, caption = caption, ...)
     }
     invisible()
@@ -1588,21 +1588,21 @@ pander.tabular <- function(x, caption = attr(x, 'caption'),
         caption <- get.caption()
     }
     data <- as.matrix(x, format = T, rowLabels = F, colLabels = F, digits = digits)
-    rlabels <- attr(x, "rowLabels")
-    rlabels[is.na(rlabels)] <- ""
-    clabels <- attr(x, "colLabels")
-    clabels[is.na(clabels)] <- ""
+    rlabels <- attr(x, 'rowLabels')
+    rlabels[is.na(rlabels)] <- ''
+    clabels <- attr(x, 'colLabels')
+    clabels[is.na(clabels)] <- ''
     if (!is.null(colnames(rlabels))) {
         # needed for case of more complex tabular structure (see examples)
         cl <- colnames(rlabels)
         data <- cbind(rlabels, data)
-        clabels <- cbind(rbind(matrix("",
+        clabels <- cbind(rbind(matrix('',
                                       nrow = (nrow(clabels) - 1),
                                       ncol = length(cl)),
                                colnames(rlabels)),
                          clabels)
     }
-    clabels <- apply(clabels, c(2), paste, collapse = "\\ \n")
+    clabels <- apply(clabels, c(2), paste, collapse = '\\ \n')
     colnames(data) <- clabels
     if (emphasize.rownames) {
         pandoc.table(data, caption = caption, keep.line.breaks = TRUE, emphasize.cols = 1:length(cl), ...)
@@ -1628,17 +1628,17 @@ pander.summary.table <- function(x, caption = attr(x, 'caption'), print.call = T
         }
     }
     if (!is.null(x$call) && print.call) {
-        cat("Call: ")
+        cat('Call: ')
         print(x$call)
     }
-    cat("Number of cases in table:", x$n.cases, "\n")
-    cat("Number of factors:", x$n.vars, "\n")
+    cat('Number of cases in table:', x$n.cases, '\n')
+    cat('Number of factors:', x$n.vars, '\n')
     if (x$n.vars > 1) {
         ch <- x$statistic
         tdf <- data.frame('Chisq'=ch, 'df'=x$parameter, 'p-value'=x$p.value)
         pandoc.table(tdf, caption=caption, ...)
         if (!x$approx.ok) {
-            cat("Chi-squared approximation may be incorrect\n")
+            cat('Chi-squared approximation may be incorrect\n')
         }
     }
 }
@@ -1717,7 +1717,7 @@ pander.summary.manova <- function (x, caption = attr(x, 'caption'), add.signific
     if (length(stats <- x$stats)) {
         pander.anova(stats, caption = caption, add.significance.stars = add.significance.stars, ...)
     } else {
-        cat("No error degrees of freedom\n\n")
+        cat('No error degrees of freedom\n\n')
         pander(data.frame(Df = x$Df, row.names = x$row.names), caption = caption, ...)
     }
     invisible(x)
@@ -1745,10 +1745,10 @@ pander.gtable <- function(x, zsort = FALSE, ...) {
     if (nrow(x$layout) == 0) {
         return()
     }
-    pos <- as.data.frame(format(as.matrix(x$layout[c("t", "r",
-                                                     "b", "l")])), stringsAsFactors = FALSE)
+    pos <- as.data.frame(format(as.matrix(x$layout[c('t', 'r',
+                                                     'b', 'l')])), stringsAsFactors = FALSE)
     grobNames <- vapply(x$grobs, as.character, character(1))
-    info <- data.frame(z = x$layout$z, cells = paste("(", pos$t, "-", pos$b, ",", pos$l, "-", pos$r, ")", sep = ""),
+    info <- data.frame(z = x$layout$z, cells = paste('(', pos$t, '-', pos$b, ',', pos$l, '-', pos$r, ')', sep = ''),
                        name = x$layout$name,
                        grob = grobNames)
     if (zsort) {
@@ -1767,7 +1767,7 @@ pander.gtable <- function(x, zsort = FALSE, ...) {
 #' @export
 pander.summary.nls <- function(x, summary = TRUE, add.significance.stars = FALSE,
                                digits = panderOptions('digits'), show.convergence = FALSE, ...) {
-    cat("\n")
+    cat('\n')
     pandoc.formula(x$call$formula,
                    text = 'Fitting nonlinear regression model:',
                    add.line.breaks = TRUE)
@@ -1782,25 +1782,25 @@ pander.summary.nls <- function(x, summary = TRUE, add.significance.stars = FALSE
             cat('\nSignif. codes:  0 \'***\' 0.001 \'**\' 0.01 \'*\' 0.05 \'.\' 0.1 \' \' 1\n')
         }
         if (!is.null(x$correlation) && NCOL(x$correlation) > 1) {
-            pander(x$correlation, caption = "Correlation of Parameter Estimates", ...)
+            pander(x$correlation, caption = 'Correlation of Parameter Estimates', ...)
         }
-        cat("\nResidual standard error:",
-            format(signif(x$sigma, digits)), "on", x$df[2L], "degrees of freedom\n")
+        cat('\nResidual standard error:',
+            format(signif(x$sigma, digits)), 'on', x$df[2L], 'degrees of freedom\n')
     } else {
-        pandoc.table(x$coefficients[, 1], caption = "Parameter Estimates", digits = digits, ...)
-        cat("\nresidual sum-of-squares:", format(signif(x$sigma, digits)), "\n")
+        pandoc.table(x$coefficients[, 1], caption = 'Parameter Estimates', digits = digits, ...)
+        cat('\nresidual sum-of-squares:', format(signif(x$sigma, digits)), '\n')
     }
 
     if (show.convergence && !is.null(x$convInfo)) {
-        if (identical(x$call$algorithm, "port")) {
-            cat("\nAlgorithm \"port\", convergence message: ",
-                x$convInfo$stopMessage, "\n", sep = "")
+        if (identical(x$call$algorithm, 'port')) {
+            cat('\nAlgorithm \'port\', convergence message: ',
+                x$convInfo$stopMessage, '\n', sep = '')
         } else {
-            cat("\nNumber of iterations", ifelse(x$convInfo$isConv, "to convergence:", "till stop:"),
-                x$convInfo$finIter, "\nAchieved convergence tolerance:",
-                format(x$convInfo$finTol, digits = digits), "\n")
+            cat('\nNumber of iterations', ifelse(x$convInfo$isConv, 'to convergence:', 'till stop:'),
+                x$convInfo$finIter, '\nAchieved convergence tolerance:',
+                format(x$convInfo$finTol, digits = digits), '\n')
             if (!x$convInfo$isConv) {
-                cat("Reason stopped:", x$convInfo$stopMessage, "\n")
+                cat('Reason stopped:', x$convInfo$stopMessage, '\n')
             }
         }
     }
