@@ -835,9 +835,12 @@ pander.mtable <- function(x, caption = attr(x, 'caption'), ...) {
 #' @param x a CrossTable object
 #' @param caption caption (string) to be shown under the table
 #' @param digits number of digits of precision
+#' @param total.r if to print row totals. Default values is taken from CrossTable object
+#' @param total.r if to print column totals. Default values is taken from CrossTable object
 #' @param ... optional parameters passed to raw \code{pandoc.table} function
 #' @export
-pander.CrossTable <- function(x, caption = attr(x, 'caption'), digits = panderOptions("digits"), ...) {
+pander.CrossTable <- function(x, caption = attr(x, 'caption'), digits = panderOptions("digits"),
+                              total.r = x$total.r, total.c = x$total.c, ...) {
     if (is.null(caption) & !is.null(storage$caption)) {
         caption <- get.caption()
     }
@@ -950,6 +953,9 @@ pander.CrossTable <- function(x, caption = attr(x, 'caption'), digits = panderOp
     or <- (nrow(nt) - ts) / nr
     nt.nr <- nrow(nt)
     nc <- ncol(nt)
+    if (!is.null(total.r) && !total.r) {
+        nc <- nc - 1
+    }
     RowData <- x$RowData
     ColData <- x$ColData
     res <- NULL
@@ -967,11 +973,16 @@ pander.CrossTable <- function(x, caption = attr(x, 'caption'), digits = panderOp
         res <- rbind(res, res.r)
     }
     res.r <- NULL
-    for (j in 1:nc) {
-        res.r <- cbind(res.r, paste(nt[ (nt.nr - ts + 1) : nt.nr, j], collapse = "\\ \n"))
+    if (is.null(total.c) || total.c) {
+        for (j in 1:nc) {
+            res.r <- cbind(res.r, paste(nt[ (nt.nr - ts + 1) : nt.nr, j], collapse = "\\ \n"))
+        }
+        res <- rbind(res, res.r)
     }
-    res <- rbind(res, res.r)
-    cln <- c(if (RowData != "") RowData else '&nbsp;', colnames(x$t), 'Total')
+    cln <- c(ifelse(RowData != "", RowData, '&nbsp;'), colnames(x$t))
+    if (is.null(total.r) || total.r) {
+        cln <- c(cln, 'Total')
+    }
     if (ColData != "") {
         cln.t <- paste(c("&nbsp;", ColData, rep("&nbsp;", nc - 2)), rep("\\\n", nc - 1), sep="")
         cln <- paste(cln.t, cln, sep="")

@@ -5,7 +5,8 @@
 \title{Pander method for CrossTable class}
 \usage{
 \method{pander}{CrossTable}(x, caption = attr(x, "caption"),
-  digits = panderOptions("digits"), ...)
+  digits = panderOptions("digits"), total.r = x$total.r,
+  total.c = x$total.c, ...)
 }
 \arguments{
 \item{x}{a CrossTable object}
@@ -14,7 +15,11 @@
 
 \item{digits}{number of digits of precision}
 
+\item{total.r}{if to print row totals. Default values is taken from CrossTable object}
+
 \item{...}{optional parameters passed to raw \code{pandoc.table} function}
+
+\item{total.r}{if to print column totals. Default values is taken from CrossTable object}
 }
 \description{
 Prints a CrossTable object in Pandoc's markdown.
