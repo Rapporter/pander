@@ -42,7 +42,7 @@ This is where `pander` comes handy. `pander` support rendering for many popular 
 methods(pander)
 ```
 
-And it's integrated with `knitr` by default:
+And it's integrated with `knitr` by default. `pander` simply identifies if `knitr` is running in the backgorund, and if so, it `capture.output` and return the resulting string as an `knit_asis` object, so that you do not need to specify the `results='asis'` option in your knitr chunk:
 ```{r, error = TRUE}
 library(descr, quietly = TRUE)
 ct <- CrossTable(mtcars$gear, mtcars$cyl)
@@ -53,7 +53,6 @@ tab <- tabular( (Species + 1) ~ (n=1) + Format(digits=2)*
 pander(tab)
 ```
 
-
 In a nutshell, this is achieved by modification that whenever you call `pander` inside of a `knitr` document, instead of returning the markdown text to the standard output (as it used to happen), pander returns a `knit_asis` class object, which renders fine in the resulting document — without the double comment chars, so rendering the tables in HTML, pdf or other document formats just fine.
 
 If by any chance you actually want results of `pander` not to be converted automatically, just specify `knitr.auto.asis` to `FALSE` either using `panderOptions`:
@@ -61,4 +60,26 @@ If by any chance you actually want results of `pander` not to be converted autom
 ```{r}
 panderOptions('knitr.auto.asis', FALSE)
 pander(head(iris))
+```
+```{r}
+panderOptions('knitr.auto.asis', TRUE)
+```
+
+#### Rendering markdown inside loop/vectorized function
+
+One question that is being asked a lot is how to use `pander` with `knitr` in a loop or with vectorized function. For example we have 3 tables that we want to render and we want to do it using `lapply`:
+
+```{r}
+dfs <- list(mtcars[1:3, 1:4], mtcars[4:6, 1:4], mtcars[7:9, 1:4])
+lapply(dfs, pander)
+```
+
+As you can see, this doesn't work correctly, due to fact that when run inside `knitr`, `pander` tries to return `knit_asis` class object, but for loops/vectorized functions this results in incorrect output.
+
+Recommended way to solve this is to disable `pander` trying to return `knit_asis` class object by setting `knitr.auto.asis` to `FALSE` using `panderOptions`. However, in that case to we also need to tell `knitr` to convert table on the fly by specifying `results='asis'` for `knitr` chunk:
+
+```{r results='asis'}
+panderOptions('knitr.auto.asis', FALSE)
+dfs <- list(mtcars[1:3, 1:4], mtcars[4:6, 1:4], mtcars[7:9, 1:4])
+invisible(lapply(dfs, pander))
 ```
