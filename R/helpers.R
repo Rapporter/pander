@@ -417,7 +417,7 @@ multitable <- function(v) {
                       uv <- unlist(c(rbind(pandoc.strong.return(names(v[[i]])),
                                            sapply(v[[i]], p, wrap=''))))
                       if (length(v[[i]]) < ml)
-                          uv <- c(uv, rep("", 2* (ml - length(v[[i]]))))
+                          uv <- c(uv, rep('', 2 * (ml - length(v[[i]]))))
                       uv
                   })
     do.call(cbind, mod)
@@ -440,10 +440,9 @@ coef_mat <- function(obj, coefs) {
         P <- 1 - pchisq(Z ^ 2, 1)
     }
     U <- cbind(beta, se, Z, P)
-    colnames(U) <- c("Coef", "S.E.", "Wald Z",
-                     "Pr(>|Z|)")
+    colnames(U) <- c('Coef', 'S.E.', 'Wald Z', 'Pr(>|Z|)')
     if (length(errordf)) {
-        colnames(U)[3:4] <- c("t", "Pr(>|t|)")
+        colnames(U)[3:4] <- c('t', 'Pr(>|t|)')
     }
     rownames(U) <- names(beta)
     if (length(obj$aux)) {
@@ -452,8 +451,8 @@ coef_mat <- function(obj, coefs) {
     }
     if (is.numeric(coefs)) {
         U <- U[1:coefs, , drop = FALSE]
-        U <- rbind(U, rep("", ncol(U)))
-        rownames(U)[nrow(U)] <- ". . ."
+        U <- rbind(U, rep('', ncol(U)))
+        rownames(U)[nrow(U)] <- '. . .'
     }
     U
 }
