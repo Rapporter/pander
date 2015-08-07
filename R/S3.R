@@ -1844,3 +1844,65 @@ pander.Arima <- function(x, digits = panderOptions('digits'), se = TRUE,...) {
              '\n', sep = '')
     invisible(x)
 }
+
+#' Prints an polr object from MASS package in Pandoc's markdown.
+#' @param x an polr object
+#' @param ... optional parameters passed to raw \code{pandoc.table} function
+#' @export
+pander.polr <- function (x, ...) {
+    if (!is.null(cl <- x$call)) {
+        cat('\nCall:', pandoc.formula.return(cl), '', sep = '\n')
+    }
+    if (length(coef(x))) {
+        pandoc.table(coef(x), caption = "Coefficients", ...)
+    } else {
+        cat("\nNo coefficients\n")
+    }
+    pandoc.table(x$zeta, caption = "Intercepts", ...)
+    cat("\nResidual Deviance:", format(x$deviance, nsmall = 2L), "\n")
+    cat("AIC:", format(x$deviance + 2 * x$edf, nsmall = 2L), "\n")
+    if (nzchar(mess <- naprint(x$na.action))) {
+        cat("(", mess, ")\n", sep = "")
+    }
+    if (x$convergence > 0) {
+        cat("Warning: did not converge as iteration limit reached\n")
+    }
+    invisible()
+}
+
+#' Prints an summary.polr object from MASS package in Pandoc's markdown.
+#' @param x an summary.polr object
+#' @param digits number of digits of precision passed to format
+#' @param round number of rounding digits passed to round
+#' @param keep.trailing.zeros to show or remove trailing zeros in numbers on a column basis width
+#' @param ... optional parameters passed to raw \code{pandoc.table} function
+#' @export
+pander.summary.polr <- function(x, digits = panderOptions('digits'), round = panderOptions('round'),
+                                keep.trailing.zeros = panderOptions('keep.trailing.zeros'), ...) {
+    if (!is.null(cl <- x$call)) {
+        cat('\nCall:', pandoc.formula.return(cl), '', sep = '\n')
+    }
+    pc <- x$pc
+    if (pc > 0) {
+        pander(x$coefficients[seq_len(pc), , drop = FALSE], caption = "Coeficients",
+               digits = digits, round = round, keep.trailing.zeros = keep.trailing.zeros, ...)
+    } else {
+        cat("\nNo coefficients\n")
+    }
+    pander(x$coefficients[(pc + 1L):nrow(x$coefficients), , drop = FALSE], caption = "Intercepts",
+          digits = digits, round = round, keep.trailing.zeros = keep.trailing.zeros, ...)
+    cat("\nResidual Deviance:", format(x$deviance, nsmall = 2L), "\n\n")
+    cat("AIC:", format(x$deviance + 2 * x$edf, nsmall = 2L), "\n\n")
+    if (nzchar(mess <- naprint(x$na.action))) {
+        cat("(", mess, ")\n\n", sep = "")
+    }
+    if (!is.null(correl <- x$correlation)) {
+        ll <- lower.tri(correl)
+        correl <- apply(correl, c(1,2),
+                        p, wrap = '', digits = digits, round = round, keep.trailing.zeros = keep.trailing.zeros)
+        correl[!ll] <- ""
+        pander(correl[-1L, -ncol(correl)],
+               digits = digits, round = round, keep.trailing.zeros = keep.trailing.zeros, caption = "Correlation of Coefficients", ...)
+    }
+    invisible(x)
+}
