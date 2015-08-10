@@ -947,3 +947,17 @@ test_that('pander.polr/summary.polr works correctly', {
     expect_equal(length(res), 60)
     expect_equal(length(grep('Table', res)), 3)
 })
+
+test_that('pander.survreg/summary.survreg works correctly', {
+    suppressMessages(require(survival))
+    x <- survreg(Surv(futime, fustat) ~ ecog.ps + rx, ovarian, dist="exponential")
+    res <- pander_return(x)
+    expect_equal(length(res), 27)
+    expect_equal(length(grep('Table', res)), 1)
+    res <- pander_return(suppressMessages(summary(x)))
+    expect_equal(length(res), 33)
+    expect_equal(length(grep('Table', res)), 1)
+    res <- pander_return(suppressMessages(summary(x, correlation = TRUE)), split.table = Inf)
+    expect_equal(length(res), 44)
+    expect_equal(length(grep('Table', res)), 2)
+})

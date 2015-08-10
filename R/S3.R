@@ -1906,3 +1906,91 @@ pander.summary.polr <- function(x, digits = panderOptions('digits'), round = pan
     }
     invisible(x)
 }
+
+#' Prints an survreg object from survival package in Pandoc's markdown.
+#' @param x an survreg object
+#' @param ... optional parameters passed to raw \code{pandoc.table} function
+#' @export
+pander.survreg <- function (x, ...) {
+        pander(summary(x), summary = FALSE, ...)
+}
+
+#' Prints an survreg object from survival package in Pandoc's markdown.
+#' @param x an survreg object
+#' @param summary if summary should be printed
+#' @param digits number of digits of precision passed to format
+#' @param round number of rounding digits passed to round
+#' @param keep.trailing.zeros to show or remove trailing zeros in numbers on a column basis width
+#' @param ... optional parameters passed to raw \code{pandoc.table} function
+#' @export
+pander.summary.survreg <- function(x, summary = TRUE, digits = panderOptions('digits'),
+                                   round = panderOptions('round'),
+                                   keep.trailing.zeros = panderOptions('keep.trailing.zeros'), ...) {
+    if (!is.null(cl <- x$call)) {
+        cat('\nCall:', pandoc.formula.return(cl), '', sep = '\n\n')
+    }
+    if (!is.null(x$fail)) {
+        cat(" Survreg failed.", x$fail, "\n\n")
+        return(invisible())
+    }
+    if (summary) {
+        pandoc.table(x$table, caption = "Model statistics",
+                     digits = digits, round = round, keep.trailing.zeros = keep.trailing.zeros, ...)
+    } else {
+        coef <- x$coef
+        if (any(nas <- is.na(coef))) {
+            if (is.null(names(coef))) {
+                names(coef) <- paste("b", 1:length(coef), sep = "")
+            }
+            cat("\nCoefficients: (", sum(nas), " not defined because of singularities)\n",
+                sep = "")
+        }
+        pandoc.table(coef, caption = "Coefficients",
+                     digits = digits, round = round, keep.trailing.zeros = keep.trailing.zeros,...)
+
+    }
+    if (nrow(x$var) == length(coef)) {
+        cat("\nScale fixed at", format(x$scale), "\n")
+    } else if (length(x$scale) == 1) {
+        cat("\nScale=", format(x$scale), "\n")
+    } else {
+        pandoc.table(x$scale, caption = 'Scale', ...)
+    }
+    nobs <- length(x$linear)
+    chi <- 2 * diff(x$loglik)
+    df <- sum(x$df) - x$idf
+    pandoc.table(data.frame('Loglik(model)'=x$loglik[2], "Loglik(intercept only)"=x$loglik[1]), ...)
+    if (df > 0) {
+        cat("Chisq=", p(chi, wrap = ''), "on", p(df, wrap = ''),
+            "degrees of freedom, p=",p(signif(1 - pchisq(chi, df), 2), wrap = ''), "\n\n")
+    } else {
+        cat("\n")
+    }
+    if (summary) {
+        if (x$robust) {
+            cat("(Loglikelihood assumes independent observations)\n\n")
+        }
+        cat("Number of Newton-Raphson Iterations:", p(trunc(x$iter), wrap =),"\n\n")
+    }
+    omit <- x$na.action
+    if (length(omit)) {
+        cat("n=", nobs, " (", naprint(omit), ")\n", sep = "")
+    } else {
+        cat("n=", nobs, "\n")
+    }
+    if (summary) {
+        if (!is.null(correl <- x$correlation)) {
+            p <- dim(correl)[2]
+            if (p > 1) {
+                ll <- lower.tri(correl)
+                correl <- apply(correl, c(1,2),
+                                p, wrap = '', digits = digits, round = round, keep.trailing.zeros = keep.trailing.zeros)
+                correl[!ll] <- ""
+                pander(correl[-1L, -ncol(correl)],
+                       digits = digits, round = round, keep.trailing.zeros = keep.trailing.zeros,
+                       caption = "Correlation of Coefficients", ...)
+            }
+        }
+    }
+    invisible()
+}
