@@ -934,3 +934,16 @@ test_that('pander.arima works correctly', {
     expect_equal(length(res), 15)
     expect_false(any(grep('s\\.e', res)))
 })
+
+test_that('pander.polr/summary.polr works correctly', {
+    house.plr <- polr(Sat ~ Infl + Type + Cont, weights = Freq, data = housing)
+    res <- pander_return(house.plr)
+    expect_equal(length(res), 25)
+    expect_equal(length(grep('Table', res)), 2)
+    res <- pander_return(suppressMessages(summary(house.plr)))
+    expect_equal(length(res), 39)
+    expect_equal(length(grep('Table', res)), 2)
+    res <- pander_return(suppressMessages(summary(house.plr, correlation = TRUE)), split.table = Inf)
+    expect_equal(length(res), 60)
+    expect_equal(length(grep('Table', res)), 3)
+})
