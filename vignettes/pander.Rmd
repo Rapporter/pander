@@ -1,0 +1,52 @@
+---
+title: "Randering markdown with pander"
+author: "Roman Tsegelskyi, Gergely Daróczi"
+date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Pandoc.table}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, echo = FALSE, message = FALSE}
+knitr::opts_chunk$set(collapse = T, comment = "#>")
+library(pander)
+library(tables)
+panderOptions('knitr.auto.asis', FALSE)
+panderOptions('plain.ascii', TRUE)
+```
+
+This vignette introduces `pander` package and it's core pieces of functionality. It is intented to be a general overview with pointers to where to get more detailed information. 
+
+## Pander
+
+`Pander` is R package designed to provide a minimal and easy tool for rendering `R` objects into [Pandoc](http://pandoc.org/)'s markdown. `pander` is also capable of exporting/converting complex `Pandoc` documents (reports) in various ways.
+
+## Rendering R objects
+
+As mentioned above core functionality of `pander` is centered around rendering `R` objects into `Pandoc`'s markdown. Let's dive in and demo the most common usage of `pander`:
+
+```{r}
+pander(head(iris))
+pander(head(mtcars[1:5]))
+pander(tabular( (Species + 1) ~ (n=1) + Format(digits=2)*
+         (Sepal.Length + Sepal.Width)*(mean + sd), data=iris ))
+```
+
+This is achieved via generic `pander` `S3` method. Out of the box, `pander` supports a variety of classes:
+
+```{r}
+methods(pander)
+```
+
+
+If you think that pander lacks support for any other R class(es), please feel free to leave change request here and we will be happy to extend the package.
+
+Under the hood, `pander` relies on different `pandoc.*` methods, where most of functionality is implemented in `pandoc.table` which is used for rendering tables. `pandoc.table` provides a truly rich functionality with many different options that `pander` inherits. For more detail please refer to specialized vignetted, which can be accessed by `vignette('pandoc_table')` or available online [here]().
+
+### Pander and knitr
+
+## Evals
+
+## General Options
