@@ -12,8 +12,7 @@ install.packages('pander')
 
 On the other hand, I welcome everyone to use the most recent version of the package with quick-fixes, new features and probably new bugs. It's currently hosted on [GitHub](https://github.com/Rapporter/pander)
 
-Current build and test coverage status: [![](https://travis-ci.org/Rapporter/pander.png?branch=master)](https://travis-ci.org/Rapporter/pander) 
-[![codecov.io](http://codecov.io/github/Rapporter/pander/coverage.svg?branch=master)](http://codecov.io/github/Rapporter/pander?branch=master)
+Current build and test coverage status: [![](https://travis-ci.org/Rapporter/pander.png?branch=master)](https://travis-ci.org/Rapporter/pander) [![](https://coveralls.io/repos/Rapporter/pander/badge.svg?branch=master)](https://coveralls.io/r/Rapporter/pander?branch=master)
 
 It can be installed easily with the nifty function of the `devtools` package from [CRAN](http://cran.r-project.org/web/packages/devtools/index.html):
 
@@ -116,9 +115,9 @@ Which command produces the following output by default:
 -------------------------------------------
       &nbsp;         mpg   cyl   disp   hp 
 ------------------- ----- ----- ------ ----
-   **Mazda RX4**     21     6    160   110 
+   **Mazda RX4**    21.0    6    160   110
 
- **Mazda RX4 Wag**   21     6    160   110 
+ **Mazda RX4 Wag**  21.0    6    160   110
 
   **Datsun 710**    22.8    4    108    93 
 -------------------------------------------
@@ -257,17 +256,16 @@ Those functions and arguments ending in `rows` or `cols` take a vector (like whi
 > emphasize.strong.cells(which(t > 20, arr.ind = TRUE))
 > pandoc.table(t)
 
--------------------------------------------------------------
-      &nbsp;          mpg     cyl    disp       hp      drat 
-------------------- -------- ----- --------- --------- ------
-   **Mazda RX4**    ***21***  *6*  ***160*** ***110*** *3.9* 
+---------------------------------------------------------------
+      &nbsp;           mpg      cyl    disp       hp      drat
+------------------- ---------- ----- --------- --------- ------
+   **Mazda RX4**    ***21.0***  *6*  ***160*** ***110*** *3.90*
 
- **Mazda RX4 Wag**  ***21***   6    **160**   **110**   3.9  
+ **Mazda RX4 Wag**  ***21.0***   6    **160**   **110**   3.90
 
-  **Datsun 710**    ***21***   4    **108**   **93**    3.85 
--------------------------------------------------------------
+  **Datsun 710**    ***22.8***   4    **108**   **93**    3.85
+---------------------------------------------------------------
 
- **WARNING**^[provided 3 variables to replace 1 variables]
 ```
 
 For more examples, please see our "[Highlight cells in markdown tables](http://blog.rapporter.net/2013/04/hihglight-cells-in-markdown-tables.html)" blog post.
@@ -284,7 +282,7 @@ You can specify the alignment of the cells (left, right or center/centre) in a t
 -------------- ------------- --------------
            5.1      3.5      1.4           
 
-           4.9       3       1.4           
+           4.9      3.0      1.4
 -------------------------------------------
 
 ```
@@ -320,7 +318,7 @@ Sepal.Length   Sepal.Width     Petal.Length
 -------------- ------------- --------------
 5.1            3.5                      1.4
 
-4.9            3                        1.4
+4.9            3.0                      1.4
 -------------------------------------------
 
 ```
@@ -335,7 +333,7 @@ Sepal.Length   Sepal.Width     Petal.Length
 +---------------------+-------+-------+--------+------+--------+-------+
 |       &nbsp;        |  mpg  |  cyl  |  disp  |  hp  |  drat  |  wt   |
 +=====================+=======+=======+========+======+========+=======+
-|    **Mazda RX4**    |  21   |   6   |  160   | 110  |  3.9   | 2.62  |
+|    **Mazda RX4**    |  21   |   6   |  160   | 110  |  3.9   | 2.620 |
 +---------------------+-------+-------+--------+------+--------+-------+
 |  **Mazda RX4 Wag**  |  21   |   6   |  160   | 110  |  3.9   | 2.875 |
 +---------------------+-------+-------+--------+------+--------+-------+
@@ -486,23 +484,23 @@ A nested list can be seen above with a table and all (optional) list names. As a
 
   * **residuals**:
 
-    ----------------------------
-    &nbsp;    3      4      5
-    ------- ------ ------ ------
-     **0**  2.042  -1.171 -1.723
+    --------------------------------------------------
+    &nbsp;    3            4                 5
+    ------- ------ ----------------- -----------------
+     **0**  2.042  -1.17073226447712 -1.72300609401128
 
-     **1**  -2.469 1.415  2.083
-    ----------------------------
+     **1**  -2.469 1.41534629268074  2.08301279585419
+    --------------------------------------------------
 
   * **stdres**:
 
-    ----------------------------
-    &nbsp;    3      4      5
-    ------- ------ ------ ------
-     **0**  4.395  -2.323 -2.943
+    -------------------------------------------------
+    &nbsp;    3            4                5
+    ------- ------ ----------------- ----------------
+     **0**  4.395  -2.32338345119108 -2.9429523715087
 
-     **1**  -4.395 2.323  2.943
-    ----------------------------
+     **1**  -4.395 2.32338345119108  2.9429523715087
+    -------------------------------------------------
 
 <!-- end of list -->
 
@@ -515,11 +513,11 @@ But the output of different **statistical methods** are tried to be prettyfied. 
 ```rout
 > pander(chisq.test(table(mtcars$am, mtcars$gear)))
 
----------------------------------------
- Test statistic   df       P value     
----------------- ---- -----------------
-     20.94        2   _2.831e-05_ * * *
----------------------------------------
+-------------------------------
+ Test statistic   df   P value
+---------------- ---- ---------
+     20.94        2     * * *
+-------------------------------
 
 Table: Pearson's Chi-squared test: `table(mtcars$am, mtcars$gear)`
 
@@ -534,7 +532,7 @@ A few other examples on the supported R classes:
 ---------------------------------------------------------
  Test statistic   df    P value   Alternative hypothesis 
 ---------------- ----- --------- ------------------------
-     -1.861      17.78 _0.07939_        two.sided        
+     -1.861      17.78                  two.sided
 ---------------------------------------------------------
 
 Table: Welch Two Sample t-test: `extra` by `group`
@@ -546,19 +544,19 @@ Table: Welch Two Sample t-test: `extra` by `group`
 > m <- glm(counts ~ outcome + treatment, family = poisson())
 > pander(m)
 
---------------------------------------------------------------
-     &nbsp;        Estimate   Std. Error   z value   Pr(>|z|) 
------------------ ---------- ------------ --------- ----------
-  **outcome2**     -0.4543      0.2022     -2.247    0.02465  
+---------------------------------------------------------------
+     &nbsp;        Estimate   Std. Error   z value    Pr(>|z|)
+----------------- ---------- ------------ ---------- ----------
+  **outcome2**    -4.543e-01    0.2022    -2.247e+00 2.465e-02
 
-  **outcome3**      -0.293      0.1927      -1.52     0.1285  
+  **outcome3**    -2.930e-01    0.1927    -1.520e+00 1.285e-01
 
- **treatment2**   1.338e-15      0.2      6.69e-15      1     
+ **treatment2**   1.338e-15     0.2000    6.690e-15  1.000e+00
 
- **treatment3**   1.421e-15      0.2      7.105e-15     1     
+ **treatment3**   1.421e-15     0.2000    7.105e-15  1.000e+00
 
- **(Intercept)**    3.045       0.1709      17.81   5.427e-71 
---------------------------------------------------------------
+ **(Intercept)**  3.045e+00     0.1709    1.781e+01  5.427e-71
+---------------------------------------------------------------
 
 Table: Fitting generalized (poisson/log) linear model: counts ~ outcome + treatment
 
@@ -567,9 +565,9 @@ Table: Fitting generalized (poisson/log) linear model: counts ~ outcome + treatm
 --------------------------------------------------------
     &nbsp;       Df   Deviance   Resid. Df   Resid. Dev 
 --------------- ---- ---------- ----------- ------------
-   **NULL**      NA      NA          8         10.58    
+   **NULL**      NA      NA          8         10.581
 
-  **outcome**    2     5.452         6         5.129    
+  **outcome**    2   5.452e+00       6         5.129
 
  **treatment**   2   2.665e-15       4         5.129    
 --------------------------------------------------------
@@ -581,11 +579,11 @@ Table: Analysis of Deviance Table
 -----------------------------------------------------------
     &nbsp;       Df   Sum Sq    Mean Sq   F value   Pr(>F) 
 --------------- ---- --------- --------- --------- --------
-  **outcome**    2     92.67     46.33     2.224    0.2242 
+  **outcome**    2   9.267e+01 4.633e+01 2.224e+00  0.2242
 
- **treatment**   2   8.382e-31 4.191e-31 2.012e-32    1    
+ **treatment**   2   8.382e-31 4.191e-31 2.012e-32  1.0000
 
- **Residuals**   4     83.33     20.83      NA        NA   
+ **Residuals**   4   8.333e+01 2.083e+01    NA        NA
 -----------------------------------------------------------
 
 Table: Analysis of Variance Model
@@ -595,13 +593,13 @@ Table: Analysis of Variance Model
 -------------------------------------------------
     &nbsp;       PC1     PC2      PC3      PC4   
 -------------- ------- -------- -------- --------
-  **Murder**   0.0417  -0.04482 0.07989  -0.9949 
+  **Murder**   0.04170 -0.04482 0.07989  -0.99492
 
- **Assault**   0.9952  -0.05876 -0.06757 0.03894 
+ **Assault**   0.99522 -0.05876 -0.06757 0.03894
 
- **UrbanPop**  0.04634  0.9769  -0.2005  -0.05817
+ **UrbanPop**  0.04634 0.97686  -0.20055 -0.05817
 
-   **Rape**    0.07516  0.2007   0.9741  0.07233 
+   **Rape**    0.07516 0.20072  0.97408  0.07233
 -------------------------------------------------
 
 Table: Principal Components Analysis
@@ -611,17 +609,17 @@ Table: Principal Components Analysis
 --------------------------------------------
    &nbsp;      Coordinates   Density values 
 ------------- ------------- ----------------
-  **Min.**       -32.12          5e-06      
+  **Min.**       -32.12        0.0000050
 
  **1st Qu.**      80.69        0.0004068    
 
- **Median**       193.5         0.001665    
+ **Median**      193.50        0.0016650
 
-  **Mean**        193.5         0.002214    
+  **Mean**       193.50        0.0022140
 
- **3rd Qu.**      306.3         0.00409     
+ **3rd Qu.**     306.30        0.0040900
 
-  **Max.**        419.1         0.006051    
+  **Max.**       419.10        0.0060510
 --------------------------------------------
 
 Table: Kernel density of *mtcars$hp* (bandwidth: 28.04104)
@@ -633,17 +631,17 @@ Table: Kernel density of *mtcars$hp* (bandwidth: 28.04104)
 --------------------------------------------
    &nbsp;      Coordinates   Density values 
 ------------- ------------- ----------------
-  **Min.**       -32.12            0        
+  **Min.**       -32.12           0.00
 
- **1st Qu.**      80.69            0        
+ **1st Qu.**      80.69           0.00
 
- **Median**       193.5            0        
+ **Median**      193.50           0.00
 
-  **Mean**        193.5            0        
+  **Mean**       193.50           0.00
 
- **3rd Qu.**      306.3            0        
+ **3rd Qu.**     306.30           0.00
 
-  **Max.**        419.1           0.01      
+  **Max.**       419.10           0.01
 --------------------------------------------
 
 Table: Kernel density of *mtcars$hp* (bandwidth: 28.04104)
@@ -1061,6 +1059,7 @@ The list of possible options are:
   * `graph.env`: save the environments in which plots were generated to distinct files (based on `graph.name`) with `env` extension?
   * `graph.recordplot`: save the plot via `recordPlot` to distinct files (based on `graph.name`) with `recodplot` extension?
   * `graph.RDS` save the raw R object returned (usually with `lattice` or `ggplot2`) while generating the plots to distinct files (based on `graph.name`) with `RDS` extension?
+  * `log`: `NULL` or  an optionally passed *logger name* from `futile.logger` to record all info, trace, debug and error messages.
 
 # Difference from other rendering packages
 
@@ -1109,7 +1108,3 @@ To use this small lib, just type: `M-x pander-mode` on any document. It might be
     });
 </script>
 <a href="https://github.com/Rapporter/pander"><img style="position: fixed; top: -5px; right: -5px; border: 0;" src="https://camo.githubusercontent.com/38ef81f8aca64bb9a64448d0d70f1308ef5341ab/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f72696768745f6461726b626c75655f3132313632312e706e67" data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_right_darkblue_121621.png"></a> 
-
-
--------
-This report was generated with [R](http://www.r-project.org/) (3.1.2) and [pander](https://github.com/rapporter/pander) (0.5.2) in 1.746 sec on x86_64-unknown-linux-gnu platform.
