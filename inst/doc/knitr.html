@@ -1,0 +1,592 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+
+<meta charset="utf-8">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="pandoc" />
+
+<meta name="author" content="Roman Tsegelskyi, Gergely Daróczi" />
+
+<meta name="date" content="2015-08-13" />
+
+<title>Using pander with knitr</title>
+
+
+
+<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css">
+div.sourceCode { overflow-x: auto; }
+table.sourceCode, tr.sourceCode, td.lineNumbers, td.sourceCode {
+  margin: 0; padding: 0; vertical-align: baseline; border: none; }
+table.sourceCode { width: 100%; line-height: 100%; }
+td.lineNumbers { text-align: right; padding-right: 4px; padding-left: 4px; color: #aaaaaa; border-right: 1px solid #aaaaaa; }
+td.sourceCode { padding-left: 5px; }
+code > span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code > span.dt { color: #902000; } /* DataType */
+code > span.dv { color: #40a070; } /* DecVal */
+code > span.bn { color: #40a070; } /* BaseN */
+code > span.fl { color: #40a070; } /* Float */
+code > span.ch { color: #4070a0; } /* Char */
+code > span.st { color: #4070a0; } /* String */
+code > span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code > span.ot { color: #007020; } /* Other */
+code > span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code > span.fu { color: #06287e; } /* Function */
+code > span.er { color: #ff0000; font-weight: bold; } /* Error */
+code > span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+code > span.cn { color: #880000; } /* Constant */
+code > span.sc { color: #4070a0; } /* SpecialChar */
+code > span.vs { color: #4070a0; } /* VerbatimString */
+code > span.ss { color: #bb6688; } /* SpecialString */
+code > span.im { } /* Import */
+code > span.va { color: #19177c; } /* Variable */
+code > span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code > span.op { color: #666666; } /* Operator */
+code > span.bu { } /* BuiltIn */
+code > span.ex { } /* Extension */
+code > span.pp { color: #bc7a00; } /* Preprocessor */
+code > span.at { color: #7d9029; } /* Attribute */
+code > span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code > span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code > span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+</style>
+<style type="text/css">
+  pre:not([class]) {
+    background-color: white;
+  }
+</style>
+
+
+<link href="data:text/css;charset=utf-8,body%20%7B%0Abackground%2Dcolor%3A%20%23fff%3B%0Amargin%3A%201em%20auto%3B%0Amax%2Dwidth%3A%20700px%3B%0Aoverflow%3A%20visible%3B%0Apadding%2Dleft%3A%202em%3B%0Apadding%2Dright%3A%202em%3B%0Afont%2Dfamily%3A%20%22Open%20Sans%22%2C%20%22Helvetica%20Neue%22%2C%20Helvetica%2C%20Arial%2C%20sans%2Dserif%3B%0Afont%2Dsize%3A%2014px%3B%0Aline%2Dheight%3A%201%2E35%3B%0A%7D%0A%23header%20%7B%0Atext%2Dalign%3A%20center%3B%0A%7D%0A%23TOC%20%7B%0Aclear%3A%20both%3B%0Amargin%3A%200%200%2010px%2010px%3B%0Apadding%3A%204px%3B%0Awidth%3A%20400px%3B%0Aborder%3A%201px%20solid%20%23CCCCCC%3B%0Aborder%2Dradius%3A%205px%3B%0Abackground%2Dcolor%3A%20%23f6f6f6%3B%0Afont%2Dsize%3A%2013px%3B%0Aline%2Dheight%3A%201%2E3%3B%0A%7D%0A%23TOC%20%2Etoctitle%20%7B%0Afont%2Dweight%3A%20bold%3B%0Afont%2Dsize%3A%2015px%3B%0Amargin%2Dleft%3A%205px%3B%0A%7D%0A%23TOC%20ul%20%7B%0Apadding%2Dleft%3A%2040px%3B%0Amargin%2Dleft%3A%20%2D1%2E5em%3B%0Amargin%2Dtop%3A%205px%3B%0Amargin%2Dbottom%3A%205px%3B%0A%7D%0A%23TOC%20ul%20ul%20%7B%0Amargin%2Dleft%3A%20%2D2em%3B%0A%7D%0A%23TOC%20li%20%7B%0Aline%2Dheight%3A%2016px%3B%0A%7D%0Atable%20%7B%0Amargin%3A%201em%20auto%3B%0Aborder%2Dwidth%3A%201px%3B%0Aborder%2Dcolor%3A%20%23DDDDDD%3B%0Aborder%2Dstyle%3A%20outset%3B%0Aborder%2Dcollapse%3A%20collapse%3B%0A%7D%0Atable%20th%20%7B%0Aborder%2Dwidth%3A%202px%3B%0Apadding%3A%205px%3B%0Aborder%2Dstyle%3A%20inset%3B%0A%7D%0Atable%20td%20%7B%0Aborder%2Dwidth%3A%201px%3B%0Aborder%2Dstyle%3A%20inset%3B%0Aline%2Dheight%3A%2018px%3B%0Apadding%3A%205px%205px%3B%0A%7D%0Atable%2C%20table%20th%2C%20table%20td%20%7B%0Aborder%2Dleft%2Dstyle%3A%20none%3B%0Aborder%2Dright%2Dstyle%3A%20none%3B%0A%7D%0Atable%20thead%2C%20table%20tr%2Eeven%20%7B%0Abackground%2Dcolor%3A%20%23f7f7f7%3B%0A%7D%0Ap%20%7B%0Amargin%3A%200%2E5em%200%3B%0A%7D%0Ablockquote%20%7B%0Abackground%2Dcolor%3A%20%23f6f6f6%3B%0Apadding%3A%200%2E25em%200%2E75em%3B%0A%7D%0Ahr%20%7B%0Aborder%2Dstyle%3A%20solid%3B%0Aborder%3A%20none%3B%0Aborder%2Dtop%3A%201px%20solid%20%23777%3B%0Amargin%3A%2028px%200%3B%0A%7D%0Adl%20%7B%0Amargin%2Dleft%3A%200%3B%0A%7D%0Adl%20dd%20%7B%0Amargin%2Dbottom%3A%2013px%3B%0Amargin%2Dleft%3A%2013px%3B%0A%7D%0Adl%20dt%20%7B%0Afont%2Dweight%3A%20bold%3B%0A%7D%0Aul%20%7B%0Amargin%2Dtop%3A%200%3B%0A%7D%0Aul%20li%20%7B%0Alist%2Dstyle%3A%20circle%20outside%3B%0A%7D%0Aul%20ul%20%7B%0Amargin%2Dbottom%3A%200%3B%0A%7D%0Apre%2C%20code%20%7B%0Abackground%2Dcolor%3A%20%23f7f7f7%3B%0Aborder%2Dradius%3A%203px%3B%0Acolor%3A%20%23333%3B%0A%7D%0Apre%20%7B%0Awhite%2Dspace%3A%20pre%2Dwrap%3B%20%0Aborder%2Dradius%3A%203px%3B%0Amargin%3A%205px%200px%2010px%200px%3B%0Apadding%3A%2010px%3B%0A%7D%0Apre%3Anot%28%5Bclass%5D%29%20%7B%0Abackground%2Dcolor%3A%20%23f7f7f7%3B%0A%7D%0Acode%20%7B%0Afont%2Dfamily%3A%20Consolas%2C%20Monaco%2C%20%27Courier%20New%27%2C%20monospace%3B%0Afont%2Dsize%3A%2085%25%3B%0A%7D%0Ap%20%3E%20code%2C%20li%20%3E%20code%20%7B%0Apadding%3A%202px%200px%3B%0A%7D%0Adiv%2Efigure%20%7B%0Atext%2Dalign%3A%20center%3B%0A%7D%0Aimg%20%7B%0Abackground%2Dcolor%3A%20%23FFFFFF%3B%0Apadding%3A%202px%3B%0Aborder%3A%201px%20solid%20%23DDDDDD%3B%0Aborder%2Dradius%3A%203px%3B%0Aborder%3A%201px%20solid%20%23CCCCCC%3B%0Amargin%3A%200%205px%3B%0A%7D%0Ah1%20%7B%0Amargin%2Dtop%3A%200%3B%0Afont%2Dsize%3A%2035px%3B%0Aline%2Dheight%3A%2040px%3B%0A%7D%0Ah2%20%7B%0Aborder%2Dbottom%3A%204px%20solid%20%23f7f7f7%3B%0Apadding%2Dtop%3A%2010px%3B%0Apadding%2Dbottom%3A%202px%3B%0Afont%2Dsize%3A%20145%25%3B%0A%7D%0Ah3%20%7B%0Aborder%2Dbottom%3A%202px%20solid%20%23f7f7f7%3B%0Apadding%2Dtop%3A%2010px%3B%0Afont%2Dsize%3A%20120%25%3B%0A%7D%0Ah4%20%7B%0Aborder%2Dbottom%3A%201px%20solid%20%23f7f7f7%3B%0Amargin%2Dleft%3A%208px%3B%0Afont%2Dsize%3A%20105%25%3B%0A%7D%0Ah5%2C%20h6%20%7B%0Aborder%2Dbottom%3A%201px%20solid%20%23ccc%3B%0Afont%2Dsize%3A%20105%25%3B%0A%7D%0Aa%20%7B%0Acolor%3A%20%230033dd%3B%0Atext%2Ddecoration%3A%20none%3B%0A%7D%0Aa%3Ahover%20%7B%0Acolor%3A%20%236666ff%3B%20%7D%0Aa%3Avisited%20%7B%0Acolor%3A%20%23800080%3B%20%7D%0Aa%3Avisited%3Ahover%20%7B%0Acolor%3A%20%23BB00BB%3B%20%7D%0Aa%5Bhref%5E%3D%22http%3A%22%5D%20%7B%0Atext%2Ddecoration%3A%20underline%3B%20%7D%0Aa%5Bhref%5E%3D%22https%3A%22%5D%20%7B%0Atext%2Ddecoration%3A%20underline%3B%20%7D%0A%0Acode%20%3E%20span%2Ekw%20%7B%20color%3A%20%23555%3B%20font%2Dweight%3A%20bold%3B%20%7D%20%0Acode%20%3E%20span%2Edt%20%7B%20color%3A%20%23902000%3B%20%7D%20%0Acode%20%3E%20span%2Edv%20%7B%20color%3A%20%2340a070%3B%20%7D%20%0Acode%20%3E%20span%2Ebn%20%7B%20color%3A%20%23d14%3B%20%7D%20%0Acode%20%3E%20span%2Efl%20%7B%20color%3A%20%23d14%3B%20%7D%20%0Acode%20%3E%20span%2Ech%20%7B%20color%3A%20%23d14%3B%20%7D%20%0Acode%20%3E%20span%2Est%20%7B%20color%3A%20%23d14%3B%20%7D%20%0Acode%20%3E%20span%2Eco%20%7B%20color%3A%20%23888888%3B%20font%2Dstyle%3A%20italic%3B%20%7D%20%0Acode%20%3E%20span%2Eot%20%7B%20color%3A%20%23007020%3B%20%7D%20%0Acode%20%3E%20span%2Eal%20%7B%20color%3A%20%23ff0000%3B%20font%2Dweight%3A%20bold%3B%20%7D%20%0Acode%20%3E%20span%2Efu%20%7B%20color%3A%20%23900%3B%20font%2Dweight%3A%20bold%3B%20%7D%20%20code%20%3E%20span%2Eer%20%7B%20color%3A%20%23a61717%3B%20background%2Dcolor%3A%20%23e3d2d2%3B%20%7D%20%0A" rel="stylesheet" type="text/css" />
+
+</head>
+
+<body>
+
+
+
+<div id="header">
+<h1 class="title">Using pander with knitr</h1>
+<h4 class="author"><em>Roman Tsegelskyi, Gergely Daróczi</em></h4>
+<h4 class="date"><em>2015-08-13</em></h4>
+</div>
+
+
+<p>While functionality of <code>pander</code> and <code>knitr</code> overlap in report generation, we have the feeling that the best way to use all power of <code>R/knitr/pander</code> for report generation is to utilize them together. This short vignette aims to explain how to embed output of <code>pander</code> in reports generated by <code>knitr</code>. If you are not aware of what <code>knitr</code> is, be sure to check out project’s <a href="http://yihui.name/knitr/">homepage</a> which contains extensive documentation and examples.</p>
+<p>One of the most useful feature of <code>knitr</code> is the ability to convert tables to output format on the fly. For example:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">head</span>(iris)
+<span class="co">#&gt;   Sepal.Length Sepal.Width Petal.Length Petal.Width Species</span>
+<span class="co">#&gt; 1          5.1         3.5          1.4         0.2  setosa</span>
+<span class="co">#&gt; 2          4.9         3.0          1.4         0.2  setosa</span>
+<span class="co">#&gt; 3          4.7         3.2          1.3         0.2  setosa</span>
+<span class="co">#&gt; 4          4.6         3.1          1.5         0.2  setosa</span>
+<span class="co">#&gt; 5          5.0         3.6          1.4         0.2  setosa</span>
+<span class="co">#&gt; 6          5.4         3.9          1.7         0.4  setosa</span>
+knitr::<span class="kw">kable</span>(<span class="kw">head</span>(iris))</code></pre></div>
+<table>
+<thead>
+<tr class="header">
+<th align="right">Sepal.Length</th>
+<th align="right">Sepal.Width</th>
+<th align="right">Petal.Length</th>
+<th align="right">Petal.Width</th>
+<th align="left">Species</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="right">5.1</td>
+<td align="right">3.5</td>
+<td align="right">1.4</td>
+<td align="right">0.2</td>
+<td align="left">setosa</td>
+</tr>
+<tr class="even">
+<td align="right">4.9</td>
+<td align="right">3.0</td>
+<td align="right">1.4</td>
+<td align="right">0.2</td>
+<td align="left">setosa</td>
+</tr>
+<tr class="odd">
+<td align="right">4.7</td>
+<td align="right">3.2</td>
+<td align="right">1.3</td>
+<td align="right">0.2</td>
+<td align="left">setosa</td>
+</tr>
+<tr class="even">
+<td align="right">4.6</td>
+<td align="right">3.1</td>
+<td align="right">1.5</td>
+<td align="right">0.2</td>
+<td align="left">setosa</td>
+</tr>
+<tr class="odd">
+<td align="right">5.0</td>
+<td align="right">3.6</td>
+<td align="right">1.4</td>
+<td align="right">0.2</td>
+<td align="left">setosa</td>
+</tr>
+<tr class="even">
+<td align="right">5.4</td>
+<td align="right">3.9</td>
+<td align="right">1.7</td>
+<td align="right">0.4</td>
+<td align="left">setosa</td>
+</tr>
+</tbody>
+</table>
+<p>However, <code>kable</code> table generator is simple by design, and does not capture all the variety of classes that <code>R</code> has to offer. For example, <code>CrossTable</code> and <code>tabular</code> is not supported:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(descr, <span class="dt">quietly =</span> <span class="ot">TRUE</span>)
+ct &lt;-<span class="st"> </span><span class="kw">CrossTable</span>(mtcars$gear, mtcars$cyl)
+<span class="co">#&gt; Warning in chisq.test(tab, correct = FALSE, ...): Chi-squared approximation</span>
+<span class="co">#&gt; may be incorrect</span>
+knitr::<span class="kw">kable</span>(ct)
+<span class="co">#&gt; Error in as.data.frame.default(x): cannot coerce class &quot;&quot;CrossTable&quot;&quot; to a data.frame</span>
+<span class="kw">library</span>(tables, <span class="dt">quietly =</span> <span class="ot">TRUE</span>)
+<span class="co">#&gt; </span>
+<span class="co">#&gt; Attaching package: 'Hmisc'</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; The following objects are masked from 'package:base':</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt;     format.pval, round.POSIXt, trunc.POSIXt, units</span>
+tab &lt;-<span class="st"> </span><span class="kw">tabular</span>( (Species +<span class="st"> </span><span class="dv">1</span>) ~<span class="st"> </span>(<span class="dt">n=</span><span class="dv">1</span>) +<span class="st"> </span><span class="kw">Format</span>(<span class="dt">digits=</span><span class="dv">2</span>)*
+<span class="st">         </span>(Sepal.Length +<span class="st"> </span>Sepal.Width)*(mean +<span class="st"> </span>sd), <span class="dt">data=</span>iris )
+knitr::<span class="kw">kable</span>(tab)
+<span class="co">#&gt; Error in `colnames&lt;-`(`*tmp*`, value = c(&quot;term&quot;, &quot;term&quot;, &quot;term&quot;, &quot;term&quot;, : length of 'dimnames' [2] not equal to array extent</span></code></pre></div>
+<p>This is where <code>pander</code> comes handy. <code>pander</code> support rendering for many popular classes:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">methods</span>(pander)
+<span class="co">#&gt;  [1] pander.anova*           pander.aov*            </span>
+<span class="co">#&gt;  [3] pander.aovlist*         pander.Arima*          </span>
+<span class="co">#&gt;  [5] pander.call*            pander.cast_df*        </span>
+<span class="co">#&gt;  [7] pander.character*       pander.clogit*         </span>
+<span class="co">#&gt;  [9] pander.coxph*           pander.CrossTable*     </span>
+<span class="co">#&gt; [11] pander.data.frame*      pander.Date*           </span>
+<span class="co">#&gt; [13] pander.default*         pander.density*        </span>
+<span class="co">#&gt; [15] pander.describe*        pander.evals*          </span>
+<span class="co">#&gt; [17] pander.factor*          pander.formula*        </span>
+<span class="co">#&gt; [19] pander.ftable*          pander.function*       </span>
+<span class="co">#&gt; [21] pander.glm*             pander.gtable*         </span>
+<span class="co">#&gt; [23] pander.htest*           pander.image*          </span>
+<span class="co">#&gt; [25] pander.irts*            pander.list*           </span>
+<span class="co">#&gt; [27] pander.lm*              pander.lme*            </span>
+<span class="co">#&gt; [29] pander.logical*         pander.manova*         </span>
+<span class="co">#&gt; [31] pander.matrix*          pander.microbenchmark* </span>
+<span class="co">#&gt; [33] pander.mtable*          pander.name*           </span>
+<span class="co">#&gt; [35] pander.nls*             pander.NULL*           </span>
+<span class="co">#&gt; [37] pander.numeric*         pander.option          </span>
+<span class="co">#&gt; [39] pander.polr*            pander.POSIXct*        </span>
+<span class="co">#&gt; [41] pander.POSIXlt*         pander.prcomp*         </span>
+<span class="co">#&gt; [43] pander.randomForest*    pander.rapport*        </span>
+<span class="co">#&gt; [45] pander.return           pander.rlm*            </span>
+<span class="co">#&gt; [47] pander.sessionInfo*     pander.smooth.spline*  </span>
+<span class="co">#&gt; [49] pander.stat.table*      pander.summary.aov*    </span>
+<span class="co">#&gt; [51] pander.summary.aovlist* pander.summary.glm*    </span>
+<span class="co">#&gt; [53] pander.summary.lm*      pander.summary.lme*    </span>
+<span class="co">#&gt; [55] pander.summary.manova*  pander.summary.nls*    </span>
+<span class="co">#&gt; [57] pander.summary.polr*    pander.summary.prcomp* </span>
+<span class="co">#&gt; [59] pander.summary.survreg* pander.summary.table*  </span>
+<span class="co">#&gt; [61] pander.survdiff*        pander.survfit*        </span>
+<span class="co">#&gt; [63] pander.survreg*         pander.table*          </span>
+<span class="co">#&gt; [65] pander.tabular*         pander.ts*             </span>
+<span class="co">#&gt; [67] pander.zoo*            </span>
+<span class="co">#&gt; see '?methods' for accessing help and source code</span></code></pre></div>
+<p>And it’s integrated with <code>knitr</code> by default. <code>pander</code> simply identifies if <code>knitr</code> is running in the backgorund, and if so, it <code>capture.output</code> and return the resulting string as an <code>knit_asis</code> object, so that you do not need to specify the <code>results='asis'</code> option in your knitr chunk:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(descr, <span class="dt">quietly =</span> <span class="ot">TRUE</span>)
+ct &lt;-<span class="st"> </span><span class="kw">CrossTable</span>(mtcars$gear, mtcars$cyl)
+<span class="co">#&gt; Warning in chisq.test(tab, correct = FALSE, ...): Chi-squared approximation</span>
+<span class="co">#&gt; may be incorrect</span>
+<span class="kw">pander</span>(ct)</code></pre></div>
+<table>
+<colgroup>
+<col width="19%"></col>
+<col width="19%"></col>
+<col width="16%"></col>
+<col width="16%"></col>
+<col width="16%"></col>
+</colgroup>
+<thead>
+<tr class="header">
+<th align="center"> <br />
+mtcars$gear</th>
+<th align="center">mtcars$cyl<br />
+4</th>
+<th align="center"> <br />
+6</th>
+<th align="center"> <br />
+8</th>
+<th align="center"> <br />
+Total</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="center"><strong>3</strong><br />
+N<br />
+Chi-square<br />
+Row(%)<br />
+Column(%)<br />
+Total(%)</td>
+<td align="center"> <br />
+1<br />
+3.3502<br />
+6.6667%<br />
+9.0909%<br />
+3.125%</td>
+<td align="center"> <br />
+2<br />
+0.5003<br />
+13.3333%<br />
+28.5714%<br />
+6.250%</td>
+<td align="center"> <br />
+12<br />
+4.5054<br />
+80.0000%<br />
+85.7143%<br />
+37.500%</td>
+<td align="center"> <br />
+15<br />
+<br />
+46.8750%<br />
+<br />
+</td>
+</tr>
+<tr class="even">
+<td align="center"><strong>4</strong><br />
+N<br />
+Chi-square<br />
+Row(%)<br />
+Column(%)<br />
+Total(%)</td>
+<td align="center"> <br />
+8<br />
+3.6402<br />
+66.6667%<br />
+72.7273%<br />
+25.000%</td>
+<td align="center"> <br />
+4<br />
+0.7202<br />
+33.3333%<br />
+57.1429%<br />
+12.500%</td>
+<td align="center"> <br />
+0<br />
+5.2500<br />
+0.0000%<br />
+0.0000%<br />
+0.000%</td>
+<td align="center"> <br />
+12<br />
+<br />
+37.5000%<br />
+<br />
+</td>
+</tr>
+<tr class="odd">
+<td align="center"><strong>5</strong><br />
+N<br />
+Chi-square<br />
+Row(%)<br />
+Column(%)<br />
+Total(%)</td>
+<td align="center"> <br />
+2<br />
+0.0460<br />
+40.0000%<br />
+18.1818%<br />
+6.250%</td>
+<td align="center"> <br />
+1<br />
+0.0080<br />
+20.0000%<br />
+14.2857%<br />
+3.125%</td>
+<td align="center"> <br />
+2<br />
+0.0161<br />
+40.0000%<br />
+14.2857%<br />
+6.250%</td>
+<td align="center"> <br />
+5<br />
+<br />
+15.6250%<br />
+<br />
+</td>
+</tr>
+<tr class="even">
+<td align="center">Total<br />
+</td>
+<td align="center">11<br />
+34.375%</td>
+<td align="center">7<br />
+21.875%</td>
+<td align="center">14<br />
+43.75%</td>
+<td align="center">32<br />
+</td>
+</tr>
+</tbody>
+</table>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(tables, <span class="dt">quietly =</span> <span class="ot">TRUE</span>)
+tab &lt;-<span class="st"> </span><span class="kw">tabular</span>( (Species +<span class="st"> </span><span class="dv">1</span>) ~<span class="st"> </span>(<span class="dt">n=</span><span class="dv">1</span>) +<span class="st"> </span><span class="kw">Format</span>(<span class="dt">digits=</span><span class="dv">2</span>)*
+<span class="st">         </span>(Sepal.Length +<span class="st"> </span>Sepal.Width)*(mean +<span class="st"> </span>sd), <span class="dt">data=</span>iris )
+<span class="kw">pander</span>(tab)</code></pre></div>
+<table>
+<colgroup>
+<col width="18%"></col>
+<col width="6%"></col>
+<col width="23%"></col>
+<col width="6%"></col>
+<col width="22%"></col>
+<col width="5%"></col>
+</colgroup>
+<thead>
+<tr class="header">
+<th align="center"><br />
+Species</th>
+<th align="center"><br />
+n</th>
+<th align="center">Sepal.Length<br />
+mean</th>
+<th align="center"><br />
+sd</th>
+<th align="center">Sepal.Width<br />
+mean</th>
+<th align="center"><br />
+sd</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="center"><em>setosa</em></td>
+<td align="center">50</td>
+<td align="center">5.01</td>
+<td align="center">0.35</td>
+<td align="center">3.43</td>
+<td align="center">0.38</td>
+</tr>
+<tr class="even">
+<td align="center"><em>versicolor</em></td>
+<td align="center">50</td>
+<td align="center">5.94</td>
+<td align="center">0.52</td>
+<td align="center">2.77</td>
+<td align="center">0.31</td>
+</tr>
+<tr class="odd">
+<td align="center"><em>virginica</em></td>
+<td align="center">50</td>
+<td align="center">6.59</td>
+<td align="center">0.64</td>
+<td align="center">2.97</td>
+<td align="center">0.32</td>
+</tr>
+<tr class="even">
+<td align="center"><em>All</em></td>
+<td align="center">150</td>
+<td align="center">5.84</td>
+<td align="center">0.83</td>
+<td align="center">3.06</td>
+<td align="center">0.44</td>
+</tr>
+</tbody>
+</table>
+<p>In a nutshell, this is achieved by modification that whenever you call <code>pander</code> inside of a <code>knitr</code> document, instead of returning the markdown text to the standard output (as it used to happen), pander returns a <code>knit_asis</code> class object, which renders fine in the resulting document — without the double comment chars, so rendering the tables in HTML, pdf or other document formats just fine.</p>
+<p>If by any chance you actually want results of <code>pander</code> not to be converted automatically, just specify <code>knitr.auto.asis</code> to <code>FALSE</code> either using <code>panderOptions</code>:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">panderOptions</span>(<span class="st">'knitr.auto.asis'</span>, <span class="ot">FALSE</span>)
+<span class="kw">pander</span>(<span class="kw">head</span>(iris))
+<span class="co">#&gt; </span>
+<span class="co">#&gt; -------------------------------------------------------------------</span>
+<span class="co">#&gt;  Sepal.Length   Sepal.Width   Petal.Length   Petal.Width   Species </span>
+<span class="co">#&gt; -------------- ------------- -------------- ------------- ---------</span>
+<span class="co">#&gt;      5.1            3.5           1.4            0.2       setosa  </span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt;      4.9            3.0           1.4            0.2       setosa  </span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt;      4.7            3.2           1.3            0.2       setosa  </span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt;      4.6            3.1           1.5            0.2       setosa  </span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt;      5.0            3.6           1.4            0.2       setosa  </span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt;      5.4            3.9           1.7            0.4       setosa  </span>
+<span class="co">#&gt; -------------------------------------------------------------------</span></code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">panderOptions</span>(<span class="st">'knitr.auto.asis'</span>, <span class="ot">TRUE</span>)</code></pre></div>
+<div id="rendering-markdown-inside-loopvectorized-function" class="section level4">
+<h4>Rendering markdown inside loop/vectorized function</h4>
+<p>One question that is being asked a lot is how to use <code>pander</code> with <code>knitr</code> in a loop or with vectorized function. For example we have 3 tables that we want to render and we want to do it using <code>lapply</code>:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">dfs &lt;-<span class="st"> </span><span class="kw">list</span>(mtcars[<span class="dv">1</span>:<span class="dv">3</span>, <span class="dv">1</span>:<span class="dv">4</span>], mtcars[<span class="dv">4</span>:<span class="dv">6</span>, <span class="dv">1</span>:<span class="dv">4</span>], mtcars[<span class="dv">7</span>:<span class="dv">9</span>, <span class="dv">1</span>:<span class="dv">4</span>])
+<span class="kw">lapply</span>(dfs, pander)
+<span class="co">#&gt; [[1]]</span>
+<span class="co">#&gt; [1] &quot;\n-------------------------------------------\n      &amp;nbsp;         mpg   cyl   disp   hp \n------------------- ----- ----- ------ ----\n   **Mazda RX4**    21.0    6    160   110 \n\n **Mazda RX4 Wag**  21.0    6    160   110 \n\n  **Datsun 710**    22.8    4    108    93 \n-------------------------------------------\n\n&quot;</span>
+<span class="co">#&gt; attr(,&quot;class&quot;)</span>
+<span class="co">#&gt; [1] &quot;knit_asis&quot;</span>
+<span class="co">#&gt; attr(,&quot;knit_cacheable&quot;)</span>
+<span class="co">#&gt; [1] TRUE</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; [[2]]</span>
+<span class="co">#&gt; [1] &quot;\n-----------------------------------------------\n        &amp;nbsp;           mpg   cyl   disp   hp \n----------------------- ----- ----- ------ ----\n  **Hornet 4 Drive**    21.4    6    258   110 \n\n **Hornet Sportabout**  18.7    8    360   175 \n\n      **Valiant**       18.1    6    225   105 \n-----------------------------------------------\n\n&quot;</span>
+<span class="co">#&gt; attr(,&quot;class&quot;)</span>
+<span class="co">#&gt; [1] &quot;knit_asis&quot;</span>
+<span class="co">#&gt; attr(,&quot;knit_cacheable&quot;)</span>
+<span class="co">#&gt; [1] TRUE</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; [[3]]</span>
+<span class="co">#&gt; [1] &quot;\n----------------------------------------\n     &amp;nbsp;       mpg   cyl   disp   hp \n---------------- ----- ----- ------ ----\n **Duster 360**  14.3    8   360.0  245 \n\n **Merc 240D**   24.4    4   146.7   62 \n\n  **Merc 230**   22.8    4   140.8   95 \n----------------------------------------\n\n&quot;</span>
+<span class="co">#&gt; attr(,&quot;class&quot;)</span>
+<span class="co">#&gt; [1] &quot;knit_asis&quot;</span>
+<span class="co">#&gt; attr(,&quot;knit_cacheable&quot;)</span>
+<span class="co">#&gt; [1] TRUE</span></code></pre></div>
+<p>As you can see, this doesn’t work correctly, due to fact that when run inside <code>knitr</code>, <code>pander</code> tries to return <code>knit_asis</code> class object, but for loops/vectorized functions this results in incorrect output.</p>
+<p>Recommended way to solve this is to disable <code>pander</code> trying to return <code>knit_asis</code> class object by setting <code>knitr.auto.asis</code> to <code>FALSE</code> using <code>panderOptions</code>. However, in that case to we also need to tell <code>knitr</code> to convert table on the fly by specifying <code>results='asis'</code> for <code>knitr</code> chunk:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">panderOptions</span>(<span class="st">'knitr.auto.asis'</span>, <span class="ot">FALSE</span>)
+dfs &lt;-<span class="st"> </span><span class="kw">list</span>(mtcars[<span class="dv">1</span>:<span class="dv">3</span>, <span class="dv">1</span>:<span class="dv">4</span>], mtcars[<span class="dv">4</span>:<span class="dv">6</span>, <span class="dv">1</span>:<span class="dv">4</span>], mtcars[<span class="dv">7</span>:<span class="dv">9</span>, <span class="dv">1</span>:<span class="dv">4</span>])
+<span class="kw">invisible</span>(<span class="kw">lapply</span>(dfs, pander))</code></pre></div>
+<table>
+<colgroup>
+<col width="27%"></col>
+<col width="8%"></col>
+<col width="8%"></col>
+<col width="9%"></col>
+<col width="5%"></col>
+</colgroup>
+<thead>
+<tr class="header">
+<th align="center"> </th>
+<th align="center">mpg</th>
+<th align="center">cyl</th>
+<th align="center">disp</th>
+<th align="center">hp</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="center"><strong>Mazda RX4</strong></td>
+<td align="center">21.0</td>
+<td align="center">6</td>
+<td align="center">160</td>
+<td align="center">110</td>
+</tr>
+<tr class="even">
+<td align="center"><strong>Mazda RX4 Wag</strong></td>
+<td align="center">21.0</td>
+<td align="center">6</td>
+<td align="center">160</td>
+<td align="center">110</td>
+</tr>
+<tr class="odd">
+<td align="center"><strong>Datsun 710</strong></td>
+<td align="center">22.8</td>
+<td align="center">4</td>
+<td align="center">108</td>
+<td align="center">93</td>
+</tr>
+</tbody>
+</table>
+<table>
+<colgroup>
+<col width="33%"></col>
+<col width="8%"></col>
+<col width="8%"></col>
+<col width="9%"></col>
+<col width="5%"></col>
+</colgroup>
+<thead>
+<tr class="header">
+<th align="center"> </th>
+<th align="center">mpg</th>
+<th align="center">cyl</th>
+<th align="center">disp</th>
+<th align="center">hp</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="center"><strong>Hornet 4 Drive</strong></td>
+<td align="center">21.4</td>
+<td align="center">6</td>
+<td align="center">258</td>
+<td align="center">110</td>
+</tr>
+<tr class="even">
+<td align="center"><strong>Hornet Sportabout</strong></td>
+<td align="center">18.7</td>
+<td align="center">8</td>
+<td align="center">360</td>
+<td align="center">175</td>
+</tr>
+<tr class="odd">
+<td align="center"><strong>Valiant</strong></td>
+<td align="center">18.1</td>
+<td align="center">6</td>
+<td align="center">225</td>
+<td align="center">105</td>
+</tr>
+</tbody>
+</table>
+<table>
+<colgroup>
+<col width="23%"></col>
+<col width="8%"></col>
+<col width="8%"></col>
+<col width="9%"></col>
+<col width="5%"></col>
+</colgroup>
+<thead>
+<tr class="header">
+<th align="center"> </th>
+<th align="center">mpg</th>
+<th align="center">cyl</th>
+<th align="center">disp</th>
+<th align="center">hp</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="center"><strong>Duster 360</strong></td>
+<td align="center">14.3</td>
+<td align="center">8</td>
+<td align="center">360.0</td>
+<td align="center">245</td>
+</tr>
+<tr class="even">
+<td align="center"><strong>Merc 240D</strong></td>
+<td align="center">24.4</td>
+<td align="center">4</td>
+<td align="center">146.7</td>
+<td align="center">62</td>
+</tr>
+<tr class="odd">
+<td align="center"><strong>Merc 230</strong></td>
+<td align="center">22.8</td>
+<td align="center">4</td>
+<td align="center">140.8</td>
+<td align="center">95</td>
+</tr>
+</tbody>
+</table>
+</div>
+
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

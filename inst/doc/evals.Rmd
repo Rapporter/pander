@@ -12,6 +12,10 @@ vignette: >
 ```{r, echo = FALSE, message = FALSE}
 knitr::opts_chunk$set(collapse = T, comment = "#>")
 library(pander)
+library(futile.logger)
+evals.option('graph.name', 'test')
+evals.option('graph.dir', 'my_plots')
+evals.option('graph.output', 'jpg')
 ```
 
 `evals` is aimed at collecting as much information as possible while evaluating R code. It can evaluate a character vector of R expressions, and it returns a list of captured information while running those:
@@ -56,12 +60,12 @@ As mentioned before, `evals` capture the output to graphical devices and saves i
 evals('plot(mtcars)')[[1]]$result
 ```
 
-![](plots/mtcars.png)
+![](https://raw.githubusercontent.com/Rapporter/pander/gh-pages/plots/evals-mtcars.jpeg)
 
 You can specify output directory using `graph.dir` parameter and output type using `graph.output` parameter. Currently it could be any of grDevices: png, bmp, jpeg, jpg, tiff, svg or pdf.
 
 ```{r}
-evals('plot(mtcars)', graph.dir = 'my_plots', graph.output = 'png')[[1]]$result
+evals('plot(mtcars)', graph.dir = 'my_plots', graph.output = 'jpg')[[1]]$result
 ```
 
 Moreover, `evals` provides facilities to:
@@ -100,8 +104,8 @@ evals('ggplot(df) + geom_histogram(aes(x = hp), binwidth = 50) + ggtitle("Histog
 evalsOptions('graph.unify', FALSE)
 ```
 
-![](plots/lattice.png)
-![](plots/ggplot2.png)
+![](https://raw.githubusercontent.com/Rapporter/pander/gh-pages/plots/evals-lattice.jpeg)
+![](https://raw.githubusercontent.com/Rapporter/pander/gh-pages/plots/evals-ggplot2.jpeg)
 
 Options for unification can be set with `panderOptions`, for example:
 
@@ -140,13 +144,11 @@ x <- evals('1:10', cache.time = 0)
 
 ```{r}
 t <- tempfile()
-#flog.appender(appender.file(t), name = 'evals')
+flog.appender(appender.file(t), name = 'evals')
 x <- evals('1:10', log = 'evals')
-#readLines(t)
-```
-
-````{r, echo = FALSE, message = FALSE}
-x <- capture.output(appender.console())
+readLines(t)
+# revert back to console
+flog.appender(appender.console(), name = 'evals')
 ```
 
 ## Result Caching
@@ -224,5 +226,9 @@ Also `evals` is able to cache output to graphical devices produces during evalua
 
 ```{r}
 system.time(evals('plot(mtcars)'))
-system.time(evals('plot(mtcars)'))  
+system.time(evals('plot(mtcars)'))
+```
+```{r, echo = FALSE, message = FALSE}
+unlink("cachedir", recursive = TRUE, force = TRUE)
+unlink("my_plots", recursive = TRUE, force = TRUE)
 ```

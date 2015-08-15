@@ -1,6 +1,10 @@
 ## ---- echo = FALSE, message = FALSE--------------------------------------
-knitr::opts_chunk$set(collapse = T, comment = '#>')
+knitr::opts_chunk$set(collapse = T, comment = "#>")
 library(pander)
+library(futile.logger)
+evals.option('graph.name', 'test')
+evals.option('graph.dir', 'my_plots')
+evals.option('graph.output', 'jpg')
 
 ## ------------------------------------------------------------------------
 evals('1:10')
@@ -16,7 +20,7 @@ evals('as.numeric("1.1a")')[[1]]$msg
 evals('plot(mtcars)')[[1]]$result
 
 ## ------------------------------------------------------------------------
-evals('plot(mtcars)', graph.dir = 'my_plots', graph.output = 'png')[[1]]$result
+evals('plot(mtcars)', graph.dir = 'my_plots', graph.output = 'jpg')[[1]]$result
 
 ## ------------------------------------------------------------------------
 ## generating dataset
@@ -47,12 +51,11 @@ x <- evals('1:10', cache.time = 0)
 
 ## ------------------------------------------------------------------------
 t <- tempfile()
-#flog.appender(appender.file(t), name = 'evals')
+flog.appender(appender.file(t), name = 'evals')
 x <- evals('1:10', log = 'evals')
-#readLines(t)
-
-## ---- echo = FALSE, message = FALSE--------------------------------------
-x <- capture.output(appender.console())
+readLines(t)
+# revert back to console
+flog.appender(appender.console(), name = 'evals')
 
 ## ------------------------------------------------------------------------
 evalsOptions('cache.time', 0)
@@ -90,3 +93,8 @@ evals('x <- 1:10; x[3]')[[2]]$result
 ## ------------------------------------------------------------------------
 system.time(evals('plot(mtcars)'))
 system.time(evals('plot(mtcars)'))
+
+## ---- echo = FALSE, message = FALSE--------------------------------------
+unlink("cachedir", recursive = TRUE, force = TRUE)
+unlink("my_plots", recursive = TRUE, force = TRUE)
+

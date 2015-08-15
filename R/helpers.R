@@ -59,7 +59,7 @@ repChar <- function(x, n, sep = '')
 #' @export
 #' @author Aleksandar Blagotic
 #' @references This function was moved from \code{rapport} package: \url{http://rapport-package.info}.
-p <- function(x, wrap = panderOptions('p.wrap'), sep = panderOptions('p.sep'), copula = panderOptions('p.copula'), limit = Inf, keep.trailing.zeros = panderOptions('keep.trailing.zeros'), missing = panderOptions('missing')){ #nolint
+p <- function(x, wrap = panderOptions('p.wrap'), sep = panderOptions('p.sep'), copula = panderOptions('p.copula'), limit = Inf, keep.trailing.zeros = panderOptions('keep.trailing.zeros'), missing = panderOptions('missing'), digits = panderOptions('digits'), round = panderOptions('round')){ #nolint
 
     attributes(x) <- NULL
     stopifnot(is.vector(x))
@@ -76,14 +76,14 @@ p <- function(x, wrap = panderOptions('p.wrap'), sep = panderOptions('p.sep'), c
     ## prettify numbers
     if (is.numeric(x)) {
 
-        x <- round(x, panderOptions('round'))
+        x <- round(x, digits = round)
 
         ## optionally remove trailing zeros by running format separately on each element of the vector
         if (!keep.trailing.zeros) {
-            x <- sapply(x, format, trim = TRUE, digits = panderOptions('digits'), decimal.mark = panderOptions('decimal.mark')) #nolint
+            x <- sapply(x, format, trim = TRUE, digits = digits, decimal.mark = panderOptions('decimal.mark')) #nolint
         } else {
             ## otherwise force using the same number format for all vector elements
-            x <- format(x, trim = TRUE, digits = panderOptions('digits'), decimal.mark = panderOptions('decimal.mark'))
+            x <- format(x, trim = TRUE, digits = digits, decimal.mark = panderOptions('decimal.mark'))
         }
 
     }
@@ -386,7 +386,7 @@ check_caption <- function(caption) {
 #' Check if vector parameter for round/digits and adjust accodingly
 #' @param param vector to be checked
 #' @param name parameter name
-#' @param n needed size of vector 
+#' @param n needed size of vector
 #' @return original vector if size is good, vector of default values otherwise
 #' @keywords internal
 check_digits <- function(param, name, n) {

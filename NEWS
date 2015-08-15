@@ -23,6 +23,7 @@ New classes supported by the `pander` generic S3 method:
  * gtable
  * nls/summary.nls
  * arima
+ * survreg/summary.survreg
 
 Other changes:
  * Pandoc.convert will not add a footer to the document by dafault (#173)
