@@ -283,7 +283,13 @@ panderOptions <- function(o, value) {
         if (!o %in% names(res))
             stop(paste('Invalid option name:', o))
 
-        res[[o]] <- value
+        ## fix assigning NULL to a list element
+        if (is.null(value)) {
+            res[o] <- list(NULL)
+        } else {
+            res[[o]] <- value
+        }
+
         options('pander' = res)
 
     }
@@ -368,7 +374,13 @@ evalsOptions <- function(o, value) {
         if (!o %in% names(res))
             stop(paste('Invalid option name:', o))
 
-        res[[o]] <- value
+        ## fix assigning NULL to a list element
+        if (is.null(value)) {
+            res[o] <- list(NULL)
+        } else {
+            res[[o]] <- value
+        }
+
         options('evals' = res)
 
     }
