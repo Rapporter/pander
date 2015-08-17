@@ -245,7 +245,7 @@ test_that('digits param', {
     expect_equal(res[3],'0.11 0.11 0.11')
     mt <- mtcars[1:4, 5:8]
     res <- pander_return(mt, digits = c(1,4,3,4), keep.trailing.zeros = T)
-    expect_equal(res[5], '   **Mazda RX4**       4    2.620  16.5   0  ')
+    expect_equal(res[5], '   **Mazda RX4**       4    2.62   16.5   0  ')
 })
 
 test_that('round param', {

@@ -899,7 +899,8 @@ pandoc.table.return <- function(t, caption, digits = panderOptions('digits'), de
         if (!keep.trailing.zeros) {
             # for-loop is needed to preserve row/col names and use index to get appropriate value from digits vector
             for (j in 1:ncol(temp.t)) {
-                temp.t[, j] <- format(temp.t[, j],
+                temp.t[, j] <- sapply(temp.t[, j],
+                                      format,
                                       trim = TRUE,
                                       digits = digits[j],
                                       decimal.mark = decimal.mark,
@@ -912,7 +913,8 @@ pandoc.table.return <- function(t, caption, digits = panderOptions('digits'), de
     if (keep.trailing.zeros) {
         # for-loop is needed to preserve row/col names and use index to get appropriate value from digits vector
         for (j in 1:ncol(t)) {
-            temp.t[, j] <- format(temp.t[, j],
+            temp.t[, j] <- sapply(temp.t[, j],
+                                  format,
                                   trim = TRUE,
                                   digits = digits[j],
                                   decimal.mark = decimal.mark,
