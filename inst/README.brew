@@ -182,14 +182,17 @@ One of the fanciest features in *pander* is the ease of highlighting rows, colum
 
 This can be achieved by calling `pandoc.table` directly and passing any (or more) of the following arguments **or** calling the R function with the same names before rendering a table with either the `pander` [generic S3 method](#generic-pander-method) or via `pandoc.table`:
 
-  * emphasize.rows
-  * emphasize.cols
-  * emphasize.cells
-  * emphasize.strong.rows
-  * emphasize.strong.cols
-  * emphasize.strong.cells
+* emphasize.italics.rows
+* emphasize.italics.cols
+* emphasize.italics.cells
+* emphasize.strong.rows
+* emphasize.strong.cols
+* emphasize.strong.cells
+* emphasize.verbatim.rows
+* emphasize.verbatim.cols
+* emphasize.verbatim.cells
 
-The `emphasize` helpers would turn the affected cells to *italic*, while `emphasize.strong` would apply a **bold style** to the cell. Of course a cell can be also ***italic and strong*** at the same time.
+The `emphasize.italics` helpers would turn the affected cells to *italic*, `emphasize.strong` would apply a **bold** style to the cell and `emphasize.verbatim` would apply a `verbatim` style to the cell. A cell can be also *italic*,  **bold** and `verbatim` at the same time.
 
 Those functions and arguments ending in `rows` or `cols` take a vector (like which columns or rows to emphasize in a table), while the `cells` argument take either a vector (for one dimensional "tables") or an array-like data structure with two columns holding row and column indexes of cells to be emphasized -- just like what `which(..., arr.ind = TRUE)` returns. A quick-example:
 
@@ -205,6 +208,7 @@ emphasize.cols(1)
 emphasize.rows(1)
 emphasize.strong.cells(which(t > 20, arr.ind = TRUE))
 pandoc.table.return(t)
+pandoc.table(t, emphasize.verbatim.rows = 1, emphasize.strong.cells = which(t > 20, arr.ind = TRUE))
 %>
 ```
 
