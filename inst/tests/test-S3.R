@@ -113,20 +113,20 @@ context('highlight tables')
 
 t <- mtcars[1:3, 1:5]
 test_that('highlight 1D: no error', {
-    expect_that(pandoc.table.return(t$mpg, emphasize.cells = 1), is_a('character'))
-    expect_that(pandoc.table.return(t$mpg, emphasize.cells = 1:2), is_a('character'))
+    expect_that(pandoc.table.return(t$mpg, emphasize.italics.cells = 1), is_a('character'))
+    expect_that(pandoc.table.return(t$mpg, emphasize.italics.cells = 1:2), is_a('character'))
     expect_that(pandoc.table.return(t$mpg, emphasize.strong.cells = 1), is_a('character'))
     expect_that(pandoc.table.return(t$mpg, emphasize.strong.cells = 1:2), is_a('character'))
 })
 
 t <- table(mtcars$am, mtcars$gear)
 test_that('emphasize 2D: no error', {
-    expect_that(pandoc.table.return(t, emphasize.rows = 1), is_a('character'))
-    expect_that(pandoc.table.return(t, emphasize.rows = 1:2), is_a('character'))
-    expect_that(pandoc.table.return(t, emphasize.cols = 1), is_a('character'))
-    expect_that(pandoc.table.return(t, emphasize.cols = 1:2), is_a('character'))
-    expect_that(pandoc.table.return(t, emphasize.cells = which(t > 10, arr.ind = TRUE)), is_a('character'))
-    expect_that(pandoc.table.return(t, emphasize.cells = which(t > 20, arr.ind = TRUE)), is_a('character'))
+    expect_that(pandoc.table.return(t, emphasize.italics.rows = 1), is_a('character'))
+    expect_that(pandoc.table.return(t, emphasize.italics.rows = 1:2), is_a('character'))
+    expect_that(pandoc.table.return(t, emphasize.italics.cols = 1), is_a('character'))
+    expect_that(pandoc.table.return(t, emphasize.italics.cols = 1:2), is_a('character'))
+    expect_that(pandoc.table.return(t, emphasize.italics.cells = which(t > 10, arr.ind = TRUE)), is_a('character'))
+    expect_that(pandoc.table.return(t, emphasize.italics.cells = which(t > 20, arr.ind = TRUE)), is_a('character'))
     expect_that(pandoc.table.return(t, emphasize.strong.rows = 1), is_a('character'))
     expect_that(pandoc.table.return(t, emphasize.strong.rows = 1:2), is_a('character'))
     expect_that(pandoc.table.return(t, emphasize.strong.cols = 1), is_a('character'))
@@ -136,26 +136,44 @@ test_that('emphasize 2D: no error', {
 })
 
 test_that('emphasize: error', {
-    expect_that(pandoc.table(t, emphasize.cols = 1:5), throws_error())
-    expect_that(pandoc.table(t, emphasize.cols = 1.5), throws_error())
+    expect_that(pandoc.table(t, emphasize.italics.cols = 1:5), throws_error())
+    expect_that(pandoc.table(t, emphasize.italics.cols = 1.5), throws_error())
     expect_that(pandoc.table(t, emphasize.strong.cols = 1:5), throws_error())
     expect_that(pandoc.table(t, emphasize.strong.cols = 1.5), throws_error())
 })
 
 test_that('no warning for highlight NA/empty strings', {
-    expect_that(pandoc.table(data.frame(x = 1:2, y = c(1,NA)), emphasize.cols = 2), not(gives_warning()))
+    expect_that(pandoc.table(data.frame(x = 1:2, y = c(1,NA)), emphasize.italics.cols = 2), not(gives_warning()))
 })
 
-test_that('emphasize.rows works correctly', {
+test_that('emphasize.italics.rows works correctly', {
     # test for issue 176
     df <- data.frame(a=1:3, b=1:3, c=1:3)
-    res <- capture.output(pander(df, emphasize.rows = c(1,2), style = 'simple'))
+    res <- capture.output(pander(df, emphasize.italics.rows = c(1,2), style = 'simple'))
     expect_equal(res[5], '*1* *1* *1*')
     expect_equal(res[6], '*2* *2* *2*')
     res <- capture.output(pander(df, emphasize.strong.rows = c(1,2), style = 'simple'))
     expect_equal(res[5], '**1** **1** **1**')
     expect_equal(res[6], '**2** **2** **2**')
 })
+
+test_that('emphasize.verbatim works correctly', {
+    df <- data.frame(a=1:3, b=4:6, c=7:9)
+    res <- pander_return(df, emphasize.verbatim.rows = c(1,2), style = 'simple')
+    expect_equal(res[5], '`1` `4` `7`')
+    expect_equal(res[6], '`2` `5` `8`')
+    res <- pander_return(df, emphasize.verbatim.cols = c(1,2), style = 'simple')
+    expect_equal(res[5], '`1` `4`  7 ')
+    expect_equal(res[6], '`2` `5`  8 ')
+    res <- pander_return(df, emphasize.verbatim.cells = which(df > 5, arr.ind = TRUE), style = 'simple')
+    expect_equal(res[5], ' 1   4  `7`')
+    expect_equal(res[6], ' 2   5  `8`')
+    res <- pander_return(df, emphasize.verbatim.cells = which(df > 5, arr.ind = TRUE),
+                         emphasize.strong.rows = c(1,2), style = 'simple')
+    expect_equal(res[5], '**1** **4** **`7`**')
+    expect_equal(res[7], '  3    `6`    `9`  ')
+})
+
 
 context('captions')
 

@@ -506,12 +506,18 @@ pandoc.list <- function(...)
 #' @param plain.ascii (default: \code{FALSE}) if output should be in plain ascii (without markdown markup) or not
 #' @param use.hyphening boolean (default: \code{FALSE}) if try to use hyphening when splitting large cells according to table.split.cells. Requires koRpus package.
 #' @param emphasize.rownames boolean (default: \code{TRUE}) if row names should be highlighted
-#' @param emphasize.rows a vector for a two dimensional table specifying which rows to emphasize
-#' @param emphasize.cols a vector for a two dimensional table specifying which cols to emphasize
-#' @param emphasize.cells a vector for one-dimensional tables or a matrix like structure with two columns for row and column indexes to be emphasized in two dimensional tables. See e.g. \code{which(..., arr.ind = TRUE)}
-#' @param emphasize.strong.rows see \code{emphasize.rows} but in bold
-#' @param emphasize.strong.cols see \code{emphasize.cols} but in bold
-#' @param emphasize.strong.cells see \code{emphasize.cells} but in bold
+#' @param emphasize.rows deprecated for \code{emphasize.italics.rows} argument
+#' @param emphasize.cols deprecated for \code{emphasize.italics.cols} argument
+#' @param emphasize.cells deprecated for \code{emphasize.italics.cells} argument
+#' @param emphasize.italics.rows a vector for a two dimensional table specifying which rows to emphasize
+#' @param emphasize.italics.cols a vector for a two dimensional table specifying which cols to emphasize
+#' @param emphasize.italics.cells a vector for one-dimensional tables or a matrix like structure with two columns for row and column indexes to be emphasized in two dimensional tables. See e.g. \code{which(..., arr.ind = TRUE)}
+#' @param emphasize.strong.rows see \code{emphasize.italics.rows} but in bold
+#' @param emphasize.strong.cols see \code{emphasize.italics.cols} but in bold
+#' @param emphasize.strong.cells see \code{emphasize.italics.cells} but in bold
+#' @param emphasize.verbatim.rows see \code{emphasize.italics.rows} but in verbatim
+#' @param emphasize.verbatim.cols see \code{emphasize.italics.cols} but in verbatim
+#' @param emphasize.verbatim.cells see \code{emphasize.italics.cells} but in verbatim
 #' @param ... unsupported extra arguments directly placed into \code{/dev/null}
 #' @return By default this function outputs (see: \code{cat}) the result. If you would want to catch the result instead, then call \code{pandoc.table.return} instead.
 #' @export
@@ -568,13 +574,15 @@ pandoc.list <- function(...)
 #'
 #' ## highlight cells
 #' t <- mtcars[1:3, 1:5]
-#' pandoc.table(t$mpg, emphasize.cells = 1)
+#' pandoc.table(t$mpg, emphasize.italics.cells = 1)
 #' pandoc.table(t$mpg, emphasize.strong.cells = 1)
-#' pandoc.table(t$mpg, emphasize.cells = 1, emphasize.strong.cells = 1)
-#' pandoc.table(t$mpg, emphasize.cells = 1:2)
+#' pandoc.table(t$mpg, emphasize.italics.cells = 1, emphasize.strong.cells = 1)
+#' pandoc.table(t$mpg, emphasize.italics.cells = 1:2)
 #' pandoc.table(t$mpg, emphasize.strong.cells = 1:2)
-#' pandoc.table(t, emphasize.cells = which(t > 20, arr.ind = TRUE))
-#' pandoc.table(t, emphasize.cells = which(t == 6, arr.ind = TRUE))
+#' pandoc.table(t, emphasize.italics.cells = which(t > 20, arr.ind = TRUE))
+#' pandoc.table(t, emphasize.italics.cells = which(t == 6, arr.ind = TRUE))
+#' pandoc.table(t, emphasize.verbatim.cells = which(t == 6, arr.ind = TRUE))
+#' pandoc.table(t, emphasize.verbatim.cells = which(t == 6, arr.ind = TRUE), emphasize.italics.rows = 1)
 #' ## with helpers
 #' emphasize.cols(1)
 #' emphasize.rows(1)
@@ -618,7 +626,7 @@ pandoc.list <- function(...)
 #' x <- data.frame(a = "Can be also supplied as a vector, for each cell separately",
 #'        b = "Can be also supplied as a vector, for each cell separately")
 #' pandoc.table(x, split.cells = 10, use.hyphening = TRUE)
-pandoc.table.return <- function(t, caption, digits = panderOptions('digits'), decimal.mark = panderOptions('decimal.mark'), big.mark = panderOptions('big.mark'), round = panderOptions('round'), missing = panderOptions('missing'), justify, style = c('multiline', 'grid', 'simple', 'rmarkdown'), split.tables = panderOptions('table.split.table'), split.cells = panderOptions('table.split.cells'), keep.trailing.zeros = panderOptions('keep.trailing.zeros'), keep.line.breaks = panderOptions('keep.line.breaks'), plain.ascii = panderOptions('plain.ascii'), use.hyphening = panderOptions('use.hyphening'), emphasize.rownames = panderOptions('table.emphasize.rownames'), emphasize.rows, emphasize.cols, emphasize.cells, emphasize.strong.rows, emphasize.strong.cols, emphasize.strong.cells, ...) { #nolint
+pandoc.table.return <- function(t, caption, digits = panderOptions('digits'), decimal.mark = panderOptions('decimal.mark'), big.mark = panderOptions('big.mark'), round = panderOptions('round'), missing = panderOptions('missing'), justify, style = c('multiline', 'grid', 'simple', 'rmarkdown'), split.tables = panderOptions('table.split.table'), split.cells = panderOptions('table.split.cells'), keep.trailing.zeros = panderOptions('keep.trailing.zeros'), keep.line.breaks = panderOptions('keep.line.breaks'), plain.ascii = panderOptions('plain.ascii'), use.hyphening = panderOptions('use.hyphening'), emphasize.rownames = panderOptions('table.emphasize.rownames'), emphasize.rows, emphasize.cols, emphasize.cells, emphasize.strong.rows, emphasize.strong.cols, emphasize.strong.cells, emphasize.italics.rows, emphasize.italics.cols, emphasize.italics.cells, emphasize.verbatim.rows, emphasize.verbatim.cols, emphasize.verbatim.cells, ...) { #nolint
 
     ## expands cells for output
     table.expand <- function(cells, cols.width, justify, sep.cols) {
@@ -775,6 +783,12 @@ pandoc.table.return <- function(t, caption, digits = panderOptions('digits'), de
         if (!missing(emphasize.cells)) {
             emphasize.cells <- cbind(rep(1, length(emphasize.cells)), emphasize.cells)
         }
+        if (!missing(emphasize.verbatim.cells)) {
+            emphasize.verbatim.cells <- cbind(rep(1, length(emphasize.verbatim.cells)), emphasize.verbatim.cells)
+        }
+        if (!missing(emphasize.italics.cells)) {
+            emphasize.italics.cells <- cbind(rep(1, length(emphasize.italics.cells)), emphasize.italics.cells)
+        }
         if (!missing(emphasize.strong.cells)) {
             emphasize.strong.cells <- cbind(rep(1, length(emphasize.strong.cells)), emphasize.strong.cells)
         }
@@ -850,7 +864,13 @@ pandoc.table.return <- function(t, caption, digits = panderOptions('digits'), de
                               'emphasize.cells',
                               'emphasize.strong.rows',
                               'emphasize.strong.cols',
-                              'emphasize.strong.cells')
+                              'emphasize.strong.cells',
+                              'emphasize.italics.rows',
+                              'emphasize.italics.cols',
+                              'emphasize.italics.cells',
+                              'emphasize.verbatim.rows',
+                              'emphasize.verbatim.cols',
+                              'emphasize.verbatim.cells')
     if (all(sapply(emphasize.parameters, function(p) is.null(mc[[p]]), USE.NAMES = FALSE))) {
         ## check if emphasize parameters were set in attributes
         if (all(sapply(emphasize.parameters, function(p) is.null(attr(t, p)), USE.NAMES = FALSE))) {
@@ -938,9 +958,33 @@ pandoc.table.return <- function(t, caption, digits = panderOptions('digits'), de
     }
 
     ## adding formatting (emphasis, strong etc.)
-    if (!is.null(emphasize.rows) && !plain.ascii) {
-        check.highlight.parameters(emphasize.rows, nrow(t))
-        t[emphasize.rows, ] <- base::t(apply(t[emphasize.rows, , drop = FALSE],
+    if (is.null(emphasize.italics.rows)) {
+        emphasize.italics.rows <- emphasize.rows
+    }
+    if (is.null(emphasize.italics.cols)) {
+        emphasize.italics.cols <- emphasize.cols
+    }
+    if (is.null(emphasize.italics.cells)) {
+        emphasize.italics.cells <- emphasize.cells
+    }
+    if (!is.null(emphasize.verbatim.rows) && !plain.ascii) {
+        check.highlight.parameters(emphasize.verbatim.rows, nrow(t))
+        t[emphasize.verbatim.rows, ] <- apply(t[emphasize.verbatim.rows, , drop = FALSE],
+                                              c(1, 2),
+                                              pandoc.verbatim.return)
+    }
+    if (!is.null(emphasize.verbatim.cols) && !plain.ascii) {
+        check.highlight.parameters(emphasize.verbatim.cols, ncol(t))
+        t[, emphasize.verbatim.cols] <- apply(t[, emphasize.verbatim.cols, drop = FALSE], c(1,2), pandoc.verbatim.return)
+    }
+    if (!is.null(emphasize.verbatim.cells) && !plain.ascii) {
+        t <- as.matrix(t)
+        check.highlight.parameters(emphasize.verbatim.cells, nrow(t), ncol(t))
+        t[emphasize.verbatim.cells] <- sapply(t[emphasize.verbatim.cells], pandoc.verbatim.return)
+    }
+    if (!is.null(emphasize.italics.rows) && !plain.ascii) {
+        check.highlight.parameters(emphasize.italics.rows, nrow(t))
+        t[emphasize.italics.rows, ] <- base::t(apply(t[emphasize.italics.rows, , drop = FALSE],
                                              c(1),
                                              pandoc.emphasis.return))
     }
@@ -950,18 +994,18 @@ pandoc.table.return <- function(t, caption, digits = panderOptions('digits'), de
                                                     c(1),
                                                     pandoc.strong.return))
     }
-    if (!is.null(emphasize.cols) && !plain.ascii) {
-        check.highlight.parameters(emphasize.cols, ncol(t))
-        t[, emphasize.cols] <- apply(t[, emphasize.cols, drop = FALSE], c(2), pandoc.emphasis.return)
+    if (!is.null(emphasize.italics.cols) && !plain.ascii) {
+        check.highlight.parameters(emphasize.italics.cols, ncol(t))
+        t[, emphasize.italics.cols] <- apply(t[, emphasize.italics.cols, drop = FALSE], c(2), pandoc.emphasis.return)
     }
     if (!is.null(emphasize.strong.cols) && !plain.ascii) {
         check.highlight.parameters(emphasize.strong.cols, ncol(t))
         t[, emphasize.strong.cols] <- apply(t[, emphasize.strong.cols, drop = FALSE], c(2), pandoc.strong.return)
     }
-    if (!is.null(emphasize.cells) && !plain.ascii) {
+    if (!is.null(emphasize.italics.cells) && !plain.ascii) {
         t <- as.matrix(t)
-        check.highlight.parameters(emphasize.cells, nrow(t), ncol(t))
-        t[emphasize.cells] <- pandoc.emphasis.return(t[emphasize.cells])
+        check.highlight.parameters(emphasize.italics.cells, nrow(t), ncol(t))
+        t[emphasize.italics.cells] <- pandoc.emphasis.return(t[emphasize.italics.cells])
     }
     if (!is.null(emphasize.strong.cells) && !plain.ascii) {
         t <- as.matrix(t)

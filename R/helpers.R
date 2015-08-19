@@ -253,13 +253,25 @@ emphasize.rows <- function(x)
 #' @export
 emphasize.strong.rows <- emphasize.rows
 #' @export
+emphasize.italics.rows <- emphasize.rows
+#' @export
+emphasize.verbatim.rows <- emphasize.rows
+#' @export
 emphasize.cols <- emphasize.rows
 #' @export
 emphasize.strong.cols <- emphasize.rows
 #' @export
+emphasize.italics.cols <- emphasize.rows
+#' @export
+emphasize.verbatim.cols <- emphasize.rows
+#' @export
 emphasize.cells <- emphasize.rows
 #' @export
 emphasize.strong.cells <- emphasize.rows
+#' @export
+emphasize.italics.cells <- emphasize.rows
+#' @export
+emphasize.verbatim.cells <- emphasize.rows
 
 
 #' Get emphasize params from internal buffer
@@ -274,7 +286,13 @@ get.emphasize <- function(df) {
                 'emphasize.cells',
                 'emphasize.strong.rows',
                 'emphasize.strong.cols',
-                'emphasize.strong.cells')) {
+                'emphasize.strong.cells',
+                'emphasize.italics.rows',
+                'emphasize.italics.cols',
+                'emphasize.italics.cells',
+                'emphasize.verbatim.rows',
+                'emphasize.verbatim.cols',
+                'emphasize.verbatim.cells')) {
         if (is.null(attr(df, v))) {
             attr(df, v) <- get.storage(v)
         }

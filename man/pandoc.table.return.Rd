@@ -18,7 +18,9 @@ pandoc.table.return(t, caption, digits = panderOptions("digits"),
   use.hyphening = panderOptions("use.hyphening"),
   emphasize.rownames = panderOptions("table.emphasize.rownames"),
   emphasize.rows, emphasize.cols, emphasize.cells, emphasize.strong.rows,
-  emphasize.strong.cols, emphasize.strong.cells, ...)
+  emphasize.strong.cols, emphasize.strong.cells, emphasize.italics.rows,
+  emphasize.italics.cols, emphasize.italics.cells, emphasize.verbatim.rows,
+  emphasize.verbatim.cols, emphasize.verbatim.cells, ...)
 }
 \arguments{
 \item{t}{data frame, matrix or table}
@@ -53,17 +55,29 @@ pandoc.table.return(t, caption, digits = panderOptions("digits"),
 
 \item{emphasize.rownames}{boolean (default: \code{TRUE}) if row names should be highlighted}
 
-\item{emphasize.rows}{a vector for a two dimensional table specifying which rows to emphasize}
+\item{emphasize.rows}{deprecated for \code{emphasize.italics.rows} argument}
 
-\item{emphasize.cols}{a vector for a two dimensional table specifying which cols to emphasize}
+\item{emphasize.cols}{deprecated for \code{emphasize.italics.cols} argument}
 
-\item{emphasize.cells}{a vector for one-dimensional tables or a matrix like structure with two columns for row and column indexes to be emphasized in two dimensional tables. See e.g. \code{which(..., arr.ind = TRUE)}}
+\item{emphasize.cells}{deprecated for \code{emphasize.italics.cells} argument}
 
-\item{emphasize.strong.rows}{see \code{emphasize.rows} but in bold}
+\item{emphasize.strong.rows}{see \code{emphasize.italics.rows} but in bold}
 
-\item{emphasize.strong.cols}{see \code{emphasize.cols} but in bold}
+\item{emphasize.strong.cols}{see \code{emphasize.italics.cols} but in bold}
 
-\item{emphasize.strong.cells}{see \code{emphasize.cells} but in bold}
+\item{emphasize.strong.cells}{see \code{emphasize.italics.cells} but in bold}
+
+\item{emphasize.italics.rows}{a vector for a two dimensional table specifying which rows to emphasize}
+
+\item{emphasize.italics.cols}{a vector for a two dimensional table specifying which cols to emphasize}
+
+\item{emphasize.italics.cells}{a vector for one-dimensional tables or a matrix like structure with two columns for row and column indexes to be emphasized in two dimensional tables. See e.g. \code{which(..., arr.ind = TRUE)}}
+
+\item{emphasize.verbatim.rows}{see \code{emphasize.italics.rows} but in verbatim}
+
+\item{emphasize.verbatim.cols}{see \code{emphasize.italics.cols} but in verbatim}
+
+\item{emphasize.verbatim.cells}{see \code{emphasize.italics.cells} but in verbatim}
 
 \item{...}{unsupported extra arguments directly placed into \code{/dev/null}}
 }
@@ -130,13 +144,15 @@ tryCatch(pandoc.table(t, style = "simple", split.cells = 5),
 
 ## highlight cells
 t <- mtcars[1:3, 1:5]
-pandoc.table(t$mpg, emphasize.cells = 1)
+pandoc.table(t$mpg, emphasize.italics.cells = 1)
 pandoc.table(t$mpg, emphasize.strong.cells = 1)
-pandoc.table(t$mpg, emphasize.cells = 1, emphasize.strong.cells = 1)
-pandoc.table(t$mpg, emphasize.cells = 1:2)
+pandoc.table(t$mpg, emphasize.italics.cells = 1, emphasize.strong.cells = 1)
+pandoc.table(t$mpg, emphasize.italics.cells = 1:2)
 pandoc.table(t$mpg, emphasize.strong.cells = 1:2)
-pandoc.table(t, emphasize.cells = which(t > 20, arr.ind = TRUE))
-pandoc.table(t, emphasize.cells = which(t == 6, arr.ind = TRUE))
+pandoc.table(t, emphasize.italics.cells = which(t > 20, arr.ind = TRUE))
+pandoc.table(t, emphasize.italics.cells = which(t == 6, arr.ind = TRUE))
+pandoc.table(t, emphasize.verbatim.cells = which(t == 6, arr.ind = TRUE))
+pandoc.table(t, emphasize.verbatim.cells = which(t == 6, arr.ind = TRUE), emphasize.italics.rows = 1)
 ## with helpers
 emphasize.cols(1)
 emphasize.rows(1)
