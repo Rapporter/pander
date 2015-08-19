@@ -979,3 +979,105 @@ test_that('pander.survreg/summary.survreg works correctly', {
     expect_equal(length(res), 44)
     expect_equal(length(grep('Table', res)), 2)
 })
+
+test_that('pander.ols works correctly', {
+    suppressMessages(require(rms))
+    set.seed(123)
+    n <- 1000
+    age <- rnorm(n, 50, 10)
+    cholesterol <- rnorm(n, 200, 25)
+    sex <- factor(sample(c('female', 'male'), n, TRUE))
+    health <- data.frame(age, cholesterol)
+    dd <- datadist(age, sex)
+    fit1 <- ols(cholesterol ~ age)
+    fit2 <- ols(cholesterol ~ age + sex)
+
+    res1 <- pander_return(fit1)
+    expect_equal(length(res1), 40)
+    expect_equal(length(grep('Table', res1)), 3)
+    res2 <- pander_return(fit2, coefs = FALSE)
+    expect_equal(length(res2), 29)
+    expect_equal(length(grep('Table', res2)), 2)
+})
+
+test_that('pander.lrm works correctly', {
+    suppressMessages(require(rms))
+    x    <- 1:5
+    y    <- c(0,1,0,1,0)
+    reps <- c(1,2,3,2,1)
+    res <- pander_return(lrm(y ~ x))
+    expect_equal(length(res), 39)
+    expect_true(any(grep('y ~ x', res)))
+    expect_equal(length(grep('Table', res)), 2)
+
+    x <- rep(x, reps)
+    y <- rep(y, reps)
+    res <- pander_return(lrm(y ~ x), coefs = FALSE)
+    expect_equal(length(res), 28)
+    expect_true(any(grep('y ~ x', res)))
+    expect_equal(length(grep('Table', res)), 1)
+
+    res <- pander_return(lrm(y ~ x, penalty = 0.1), coefs = TRUE)
+    expect_true(any(grep('y ~ x', res)))
+    expect_equal(length(grep('Table', res)), 3)
+})
+
+test_that('pander.orm works correctly', {
+    suppressMessages(require(rms))
+    n <- 100
+    y <- round(runif(n), 2)
+    x1 <- sample(c(-1,0,1), n, TRUE)
+    x2 <- sample(c(-1,0,1), n, TRUE)
+    res <- pander_return(orm(y ~ x1 + x2, eps=1e-5))
+    expect_equal(length(res), 39)
+    expect_true(any(grep('y ~ x1 \\+ x2', res)))
+    expect_equal(length(grep('Table', res)), 2)
+
+    res <- pander_return(orm(y ~ x1 + x2, eps=1e-5), coefs = FALSE)
+    expect_equal(length(res), 28)
+    expect_true(any(grep('y ~ x1 \\+ x2', res)))
+    expect_equal(length(grep('Table', res)), 1)
+})
+
+test_that('pander.Glm works correctly', {
+    suppressMessages(require(rms))
+    counts <- c(18,17,15,20,10,20,25,13,12)
+    outcome <- gl(3,1,9)
+    treatment <- gl(3,3)
+    f <- Glm(counts ~ outcome + treatment, family=poisson())
+    res <- pander_return(f)
+    expect_equal(length(res), 37)
+    expect_true(any(grep('counts ~ outcome \\+ treatment', res)))
+    expect_equal(length(grep('Table', res)), 2)
+    res <- pander_return(f, coefs = FALSE)
+    expect_equal(length(res), 20)
+    expect_true(any(grep('counts ~ outcome \\+ treatment', res)))
+    expect_equal(length(grep('Table', res)), 1)
+})
+
+test_that('pander.cph', {
+    suppressMessages(require(rms))
+    n <- 1000
+    set.seed(731)
+    age <- 50 + 12 * rnorm(n)
+    label(age) <- 'Age'
+    sex <- factor(sample(c('Male','Female'), n, rep=TRUE, prob=c(.6, .4)))
+    cens <- 15 * runif(n)
+    h <- .02 * exp(.04 * (age - 50) + .8 * (sex == 'Female'))
+    dt <- -log(runif(n)) / h
+    label(dt) <- 'Follow-up Time'
+    e <- ifelse(dt <= cens, 1, 0)
+    dt <- pmin(dt, cens)
+    units(dt) <- 'Year'
+    dd <- datadist(age, sex)
+    S <- Surv(dt,e)
+    capture.output(f <- cph(S ~ rcs(age,4) + sex, x=TRUE, y=TRUE))
+    res <- pander_return(f)
+    expect_equal(length(res), 43)
+    expect_true(any(grep('S ~ rcs\\(age, 4\\) \\+ sex', res)))
+    expect_equal(length(grep('Table', res)), 2)
+    res <- pander_return(f, conf.int = 0.95)
+    expect_equal(length(res), 58)
+    expect_true(any(grep('S ~ rcs\\(age, 4\\) \\+ sex', res)))
+    expect_equal(length(grep('Table', res)), 3)
+})

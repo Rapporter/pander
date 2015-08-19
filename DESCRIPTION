@@ -44,7 +44,8 @@ Suggests:
     Epi,
     randomForest,
     tseries,
-    gtable
+    gtable,
+    rms
 SystemRequirements: pandoc (http://johnmacfarlane.net/pandoc) for exporting
     markdown files to other formats.
 LinkingTo: Rcpp

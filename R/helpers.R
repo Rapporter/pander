@@ -416,3 +416,61 @@ check_digits <- function(param, name, n) {
     }
     param
 }
+
+#' Create a multitable used for rendering objects from rms package
+#'
+#' When ols/lrm/orm from rms package get rendered, main statistics are group in table of tables.
+#' Since pandoc doesn't support row or col-span,
+#' we chose to group those statistics in a column each.
+#' This function takes care of that
+#' @param v list of vectors/lists to be merge in the table
+#' @return data.frame in specified format
+#' @examples
+#' pander:::multitable(list(list(a=1, b=2),list(c=3, d=4)))
+#' @keywords internal
+multitable <- function(v) {
+    ml <- max(sapply(v, length))
+    mod <- lapply(1:length(v),
+                  function(i)  {
+                      uv <- unlist(c(rbind(pandoc.strong.return(names(v[[i]])),
+                                           sapply(v[[i]], p, wrap=''))))
+                      if (length(v[[i]]) < ml)
+                          uv <- c(uv, rep('', 2 * (ml - length(v[[i]]))))
+                      uv
+                  })
+    do.call(cbind, mod)
+}
+
+#' Calculate coef matrix for models from rms package
+#' Forked from prModFit from rms
+#'
+#' @param obj object list
+#' @param coefs numeric value if to print only the first n regression coefficients in the model.
+#' @return coeficients matrix
+coef_mat <- function(obj, coefs) {
+    errordf <- obj$errordf
+    beta <- obj$coef
+    se <- obj$se
+    Z <- beta / se
+    if(length(errordf)) {
+        P <- 2 * (1 - pt(abs(Z), errordf))
+    } else {
+        P <- 1 - pchisq(Z ^ 2, 1)
+    }
+    U <- cbind(beta, se, Z, P)
+    colnames(U) <- c('Coef', 'S.E.', 'Wald Z', 'Pr(>|Z|)')
+    if (length(errordf)) {
+        colnames(U)[3:4] <- c('t', 'Pr(>|t|)')
+    }
+    rownames(U) <- names(beta)
+    if (length(obj$aux)) {
+        U <- cbind(U, obj$aux)
+        colnames(U)[ncol(U)] <- obj$auxname
+    }
+    if (is.numeric(coefs)) {
+        U <- U[1:coefs, , drop = FALSE]
+        U <- rbind(U, rep('', ncol(U)))
+        rownames(U)[nrow(U)] <- '. . .'
+    }
+    U
+}

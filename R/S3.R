@@ -1870,6 +1870,81 @@ pander.polr <- function (x, ...) {
     invisible()
 }
 
+#' Prints an ols object from rms package in Pandoc's markdown.
+#' @param x an ols object
+#' @param long if to print the correlation matrix of parameter estimates. default(\code{FALSE})
+#' @param coefs if to the table of model coefficients, standard errors, etc. default(\code{TRUE})
+#' @param digits passed to \code{format}. Can be a vector specifying values for each column (has to be the same length as number of columns).
+#' @param round passed to \code{round}. Can be a vector specifying values for each column (has to be the same length as number of columns). Values for non-numeric columns will be disregarded.
+#' @param ... optional parameters passed to raw \code{pandoc.table} function
+#' @export
+pander.ols <- function (x, long = FALSE, coefs = TRUE,
+                        digits = panderOptions('digits'), round = panderOptions('round'), ...) {
+    requireNamespace('rms', quietly = TRUE)
+    stats <- x$stats
+    pen <- length(x$penalty.matrix) > 0
+    resid <- x$residuals
+    n <- length(resid)
+    p <- length(x$coef) - (names(x$coef)[1] == 'Intercept')
+    if (length(stats) == 0) {
+        cat('n=', n, '   p=', p, '\n\n', sep = '')
+    }
+    ndf <- stats['d.f.']
+    df <- c(ndf, n - ndf - 1, ndf)
+    r2 <- stats['R2']
+    sigma <- stats['Sigma']
+    rdf <- df[2]
+    rsqa <- 1 - (1 - r2) * (n - 1) / rdf
+    lrchisq <- stats['Model L.R.']
+    ci <- x$clusterInfo
+    if (lst <- length(stats)) {
+        misc <- reVector(Obs = stats['n'], sigma = sigma, d.f. = df[2], `Cluster on` = ci$name, Clusters = ci$n)
+        lr <- reVector(`LR chi2` = lrchisq, d.f. = ndf, `Pr(> chi2)` = 1 - pchisq(lrchisq, ndf))
+        disc <- reVector(R2 = r2, `R2 adj` = rsqa, g = stats['g'])
+        sdf <- multitable(list(misc, lr, disc))
+        colnames(sdf) <- c('', 'Model Likelihood\nRatio Test', 'Discrimination\nIndexes')
+        caption <- pandoc.formula.return(x$call$formula, text = 'Fitting linear model:')
+        pandoc.table(sdf, keep.line.breaks = TRUE, caption = caption, ...)
+    }
+    if (rdf > 5) {
+        if (length(dim(resid)) == 2) {
+            rq <- apply(t(resid), 1, quantile)
+            dimnames(rq) <- list(c('Min', '1Q', 'Median', '3Q',
+                                   'Max'), dimnames(resid)[[2]])
+        } else {
+            rq <- quantile(resid)
+            names(rq) <- c('Min', '1Q', 'Median', '3Q', 'Max')
+        }
+        pandoc.table(rq, caption = 'Residuals', ...)
+    }
+    else if (rdf > 0) {
+        pandoc.table(resid, caption = 'Residuals', ...)
+    }
+    if (nsingular <- df[3] - df[1]) {
+        cat(nsingular, 'coefficients not defined because of singularities', '\n')
+    }
+    se <- sqrt(diag(x$var))
+    if (coefs) {
+        obj <- list(coef = x$coefficients, se = se, errordf = rdf)
+        U <- coef_mat(obj, coefs = coefs)
+        pandoc.table(U, caption = 'Coeficients', ...)
+    }
+    if (!pen) {
+        if (long && p > 0) {
+            correl <- diag(1 / se) %*% x$var %*% diag(1 / se)
+            dimnames(correl) <- dimnames(x$var)
+            ll <- lower.tri(correl)
+            correl[ll] <- format(round(correl[ll], digits = round), digits = digits, ...)
+            correl[!ll] <- ''
+            pandoc.table(correl[-1, - (p + 1), drop = FALSE],
+                         caption ='Correlation of Coefficients',
+                         digits = digits,
+                         round = round, ...)
+        }
+    }
+    invisible()
+}
+
 #' Prints an summary.polr object from MASS package in Pandoc's markdown.
 #' @param x an summary.polr object
 #' @param digits number of digits of precision passed to format
@@ -1990,6 +2065,226 @@ pander.summary.survreg <- function(x, summary = TRUE, digits = panderOptions('di
                        digits = digits, round = round, keep.trailing.zeros = keep.trailing.zeros,
                        caption = "Correlation of Coefficients", ...)
             }
+        }
+    }
+    invisible()
+}
+
+#' Prints an lrm object from rms package in Pandoc's markdown.
+#' @param x an lrm object
+#' @param coefs if to the table of model coefficients, standard errors, etc. default(\code{TRUE})
+#' @param ... optional parameters passed to raw \code{pandoc.table} function
+#' @export
+pander.lrm <- function (x, coefs = TRUE, ...)  {
+    requireNamespace('rms', quietly = TRUE)
+    ns <- x$non.slopes
+    nstrata <- x$nstrata
+    if (!length(nstrata)) {
+        nstrata <- 1
+    }
+    pm <- x$penalty.matrix
+    penaltyFactor <- NULL
+    if (length(pm)) {
+        psc <- ifelse(length(pm) == 1, sqrt(pm), sqrt(diag(pm)))
+        penalty.scale <- c(rep(0, ns), psc)
+        cof <- matrix(x$coef[ - (1:ns)], ncol = 1)
+        pandoc.table(as.data.frame(x$penalty, row.names = ''), caption = 'Penalty factors', ...)
+        penaltyFactor <- as.vector(t(cof) %*% pm %*% cof)
+    }
+    est.exp <- 1:ns
+    if (length(x$est)) {
+        est.exp <- c(est.exp, ns + x$est[x$est + ns <= length(x$coefficients)])
+    }
+    vv <- diag(x$var)
+    cof <- x$coef
+    stats <- x$stats
+    maxd <- signif(stats['Max Deriv'], 1)
+    ci <- x$clusterInfo
+    misc <- reVector(Obs = stats['Obs'],
+                     `Sum of weights` = stats['Sum of Weights'],
+                     Strata = if (nstrata > 1) nstrata,
+                     `Cluster on` = ci$name, Clusters = ci$n,
+                     `max |deriv|` = maxd)
+    if (length(x$freq) < 4) {
+        names(x$freq) <- paste(' ', names(x$freq), sep = '')
+        misc <- c(misc[1], x$freq, misc[-1])
+    }
+    lr <- reVector(`LR chi2` = stats['Model L.R.'],
+                   d.f. = stats['d.f.'],
+                   `Pr(> chi2)` = stats['P'],
+                   Penalty = penaltyFactor)
+    disc <- reVector(R2 = stats['R2'], g = stats['g'], gr = stats['gr'],
+                     gp = stats['gp'], Brier = stats['Brier'])
+    discr <- reVector(C = stats['C'], Dxy = stats['Dxy'], gamma = stats['Gamma'],
+                      `tau-a` = stats['Tau-a'])
+    sdf <- multitable(list(misc, lr, disc, discr))
+    colnames(sdf) <- c('', 'Model Likelihood\nRatio Test',
+                       'Discrimination\nIndexes', 'Rank Discrim.\nIndexes')
+    caption <- pandoc.formula.return(x$call$formula, text = 'Fitting logistic regression model:')
+    pandoc.table(sdf, keep.line.breaks = TRUE, caption, ...)
+    if (coefs) {
+        obj <- list(coef = cof, se = sqrt(vv), aux = if (length(pm)) penalty.scale, auxname = 'Penalty Scale')
+        U <- coef_mat(obj, coefs = coefs)
+        pandoc.table(U, caption = 'Coeficients', ...)
+    }
+    invisible()
+}
+
+#' Prints an orm object from rms package in Pandoc's markdown.
+#' @param x an orm object
+#' @param coefs if to the table of model coefficients, standard errors, etc. default(\code{TRUE})
+#' @param ... optional parameters passed to raw \code{pandoc.table} function
+#' @export
+pander.orm <- function (x, coefs = TRUE, intercepts = x$non.slopes < 10, ...) {
+    requireNamespace('rms', quietly = TRUE)
+    ns <- x$non.slopes
+    cik <- attr(x$coef, 'intercepts')
+    if (length(cik) && intercepts) {
+        warning('intercepts=TRUE not implemented for fit.mult.impute objects')
+        intercepts <- FALSE
+    }
+    pm <- x$penalty.matrix
+    penaltyFactor <- NULL
+    if (length(pm)) {
+        psc <- ifelse(length(pm) == 1, sqrt(pm), sqrt(diag(pm)))
+        penalty.scale <- c(rep(0, ns), psc)
+        cof <- matrix(x$coef[ - (1:ns)], ncol = 1)
+        pandoc.table(as.data.frame(x$penalty, row.names = ''), caption = 'Penalty factors', ...)
+        penaltyFactor <- as.vector(t(cof) %*% pm %*% cof)
+    }
+    vv <- diag(vcov(x, intercepts = ifelse(intercepts, 'all', 'none')))
+    if (!intercepts) {
+        if (!length(cik)) {
+            nints <- ns
+        } else if (length(cik) == 1 && cik == 0) {
+            nints <- 0
+        } else {
+            length(cik)
+        }
+        ints.to.delete <- vector()
+        if (ns != 0 && nints != 0) {
+            ints.to.delete <- 1:nints
+        }
+        vv <- c(rep(NA, nints), vv)
+    }
+    cof <- x$coef
+    stats <- x$stats
+    maxd <- signif(stats['Max Deriv'], 1)
+    ci <- x$clusterInfo
+    misc <- reVector(Obs = stats['Obs'], `Unique Y` = stats['Unique Y'],
+                     `Cluster on` = ci$name, Clusters = ci$n, `Median Y` = stats['Median Y'],
+                     `max |deriv|` = maxd)
+    if (length(x$freq) < 4) {
+        names(x$freq) <- paste(' ', names(x$freq), sep = '')
+        misc <- c(misc[1], x$freq, misc[-1])
+    }
+    lr <- reVector(`LR chi2` = stats['Model L.R.'],
+                   d.f. = stats['d.f.'],
+                   `Pr(> chi2)` = stats['P'],
+                   `Score chi2` = stats['Score'],
+                   `Pr(> chi2)` = stats['Score P'], Penalty = penaltyFactor)
+    disc <- reVector(R2 = stats['R2'], g = stats['g'], gr = stats['gr'],
+                     `|Pr(Y>=median)-0.5|` = stats['pdm'])
+    discr <- reVector(rho = stats['rho'])
+    sdf <- multitable(list(misc, lr, disc, discr))
+    colnames(sdf) <- c('', 'Model Likelihood\nRatio Test',
+                       'Discrimination\nIndexes', 'Rank Discrim.\nIndexes')
+    caption <- switch(x$family, logistic = 'Logistic (Proportional Odds)',
+                      probit = 'Probit', cauchit = 'Cauchy', loglog = '-log-log',
+                      cloglog = 'Complementary log-log')
+    caption <- paste(caption, 'Ordinal Regression Model')
+    caption <- pandoc.formula.return(x$call$formula, text = caption)
+    pandoc.table(sdf, keep.line.breaks = TRUE, caption, ...)
+    if (coefs) {
+        if (!intercepts) {
+            j <- -ints.to.delete
+            cof <- cof[j]
+            vv <- vv[j]
+            if (length(pm)) {
+                penalty.scale <- penalty.scale[j]
+            }
+        }
+        obj <- list(coef = cof, se = sqrt(vv), aux = if (length(pm)) penalty.scale, auxname = 'Penalty Scale')
+        U <- coef_mat(obj, coefs = coefs)
+        pandoc.table(U, caption = 'Coeficients', ...)
+    }
+    invisible()
+}
+
+#' Prints an Grm object from rms package in Pandoc's markdown.
+#' @param x an Grm object
+#' @param coefs if to the table of model coefficients, standard errors, etc. default(\code{TRUE})
+#' @param ... optional parameters passed to raw \code{pandoc.table} function
+#' @export
+pander.Glm <- function (x, coefs = TRUE, ...) {
+    requireNamespace('rms', quietly = TRUE)
+    cof <- coef(x)
+    lr <- x$null.deviance - x$deviance
+    dof <- x$rank - (names(cof)[1] == 'Intercept')
+    pval <- 1 - pchisq(lr, dof)
+    ci <- x$clusterInfo
+    misc <- reVector(Obs = length(x$residuals), `Residual d.f.` = x$df.residual,
+                     `Cluster on` = ci$name, Clusters = ci$n, g = x$g)
+    lr <- reVector(`LR chi2` = lr, d.f. = dof, `Pr(> chi2)` = pval)
+    sdf <- multitable(list(misc, lr))
+    colnames(sdf) <- c('', 'Model Likelihood\nRatio Test')
+    caption <- pandoc.formula.return(x$call$formula, text = 'General Linear Model')
+    pandoc.table(sdf, keep.line.breaks = TRUE, caption, ...)
+    if (coefs) {
+        se <- sqrt(diag(vcov(x)))
+        obj <- list(coef = cof, se = se)
+        U <- coef_mat(obj, coefs = coefs)
+        pandoc.table(U, caption = 'Coeficients', ...)
+    }
+    invisible()
+}
+
+#' Prints an cph object from rms package in Pandoc's markdown.
+#' @param x an cph object
+#' @param table if to print event frequency statistics. default(\code{TRUE})
+#' @param conf.int set to e.g. .95 to print 0.95 confidence intervals on simple hazard ratios (which are usually meaningless as one-unit changes are seldom relevant and most models contain multiple terms per predictor)
+#' @param coefs if to the table of model coefficients, standard errors, etc. default(\code{TRUE})
+#' @param ... optional parameters passed to raw \code{pandoc.table} function
+#' @export
+pander.cph <- function (x, table = TRUE, conf.int = FALSE, coefs = TRUE, ...) {
+    requireNamespace('rms', quietly = TRUE)
+    if (table && length(x$n) && is.matrix(x$n)) {
+       pandoc.table(x$n, caption = 'Status', ...)
+    }
+    if (length(x$coef)) {
+        stats <- x$stats
+        ci <- x$clusterInfo
+        misc <- reVector(Obs = stats['Obs'], Events = stats['Events'],
+                         `Cluster on` = ci$name, Clusters = ci$n,
+                         Center = x$center)
+        lr <- reVector(`LR chi2` = stats['Model L.R.'], d.f. = stats['d.f.'],
+                       `Pr(> chi2)` = stats['P'], `Score chi2` = stats['Score'],
+                       `Pr(> chi2)` = stats['Score P'])
+        disc <- reVector(R2 = stats['R2'], Dxy = stats['Dxy'],
+                         g = stats['g'], gr = stats['gr'])
+        sdf <- multitable(list(misc, lr, disc))
+        colnames(sdf) <- c('', 'Model Likelihood\nRatio Test',
+                           'Discrimination\nIndexes')
+        caption <- pandoc.formula.return(x$call$formula, text = 'Cox Proportional Hazards Model')
+        pandoc.table(sdf, keep.line.breaks = TRUE, caption, ...)
+        beta <- x$coef
+        se <- sqrt(diag(x$var))
+        if (coefs) {
+            se <- sqrt(diag(x$var))
+            obj <- list(coef = x$coef, se = se)
+            U <- coef_mat(obj, coefs = coefs)
+            pandoc.table(U, caption = 'Coeficients', ...)
+        }
+        if (conf.int) {
+            zcrit <- qnorm( (1 + conf.int) / 2 )
+            tmp <- cbind(exp(beta), exp(-beta),
+                         exp(beta - zcrit * se),
+                         exp(beta + zcrit * se))
+            dimnames(tmp) <- list(names(beta),
+                                  c('exp(coef)','exp(-coef)',
+                                    paste('lower ', p(conf.int, wrap = ''), sep = ''),
+                                    paste('upper ', p(conf.int, wrap = ''), sep = '')))
+            pandoc.table(tmp, caption = 'Confidence interval', ...)
         }
     }
     invisible()
