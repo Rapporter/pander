@@ -27,6 +27,7 @@ then
 fi
 git commit -m "Update by travis after $TRAVIS_COMMIT"
 git push origin master
+git stash
 
 # gh-pages handling
 git checkout gh-pages
