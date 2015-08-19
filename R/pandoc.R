@@ -795,8 +795,7 @@ pandoc.table.return <- function(t, caption, digits = panderOptions('digits'), de
     } else if (dim(t)[1] == 0) {
         # check for empty objects
         if (!is.null(colnames(t)) && length(colnames(t)) > 0) {
-            t <- as.data.frame(t)
-            t[1, ] <- NA
+            t <- matrix(data = pandoc.strong.return(colnames(t)), nrow = 1)
         } else {
             warning('Object is empty and without header. No output will be produced')
             return(invisible())
