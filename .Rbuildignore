@@ -6,3 +6,5 @@ TODO.md
 ^.*\.Rproj$
 ^\.Rproj\.user$
 \.lintr
+\.gh-pages-update.sh
+\.brewer.R
