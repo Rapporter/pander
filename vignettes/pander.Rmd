@@ -35,15 +35,15 @@ pander(tabular( (Species + 1) ~ (n=1) + Format(digits=2)*
          (Sepal.Length + Sepal.Width)*(mean + sd), data=iris ))
 ```
 
-As you have probably guesse, this is achieved via generic `pander` `S3` method. Out of the box, `pander` supports a variety of classes:
+As you have probably guess, this is achieved via generic `pander` `S3` method. Out of the box, `pander` supports a variety of classes:
 
 ```{r}
 methods(pander)
 ```
 
-If you think that pander lacks support for any other R class(es), please feel free to leave change request [here](https://github.com/Rapporter/pander/issues) and we will be happy to extend the package.
+If you think that pander lacks support for any other R class(es), please feel free to open a [ticket](https://github.com/Rapporter/pander/pulls) suggesting a new feature or submit [pull request](https://github.com/Rapporter/pander/issues) and we will be happy to extend the package.
 
-Under the hood, `pander` S3 methods rely on different `pandoc.*` methods, where most of functionality is implemented in `pandoc.table` which is used for rendering tables. `pandoc.table` provides  a truly rich functionality with many different options that `pander` inherits. For more usage/implementation details and examples, please refer to specialized vignette, which can be accessed by `vignette('pandoc_table')` or available online [here]().
+Under the hood, `pander` S3 methods rely on different `pandoc.*` methods, where most of functionality is implemented in `pandoc.table` which is used for rendering tables. `pandoc.table` provides similar to `knitr::kable` functionality in rendering markdown, but also adds a truly rich functionality with many different rendering options that `pander` inherits. For more usage/implementation details and examples, please refer to specialized vignette, which can be accessed by `vignette('pandoc_table')` or available online [here](http://rapporter.github.io/pander/pandoc_table.html).
 
 ## Evals
 
@@ -64,7 +64,7 @@ evals('1:10')
 * `msg` is a list of possible messages captured while evaluating the R expression and. Among other messages, warnings/errors will appear here.
 * `stdout` contains if anything was written to the standard output.
 
-For more usage/implementation details and examples, please refer to specialized vignette, which can be accessed by `vignette('evals')` or available online [here]().
+For more usage/implementation details and examples, please refer to specialized vignette, which can be accessed by `vignette('evals')` or available online [here](http://rapporter.github.io/pander/evals.html).
 
 ## Brew to Pandoc
 
@@ -114,84 +114,14 @@ Pandoc.brew(system.file('examples/graphs.brew', package='pander'),
 
 ## General Options
 
-The package comes with a variety of globally adjustable options, which have an effect on the result of your reports. You can query and update these options with the `panderOptions` function:
+The package comes with a variety of globally adjustable options, which have an effect on the result of your reports. Full list of options can be viewed by calling `?panderOptions` or in the online [readme](https://github.com/Rapporter/pander#general-options).
 
-  * `digits`: numeric (default: `2`) passed to `format`
-  * `decimal.mark`: string (default: `.`) passed to `format`
-  * `formula.caption.prefix`: string (default: `Formula: `) passed to `pandoc.formula` to be used as caption prefix. Be sure about what you are doing if changing to other than `Formula: ` or `:`.
-  * `big.mark`: string (default: ``) passed to `format`
-  * `round`: numeric (default: `Inf`) passed to `round`
-  * `keep.trailing.zeros`: boolean (default: `FALSE`) show or remove trailing zeros in numbers (e.g. in numeric vectors or in columns of tables with numeric values)
-  * `keep.line.breaks`: boolean (default: `FALSE`) to keep or remove line breaks from cells in a table
-  * `missing`: string (default: `NA`) to replace missing values in vectors, tables etc.
-  * `date`: string (default: `'%Y/%m/%d %X'`) passed to `format` when printing dates (`POSIXct` or `POSIXt`)
-  * `header.style`: `'atx'` or `'setext'` passed to `pandoc.header`
-  * `list.style`: `'bullet'` (default), `'ordered'` or `'roman'` passed to `pandoc.list`. Please not that this has no effect on `pander` methods.
-  * `table.style`: `'multiline'`, `'grid'` or `'simple'` passed to `pandoc.table`
-  * `table.emphasize.rownames`: boolean (default: `TRUE`) if row names should be highlighted
-  * `table.split.table`: numeric passed to `pandoc.table` and also affects `pander` methods. This option tells `pander` where to split too wide tables. The default value (`80`) suggests the conventional number of characters used in a line, feel free to change (e.g. to `Inf` to disable this feature) if you are not using a VT100 terminal any more :)
-  * `table.split.cells`: numeric (default: 30) passed to `pandoc.table` and also affects pander methods. This option tells pander where to split too wide cells with line breaks. Set `Inf`` to disable.
-  * `table.caption.prefix`: string (default: `Table: `) passed to `pandoc.table` to be used as caption prefix. Be sure about what you are doing if changing to other than `Table: ` or `:`.
-  * `table.continues`: string (default: `Table continues below`) passed to `pandoc.table` to be used as caption for long (split) without a use defined caption
-  * `table.continues.affix`: string (default: `(continued below)`) passed to `pandoc.table` to be used as an affix concatenated to the user defined caption for long (split) tables
-  * `table.alignment.default`: string (default: `centre`) that defines the default alignment of cells. Can be `left`, `right` or `centre` that latter can be also spelled as `center`
-  * `table.alignment.rownames`: string (default: `centre`) that defines the alignment of rownames in tables. Can be `left`, `right` or `centre` that latter can be also spelled as `center`
-  * `use.hyphening`: boolean (default: `FALSE`) if try to use hyphening when splitting large cells according to table.split.cells. Requires `koRpus` package.
-  * `evals.messages`: boolean (default: `TRUE`) passed to `evals`' `pander` method specifying if messages should be rendered
-  * `p.wrap`: a string (default:`'_'`) to wrap vector elements passed to `p` function
-  * `p.sep`: a string (default: `', '`) with the main separator passed to `p` function
-  * `p.copula`: a string (default: `'and'`) a string with ending separator passed to `p` function
-  * `plain.ascii`: boolean (default: FALSE) to define if output should be in plain ascii or not
-  * `graph.nomargin`: boolean (default: `TRUE`) if trying to keep plots' margins at minimal
-  * `graph.fontfamily`: string (default: `'sans'`) specifying the font family to be used in images. Please note, that using a custom font on Windows requires `grDevices:::windowsFonts` first.
-  * `graph.fontcolor`: string (default: `'black'`) specifying the default font color
-  * `graph.fontsize`: numeric (default: `12`) specifying the *base* font size in pixels. Main title is rendered with `1.2` and labels with `0.8` multiplier.
-  * `graph.grid`: boolean (default: `TRUE`) if a grid should be added to the plot
-  * `graph.grid.minor`: boolean (default: `TRUE`) if a miner grid should be also rendered
-  * `graph.grid.color`: string (default: `'grey'`) specifying the color of the rendered grid
-  * `graph.grid.lty`: string (default: `'dashed'`) specifying the line type of grid
-  * `graph.boxes`: boolean (default: `FALSE`) if to render a border around of plot (and e.g. around strip)
-  * `graph.legend.position`: string (default: `'right'`) specifying the position of the legend: 'top', 'right', 'bottom' or 'left'
-  * `graph.background`: string (default: `'white'`) specifying the plots main background's color
-  * `graph.panel.background`: string (default: `'transparent'`) specifying the plot's main panel background. Please *note*, that this option is not supported with `base` graphics.
-  * `graph.colors`: character vector of default color palette (defaults to a [colorblind theme](http://jfly.iam.u-tokyo.ac.jp/color/)). Please *note* that this update work with `base` plots by appending the `col` argument to the call if not set.
-  * `graph.color.rnd`: boolean (default: `FALSE`) specifying if the palette should be reordered randomly before rendering each plot to get colorful images
-  * `graph.axis.angle`: numeric (default: `1`) specifying the angle of axes' labels. The available options are based on `par(les)` and sets if the labels should be:
+You can query and update these options with the `panderOptions` function:
 
-      *  `1`: parallel to the axis,
-      *  `2`: horizontal,
-      *  `3`: perpendicular to the axis or
-      *  `4`: vertical.
-
-  * `graph.symbol`: numeric (default: `1`) specifying a symbol (see the `pch` parameter of `par`)
-  * `knitr.auto.asis`: boolean (default: `TRUE`) if the results of `pander` should be considered as `asis` in `knitr`. Equals to specifying `results='asis'` in the R chunk, so thus there is no need to do so if set tot `TRUE`.
-
-<a id='evals-options'></a><a id='evalsoptions'></a>
-
-Besides localization of numeric formats or the styles of tables, lists and plots, there are some technical options as well, which would effect e.g. [caching](#caching) or the format of rendered image files. You can query/update those with the `evalsOptions` function as the main backend of `pander` calls is a custom evaluation function called [`evals`](#evals).
-
-The list of possible options are:
-
-  * `parse`: if `TRUE` the provided `txt` elements would be merged into one string and parsed to logical chunks. This is useful if you would want to get separate results of your code parts - not just the last returned value, but you are passing the whole script in one string. To manually lock lines to each other (e.g. calling a `plot` and on next line adding an `abline` or `text` to it), use a plus char (`+`) at the beginning of each line which should be evaluated with the previous one(s). If set to `FALSE`, [`evals`](#evals) would not try to parse R code, it would get evaluated in separate runs - as provided. Please see the documentation of [`evals`](#evals).
-  * `cache`: [caching](#caching) the result of R calls if set to `TRUE`
-  * `cache.mode`: cached results could be stored in an `environment` in _current_ R session or let it be permanent on `disk`.
-  * `cache.dir`: path to a directory holding cache files if `cache.mode` set to `disk`. Default set to `.cache` in current working directory.
-  * `cache.time`: number of seconds to limit caching based on `proc.time`. If set to `0`, all R commands, if set to `Inf`, none is cached (despite the `cache` parameter).
-  * `cache.copy.images`: copy images to new file names if an image is returned from the *disk* cache? If set to `FALSE` (default), the cached path would be returned.
-  * `classes`: a vector or list of classes which should be returned. If set to `NULL` (by default) all R objects will be returned.
-  * `hooks`: list of hooks to be run for given classes in the form of `list(class = fn)`. If you would also specify some parameters of the function, a list should be provided in the form of `list(fn, param1, param2=NULL)` etc. So the hooks would become `list(class1=list(fn, param1, param2=NULL), ...)`. See example of [`evals`](#evals) for more details. A default hook can be specified too by setting the class to `'default'`. This can be handy if you do not want to define separate methods/functions to each possible class, but automatically apply the default hook to all classes not mentioned in the list. You may also specify only one element in the list like: `hooks=list('default' = pander.return)`. Please note, that nor error/warning messages, nor stdout is captured (so: updated) while running hooks!
-  * `length`: any R object exceeding the specified length will not be returned. The default value (`Inf`) does not filter out any R objects.
-  * `output`: a character vector of required returned values. This might be useful if you are only interested in the `result`, and do not want to save/see e.g. `messages` or `print`ed `output`. See examples of [`evals`](#evals).
-  * `graph.unify`: should `evals` try to unify the style of (`base`, `lattice` and `ggplot2`) plots? If set to `TRUE`, some `panderOptions()` would apply. By default this is disabled not to freak out useRs :)
-  * `graph.name`: set the file name of saved plots which is `%s` by default. A simple character string might be provided where `%d` would be replaced by the index of the generating `txt` source, `%n` with an incremented integer in `graph.dir` with similar file names and `%t` by some unique random characters. When used in a `brew` file, `%i` is also available which would be replaced by the chunk number.
-  * `graph.dir`: path to a directory where to place generated images. If the directory does not exist, [`evals`](#evals) try to create that. Default set to `plots` in current working directory.
-  * `graph.output`: set the required file format of saved plots. Currently it could be any of  `grDevices`: `png`, `bmp`, `jpeg`, `jpg`, `tiff`, `svg` or `pdf`. Set to `NA` not to save plots at all and tweak that setting with `capture.plot()` on demand.
-  * `width`: width of generated plot in pixels for even vector formats
-  * `height`: height of generated plot in pixels for even vector formats
-  * `res`: nominal resolution in `ppi`. The height and width of vector images will be calculated based in this.
-  * `hi.res`: generate high resolution plots also? If set to `TRUE`, each R code parts resulting an image would be run twice.
-  * `hi.res.width`: width of generated high resolution plot in pixels for even vector formats. The `height` and `res` of high resolution image is automatically computed based on the above options to preserve original plot aspect ratio.
-  * `graph.env`: save the environments in which plots were generated to distinct files (based on `graph.name`) with `env` extension?
-  * `graph.recordplot`: save the plot via `recordPlot` to distinct files (based on `graph.name`) with `recodplot` extension?
-  * `graph.RDS` save the raw R object returned (usually with `lattice` or `ggplot2`) while generating the plots to distinct files (based on `graph.name`) with `RDS` extension?
-  * `log`: `NULL` or  an optionally passed *logger name* from `futile.logger` to record all info, trace, debug and error messages.
+```{r}
+panderOptions("table.style", "simple")
+pander(mtcars[1:3, 1:4])
+pander(head(iris))
+panderOptions("table.style", "grid")
+pander(head(iris))
+```
