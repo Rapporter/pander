@@ -2290,3 +2290,25 @@ pander.cph <- function (x, table = TRUE, conf.int = FALSE, coefs = TRUE, ...) {
     }
     invisible()
 }
+
+#' Prints an summary.rms from rms package in Pandoc's markdown.
+#' @param x an summary.rms object
+#' @param ... optional parameters passed to raw \code{pandoc.table} function
+#' @export
+pander.summary.rms <- function (x, ...) {
+    cstats <- dimnames(x)[[1]]
+    for (i in 1:7) cstats <- cbind(cstats, signif(x[, i], 5))
+    dimnames(cstats) <- list(rep("", nrow(cstats)), c("Factor", dimnames(x)[[2]][1:7]))
+    pandoc.table(cstats, ...)
+    if ((A <- attr(x, "adjust")) != "") 
+        cat("\nAdjusted to:", A, "\n")
+    blab <- switch(attr(x, "conf.type"), `bootstrap nonparametric percentile` = "Bootstrap nonparametric percentile confidence intervals", 
+                   `bootstrap BCa` = "Bootstrap BCa confidence intervals", 
+                   `basic bootstrap` = "Basic bootstrap confidence intervals", 
+                   "")
+    if (blab != "") {
+        cat("\n", blab, "\n", sep = "")
+    }
+    cat("\n")
+    invisible()
+}
