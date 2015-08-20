@@ -20,7 +20,7 @@ then
   git add inst\doc
 fi
 # check if readme was update
-if [[ $CHANGED_FILES =~ .*\.README\.brew.* ]]
+if [[ $CHANGED_FILES =~ .*README\.brew.* ]]
 then
   R -f ../.brewer.R
   git add README.md
