@@ -1854,18 +1854,18 @@ pander.polr <- function (x, ...) {
         cat('\nCall:', pandoc.formula.return(cl), '', sep = '\n')
     }
     if (length(coef(x))) {
-        pandoc.table(coef(x), caption = "Coefficients", ...)
+        pandoc.table(coef(x), caption = 'Coefficients', ...)
     } else {
-        cat("\nNo coefficients\n")
+        cat('\nNo coefficients\n')
     }
-    pandoc.table(x$zeta, caption = "Intercepts", ...)
-    cat("\nResidual Deviance:", format(x$deviance, nsmall = 2L), "\n")
-    cat("AIC:", format(x$deviance + 2 * x$edf, nsmall = 2L), "\n")
+    pandoc.table(x$zeta, caption = 'Intercepts', ...)
+    cat('\nResidual Deviance:', format(x$deviance, nsmall = 2L), '\n')
+    cat('AIC:', format(x$deviance + 2 * x$edf, nsmall = 2L), '\n')
     if (nzchar(mess <- naprint(x$na.action))) {
-        cat("(", mess, ")\n", sep = "")
+        cat('(', mess, ')\n', sep = '')
     }
     if (x$convergence > 0) {
-        cat("Warning: did not converge as iteration limit reached\n")
+        cat('Warning: did not converge as iteration limit reached\n')
     }
     invisible()
 }
@@ -1898,9 +1898,9 @@ pander.ols <- function (x, long = FALSE, coefs = TRUE,
     lrchisq <- stats['Model L.R.']
     ci <- x$clusterInfo
     if (lst <- length(stats)) {
-        misc <- reVector(Obs = stats['n'], sigma = sigma, d.f. = df[2], `Cluster on` = ci$name, Clusters = ci$n)
-        lr <- reVector(`LR chi2` = lrchisq, d.f. = ndf, `Pr(> chi2)` = 1 - pchisq(lrchisq, ndf))
-        disc <- reVector(R2 = r2, `R2 adj` = rsqa, g = stats['g'])
+        misc <- reVector(Obs = stats['n'], sigma = sigma, d.f. = df[2], `Cluster on` = ci$name, Clusters = ci$n) #nolint
+        lr <- reVector(`LR chi2` = lrchisq, d.f. = ndf, `Pr(> chi2)` = 1 - pchisq(lrchisq, ndf)) #nolint
+        disc <- reVector(R2 = r2, `R2 adj` = rsqa, g = stats['g']) #nolint
         sdf <- multitable(list(misc, lr, disc))
         colnames(sdf) <- c('', 'Model Likelihood\nRatio Test', 'Discrimination\nIndexes')
         caption <- pandoc.formula.return(x$call$formula, text = 'Fitting linear model:')
@@ -1959,25 +1959,26 @@ pander.summary.polr <- function(x, digits = panderOptions('digits'), round = pan
     }
     pc <- x$pc
     if (pc > 0) {
-        pander(x$coefficients[seq_len(pc), , drop = FALSE], caption = "Coeficients",
+        pander(x$coefficients[seq_len(pc), , drop = FALSE], caption = 'Coeficients',
                digits = digits, round = round, keep.trailing.zeros = keep.trailing.zeros, ...)
     } else {
-        cat("\nNo coefficients\n")
+        cat('\nNo coefficients\n')
     }
-    pander(x$coefficients[(pc + 1L):nrow(x$coefficients), , drop = FALSE], caption = "Intercepts",
+    pander(x$coefficients[ (pc + 1L):nrow(x$coefficients), , drop = FALSE], caption = 'Intercepts',
           digits = digits, round = round, keep.trailing.zeros = keep.trailing.zeros, ...)
-    cat("\nResidual Deviance:", format(x$deviance, nsmall = 2L), "\n\n")
-    cat("AIC:", format(x$deviance + 2 * x$edf, nsmall = 2L), "\n\n")
+    cat('\nResidual Deviance:', format(x$deviance, nsmall = 2L), '\n\n')
+    cat('AIC:', format(x$deviance + 2 * x$edf, nsmall = 2L), '\n\n')
     if (nzchar(mess <- naprint(x$na.action))) {
-        cat("(", mess, ")\n\n", sep = "")
+        cat('(', mess, ')\n\n', sep = '')
     }
     if (!is.null(correl <- x$correlation)) {
         ll <- lower.tri(correl)
         correl <- apply(correl, c(1,2),
                         p, wrap = '', digits = digits, round = round, keep.trailing.zeros = keep.trailing.zeros)
-        correl[!ll] <- ""
+        correl[!ll] <- ''
         pander(correl[-1L, -ncol(correl)],
-               digits = digits, round = round, keep.trailing.zeros = keep.trailing.zeros, caption = "Correlation of Coefficients", ...)
+               digits = digits, round = round, keep.trailing.zeros = keep.trailing.zeros,
+               caption = 'Correlation of Coefficients', ...)
     }
     invisible(x)
 }
@@ -2005,53 +2006,53 @@ pander.summary.survreg <- function(x, summary = TRUE, digits = panderOptions('di
         cat('\nCall:', pandoc.formula.return(cl), '', sep = '\n\n')
     }
     if (!is.null(x$fail)) {
-        cat(" Survreg failed.", x$fail, "\n\n")
+        cat(' Survreg failed.', x$fail, '\n\n')
         return(invisible())
     }
     if (summary) {
-        pandoc.table(x$table, caption = "Model statistics",
+        pandoc.table(x$table, caption = 'Model statistics',
                      digits = digits, round = round, keep.trailing.zeros = keep.trailing.zeros, ...)
     } else {
         coef <- x$coef
         if (any(nas <- is.na(coef))) {
             if (is.null(names(coef))) {
-                names(coef) <- paste("b", 1:length(coef), sep = "")
+                names(coef) <- paste('b', 1:length(coef), sep = '')
             }
-            cat("\nCoefficients: (", sum(nas), " not defined because of singularities)\n",
-                sep = "")
+            cat('\nCoefficients: (', sum(nas), ' not defined because of singularities)\n',
+                sep = '')
         }
-        pandoc.table(coef, caption = "Coefficients",
+        pandoc.table(coef, caption = 'Coefficients',
                      digits = digits, round = round, keep.trailing.zeros = keep.trailing.zeros,...)
 
     }
     if (nrow(x$var) == length(coef)) {
-        cat("\nScale fixed at", format(x$scale), "\n")
+        cat('\nScale fixed at', format(x$scale), '\n')
     } else if (length(x$scale) == 1) {
-        cat("\nScale=", format(x$scale), "\n")
+        cat('\nScale=', format(x$scale), '\n')
     } else {
         pandoc.table(x$scale, caption = 'Scale', ...)
     }
     nobs <- length(x$linear)
     chi <- 2 * diff(x$loglik)
     df <- sum(x$df) - x$idf
-    pandoc.table(data.frame('Loglik(model)'=x$loglik[2], "Loglik(intercept only)"=x$loglik[1]), ...)
+    pandoc.table(data.frame('Loglik(model)'=x$loglik[2], 'Loglik(intercept only)'=x$loglik[1]), ...)
     if (df > 0) {
-        cat("Chisq=", p(chi, wrap = ''), "on", p(df, wrap = ''),
-            "degrees of freedom, p=",p(signif(1 - pchisq(chi, df), 2), wrap = ''), "\n\n")
+        cat('Chisq=', p(chi, wrap = ''), 'on', p(df, wrap = ''),
+            'degrees of freedom, p=',p(signif(1 - pchisq(chi, df), 2), wrap = ''), '\n\n')
     } else {
-        cat("\n")
+        cat('\n')
     }
     if (summary) {
         if (x$robust) {
-            cat("(Loglikelihood assumes independent observations)\n\n")
+            cat('(Loglikelihood assumes independent observations)\n\n')
         }
-        cat("Number of Newton-Raphson Iterations:", p(trunc(x$iter), wrap =),"\n\n")
+        cat('Number of Newton-Raphson Iterations:', p(trunc(x$iter), wrap =),'\n\n')
     }
     omit <- x$na.action
     if (length(omit)) {
-        cat("n=", nobs, " (", naprint(omit), ")\n", sep = "")
+        cat('n=', nobs, ' (', naprint(omit), ')\n', sep = '')
     } else {
-        cat("n=", nobs, "\n")
+        cat('n=', nobs, '\n')
     }
     if (summary) {
         if (!is.null(correl <- x$correlation)) {
@@ -2060,10 +2061,10 @@ pander.summary.survreg <- function(x, summary = TRUE, digits = panderOptions('di
                 ll <- lower.tri(correl)
                 correl <- apply(correl, c(1,2),
                                 p, wrap = '', digits = digits, round = round, keep.trailing.zeros = keep.trailing.zeros)
-                correl[!ll] <- ""
+                correl[!ll] <- ''
                 pander(correl[-1L, -ncol(correl)],
                        digits = digits, round = round, keep.trailing.zeros = keep.trailing.zeros,
-                       caption = "Correlation of Coefficients", ...)
+                       caption = 'Correlation of Coefficients', ...)
             }
         }
     }
@@ -2178,14 +2179,14 @@ pander.orm <- function (x, coefs = TRUE, intercepts = x$non.slopes < 10, ...) {
         names(x$freq) <- paste(' ', names(x$freq), sep = '')
         misc <- c(misc[1], x$freq, misc[-1])
     }
-    lr <- reVector(`LR chi2` = stats['Model L.R.'],
+    lr <- reVector(`LR chi2` = stats['Model L.R.'], #nolint
                    d.f. = stats['d.f.'],
                    `Pr(> chi2)` = stats['P'],
                    `Score chi2` = stats['Score'],
                    `Pr(> chi2)` = stats['Score P'], Penalty = penaltyFactor)
-    disc <- reVector(R2 = stats['R2'], g = stats['g'], gr = stats['gr'],
+    disc <- reVector(R2 = stats['R2'], g = stats['g'], gr = stats['gr'], #nolint
                      `|Pr(Y>=median)-0.5|` = stats['pdm'])
-    discr <- reVector(rho = stats['rho'])
+    discr <- reVector(rho = stats['rho']) #nolint
     sdf <- multitable(list(misc, lr, disc, discr))
     colnames(sdf) <- c('', 'Model Likelihood\nRatio Test',
                        'Discrimination\nIndexes', 'Rank Discrim.\nIndexes')
@@ -2225,7 +2226,7 @@ pander.Glm <- function (x, coefs = TRUE, ...) {
     ci <- x$clusterInfo
     misc <- reVector(Obs = length(x$residuals), `Residual d.f.` = x$df.residual,
                      `Cluster on` = ci$name, Clusters = ci$n, g = x$g)
-    lr <- reVector(`LR chi2` = lr, d.f. = dof, `Pr(> chi2)` = pval)
+    lr <- reVector(`LR chi2` = lr, d.f. = dof, `Pr(> chi2)` = pval) #nolint
     sdf <- multitable(list(misc, lr))
     colnames(sdf) <- c('', 'Model Likelihood\nRatio Test')
     caption <- pandoc.formula.return(x$call$formula, text = 'General Linear Model')

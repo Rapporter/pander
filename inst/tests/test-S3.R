@@ -966,7 +966,7 @@ test_that('pander.polr/summary.polr works correctly', {
 
 test_that('pander.survreg/summary.survreg works correctly', {
     suppressMessages(require(survival))
-    x <- survreg(Surv(futime, fustat) ~ ecog.ps + rx, ovarian, dist="exponential")
+    x <- survreg(Surv(futime, fustat) ~ ecog.ps + rx, ovarian, dist='exponential')
     res <- pander_return(x)
     expect_equal(length(res), 27)
     expect_equal(length(grep('Table', res)), 1)

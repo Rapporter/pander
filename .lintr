@@ -14,4 +14,4 @@ linters: with_defaults(line_length_linter(120), camel_case_linter = NULL, snake_
                        ranges = list(c(parsed$col1, parsed$col2)),
                        linter = "double_quotes_linter"
                    )}})})
-exclusions: list("R/RcppExports.R")
+exclusions: list("R/RcppExports.R", "inst/doc/pandoc_table.R", "inst/doc/knitr.R", "inst/doc/evals.R")

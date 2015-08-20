@@ -974,7 +974,8 @@ pandoc.table.return <- function(t, caption, digits = panderOptions('digits'), de
     }
     if (!is.null(emphasize.verbatim.cols) && !plain.ascii) {
         check.highlight.parameters(emphasize.verbatim.cols, ncol(t))
-        t[, emphasize.verbatim.cols] <- apply(t[, emphasize.verbatim.cols, drop = FALSE], c(1,2), pandoc.verbatim.return)
+        t[, emphasize.verbatim.cols] <- apply(t[, emphasize.verbatim.cols, drop = FALSE],
+                                              c(1,2), pandoc.verbatim.return)
     }
     if (!is.null(emphasize.verbatim.cells) && !plain.ascii) {
         t <- as.matrix(t)

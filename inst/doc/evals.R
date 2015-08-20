@@ -97,4 +97,3 @@ system.time(evals('plot(mtcars)'))
 ## ---- echo = FALSE, message = FALSE--------------------------------------
 unlink("cachedir", recursive = TRUE, force = TRUE)
 unlink("my_plots", recursive = TRUE, force = TRUE)
-
