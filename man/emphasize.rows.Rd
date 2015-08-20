@@ -3,10 +3,16 @@
 \name{emphasize.rows}
 \alias{emphasize.cells}
 \alias{emphasize.cols}
+\alias{emphasize.italics.cells}
+\alias{emphasize.italics.cols}
+\alias{emphasize.italics.rows}
 \alias{emphasize.rows}
 \alias{emphasize.strong.cells}
 \alias{emphasize.strong.cols}
 \alias{emphasize.strong.rows}
+\alias{emphasize.verbatim.cells}
+\alias{emphasize.verbatim.cols}
+\alias{emphasize.verbatim.rows}
 \title{Emphasize rows/columns/cells}
 \usage{
 emphasize.rows(x)
@@ -20,6 +26,18 @@ emphasize.strong.rows(x)
 emphasize.strong.cols(x)
 
 emphasize.strong.cells(x)
+
+emphasize.italics.rows(x)
+
+emphasize.italics.cols(x)
+
+emphasize.italics.cells(x)
+
+emphasize.verbatim.rows(x)
+
+emphasize.verbatim.cols(x)
+
+emphasize.verbatim.cells(x)
 }
 \arguments{
 \item{x}{vector of row/columns indexes or an array like returned by \code{which(..., arr.ind = TRUE)}}

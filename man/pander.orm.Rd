@@ -11,6 +11,8 @@
 
 \item{coefs}{if to the table of model coefficients, standard errors, etc. default(\code{TRUE})}
 
+\item{intercepts}{if to print intercepts, by default, intercepts are only printed if there are fewer than 10 of them}
+
 \item{...}{optional parameters passed to raw \code{pandoc.table} function}
 }
 \description{

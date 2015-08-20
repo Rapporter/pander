@@ -24,6 +24,10 @@ p(x, wrap = panderOptions("p.wrap"), sep = panderOptions("p.sep"),
 \item{keep.trailing.zeros}{to show or remove trailing zeros in numbers}
 
 \item{missing}{string to replace missing values}
+
+\item{digits}{numeric (default: 2) passed to format}
+
+\item{round}{numeric (default: Inf) passed to round}
 }
 \value{
 a string with concatenated vector contents

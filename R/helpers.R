@@ -46,6 +46,8 @@ repChar <- function(x, n, sep = '')
 #' @param limit maximum character length (defaults to \code{Inf}initive  elements)
 #' @param keep.trailing.zeros to show or remove trailing zeros in numbers
 #' @param missing string to replace missing values
+#' @param digits numeric (default: 2) passed to format
+#' @param round numeric (default: Inf) passed to round
 #' @return a string with concatenated vector contents
 #' @examples
 #' p(c('fee', 'fi', 'foo', 'fam'))
@@ -225,7 +227,7 @@ get.alignment <- function(df) {
 #'
 #' Storing indexes of cells to be (strong) emphasized of a tabular data in an internal buffer that can be released and applied by \code{\link{pandoc.table}}, \code{\link{pander}} or \code{\link{evals}} later.
 #' @param x vector of row/columns indexes or an array like returned by \code{which(..., arr.ind = TRUE)}
-#' @aliases emphasize.rows emphasize.cols emphasize.cells emphasize.strong.rows emphasize.strong.cols emphasize.strong.cells
+#' @aliases emphasize.rows emphasize.cols emphasize.cells emphasize.strong.rows emphasize.strong.cols emphasize.strong.cells emphasize.italics.rows emphasize.italics.cols emphasize.italics.cells emphasize.verbatim.rows emphasize.verbatim.cols emphasize.verbatim.cells
 #' @usage
 #' emphasize.rows(x)
 #'
@@ -238,6 +240,18 @@ get.alignment <- function(df) {
 #' emphasize.strong.cols(x)
 #'
 #' emphasize.strong.cells(x)
+#' 
+#' emphasize.italics.rows(x)
+#'
+#' emphasize.italics.cols(x)
+#'
+#' emphasize.italics.cells(x)
+#' 
+#' emphasize.verbatim.rows(x)
+#'
+#' emphasize.verbatim.cols(x)
+#'
+#' emphasize.verbatim.cells(x)
 #' @export
 #' @examples \dontrun{
 #' n <- data.frame(x = c(1,1,1,1,1), y = c(0,1,0,1,0))

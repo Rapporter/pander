@@ -152,7 +152,8 @@ pandoc.table(t$mpg, emphasize.strong.cells = 1:2)
 pandoc.table(t, emphasize.italics.cells = which(t > 20, arr.ind = TRUE))
 pandoc.table(t, emphasize.italics.cells = which(t == 6, arr.ind = TRUE))
 pandoc.table(t, emphasize.verbatim.cells = which(t == 6, arr.ind = TRUE))
-pandoc.table(t, emphasize.verbatim.cells = which(t == 6, arr.ind = TRUE), emphasize.italics.rows = 1)
+pandoc.table(t, emphasize.verbatim.cells = which(t == 6, arr.ind = TRUE),
+ emphasize.italics.rows = 1)
 ## with helpers
 emphasize.cols(1)
 emphasize.rows(1)
