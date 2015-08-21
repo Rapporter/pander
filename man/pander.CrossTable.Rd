@@ -17,9 +17,9 @@
 
 \item{total.r}{if to print row totals. Default values is taken from CrossTable object}
 
-\item{...}{optional parameters passed to raw \code{pandoc.table} function}
+\item{total.c}{if to print column totals. Default values is taken from CrossTable object}
 
-\item{total.r}{if to print column totals. Default values is taken from CrossTable object}
+\item{...}{optional parameters passed to raw \code{pandoc.table} function}
 }
 \description{
 Prints a CrossTable object in Pandoc's markdown.

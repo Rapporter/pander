@@ -1,6 +1,6 @@
 ---
-title: "Evals"
-author: "Roman Tsegelskyi "
+title: "Capturing evaluation information with evals"
+author: "Roman Tsegelskyi, Gergely Daróczi"
 date: "`r Sys.Date()`"
 output: rmarkdown::html_vignette
 vignette: >

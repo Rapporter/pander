@@ -836,7 +836,7 @@ pander.mtable <- function(x, caption = attr(x, 'caption'), ...) {
 #' @param caption caption (string) to be shown under the table
 #' @param digits number of digits of precision
 #' @param total.r if to print row totals. Default values is taken from CrossTable object
-#' @param total.r if to print column totals. Default values is taken from CrossTable object
+#' @param total.c if to print column totals. Default values is taken from CrossTable object
 #' @param ... optional parameters passed to raw \code{pandoc.table} function
 #' @export
 pander.CrossTable <- function(x, caption = attr(x, 'caption'), digits = panderOptions('digits'),
@@ -1898,9 +1898,9 @@ pander.ols <- function (x, long = FALSE, coefs = TRUE,
     lrchisq <- stats['Model L.R.']
     ci <- x$clusterInfo
     if (lst <- length(stats)) {
-        misc <- reVector(Obs = stats['n'], sigma = sigma, d.f. = df[2], `Cluster on` = ci$name, Clusters = ci$n) #nolint
-        lr <- reVector(`LR chi2` = lrchisq, d.f. = ndf, `Pr(> chi2)` = 1 - pchisq(lrchisq, ndf)) #nolint
-        disc <- reVector(R2 = r2, `R2 adj` = rsqa, g = stats['g']) #nolint
+        misc <- rms::reVector(Obs = stats['n'], sigma = sigma, d.f. = df[2], `Cluster on` = ci$name, Clusters = ci$n) #nolint
+        lr <- rms::reVector(`LR chi2` = lrchisq, d.f. = ndf, `Pr(> chi2)` = 1 - pchisq(lrchisq, ndf)) #nolint
+        disc <- rms::reVector(R2 = r2, `R2 adj` = rsqa, g = stats['g']) #nolint
         sdf <- multitable(list(misc, lr, disc))
         colnames(sdf) <- c('', 'Model Likelihood\nRatio Test', 'Discrimination\nIndexes')
         caption <- pandoc.formula.return(x$call$formula, text = 'Fitting linear model:')
@@ -2101,7 +2101,7 @@ pander.lrm <- function (x, coefs = TRUE, ...)  {
     stats <- x$stats
     maxd <- signif(stats['Max Deriv'], 1)
     ci <- x$clusterInfo
-    misc <- reVector(Obs = stats['Obs'],
+    misc <- rms::reVector(Obs = stats['Obs'],
                      `Sum of weights` = stats['Sum of Weights'],
                      Strata = if (nstrata > 1) nstrata,
                      `Cluster on` = ci$name, Clusters = ci$n,
@@ -2110,13 +2110,13 @@ pander.lrm <- function (x, coefs = TRUE, ...)  {
         names(x$freq) <- paste(' ', names(x$freq), sep = '')
         misc <- c(misc[1], x$freq, misc[-1])
     }
-    lr <- reVector(`LR chi2` = stats['Model L.R.'],
+    lr <- rms::reVector(`LR chi2` = stats['Model L.R.'],
                    d.f. = stats['d.f.'],
                    `Pr(> chi2)` = stats['P'],
                    Penalty = penaltyFactor)
-    disc <- reVector(R2 = stats['R2'], g = stats['g'], gr = stats['gr'],
+    disc <- rms::reVector(R2 = stats['R2'], g = stats['g'], gr = stats['gr'],
                      gp = stats['gp'], Brier = stats['Brier'])
-    discr <- reVector(C = stats['C'], Dxy = stats['Dxy'], gamma = stats['Gamma'],
+    discr <- rms::reVector(C = stats['C'], Dxy = stats['Dxy'], gamma = stats['Gamma'],
                       `tau-a` = stats['Tau-a'])
     sdf <- multitable(list(misc, lr, disc, discr))
     colnames(sdf) <- c('', 'Model Likelihood\nRatio Test',
@@ -2134,6 +2134,7 @@ pander.lrm <- function (x, coefs = TRUE, ...)  {
 #' Prints an orm object from rms package in Pandoc's markdown.
 #' @param x an orm object
 #' @param coefs if to the table of model coefficients, standard errors, etc. default(\code{TRUE})
+#' @param intercepts if to print intercepts, by default, intercepts are only printed if there are fewer than 10 of them 
 #' @param ... optional parameters passed to raw \code{pandoc.table} function
 #' @export
 pander.orm <- function (x, coefs = TRUE, intercepts = x$non.slopes < 10, ...) {
@@ -2172,21 +2173,21 @@ pander.orm <- function (x, coefs = TRUE, intercepts = x$non.slopes < 10, ...) {
     stats <- x$stats
     maxd <- signif(stats['Max Deriv'], 1)
     ci <- x$clusterInfo
-    misc <- reVector(Obs = stats['Obs'], `Unique Y` = stats['Unique Y'],
+    misc <- rms::reVector(Obs = stats['Obs'], `Unique Y` = stats['Unique Y'],
                      `Cluster on` = ci$name, Clusters = ci$n, `Median Y` = stats['Median Y'],
                      `max |deriv|` = maxd)
     if (length(x$freq) < 4) {
         names(x$freq) <- paste(' ', names(x$freq), sep = '')
         misc <- c(misc[1], x$freq, misc[-1])
     }
-    lr <- reVector(`LR chi2` = stats['Model L.R.'], #nolint
+    lr <- rms::reVector(`LR chi2` = stats['Model L.R.'], #nolint
                    d.f. = stats['d.f.'],
                    `Pr(> chi2)` = stats['P'],
                    `Score chi2` = stats['Score'],
                    `Pr(> chi2)` = stats['Score P'], Penalty = penaltyFactor)
-    disc <- reVector(R2 = stats['R2'], g = stats['g'], gr = stats['gr'], #nolint
+    disc <- rms::reVector(R2 = stats['R2'], g = stats['g'], gr = stats['gr'], #nolint
                      `|Pr(Y>=median)-0.5|` = stats['pdm'])
-    discr <- reVector(rho = stats['rho']) #nolint
+    discr <- rms::reVector(rho = stats['rho']) #nolint
     sdf <- multitable(list(misc, lr, disc, discr))
     colnames(sdf) <- c('', 'Model Likelihood\nRatio Test',
                        'Discrimination\nIndexes', 'Rank Discrim.\nIndexes')
@@ -2224,9 +2225,9 @@ pander.Glm <- function (x, coefs = TRUE, ...) {
     dof <- x$rank - (names(cof)[1] == 'Intercept')
     pval <- 1 - pchisq(lr, dof)
     ci <- x$clusterInfo
-    misc <- reVector(Obs = length(x$residuals), `Residual d.f.` = x$df.residual,
+    misc <- rms::reVector(Obs = length(x$residuals), `Residual d.f.` = x$df.residual,
                      `Cluster on` = ci$name, Clusters = ci$n, g = x$g)
-    lr <- reVector(`LR chi2` = lr, d.f. = dof, `Pr(> chi2)` = pval) #nolint
+    lr <- rms::reVector(`LR chi2` = lr, d.f. = dof, `Pr(> chi2)` = pval) #nolint
     sdf <- multitable(list(misc, lr))
     colnames(sdf) <- c('', 'Model Likelihood\nRatio Test')
     caption <- pandoc.formula.return(x$call$formula, text = 'General Linear Model')
@@ -2255,13 +2256,13 @@ pander.cph <- function (x, table = TRUE, conf.int = FALSE, coefs = TRUE, ...) {
     if (length(x$coef)) {
         stats <- x$stats
         ci <- x$clusterInfo
-        misc <- reVector(Obs = stats['Obs'], Events = stats['Events'],
+        misc <- rms::reVector(Obs = stats['Obs'], Events = stats['Events'],
                          `Cluster on` = ci$name, Clusters = ci$n,
                          Center = x$center)
-        lr <- reVector(`LR chi2` = stats['Model L.R.'], d.f. = stats['d.f.'],
+        lr <- rms::reVector(`LR chi2` = stats['Model L.R.'], d.f. = stats['d.f.'],
                        `Pr(> chi2)` = stats['P'], `Score chi2` = stats['Score'],
                        `Pr(> chi2)` = stats['Score P'])
-        disc <- reVector(R2 = stats['R2'], Dxy = stats['Dxy'],
+        disc <- rms::reVector(R2 = stats['R2'], Dxy = stats['Dxy'],
                          g = stats['g'], gr = stats['gr'])
         sdf <- multitable(list(misc, lr, disc))
         colnames(sdf) <- c('', 'Model Likelihood\nRatio Test',
@@ -2298,17 +2299,18 @@ pander.cph <- function (x, table = TRUE, conf.int = FALSE, coefs = TRUE, ...) {
 pander.summary.rms <- function (x, ...) {
     cstats <- dimnames(x)[[1]]
     for (i in 1:7) cstats <- cbind(cstats, signif(x[, i], 5))
-    dimnames(cstats) <- list(rep("", nrow(cstats)), c("Factor", dimnames(x)[[2]][1:7]))
+    dimnames(cstats) <- list(rep('', nrow(cstats)), c('Factor', dimnames(x)[[2]][1:7]))
     pandoc.table(cstats, ...)
-    if ((A <- attr(x, "adjust")) != "") 
-        cat("\nAdjusted to:", A, "\n")
-    blab <- switch(attr(x, "conf.type"), `bootstrap nonparametric percentile` = "Bootstrap nonparametric percentile confidence intervals", 
-                   `bootstrap BCa` = "Bootstrap BCa confidence intervals", 
-                   `basic bootstrap` = "Basic bootstrap confidence intervals", 
-                   "")
-    if (blab != "") {
-        cat("\n", blab, "\n", sep = "")
+    if ((A <- attr(x, 'adjust')) != '')
+        cat('\nAdjusted to:', A, '\n')
+    blab <- switch(attr(x, 'conf.type'),
+                   `bootstrap nonparametric percentile` = 'Bootstrap nonparametric percentile confidence intervals',
+                   `bootstrap BCa` = 'Bootstrap BCa confidence intervals',
+                   `basic bootstrap` = 'Basic bootstrap confidence intervals',
+                   '')
+    if (blab != '') {
+        cat('\n', blab, '\n', sep = '')
     }
-    cat("\n")
+    cat('\n')
     invisible()
 }
