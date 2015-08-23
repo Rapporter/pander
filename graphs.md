@@ -38,43 +38,43 @@ Not touching the above ones, let us check out how different plots look like by c
 
 ### Base R plot
 
-[![](plots/graphs-1.png)](plots/graphs-1-hires.png)
+![](./plots/graphs-1.png) **WARNING**^[Applying default formatting to image is somehow compromised (the result could differ from what you specified in `panderOptions`). Hints: printing `lattice`/`ggplot2` is not needed and tweaking `base` plots with `par` might have some side-effects!]
 
 ### lattice
 
-[![](plots/graphs-2.png)](plots/graphs-2-hires.png)
+![](./plots/graphs-2.png)
 
 ### ggplot2
 
-[![](plots/graphs-3.png)](plots/graphs-3-hires.png)
+![](./plots/graphs-3.png)
 
 ## Barplot
 
 ### Base R plot
 
-[![](plots/graphs-4.png)](plots/graphs-4-hires.png)
+![](./plots/graphs-4.png) **WARNING**^[Applying default formatting to image is somehow compromised (the result could differ from what you specified in `panderOptions`). Hints: printing `lattice`/`ggplot2` is not needed and tweaking `base` plots with `par` might have some side-effects!]
 
 ### lattice
 
-[![](plots/graphs-5.png)](plots/graphs-5-hires.png)
+![](./plots/graphs-5.png)
 
 ### ggplot2
 
-[![](plots/graphs-6.png)](plots/graphs-6-hires.png)
+![](./plots/graphs-6.png)
 
 ## Points
 
 ### Base R plot
 
-[![](plots/graphs-7.png)](plots/graphs-7-hires.png)
+![](./plots/graphs-7.png) **WARNING**^[Applying default formatting to image is somehow compromised (the result could differ from what you specified in `panderOptions`). Hints: printing `lattice`/`ggplot2` is not needed and tweaking `base` plots with `par` might have some side-effects!]
 
 ### lattice
 
-[![](plots/graphs-8.png)](plots/graphs-8-hires.png)
+![](./plots/graphs-8.png)
 
 ### ggplot2
 
-[![](plots/graphs-9.png)](plots/graphs-9-hires.png)
+![](./plots/graphs-9.png)
 
 ## Grouped plot
 
@@ -84,11 +84,11 @@ I have no idea how to do that besides manually adding `points`.
 
 ### lattice
 
-[![](plots/graphs-10.png)](plots/graphs-10-hires.png)
+![](./plots/graphs-10.png)
 
 ### ggplot2
 
-[![](plots/graphs-11.png)](plots/graphs-11-hires.png)
+![](./plots/graphs-11.png)
 
 ## Facets
 
@@ -98,39 +98,39 @@ I have no idea how to do that besides `par(mfrow=c(foo, bar))`.
 
 ### lattice
 
-[![](plots/graphs-12.png)](plots/graphs-12-hires.png)
+![](./plots/graphs-12.png)
 
 ### ggplot2
 
-[![](plots/graphs-13.png)](plots/graphs-13-hires.png)
+![](./plots/graphs-13.png)
 
 ## Boxplot
 
 ### Base R plot
 
-[![](plots/graphs-14.png)](plots/graphs-14-hires.png)
+![](./plots/graphs-14.png) **WARNING**^[Applying default formatting to image is somehow compromised (the result could differ from what you specified in `panderOptions`). Hints: printing `lattice`/`ggplot2` is not needed and tweaking `base` plots with `par` might have some side-effects!]
 
 ### lattice
 
-[![](plots/graphs-15.png)](plots/graphs-15-hires.png)
+![](./plots/graphs-15.png)
 
 ### ggplot2
 
-[![](plots/graphs-16.png)](plots/graphs-16-hires.png)
+![](./plots/graphs-16.png)
 
 ## Lines
 
 ### Base R plot
 
-[![](plots/graphs-17.png)](plots/graphs-17-hires.png)
+![](./plots/graphs-17.png) **WARNING**^[Applying default formatting to image is somehow compromised (the result could differ from what you specified in `panderOptions`). Hints: printing `lattice`/`ggplot2` is not needed and tweaking `base` plots with `par` might have some side-effects!]
 
 ### lattice
 
-[![](plots/graphs-18.png)](plots/graphs-18-hires.png)
+![](./plots/graphs-18.png)
 
 ### ggplot2
 
-[![](plots/graphs-19.png)](plots/graphs-19-hires.png)
+![](./plots/graphs-19.png)
 
 # Custom options
 
@@ -153,51 +153,51 @@ panderOptions('graph.symbol', 22)
 
 ### Base R plot
 
-[![](plots/graphs-20.png)](plots/graphs-20-hires.png)
+![](./plots/graphs-20.png)
 
 ### lattice
 
-[![](plots/graphs-21.png)](plots/graphs-21-hires.png)
+![](./plots/graphs-21.png)
 
 ### ggplot2
 
-[![](plots/graphs-22.png)](plots/graphs-22-hires.png)
+![](./plots/graphs-22.png)
 
 ## Barplot
 
 ### Base R plot
 
-[![](plots/graphs-23.png)](plots/graphs-23-hires.png)
+![](./plots/graphs-23.png)
 
 Yeah, the "Foo bar" label is cropped. We need a custom `mar` option here:
 
-[![](plots/graphs-24.png)](plots/graphs-24-hires.png)
+![](./plots/graphs-24.png)
 
 But wait, we lost the color! Right: unfortunately coloring base R plots is really hackish, `pander` is adding the `col` attribute to the calls. If you start to tweak `par` in a chunk, you should prepare to some unwanted side-effects. Solution:
 
-[![](plots/graphs-25.png)](plots/graphs-25-hires.png)
+![](./plots/graphs-25.png)
 
 ### lattice
 
-[![](plots/graphs-26.png)](plots/graphs-26-hires.png)
+![](./plots/graphs-26.png)
 
 ### ggplot2
 
-[![](plots/graphs-27.png)](plots/graphs-27-hires.png)
+![](./plots/graphs-27.png)
 
 ## Points
 
 ### Base R plot
 
-[![](plots/graphs-28.png)](plots/graphs-28-hires.png)
+![](./plots/graphs-28.png)
 
 ### lattice
 
-[![](plots/graphs-29.png)](plots/graphs-29-hires.png)
+![](./plots/graphs-29.png)
 
 ### ggplot2
 
-[![](plots/graphs-30.png)](plots/graphs-30-hires.png)
+![](./plots/graphs-30.png)
 
 ## Grouped plot
 
@@ -207,11 +207,11 @@ I have no idea how to do that besides manually adding `points`.
 
 ### lattice
 
-[![](plots/graphs-31.png)](plots/graphs-31-hires.png)
+![](./plots/graphs-31.png)
 
 ### ggplot2
 
-[![](plots/graphs-32.png)](plots/graphs-32-hires.png)
+![](./plots/graphs-32.png)
 
 ## Facets
 
@@ -221,42 +221,38 @@ I have no idea how to do that besides `par(mfrow=c(foo, bar))`.
 
 ### lattice
 
-[![](plots/graphs-33.png)](plots/graphs-33-hires.png)
+![](./plots/graphs-33.png)
 
 ### ggplot2
 
-[![](plots/graphs-34.png)](plots/graphs-34-hires.png)
+![](./plots/graphs-34.png)
 
 ## Boxplot
 
 ### Base R plot
 
-[![](plots/graphs-35.png)](plots/graphs-35-hires.png)
+![](./plots/graphs-35.png)
 
 ### lattice
 
-[![](plots/graphs-36.png)](plots/graphs-36-hires.png)
+![](./plots/graphs-36.png)
 
 ### ggplot2
 
-[![](plots/graphs-37.png)](plots/graphs-37-hires.png)
+![](./plots/graphs-37.png)
 
 ## Lines
 
 ### Base R plot
 
-[![](plots/graphs-38.png)](plots/graphs-38-hires.png)
+![](./plots/graphs-38.png)
 
 ### lattice
 
-[![](plots/graphs-39.png)](plots/graphs-39-hires.png)
+![](./plots/graphs-39.png)
 
 ### ggplot2
 
-[![](plots/graphs-40.png)](plots/graphs-40-hires.png)
+![](./plots/graphs-40.png)
 
  
-
-
--------
-This report was generated with [R](http://www.r-project.org/) (2.15.1) and [pander](https://github.com/rapporter/pander) (0.2) in 14.579 sec on x86_64-unknown-linux-gnu platform.

@@ -55,15 +55,14 @@ code > span.er { color: #ff0000; font-weight: bold; }
 <body>
 <h1 id="pander-an-r-pandoc-writer"><a href="https://github.com/Rapporter/pander">pander: An R Pandoc Writer</a></h1>
 <p>The main aim of the <em>pander</em> <a href="http://r-project.org">R</a> package is to provide a minimal and easy tool for rendering <strong>R objects</strong> into <a href="http://johnmacfarlane.net/pandoc/">Pandoc</a>'s <strong>markdown</strong>. The package is also capable of exporting/converting complex Pandoc documents (reports) in <a href="#creating-pandoc-documents">various ways</a>. Regarding the difference between <code>pander</code> and other packages for exporting R objects to different file formats, please refer to this <a href="#difference-from-other-rendering-packages">section</a>.</p>
+<p>Current build and test coverage status: <a href="https://travis-ci.org/Rapporter/pander"><img src="https://travis-ci.org/Rapporter/pander.png?branch=master" /></a> <a href="http://codecov.io/github/Rapporter/pander?branch=master"><img src="http://codecov.io/github/Rapporter/pander/coverage.svg?branch=master" /></a>.</p>
+<p>Some CRAN statistics: <a href="http://cran.rstudio.com/web/packages/pander/index.html"><img src="http://cranlogs.r-pkg.org/badges/pander" /></a> <a href="http://cran.rstudio.com/web/packages/pander/index.html"><img src="http://cranlogs.r-pkg.org/badges/grand-total/pander" /></a></p>
 <h1 id="installation">Installation</h1>
-<p>The stable version can be found on <a href="http://cran.r-project.org/web/packages/pander/">CRAN</a> and can be installed easily in the R console like any other package:</p>
+<p>The stable version <a href="http://cran.r-project.org/web/packages/pander/index.html"><img src="http://www.r-pkg.org/badges/version/pander" /></a> can be installed easily in the <code>R</code> console like any other package:</p>
 <pre class="sourceCode r"><code class="sourceCode r"><span class="kw">install.packages</span>(<span class="st">&#39;pander&#39;</span>)</code></pre>
-<p>On the other hand, I welcome everyone to use the most recent version of the package with quick-fixes, new features and probably new bugs. It's currently hosted on <a href="https://github.com/Rapporter/pander">GitHub</a></p>
-<p>Current build and test coverage status: <a href="https://travis-ci.org/Rapporter/pander"><img src="https://travis-ci.org/Rapporter/pander.png?branch=master" /></a> <a href="https://coveralls.io/r/Rapporter/pander?branch=master"><img src="https://coveralls.io/repos/Rapporter/pander/badge.svg?branch=master" /></a></p>
-<p>It can be installed easily with the nifty function of the <code>devtools</code> package from <a href="http://cran.r-project.org/web/packages/devtools/index.html">CRAN</a>:</p>
-<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(devtools)
-<span class="kw">install_github</span>(<span class="st">&#39;pander&#39;</span>, <span class="st">&#39;Rapporter&#39;</span>)</code></pre>
-<p>Or download the <a href="https://github.com/Rapporter/pander/zipball/master">sources</a> and build manually. If you're running R on Windows, you need to install <a href="http://cran.stat.ucla.edu/bin/windows/Rtools/">Rtools</a>.</p>
+<p>On the other hand, I welcome everyone to use the most recent version of the package with quick-fixes, new features and probably new bugs. It's currently hosted on <a href="https://github.com/Rapporter/pander">GitHub</a>. To get the latest development version from <a href="https://github.com/Rapporter/pander">GitHub</a> of the <code>devtools</code> package from <a href="http://cran.r-project.org/web/packages/devtools/index.html">CRAN</a>:</p>
+<pre class="sourceCode r"><code class="sourceCode r">devtools::<span class="kw">install_github</span>(<span class="st">&#39;Rapporter/pander&#39;</span>)</code></pre>
+<p>Or download the <a href="https://github.com/Rapporter/pander/zipball/master">sources</a> and build manually. If you're running R on Windows, you will need to install <a href="http://cran.stat.ucla.edu/bin/windows/Rtools/">Rtools</a>.</p>
 <h2 id="dependencies">Dependencies</h2>
 <p>Few cool packages from CRAN are needed for installing and/or using <code>pander</code>:</p>
 <ul>
@@ -74,8 +73,9 @@ code > span.er { color: #ff0000; font-weight: bold; }
 <ul>
 <li><a href="http://cran.r-project.org/web/packages/koRpus/index.html">koRpus</a> to use hyphenation when splitting large table cells,</li>
 <li><a href="http://cran.r-project.org/web/packages/lattice/index.html">lattice</a> and <a href="http://cran.r-project.org/web/packages/ggplot2/index.html">ggplot2</a> for unified plot theme,</li>
-<li><a href="http://cran.r-project.org/web/packages/survival/index.html">survival</a>, <a href="http://cran.r-project.org/web/packages/microbenchmark/index.html">microbenchmark</a>, <a href="http://cran.r-project.org/web/packages/zoo/index.html">zoo</a>, <a href="http://cran.r-project.org/web/packages/nlme/index.html">nlme</a>, <a href="http://cran.r-project.org/web/packages/descr/index.html">descr</a>, <a href="http://cran.r-project.org/web/packages/MASS/index.html">MASS</a> packages includes some supported R classes,</li>
-<li>and <em>pander</em> can be also very useful inside of <a href="http://cran.r-project.org/web/packages/knitr/index.html">knitr</a>.</li>
+<li><a href="https://cran.r-project.org/web/packages/futile.logger/index.html">futile.logger</a> for logging capabilities inside <code>evals</code>,</li>
+<li><a href="http://cran.r-project.org/web/packages/survival/index.html">survival</a>, <a href="http://cran.r-project.org/web/packages/microbenchmark/index.html">microbenchmark</a>, <a href="http://cran.r-project.org/web/packages/zoo/index.html">zoo</a>, <a href="http://cran.r-project.org/web/packages/nlme/index.html">nlme</a>, <a href="http://cran.r-project.org/web/packages/descr/index.html">descr</a>, <a href="http://cran.r-project.org/web/packages/MASS/index.html">MASS</a>, <a href="https://cran.r-project.org/web/packages/tables/index.html">tables</a>, <a href="https://cran.r-project.org/web/packages/reshape/index.html">reshape</a>, <a href="https://cran.r-project.org/web/packages/memisc/">memisc</a>, <a href="https://cran.r-project.org/web/packages/Epi/">Epi</a>, <a href="https://cran.r-project.org/web/packages/randomForest/">randomForest</a>, <a href="https://cran.r-project.org/web/packages/tseries/">tseries</a>, <a href="https://cran.r-project.org/web/packages/rms/">rms</a> packages include some supported R classes,</li>
+<li>and <em>pander</em> can be also very useful inside of <a href="http://cran.r-project.org/web/packages/knitr/index.html">knitr</a>. More information about how to use <em>pander</em> and <em>knitr</em> can be found specialized vignette, which can be accessed by <code>vignette('knitr', package = 'pander')</code> or available online <a href="http://rapporter.github.io/pander/knitr.html">here</a>.</li>
 </ul>
 <h3 id="pandoc">Pandoc</h3>
 <p><em>pander</em> heavily builds on <a href="http://johnmacfarlane.net/pandoc">Pandoc</a>, which should be <strong>pre-installed</strong> before trying to convert your reports to <a href="http://johnmacfarlane.net/pandoc/">different formats</a>. Although <strong>main functions work without Pandoc</strong>, e.g. you can transform R objects into markdown or generate a markdown formatted report via <a href="#brew-to-pandoc">Pandoc.brew</a> or the custom <a href="#live-report-generation">reference class</a>, but installing that great piece of software is suggested if you want to convert markdown to PDF/docx/HTML or other formats.</p>
@@ -128,7 +128,8 @@ II. Second element
 </code></pre>
 <p><a id="tables"></a></p>
 <h1 id="markdown-tables">Markdown tables</h1>
-<p>One of the most popular feature in <em>pander</em> is <code>pandoc.table</code>, rendering most tabular R objects into markdown tables with various options and settings (e.g. <a href="#style">style</a>, <a href="#caption">caption</a>, <a href="#highlight-cells">cell highlighting</a>, <a href="#cell-alignment">cell alignment</a>, <a href="#table-and-cell-width">width</a>):</p>
+<p>One of the most popular feature in <em>pander</em> is <code>pandoc.table</code>, rendering most tabular R objects into markdown tables with various options and settings (e.g. <a href="#style">style</a>, <a href="#caption">caption</a>, <a href="#highlight-cells">cell highlighting</a>, <a href="#cell-alignment">cell alignment</a>, <a href="#table-and-cell-width">width</a>). This section aims to provide quick introduction to most common options, but for more usage/implementation details and examples, please refer to specialized vignette, which can be accessed by <code>vignette('pandoc_table')</code> or available online <a href="http://rapporter.github.io/pander/pandoc_table.html">here</a>.</p>
+<p>Let's start with a small example:</p>
 <pre class="sourceCode r"><code class="sourceCode r">&gt;<span class="st"> </span><span class="kw">pandoc.table</span>(mtcars[<span class="dv">1</span>:<span class="dv">3</span>, <span class="dv">1</span>:<span class="dv">4</span>])</code></pre>
 <p>Which command produces the following output by default:</p>
 <pre><code>-------------------------------------------
@@ -220,32 +221,34 @@ Table: Hello caption!
 <p>One of the fanciest features in <em>pander</em> is the ease of highlighting rows, columns or any cells in a table. This is a real markdown feature without custom HTML or LaTeX-only tweaks, so all HTML/PDF/MS Word/OpenOffice etc. formats are supported.</p>
 <p>This can be achieved by calling <code>pandoc.table</code> directly and passing any (or more) of the following arguments <strong>or</strong> calling the R function with the same names before rendering a table with either the <code>pander</code> <a href="#generic-pander-method">generic S3 method</a> or via <code>pandoc.table</code>:</p>
 <ul>
-<li>emphasize.rows</li>
-<li>emphasize.cols</li>
-<li>emphasize.cells</li>
+<li>emphasize.italics.rows</li>
+<li>emphasize.italics.cols</li>
+<li>emphasize.italics.cells</li>
 <li>emphasize.strong.rows</li>
 <li>emphasize.strong.cols</li>
 <li>emphasize.strong.cells</li>
+<li>emphasize.verbatim.rows</li>
+<li>emphasize.verbatim.cols</li>
+<li>emphasize.verbatim.cells</li>
 </ul>
-<p>The <code>emphasize</code> helpers would turn the affected cells to <em>italic</em>, while <code>emphasize.strong</code> would apply a <strong>bold style</strong> to the cell. Of course a cell can be also <strong><em>italic and strong</em></strong> at the same time.</p>
+<p>The <code>emphasize.italics</code> helpers would turn the affected cells to <em>italic</em>, <code>emphasize.strong</code> would apply a <strong>bold</strong> style to the cell and <code>emphasize.verbatim</code> would apply a <code>verbatim</code> style to the cell. A cell can be also <em>italic</em>, <strong>bold</strong> and <code>verbatim</code> at the same time.</p>
 <p>Those functions and arguments ending in <code>rows</code> or <code>cols</code> take a vector (like which columns or rows to emphasize in a table), while the <code>cells</code> argument take either a vector (for one dimensional &quot;tables&quot;) or an array-like data structure with two columns holding row and column indexes of cells to be emphasized -- just like what <code>which(..., arr.ind = TRUE)</code> returns. A quick-example:</p>
 <pre class="rout"><code>&gt; t &lt;- mtcars[1:3, 1:5]
-&gt; emphasize.cols(1)
-&gt; emphasize.rows(1)
+&gt; emphasize.italics.cols(1)
+&gt; emphasize.italics.rows(1)
 &gt; emphasize.strong.cells(which(t &gt; 20, arr.ind = TRUE))
 &gt; pandoc.table(t)
 
--------------------------------------------------------------
-      &amp;nbsp;          mpg     cyl    disp       hp      drat 
-------------------- -------- ----- --------- --------- ------
-   **Mazda RX4**    ***21***  *6*  ***160*** ***110*** *3.9* 
+---------------------------------------------------------------
+      &amp;nbsp;           mpg      cyl    disp       hp      drat 
+------------------- ---------- ----- --------- --------- ------
+   **Mazda RX4**     ***21***   *6*  ***160*** ***110*** *3.9* 
 
- **Mazda RX4 Wag**  ***21***   6    **160**   **110**   3.9  
+ **Mazda RX4 Wag**   ***21***    6    **160**   **110**   3.9  
 
-  **Datsun 710**    ***21***   4    **108**   **93**    3.85 
--------------------------------------------------------------
-
- **WARNING**^[provided 3 variables to replace 1 variables]</code></pre>
+  **Datsun 710**    ***22.8***   4    **108**   **93**    3.85 
+---------------------------------------------------------------
+</code></pre>
 <p>For more examples, please see our &quot;<a href="http://blog.rapporter.net/2013/04/hihglight-cells-in-markdown-tables.html">Highlight cells in markdown tables</a>&quot; blog post.</p>
 <h2 id="cell-alignment">Cell alignment</h2>
 <p>You can specify the alignment of the cells (left, right or center/centre) in a table directly by setting the <code>justify</code> parameter:</p>
@@ -348,25 +351,93 @@ foo-
 -----
 </code></pre>
 <h2 id="minor-features">Minor features</h2>
-<p>The <code>pandoc.table</code> helper function turning any tabular R data into markdown table comes with a variety of further options and features. For example, the function automatically omits all line breaks found in each table cell to be able to apply the <code>table.split</code> functionality. To preserve line breaks inside cells <code>keep.line.breaks</code> parameter should be used.</p>
-<p>Similarly, to print tables in plain ASCII without any markdown markup, set the <code>plain.ascii</code> parameter to <code>TRUE</code>, or if you do not like the row names to be highlighted in the tables, simply disable <code>emphasize.rownames</code>. To see all possible options, please check <a href="http://www.rdocumentation.org/packages/pander/functions/pandoc.table.return"><code>?pandoc.table</code></a></p>
+<p>Funtionality described in other sections is most notable, but <code>pander/pandoc.table</code> also has smaller nifty features that are worth mentioning:</p>
+<ul>
+<li><code>plain.ascii</code> - allows to have the output without <code>markdown</code> markup:</li>
+</ul>
+<pre class="rout"><code>&gt; pandoc.table(mtcars[1:3, 1:4])
+
+-------------------------------------------
+      &amp;nbsp;         mpg   cyl   disp   hp 
+------------------- ----- ----- ------ ----
+   **Mazda RX4**     21     6    160   110 
+
+ **Mazda RX4 Wag**   21     6    160   110 
+
+  **Datsun 710**    22.8    4    108    93 
+-------------------------------------------
+
+&gt; pandoc.table(mtcars[1:3, 1:4], plain.ascii = TRUE)
+
+-------------------------------------------
+                     mpg   cyl   disp   hp 
+------------------- ----- ----- ------ ----
+     Mazda RX4       21     6    160   110 
+
+   Mazda RX4 Wag     21     6    160   110 
+
+    Datsun 710      22.8    4    108    93 
+-------------------------------------------
+</code></pre>
+<ul>
+<li><code>missing</code> - set a string to replace missing values:</li>
+</ul>
+<pre class="rout"><code>&gt; m &lt;- mtcars[1:3, 1:5]
+&gt; m$mpg &lt;- NA
+&gt; pandoc.table(m, missing = &#39;?&#39;)
+
+--------------------------------------------------
+      &amp;nbsp;         mpg   cyl   disp   hp   drat 
+------------------- ----- ----- ------ ---- ------
+   **Mazda RX4**      ?     6    160   110   3.9  
+
+ **Mazda RX4 Wag**    ?     6    160   110   3.9  
+
+  **Datsun 710**      ?     4    108    93   3.85 
+--------------------------------------------------
+</code></pre>
+<ul>
+<li><code>keep.line.breaks</code> - allows to preserve line breaks inside cells. Not that by default <code>pandoc.table</code> automatically omits all line breaks found in each table cell to be able to apply the <code>table.split</code> functionality.</li>
+</ul>
+<pre class="rout"><code>&gt; m &lt;- data.frame(a=&quot;foo\nbar&quot;, b=&quot;pander&quot;)
+&gt; pandoc.table(m)
+
+--------------
+   a      b   
+------- ------
+foo bar pander
+--------------
+
+&gt; pandoc.table(m, keep.line.breaks = TRUE)
+
+----------
+ a    b   
+--- ------
+foo pander
+bar       
+----------
+</code></pre>
+<p>To see all possible options, please check <a href="http://www.rdocumentation.org/packages/pander/functions/pandoc.table.return"><code>?pandoc.table</code></a></p>
 <p>And please note, that all above mentioned features are also supported by the <code>pander</code> <a href="#generic-pander-method">generic S3 method</a> and defaults can be updated via <a href="#pander-options"><code>panderOptions</code></a> for permanent settings.</p>
 <h1 id="generic-pander-method">Generic pander method</h1>
 <p><code>pander</code> or <code>pandoc</code> (call as you wish) can deal with a bunch of R object types as being a pandocized <code>S3</code> generic method with a variety of already supported classes:</p>
 <p><a id="supported-r-classes"></a></p>
 <pre class="rout"><code>&gt; methods(pander)
- [1] pander.anova           pander.aov             pander.aovlist         pander.call            pander.cast_df
- [6] pander.character       pander.clogit          pander.coxph           pander.CrossTable      pander.data.frame
-[11] pander.Date            pander.default         pander.density         pander.describe        pander.evals
-[16] pander.factor          pander.formula         pander.ftable          pander.function        pander.glm
-[21] pander.htest           pander.image           pander.list            pander.lm              pander.lme
-[26] pander.logical         pander.matrix          pander.microbenchmark  pander.mtable          pander.NULL
-[31] pander.numeric         pander.option*         pander.POSIXct         pander.POSIXlt         pander.prcomp
-[36] pander.rapport         pander.return          pander.rlm             pander.sessionInfo     pander.smooth.spline
-[41] pander.stat.table      pander.summary.aov     pander.summary.aovlist pander.summary.glm     pander.summary.lm
-[46] pander.summary.prcomp  pander.survdiff        pander.survfit         pander.table           pander.ts
-[51] pander.zoo</code></pre>
-<p>If you think that <code>pander</code> lacks support for any other R class(es), please feel free to leave change request <a href="https://github.com/Rapporter/pander/issues">here</a> and we will be happy to extend the package.</p>
+ [1] pander.anova*           pander.aov*             pander.aovlist*         pander.Arima*           pander.call*
+ [6] pander.cast_df*         pander.character*       pander.clogit*          pander.coxph*           pander.CrossTable*
+[11] pander.data.frame*      pander.Date*            pander.default*         pander.density*         pander.describe*
+[16] pander.evals*           pander.factor*          pander.formula*         pander.ftable*          pander.function*
+[21] pander.glm*             pander.gtable*          pander.htest*           pander.image*           pander.irts*
+[26] pander.list*            pander.lm*              pander.lme*             pander.logical*         pander.manova*
+[31] pander.matrix*          pander.microbenchmark*  pander.mtable*          pander.name*            pander.nls*
+[36] pander.NULL*            pander.numeric*         pander.option           pander.polr*            pander.POSIXct*
+[41] pander.POSIXlt*         pander.prcomp*          pander.randomForest*    pander.rapport*         pander.return
+[46] pander.rlm*             pander.sessionInfo*     pander.smooth.spline*   pander.stat.table*      pander.summary.aov*
+[51] pander.summary.aovlist* pander.summary.glm*     pander.summary.lm*      pander.summary.lme*     pander.summary.manova*
+[56] pander.summary.nls*     pander.summary.polr*    pander.summary.prcomp*  pander.summary.survreg* pander.summary.table*
+[61] pander.survdiff*        pander.survfit*         pander.survreg*         pander.table*           pander.tabular*
+[66] pander.ts*              pander.zoo*</code></pre>
+<p>If you think that pander lacks support for any other R class(es), please feel free to open a <a href="https://github.com/Rapporter/pander/pulls">ticket</a> suggesting a new feature or submit <a href="https://github.com/Rapporter/pander/issues">pull request</a> and we will be happy to extend the package.</p>
 <p>Besides the most basic R object types (vectors, matrices, tables or data frames), list-support might be interesting for you:</p>
 <pre class="rout"><code>&gt; pander(list(a = 1, b = 2, c = table(mtcars$am), x = list(myname = 1, 2), 56))
 </code></pre>
@@ -417,23 +488,23 @@ foo-
 
   * **residuals**:
 
-    ----------------------------
-    &amp;nbsp;    3      4      5
-    ------- ------ ------ ------
-     **0**  2.042  -1.171 -1.723
+    --------------------------------------------------
+    &amp;nbsp;    3            4                 5
+    ------- ------ ----------------- -----------------
+     **0**  2.042  -1.17073226447712 -1.72300609401128
 
-     **1**  -2.469 1.415  2.083
-    ----------------------------
+     **1**  -2.469 1.41534629268074  2.08301279585419
+    --------------------------------------------------
 
   * **stdres**:
 
-    ----------------------------
-    &amp;nbsp;    3      4      5
-    ------- ------ ------ ------
-     **0**  4.395  -2.323 -2.943
+    -------------------------------------------------
+    &amp;nbsp;    3            4                5
+    ------- ------ ----------------- ----------------
+     **0**  4.395  -2.32338345119108 -2.9429523715087
 
-     **1**  -4.395 2.323  2.943
-    ----------------------------
+     **1**  -4.395 2.32338345119108  2.9429523715087
+    -------------------------------------------------
 
 &lt;!-- end of list --&gt;
 </code></pre>
@@ -441,11 +512,11 @@ foo-
 <p>But the output of different <strong>statistical methods</strong> are tried to be prettyfied. Some the above call normally returns like:</p>
 <pre class="rout"><code>&gt; pander(chisq.test(table(mtcars$am, mtcars$gear)))
 
----------------------------------------
- Test statistic   df       P value     
----------------- ---- -----------------
-     20.94        2   _2.831e-05_ * * *
----------------------------------------
+-------------------------------
+ Test statistic   df   P value 
+---------------- ---- ---------
+     20.94        2     * * *  
+-------------------------------
 
 Table: Pearson&#39;s Chi-squared test: `table(mtcars$am, mtcars$gear)`
 
@@ -456,7 +527,7 @@ Table: Pearson&#39;s Chi-squared test: `table(mtcars$am, mtcars$gear)`
 ---------------------------------------------------------
  Test statistic   df    P value   Alternative hypothesis 
 ---------------- ----- --------- ------------------------
-     -1.861      17.78 _0.07939_        two.sided        
+     -1.861      17.78                  two.sided        
 ---------------------------------------------------------
 
 Table: Welch Two Sample t-test: `extra` by `group`
@@ -726,8 +797,8 @@ myReport$<span class="kw">export</span>(<span class="kw">tempfile</span>())
 
 ## You do not want to see the generated report after generation?
 myReport$<span class="kw">export</span>(<span class="dt">open =</span> <span class="ot">FALSE</span>)</code></pre>
-<h1 id="evals">Evals</h1>
-<p>When working on the <a href="http://rapport-package.info">rapport package</a>, I really needed some nifty R function that can evaluate R expression along with capturing errors and warnings. Unfortunately the <code>evaluate</code> package had only limited features at that time, as it could not return the raw R object, but only the standard output with messages. So I wrote my own function, and soon some further feature requests arose, like identifying if an R expression results in a plot etc.</p>
+<h1 id="capturing-evaluation-information-with-evals">Capturing evaluation information with evals</h1>
+<p>When working on the <a href="http://rapport-package.info">rapport package</a>, I really needed some nifty R function that can evaluate R expression along with capturing errors and warnings. Unfortunately the <code>evaluate</code> package had only limited features at that time, as it could not return the raw R object, but only the standard output with messages. So I wrote my own function, and soon some further feature requests arose, like identifying if an R expression results in a plot etc. This section aims to give a quick introduction to the functionality of <code>evals</code>, but for more usage/implementation details, please refer to specialized vignette, which can be accessed by <code>vignette('evals', package='pander')</code> or available online <a href="http://rapporter.github.io/pander/evals.html">here</a>.</p>
 <p>But probably it's easier to explain what <code>evals</code> can do with a simple example:</p>
 <pre class="rout"><code>&gt; evals(&#39;1:10&#39;)
 [[1]]
@@ -773,7 +844,6 @@ attr(,&quot;class&quot;)
 <p>So instead of a captured R object (which would be <code>NULL</code> in this situation by the way), we get the path of the image where the plot was saved:</p>
 <div class="figure">
 <img src="https://raw.githubusercontent.com/Rapporter/pander/gh-pages/plots/graphs-1.png" />
-
 </div>
 <p>Well, this is not a standard histogram usually returned by the <code>hist</code> function, right? As mentioned before, <code>evals</code> have some extra features like applying the user defined theme on various plots automatically. Please see the <code>graphs.brew</code> example <a href="#examples">above</a> for further details, or check the related <a href="#evals-options">global options</a>. If you do not like this feature, simply add <code>evalsOptions('graph.unify</code>, FALSE)<code>to your</code>.Rprofile`.</p>
 <p>Further features are described in the <a href="http://www.rdocumentation.org/packages/pander/functions/evals">technical docs</a>, and now I'll only give a brief introduction to another important feature of <code>evals</code>.</p>
@@ -825,11 +895,11 @@ evals(&#39;mean(xx)&#39;)</code></pre>
 <h1 id="general-options">General options</h1>
 <p>The package comes with a variety of globally adjustable options, which have an effect on the result of your reports. You can query and update these options with the <code>panderOptions</code> function:</p>
 <ul>
-<li><code>digits</code>: numeric (default: <code>2</code>) passed to <code>format</code></li>
+<li><code>digits</code>: numeric (default: <code>2</code>) passed to <code>format</code>. Can be a vector specifying values for each column (has to be the same length as number of columns). Values for non-numeric columns will be disregarded.</li>
 <li><code>decimal.mark</code>: string (default: <code>.</code>) passed to <code>format</code></li>
 <li><code>formula.caption.prefix</code>: string (default: <code>Formula:</code>) passed to <code>pandoc.formula</code> to be used as caption prefix. Be sure about what you are doing if changing to other than <code>Formula:</code> or <code>:</code>.</li>
 <li><code>big.mark</code>: string (default: `<code>) passed to</code>format`</li>
-<li><code>round</code>: numeric (default: <code>Inf</code>) passed to <code>round</code></li>
+<li><code>round</code>: numeric (default: <code>Inf</code>) passed to <code>round</code>. Can be a vector specifying values for each column (has to be the same length as number of columns). Values for non-numeric columns will be disregarded.</li>
 <li><code>keep.trailing.zeros</code>: boolean (default: <code>FALSE</code>) show or remove trailing zeros in numbers (e.g. in numeric vectors or in columns of tables with numeric values)</li>
 <li><code>keep.line.breaks</code>: boolean (default: <code>FALSE</code>) to keep or remove line breaks from cells in a table</li>
 <li><code>missing</code>: string (default: <code>NA</code>) to replace missing values in vectors, tables etc.</li>
@@ -901,6 +971,7 @@ evals(&#39;mean(xx)&#39;)</code></pre>
 <li><code>graph.env</code>: save the environments in which plots were generated to distinct files (based on <code>graph.name</code>) with <code>env</code> extension?</li>
 <li><code>graph.recordplot</code>: save the plot via <code>recordPlot</code> to distinct files (based on <code>graph.name</code>) with <code>recodplot</code> extension?</li>
 <li><code>graph.RDS</code> save the raw R object returned (usually with <code>lattice</code> or <code>ggplot2</code>) while generating the plots to distinct files (based on <code>graph.name</code>) with <code>RDS</code> extension?</li>
+<li><code>log</code>: <code>NULL</code> or an optionally passed <em>logger name</em> from <code>futile.logger</code> to record all info, trace, debug and error messages.</li>
 </ul>
 <h1 id="difference-from-other-rendering-packages">Difference from other rendering packages</h1>
 <p>How does <code>pander</code> differ from Sweave, brew, knitr, R2HTML and the other tools of literate programming? First of all <code>pander</code> can be used as a helper with any other literate programming solution, so <strong>you can call <code>pander</code> inside of <code>knitr</code> chunks</strong>.</p>
@@ -927,7 +998,6 @@ evals(&#39;mean(xx)&#39;)</code></pre>
 <p>To use this small lib, just type: <code>M-x pander-mode</code> on any document. It might be useful to add a hook to <code>markdown-mode</code> if you find this useful.</p>
 <div class="figure">
 <img src="https://cruel-carlota.gopagoda.com/9dfac0c1da37bd83d1848289630631fd" title="githalytics.com" />
-
 </div>
 <script type="text/javascript">
     $(document).ready(function() {
@@ -939,8 +1009,6 @@ evals(&#39;mean(xx)&#39;)</code></pre>
     });
 </script>
 <p><a href="https://github.com/Rapporter/pander"><img style="position: fixed; top: -5px; right: -5px; border: 0;" src="https://camo.githubusercontent.com/38ef81f8aca64bb9a64448d0d70f1308ef5341ab/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f72696768745f6461726b626c75655f3132313632312e706e67" data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_right_darkblue_121621.png"></a></p>
-<hr />
-<p>This report was generated with <a href="http://www.r-project.org/">R</a> (3.1.2) and <a href="https://github.com/rapporter/pander">pander</a> (0.5.2) in 1.746 sec on x86_64-unknown-linux-gnu platform.</p>
 <p align="center">
   Design: <a href="http://rapporter.net"><i>Rapporter</i> Team</a> &copy; 2011-2014 | Backend: <a href="https://github.com/rapporter/pander">pander</a> | License: <a href="http://www.gnu.org/licenses/agpl.html" target="_blank">AGPL3</a> or <a href="http://opensource.org/licenses/OSL-3.0" target="_blank">OSL</a> | Styled with <a href="http://www.getskeleton.com/" target="_blank">skeleton</a>
 </p>

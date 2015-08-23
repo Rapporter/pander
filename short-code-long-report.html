@@ -6,831 +6,729 @@
   <meta name="generator" content="pandoc" />
   <meta name="author" content="Looong report" />
   <title>Gergely Daróczi</title>
-  <!--[if lt IE 9]>
-      <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
-      <![endif]-->
-  
-  <link rel="stylesheet" href="stylesheets/base.css" />
-  <link rel="stylesheet" href="stylesheets/skeleton.css" />
-  <link rel="stylesheet" href="stylesheets/layout.css" />
-  <link rel="stylesheet" href="stylesheets/fonts.css" />
-  <link rel="stylesheet" href="stylesheets/slimbox2.css" />
-  <link rel="stylesheet" href="stylesheets/custom.css" />
-  <link rel="stylesheet" href="stylesheets/caption.css"/>
-  
-  <link rel="shortcut icon" href="images/favicon.gif" />
-  <link rel="apple-touch-icon" href="images/apple-touch-icon.png" />
-  <link rel="apple-touch-icon" sizes="72x72" href="images/apple-touch-icon-72x72.png" />
-  <link rel="apple-touch-icon" sizes="114x114" href="images/apple-touch-icon-114x114.png" />
-  
-  <script type="text/javascript" src="javascripts/jquery-1.7.2.min.js"></script>
-  <script type="text/javascript" src="javascripts/tabs.js"></script>  <!--remove-->
-  <script type="text/javascript" src="javascripts/custom.js"></script>
-  <script type="text/javascript" src="javascripts/slimbox2.js"></script>
-  <script type="text/x-mathjax-config">
-    MathJax.Hub.Config({
-    tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]}
-    });
-  </script>
-  <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_HTML"></script>
-  <script type="text/javascript" src="javascripts/jcaption.min.js" /></script>
+  <style type="text/css">code{white-space: pre;}</style>
+<!--[if lt IE 9]>
+    <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+<![endif]-->
+
+<link rel="stylesheet" href="http://cdn.rapporter.net/pander/stylesheets/base.css" />
+<link rel="stylesheet" href="http://cdn.rapporter.net/pander/stylesheets/skeleton.css" />
+<link rel="stylesheet" href="http://cdn.rapporter.net/pander/stylesheets/layout.css" />
+<link rel="stylesheet" href="http://cdn.rapporter.net/pander/stylesheets/slimbox2.css" />
+<link rel="stylesheet" href="http://cdn.rapporter.net/pander/stylesheets/custom.css" />
+<link rel="stylesheet" href="http://cdn.rapporter.net/pander/stylesheets/caption.css"/>
+
+<link rel="shortcut icon" href="http://cdn.rapporter.net/pander/images/favicon.gif" />
+<link rel="apple-touch-icon" href="http://cdn.rapporter.net/pander/images/apple-touch-icon.png" />
+<link rel="apple-touch-icon" sizes="72x72" href="http://cdn.rapporter.net/pander/images/apple-touch-icon-72x72.png" />
+<link rel="apple-touch-icon" sizes="114x114" href="http://cdn.rapporter.net/pander/images/apple-touch-icon-114x114.png" />
+
+<script type="text/javascript" src="http://cdn.rapporter.net/pander/javascripts/jquery-1.7.2.min.js"></script>
+<script type="text/javascript" src="http://cdn.rapporter.net/pander/javascripts/custom.js"></script>
+<script type="text/javascript" src="http://cdn.rapporter.net/pander/javascripts/slimbox2.js"></script>
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+  tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]}
+  });
+</script>
+<script type="text/javascript" src="http://cdn.rapporter.net/mathjax/2.1/MathJax.js?config=TeX-AMS_HTML"></script>
+<script type="text/javascript" src="http://cdn.rapporter.net/pander/javascripts/jcaption.min.js" /></script>
 </head>
 <body>
 <div id="header">
 <h1 class="title">Gergely Daróczi</h1>
 <h2 class="author">Looong report</h2>
-<h3 class="date">Mon Sep 3 15:00:26 2012</h3>
+<h3 class="date">Sun Aug 23 04:00:57 2015</h3>
 </div>
 <p>I have written the below report in 10 mins :)</p>
 <h1 id="dataset">Dataset</h1>
 <p>Here I will do a pretty fast report on <code>mtcars</code> which is:</p>
 <table>
 <caption>Table continues below</caption>
-<col width="36%" />
-<col width="8%" />
-<col width="8%" />
-<col width="9%" />
-<col width="6%" />
-<col width="8%" />
+<colgroup>
+<col width="32%"></col>
+<col width="7%"></col>
+<col width="7%"></col>
+<col width="8%"></col>
+<col width="6%"></col>
+<col width="8%"></col>
+<col width="7%"></col>
+<col width="8%"></col>
+<col width="6%"></col>
+<col width="6%"></col>
+</colgroup>
 <thead>
 <tr class="header">
-<th align="left"> </th>
-<th align="left">mpg</th>
-<th align="left">cyl</th>
-<th align="left">disp</th>
-<th align="left">hp</th>
-<th align="left">drat</th>
+<th align="center"> </th>
+<th align="center">mpg</th>
+<th align="center">cyl</th>
+<th align="center">disp</th>
+<th align="center">hp</th>
+<th align="center">drat</th>
+<th align="center">wt</th>
+<th align="center">qsec</th>
+<th align="center">vs</th>
+<th align="center">am</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
-<td align="left"><strong>Mazda RX4</strong></td>
-<td align="left">21</td>
-<td align="left">6</td>
-<td align="left">160</td>
-<td align="left">110</td>
-<td align="left">3.90</td>
+<td align="center"><strong>Mazda RX4</strong></td>
+<td align="center">21</td>
+<td align="center">6</td>
+<td align="center">160</td>
+<td align="center">110</td>
+<td align="center">3.9</td>
+<td align="center">2.62</td>
+<td align="center">16.46</td>
+<td align="center">0</td>
+<td align="center">1</td>
 </tr>
 <tr class="even">
-<td align="left"><strong>Mazda RX4 Wag</strong></td>
-<td align="left">21</td>
-<td align="left">6</td>
-<td align="left">160</td>
-<td align="left">110</td>
-<td align="left">3.90</td>
+<td align="center"><strong>Mazda RX4 Wag</strong></td>
+<td align="center">21</td>
+<td align="center">6</td>
+<td align="center">160</td>
+<td align="center">110</td>
+<td align="center">3.9</td>
+<td align="center">2.875</td>
+<td align="center">17.02</td>
+<td align="center">0</td>
+<td align="center">1</td>
 </tr>
 <tr class="odd">
-<td align="left"><strong>Datsun 710</strong></td>
-<td align="left">22.8</td>
-<td align="left">4</td>
-<td align="left">108</td>
-<td align="left">93</td>
-<td align="left">3.85</td>
+<td align="center"><strong>Datsun 710</strong></td>
+<td align="center">22.8</td>
+<td align="center">4</td>
+<td align="center">108</td>
+<td align="center">93</td>
+<td align="center">3.85</td>
+<td align="center">2.32</td>
+<td align="center">18.61</td>
+<td align="center">1</td>
+<td align="center">1</td>
 </tr>
 <tr class="even">
-<td align="left"><strong>Hornet 4 Drive</strong></td>
-<td align="left">21.4</td>
-<td align="left">6</td>
-<td align="left">258</td>
-<td align="left">110</td>
-<td align="left">3.08</td>
+<td align="center"><strong>Hornet 4 Drive</strong></td>
+<td align="center">21.4</td>
+<td align="center">6</td>
+<td align="center">258</td>
+<td align="center">110</td>
+<td align="center">3.08</td>
+<td align="center">3.215</td>
+<td align="center">19.44</td>
+<td align="center">1</td>
+<td align="center">0</td>
 </tr>
 <tr class="odd">
-<td align="left"><strong>Hornet Sportabout</strong></td>
-<td align="left">18.7</td>
-<td align="left">8</td>
-<td align="left">360</td>
-<td align="left">175</td>
-<td align="left">3.15</td>
+<td align="center"><strong>Hornet Sportabout</strong></td>
+<td align="center">18.7</td>
+<td align="center">8</td>
+<td align="center">360</td>
+<td align="center">175</td>
+<td align="center">3.15</td>
+<td align="center">3.44</td>
+<td align="center">17.02</td>
+<td align="center">0</td>
+<td align="center">0</td>
 </tr>
 <tr class="even">
-<td align="left"><strong>Valiant</strong></td>
-<td align="left">18.1</td>
-<td align="left">6</td>
-<td align="left">225</td>
-<td align="left">105</td>
-<td align="left">2.76</td>
+<td align="center"><strong>Valiant</strong></td>
+<td align="center">18.1</td>
+<td align="center">6</td>
+<td align="center">225</td>
+<td align="center">105</td>
+<td align="center">2.76</td>
+<td align="center">3.46</td>
+<td align="center">20.22</td>
+<td align="center">1</td>
+<td align="center">0</td>
 </tr>
 <tr class="odd">
-<td align="left"><strong>Duster 360</strong></td>
-<td align="left">14.3</td>
-<td align="left">8</td>
-<td align="left">360</td>
-<td align="left">245</td>
-<td align="left">3.21</td>
+<td align="center"><strong>Duster 360</strong></td>
+<td align="center">14.3</td>
+<td align="center">8</td>
+<td align="center">360</td>
+<td align="center">245</td>
+<td align="center">3.21</td>
+<td align="center">3.57</td>
+<td align="center">15.84</td>
+<td align="center">0</td>
+<td align="center">0</td>
 </tr>
 <tr class="even">
-<td align="left"><strong>Merc 240D</strong></td>
-<td align="left">24.4</td>
-<td align="left">4</td>
-<td align="left">146.7</td>
-<td align="left">62</td>
-<td align="left">3.69</td>
+<td align="center"><strong>Merc 240D</strong></td>
+<td align="center">24.4</td>
+<td align="center">4</td>
+<td align="center">146.7</td>
+<td align="center">62</td>
+<td align="center">3.69</td>
+<td align="center">3.19</td>
+<td align="center">20</td>
+<td align="center">1</td>
+<td align="center">0</td>
 </tr>
 <tr class="odd">
-<td align="left"><strong>Merc 230</strong></td>
-<td align="left">22.8</td>
-<td align="left">4</td>
-<td align="left">140.8</td>
-<td align="left">95</td>
-<td align="left">3.92</td>
+<td align="center"><strong>Merc 230</strong></td>
+<td align="center">22.8</td>
+<td align="center">4</td>
+<td align="center">140.8</td>
+<td align="center">95</td>
+<td align="center">3.92</td>
+<td align="center">3.15</td>
+<td align="center">22.9</td>
+<td align="center">1</td>
+<td align="center">0</td>
 </tr>
 <tr class="even">
-<td align="left"><strong>Merc 280</strong></td>
-<td align="left">19.2</td>
-<td align="left">6</td>
-<td align="left">167.6</td>
-<td align="left">123</td>
-<td align="left">3.92</td>
+<td align="center"><strong>Merc 280</strong></td>
+<td align="center">19.2</td>
+<td align="center">6</td>
+<td align="center">167.6</td>
+<td align="center">123</td>
+<td align="center">3.92</td>
+<td align="center">3.44</td>
+<td align="center">18.3</td>
+<td align="center">1</td>
+<td align="center">0</td>
 </tr>
 <tr class="odd">
-<td align="left"><strong>Merc 280C</strong></td>
-<td align="left">17.8</td>
-<td align="left">6</td>
-<td align="left">167.6</td>
-<td align="left">123</td>
-<td align="left">3.92</td>
+<td align="center"><strong>Merc 280C</strong></td>
+<td align="center">17.8</td>
+<td align="center">6</td>
+<td align="center">167.6</td>
+<td align="center">123</td>
+<td align="center">3.92</td>
+<td align="center">3.44</td>
+<td align="center">18.9</td>
+<td align="center">1</td>
+<td align="center">0</td>
 </tr>
 <tr class="even">
-<td align="left"><strong>Merc 450SE</strong></td>
-<td align="left">16.4</td>
-<td align="left">8</td>
-<td align="left">275.8</td>
-<td align="left">180</td>
-<td align="left">3.07</td>
+<td align="center"><strong>Merc 450SE</strong></td>
+<td align="center">16.4</td>
+<td align="center">8</td>
+<td align="center">275.8</td>
+<td align="center">180</td>
+<td align="center">3.07</td>
+<td align="center">4.07</td>
+<td align="center">17.4</td>
+<td align="center">0</td>
+<td align="center">0</td>
 </tr>
 <tr class="odd">
-<td align="left"><strong>Merc 450SL</strong></td>
-<td align="left">17.3</td>
-<td align="left">8</td>
-<td align="left">275.8</td>
-<td align="left">180</td>
-<td align="left">3.07</td>
+<td align="center"><strong>Merc 450SL</strong></td>
+<td align="center">17.3</td>
+<td align="center">8</td>
+<td align="center">275.8</td>
+<td align="center">180</td>
+<td align="center">3.07</td>
+<td align="center">3.73</td>
+<td align="center">17.6</td>
+<td align="center">0</td>
+<td align="center">0</td>
 </tr>
 <tr class="even">
-<td align="left"><strong>Merc 450SLC</strong></td>
-<td align="left">15.2</td>
-<td align="left">8</td>
-<td align="left">275.8</td>
-<td align="left">180</td>
-<td align="left">3.07</td>
+<td align="center"><strong>Merc 450SLC</strong></td>
+<td align="center">15.2</td>
+<td align="center">8</td>
+<td align="center">275.8</td>
+<td align="center">180</td>
+<td align="center">3.07</td>
+<td align="center">3.78</td>
+<td align="center">18</td>
+<td align="center">0</td>
+<td align="center">0</td>
 </tr>
 <tr class="odd">
-<td align="left"><strong>Cadillac Fleetwood</strong></td>
-<td align="left">10.4</td>
-<td align="left">8</td>
-<td align="left">472</td>
-<td align="left">205</td>
-<td align="left">2.93</td>
+<td align="center"><strong>Cadillac Fleetwood</strong></td>
+<td align="center">10.4</td>
+<td align="center">8</td>
+<td align="center">472</td>
+<td align="center">205</td>
+<td align="center">2.93</td>
+<td align="center">5.25</td>
+<td align="center">17.98</td>
+<td align="center">0</td>
+<td align="center">0</td>
 </tr>
 <tr class="even">
-<td align="left"><strong>Lincoln Continental</strong></td>
-<td align="left">10.4</td>
-<td align="left">8</td>
-<td align="left">460</td>
-<td align="left">215</td>
-<td align="left">3</td>
+<td align="center"><strong>Lincoln Continental</strong></td>
+<td align="center">10.4</td>
+<td align="center">8</td>
+<td align="center">460</td>
+<td align="center">215</td>
+<td align="center">3</td>
+<td align="center">5.424</td>
+<td align="center">17.82</td>
+<td align="center">0</td>
+<td align="center">0</td>
 </tr>
 <tr class="odd">
-<td align="left"><strong>Chrysler Imperial</strong></td>
-<td align="left">14.7</td>
-<td align="left">8</td>
-<td align="left">440</td>
-<td align="left">230</td>
-<td align="left">3.23</td>
+<td align="center"><strong>Chrysler Imperial</strong></td>
+<td align="center">14.7</td>
+<td align="center">8</td>
+<td align="center">440</td>
+<td align="center">230</td>
+<td align="center">3.23</td>
+<td align="center">5.345</td>
+<td align="center">17.42</td>
+<td align="center">0</td>
+<td align="center">0</td>
 </tr>
 <tr class="even">
-<td align="left"><strong>Fiat 128</strong></td>
-<td align="left">32.4</td>
-<td align="left">4</td>
-<td align="left">78.7</td>
-<td align="left">66</td>
-<td align="left">4.08</td>
+<td align="center"><strong>Fiat 128</strong></td>
+<td align="center">32.4</td>
+<td align="center">4</td>
+<td align="center">78.7</td>
+<td align="center">66</td>
+<td align="center">4.08</td>
+<td align="center">2.2</td>
+<td align="center">19.47</td>
+<td align="center">1</td>
+<td align="center">1</td>
 </tr>
 <tr class="odd">
-<td align="left"><strong>Honda Civic</strong></td>
-<td align="left">30.4</td>
-<td align="left">4</td>
-<td align="left">75.7</td>
-<td align="left">52</td>
-<td align="left">4.93</td>
+<td align="center"><strong>Honda Civic</strong></td>
+<td align="center">30.4</td>
+<td align="center">4</td>
+<td align="center">75.7</td>
+<td align="center">52</td>
+<td align="center">4.93</td>
+<td align="center">1.615</td>
+<td align="center">18.52</td>
+<td align="center">1</td>
+<td align="center">1</td>
 </tr>
 <tr class="even">
-<td align="left"><strong>Toyota Corolla</strong></td>
-<td align="left">33.9</td>
-<td align="left">4</td>
-<td align="left">71.1</td>
-<td align="left">65</td>
-<td align="left">4.22</td>
+<td align="center"><strong>Toyota Corolla</strong></td>
+<td align="center">33.9</td>
+<td align="center">4</td>
+<td align="center">71.1</td>
+<td align="center">65</td>
+<td align="center">4.22</td>
+<td align="center">1.835</td>
+<td align="center">19.9</td>
+<td align="center">1</td>
+<td align="center">1</td>
 </tr>
 <tr class="odd">
-<td align="left"><strong>Toyota Corona</strong></td>
-<td align="left">21.5</td>
-<td align="left">4</td>
-<td align="left">120.1</td>
-<td align="left">97</td>
-<td align="left">3.70</td>
+<td align="center"><strong>Toyota Corona</strong></td>
+<td align="center">21.5</td>
+<td align="center">4</td>
+<td align="center">120.1</td>
+<td align="center">97</td>
+<td align="center">3.7</td>
+<td align="center">2.465</td>
+<td align="center">20.01</td>
+<td align="center">1</td>
+<td align="center">0</td>
 </tr>
 <tr class="even">
-<td align="left"><strong>Dodge Challenger</strong></td>
-<td align="left">15.5</td>
-<td align="left">8</td>
-<td align="left">318</td>
-<td align="left">150</td>
-<td align="left">2.76</td>
+<td align="center"><strong>Dodge Challenger</strong></td>
+<td align="center">15.5</td>
+<td align="center">8</td>
+<td align="center">318</td>
+<td align="center">150</td>
+<td align="center">2.76</td>
+<td align="center">3.52</td>
+<td align="center">16.87</td>
+<td align="center">0</td>
+<td align="center">0</td>
 </tr>
 <tr class="odd">
-<td align="left"><strong>AMC Javelin</strong></td>
-<td align="left">15.2</td>
-<td align="left">8</td>
-<td align="left">304</td>
-<td align="left">150</td>
-<td align="left">3.15</td>
+<td align="center"><strong>AMC Javelin</strong></td>
+<td align="center">15.2</td>
+<td align="center">8</td>
+<td align="center">304</td>
+<td align="center">150</td>
+<td align="center">3.15</td>
+<td align="center">3.435</td>
+<td align="center">17.3</td>
+<td align="center">0</td>
+<td align="center">0</td>
 </tr>
 <tr class="even">
-<td align="left"><strong>Camaro Z28</strong></td>
-<td align="left">13.3</td>
-<td align="left">8</td>
-<td align="left">350</td>
-<td align="left">245</td>
-<td align="left">3.73</td>
+<td align="center"><strong>Camaro Z28</strong></td>
+<td align="center">13.3</td>
+<td align="center">8</td>
+<td align="center">350</td>
+<td align="center">245</td>
+<td align="center">3.73</td>
+<td align="center">3.84</td>
+<td align="center">15.41</td>
+<td align="center">0</td>
+<td align="center">0</td>
 </tr>
 <tr class="odd">
-<td align="left"><strong>Pontiac Firebird</strong></td>
-<td align="left">19.2</td>
-<td align="left">8</td>
-<td align="left">400</td>
-<td align="left">175</td>
-<td align="left">3.08</td>
+<td align="center"><strong>Pontiac Firebird</strong></td>
+<td align="center">19.2</td>
+<td align="center">8</td>
+<td align="center">400</td>
+<td align="center">175</td>
+<td align="center">3.08</td>
+<td align="center">3.845</td>
+<td align="center">17.05</td>
+<td align="center">0</td>
+<td align="center">0</td>
 </tr>
 <tr class="even">
-<td align="left"><strong>Fiat X1-9</strong></td>
-<td align="left">27.3</td>
-<td align="left">4</td>
-<td align="left">79</td>
-<td align="left">66</td>
-<td align="left">4.08</td>
+<td align="center"><strong>Fiat X1-9</strong></td>
+<td align="center">27.3</td>
+<td align="center">4</td>
+<td align="center">79</td>
+<td align="center">66</td>
+<td align="center">4.08</td>
+<td align="center">1.935</td>
+<td align="center">18.9</td>
+<td align="center">1</td>
+<td align="center">1</td>
 </tr>
 <tr class="odd">
-<td align="left"><strong>Porsche 914-2</strong></td>
-<td align="left">26</td>
-<td align="left">4</td>
-<td align="left">120.3</td>
-<td align="left">91</td>
-<td align="left">4.43</td>
+<td align="center"><strong>Porsche 914-2</strong></td>
+<td align="center">26</td>
+<td align="center">4</td>
+<td align="center">120.3</td>
+<td align="center">91</td>
+<td align="center">4.43</td>
+<td align="center">2.14</td>
+<td align="center">16.7</td>
+<td align="center">0</td>
+<td align="center">1</td>
 </tr>
 <tr class="even">
-<td align="left"><strong>Lotus Europa</strong></td>
-<td align="left">30.4</td>
-<td align="left">4</td>
-<td align="left">95.1</td>
-<td align="left">113</td>
-<td align="left">3.77</td>
+<td align="center"><strong>Lotus Europa</strong></td>
+<td align="center">30.4</td>
+<td align="center">4</td>
+<td align="center">95.1</td>
+<td align="center">113</td>
+<td align="center">3.77</td>
+<td align="center">1.513</td>
+<td align="center">16.9</td>
+<td align="center">1</td>
+<td align="center">1</td>
 </tr>
 <tr class="odd">
-<td align="left"><strong>Ford Pantera L</strong></td>
-<td align="left">15.8</td>
-<td align="left">8</td>
-<td align="left">351</td>
-<td align="left">264</td>
-<td align="left">4.22</td>
+<td align="center"><strong>Ford Pantera L</strong></td>
+<td align="center">15.8</td>
+<td align="center">8</td>
+<td align="center">351</td>
+<td align="center">264</td>
+<td align="center">4.22</td>
+<td align="center">3.17</td>
+<td align="center">14.5</td>
+<td align="center">0</td>
+<td align="center">1</td>
 </tr>
 <tr class="even">
-<td align="left"><strong>Ferrari Dino</strong></td>
-<td align="left">19.7</td>
-<td align="left">6</td>
-<td align="left">145</td>
-<td align="left">175</td>
-<td align="left">3.62</td>
+<td align="center"><strong>Ferrari Dino</strong></td>
+<td align="center">19.7</td>
+<td align="center">6</td>
+<td align="center">145</td>
+<td align="center">175</td>
+<td align="center">3.62</td>
+<td align="center">2.77</td>
+<td align="center">15.5</td>
+<td align="center">0</td>
+<td align="center">1</td>
 </tr>
 <tr class="odd">
-<td align="left"><strong>Maserati Bora</strong></td>
-<td align="left">15</td>
-<td align="left">8</td>
-<td align="left">301</td>
-<td align="left">335</td>
-<td align="left">3.54</td>
+<td align="center"><strong>Maserati Bora</strong></td>
+<td align="center">15</td>
+<td align="center">8</td>
+<td align="center">301</td>
+<td align="center">335</td>
+<td align="center">3.54</td>
+<td align="center">3.57</td>
+<td align="center">14.6</td>
+<td align="center">0</td>
+<td align="center">1</td>
 </tr>
 <tr class="even">
-<td align="left"><strong>Volvo 142E</strong></td>
-<td align="left">21.4</td>
-<td align="left">4</td>
-<td align="left">121</td>
-<td align="left">109</td>
-<td align="left">4.11</td>
+<td align="center"><strong>Volvo 142E</strong></td>
+<td align="center">21.4</td>
+<td align="center">4</td>
+<td align="center">121</td>
+<td align="center">109</td>
+<td align="center">4.11</td>
+<td align="center">2.78</td>
+<td align="center">18.6</td>
+<td align="center">1</td>
+<td align="center">1</td>
 </tr>
 </tbody>
 </table>
 <table>
-<caption>Table continues below</caption>
-<col width="36%" />
-<col width="8%" />
-<col width="9%" />
-<col width="6%" />
-<col width="6%" />
-<col width="8%" />
+<colgroup>
+<col width="36%"></col>
+<col width="9%"></col>
+<col width="9%"></col>
+</colgroup>
 <thead>
 <tr class="header">
-<th align="left"> </th>
-<th align="left">wt</th>
-<th align="left">qsec</th>
-<th align="left">vs</th>
-<th align="left">am</th>
-<th align="left">gear</th>
+<th align="center"> </th>
+<th align="center">gear</th>
+<th align="center">carb</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
-<td align="left"><strong>Mazda RX4</strong></td>
-<td align="left">2.620</td>
-<td align="left">16.46</td>
-<td align="left">0</td>
-<td align="left">1</td>
-<td align="left">4</td>
+<td align="center"><strong>Mazda RX4</strong></td>
+<td align="center">4</td>
+<td align="center">4</td>
 </tr>
 <tr class="even">
-<td align="left"><strong>Mazda RX4 Wag</strong></td>
-<td align="left">2.875</td>
-<td align="left">17.02</td>
-<td align="left">0</td>
-<td align="left">1</td>
-<td align="left">4</td>
+<td align="center"><strong>Mazda RX4 Wag</strong></td>
+<td align="center">4</td>
+<td align="center">4</td>
 </tr>
 <tr class="odd">
-<td align="left"><strong>Datsun 710</strong></td>
-<td align="left">2.320</td>
-<td align="left">18.61</td>
-<td align="left">1</td>
-<td align="left">1</td>
-<td align="left">4</td>
+<td align="center"><strong>Datsun 710</strong></td>
+<td align="center">4</td>
+<td align="center">1</td>
 </tr>
 <tr class="even">
-<td align="left"><strong>Hornet 4 Drive</strong></td>
-<td align="left">3.215</td>
-<td align="left">19.44</td>
-<td align="left">1</td>
-<td align="left">0</td>
-<td align="left">3</td>
+<td align="center"><strong>Hornet 4 Drive</strong></td>
+<td align="center">3</td>
+<td align="center">1</td>
 </tr>
 <tr class="odd">
-<td align="left"><strong>Hornet Sportabout</strong></td>
-<td align="left">3.440</td>
-<td align="left">17.02</td>
-<td align="left">0</td>
-<td align="left">0</td>
-<td align="left">3</td>
+<td align="center"><strong>Hornet Sportabout</strong></td>
+<td align="center">3</td>
+<td align="center">2</td>
 </tr>
 <tr class="even">
-<td align="left"><strong>Valiant</strong></td>
-<td align="left">3.460</td>
-<td align="left">20.22</td>
-<td align="left">1</td>
-<td align="left">0</td>
-<td align="left">3</td>
+<td align="center"><strong>Valiant</strong></td>
+<td align="center">3</td>
+<td align="center">1</td>
 </tr>
 <tr class="odd">
-<td align="left"><strong>Duster 360</strong></td>
-<td align="left">3.570</td>
-<td align="left">15.84</td>
-<td align="left">0</td>
-<td align="left">0</td>
-<td align="left">3</td>
+<td align="center"><strong>Duster 360</strong></td>
+<td align="center">3</td>
+<td align="center">4</td>
 </tr>
 <tr class="even">
-<td align="left"><strong>Merc 240D</strong></td>
-<td align="left">3.190</td>
-<td align="left">20</td>
-<td align="left">1</td>
-<td align="left">0</td>
-<td align="left">4</td>
+<td align="center"><strong>Merc 240D</strong></td>
+<td align="center">4</td>
+<td align="center">2</td>
 </tr>
 <tr class="odd">
-<td align="left"><strong>Merc 230</strong></td>
-<td align="left">3.150</td>
-<td align="left">22.90</td>
-<td align="left">1</td>
-<td align="left">0</td>
-<td align="left">4</td>
+<td align="center"><strong>Merc 230</strong></td>
+<td align="center">4</td>
+<td align="center">2</td>
 </tr>
 <tr class="even">
-<td align="left"><strong>Merc 280</strong></td>
-<td align="left">3.440</td>
-<td align="left">18.30</td>
-<td align="left">1</td>
-<td align="left">0</td>
-<td align="left">4</td>
+<td align="center"><strong>Merc 280</strong></td>
+<td align="center">4</td>
+<td align="center">4</td>
 </tr>
 <tr class="odd">
-<td align="left"><strong>Merc 280C</strong></td>
-<td align="left">3.440</td>
-<td align="left">18.90</td>
-<td align="left">1</td>
-<td align="left">0</td>
-<td align="left">4</td>
+<td align="center"><strong>Merc 280C</strong></td>
+<td align="center">4</td>
+<td align="center">4</td>
 </tr>
 <tr class="even">
-<td align="left"><strong>Merc 450SE</strong></td>
-<td align="left">4.070</td>
-<td align="left">17.40</td>
-<td align="left">0</td>
-<td align="left">0</td>
-<td align="left">3</td>
+<td align="center"><strong>Merc 450SE</strong></td>
+<td align="center">3</td>
+<td align="center">3</td>
 </tr>
 <tr class="odd">
-<td align="left"><strong>Merc 450SL</strong></td>
-<td align="left">3.730</td>
-<td align="left">17.60</td>
-<td align="left">0</td>
-<td align="left">0</td>
-<td align="left">3</td>
+<td align="center"><strong>Merc 450SL</strong></td>
+<td align="center">3</td>
+<td align="center">3</td>
 </tr>
 <tr class="even">
-<td align="left"><strong>Merc 450SLC</strong></td>
-<td align="left">3.780</td>
-<td align="left">18</td>
-<td align="left">0</td>
-<td align="left">0</td>
-<td align="left">3</td>
+<td align="center"><strong>Merc 450SLC</strong></td>
+<td align="center">3</td>
+<td align="center">3</td>
 </tr>
 <tr class="odd">
-<td align="left"><strong>Cadillac Fleetwood</strong></td>
-<td align="left">5.250</td>
-<td align="left">17.98</td>
-<td align="left">0</td>
-<td align="left">0</td>
-<td align="left">3</td>
+<td align="center"><strong>Cadillac Fleetwood</strong></td>
+<td align="center">3</td>
+<td align="center">4</td>
 </tr>
 <tr class="even">
-<td align="left"><strong>Lincoln Continental</strong></td>
-<td align="left">5.424</td>
-<td align="left">17.82</td>
-<td align="left">0</td>
-<td align="left">0</td>
-<td align="left">3</td>
+<td align="center"><strong>Lincoln Continental</strong></td>
+<td align="center">3</td>
+<td align="center">4</td>
 </tr>
 <tr class="odd">
-<td align="left"><strong>Chrysler Imperial</strong></td>
-<td align="left">5.345</td>
-<td align="left">17.42</td>
-<td align="left">0</td>
-<td align="left">0</td>
-<td align="left">3</td>
+<td align="center"><strong>Chrysler Imperial</strong></td>
+<td align="center">3</td>
+<td align="center">4</td>
 </tr>
 <tr class="even">
-<td align="left"><strong>Fiat 128</strong></td>
-<td align="left">2.200</td>
-<td align="left">19.47</td>
-<td align="left">1</td>
-<td align="left">1</td>
-<td align="left">4</td>
+<td align="center"><strong>Fiat 128</strong></td>
+<td align="center">4</td>
+<td align="center">1</td>
 </tr>
 <tr class="odd">
-<td align="left"><strong>Honda Civic</strong></td>
-<td align="left">1.615</td>
-<td align="left">18.52</td>
-<td align="left">1</td>
-<td align="left">1</td>
-<td align="left">4</td>
+<td align="center"><strong>Honda Civic</strong></td>
+<td align="center">4</td>
+<td align="center">2</td>
 </tr>
 <tr class="even">
-<td align="left"><strong>Toyota Corolla</strong></td>
-<td align="left">1.835</td>
-<td align="left">19.90</td>
-<td align="left">1</td>
-<td align="left">1</td>
-<td align="left">4</td>
+<td align="center"><strong>Toyota Corolla</strong></td>
+<td align="center">4</td>
+<td align="center">1</td>
 </tr>
 <tr class="odd">
-<td align="left"><strong>Toyota Corona</strong></td>
-<td align="left">2.465</td>
-<td align="left">20.01</td>
-<td align="left">1</td>
-<td align="left">0</td>
-<td align="left">3</td>
+<td align="center"><strong>Toyota Corona</strong></td>
+<td align="center">3</td>
+<td align="center">1</td>
 </tr>
 <tr class="even">
-<td align="left"><strong>Dodge Challenger</strong></td>
-<td align="left">3.520</td>
-<td align="left">16.87</td>
-<td align="left">0</td>
-<td align="left">0</td>
-<td align="left">3</td>
+<td align="center"><strong>Dodge Challenger</strong></td>
+<td align="center">3</td>
+<td align="center">2</td>
 </tr>
 <tr class="odd">
-<td align="left"><strong>AMC Javelin</strong></td>
-<td align="left">3.435</td>
-<td align="left">17.30</td>
-<td align="left">0</td>
-<td align="left">0</td>
-<td align="left">3</td>
+<td align="center"><strong>AMC Javelin</strong></td>
+<td align="center">3</td>
+<td align="center">2</td>
 </tr>
 <tr class="even">
-<td align="left"><strong>Camaro Z28</strong></td>
-<td align="left">3.840</td>
-<td align="left">15.41</td>
-<td align="left">0</td>
-<td align="left">0</td>
-<td align="left">3</td>
+<td align="center"><strong>Camaro Z28</strong></td>
+<td align="center">3</td>
+<td align="center">4</td>
 </tr>
 <tr class="odd">
-<td align="left"><strong>Pontiac Firebird</strong></td>
-<td align="left">3.845</td>
-<td align="left">17.05</td>
-<td align="left">0</td>
-<td align="left">0</td>
-<td align="left">3</td>
+<td align="center"><strong>Pontiac Firebird</strong></td>
+<td align="center">3</td>
+<td align="center">2</td>
 </tr>
 <tr class="even">
-<td align="left"><strong>Fiat X1-9</strong></td>
-<td align="left">1.935</td>
-<td align="left">18.90</td>
-<td align="left">1</td>
-<td align="left">1</td>
-<td align="left">4</td>
+<td align="center"><strong>Fiat X1-9</strong></td>
+<td align="center">4</td>
+<td align="center">1</td>
 </tr>
 <tr class="odd">
-<td align="left"><strong>Porsche 914-2</strong></td>
-<td align="left">2.140</td>
-<td align="left">16.70</td>
-<td align="left">0</td>
-<td align="left">1</td>
-<td align="left">5</td>
+<td align="center"><strong>Porsche 914-2</strong></td>
+<td align="center">5</td>
+<td align="center">2</td>
 </tr>
 <tr class="even">
-<td align="left"><strong>Lotus Europa</strong></td>
-<td align="left">1.513</td>
-<td align="left">16.90</td>
-<td align="left">1</td>
-<td align="left">1</td>
-<td align="left">5</td>
+<td align="center"><strong>Lotus Europa</strong></td>
+<td align="center">5</td>
+<td align="center">2</td>
 </tr>
 <tr class="odd">
-<td align="left"><strong>Ford Pantera L</strong></td>
-<td align="left">3.170</td>
-<td align="left">14.50</td>
-<td align="left">0</td>
-<td align="left">1</td>
-<td align="left">5</td>
+<td align="center"><strong>Ford Pantera L</strong></td>
+<td align="center">5</td>
+<td align="center">4</td>
 </tr>
 <tr class="even">
-<td align="left"><strong>Ferrari Dino</strong></td>
-<td align="left">2.770</td>
-<td align="left">15.50</td>
-<td align="left">0</td>
-<td align="left">1</td>
-<td align="left">5</td>
+<td align="center"><strong>Ferrari Dino</strong></td>
+<td align="center">5</td>
+<td align="center">6</td>
 </tr>
 <tr class="odd">
-<td align="left"><strong>Maserati Bora</strong></td>
-<td align="left">3.570</td>
-<td align="left">14.60</td>
-<td align="left">0</td>
-<td align="left">1</td>
-<td align="left">5</td>
+<td align="center"><strong>Maserati Bora</strong></td>
+<td align="center">5</td>
+<td align="center">8</td>
 </tr>
 <tr class="even">
-<td align="left"><strong>Volvo 142E</strong></td>
-<td align="left">2.780</td>
-<td align="left">18.60</td>
-<td align="left">1</td>
-<td align="left">1</td>
-<td align="left">4</td>
-</tr>
-</tbody>
-</table>
-<table>
-<col width="36%" />
-<col width="8%" />
-<thead>
-<tr class="header">
-<th align="left"> </th>
-<th align="left">carb</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td align="left"><strong>Mazda RX4</strong></td>
-<td align="left">4</td>
-</tr>
-<tr class="even">
-<td align="left"><strong>Mazda RX4 Wag</strong></td>
-<td align="left">4</td>
-</tr>
-<tr class="odd">
-<td align="left"><strong>Datsun 710</strong></td>
-<td align="left">1</td>
-</tr>
-<tr class="even">
-<td align="left"><strong>Hornet 4 Drive</strong></td>
-<td align="left">1</td>
-</tr>
-<tr class="odd">
-<td align="left"><strong>Hornet Sportabout</strong></td>
-<td align="left">2</td>
-</tr>
-<tr class="even">
-<td align="left"><strong>Valiant</strong></td>
-<td align="left">1</td>
-</tr>
-<tr class="odd">
-<td align="left"><strong>Duster 360</strong></td>
-<td align="left">4</td>
-</tr>
-<tr class="even">
-<td align="left"><strong>Merc 240D</strong></td>
-<td align="left">2</td>
-</tr>
-<tr class="odd">
-<td align="left"><strong>Merc 230</strong></td>
-<td align="left">2</td>
-</tr>
-<tr class="even">
-<td align="left"><strong>Merc 280</strong></td>
-<td align="left">4</td>
-</tr>
-<tr class="odd">
-<td align="left"><strong>Merc 280C</strong></td>
-<td align="left">4</td>
-</tr>
-<tr class="even">
-<td align="left"><strong>Merc 450SE</strong></td>
-<td align="left">3</td>
-</tr>
-<tr class="odd">
-<td align="left"><strong>Merc 450SL</strong></td>
-<td align="left">3</td>
-</tr>
-<tr class="even">
-<td align="left"><strong>Merc 450SLC</strong></td>
-<td align="left">3</td>
-</tr>
-<tr class="odd">
-<td align="left"><strong>Cadillac Fleetwood</strong></td>
-<td align="left">4</td>
-</tr>
-<tr class="even">
-<td align="left"><strong>Lincoln Continental</strong></td>
-<td align="left">4</td>
-</tr>
-<tr class="odd">
-<td align="left"><strong>Chrysler Imperial</strong></td>
-<td align="left">4</td>
-</tr>
-<tr class="even">
-<td align="left"><strong>Fiat 128</strong></td>
-<td align="left">1</td>
-</tr>
-<tr class="odd">
-<td align="left"><strong>Honda Civic</strong></td>
-<td align="left">2</td>
-</tr>
-<tr class="even">
-<td align="left"><strong>Toyota Corolla</strong></td>
-<td align="left">1</td>
-</tr>
-<tr class="odd">
-<td align="left"><strong>Toyota Corona</strong></td>
-<td align="left">1</td>
-</tr>
-<tr class="even">
-<td align="left"><strong>Dodge Challenger</strong></td>
-<td align="left">2</td>
-</tr>
-<tr class="odd">
-<td align="left"><strong>AMC Javelin</strong></td>
-<td align="left">2</td>
-</tr>
-<tr class="even">
-<td align="left"><strong>Camaro Z28</strong></td>
-<td align="left">4</td>
-</tr>
-<tr class="odd">
-<td align="left"><strong>Pontiac Firebird</strong></td>
-<td align="left">2</td>
-</tr>
-<tr class="even">
-<td align="left"><strong>Fiat X1-9</strong></td>
-<td align="left">1</td>
-</tr>
-<tr class="odd">
-<td align="left"><strong>Porsche 914-2</strong></td>
-<td align="left">2</td>
-</tr>
-<tr class="even">
-<td align="left"><strong>Lotus Europa</strong></td>
-<td align="left">2</td>
-</tr>
-<tr class="odd">
-<td align="left"><strong>Ford Pantera L</strong></td>
-<td align="left">4</td>
-</tr>
-<tr class="even">
-<td align="left"><strong>Ferrari Dino</strong></td>
-<td align="left">6</td>
-</tr>
-<tr class="odd">
-<td align="left"><strong>Maserati Bora</strong></td>
-<td align="left">8</td>
-</tr>
-<tr class="even">
-<td align="left"><strong>Volvo 142E</strong></td>
-<td align="left">2</td>
+<td align="center"><strong>Volvo 142E</strong></td>
+<td align="center">4</td>
+<td align="center">2</td>
 </tr>
 </tbody>
 </table>
 <h1 id="descriptives">Descriptives</h1>
 <table>
-<col width="15%" />
-<col width="13%" />
-<col width="12%" />
-<col width="29%" />
-<col width="13%" />
+<colgroup>
+<col width="15%"></col>
+<col width="13%"></col>
+<col width="12%"></col>
+<col width="29%"></col>
+<col width="13%"></col>
+</colgroup>
 <thead>
 <tr class="header">
-<th align="left"> </th>
-<th align="left">Average</th>
-<th align="left">Median</th>
-<th align="left">Standard.deviation</th>
-<th align="left">Variance</th>
+<th align="center"> </th>
+<th align="center">Average</th>
+<th align="center">Median</th>
+<th align="center">Standard.deviation</th>
+<th align="center">Variance</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
-<td align="left"><strong>mpg</strong></td>
-<td align="left">20.0906</td>
-<td align="left">19.200</td>
-<td align="left">6.0269</td>
-<td align="left">3.632e+01</td>
+<td align="center"><strong>mpg</strong></td>
+<td align="center">20.09</td>
+<td align="center">19.2</td>
+<td align="center">6.027</td>
+<td align="center">36.32</td>
 </tr>
 <tr class="even">
-<td align="left"><strong>cyl</strong></td>
-<td align="left">6.1875</td>
-<td align="left">6</td>
-<td align="left">1.7859</td>
-<td align="left">3.190e+00</td>
+<td align="center"><strong>cyl</strong></td>
+<td align="center">6.188</td>
+<td align="center">6</td>
+<td align="center">1.786</td>
+<td align="center">3.19</td>
 </tr>
 <tr class="odd">
-<td align="left"><strong>disp</strong></td>
-<td align="left">230.7219</td>
-<td align="left">196.300</td>
-<td align="left">123.9387</td>
-<td align="left">1.536e+04</td>
+<td align="center"><strong>disp</strong></td>
+<td align="center">230.7</td>
+<td align="center">196.3</td>
+<td align="center">123.9</td>
+<td align="center">15361</td>
 </tr>
 <tr class="even">
-<td align="left"><strong>hp</strong></td>
-<td align="left">146.6875</td>
-<td align="left">123</td>
-<td align="left">68.5629</td>
-<td align="left">4.701e+03</td>
+<td align="center"><strong>hp</strong></td>
+<td align="center">146.7</td>
+<td align="center">123</td>
+<td align="center">68.56</td>
+<td align="center">4701</td>
 </tr>
 <tr class="odd">
-<td align="left"><strong>drat</strong></td>
-<td align="left">3.5966</td>
-<td align="left">3.695</td>
-<td align="left">0.5347</td>
-<td align="left">2.859e-01</td>
+<td align="center"><strong>drat</strong></td>
+<td align="center">3.597</td>
+<td align="center">3.695</td>
+<td align="center">0.5347</td>
+<td align="center">0.2859</td>
 </tr>
 <tr class="even">
-<td align="left"><strong>wt</strong></td>
-<td align="left">3.2172</td>
-<td align="left">3.325</td>
-<td align="left">0.9785</td>
-<td align="left">9.574e-01</td>
+<td align="center"><strong>wt</strong></td>
+<td align="center">3.217</td>
+<td align="center">3.325</td>
+<td align="center">0.9785</td>
+<td align="center">0.9574</td>
 </tr>
 <tr class="odd">
-<td align="left"><strong>qsec</strong></td>
-<td align="left">17.8487</td>
-<td align="left">17.710</td>
-<td align="left">1.7869</td>
-<td align="left">3.193e+00</td>
+<td align="center"><strong>qsec</strong></td>
+<td align="center">17.85</td>
+<td align="center">17.71</td>
+<td align="center">1.787</td>
+<td align="center">3.193</td>
 </tr>
 <tr class="even">
-<td align="left"><strong>vs</strong></td>
-<td align="left">0.4375</td>
-<td align="left">0</td>
-<td align="left">0.5040</td>
-<td align="left">2.540e-01</td>
+<td align="center"><strong>vs</strong></td>
+<td align="center">0.4375</td>
+<td align="center">0</td>
+<td align="center">0.504</td>
+<td align="center">0.254</td>
 </tr>
 <tr class="odd">
-<td align="left"><strong>am</strong></td>
-<td align="left">0.4062</td>
-<td align="left">0</td>
-<td align="left">0.4990</td>
-<td align="left">2.490e-01</td>
+<td align="center"><strong>am</strong></td>
+<td align="center">0.4062</td>
+<td align="center">0</td>
+<td align="center">0.499</td>
+<td align="center">0.249</td>
 </tr>
 <tr class="even">
-<td align="left"><strong>gear</strong></td>
-<td align="left">3.6875</td>
-<td align="left">4</td>
-<td align="left">0.7378</td>
-<td align="left">5.444e-01</td>
+<td align="center"><strong>gear</strong></td>
+<td align="center">3.688</td>
+<td align="center">4</td>
+<td align="center">0.7378</td>
+<td align="center">0.5444</td>
 </tr>
 <tr class="odd">
-<td align="left"><strong>carb</strong></td>
-<td align="left">2.8125</td>
-<td align="left">2</td>
-<td align="left">1.6152</td>
-<td align="left">2.609e+00</td>
+<td align="center"><strong>carb</strong></td>
+<td align="center">2.812</td>
+<td align="center">2</td>
+<td align="center">1.615</td>
+<td align="center">2.609</td>
 </tr>
 </tbody>
 </table>
@@ -841,1165 +739,1100 @@
 <p>The mean of mpg is <em>20.09</em> while the standard deviation is: <em>6.027</em>. The most frequent value in mpg is 10.4, but let us check out the frequency table too:</p>
 <table>
 <caption>Table continues below</caption>
-<col width="9%" />
-<col width="9%" />
-<col width="9%" />
-<col width="9%" />
-<col width="6%" />
-<col width="9%" />
-<col width="9%" />
-<col width="9%" />
+<colgroup>
+<col width="9%"></col>
+<col width="9%"></col>
+<col width="9%"></col>
+<col width="9%"></col>
+<col width="6%"></col>
+<col width="9%"></col>
+<col width="9%"></col>
+<col width="9%"></col>
+<col width="9%"></col>
+<col width="9%"></col>
+<col width="9%"></col>
+</colgroup>
 <thead>
 <tr class="header">
-<th align="left">10.4</th>
-<th align="left">13.3</th>
-<th align="left">14.3</th>
-<th align="left">14.7</th>
-<th align="left">15</th>
-<th align="left">15.2</th>
-<th align="left">15.5</th>
-<th align="left">15.8</th>
+<th align="center">10.4</th>
+<th align="center">13.3</th>
+<th align="center">14.3</th>
+<th align="center">14.7</th>
+<th align="center">15</th>
+<th align="center">15.2</th>
+<th align="center">15.5</th>
+<th align="center">15.8</th>
+<th align="center">16.4</th>
+<th align="center">17.3</th>
+<th align="center">17.8</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
-<td align="left">2</td>
-<td align="left">1</td>
-<td align="left">1</td>
-<td align="left">1</td>
-<td align="left">1</td>
-<td align="left">2</td>
-<td align="left">1</td>
-<td align="left">1</td>
+<td align="center">2</td>
+<td align="center">1</td>
+<td align="center">1</td>
+<td align="center">1</td>
+<td align="center">1</td>
+<td align="center">2</td>
+<td align="center">1</td>
+<td align="center">1</td>
+<td align="center">1</td>
+<td align="center">1</td>
+<td align="center">1</td>
 </tr>
 </tbody>
 </table>
 <table>
 <caption>Table continues below</caption>
-<col width="9%" />
-<col width="9%" />
-<col width="9%" />
-<col width="9%" />
-<col width="9%" />
-<col width="9%" />
-<col width="9%" />
-<col width="5%" />
+<colgroup>
+<col width="8%"></col>
+<col width="8%"></col>
+<col width="8%"></col>
+<col width="8%"></col>
+<col width="6%"></col>
+<col width="8%"></col>
+<col width="8%"></col>
+<col width="8%"></col>
+<col width="8%"></col>
+<col width="6%"></col>
+<col width="8%"></col>
+<col width="8%"></col>
+</colgroup>
 <thead>
 <tr class="header">
-<th align="left">16.4</th>
-<th align="left">17.3</th>
-<th align="left">17.8</th>
-<th align="left">18.1</th>
-<th align="left">18.7</th>
-<th align="left">19.2</th>
-<th align="left">19.7</th>
-<th align="left">21</th>
+<th align="center">18.1</th>
+<th align="center">18.7</th>
+<th align="center">19.2</th>
+<th align="center">19.7</th>
+<th align="center">21</th>
+<th align="center">21.4</th>
+<th align="center">21.5</th>
+<th align="center">22.8</th>
+<th align="center">24.4</th>
+<th align="center">26</th>
+<th align="center">27.3</th>
+<th align="center">30.4</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
-<td align="left">1</td>
-<td align="left">1</td>
-<td align="left">1</td>
-<td align="left">1</td>
-<td align="left">1</td>
-<td align="left">2</td>
-<td align="left">1</td>
-<td align="left">2</td>
+<td align="center">1</td>
+<td align="center">1</td>
+<td align="center">2</td>
+<td align="center">1</td>
+<td align="center">2</td>
+<td align="center">2</td>
+<td align="center">1</td>
+<td align="center">2</td>
+<td align="center">1</td>
+<td align="center">1</td>
+<td align="center">1</td>
+<td align="center">2</td>
 </tr>
 </tbody>
 </table>
 <table>
-<caption>Table continues below</caption>
-<col width="9%" />
-<col width="9%" />
-<col width="9%" />
-<col width="9%" />
-<col width="6%" />
-<col width="9%" />
-<col width="9%" />
-<col width="9%" />
+<colgroup>
+<col width="9%"></col>
+<col width="9%"></col>
+</colgroup>
 <thead>
 <tr class="header">
-<th align="left">21.4</th>
-<th align="left">21.5</th>
-<th align="left">22.8</th>
-<th align="left">24.4</th>
-<th align="left">26</th>
-<th align="left">27.3</th>
-<th align="left">30.4</th>
-<th align="left">32.4</th>
+<th align="center">32.4</th>
+<th align="center">33.9</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
-<td align="left">2</td>
-<td align="left">1</td>
-<td align="left">2</td>
-<td align="left">1</td>
-<td align="left">1</td>
-<td align="left">1</td>
-<td align="left">2</td>
-<td align="left">1</td>
-</tr>
-</tbody>
-</table>
-<table>
-<col width="8%" />
-<thead>
-<tr class="header">
-<th align="left">33.9</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td align="left">1</td>
+<td align="center">1</td>
+<td align="center">1</td>
 </tr>
 </tbody>
 </table>
 <p>Tables are boring, let us show the same with a <code>histogram</code>:</p>
-<p><a href="plots/short-code-long-report-1-hires.png"><img src="plots/short-code-long-report-1.png" /></a></p>
+<div class="figure">
+<img src="data:image/png;base64,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" />
+</div>
 <h3 id="cyl">cyl</h3>
 <p>We found the folloing values here:</p>
 <p><em>6</em>, <em>6</em>, <em>4</em>, <em>6</em>, <em>8</em>, <em>6</em>, <em>8</em>, <em>4</em>, <em>4</em>, <em>6</em>, <em>6</em>, <em>8</em>, <em>8</em>, <em>8</em>, <em>8</em>, <em>8</em>, <em>8</em>, <em>4</em>, <em>4</em>, <em>4</em>, <em>4</em>, <em>8</em>, <em>8</em>, <em>8</em>, <em>8</em>, <em>4</em>, <em>4</em>, <em>4</em>, <em>8</em>, <em>6</em>, <em>8</em> and <em>4</em></p>
 <p>The mean of cyl is <em>6.188</em> while the standard deviation is: <em>1.786</em>. The most frequent value in cyl is 8, but let us check out the frequency table too:</p>
 <table>
-<col width="5%" />
-<col width="5%" />
-<col width="5%" />
+<colgroup>
+<col width="5%"></col>
+<col width="5%"></col>
+<col width="5%"></col>
+</colgroup>
 <thead>
 <tr class="header">
-<th align="left">4</th>
-<th align="left">6</th>
-<th align="left">8</th>
+<th align="center">4</th>
+<th align="center">6</th>
+<th align="center">8</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
-<td align="left">11</td>
-<td align="left">7</td>
-<td align="left">14</td>
+<td align="center">11</td>
+<td align="center">7</td>
+<td align="center">14</td>
 </tr>
 </tbody>
 </table>
 <p>Tables are boring, let us show the same with a <code>histogram</code>:</p>
-<p><a href="plots/short-code-long-report-2-hires.png"><img src="plots/short-code-long-report-2.png" /></a></p>
+<div class="figure">
+<img src="data:image/png;base64,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" />
+</div>
 <h3 id="disp">disp</h3>
 <p>We found the folloing values here:</p>
 <p><em>160</em>, <em>160</em>, <em>108</em>, <em>258</em>, <em>360</em>, <em>225</em>, <em>360</em>, <em>146.7</em>, <em>140.8</em>, <em>167.6</em>, <em>167.6</em>, <em>275.8</em>, <em>275.8</em>, <em>275.8</em>, <em>472</em>, <em>460</em>, <em>440</em>, <em>78.7</em>, <em>75.7</em>, <em>71.1</em>, <em>120.1</em>, <em>318</em>, <em>304</em>, <em>350</em>, <em>400</em>, <em>79</em>, <em>120.3</em>, <em>95.1</em>, <em>351</em>, <em>145</em>, <em>301</em> and <em>121</em></p>
 <p>The mean of disp is <em>230.7</em> while the standard deviation is: <em>123.9</em>. The most frequent value in disp is 275.8, but let us check out the frequency table too:</p>
 <table>
 <caption>Table continues below</caption>
-<col width="9%" />
-<col width="9%" />
-<col width="9%" />
-<col width="6%" />
-<col width="9%" />
-<col width="8%" />
-<col width="11%" />
-<col width="11%" />
+<colgroup>
+<col width="9%"></col>
+<col width="9%"></col>
+<col width="9%"></col>
+<col width="6%"></col>
+<col width="9%"></col>
+<col width="8%"></col>
+<col width="10%"></col>
+<col width="10%"></col>
+<col width="8%"></col>
+<col width="10%"></col>
+<col width="6%"></col>
+</colgroup>
 <thead>
 <tr class="header">
-<th align="left">71.1</th>
-<th align="left">75.7</th>
-<th align="left">78.7</th>
-<th align="left">79</th>
-<th align="left">95.1</th>
-<th align="left">108</th>
-<th align="left">120.1</th>
-<th align="left">120.3</th>
+<th align="center">71.1</th>
+<th align="center">75.7</th>
+<th align="center">78.7</th>
+<th align="center">79</th>
+<th align="center">95.1</th>
+<th align="center">108</th>
+<th align="center">120.1</th>
+<th align="center">120.3</th>
+<th align="center">121</th>
+<th align="center">140.8</th>
+<th align="center">145</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
-<td align="left">1</td>
-<td align="left">1</td>
-<td align="left">1</td>
-<td align="left">1</td>
-<td align="left">1</td>
-<td align="left">1</td>
-<td align="left">1</td>
-<td align="left">1</td>
+<td align="center">1</td>
+<td align="center">1</td>
+<td align="center">1</td>
+<td align="center">1</td>
+<td align="center">1</td>
+<td align="center">1</td>
+<td align="center">1</td>
+<td align="center">1</td>
+<td align="center">1</td>
+<td align="center">1</td>
+<td align="center">1</td>
 </tr>
 </tbody>
 </table>
 <table>
 <caption>Table continues below</caption>
-<col width="8%" />
-<col width="11%" />
-<col width="8%" />
-<col width="11%" />
-<col width="8%" />
-<col width="11%" />
-<col width="8%" />
-<col width="8%" />
+<colgroup>
+<col width="10%"></col>
+<col width="7%"></col>
+<col width="10%"></col>
+<col width="7%"></col>
+<col width="7%"></col>
+<col width="10%"></col>
+<col width="7%"></col>
+<col width="7%"></col>
+<col width="7%"></col>
+<col width="7%"></col>
+<col width="7%"></col>
+<col width="7%"></col>
+</colgroup>
 <thead>
 <tr class="header">
-<th align="left">121</th>
-<th align="left">140.8</th>
-<th align="left">145</th>
-<th align="left">146.7</th>
-<th align="left">160</th>
-<th align="left">167.6</th>
-<th align="left">225</th>
-<th align="left">258</th>
+<th align="center">146.7</th>
+<th align="center">160</th>
+<th align="center">167.6</th>
+<th align="center">225</th>
+<th align="center">258</th>
+<th align="center">275.8</th>
+<th align="center">301</th>
+<th align="center">304</th>
+<th align="center">318</th>
+<th align="center">350</th>
+<th align="center">351</th>
+<th align="center">360</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
-<td align="left">1</td>
-<td align="left">1</td>
-<td align="left">1</td>
-<td align="left">1</td>
-<td align="left">2</td>
-<td align="left">2</td>
-<td align="left">1</td>
-<td align="left">1</td>
+<td align="center">1</td>
+<td align="center">2</td>
+<td align="center">2</td>
+<td align="center">1</td>
+<td align="center">1</td>
+<td align="center">3</td>
+<td align="center">1</td>
+<td align="center">1</td>
+<td align="center">1</td>
+<td align="center">1</td>
+<td align="center">1</td>
+<td align="center">2</td>
 </tr>
 </tbody>
 </table>
 <table>
-<caption>Table continues below</caption>
-<col width="11%" />
-<col width="8%" />
-<col width="8%" />
-<col width="8%" />
-<col width="8%" />
-<col width="8%" />
-<col width="8%" />
-<col width="8%" />
+<colgroup>
+<col width="8%"></col>
+<col width="8%"></col>
+<col width="8%"></col>
+<col width="8%"></col>
+</colgroup>
 <thead>
 <tr class="header">
-<th align="left">275.8</th>
-<th align="left">301</th>
-<th align="left">304</th>
-<th align="left">318</th>
-<th align="left">350</th>
-<th align="left">351</th>
-<th align="left">360</th>
-<th align="left">400</th>
+<th align="center">400</th>
+<th align="center">440</th>
+<th align="center">460</th>
+<th align="center">472</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
-<td align="left">3</td>
-<td align="left">1</td>
-<td align="left">1</td>
-<td align="left">1</td>
-<td align="left">1</td>
-<td align="left">1</td>
-<td align="left">2</td>
-<td align="left">1</td>
-</tr>
-</tbody>
-</table>
-<table>
-<col width="8%" />
-<col width="8%" />
-<col width="8%" />
-<thead>
-<tr class="header">
-<th align="left">440</th>
-<th align="left">460</th>
-<th align="left">472</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td align="left">1</td>
-<td align="left">1</td>
-<td align="left">1</td>
+<td align="center">1</td>
+<td align="center">1</td>
+<td align="center">1</td>
+<td align="center">1</td>
 </tr>
 </tbody>
 </table>
 <p>Tables are boring, let us show the same with a <code>histogram</code>:</p>
-<p><a href="plots/short-code-long-report-3-hires.png"><img src="plots/short-code-long-report-3.png" /></a></p>
+<div class="figure">
+<img src="data:image/png;base64,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" />
+</div>
 <h3 id="hp">hp</h3>
 <p>We found the folloing values here:</p>
 <p><em>110</em>, <em>110</em>, <em>93</em>, <em>110</em>, <em>175</em>, <em>105</em>, <em>245</em>, <em>62</em>, <em>95</em>, <em>123</em>, <em>123</em>, <em>180</em>, <em>180</em>, <em>180</em>, <em>205</em>, <em>215</em>, <em>230</em>, <em>66</em>, <em>52</em>, <em>65</em>, <em>97</em>, <em>150</em>, <em>150</em>, <em>245</em>, <em>175</em>, <em>66</em>, <em>91</em>, <em>113</em>, <em>264</em>, <em>175</em>, <em>335</em> and <em>109</em></p>
 <p>The mean of hp is <em>146.7</em> while the standard deviation is: <em>68.56</em>. The most frequent value in hp is 110, but let us check out the frequency table too:</p>
 <table>
 <caption>Table continues below</caption>
-<col width="6%" />
-<col width="6%" />
-<col width="6%" />
-<col width="6%" />
-<col width="6%" />
-<col width="6%" />
-<col width="6%" />
-<col width="6%" />
-<col width="6%" />
+<colgroup>
+<col width="6%"></col>
+<col width="6%"></col>
+<col width="6%"></col>
+<col width="6%"></col>
+<col width="6%"></col>
+<col width="6%"></col>
+<col width="6%"></col>
+<col width="6%"></col>
+<col width="7%"></col>
+<col width="7%"></col>
+<col width="7%"></col>
+<col width="7%"></col>
+<col width="7%"></col>
+<col width="7%"></col>
+</colgroup>
 <thead>
 <tr class="header">
-<th align="left">52</th>
-<th align="left">62</th>
-<th align="left">65</th>
-<th align="left">66</th>
-<th align="left">91</th>
-<th align="left">93</th>
-<th align="left">95</th>
-<th align="left">97</th>
-<th align="left">105</th>
+<th align="center">52</th>
+<th align="center">62</th>
+<th align="center">65</th>
+<th align="center">66</th>
+<th align="center">91</th>
+<th align="center">93</th>
+<th align="center">95</th>
+<th align="center">97</th>
+<th align="center">105</th>
+<th align="center">109</th>
+<th align="center">110</th>
+<th align="center">113</th>
+<th align="center">123</th>
+<th align="center">150</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
-<td align="left">1</td>
-<td align="left">1</td>
-<td align="left">1</td>
-<td align="left">2</td>
-<td align="left">1</td>
-<td align="left">1</td>
-<td align="left">1</td>
-<td align="left">1</td>
-<td align="left">1</td>
+<td align="center">1</td>
+<td align="center">1</td>
+<td align="center">1</td>
+<td align="center">2</td>
+<td align="center">1</td>
+<td align="center">1</td>
+<td align="center">1</td>
+<td align="center">1</td>
+<td align="center">1</td>
+<td align="center">1</td>
+<td align="center">3</td>
+<td align="center">1</td>
+<td align="center">2</td>
+<td align="center">2</td>
 </tr>
 </tbody>
 </table>
 <table>
-<caption>Table continues below</caption>
-<col width="8%" />
-<col width="8%" />
-<col width="8%" />
-<col width="8%" />
-<col width="8%" />
-<col width="8%" />
-<col width="8%" />
-<col width="8%" />
+<colgroup>
+<col width="8%"></col>
+<col width="8%"></col>
+<col width="8%"></col>
+<col width="8%"></col>
+<col width="8%"></col>
+<col width="8%"></col>
+<col width="8%"></col>
+<col width="8%"></col>
+</colgroup>
 <thead>
 <tr class="header">
-<th align="left">109</th>
-<th align="left">110</th>
-<th align="left">113</th>
-<th align="left">123</th>
-<th align="left">150</th>
-<th align="left">175</th>
-<th align="left">180</th>
-<th align="left">205</th>
+<th align="center">175</th>
+<th align="center">180</th>
+<th align="center">205</th>
+<th align="center">215</th>
+<th align="center">230</th>
+<th align="center">245</th>
+<th align="center">264</th>
+<th align="center">335</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
-<td align="left">1</td>
-<td align="left">3</td>
-<td align="left">1</td>
-<td align="left">2</td>
-<td align="left">2</td>
-<td align="left">3</td>
-<td align="left">3</td>
-<td align="left">1</td>
-</tr>
-</tbody>
-</table>
-<table>
-<col width="8%" />
-<col width="8%" />
-<col width="8%" />
-<col width="8%" />
-<col width="8%" />
-<thead>
-<tr class="header">
-<th align="left">215</th>
-<th align="left">230</th>
-<th align="left">245</th>
-<th align="left">264</th>
-<th align="left">335</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td align="left">1</td>
-<td align="left">1</td>
-<td align="left">2</td>
-<td align="left">1</td>
-<td align="left">1</td>
+<td align="center">3</td>
+<td align="center">3</td>
+<td align="center">1</td>
+<td align="center">1</td>
+<td align="center">1</td>
+<td align="center">2</td>
+<td align="center">1</td>
+<td align="center">1</td>
 </tr>
 </tbody>
 </table>
 <p>Tables are boring, let us show the same with a <code>histogram</code>:</p>
-<p><a href="plots/short-code-long-report-4-hires.png"><img src="plots/short-code-long-report-4.png" /></a></p>
+<div class="figure">
+<img src="data:image/png;base64,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" />
+</div>
 <h3 id="drat">drat</h3>
 <p>We found the folloing values here:</p>
-<p><em>3.90</em>, <em>3.90</em>, <em>3.85</em>, <em>3.08</em>, <em>3.15</em>, <em>2.76</em>, <em>3.21</em>, <em>3.69</em>, <em>3.92</em>, <em>3.92</em>, <em>3.92</em>, <em>3.07</em>, <em>3.07</em>, <em>3.07</em>, <em>2.93</em>, <em>3</em>, <em>3.23</em>, <em>4.08</em>, <em>4.93</em>, <em>4.22</em>, <em>3.70</em>, <em>2.76</em>, <em>3.15</em>, <em>3.73</em>, <em>3.08</em>, <em>4.08</em>, <em>4.43</em>, <em>3.77</em>, <em>4.22</em>, <em>3.62</em>, <em>3.54</em> and <em>4.11</em></p>
+<p><em>3.9</em>, <em>3.9</em>, <em>3.85</em>, <em>3.08</em>, <em>3.15</em>, <em>2.76</em>, <em>3.21</em>, <em>3.69</em>, <em>3.92</em>, <em>3.92</em>, <em>3.92</em>, <em>3.07</em>, <em>3.07</em>, <em>3.07</em>, <em>2.93</em>, <em>3</em>, <em>3.23</em>, <em>4.08</em>, <em>4.93</em>, <em>4.22</em>, <em>3.7</em>, <em>2.76</em>, <em>3.15</em>, <em>3.73</em>, <em>3.08</em>, <em>4.08</em>, <em>4.43</em>, <em>3.77</em>, <em>4.22</em>, <em>3.62</em>, <em>3.54</em> and <em>4.11</em></p>
 <p>The mean of drat is <em>3.597</em> while the standard deviation is: <em>0.5347</em>. The most frequent value in drat is 3.07, but let us check out the frequency table too:</p>
 <table>
 <caption>Table continues below</caption>
-<col width="9%" />
-<col width="9%" />
-<col width="5%" />
-<col width="9%" />
-<col width="9%" />
-<col width="9%" />
-<col width="9%" />
-<col width="9%" />
+<colgroup>
+<col width="8%"></col>
+<col width="8%"></col>
+<col width="4%"></col>
+<col width="8%"></col>
+<col width="8%"></col>
+<col width="8%"></col>
+<col width="8%"></col>
+<col width="8%"></col>
+<col width="8%"></col>
+<col width="8%"></col>
+<col width="8%"></col>
+<col width="8%"></col>
+</colgroup>
 <thead>
 <tr class="header">
-<th align="left">2.76</th>
-<th align="left">2.93</th>
-<th align="left">3</th>
-<th align="left">3.07</th>
-<th align="left">3.08</th>
-<th align="left">3.15</th>
-<th align="left">3.21</th>
-<th align="left">3.23</th>
+<th align="center">2.76</th>
+<th align="center">2.93</th>
+<th align="center">3</th>
+<th align="center">3.07</th>
+<th align="center">3.08</th>
+<th align="center">3.15</th>
+<th align="center">3.21</th>
+<th align="center">3.23</th>
+<th align="center">3.54</th>
+<th align="center">3.62</th>
+<th align="center">3.69</th>
+<th align="center">3.7</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
-<td align="left">2</td>
-<td align="left">1</td>
-<td align="left">1</td>
-<td align="left">3</td>
-<td align="left">2</td>
-<td align="left">2</td>
-<td align="left">1</td>
-<td align="left">1</td>
+<td align="center">2</td>
+<td align="center">1</td>
+<td align="center">1</td>
+<td align="center">3</td>
+<td align="center">2</td>
+<td align="center">2</td>
+<td align="center">1</td>
+<td align="center">1</td>
+<td align="center">1</td>
+<td align="center">1</td>
+<td align="center">1</td>
+<td align="center">1</td>
 </tr>
 </tbody>
 </table>
 <table>
-<caption>Table continues below</caption>
-<col width="9%" />
-<col width="9%" />
-<col width="9%" />
-<col width="8%" />
-<col width="9%" />
-<col width="9%" />
-<col width="9%" />
-<col width="9%" />
+<colgroup>
+<col width="9%"></col>
+<col width="9%"></col>
+<col width="9%"></col>
+<col width="8%"></col>
+<col width="9%"></col>
+<col width="9%"></col>
+<col width="9%"></col>
+<col width="9%"></col>
+<col width="9%"></col>
+<col width="9%"></col>
+</colgroup>
 <thead>
 <tr class="header">
-<th align="left">3.54</th>
-<th align="left">3.62</th>
-<th align="left">3.69</th>
-<th align="left">3.7</th>
-<th align="left">3.73</th>
-<th align="left">3.77</th>
-<th align="left">3.85</th>
-<th align="left">3.9</th>
+<th align="center">3.73</th>
+<th align="center">3.77</th>
+<th align="center">3.85</th>
+<th align="center">3.9</th>
+<th align="center">3.92</th>
+<th align="center">4.08</th>
+<th align="center">4.11</th>
+<th align="center">4.22</th>
+<th align="center">4.43</th>
+<th align="center">4.93</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
-<td align="left">1</td>
-<td align="left">1</td>
-<td align="left">1</td>
-<td align="left">1</td>
-<td align="left">1</td>
-<td align="left">1</td>
-<td align="left">1</td>
-<td align="left">2</td>
-</tr>
-</tbody>
-</table>
-<table>
-<col width="9%" />
-<col width="9%" />
-<col width="9%" />
-<col width="9%" />
-<col width="9%" />
-<col width="9%" />
-<thead>
-<tr class="header">
-<th align="left">3.92</th>
-<th align="left">4.08</th>
-<th align="left">4.11</th>
-<th align="left">4.22</th>
-<th align="left">4.43</th>
-<th align="left">4.93</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td align="left">3</td>
-<td align="left">2</td>
-<td align="left">1</td>
-<td align="left">2</td>
-<td align="left">1</td>
-<td align="left">1</td>
+<td align="center">1</td>
+<td align="center">1</td>
+<td align="center">1</td>
+<td align="center">2</td>
+<td align="center">3</td>
+<td align="center">2</td>
+<td align="center">1</td>
+<td align="center">2</td>
+<td align="center">1</td>
+<td align="center">1</td>
 </tr>
 </tbody>
 </table>
 <p>Tables are boring, let us show the same with a <code>histogram</code>:</p>
-<p><a href="plots/short-code-long-report-5-hires.png"><img src="plots/short-code-long-report-5.png" /></a></p>
+<div class="figure">
+<img src="data:image/png;base64,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" />
+</div>
 <h3 id="wt">wt</h3>
 <p>We found the folloing values here:</p>
-<p><em>2.620</em>, <em>2.875</em>, <em>2.320</em>, <em>3.215</em>, <em>3.440</em>, <em>3.460</em>, <em>3.570</em>, <em>3.190</em>, <em>3.150</em>, <em>3.440</em>, <em>3.440</em>, <em>4.070</em>, <em>3.730</em>, <em>3.780</em>, <em>5.250</em>, <em>5.424</em>, <em>5.345</em>, <em>2.200</em>, <em>1.615</em>, <em>1.835</em>, <em>2.465</em>, <em>3.520</em>, <em>3.435</em>, <em>3.840</em>, <em>3.845</em>, <em>1.935</em>, <em>2.140</em>, <em>1.513</em>, <em>3.170</em>, <em>2.770</em>, <em>3.570</em> and <em>2.780</em></p>
+<p><em>2.62</em>, <em>2.875</em>, <em>2.32</em>, <em>3.215</em>, <em>3.44</em>, <em>3.46</em>, <em>3.57</em>, <em>3.19</em>, <em>3.15</em>, <em>3.44</em>, <em>3.44</em>, <em>4.07</em>, <em>3.73</em>, <em>3.78</em>, <em>5.25</em>, <em>5.424</em>, <em>5.345</em>, <em>2.2</em>, <em>1.615</em>, <em>1.835</em>, <em>2.465</em>, <em>3.52</em>, <em>3.435</em>, <em>3.84</em>, <em>3.845</em>, <em>1.935</em>, <em>2.14</em>, <em>1.513</em>, <em>3.17</em>, <em>2.77</em>, <em>3.57</em> and <em>2.78</em></p>
 <p>The mean of wt is <em>3.217</em> while the standard deviation is: <em>0.9785</em>. The most frequent value in wt is 3.44, but let us check out the frequency table too:</p>
 <table>
 <caption>Table continues below</caption>
-<col width="11%" />
-<col width="11%" />
-<col width="11%" />
-<col width="11%" />
-<col width="9%" />
-<col width="8%" />
-<col width="8%" />
+<colgroup>
+<col width="9%"></col>
+<col width="9%"></col>
+<col width="9%"></col>
+<col width="9%"></col>
+<col width="8%"></col>
+<col width="7%"></col>
+<col width="8%"></col>
+<col width="9%"></col>
+<col width="8%"></col>
+<col width="8%"></col>
+<col width="8%"></col>
+</colgroup>
 <thead>
 <tr class="header">
-<th align="left">1.513</th>
-<th align="left">1.615</th>
-<th align="left">1.835</th>
-<th align="left">1.935</th>
-<th align="left">2.14</th>
-<th align="left">2.2</th>
-<th align="left">2.32</th>
+<th align="center">1.513</th>
+<th align="center">1.615</th>
+<th align="center">1.835</th>
+<th align="center">1.935</th>
+<th align="center">2.14</th>
+<th align="center">2.2</th>
+<th align="center">2.32</th>
+<th align="center">2.465</th>
+<th align="center">2.62</th>
+<th align="center">2.77</th>
+<th align="center">2.78</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
-<td align="left">1</td>
-<td align="left">1</td>
-<td align="left">1</td>
-<td align="left">1</td>
-<td align="left">1</td>
-<td align="left">1</td>
-<td align="left">1</td>
+<td align="center">1</td>
+<td align="center">1</td>
+<td align="center">1</td>
+<td align="center">1</td>
+<td align="center">1</td>
+<td align="center">1</td>
+<td align="center">1</td>
+<td align="center">1</td>
+<td align="center">1</td>
+<td align="center">1</td>
+<td align="center">1</td>
 </tr>
 </tbody>
 </table>
 <table>
 <caption>Table continues below</caption>
-<col width="11%" />
-<col width="9%" />
-<col width="9%" />
-<col width="9%" />
-<col width="11%" />
-<col width="9%" />
-<col width="9%" />
+<colgroup>
+<col width="10%"></col>
+<col width="8%"></col>
+<col width="8%"></col>
+<col width="8%"></col>
+<col width="10%"></col>
+<col width="10%"></col>
+<col width="8%"></col>
+<col width="8%"></col>
+<col width="8%"></col>
+<col width="8%"></col>
+<col width="8%"></col>
+</colgroup>
 <thead>
 <tr class="header">
-<th align="left">2.465</th>
-<th align="left">2.62</th>
-<th align="left">2.77</th>
-<th align="left">2.78</th>
-<th align="left">2.875</th>
-<th align="left">3.15</th>
-<th align="left">3.17</th>
+<th align="center">2.875</th>
+<th align="center">3.15</th>
+<th align="center">3.17</th>
+<th align="center">3.19</th>
+<th align="center">3.215</th>
+<th align="center">3.435</th>
+<th align="center">3.44</th>
+<th align="center">3.46</th>
+<th align="center">3.52</th>
+<th align="center">3.57</th>
+<th align="center">3.73</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
-<td align="left">1</td>
-<td align="left">1</td>
-<td align="left">1</td>
-<td align="left">1</td>
-<td align="left">1</td>
-<td align="left">1</td>
-<td align="left">1</td>
+<td align="center">1</td>
+<td align="center">1</td>
+<td align="center">1</td>
+<td align="center">1</td>
+<td align="center">1</td>
+<td align="center">1</td>
+<td align="center">3</td>
+<td align="center">1</td>
+<td align="center">1</td>
+<td align="center">2</td>
+<td align="center">1</td>
 </tr>
 </tbody>
 </table>
 <table>
-<caption>Table continues below</caption>
-<col width="9%" />
-<col width="11%" />
-<col width="11%" />
-<col width="9%" />
-<col width="9%" />
-<col width="9%" />
-<col width="9%" />
+<colgroup>
+<col width="9%"></col>
+<col width="9%"></col>
+<col width="11%"></col>
+<col width="9%"></col>
+<col width="9%"></col>
+<col width="11%"></col>
+<col width="11%"></col>
+</colgroup>
 <thead>
 <tr class="header">
-<th align="left">3.19</th>
-<th align="left">3.215</th>
-<th align="left">3.435</th>
-<th align="left">3.44</th>
-<th align="left">3.46</th>
-<th align="left">3.52</th>
-<th align="left">3.57</th>
+<th align="center">3.78</th>
+<th align="center">3.84</th>
+<th align="center">3.845</th>
+<th align="center">4.07</th>
+<th align="center">5.25</th>
+<th align="center">5.345</th>
+<th align="center">5.424</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
-<td align="left">1</td>
-<td align="left">1</td>
-<td align="left">1</td>
-<td align="left">3</td>
-<td align="left">1</td>
-<td align="left">1</td>
-<td align="left">2</td>
-</tr>
-</tbody>
-</table>
-<table>
-<caption>Table continues below</caption>
-<col width="9%" />
-<col width="9%" />
-<col width="9%" />
-<col width="11%" />
-<col width="9%" />
-<col width="9%" />
-<col width="9%" />
-<thead>
-<tr class="header">
-<th align="left">3.73</th>
-<th align="left">3.78</th>
-<th align="left">3.84</th>
-<th align="left">3.845</th>
-<th align="left">4.07</th>
-<th align="left">5.25</th>
-<th align="left">5.345</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td align="left">1</td>
-<td align="left">1</td>
-<td align="left">1</td>
-<td align="left">1</td>
-<td align="left">1</td>
-<td align="left">1</td>
-<td align="left">1</td>
-</tr>
-</tbody>
-</table>
-<table>
-<col width="9%" />
-<thead>
-<tr class="header">
-<th align="left">5.424</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td align="left">1</td>
+<td align="center">1</td>
+<td align="center">1</td>
+<td align="center">1</td>
+<td align="center">1</td>
+<td align="center">1</td>
+<td align="center">1</td>
+<td align="center">1</td>
 </tr>
 </tbody>
 </table>
 <p>Tables are boring, let us show the same with a <code>histogram</code>:</p>
-<p><a href="plots/short-code-long-report-6-hires.png"><img src="plots/short-code-long-report-6.png" /></a></p>
+<div class="figure">
+<img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAeAAAAHgCAMAAABKCk6nAAACu1BMVEUAAAABAQEDAwMEBAQFBQUGBgYHBwcICAgJCQkKCgoLCwsMDAwNDQ0ODg4PDw8QEBARERESEhITExMVFRUXFxcYGBgZGRkdHR0eHh4fHx8hISEjIyMlJSUmJiYnJycpKSkrKyssLCwtLS0uLi4vLy8wMDAxMTEyMjIzMzM0NDQ1NTU2NjY3Nzc4ODg5OTk6Ojo7Ozs8PDw9PT0+Pj4/Pz9AQEBBQUFCQkJDQ0NERERFRUVGRkZHR0dJSUlKSkpLS0tMTExNTU1OTk5PT09QUFBRUVFSUlJTU1NVVVVWVlZXV1dYWFhdXV1eXl5fX19gYGBhYWFiYmJjY2NlZWVmZmZnZ2dqampra2tsbGxtbW1ubm5vb29wcHB0dHR1dXV2dnZ3d3d4eHh5eXl6enp7e3t8fHx/f3+BgYGCgoKDg4OIiIiKioqLi4uMjIyOjo6Pj4+RkZGTk5OVlZWWlpaZmZmampqcnJydnZ2enp6fn5+goKChoaGioqKjo6OlpaWnp6eoqKipqamqqqqrq6usrKytra2xsbGysrKzs7O0tLS1tbW2tra3t7e4uLi5ubm7u7u8vLy+vr6/v7/AwMDBwcHCwsLFxcXGxsbIyMjJycnKysrLy8vMzMzNzc3Ozs7Pz8/Q0NDR0dHS0tLT09PU1NTV1dXW1tbX19fY2NjZ2dna2trb29vc3Nzd3d3e3t7f39/g4ODh4eHi4uLj4+Pk5OTl5eXm5ubn5+fo6Ojp6enq6urr6+vs7Ozt7e3u5d7u7u7v7+/w8PDx6eTx8fHy8vLz7Ofz7Ojz7ejz7enz8/P07un09PT17+v19fX28e329vb38u/38/D39/f49PH4+Pj59fP59vT59/T5+fn69/X6+vr7+Pf7+/v8+vj8+vn8+vr8+/n8+/r8/Pz9+/r9/f3+/f3+/v3+/v7///+8WqGNAAAACXBIWXMAAAsSAAALEgHS3X78AAASCUlEQVR4nO2d/39VdR3HJ2oF4fySBWRBJaVpYswvCEqoGDVQKUtkkbosh6iNyhQSLa1A7ZujTFQSVDacsAuOcGOwGgR9WYuWa+laV8vrrfv5M7r3c8acj3vOPZ/3+Zz3+9z72ev5w3nwuI/D6/Pe54n38/Leu61KAaepSnoAwAsEOw4EOw4EOw4EOw4EOw4EOw4EOw4EOw4EOw4EOw4EOw4EOw4EOw4EOw4EOw4EOw4EOw4EOw4EOw4EO06Q4K76mhmz67tFZwEMBAmev2Z7X8u6haKzAAaCBM/R1wVygwAeggQvq21c37hkBevanYR7h81vzewn3Js1v5dpXFIunSDBuaaVdQ1N3pffubXAtra2/JHcEeM1Rbj/RfPkHVvMZ9iXMZ8hRfjqWgn70BznrqZNBWvm2/8DKkWmsnIrbNwRggRPmTh9+vSJ01nXBgIECT60/HNd6jLetYd4YnOUA5AA07hsuR7BT9FPzb17HuvSKkW4t9/81uE9hHsJz49M45Jy6ZQ4g9Orr2ZdGoLpuXSSfKkSgsm5dJIUXGG1tMLGHQFvNjhOkoLRollzPXAGG4MzmAoEk3PpQLAxEEylwmpphY07Alq046BFG4MWTQVnMDmXDgQbA8FUIJicSwctOulYtGhgA1q0MWjRVHAGk3PpQLAxEEyFacdyhOc8COYkjvr4Wwt+Jz+uZK5HpbdoQcGVSaW3aEHBaNFU4jjULAXjDOYEgsm5dCBYdFzbXDpo0aLjSuZ6oEU7Dlq06LiSuR44g0XHtc2lA8Gi49rm0oFg0XFtc+mgRYuOK5nrgRbtOGjRouNK5nrgDBYd1zaXDgSLjmubSweCRce1zaWDFi06rmSuB1q046BFi44rmeuBM1h0XNtcOhAsOq5tLh1Dwbu2bk3196fzOxLjNUW4/0jA41aC0/39GfMZUoSvroewDzvj3NVcRMEsoEWz5nqgRTsOWrTouJK5HihZouPa5tKBYNFxbXPpQLDouLa5dNCiRceVzPVAi3YctGjRcSVzPXAGi45rm0sHgkXHtc2lA8Gi49rm0kGLFh1XMtcDLdpx0KJFx5XM9cAZLDqubS4dCBYd1zaXDgSLjmubSwctWnRcyVwPtGjHQYsWHVcy1wNnsOi4trl0IFh0XNtcOhAsOq5tLh20aNFxJXM90KIdBy1adFzJXA+cwaLj2ubSgWDRcW1z6UCw6Li2uXTQokXHlcz1QIt2HLRo0XElcz1wBouOa5tLB4JFx7XNpQPBouPa5tJBixYdVzLXAy3acdCiRceVzPXAGSw6rm0uHQgWHdc2lw4Ei45rm0snSHBXfc2M2fXdrGujRbPmegQJnr9me1/LuoWsa8eBoODKJEjwHH1dwLo2WjRrrkeQ4GW1jesbl6xgXRtnMDmXTpDgXNPKuoamLOvaEEzOpRMkeFfdral5F23Rf+7YWuC5trZ85+qI8Zoi3P9iwONWgg+17cuYz5AifHWthH1ojnNX06aCz1t77ykbN30ipn9G/qBFs+Z6BAmuUWqRUrNY144DQcGVSZDgy297SaXXzmVdGy2aNdcjSHDvXc3q8E0drGujZJFz6eClStFxbXPpQLDouLa5dPCJDtFxJXM98IkOx8EnOkTHlcz1wBksOq5tLh0IFh3XNpcOBIuOa5tLBy1adFzJXA+0aMdBixYdVzLXA2ew6Li2uXQgWHRc21w6ECw6rm0uHbRo0XElcz3Qoh0HLVp0XMlcD5zBouPa5tKBYNFxbXPpQLDouLa5dNCiRceVzPVAi3YctGjRcSVzPXAGi45rm0sHgkXHtc2lA8Gi49rm0kGLFh1XMtcDLdpx0KJFx5XM9cAZLDqubS4dCBYd1zaXDgSLjmubSwctWnRcyVwPtGjHQYsWHVcy1wNnsOi4trl0IFh0XNtcOhAsOq5tLh20aNFxJXM90KIdBy1adFzJXA+cwaLj2ubSMRScSafjPyoqTPDuGMb1oywEv9jcvLu/P53fkRivKcL9RwIetxH8hzdfseCNTImZewj7sDPOXc1FFMxC0i36T3+3+dsvxzC9Bi26FA4I5mU8t+gyEYwWXYCjZDEKrriSxQIEayC4AARHBC2aRTAFtOhSOCCYF7ToxAWjRRfAGRwRCIZgNiBY465gtGgNWnQpHBDMC1p04oLRogvgDI4IBEMwGxCsYRf8oWOwLuQDWrSGvUVvPQbrQkw4IJiXMU/R90mvjRatEWjRz39x8eLFV57OupAPOIM1AiXrnKU3fur+cx9hXcgHCNYICH5Hd99ctW8260I+QLBGQPC0X6qze/pPZV3IB7RojcBr0d8+sf3Wsy64lHUhJhwQzIsW3LdnIP3db3ZIr40WrWFv0en01HSeg5NZF/IBZ7CG/QyeMKFqQoHFrAv5AMEagZI1j3WJQCBYI/JmQ6YzzbqML2jRGoEWvb/2+EnH1+5nXYgJBwTzogVftXS/2n/NIum10aI1Aq9FT+7JX7pPYl3IB5zBGoEz+AOP5i+PTmddyAcI1ggI/mH1tQ3XVq9nXcgHCNawC/51VqVW16/mXccPtGgNe4uuOsi6Ai8OCOYlScFo0Rr2Fl318M89WBfyAWewhv0MrpoyzYN1IR8gWMMvOKmnaAjWJCO4q75mxuz6bta10aI17C36wl6fx+ev2d7Xsm4h69px4IBgXoK+dWWOvi5gXRstWpPMdxcuq21c37hkBevaOIM17Gdwl/J5ozDXtLKuoSmr/zx8pMDRdDqrf3B0bNcU4f7egMcTFFxq5l7CPrTFuat+gk/unNKrGfv4E+fN+olSl+s/H2gr0Nre3qPUvhivKcL9ewIeT1DwkRIztxH2oSXOXS0ynBd848nHVWvGPv7Rp3ef9ayaafHcEA5atEbgEx1XFT9+sVJP1qR5BceBA4J5CfpM1rXLW9VXFvO+uIUWrRFo0T6fyRp8aIvKPXAd69po0RqBN/wT+kwWBGsEBOMzWY4LTugzWWjRGoEWndBnsuLAAcG8eC06mc9koUVr8JPuCuAMjggEjwfBfeqtqyAQrGEXnNg3gKNFa9hbdGLfAB4HDgjmJclvAEeL1qBFF8AZHBEtuGnW9AKsC/kAwRoBwVPrtz2fh3UhHyBYIyD4fZR54gMtWiPwWvSdt/MuwogDgnnRgj856aQPJnAGo0VrJH5etAfrQj7gDNbI/JysjhzrMr5AsEZA8N6LJp68efYu1oV8gGCNxI8yXD4wLX3jJawL+YAWrRFo0e86qKapAxNZF2LCAcG8aMFnPpwX/MiHpddGi9YItOhfnPaZyYve8zPWhXzAGayRaNHd31l1TyfrOn5AsEZA8OA9j6n7V/M+VfgAwRoBwdef/YzadM7nWRfyAS1aI9CiTy38I0pVh9xaljggmBct+Iwn8pdNZ0ivjRatEWjRD5xW9/Uvnyb+yylxBmskWnTrqusbnmVdxw8I1ggI/kgz6xpBQLBGQPCqpYOsiwSAFq0RaNEXVp94RgJv+MeBA4J50YK3eUivjRatEflcNN7wj1dwmZ3BFfCGf1BJgOAQknzD3/vK/vFXC/4HwSEk+Ya/Vx//aLPL/7X5y2VyBgu06ITe8PcY94J5SfINf68+jnvBEi06yTf8nRRcXmfwc/c9Hnbb0Z6evmzhp0fnYrym9LWSBQd+dX2EfUjFuat+gu864cx33hwiuKu9vXNoKF8H0jFeU4VrtmIFZ0t8dYcJ+9AW564WvZyRFzz1QfXEceI/gUWhRb9tG7go/FqdAyo3cTfrKqUY94J5Gfm9SdVJCEaLHrMNXBQEb9y8edKGzZs3sy7kA1r0mG3gIi/49GOwLuQDBI/ZBi6S/yk7EGyzh6EkKRgtesw2cJGkYI9xL5iXJAWjRY/ZBi5wBkcFZ3AoEDxmG7iA4KhAcCho0WO2gQu06KigRYeCFj1mG7jAGRwVnMGhQPCYbeACgqMCwaGgRY/ZBi7QoqOCFh0KWvSYbeACZ3BUcAaHsk9fIdhmD0OJQ/Brf7HgdQi23P7SxCH4FZt9+qeTgimUf4uG4DIGgqMyjlo0BBeBM3gUCIbgEkBwGBAcFbRoMyCYFwiOClq0GW4Kxhk8CgRDcAkgOAwIjgpatBkQzAsERwUt2gw3BeMMHgWCIbgEEBxGkOCu+poZs+u7jTIg2IpkWvT8Ndv7WtYtNMqA4DImSPAcfV1glAHBViTTopfVNq5vXLLCKAOCiyj/MzjXtLKuocn78cO9LxXo6OnJj91bfD04TgUP+u6Gd+0MeNzv+oLxnQbXoh8YbdKiD2vBe3t6jip1pPg6XgUP+O6Gd+0MeNzv2mp8p8G1qLEFCf6Bh4F+PEVbkkyLXjXhlq/lMcqA4DIm8Cm6Jm2cAcFWJPRadMb8lxlCcBHl36IpQHARFMEHLLe/NBAcFTvBr//Zgr8R5EBwVOzO4H/ZLP17wkIQHBUINgOC6UCwGUmewRBsBgSHAcFRgWAz3BQcCgSbAcFhQHBUINgMNwXjDB4FgulAsBkQbAgE04FgMyA4DAiOCgSb4aZgnMGjQDAdCDYDgg2BYDoQbAYEhwHBUYFgM9wUjDN4FAimA8FmQLAhEEwHgs2A4DAgOCoQbIabgnEGjwLBdCDYDAg2BILpQLAZEBwGBEcFgs1wUzDO4FEgmA4EmwHBhkAwHQg2A4LDgOCoQLAZbgquuDP4QHv7vqGhjFJpn+s4FZz13w19PRy0V8eudoKzgclRBff29PRmszmlcj7XcSo4YDf0tS9or45d7QQHJ0cVXJJxKthqz8rtKbokEEwHgs2A4DAgOCputeiSQHAREDwKBNOBYDNwBhsCwXQg2AwIDgOCo4Iz2AwIpgPBZkCwIRBMB4LNgOAwIDgqEGyGm4JxBo8CwXQg2AwINgSC6UCwGRAcBgRHBYLNcFMwzuBRIJgOBJsBwYZAMB0INgOCw4DgqECwGW4Kxhk8CgTTgWAzINgQCKYDwWZAcBgQHBUINsNNwTiDR4FgOhBsBgQbAsF0INgMCA4DgqMCwWa4KRhn8CgQTAeCzYBgQyCYDgSbAcFhBAnuqq+ZMbu+2ygDgukkLnj+mu19LesWGmVAcBHlfwbP0dcF+trdVuCF9vae/H/Zb78eVerokTdetuDNV23+ds7mL7/6ms3f/ndGqeHBwXS0639sln5l+PDhgSIX+po2FbystnF945IV+s9DRwr0pdNZpTJF12wmW7hm6dcuwv0D5slDB8xnGM6az9BF+OoGCPvQFWH3MhlfF5kiv4GCc00r6xqain++dJxkKiu3wsYdIY4WDcqYJAUX/4KBWMgN8+QyjcuW65Gk4BTh3tBa+hbDewj3Ep4fmcYl5dKBYGMgmAoEk3PpJCm4wmpphY07Alq046BFG4MWTQVnMDmXDgQbA8FUIJicSwctOulYtGhgA1q0MWjRVHAGk3PpQLAxEEwFgsm5dNCik45FiwY2oEUbgxZNBWcwOZcOBBsDwVSeJ9xr9k00msE283v7Bszvbc2Z30sYN0fZBjpJCt7Cc2/vDvN793aZ39s8aH4vYdyhbeb3RiBJwVsJ91IE7zS/lyK4hUlws/m9EagUwYR7SYL3m99LEUwYF4I1xd90EwhFcIbwzTkUwYRxIZgKRTAFimACDgtu4Yk9upsndwfPCyjpF1hij4GXKh0Hgh0Hgh0Hgh0Hgh0nOcGDSy/+2JMMub1XXHD+LoZcdWgKR+pg9cyZd3AEj5Cc4IeWq1+dx5B7121qbR1DrqqbyJG6/RqO1LdITvCWVrV7FkNu80vq3lsZcp9aOp0hVW04d+FnCe9vkknyDH7qrB+z5C46heEt1vTcLhbBm76vvnclR/AIyQnOfbXmGY7cw2m18dL4Y1ffrVgE5+l/P1NwgeQEP7iY8Io8gZvWqk0XxR979bzLJs6PP1bd/i218QqG3GMkJ/i6aTNnXs6Q23HJ+ec+zZCreP4L/s1VNfMIH0Ehg/8PdhwIdhwIdhwIdhwIdhwIdhwIdhwIdhwIdhwIdhwIdhwIdpxxL3gCz3taZQMEQ7CLfPxH6o4TBtTF6+ZVTe1LehhWxqngm29Ri979+PCkvfgv2E1+WpObesOdm2fgKdpR+ibvOHvDp79RB8GuUvOlGw68t3YDBLtKw6T71YzqQ3nBB5MehZfxKvixqp3qC4XP3ddORosGFQwEOw4EOw4EOw4EOw4EO87/AWCnOzsw6BCxAAAAAElFTkSuQmCC" />
+</div>
 <h3 id="qsec">qsec</h3>
 <p>We found the folloing values here:</p>
-<p><em>16.46</em>, <em>17.02</em>, <em>18.61</em>, <em>19.44</em>, <em>17.02</em>, <em>20.22</em>, <em>15.84</em>, <em>20</em>, <em>22.90</em>, <em>18.30</em>, <em>18.90</em>, <em>17.40</em>, <em>17.60</em>, <em>18</em>, <em>17.98</em>, <em>17.82</em>, <em>17.42</em>, <em>19.47</em>, <em>18.52</em>, <em>19.90</em>, <em>20.01</em>, <em>16.87</em>, <em>17.30</em>, <em>15.41</em>, <em>17.05</em>, <em>18.90</em>, <em>16.70</em>, <em>16.90</em>, <em>14.50</em>, <em>15.50</em>, <em>14.60</em> and <em>18.60</em></p>
+<p><em>16.46</em>, <em>17.02</em>, <em>18.61</em>, <em>19.44</em>, <em>17.02</em>, <em>20.22</em>, <em>15.84</em>, <em>20</em>, <em>22.9</em>, <em>18.3</em>, <em>18.9</em>, <em>17.4</em>, <em>17.6</em>, <em>18</em>, <em>17.98</em>, <em>17.82</em>, <em>17.42</em>, <em>19.47</em>, <em>18.52</em>, <em>19.9</em>, <em>20.01</em>, <em>16.87</em>, <em>17.3</em>, <em>15.41</em>, <em>17.05</em>, <em>18.9</em>, <em>16.7</em>, <em>16.9</em>, <em>14.5</em>, <em>15.5</em>, <em>14.6</em> and <em>18.6</em></p>
 <p>The mean of qsec is <em>17.85</em> while the standard deviation is: <em>1.787</em>. The most frequent value in qsec is 17.02, but let us check out the frequency table too:</p>
 <table>
 <caption>Table continues below</caption>
-<col width="9%" />
-<col width="9%" />
-<col width="11%" />
-<col width="9%" />
-<col width="11%" />
-<col width="11%" />
-<col width="11%" />
+<colgroup>
+<col width="9%"></col>
+<col width="9%"></col>
+<col width="10%"></col>
+<col width="9%"></col>
+<col width="10%"></col>
+<col width="10%"></col>
+<col width="9%"></col>
+<col width="10%"></col>
+<col width="9%"></col>
+<col width="9%"></col>
+</colgroup>
 <thead>
 <tr class="header">
-<th align="left">14.5</th>
-<th align="left">14.6</th>
-<th align="left">15.41</th>
-<th align="left">15.5</th>
-<th align="left">15.84</th>
-<th align="left">16.46</th>
-<th align="left">16.7</th>
+<th align="center">14.5</th>
+<th align="center">14.6</th>
+<th align="center">15.41</th>
+<th align="center">15.5</th>
+<th align="center">15.84</th>
+<th align="center">16.46</th>
+<th align="center">16.7</th>
+<th align="center">16.87</th>
+<th align="center">16.9</th>
+<th align="center">17.02</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
-<td align="left">1</td>
-<td align="left">1</td>
-<td align="left">1</td>
-<td align="left">1</td>
-<td align="left">1</td>
-<td align="left">1</td>
-<td align="left">1</td>
+<td align="center">1</td>
+<td align="center">1</td>
+<td align="center">1</td>
+<td align="center">1</td>
+<td align="center">1</td>
+<td align="center">1</td>
+<td align="center">1</td>
+<td align="center">1</td>
+<td align="center">1</td>
+<td align="center">2</td>
 </tr>
 </tbody>
 </table>
 <table>
 <caption>Table continues below</caption>
-<col width="11%" />
-<col width="9%" />
-<col width="11%" />
-<col width="11%" />
-<col width="9%" />
-<col width="9%" />
-<col width="9%" />
+<colgroup>
+<col width="9%"></col>
+<col width="8%"></col>
+<col width="8%"></col>
+<col width="9%"></col>
+<col width="8%"></col>
+<col width="9%"></col>
+<col width="9%"></col>
+<col width="6%"></col>
+<col width="8%"></col>
+<col width="9%"></col>
+<col width="9%"></col>
+</colgroup>
 <thead>
 <tr class="header">
-<th align="left">16.87</th>
-<th align="left">16.9</th>
-<th align="left">17.02</th>
-<th align="left">17.05</th>
-<th align="left">17.3</th>
-<th align="left">17.4</th>
-<th align="left">17.42</th>
+<th align="center">17.05</th>
+<th align="center">17.3</th>
+<th align="center">17.4</th>
+<th align="center">17.42</th>
+<th align="center">17.6</th>
+<th align="center">17.82</th>
+<th align="center">17.98</th>
+<th align="center">18</th>
+<th align="center">18.3</th>
+<th align="center">18.52</th>
+<th align="center">18.6</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
-<td align="left">1</td>
-<td align="left">1</td>
-<td align="left">2</td>
-<td align="left">1</td>
-<td align="left">1</td>
-<td align="left">1</td>
-<td align="left">1</td>
+<td align="center">1</td>
+<td align="center">1</td>
+<td align="center">1</td>
+<td align="center">1</td>
+<td align="center">1</td>
+<td align="center">1</td>
+<td align="center">1</td>
+<td align="center">1</td>
+<td align="center">1</td>
+<td align="center">1</td>
+<td align="center">1</td>
 </tr>
 </tbody>
 </table>
 <table>
-<caption>Table continues below</caption>
-<col width="9%" />
-<col width="11%" />
-<col width="11%" />
-<col width="6%" />
-<col width="9%" />
-<col width="11%" />
-<col width="11%" />
+<colgroup>
+<col width="11%"></col>
+<col width="9%"></col>
+<col width="11%"></col>
+<col width="11%"></col>
+<col width="9%"></col>
+<col width="6%"></col>
+<col width="11%"></col>
+<col width="11%"></col>
+<col width="11%"></col>
+</colgroup>
 <thead>
 <tr class="header">
-<th align="left">17.6</th>
-<th align="left">17.82</th>
-<th align="left">17.98</th>
-<th align="left">18</th>
-<th align="left">18.3</th>
-<th align="left">18.52</th>
-<th align="left">18.6</th>
+<th align="center">18.61</th>
+<th align="center">18.9</th>
+<th align="center">19.44</th>
+<th align="center">19.47</th>
+<th align="center">19.9</th>
+<th align="center">20</th>
+<th align="center">20.01</th>
+<th align="center">20.22</th>
+<th align="center">22.9</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
-<td align="left">1</td>
-<td align="left">1</td>
-<td align="left">1</td>
-<td align="left">1</td>
-<td align="left">1</td>
-<td align="left">1</td>
-<td align="left">1</td>
-</tr>
-</tbody>
-</table>
-<table>
-<caption>Table continues below</caption>
-<col width="11%" />
-<col width="9%" />
-<col width="11%" />
-<col width="11%" />
-<col width="9%" />
-<col width="6%" />
-<col width="9%" />
-<thead>
-<tr class="header">
-<th align="left">18.61</th>
-<th align="left">18.9</th>
-<th align="left">19.44</th>
-<th align="left">19.47</th>
-<th align="left">19.9</th>
-<th align="left">20</th>
-<th align="left">20.01</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td align="left">1</td>
-<td align="left">2</td>
-<td align="left">1</td>
-<td align="left">1</td>
-<td align="left">1</td>
-<td align="left">1</td>
-<td align="left">1</td>
-</tr>
-</tbody>
-</table>
-<table>
-<col width="11%" />
-<col width="11%" />
-<thead>
-<tr class="header">
-<th align="left">20.22</th>
-<th align="left">22.9</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td align="left">1</td>
-<td align="left">1</td>
+<td align="center">1</td>
+<td align="center">2</td>
+<td align="center">1</td>
+<td align="center">1</td>
+<td align="center">1</td>
+<td align="center">1</td>
+<td align="center">1</td>
+<td align="center">1</td>
+<td align="center">1</td>
 </tr>
 </tbody>
 </table>
 <p>Tables are boring, let us show the same with a <code>histogram</code>:</p>
-<p><a href="plots/short-code-long-report-7-hires.png"><img src="plots/short-code-long-report-7.png" /></a></p>
+<div class="figure">
+<img src="data:image/png;base64,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" />
+</div>
 <h3 id="vs">vs</h3>
 <p>We found the folloing values here:</p>
 <p><em>0</em>, <em>0</em>, <em>1</em>, <em>1</em>, <em>0</em>, <em>1</em>, <em>0</em>, <em>1</em>, <em>1</em>, <em>1</em>, <em>1</em>, <em>0</em>, <em>0</em>, <em>0</em>, <em>0</em>, <em>0</em>, <em>0</em>, <em>1</em>, <em>1</em>, <em>1</em>, <em>1</em>, <em>0</em>, <em>0</em>, <em>0</em>, <em>0</em>, <em>1</em>, <em>0</em>, <em>1</em>, <em>0</em>, <em>0</em>, <em>0</em> and <em>1</em></p>
 <p>The mean of vs is <em>0.4375</em> while the standard deviation is: <em>0.504</em>. The most frequent value in vs is 0, but let us check out the frequency table too:</p>
 <table>
-<col width="5%" />
-<col width="5%" />
+<colgroup>
+<col width="5%"></col>
+<col width="5%"></col>
+</colgroup>
 <thead>
 <tr class="header">
-<th align="left">0</th>
-<th align="left">1</th>
+<th align="center">0</th>
+<th align="center">1</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
-<td align="left">18</td>
-<td align="left">14</td>
+<td align="center">18</td>
+<td align="center">14</td>
 </tr>
 </tbody>
 </table>
 <p>Tables are boring, let us show the same with a <code>histogram</code>:</p>
-<p><a href="plots/short-code-long-report-8-hires.png"><img src="plots/short-code-long-report-8.png" /></a></p>
+<div class="figure">
+<img src="data:image/png;base64,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" />
+</div>
 <h3 id="am">am</h3>
 <p>We found the folloing values here:</p>
 <p><em>1</em>, <em>1</em>, <em>1</em>, <em>0</em>, <em>0</em>, <em>0</em>, <em>0</em>, <em>0</em>, <em>0</em>, <em>0</em>, <em>0</em>, <em>0</em>, <em>0</em>, <em>0</em>, <em>0</em>, <em>0</em>, <em>0</em>, <em>1</em>, <em>1</em>, <em>1</em>, <em>0</em>, <em>0</em>, <em>0</em>, <em>0</em>, <em>0</em>, <em>1</em>, <em>1</em>, <em>1</em>, <em>1</em>, <em>1</em>, <em>1</em> and <em>1</em></p>
 <p>The mean of am is <em>0.4062</em> while the standard deviation is: <em>0.499</em>. The most frequent value in am is 0, but let us check out the frequency table too:</p>
 <table>
-<col width="5%" />
-<col width="5%" />
+<colgroup>
+<col width="5%"></col>
+<col width="5%"></col>
+</colgroup>
 <thead>
 <tr class="header">
-<th align="left">0</th>
-<th align="left">1</th>
+<th align="center">0</th>
+<th align="center">1</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
-<td align="left">19</td>
-<td align="left">13</td>
+<td align="center">19</td>
+<td align="center">13</td>
 </tr>
 </tbody>
 </table>
 <p>Tables are boring, let us show the same with a <code>histogram</code>:</p>
-<p><a href="plots/short-code-long-report-9-hires.png"><img src="plots/short-code-long-report-9.png" /></a></p>
+<div class="figure">
+<img src="data:image/png;base64,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" />
+</div>
 <h3 id="gear">gear</h3>
 <p>We found the folloing values here:</p>
 <p><em>4</em>, <em>4</em>, <em>4</em>, <em>3</em>, <em>3</em>, <em>3</em>, <em>3</em>, <em>4</em>, <em>4</em>, <em>4</em>, <em>4</em>, <em>3</em>, <em>3</em>, <em>3</em>, <em>3</em>, <em>3</em>, <em>3</em>, <em>4</em>, <em>4</em>, <em>4</em>, <em>3</em>, <em>3</em>, <em>3</em>, <em>3</em>, <em>3</em>, <em>4</em>, <em>5</em>, <em>5</em>, <em>5</em>, <em>5</em>, <em>5</em> and <em>4</em></p>
 <p>The mean of gear is <em>3.688</em> while the standard deviation is: <em>0.7378</em>. The most frequent value in gear is 3, but let us check out the frequency table too:</p>
 <table>
-<col width="5%" />
-<col width="5%" />
-<col width="5%" />
+<colgroup>
+<col width="5%"></col>
+<col width="5%"></col>
+<col width="5%"></col>
+</colgroup>
 <thead>
 <tr class="header">
-<th align="left">3</th>
-<th align="left">4</th>
-<th align="left">5</th>
+<th align="center">3</th>
+<th align="center">4</th>
+<th align="center">5</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
-<td align="left">15</td>
-<td align="left">12</td>
-<td align="left">5</td>
+<td align="center">15</td>
+<td align="center">12</td>
+<td align="center">5</td>
 </tr>
 </tbody>
 </table>
 <p>Tables are boring, let us show the same with a <code>histogram</code>:</p>
-<p><a href="plots/short-code-long-report-10-hires.png"><img src="plots/short-code-long-report-10.png" /></a></p>
+<div class="figure">
+<img src="data:image/png;base64,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" />
+</div>
 <h3 id="carb">carb</h3>
 <p>We found the folloing values here:</p>
 <p><em>4</em>, <em>4</em>, <em>1</em>, <em>1</em>, <em>2</em>, <em>1</em>, <em>4</em>, <em>2</em>, <em>2</em>, <em>4</em>, <em>4</em>, <em>3</em>, <em>3</em>, <em>3</em>, <em>4</em>, <em>4</em>, <em>4</em>, <em>1</em>, <em>2</em>, <em>1</em>, <em>1</em>, <em>2</em>, <em>2</em>, <em>4</em>, <em>2</em>, <em>1</em>, <em>2</em>, <em>2</em>, <em>4</em>, <em>6</em>, <em>8</em> and <em>2</em></p>
 <p>The mean of carb is <em>2.812</em> while the standard deviation is: <em>1.615</em>. The most frequent value in carb is 2, but let us check out the frequency table too:</p>
 <table>
-<col width="5%" />
-<col width="5%" />
-<col width="5%" />
-<col width="5%" />
-<col width="5%" />
-<col width="5%" />
+<colgroup>
+<col width="5%"></col>
+<col width="5%"></col>
+<col width="5%"></col>
+<col width="5%"></col>
+<col width="5%"></col>
+<col width="5%"></col>
+</colgroup>
 <thead>
 <tr class="header">
-<th align="left">1</th>
-<th align="left">2</th>
-<th align="left">3</th>
-<th align="left">4</th>
-<th align="left">6</th>
-<th align="left">8</th>
+<th align="center">1</th>
+<th align="center">2</th>
+<th align="center">3</th>
+<th align="center">4</th>
+<th align="center">6</th>
+<th align="center">8</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
-<td align="left">7</td>
-<td align="left">10</td>
-<td align="left">3</td>
-<td align="left">10</td>
-<td align="left">1</td>
-<td align="left">1</td>
+<td align="center">7</td>
+<td align="center">10</td>
+<td align="center">3</td>
+<td align="center">10</td>
+<td align="center">1</td>
+<td align="center">1</td>
 </tr>
 </tbody>
 </table>
 <p>Tables are boring, let us show the same with a <code>histogram</code>:</p>
-<p><a href="plots/short-code-long-report-11-hires.png"><img src="plots/short-code-long-report-11.png" /></a></p>
+<div class="figure">
+<img src="data:image/png;base64,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" />
+</div>
 <h1 id="correlation">Correlation</h1>
 <p>And here goes a correlation table:</p>
 <table>
 <caption>Table continues below</caption>
-<col width="15%" />
-<col width="12%" />
-<col width="12%" />
-<col width="12%" />
-<col width="12%" />
-<col width="12%" />
+<colgroup>
+<col width="14%"></col>
+<col width="10%"></col>
+<col width="10%"></col>
+<col width="10%"></col>
+<col width="10%"></col>
+<col width="11%"></col>
+<col width="10%"></col>
+<col width="10%"></col>
+<col width="10%"></col>
+</colgroup>
 <thead>
 <tr class="header">
-<th align="left"> </th>
-<th align="left">mpg</th>
-<th align="left">cyl</th>
-<th align="left">disp</th>
-<th align="left">hp</th>
-<th align="left">drat</th>
+<th align="center"> </th>
+<th align="center">mpg</th>
+<th align="center">cyl</th>
+<th align="center">disp</th>
+<th align="center">hp</th>
+<th align="center">drat</th>
+<th align="center">wt</th>
+<th align="center">qsec</th>
+<th align="center">vs</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
-<td align="left"><strong>mpg</strong></td>
-<td align="left">1</td>
-<td align="left">-0.85216</td>
-<td align="left">-0.84755</td>
-<td align="left">-0.77617</td>
-<td align="left">0.68117</td>
+<td align="center"><strong>mpg</strong></td>
+<td align="center">1</td>
+<td align="center">-0.8522</td>
+<td align="center">-0.8476</td>
+<td align="center">-0.7762</td>
+<td align="center">0.6812</td>
+<td align="center">-0.8677</td>
+<td align="center">0.4187</td>
+<td align="center">0.664</td>
 </tr>
 <tr class="even">
-<td align="left"><strong>cyl</strong></td>
-<td align="left">-0.85216</td>
-<td align="left">1</td>
-<td align="left">0.90203</td>
-<td align="left">0.83245</td>
-<td align="left">-0.69994</td>
+<td align="center"><strong>cyl</strong></td>
+<td align="center">-0.8522</td>
+<td align="center">1</td>
+<td align="center">0.902</td>
+<td align="center">0.8324</td>
+<td align="center">-0.6999</td>
+<td align="center">0.7825</td>
+<td align="center">-0.5912</td>
+<td align="center">-0.8108</td>
 </tr>
 <tr class="odd">
-<td align="left"><strong>disp</strong></td>
-<td align="left">-0.84755</td>
-<td align="left">0.90203</td>
-<td align="left">1</td>
-<td align="left">0.79095</td>
-<td align="left">-0.71021</td>
+<td align="center"><strong>disp</strong></td>
+<td align="center">-0.8476</td>
+<td align="center">0.902</td>
+<td align="center">1</td>
+<td align="center">0.7909</td>
+<td align="center">-0.7102</td>
+<td align="center">0.888</td>
+<td align="center">-0.4337</td>
+<td align="center">-0.7104</td>
 </tr>
 <tr class="even">
-<td align="left"><strong>hp</strong></td>
-<td align="left">-0.77617</td>
-<td align="left">0.83245</td>
-<td align="left">0.79095</td>
-<td align="left">1</td>
-<td align="left">-0.44876</td>
+<td align="center"><strong>hp</strong></td>
+<td align="center">-0.7762</td>
+<td align="center">0.8324</td>
+<td align="center">0.7909</td>
+<td align="center">1</td>
+<td align="center">-0.4488</td>
+<td align="center">0.6587</td>
+<td align="center">-0.7082</td>
+<td align="center">-0.7231</td>
 </tr>
 <tr class="odd">
-<td align="left"><strong>drat</strong></td>
-<td align="left">0.68117</td>
-<td align="left">-0.69994</td>
-<td align="left">-0.71021</td>
-<td align="left">-0.44876</td>
-<td align="left">1</td>
+<td align="center"><strong>drat</strong></td>
+<td align="center">0.6812</td>
+<td align="center">-0.6999</td>
+<td align="center">-0.7102</td>
+<td align="center">-0.4488</td>
+<td align="center">1</td>
+<td align="center">-0.7124</td>
+<td align="center">0.0912</td>
+<td align="center">0.4403</td>
 </tr>
 <tr class="even">
-<td align="left"><strong>wt</strong></td>
-<td align="left">-0.86766</td>
-<td align="left">0.78250</td>
-<td align="left">0.88798</td>
-<td align="left">0.65875</td>
-<td align="left">-0.71244</td>
+<td align="center"><strong>wt</strong></td>
+<td align="center">-0.8677</td>
+<td align="center">0.7825</td>
+<td align="center">0.888</td>
+<td align="center">0.6587</td>
+<td align="center">-0.7124</td>
+<td align="center">1</td>
+<td align="center">-0.1747</td>
+<td align="center">-0.5549</td>
 </tr>
 <tr class="odd">
-<td align="left"><strong>qsec</strong></td>
-<td align="left">0.41868</td>
-<td align="left">-0.59124</td>
-<td align="left">-0.43370</td>
-<td align="left">-0.70822</td>
-<td align="left">0.09120</td>
+<td align="center"><strong>qsec</strong></td>
+<td align="center">0.4187</td>
+<td align="center">-0.5912</td>
+<td align="center">-0.4337</td>
+<td align="center">-0.7082</td>
+<td align="center">0.0912</td>
+<td align="center">-0.1747</td>
+<td align="center">1</td>
+<td align="center">0.7445</td>
 </tr>
 <tr class="even">
-<td align="left"><strong>vs</strong></td>
-<td align="left">0.66404</td>
-<td align="left">-0.81081</td>
-<td align="left">-0.71042</td>
-<td align="left">-0.72310</td>
-<td align="left">0.44028</td>
+<td align="center"><strong>vs</strong></td>
+<td align="center">0.664</td>
+<td align="center">-0.8108</td>
+<td align="center">-0.7104</td>
+<td align="center">-0.7231</td>
+<td align="center">0.4403</td>
+<td align="center">-0.5549</td>
+<td align="center">0.7445</td>
+<td align="center">1</td>
 </tr>
 <tr class="odd">
-<td align="left"><strong>am</strong></td>
-<td align="left">0.59983</td>
-<td align="left">-0.52261</td>
-<td align="left">-0.59123</td>
-<td align="left">-0.24320</td>
-<td align="left">0.71271</td>
+<td align="center"><strong>am</strong></td>
+<td align="center">0.5998</td>
+<td align="center">-0.5226</td>
+<td align="center">-0.5912</td>
+<td align="center">-0.2432</td>
+<td align="center">0.7127</td>
+<td align="center">-0.6925</td>
+<td align="center">-0.2299</td>
+<td align="center">0.1683</td>
 </tr>
 <tr class="even">
-<td align="left"><strong>gear</strong></td>
-<td align="left">0.48028</td>
-<td align="left">-0.49269</td>
-<td align="left">-0.55557</td>
-<td align="left">-0.12570</td>
-<td align="left">0.69961</td>
+<td align="center"><strong>gear</strong></td>
+<td align="center">0.4803</td>
+<td align="center">-0.4927</td>
+<td align="center">-0.5556</td>
+<td align="center">-0.1257</td>
+<td align="center">0.6996</td>
+<td align="center">-0.5833</td>
+<td align="center">-0.2127</td>
+<td align="center">0.206</td>
 </tr>
 <tr class="odd">
-<td align="left"><strong>carb</strong></td>
-<td align="left">-0.55093</td>
-<td align="left">0.52699</td>
-<td align="left">0.39498</td>
-<td align="left">0.74981</td>
-<td align="left">-0.09079</td>
+<td align="center"><strong>carb</strong></td>
+<td align="center">-0.5509</td>
+<td align="center">0.527</td>
+<td align="center">0.395</td>
+<td align="center">0.7498</td>
+<td align="center">-0.09079</td>
+<td align="center">0.4276</td>
+<td align="center">-0.6562</td>
+<td align="center">-0.5696</td>
 </tr>
 </tbody>
 </table>
 <table>
-<caption>Table continues below</caption>
-<col width="15%" />
-<col width="12%" />
-<col width="12%" />
-<col width="12%" />
-<col width="12%" />
-<col width="12%" />
+<colgroup>
+<col width="15%"></col>
+<col width="11%"></col>
+<col width="11%"></col>
+<col width="11%"></col>
+</colgroup>
 <thead>
 <tr class="header">
-<th align="left"> </th>
-<th align="left">wt</th>
-<th align="left">qsec</th>
-<th align="left">vs</th>
-<th align="left">am</th>
-<th align="left">gear</th>
+<th align="center"> </th>
+<th align="center">am</th>
+<th align="center">gear</th>
+<th align="center">carb</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
-<td align="left"><strong>mpg</strong></td>
-<td align="left">-0.86766</td>
-<td align="left">0.41868</td>
-<td align="left">0.66404</td>
-<td align="left">0.59983</td>
-<td align="left">0.48028</td>
+<td align="center"><strong>mpg</strong></td>
+<td align="center">0.5998</td>
+<td align="center">0.4803</td>
+<td align="center">-0.5509</td>
 </tr>
 <tr class="even">
-<td align="left"><strong>cyl</strong></td>
-<td align="left">0.78250</td>
-<td align="left">-0.59124</td>
-<td align="left">-0.81081</td>
-<td align="left">-0.52261</td>
-<td align="left">-0.49269</td>
+<td align="center"><strong>cyl</strong></td>
+<td align="center">-0.5226</td>
+<td align="center">-0.4927</td>
+<td align="center">0.527</td>
 </tr>
 <tr class="odd">
-<td align="left"><strong>disp</strong></td>
-<td align="left">0.88798</td>
-<td align="left">-0.43370</td>
-<td align="left">-0.71042</td>
-<td align="left">-0.59123</td>
-<td align="left">-0.55557</td>
+<td align="center"><strong>disp</strong></td>
+<td align="center">-0.5912</td>
+<td align="center">-0.5556</td>
+<td align="center">0.395</td>
 </tr>
 <tr class="even">
-<td align="left"><strong>hp</strong></td>
-<td align="left">0.65875</td>
-<td align="left">-0.70822</td>
-<td align="left">-0.72310</td>
-<td align="left">-0.24320</td>
-<td align="left">-0.12570</td>
+<td align="center"><strong>hp</strong></td>
+<td align="center">-0.2432</td>
+<td align="center">-0.1257</td>
+<td align="center">0.7498</td>
 </tr>
 <tr class="odd">
-<td align="left"><strong>drat</strong></td>
-<td align="left">-0.71244</td>
-<td align="left">0.09120</td>
-<td align="left">0.44028</td>
-<td align="left">0.71271</td>
-<td align="left">0.69961</td>
+<td align="center"><strong>drat</strong></td>
+<td align="center">0.7127</td>
+<td align="center">0.6996</td>
+<td align="center">-0.09079</td>
 </tr>
 <tr class="even">
-<td align="left"><strong>wt</strong></td>
-<td align="left">1</td>
-<td align="left">-0.17472</td>
-<td align="left">-0.55492</td>
-<td align="left">-0.69250</td>
-<td align="left">-0.58329</td>
+<td align="center"><strong>wt</strong></td>
+<td align="center">-0.6925</td>
+<td align="center">-0.5833</td>
+<td align="center">0.4276</td>
 </tr>
 <tr class="odd">
-<td align="left"><strong>qsec</strong></td>
-<td align="left">-0.17472</td>
-<td align="left">1</td>
-<td align="left">0.74454</td>
-<td align="left">-0.22986</td>
-<td align="left">-0.21268</td>
+<td align="center"><strong>qsec</strong></td>
+<td align="center">-0.2299</td>
+<td align="center">-0.2127</td>
+<td align="center">-0.6562</td>
 </tr>
 <tr class="even">
-<td align="left"><strong>vs</strong></td>
-<td align="left">-0.55492</td>
-<td align="left">0.74454</td>
-<td align="left">1</td>
-<td align="left">0.16835</td>
-<td align="left">0.20602</td>
+<td align="center"><strong>vs</strong></td>
+<td align="center">0.1683</td>
+<td align="center">0.206</td>
+<td align="center">-0.5696</td>
 </tr>
 <tr class="odd">
-<td align="left"><strong>am</strong></td>
-<td align="left">-0.69250</td>
-<td align="left">-0.22986</td>
-<td align="left">0.16835</td>
-<td align="left">1</td>
-<td align="left">0.79406</td>
+<td align="center"><strong>am</strong></td>
+<td align="center">1</td>
+<td align="center">0.7941</td>
+<td align="center">0.05753</td>
 </tr>
 <tr class="even">
-<td align="left"><strong>gear</strong></td>
-<td align="left">-0.58329</td>
-<td align="left">-0.21268</td>
-<td align="left">0.20602</td>
-<td align="left">0.79406</td>
-<td align="left">1</td>
+<td align="center"><strong>gear</strong></td>
+<td align="center">0.7941</td>
+<td align="center">1</td>
+<td align="center">0.2741</td>
 </tr>
 <tr class="odd">
-<td align="left"><strong>carb</strong></td>
-<td align="left">0.42761</td>
-<td align="left">-0.65625</td>
-<td align="left">-0.56961</td>
-<td align="left">0.05753</td>
-<td align="left">0.27407</td>
-</tr>
-</tbody>
-</table>
-<table>
-<col width="15%" />
-<col width="11%" />
-<thead>
-<tr class="header">
-<th align="left"> </th>
-<th align="left">carb</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td align="left"><strong>mpg</strong></td>
-<td align="left">-0.55093</td>
-</tr>
-<tr class="even">
-<td align="left"><strong>cyl</strong></td>
-<td align="left">0.52699</td>
-</tr>
-<tr class="odd">
-<td align="left"><strong>disp</strong></td>
-<td align="left">0.39498</td>
-</tr>
-<tr class="even">
-<td align="left"><strong>hp</strong></td>
-<td align="left">0.74981</td>
-</tr>
-<tr class="odd">
-<td align="left"><strong>drat</strong></td>
-<td align="left">-0.09079</td>
-</tr>
-<tr class="even">
-<td align="left"><strong>wt</strong></td>
-<td align="left">0.42761</td>
-</tr>
-<tr class="odd">
-<td align="left"><strong>qsec</strong></td>
-<td align="left">-0.65625</td>
-</tr>
-<tr class="even">
-<td align="left"><strong>vs</strong></td>
-<td align="left">-0.56961</td>
-</tr>
-<tr class="odd">
-<td align="left"><strong>am</strong></td>
-<td align="left">0.05753</td>
-</tr>
-<tr class="even">
-<td align="left"><strong>gear</strong></td>
-<td align="left">0.27407</td>
-</tr>
-<tr class="odd">
-<td align="left"><strong>carb</strong></td>
-<td align="left">1</td>
+<td align="center"><strong>carb</strong></td>
+<td align="center">0.05753</td>
+<td align="center">0.2741</td>
+<td align="center">1</td>
 </tr>
 </tbody>
 </table>
 <p>And the same on a graph:</p>
-<p><a href="plots/short-code-long-report-12-hires.png"><img src="plots/short-code-long-report-12.png" /></a></p>
 <p>Yeah, that latter took a while to render in an image file :)</p>
 <p>That's not a <code>pander</code> issue.</p>
 <h1 id="some-models">Some models</h1>
@@ -2008,14 +1841,16 @@
 <p>A simple linear model: <code>mtcars$wt ~ mtcars$mpg</code></p>
 <table>
 <caption>Fitting linear model: mtcars$wt ~ Independent</caption>
-<col width="25%" />
-<col width="15%" />
-<col width="18%" />
-<col width="15%" />
-<col width="15%" />
+<colgroup>
+<col width="25%"></col>
+<col width="15%"></col>
+<col width="18%"></col>
+<col width="13%"></col>
+<col width="13%"></col>
+</colgroup>
 <thead>
 <tr class="header">
-<th align="right"> </th>
+<th align="center"> </th>
 <th align="center">Estimate</th>
 <th align="center">Std. Error</th>
 <th align="center">t value</th>
@@ -2024,18 +1859,18 @@
 </thead>
 <tbody>
 <tr class="odd">
-<td align="right"><strong>(Intercept)</strong></td>
-<td align="center">6.047e+00</td>
-<td align="center">3.087e-01</td>
-<td align="center">1.959e+01</td>
-<td align="center">1.204e-18</td>
+<td align="center"><strong>Independent</strong></td>
+<td align="center">-0.1409</td>
+<td align="center">0.01474</td>
+<td align="center">-9.559</td>
+<td align="center">1.294e-10</td>
 </tr>
 <tr class="even">
-<td align="right"><strong>Independent</strong></td>
-<td align="center">-1.409e-01</td>
-<td align="center">1.474e-02</td>
-<td align="center">-9.559e+00</td>
-<td align="center">1.294e-10</td>
+<td align="center"><strong>(Intercept)</strong></td>
+<td align="center">6.047</td>
+<td align="center">0.3087</td>
+<td align="center">19.59</td>
+<td align="center">1.204e-18</td>
 </tr>
 </tbody>
 </table>
@@ -2043,14 +1878,16 @@
 <p>A simple linear model: <code>mtcars$wt ~ mtcars$cyl</code></p>
 <table>
 <caption>Fitting linear model: mtcars$wt ~ Independent</caption>
-<col width="25%" />
-<col width="15%" />
-<col width="18%" />
-<col width="13%" />
-<col width="13%" />
+<colgroup>
+<col width="25%"></col>
+<col width="15%"></col>
+<col width="18%"></col>
+<col width="13%"></col>
+<col width="13%"></col>
+</colgroup>
 <thead>
 <tr class="header">
-<th align="right"> </th>
+<th align="center"> </th>
 <th align="center">Estimate</th>
 <th align="center">Std. Error</th>
 <th align="center">t value</th>
@@ -2059,18 +1896,18 @@
 </thead>
 <tbody>
 <tr class="odd">
-<td align="right"><strong>(Intercept)</strong></td>
-<td align="center">5.646e-01</td>
-<td align="center">4.006e-01</td>
-<td align="center">1.409e+00</td>
-<td align="center">1.690e-01</td>
+<td align="center"><strong>Independent</strong></td>
+<td align="center">0.4287</td>
+<td align="center">0.06228</td>
+<td align="center">6.883</td>
+<td align="center">1.218e-07</td>
 </tr>
 <tr class="even">
-<td align="right"><strong>Independent</strong></td>
-<td align="center">4.287e-01</td>
-<td align="center">6.228e-02</td>
-<td align="center">6.883e+00</td>
-<td align="center">1.218e-07</td>
+<td align="center"><strong>(Intercept)</strong></td>
+<td align="center">0.5646</td>
+<td align="center">0.4006</td>
+<td align="center">1.409</td>
+<td align="center">0.169</td>
 </tr>
 </tbody>
 </table>
@@ -2078,14 +1915,16 @@
 <p>A simple linear model: <code>mtcars$wt ~ mtcars$disp</code></p>
 <table>
 <caption>Fitting linear model: mtcars$wt ~ Independent</caption>
-<col width="25%" />
-<col width="15%" />
-<col width="18%" />
-<col width="13%" />
-<col width="13%" />
+<colgroup>
+<col width="25%"></col>
+<col width="15%"></col>
+<col width="18%"></col>
+<col width="13%"></col>
+<col width="13%"></col>
+</colgroup>
 <thead>
 <tr class="header">
-<th align="right"> </th>
+<th align="center"> </th>
 <th align="center">Estimate</th>
 <th align="center">Std. Error</th>
 <th align="center">t value</th>
@@ -2094,18 +1933,18 @@
 </thead>
 <tbody>
 <tr class="odd">
-<td align="right"><strong>(Intercept)</strong></td>
-<td align="center">1.600e+00</td>
-<td align="center">1.730e-01</td>
-<td align="center">9.248e+00</td>
-<td align="center">2.738e-10</td>
+<td align="center"><strong>Independent</strong></td>
+<td align="center">0.00701</td>
+<td align="center">0.0006629</td>
+<td align="center">10.58</td>
+<td align="center">1.222e-11</td>
 </tr>
 <tr class="even">
-<td align="right"><strong>Independent</strong></td>
-<td align="center">7.010e-03</td>
-<td align="center">6.629e-04</td>
-<td align="center">1.058e+01</td>
-<td align="center">1.222e-11</td>
+<td align="center"><strong>(Intercept)</strong></td>
+<td align="center">1.6</td>
+<td align="center">0.173</td>
+<td align="center">9.248</td>
+<td align="center">2.738e-10</td>
 </tr>
 </tbody>
 </table>
@@ -2113,14 +1952,16 @@
 <p>A simple linear model: <code>mtcars$wt ~ mtcars$hp</code></p>
 <table>
 <caption>Fitting linear model: mtcars$wt ~ Independent</caption>
-<col width="25%" />
-<col width="15%" />
-<col width="18%" />
-<col width="13%" />
-<col width="13%" />
+<colgroup>
+<col width="25%"></col>
+<col width="15%"></col>
+<col width="18%"></col>
+<col width="13%"></col>
+<col width="13%"></col>
+</colgroup>
 <thead>
 <tr class="header">
-<th align="right"> </th>
+<th align="center"> </th>
 <th align="center">Estimate</th>
 <th align="center">Std. Error</th>
 <th align="center">t value</th>
@@ -2129,18 +1970,18 @@
 </thead>
 <tbody>
 <tr class="odd">
-<td align="right"><strong>(Intercept)</strong></td>
-<td align="center">1.838e+00</td>
-<td align="center">3.165e-01</td>
-<td align="center">5.808e+00</td>
-<td align="center">2.389e-06</td>
+<td align="center"><strong>Independent</strong></td>
+<td align="center">0.009401</td>
+<td align="center">0.00196</td>
+<td align="center">4.796</td>
+<td align="center">4.146e-05</td>
 </tr>
 <tr class="even">
-<td align="right"><strong>Independent</strong></td>
-<td align="center">9.401e-03</td>
-<td align="center">1.960e-03</td>
-<td align="center">4.796e+00</td>
-<td align="center">4.146e-05</td>
+<td align="center"><strong>(Intercept)</strong></td>
+<td align="center">1.838</td>
+<td align="center">0.3165</td>
+<td align="center">5.808</td>
+<td align="center">2.389e-06</td>
 </tr>
 </tbody>
 </table>
@@ -2148,14 +1989,16 @@
 <p>A simple linear model: <code>mtcars$wt ~ mtcars$drat</code></p>
 <table>
 <caption>Fitting linear model: mtcars$wt ~ Independent</caption>
-<col width="25%" />
-<col width="15%" />
-<col width="18%" />
-<col width="15%" />
-<col width="15%" />
+<colgroup>
+<col width="25%"></col>
+<col width="15%"></col>
+<col width="18%"></col>
+<col width="13%"></col>
+<col width="13%"></col>
+</colgroup>
 <thead>
 <tr class="header">
-<th align="right"> </th>
+<th align="center"> </th>
 <th align="center">Estimate</th>
 <th align="center">Std. Error</th>
 <th align="center">t value</th>
@@ -2164,18 +2007,18 @@
 </thead>
 <tbody>
 <tr class="odd">
-<td align="right"><strong>(Intercept)</strong></td>
-<td align="center">7.906e+00</td>
-<td align="center">8.522e-01</td>
-<td align="center">9.277e+00</td>
-<td align="center">2.547e-10</td>
+<td align="center"><strong>Independent</strong></td>
+<td align="center">-1.304</td>
+<td align="center">0.2345</td>
+<td align="center">-5.561</td>
+<td align="center">4.784e-06</td>
 </tr>
 <tr class="even">
-<td align="right"><strong>Independent</strong></td>
-<td align="center">-1.304e+00</td>
-<td align="center">2.345e-01</td>
-<td align="center">-5.561e+00</td>
-<td align="center">4.784e-06</td>
+<td align="center"><strong>(Intercept)</strong></td>
+<td align="center">7.906</td>
+<td align="center">0.8522</td>
+<td align="center">9.277</td>
+<td align="center">2.547e-10</td>
 </tr>
 </tbody>
 </table>
@@ -2183,14 +2026,16 @@
 <p>A simple linear model: <code>mtcars$wt ~ mtcars$qsec</code></p>
 <table>
 <caption>Fitting linear model: mtcars$wt ~ Independent</caption>
-<col width="25%" />
-<col width="15%" />
-<col width="18%" />
-<col width="13%" />
-<col width="13%" />
+<colgroup>
+<col width="25%"></col>
+<col width="15%"></col>
+<col width="18%"></col>
+<col width="13%"></col>
+<col width="13%"></col>
+</colgroup>
 <thead>
 <tr class="header">
-<th align="right"> </th>
+<th align="center"> </th>
 <th align="center">Estimate</th>
 <th align="center">Std. Error</th>
 <th align="center">t value</th>
@@ -2199,18 +2044,18 @@
 </thead>
 <tbody>
 <tr class="odd">
-<td align="right"><strong>(Intercept)</strong></td>
-<td align="center">4.924792</td>
-<td align="center">1.765407</td>
-<td align="center">2.789607</td>
-<td align="center">0.009081</td>
+<td align="center"><strong>Independent</strong></td>
+<td align="center">-0.09567</td>
+<td align="center">0.09843</td>
+<td align="center">-0.9719</td>
+<td align="center">0.3389</td>
 </tr>
 <tr class="even">
-<td align="right"><strong>Independent</strong></td>
-<td align="center">-0.095667</td>
-<td align="center">0.098433</td>
-<td align="center">-0.971907</td>
-<td align="center">0.338868</td>
+<td align="center"><strong>(Intercept)</strong></td>
+<td align="center">4.925</td>
+<td align="center">1.765</td>
+<td align="center">2.79</td>
+<td align="center">0.009081</td>
 </tr>
 </tbody>
 </table>
@@ -2218,14 +2063,16 @@
 <p>A simple linear model: <code>mtcars$wt ~ mtcars$vs</code></p>
 <table>
 <caption>Fitting linear model: mtcars$wt ~ Independent</caption>
-<col width="25%" />
-<col width="15%" />
-<col width="18%" />
-<col width="15%" />
-<col width="15%" />
+<colgroup>
+<col width="25%"></col>
+<col width="15%"></col>
+<col width="18%"></col>
+<col width="13%"></col>
+<col width="13%"></col>
+</colgroup>
 <thead>
 <tr class="header">
-<th align="right"> </th>
+<th align="center"> </th>
 <th align="center">Estimate</th>
 <th align="center">Std. Error</th>
 <th align="center">t value</th>
@@ -2234,18 +2081,18 @@
 </thead>
 <tbody>
 <tr class="odd">
-<td align="right"><strong>(Intercept)</strong></td>
-<td align="center">3.689e+00</td>
-<td align="center">1.950e-01</td>
-<td align="center">1.891e+01</td>
-<td align="center">3.203e-18</td>
+<td align="center"><strong>Independent</strong></td>
+<td align="center">-1.077</td>
+<td align="center">0.2949</td>
+<td align="center">-3.654</td>
+<td align="center">0.0009798</td>
 </tr>
 <tr class="even">
-<td align="right"><strong>Independent</strong></td>
-<td align="center">-1.077e+00</td>
-<td align="center">2.949e-01</td>
-<td align="center">-3.654e+00</td>
-<td align="center">9.798e-04</td>
+<td align="center"><strong>(Intercept)</strong></td>
+<td align="center">3.689</td>
+<td align="center">0.195</td>
+<td align="center">18.91</td>
+<td align="center">3.203e-18</td>
 </tr>
 </tbody>
 </table>
@@ -2253,14 +2100,16 @@
 <p>A simple linear model: <code>mtcars$wt ~ mtcars$am</code></p>
 <table>
 <caption>Fitting linear model: mtcars$wt ~ Independent</caption>
-<col width="25%" />
-<col width="15%" />
-<col width="18%" />
-<col width="15%" />
-<col width="15%" />
+<colgroup>
+<col width="25%"></col>
+<col width="15%"></col>
+<col width="18%"></col>
+<col width="13%"></col>
+<col width="13%"></col>
+</colgroup>
 <thead>
 <tr class="header">
-<th align="right"> </th>
+<th align="center"> </th>
 <th align="center">Estimate</th>
 <th align="center">Std. Error</th>
 <th align="center">t value</th>
@@ -2269,18 +2118,18 @@
 </thead>
 <tbody>
 <tr class="odd">
-<td align="right"><strong>(Intercept)</strong></td>
-<td align="center">3.769e+00</td>
-<td align="center">1.646e-01</td>
-<td align="center">2.289e+01</td>
-<td align="center">1.490e-20</td>
+<td align="center"><strong>Independent</strong></td>
+<td align="center">-1.358</td>
+<td align="center">0.2583</td>
+<td align="center">-5.258</td>
+<td align="center">1.125e-05</td>
 </tr>
 <tr class="even">
-<td align="right"><strong>Independent</strong></td>
-<td align="center">-1.358e+00</td>
-<td align="center">2.583e-01</td>
-<td align="center">-5.258e+00</td>
-<td align="center">1.125e-05</td>
+<td align="center"><strong>(Intercept)</strong></td>
+<td align="center">3.769</td>
+<td align="center">0.1646</td>
+<td align="center">22.89</td>
+<td align="center">1.49e-20</td>
 </tr>
 </tbody>
 </table>
@@ -2288,14 +2137,16 @@
 <p>A simple linear model: <code>mtcars$wt ~ mtcars$gear</code></p>
 <table>
 <caption>Fitting linear model: mtcars$wt ~ Independent</caption>
-<col width="25%" />
-<col width="15%" />
-<col width="18%" />
-<col width="15%" />
-<col width="15%" />
+<colgroup>
+<col width="25%"></col>
+<col width="15%"></col>
+<col width="18%"></col>
+<col width="13%"></col>
+<col width="13%"></col>
+</colgroup>
 <thead>
 <tr class="header">
-<th align="right"> </th>
+<th align="center"> </th>
 <th align="center">Estimate</th>
 <th align="center">Std. Error</th>
 <th align="center">t value</th>
@@ -2304,18 +2155,18 @@
 </thead>
 <tbody>
 <tr class="odd">
-<td align="right"><strong>(Intercept)</strong></td>
-<td align="center">6.070e+00</td>
-<td align="center">7.392e-01</td>
-<td align="center">8.212e+00</td>
-<td align="center">3.632e-09</td>
+<td align="center"><strong>Independent</strong></td>
+<td align="center">-0.7735</td>
+<td align="center">0.1967</td>
+<td align="center">-3.933</td>
+<td align="center">0.0004587</td>
 </tr>
 <tr class="even">
-<td align="right"><strong>Independent</strong></td>
-<td align="center">-7.735e-01</td>
-<td align="center">1.967e-01</td>
-<td align="center">-3.933e+00</td>
-<td align="center">4.587e-04</td>
+<td align="center"><strong>(Intercept)</strong></td>
+<td align="center">6.07</td>
+<td align="center">0.7392</td>
+<td align="center">8.212</td>
+<td align="center">3.632e-09</td>
 </tr>
 </tbody>
 </table>
@@ -2323,14 +2174,16 @@
 <p>A simple linear model: <code>mtcars$wt ~ mtcars$carb</code></p>
 <table>
 <caption>Fitting linear model: mtcars$wt ~ Independent</caption>
-<col width="25%" />
-<col width="15%" />
-<col width="18%" />
-<col width="13%" />
-<col width="13%" />
+<colgroup>
+<col width="25%"></col>
+<col width="15%"></col>
+<col width="18%"></col>
+<col width="13%"></col>
+<col width="13%"></col>
+</colgroup>
 <thead>
 <tr class="header">
-<th align="right"> </th>
+<th align="center"> </th>
 <th align="center">Estimate</th>
 <th align="center">Std. Error</th>
 <th align="center">t value</th>
@@ -2339,25 +2192,23 @@
 </thead>
 <tbody>
 <tr class="odd">
-<td align="right"><strong>(Intercept)</strong></td>
-<td align="center">2.489e+00</td>
-<td align="center">3.230e-01</td>
-<td align="center">7.705e+00</td>
-<td align="center">1.353e-08</td>
+<td align="center"><strong>Independent</strong></td>
+<td align="center">0.259</td>
+<td align="center">0.09998</td>
+<td align="center">2.591</td>
+<td align="center">0.01464</td>
 </tr>
 <tr class="even">
-<td align="right"><strong>Independent</strong></td>
-<td align="center">2.590e-01</td>
-<td align="center">9.998e-02</td>
-<td align="center">2.591e+00</td>
-<td align="center">1.464e-02</td>
+<td align="center"><strong>(Intercept)</strong></td>
+<td align="center">2.489</td>
+<td align="center">0.323</td>
+<td align="center">7.705</td>
+<td align="center">1.353e-08</td>
 </tr>
 </tbody>
 </table>
-<hr />
-<p>This report was generated with <a href="http://www.r-project.org/">R</a> (2.15.1) and <a href="https://github.com/rapporter/pander">pander</a> (0.2) in 5.997 sec on x86_64-unknown-linux-gnu platform.</p>
 <p align="center">
-  Design: <a href="http://rapport-package.info/"><i>rapport</i> Development Team</a> &copy; 2012 | Backend: <a href="https://github.com/rapporter/pander">pander</a> | License: <a href="http://www.gnu.org/licenses/agpl.html" target="_blank">AGPL3</a> | Styled with <a href="http://www.getskeleton.com/" target="_blank">skeleton</a>
+  Design: <a href="http://rapporter.net"><i>Rapporter</i> Team</a> © 2011-2014 | Backend: <a href="https://github.com/rapporter/pander">pander</a> | License: <a href="http://www.gnu.org/licenses/agpl.html" target="_blank">AGPL3</a> or <a href="http://opensource.org/licenses/OSL-3.0" target="_blank">OSL</a> | Styled with <a href="http://www.getskeleton.com/" target="_blank">skeleton</a>
 </p>
 </body>
 </html>
