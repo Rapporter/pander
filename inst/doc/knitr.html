@@ -10,7 +10,7 @@
 
 <meta name="author" content="Roman Tsegelskyi, Gergely Daróczi" />
 
-<meta name="date" content="2015-08-13" />
+<meta name="date" content="2015-08-23" />
 
 <title>Using pander with knitr</title>
 
@@ -18,41 +18,23 @@
 
 <style type="text/css">code{white-space: pre;}</style>
 <style type="text/css">
-div.sourceCode { overflow-x: auto; }
 table.sourceCode, tr.sourceCode, td.lineNumbers, td.sourceCode {
   margin: 0; padding: 0; vertical-align: baseline; border: none; }
 table.sourceCode { width: 100%; line-height: 100%; }
 td.lineNumbers { text-align: right; padding-right: 4px; padding-left: 4px; color: #aaaaaa; border-right: 1px solid #aaaaaa; }
 td.sourceCode { padding-left: 5px; }
-code > span.kw { color: #007020; font-weight: bold; } /* Keyword */
-code > span.dt { color: #902000; } /* DataType */
-code > span.dv { color: #40a070; } /* DecVal */
-code > span.bn { color: #40a070; } /* BaseN */
-code > span.fl { color: #40a070; } /* Float */
-code > span.ch { color: #4070a0; } /* Char */
-code > span.st { color: #4070a0; } /* String */
-code > span.co { color: #60a0b0; font-style: italic; } /* Comment */
-code > span.ot { color: #007020; } /* Other */
-code > span.al { color: #ff0000; font-weight: bold; } /* Alert */
-code > span.fu { color: #06287e; } /* Function */
-code > span.er { color: #ff0000; font-weight: bold; } /* Error */
-code > span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
-code > span.cn { color: #880000; } /* Constant */
-code > span.sc { color: #4070a0; } /* SpecialChar */
-code > span.vs { color: #4070a0; } /* VerbatimString */
-code > span.ss { color: #bb6688; } /* SpecialString */
-code > span.im { } /* Import */
-code > span.va { color: #19177c; } /* Variable */
-code > span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
-code > span.op { color: #666666; } /* Operator */
-code > span.bu { } /* BuiltIn */
-code > span.ex { } /* Extension */
-code > span.pp { color: #bc7a00; } /* Preprocessor */
-code > span.at { color: #7d9029; } /* Attribute */
-code > span.do { color: #ba2121; font-style: italic; } /* Documentation */
-code > span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
-code > span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
-code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code > span.kw { color: #007020; font-weight: bold; }
+code > span.dt { color: #902000; }
+code > span.dv { color: #40a070; }
+code > span.bn { color: #40a070; }
+code > span.fl { color: #40a070; }
+code > span.ch { color: #4070a0; }
+code > span.st { color: #4070a0; }
+code > span.co { color: #60a0b0; font-style: italic; }
+code > span.ot { color: #007020; }
+code > span.al { color: #ff0000; font-weight: bold; }
+code > span.fu { color: #06287e; }
+code > span.er { color: #ff0000; font-weight: bold; }
 </style>
 <style type="text/css">
   pre:not([class]) {
@@ -61,7 +43,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 </style>
 
 
-<link href="data:text/css;charset=utf-8,body%20%7B%0Abackground%2Dcolor%3A%20%23fff%3B%0Amargin%3A%201em%20auto%3B%0Amax%2Dwidth%3A%20700px%3B%0Aoverflow%3A%20visible%3B%0Apadding%2Dleft%3A%202em%3B%0Apadding%2Dright%3A%202em%3B%0Afont%2Dfamily%3A%20%22Open%20Sans%22%2C%20%22Helvetica%20Neue%22%2C%20Helvetica%2C%20Arial%2C%20sans%2Dserif%3B%0Afont%2Dsize%3A%2014px%3B%0Aline%2Dheight%3A%201%2E35%3B%0A%7D%0A%23header%20%7B%0Atext%2Dalign%3A%20center%3B%0A%7D%0A%23TOC%20%7B%0Aclear%3A%20both%3B%0Amargin%3A%200%200%2010px%2010px%3B%0Apadding%3A%204px%3B%0Awidth%3A%20400px%3B%0Aborder%3A%201px%20solid%20%23CCCCCC%3B%0Aborder%2Dradius%3A%205px%3B%0Abackground%2Dcolor%3A%20%23f6f6f6%3B%0Afont%2Dsize%3A%2013px%3B%0Aline%2Dheight%3A%201%2E3%3B%0A%7D%0A%23TOC%20%2Etoctitle%20%7B%0Afont%2Dweight%3A%20bold%3B%0Afont%2Dsize%3A%2015px%3B%0Amargin%2Dleft%3A%205px%3B%0A%7D%0A%23TOC%20ul%20%7B%0Apadding%2Dleft%3A%2040px%3B%0Amargin%2Dleft%3A%20%2D1%2E5em%3B%0Amargin%2Dtop%3A%205px%3B%0Amargin%2Dbottom%3A%205px%3B%0A%7D%0A%23TOC%20ul%20ul%20%7B%0Amargin%2Dleft%3A%20%2D2em%3B%0A%7D%0A%23TOC%20li%20%7B%0Aline%2Dheight%3A%2016px%3B%0A%7D%0Atable%20%7B%0Amargin%3A%201em%20auto%3B%0Aborder%2Dwidth%3A%201px%3B%0Aborder%2Dcolor%3A%20%23DDDDDD%3B%0Aborder%2Dstyle%3A%20outset%3B%0Aborder%2Dcollapse%3A%20collapse%3B%0A%7D%0Atable%20th%20%7B%0Aborder%2Dwidth%3A%202px%3B%0Apadding%3A%205px%3B%0Aborder%2Dstyle%3A%20inset%3B%0A%7D%0Atable%20td%20%7B%0Aborder%2Dwidth%3A%201px%3B%0Aborder%2Dstyle%3A%20inset%3B%0Aline%2Dheight%3A%2018px%3B%0Apadding%3A%205px%205px%3B%0A%7D%0Atable%2C%20table%20th%2C%20table%20td%20%7B%0Aborder%2Dleft%2Dstyle%3A%20none%3B%0Aborder%2Dright%2Dstyle%3A%20none%3B%0A%7D%0Atable%20thead%2C%20table%20tr%2Eeven%20%7B%0Abackground%2Dcolor%3A%20%23f7f7f7%3B%0A%7D%0Ap%20%7B%0Amargin%3A%200%2E5em%200%3B%0A%7D%0Ablockquote%20%7B%0Abackground%2Dcolor%3A%20%23f6f6f6%3B%0Apadding%3A%200%2E25em%200%2E75em%3B%0A%7D%0Ahr%20%7B%0Aborder%2Dstyle%3A%20solid%3B%0Aborder%3A%20none%3B%0Aborder%2Dtop%3A%201px%20solid%20%23777%3B%0Amargin%3A%2028px%200%3B%0A%7D%0Adl%20%7B%0Amargin%2Dleft%3A%200%3B%0A%7D%0Adl%20dd%20%7B%0Amargin%2Dbottom%3A%2013px%3B%0Amargin%2Dleft%3A%2013px%3B%0A%7D%0Adl%20dt%20%7B%0Afont%2Dweight%3A%20bold%3B%0A%7D%0Aul%20%7B%0Amargin%2Dtop%3A%200%3B%0A%7D%0Aul%20li%20%7B%0Alist%2Dstyle%3A%20circle%20outside%3B%0A%7D%0Aul%20ul%20%7B%0Amargin%2Dbottom%3A%200%3B%0A%7D%0Apre%2C%20code%20%7B%0Abackground%2Dcolor%3A%20%23f7f7f7%3B%0Aborder%2Dradius%3A%203px%3B%0Acolor%3A%20%23333%3B%0A%7D%0Apre%20%7B%0Awhite%2Dspace%3A%20pre%2Dwrap%3B%20%0Aborder%2Dradius%3A%203px%3B%0Amargin%3A%205px%200px%2010px%200px%3B%0Apadding%3A%2010px%3B%0A%7D%0Apre%3Anot%28%5Bclass%5D%29%20%7B%0Abackground%2Dcolor%3A%20%23f7f7f7%3B%0A%7D%0Acode%20%7B%0Afont%2Dfamily%3A%20Consolas%2C%20Monaco%2C%20%27Courier%20New%27%2C%20monospace%3B%0Afont%2Dsize%3A%2085%25%3B%0A%7D%0Ap%20%3E%20code%2C%20li%20%3E%20code%20%7B%0Apadding%3A%202px%200px%3B%0A%7D%0Adiv%2Efigure%20%7B%0Atext%2Dalign%3A%20center%3B%0A%7D%0Aimg%20%7B%0Abackground%2Dcolor%3A%20%23FFFFFF%3B%0Apadding%3A%202px%3B%0Aborder%3A%201px%20solid%20%23DDDDDD%3B%0Aborder%2Dradius%3A%203px%3B%0Aborder%3A%201px%20solid%20%23CCCCCC%3B%0Amargin%3A%200%205px%3B%0A%7D%0Ah1%20%7B%0Amargin%2Dtop%3A%200%3B%0Afont%2Dsize%3A%2035px%3B%0Aline%2Dheight%3A%2040px%3B%0A%7D%0Ah2%20%7B%0Aborder%2Dbottom%3A%204px%20solid%20%23f7f7f7%3B%0Apadding%2Dtop%3A%2010px%3B%0Apadding%2Dbottom%3A%202px%3B%0Afont%2Dsize%3A%20145%25%3B%0A%7D%0Ah3%20%7B%0Aborder%2Dbottom%3A%202px%20solid%20%23f7f7f7%3B%0Apadding%2Dtop%3A%2010px%3B%0Afont%2Dsize%3A%20120%25%3B%0A%7D%0Ah4%20%7B%0Aborder%2Dbottom%3A%201px%20solid%20%23f7f7f7%3B%0Amargin%2Dleft%3A%208px%3B%0Afont%2Dsize%3A%20105%25%3B%0A%7D%0Ah5%2C%20h6%20%7B%0Aborder%2Dbottom%3A%201px%20solid%20%23ccc%3B%0Afont%2Dsize%3A%20105%25%3B%0A%7D%0Aa%20%7B%0Acolor%3A%20%230033dd%3B%0Atext%2Ddecoration%3A%20none%3B%0A%7D%0Aa%3Ahover%20%7B%0Acolor%3A%20%236666ff%3B%20%7D%0Aa%3Avisited%20%7B%0Acolor%3A%20%23800080%3B%20%7D%0Aa%3Avisited%3Ahover%20%7B%0Acolor%3A%20%23BB00BB%3B%20%7D%0Aa%5Bhref%5E%3D%22http%3A%22%5D%20%7B%0Atext%2Ddecoration%3A%20underline%3B%20%7D%0Aa%5Bhref%5E%3D%22https%3A%22%5D%20%7B%0Atext%2Ddecoration%3A%20underline%3B%20%7D%0A%0Acode%20%3E%20span%2Ekw%20%7B%20color%3A%20%23555%3B%20font%2Dweight%3A%20bold%3B%20%7D%20%0Acode%20%3E%20span%2Edt%20%7B%20color%3A%20%23902000%3B%20%7D%20%0Acode%20%3E%20span%2Edv%20%7B%20color%3A%20%2340a070%3B%20%7D%20%0Acode%20%3E%20span%2Ebn%20%7B%20color%3A%20%23d14%3B%20%7D%20%0Acode%20%3E%20span%2Efl%20%7B%20color%3A%20%23d14%3B%20%7D%20%0Acode%20%3E%20span%2Ech%20%7B%20color%3A%20%23d14%3B%20%7D%20%0Acode%20%3E%20span%2Est%20%7B%20color%3A%20%23d14%3B%20%7D%20%0Acode%20%3E%20span%2Eco%20%7B%20color%3A%20%23888888%3B%20font%2Dstyle%3A%20italic%3B%20%7D%20%0Acode%20%3E%20span%2Eot%20%7B%20color%3A%20%23007020%3B%20%7D%20%0Acode%20%3E%20span%2Eal%20%7B%20color%3A%20%23ff0000%3B%20font%2Dweight%3A%20bold%3B%20%7D%20%0Acode%20%3E%20span%2Efu%20%7B%20color%3A%20%23900%3B%20font%2Dweight%3A%20bold%3B%20%7D%20%20code%20%3E%20span%2Eer%20%7B%20color%3A%20%23a61717%3B%20background%2Dcolor%3A%20%23e3d2d2%3B%20%7D%20%0A" rel="stylesheet" type="text/css" />
+<link href="data:text/css,body%20%7B%0A%20%20background%2Dcolor%3A%20%23fff%3B%0A%20%20margin%3A%201em%20auto%3B%0A%20%20max%2Dwidth%3A%20700px%3B%0A%20%20overflow%3A%20visible%3B%0A%20%20padding%2Dleft%3A%202em%3B%0A%20%20padding%2Dright%3A%202em%3B%0A%20%20font%2Dfamily%3A%20%22Open%20Sans%22%2C%20%22Helvetica%20Neue%22%2C%20Helvetica%2C%20Arial%2C%20sans%2Dserif%3B%0A%20%20font%2Dsize%3A%2014px%3B%0A%20%20line%2Dheight%3A%201%2E35%3B%0A%7D%0A%0A%23header%20%7B%0A%20%20text%2Dalign%3A%20center%3B%0A%7D%0A%0A%23TOC%20%7B%0A%20%20clear%3A%20both%3B%0A%20%20margin%3A%200%200%2010px%2010px%3B%0A%20%20padding%3A%204px%3B%0A%20%20width%3A%20400px%3B%0A%20%20border%3A%201px%20solid%20%23CCCCCC%3B%0A%20%20border%2Dradius%3A%205px%3B%0A%0A%20%20background%2Dcolor%3A%20%23f6f6f6%3B%0A%20%20font%2Dsize%3A%2013px%3B%0A%20%20line%2Dheight%3A%201%2E3%3B%0A%7D%0A%20%20%23TOC%20%2Etoctitle%20%7B%0A%20%20%20%20font%2Dweight%3A%20bold%3B%0A%20%20%20%20font%2Dsize%3A%2015px%3B%0A%20%20%20%20margin%2Dleft%3A%205px%3B%0A%20%20%7D%0A%0A%20%20%23TOC%20ul%20%7B%0A%20%20%20%20padding%2Dleft%3A%2040px%3B%0A%20%20%20%20margin%2Dleft%3A%20%2D1%2E5em%3B%0A%20%20%20%20margin%2Dtop%3A%205px%3B%0A%20%20%20%20margin%2Dbottom%3A%205px%3B%0A%20%20%7D%0A%20%20%23TOC%20ul%20ul%20%7B%0A%20%20%20%20margin%2Dleft%3A%20%2D2em%3B%0A%20%20%7D%0A%20%20%23TOC%20li%20%7B%0A%20%20%20%20line%2Dheight%3A%2016px%3B%0A%20%20%7D%0A%0Atable%20%7B%0A%20%20margin%3A%201em%20auto%3B%0A%20%20border%2Dwidth%3A%201px%3B%0A%20%20border%2Dcolor%3A%20%23DDDDDD%3B%0A%20%20border%2Dstyle%3A%20outset%3B%0A%20%20border%2Dcollapse%3A%20collapse%3B%0A%7D%0Atable%20th%20%7B%0A%20%20border%2Dwidth%3A%202px%3B%0A%20%20padding%3A%205px%3B%0A%20%20border%2Dstyle%3A%20inset%3B%0A%7D%0Atable%20td%20%7B%0A%20%20border%2Dwidth%3A%201px%3B%0A%20%20border%2Dstyle%3A%20inset%3B%0A%20%20line%2Dheight%3A%2018px%3B%0A%20%20padding%3A%205px%205px%3B%0A%7D%0Atable%2C%20table%20th%2C%20table%20td%20%7B%0A%20%20border%2Dleft%2Dstyle%3A%20none%3B%0A%20%20border%2Dright%2Dstyle%3A%20none%3B%0A%7D%0Atable%20thead%2C%20table%20tr%2Eeven%20%7B%0A%20%20background%2Dcolor%3A%20%23f7f7f7%3B%0A%7D%0A%0Ap%20%7B%0A%20%20margin%3A%200%2E5em%200%3B%0A%7D%0A%0Ablockquote%20%7B%0A%20%20background%2Dcolor%3A%20%23f6f6f6%3B%0A%20%20padding%3A%200%2E25em%200%2E75em%3B%0A%7D%0A%0Ahr%20%7B%0A%20%20border%2Dstyle%3A%20solid%3B%0A%20%20border%3A%20none%3B%0A%20%20border%2Dtop%3A%201px%20solid%20%23777%3B%0A%20%20margin%3A%2028px%200%3B%0A%7D%0A%0Adl%20%7B%0A%20%20margin%2Dleft%3A%200%3B%0A%7D%0A%20%20dl%20dd%20%7B%0A%20%20%20%20margin%2Dbottom%3A%2013px%3B%0A%20%20%20%20margin%2Dleft%3A%2013px%3B%0A%20%20%7D%0A%20%20dl%20dt%20%7B%0A%20%20%20%20font%2Dweight%3A%20bold%3B%0A%20%20%7D%0A%0Aul%20%7B%0A%20%20margin%2Dtop%3A%200%3B%0A%7D%0A%20%20ul%20li%20%7B%0A%20%20%20%20list%2Dstyle%3A%20circle%20outside%3B%0A%20%20%7D%0A%20%20ul%20ul%20%7B%0A%20%20%20%20margin%2Dbottom%3A%200%3B%0A%20%20%7D%0A%0Apre%2C%20code%20%7B%0A%20%20background%2Dcolor%3A%20%23f7f7f7%3B%0A%20%20border%2Dradius%3A%203px%3B%0A%20%20color%3A%20%23333%3B%0A%7D%0Apre%20%7B%0A%20%20white%2Dspace%3A%20pre%2Dwrap%3B%20%20%20%20%2F%2A%20Wrap%20long%20lines%20%2A%2F%0A%20%20border%2Dradius%3A%203px%3B%0A%20%20margin%3A%205px%200px%2010px%200px%3B%0A%20%20padding%3A%2010px%3B%0A%7D%0Apre%3Anot%28%5Bclass%5D%29%20%7B%0A%20%20background%2Dcolor%3A%20%23f7f7f7%3B%0A%7D%0A%0Acode%20%7B%0A%20%20font%2Dfamily%3A%20Consolas%2C%20Monaco%2C%20%27Courier%20New%27%2C%20monospace%3B%0A%20%20font%2Dsize%3A%2085%25%3B%0A%7D%0Ap%20%3E%20code%2C%20li%20%3E%20code%20%7B%0A%20%20padding%3A%202px%200px%3B%0A%7D%0A%0Adiv%2Efigure%20%7B%0A%20%20text%2Dalign%3A%20center%3B%0A%7D%0Aimg%20%7B%0A%20%20background%2Dcolor%3A%20%23FFFFFF%3B%0A%20%20padding%3A%202px%3B%0A%20%20border%3A%201px%20solid%20%23DDDDDD%3B%0A%20%20border%2Dradius%3A%203px%3B%0A%20%20border%3A%201px%20solid%20%23CCCCCC%3B%0A%20%20margin%3A%200%205px%3B%0A%7D%0A%0Ah1%20%7B%0A%20%20margin%2Dtop%3A%200%3B%0A%20%20font%2Dsize%3A%2035px%3B%0A%20%20line%2Dheight%3A%2040px%3B%0A%7D%0A%0Ah2%20%7B%0A%20%20border%2Dbottom%3A%204px%20solid%20%23f7f7f7%3B%0A%20%20padding%2Dtop%3A%2010px%3B%0A%20%20padding%2Dbottom%3A%202px%3B%0A%20%20font%2Dsize%3A%20145%25%3B%0A%7D%0A%0Ah3%20%7B%0A%20%20border%2Dbottom%3A%202px%20solid%20%23f7f7f7%3B%0A%20%20padding%2Dtop%3A%2010px%3B%0A%20%20font%2Dsize%3A%20120%25%3B%0A%7D%0A%0Ah4%20%7B%0A%20%20border%2Dbottom%3A%201px%20solid%20%23f7f7f7%3B%0A%20%20margin%2Dleft%3A%208px%3B%0A%20%20font%2Dsize%3A%20105%25%3B%0A%7D%0A%0Ah5%2C%20h6%20%7B%0A%20%20border%2Dbottom%3A%201px%20solid%20%23ccc%3B%0A%20%20font%2Dsize%3A%20105%25%3B%0A%7D%0A%0Aa%20%7B%0A%20%20color%3A%20%230033dd%3B%0A%20%20text%2Ddecoration%3A%20none%3B%0A%7D%0A%20%20a%3Ahover%20%7B%0A%20%20%20%20color%3A%20%236666ff%3B%20%7D%0A%20%20a%3Avisited%20%7B%0A%20%20%20%20color%3A%20%23800080%3B%20%7D%0A%20%20a%3Avisited%3Ahover%20%7B%0A%20%20%20%20color%3A%20%23BB00BB%3B%20%7D%0A%20%20a%5Bhref%5E%3D%22http%3A%22%5D%20%7B%0A%20%20%20%20text%2Ddecoration%3A%20underline%3B%20%7D%0A%20%20a%5Bhref%5E%3D%22https%3A%22%5D%20%7B%0A%20%20%20%20text%2Ddecoration%3A%20underline%3B%20%7D%0A%0A%2F%2A%20Class%20described%20in%20https%3A%2F%2Fbenjeffrey%2Ecom%2Fposts%2Fpandoc%2Dsyntax%2Dhighlighting%2Dcss%0A%20%20%20Colours%20from%20https%3A%2F%2Fgist%2Egithub%2Ecom%2Frobsimmons%2F1172277%20%2A%2F%0A%0Acode%20%3E%20span%2Ekw%20%7B%20color%3A%20%23555%3B%20font%2Dweight%3A%20bold%3B%20%7D%20%2F%2A%20Keyword%20%2A%2F%0Acode%20%3E%20span%2Edt%20%7B%20color%3A%20%23902000%3B%20%7D%20%2F%2A%20DataType%20%2A%2F%0Acode%20%3E%20span%2Edv%20%7B%20color%3A%20%2340a070%3B%20%7D%20%2F%2A%20DecVal%20%28decimal%20values%29%20%2A%2F%0Acode%20%3E%20span%2Ebn%20%7B%20color%3A%20%23d14%3B%20%7D%20%2F%2A%20BaseN%20%2A%2F%0Acode%20%3E%20span%2Efl%20%7B%20color%3A%20%23d14%3B%20%7D%20%2F%2A%20Float%20%2A%2F%0Acode%20%3E%20span%2Ech%20%7B%20color%3A%20%23d14%3B%20%7D%20%2F%2A%20Char%20%2A%2F%0Acode%20%3E%20span%2Est%20%7B%20color%3A%20%23d14%3B%20%7D%20%2F%2A%20String%20%2A%2F%0Acode%20%3E%20span%2Eco%20%7B%20color%3A%20%23888888%3B%20font%2Dstyle%3A%20italic%3B%20%7D%20%2F%2A%20Comment%20%2A%2F%0Acode%20%3E%20span%2Eot%20%7B%20color%3A%20%23007020%3B%20%7D%20%2F%2A%20OtherToken%20%2A%2F%0Acode%20%3E%20span%2Eal%20%7B%20color%3A%20%23ff0000%3B%20font%2Dweight%3A%20bold%3B%20%7D%20%2F%2A%20AlertToken%20%2A%2F%0Acode%20%3E%20span%2Efu%20%7B%20color%3A%20%23900%3B%20font%2Dweight%3A%20bold%3B%20%7D%20%2F%2A%20Function%20calls%20%2A%2F%20%0Acode%20%3E%20span%2Eer%20%7B%20color%3A%20%23a61717%3B%20background%2Dcolor%3A%20%23e3d2d2%3B%20%7D%20%2F%2A%20ErrorTok%20%2A%2F%0A%0A" rel="stylesheet" type="text/css" />
 
 </head>
 
@@ -72,13 +54,13 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <div id="header">
 <h1 class="title">Using pander with knitr</h1>
 <h4 class="author"><em>Roman Tsegelskyi, Gergely Daróczi</em></h4>
-<h4 class="date"><em>2015-08-13</em></h4>
+<h4 class="date"><em>2015-08-23</em></h4>
 </div>
 
 
 <p>While functionality of <code>pander</code> and <code>knitr</code> overlap in report generation, we have the feeling that the best way to use all power of <code>R/knitr/pander</code> for report generation is to utilize them together. This short vignette aims to explain how to embed output of <code>pander</code> in reports generated by <code>knitr</code>. If you are not aware of what <code>knitr</code> is, be sure to check out project’s <a href="http://yihui.name/knitr/">homepage</a> which contains extensive documentation and examples.</p>
 <p>One of the most useful feature of <code>knitr</code> is the ability to convert tables to output format on the fly. For example:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">head</span>(iris)
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">head</span>(iris)
 <span class="co">#&gt;   Sepal.Length Sepal.Width Petal.Length Petal.Width Species</span>
 <span class="co">#&gt; 1          5.1         3.5          1.4         0.2  setosa</span>
 <span class="co">#&gt; 2          4.9         3.0          1.4         0.2  setosa</span>
@@ -86,7 +68,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <span class="co">#&gt; 4          4.6         3.1          1.5         0.2  setosa</span>
 <span class="co">#&gt; 5          5.0         3.6          1.4         0.2  setosa</span>
 <span class="co">#&gt; 6          5.4         3.9          1.7         0.4  setosa</span>
-knitr::<span class="kw">kable</span>(<span class="kw">head</span>(iris))</code></pre></div>
+knitr::<span class="kw">kable</span>(<span class="kw">head</span>(iris))</code></pre>
 <table>
 <thead>
 <tr class="header">
@@ -143,7 +125,7 @@ knitr::<span class="kw">kable</span>(<span class="kw">head</span>(iris))</code><
 </tbody>
 </table>
 <p>However, <code>kable</code> table generator is simple by design, and does not capture all the variety of classes that <code>R</code> has to offer. For example, <code>CrossTable</code> and <code>tabular</code> is not supported:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(descr, <span class="dt">quietly =</span> <span class="ot">TRUE</span>)
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(descr, <span class="dt">quietly =</span> <span class="ot">TRUE</span>)
 ct &lt;-<span class="st"> </span><span class="kw">CrossTable</span>(mtcars$gear, mtcars$cyl)
 <span class="co">#&gt; Warning in chisq.test(tab, correct = FALSE, ...): Chi-squared approximation</span>
 <span class="co">#&gt; may be incorrect</span>
@@ -159,50 +141,52 @@ knitr::<span class="kw">kable</span>(ct)
 tab &lt;-<span class="st"> </span><span class="kw">tabular</span>( (Species +<span class="st"> </span><span class="dv">1</span>) ~<span class="st"> </span>(<span class="dt">n=</span><span class="dv">1</span>) +<span class="st"> </span><span class="kw">Format</span>(<span class="dt">digits=</span><span class="dv">2</span>)*
 <span class="st">         </span>(Sepal.Length +<span class="st"> </span>Sepal.Width)*(mean +<span class="st"> </span>sd), <span class="dt">data=</span>iris )
 knitr::<span class="kw">kable</span>(tab)
-<span class="co">#&gt; Error in `colnames&lt;-`(`*tmp*`, value = c(&quot;term&quot;, &quot;term&quot;, &quot;term&quot;, &quot;term&quot;, : length of 'dimnames' [2] not equal to array extent</span></code></pre></div>
+<span class="co">#&gt; Error in `colnames&lt;-`(`*tmp*`, value = c(&quot;term&quot;, &quot;term&quot;, &quot;term&quot;, &quot;term&quot;, : length of 'dimnames' [2] not equal to array extent</span></code></pre>
 <p>This is where <code>pander</code> comes handy. <code>pander</code> support rendering for many popular classes:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">methods</span>(pander)
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">methods</span>(pander)
 <span class="co">#&gt;  [1] pander.anova*           pander.aov*            </span>
 <span class="co">#&gt;  [3] pander.aovlist*         pander.Arima*          </span>
 <span class="co">#&gt;  [5] pander.call*            pander.cast_df*        </span>
 <span class="co">#&gt;  [7] pander.character*       pander.clogit*         </span>
-<span class="co">#&gt;  [9] pander.coxph*           pander.CrossTable*     </span>
-<span class="co">#&gt; [11] pander.data.frame*      pander.Date*           </span>
-<span class="co">#&gt; [13] pander.default*         pander.density*        </span>
-<span class="co">#&gt; [15] pander.describe*        pander.evals*          </span>
-<span class="co">#&gt; [17] pander.factor*          pander.formula*        </span>
-<span class="co">#&gt; [19] pander.ftable*          pander.function*       </span>
-<span class="co">#&gt; [21] pander.glm*             pander.gtable*         </span>
-<span class="co">#&gt; [23] pander.htest*           pander.image*          </span>
-<span class="co">#&gt; [25] pander.irts*            pander.list*           </span>
-<span class="co">#&gt; [27] pander.lm*              pander.lme*            </span>
-<span class="co">#&gt; [29] pander.logical*         pander.manova*         </span>
-<span class="co">#&gt; [31] pander.matrix*          pander.microbenchmark* </span>
-<span class="co">#&gt; [33] pander.mtable*          pander.name*           </span>
-<span class="co">#&gt; [35] pander.nls*             pander.NULL*           </span>
-<span class="co">#&gt; [37] pander.numeric*         pander.option          </span>
-<span class="co">#&gt; [39] pander.polr*            pander.POSIXct*        </span>
-<span class="co">#&gt; [41] pander.POSIXlt*         pander.prcomp*         </span>
-<span class="co">#&gt; [43] pander.randomForest*    pander.rapport*        </span>
-<span class="co">#&gt; [45] pander.return           pander.rlm*            </span>
-<span class="co">#&gt; [47] pander.sessionInfo*     pander.smooth.spline*  </span>
-<span class="co">#&gt; [49] pander.stat.table*      pander.summary.aov*    </span>
-<span class="co">#&gt; [51] pander.summary.aovlist* pander.summary.glm*    </span>
-<span class="co">#&gt; [53] pander.summary.lm*      pander.summary.lme*    </span>
-<span class="co">#&gt; [55] pander.summary.manova*  pander.summary.nls*    </span>
-<span class="co">#&gt; [57] pander.summary.polr*    pander.summary.prcomp* </span>
-<span class="co">#&gt; [59] pander.summary.survreg* pander.summary.table*  </span>
-<span class="co">#&gt; [61] pander.survdiff*        pander.survfit*        </span>
-<span class="co">#&gt; [63] pander.survreg*         pander.table*          </span>
-<span class="co">#&gt; [65] pander.tabular*         pander.ts*             </span>
-<span class="co">#&gt; [67] pander.zoo*            </span>
-<span class="co">#&gt; see '?methods' for accessing help and source code</span></code></pre></div>
+<span class="co">#&gt;  [9] pander.coxph*           pander.cph*            </span>
+<span class="co">#&gt; [11] pander.CrossTable*      pander.data.frame*     </span>
+<span class="co">#&gt; [13] pander.Date*            pander.default*        </span>
+<span class="co">#&gt; [15] pander.density*         pander.describe*       </span>
+<span class="co">#&gt; [17] pander.evals*           pander.factor*         </span>
+<span class="co">#&gt; [19] pander.formula*         pander.ftable*         </span>
+<span class="co">#&gt; [21] pander.function*        pander.glm*            </span>
+<span class="co">#&gt; [23] pander.Glm*             pander.gtable*         </span>
+<span class="co">#&gt; [25] pander.htest*           pander.image*          </span>
+<span class="co">#&gt; [27] pander.irts*            pander.list*           </span>
+<span class="co">#&gt; [29] pander.lm*              pander.lme*            </span>
+<span class="co">#&gt; [31] pander.logical*         pander.lrm*            </span>
+<span class="co">#&gt; [33] pander.manova*          pander.matrix*         </span>
+<span class="co">#&gt; [35] pander.microbenchmark*  pander.mtable*         </span>
+<span class="co">#&gt; [37] pander.name*            pander.nls*            </span>
+<span class="co">#&gt; [39] pander.NULL*            pander.numeric*        </span>
+<span class="co">#&gt; [41] pander.ols*             pander.option          </span>
+<span class="co">#&gt; [43] pander.orm*             pander.polr*           </span>
+<span class="co">#&gt; [45] pander.POSIXct*         pander.POSIXlt*        </span>
+<span class="co">#&gt; [47] pander.prcomp*          pander.randomForest*   </span>
+<span class="co">#&gt; [49] pander.rapport*         pander.return          </span>
+<span class="co">#&gt; [51] pander.rlm*             pander.sessionInfo*    </span>
+<span class="co">#&gt; [53] pander.smooth.spline*   pander.stat.table*     </span>
+<span class="co">#&gt; [55] pander.summary.aov*     pander.summary.aovlist*</span>
+<span class="co">#&gt; [57] pander.summary.glm*     pander.summary.lm*     </span>
+<span class="co">#&gt; [59] pander.summary.lme*     pander.summary.manova* </span>
+<span class="co">#&gt; [61] pander.summary.nls*     pander.summary.polr*   </span>
+<span class="co">#&gt; [63] pander.summary.prcomp*  pander.summary.rms*    </span>
+<span class="co">#&gt; [65] pander.summary.survreg* pander.summary.table*  </span>
+<span class="co">#&gt; [67] pander.survdiff*        pander.survfit*        </span>
+<span class="co">#&gt; [69] pander.survreg*         pander.table*          </span>
+<span class="co">#&gt; [71] pander.tabular*         pander.ts*             </span>
+<span class="co">#&gt; [73] pander.zoo*            </span>
+<span class="co">#&gt; see '?methods' for accessing help and source code</span></code></pre>
 <p>And it’s integrated with <code>knitr</code> by default. <code>pander</code> simply identifies if <code>knitr</code> is running in the backgorund, and if so, it <code>capture.output</code> and return the resulting string as an <code>knit_asis</code> object, so that you do not need to specify the <code>results='asis'</code> option in your knitr chunk:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(descr, <span class="dt">quietly =</span> <span class="ot">TRUE</span>)
-ct &lt;-<span class="st"> </span><span class="kw">CrossTable</span>(mtcars$gear, mtcars$cyl)
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(descr, <span class="dt">quietly =</span> <span class="ot">TRUE</span>)
+<span class="kw">pander</span>(<span class="kw">CrossTable</span>(mtcars$gear, mtcars$cyl))
 <span class="co">#&gt; Warning in chisq.test(tab, correct = FALSE, ...): Chi-squared approximation</span>
-<span class="co">#&gt; may be incorrect</span>
-<span class="kw">pander</span>(ct)</code></pre></div>
+<span class="co">#&gt; may be incorrect</span></code></pre>
 <table>
 <colgroup>
 <col width="19%"></col>
@@ -213,133 +197,48 @@ ct &lt;-<span class="st"> </span><span class="kw">CrossTable</span>(mtcars$gear,
 </colgroup>
 <thead>
 <tr class="header">
-<th align="center"> <br />
-mtcars$gear</th>
-<th align="center">mtcars$cyl<br />
-4</th>
-<th align="center"> <br />
-6</th>
-<th align="center"> <br />
-8</th>
-<th align="center"> <br />
-Total</th>
+<th align="center"> <br />mtcars$gear</th>
+<th align="center">mtcars$cyl<br />4</th>
+<th align="center"> <br />6</th>
+<th align="center"> <br />8</th>
+<th align="center"> <br />Total</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
-<td align="center"><strong>3</strong><br />
-N<br />
-Chi-square<br />
-Row(%)<br />
-Column(%)<br />
-Total(%)</td>
-<td align="center"> <br />
-1<br />
-3.3502<br />
-6.6667%<br />
-9.0909%<br />
-3.125%</td>
-<td align="center"> <br />
-2<br />
-0.5003<br />
-13.3333%<br />
-28.5714%<br />
-6.250%</td>
-<td align="center"> <br />
-12<br />
-4.5054<br />
-80.0000%<br />
-85.7143%<br />
-37.500%</td>
-<td align="center"> <br />
-15<br />
-<br />
-46.8750%<br />
-<br />
-</td>
+<td align="center"><strong>3</strong><br />N<br />Chi-square<br />Row(%)<br />Column(%)<br />Total(%)</td>
+<td align="center"> <br />1<br />3.3502<br />6.6667%<br />9.0909%<br />3.125%</td>
+<td align="center"> <br />2<br />0.5003<br />13.3333%<br />28.5714%<br />6.250%</td>
+<td align="center"> <br />12<br />4.5054<br />80.0000%<br />85.7143%<br />37.500%</td>
+<td align="center"> <br />15<br /><br />46.8750%<br /><br /></td>
 </tr>
 <tr class="even">
-<td align="center"><strong>4</strong><br />
-N<br />
-Chi-square<br />
-Row(%)<br />
-Column(%)<br />
-Total(%)</td>
-<td align="center"> <br />
-8<br />
-3.6402<br />
-66.6667%<br />
-72.7273%<br />
-25.000%</td>
-<td align="center"> <br />
-4<br />
-0.7202<br />
-33.3333%<br />
-57.1429%<br />
-12.500%</td>
-<td align="center"> <br />
-0<br />
-5.2500<br />
-0.0000%<br />
-0.0000%<br />
-0.000%</td>
-<td align="center"> <br />
-12<br />
-<br />
-37.5000%<br />
-<br />
-</td>
+<td align="center"><strong>4</strong><br />N<br />Chi-square<br />Row(%)<br />Column(%)<br />Total(%)</td>
+<td align="center"> <br />8<br />3.6402<br />66.6667%<br />72.7273%<br />25.000%</td>
+<td align="center"> <br />4<br />0.7202<br />33.3333%<br />57.1429%<br />12.500%</td>
+<td align="center"> <br />0<br />5.2500<br />0.0000%<br />0.0000%<br />0.000%</td>
+<td align="center"> <br />12<br /><br />37.5000%<br /><br /></td>
 </tr>
 <tr class="odd">
-<td align="center"><strong>5</strong><br />
-N<br />
-Chi-square<br />
-Row(%)<br />
-Column(%)<br />
-Total(%)</td>
-<td align="center"> <br />
-2<br />
-0.0460<br />
-40.0000%<br />
-18.1818%<br />
-6.250%</td>
-<td align="center"> <br />
-1<br />
-0.0080<br />
-20.0000%<br />
-14.2857%<br />
-3.125%</td>
-<td align="center"> <br />
-2<br />
-0.0161<br />
-40.0000%<br />
-14.2857%<br />
-6.250%</td>
-<td align="center"> <br />
-5<br />
-<br />
-15.6250%<br />
-<br />
-</td>
+<td align="center"><strong>5</strong><br />N<br />Chi-square<br />Row(%)<br />Column(%)<br />Total(%)</td>
+<td align="center"> <br />2<br />0.0460<br />40.0000%<br />18.1818%<br />6.250%</td>
+<td align="center"> <br />1<br />0.0080<br />20.0000%<br />14.2857%<br />3.125%</td>
+<td align="center"> <br />2<br />0.0161<br />40.0000%<br />14.2857%<br />6.250%</td>
+<td align="center"> <br />5<br /><br />15.6250%<br /><br /></td>
 </tr>
 <tr class="even">
-<td align="center">Total<br />
-</td>
-<td align="center">11<br />
-34.375%</td>
-<td align="center">7<br />
-21.875%</td>
-<td align="center">14<br />
-43.75%</td>
-<td align="center">32<br />
-</td>
+<td align="center">Total<br /></td>
+<td align="center">11<br />34.375%</td>
+<td align="center">7<br />21.875%</td>
+<td align="center">14<br />43.75%</td>
+<td align="center">32<br /></td>
 </tr>
 </tbody>
 </table>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(tables, <span class="dt">quietly =</span> <span class="ot">TRUE</span>)
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(tables, <span class="dt">quietly =</span> <span class="ot">TRUE</span>)
 tab &lt;-<span class="st"> </span><span class="kw">tabular</span>( (Species +<span class="st"> </span><span class="dv">1</span>) ~<span class="st"> </span>(<span class="dt">n=</span><span class="dv">1</span>) +<span class="st"> </span><span class="kw">Format</span>(<span class="dt">digits=</span><span class="dv">2</span>)*
 <span class="st">         </span>(Sepal.Length +<span class="st"> </span>Sepal.Width)*(mean +<span class="st"> </span>sd), <span class="dt">data=</span>iris )
-<span class="kw">pander</span>(tab)</code></pre></div>
+<span class="kw">pander</span>(tab)</code></pre>
 <table>
 <colgroup>
 <col width="18%"></col>
@@ -351,18 +250,12 @@ tab &lt;-<span class="st"> </span><span class="kw">tabular</span>( (Species +<sp
 </colgroup>
 <thead>
 <tr class="header">
-<th align="center"><br />
-Species</th>
-<th align="center"><br />
-n</th>
-<th align="center">Sepal.Length<br />
-mean</th>
-<th align="center"><br />
-sd</th>
-<th align="center">Sepal.Width<br />
-mean</th>
-<th align="center"><br />
-sd</th>
+<th align="center"><br />Species</th>
+<th align="center"><br />n</th>
+<th align="center">Sepal.Length<br />mean</th>
+<th align="center"><br />sd</th>
+<th align="center">Sepal.Width<br />mean</th>
+<th align="center"><br />sd</th>
 </tr>
 </thead>
 <tbody>
@@ -402,7 +295,7 @@ sd</th>
 </table>
 <p>In a nutshell, this is achieved by modification that whenever you call <code>pander</code> inside of a <code>knitr</code> document, instead of returning the markdown text to the standard output (as it used to happen), pander returns a <code>knit_asis</code> class object, which renders fine in the resulting document — without the double comment chars, so rendering the tables in HTML, pdf or other document formats just fine.</p>
 <p>If by any chance you actually want results of <code>pander</code> not to be converted automatically, just specify <code>knitr.auto.asis</code> to <code>FALSE</code> either using <code>panderOptions</code>:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">panderOptions</span>(<span class="st">'knitr.auto.asis'</span>, <span class="ot">FALSE</span>)
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">panderOptions</span>(<span class="st">'knitr.auto.asis'</span>, <span class="ot">FALSE</span>)
 <span class="kw">pander</span>(<span class="kw">head</span>(iris))
 <span class="co">#&gt; </span>
 <span class="co">#&gt; -------------------------------------------------------------------</span>
@@ -410,24 +303,24 @@ sd</th>
 <span class="co">#&gt; -------------- ------------- -------------- ------------- ---------</span>
 <span class="co">#&gt;      5.1            3.5           1.4            0.2       setosa  </span>
 <span class="co">#&gt; </span>
-<span class="co">#&gt;      4.9            3.0           1.4            0.2       setosa  </span>
+<span class="co">#&gt;      4.9             3            1.4            0.2       setosa  </span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt;      4.7            3.2           1.3            0.2       setosa  </span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt;      4.6            3.1           1.5            0.2       setosa  </span>
 <span class="co">#&gt; </span>
-<span class="co">#&gt;      5.0            3.6           1.4            0.2       setosa  </span>
+<span class="co">#&gt;       5             3.6           1.4            0.2       setosa  </span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt;      5.4            3.9           1.7            0.4       setosa  </span>
-<span class="co">#&gt; -------------------------------------------------------------------</span></code></pre></div>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">panderOptions</span>(<span class="st">'knitr.auto.asis'</span>, <span class="ot">TRUE</span>)</code></pre></div>
+<span class="co">#&gt; -------------------------------------------------------------------</span></code></pre>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">panderOptions</span>(<span class="st">'knitr.auto.asis'</span>, <span class="ot">TRUE</span>)</code></pre>
 <div id="rendering-markdown-inside-loopvectorized-function" class="section level4">
 <h4>Rendering markdown inside loop/vectorized function</h4>
 <p>One question that is being asked a lot is how to use <code>pander</code> with <code>knitr</code> in a loop or with vectorized function. For example we have 3 tables that we want to render and we want to do it using <code>lapply</code>:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">dfs &lt;-<span class="st"> </span><span class="kw">list</span>(mtcars[<span class="dv">1</span>:<span class="dv">3</span>, <span class="dv">1</span>:<span class="dv">4</span>], mtcars[<span class="dv">4</span>:<span class="dv">6</span>, <span class="dv">1</span>:<span class="dv">4</span>], mtcars[<span class="dv">7</span>:<span class="dv">9</span>, <span class="dv">1</span>:<span class="dv">4</span>])
+<pre class="sourceCode r"><code class="sourceCode r">dfs &lt;-<span class="st"> </span><span class="kw">list</span>(mtcars[<span class="dv">1</span>:<span class="dv">3</span>, <span class="dv">1</span>:<span class="dv">4</span>], mtcars[<span class="dv">4</span>:<span class="dv">6</span>, <span class="dv">1</span>:<span class="dv">4</span>], mtcars[<span class="dv">7</span>:<span class="dv">9</span>, <span class="dv">1</span>:<span class="dv">4</span>])
 <span class="kw">lapply</span>(dfs, pander)
 <span class="co">#&gt; [[1]]</span>
-<span class="co">#&gt; [1] &quot;\n-------------------------------------------\n      &amp;nbsp;         mpg   cyl   disp   hp \n------------------- ----- ----- ------ ----\n   **Mazda RX4**    21.0    6    160   110 \n\n **Mazda RX4 Wag**  21.0    6    160   110 \n\n  **Datsun 710**    22.8    4    108    93 \n-------------------------------------------\n\n&quot;</span>
+<span class="co">#&gt; [1] &quot;\n-------------------------------------------\n      &amp;nbsp;         mpg   cyl   disp   hp \n------------------- ----- ----- ------ ----\n   **Mazda RX4**     21     6    160   110 \n\n **Mazda RX4 Wag**   21     6    160   110 \n\n  **Datsun 710**    22.8    4    108    93 \n-------------------------------------------\n\n&quot;</span>
 <span class="co">#&gt; attr(,&quot;class&quot;)</span>
 <span class="co">#&gt; [1] &quot;knit_asis&quot;</span>
 <span class="co">#&gt; attr(,&quot;knit_cacheable&quot;)</span>
@@ -441,16 +334,16 @@ sd</th>
 <span class="co">#&gt; [1] TRUE</span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; [[3]]</span>
-<span class="co">#&gt; [1] &quot;\n----------------------------------------\n     &amp;nbsp;       mpg   cyl   disp   hp \n---------------- ----- ----- ------ ----\n **Duster 360**  14.3    8   360.0  245 \n\n **Merc 240D**   24.4    4   146.7   62 \n\n  **Merc 230**   22.8    4   140.8   95 \n----------------------------------------\n\n&quot;</span>
+<span class="co">#&gt; [1] &quot;\n----------------------------------------\n     &amp;nbsp;       mpg   cyl   disp   hp \n---------------- ----- ----- ------ ----\n **Duster 360**  14.3    8    360   245 \n\n **Merc 240D**   24.4    4   146.7   62 \n\n  **Merc 230**   22.8    4   140.8   95 \n----------------------------------------\n\n&quot;</span>
 <span class="co">#&gt; attr(,&quot;class&quot;)</span>
 <span class="co">#&gt; [1] &quot;knit_asis&quot;</span>
 <span class="co">#&gt; attr(,&quot;knit_cacheable&quot;)</span>
-<span class="co">#&gt; [1] TRUE</span></code></pre></div>
+<span class="co">#&gt; [1] TRUE</span></code></pre>
 <p>As you can see, this doesn’t work correctly, due to fact that when run inside <code>knitr</code>, <code>pander</code> tries to return <code>knit_asis</code> class object, but for loops/vectorized functions this results in incorrect output.</p>
 <p>Recommended way to solve this is to disable <code>pander</code> trying to return <code>knit_asis</code> class object by setting <code>knitr.auto.asis</code> to <code>FALSE</code> using <code>panderOptions</code>. However, in that case to we also need to tell <code>knitr</code> to convert table on the fly by specifying <code>results='asis'</code> for <code>knitr</code> chunk:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">panderOptions</span>(<span class="st">'knitr.auto.asis'</span>, <span class="ot">FALSE</span>)
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">panderOptions</span>(<span class="st">'knitr.auto.asis'</span>, <span class="ot">FALSE</span>)
 dfs &lt;-<span class="st"> </span><span class="kw">list</span>(mtcars[<span class="dv">1</span>:<span class="dv">3</span>, <span class="dv">1</span>:<span class="dv">4</span>], mtcars[<span class="dv">4</span>:<span class="dv">6</span>, <span class="dv">1</span>:<span class="dv">4</span>], mtcars[<span class="dv">7</span>:<span class="dv">9</span>, <span class="dv">1</span>:<span class="dv">4</span>])
-<span class="kw">invisible</span>(<span class="kw">lapply</span>(dfs, pander))</code></pre></div>
+<span class="kw">invisible</span>(<span class="kw">lapply</span>(dfs, pander))</code></pre>
 <table>
 <colgroup>
 <col width="27%"></col>
@@ -471,14 +364,14 @@ dfs &lt;-<span class="st"> </span><span class="kw">list</span>(mtcars[<span clas
 <tbody>
 <tr class="odd">
 <td align="center"><strong>Mazda RX4</strong></td>
-<td align="center">21.0</td>
+<td align="center">21</td>
 <td align="center">6</td>
 <td align="center">160</td>
 <td align="center">110</td>
 </tr>
 <tr class="even">
 <td align="center"><strong>Mazda RX4 Wag</strong></td>
-<td align="center">21.0</td>
+<td align="center">21</td>
 <td align="center">6</td>
 <td align="center">160</td>
 <td align="center">110</td>
@@ -555,7 +448,7 @@ dfs &lt;-<span class="st"> </span><span class="kw">list</span>(mtcars[<span clas
 <td align="center"><strong>Duster 360</strong></td>
 <td align="center">14.3</td>
 <td align="center">8</td>
-<td align="center">360.0</td>
+<td align="center">360</td>
 <td align="center">245</td>
 </tr>
 <tr class="even">

@@ -21,8 +21,7 @@ methods(pander)
 
 ## ---- error = TRUE-------------------------------------------------------
 library(descr, quietly = TRUE)
-ct <- CrossTable(mtcars$gear, mtcars$cyl)
-pander(ct)
+pander(CrossTable(mtcars$gear, mtcars$cyl))
 library(tables, quietly = TRUE)
 tab <- tabular( (Species + 1) ~ (n=1) + Format(digits=2)*
          (Sepal.Length + Sepal.Width)*(mean + sd), data=iris )

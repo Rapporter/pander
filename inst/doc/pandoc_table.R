@@ -47,10 +47,11 @@ panderOptions('table.alignment.default', 'center')
 
 ## ------------------------------------------------------------------------
 t <- mtcars[1:3, 1:5]
-emphasize.cols(1)
-emphasize.rows(1)
+emphasize.italics.cols(1)
+emphasize.italics.rows(1)
 emphasize.strong.cells(which(t > 20, arr.ind = TRUE))
 pandoc.table(t)
+pandoc.table(t, emphasize.verbatim.rows = 1, emphasize.strong.cells = which(t > 20, arr.ind = TRUE))
 
 ## ------------------------------------------------------------------------
 pandoc.table(mtcars[1:2, ], style = "grid", caption = "Wide table to be split!")

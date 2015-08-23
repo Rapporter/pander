@@ -2,26 +2,25 @@
 
 The main aim of the *pander* [R](http://r-project.org) package is to provide a minimal and easy tool for rendering **R objects** into [Pandoc](http://johnmacfarlane.net/pandoc/)'s **markdown**. The package is also capable of exporting/converting complex Pandoc documents (reports) in [various ways](#creating-pandoc-documents). Regarding the difference between `pander` and other packages for exporting R objects to different file formats, please refer to this [section](#difference-from-other-rendering-packages).
 
+Current build and test coverage status: [![](https://travis-ci.org/Rapporter/pander.png?branch=master)](https://travis-ci.org/Rapporter/pander) [![](http://codecov.io/github/Rapporter/pander/coverage.svg?branch=master)](http://codecov.io/github/Rapporter/pander?branch=master).
+
+Some CRAN statistics: [![](http://cranlogs.r-pkg.org/badges/pander)](http://cran.rstudio.com/web/packages/pander/index.html) [![](http://cranlogs.r-pkg.org/badges/grand-total/pander)](http://cran.rstudio.com/web/packages/pander/index.html)
+
 # Installation
 
-The stable version can be found on [CRAN](http://cran.r-project.org/web/packages/pander/) and can be installed easily in the R console like any other package:
+The stable version [![](http://www.r-pkg.org/badges/version/pander)](http://cran.r-project.org/web/packages/pander/index.html) can be installed easily in the `R` console like any other package:
 
 ```r
 install.packages('pander')
 ```
 
-On the other hand, I welcome everyone to use the most recent version of the package with quick-fixes, new features and probably new bugs. It's currently hosted on [GitHub](https://github.com/Rapporter/pander)
-
-Current build and test coverage status: [![](https://travis-ci.org/Rapporter/pander.png?branch=master)](https://travis-ci.org/Rapporter/pander) [![](https://coveralls.io/repos/Rapporter/pander/badge.svg?branch=master)](https://coveralls.io/r/Rapporter/pander?branch=master)
-
-It can be installed easily with the nifty function of the `devtools` package from [CRAN](http://cran.r-project.org/web/packages/devtools/index.html):
+On the other hand, I welcome everyone to use the most recent version of the package with quick-fixes, new features and probably new bugs. It's currently hosted on [GitHub](https://github.com/Rapporter/pander). To get the latest development version from [GitHub](https://github.com/Rapporter/pander) of the `devtools` package from [CRAN](http://cran.r-project.org/web/packages/devtools/index.html):
 
 ```r
-library(devtools)
-install_github('pander', 'Rapporter')
+devtools::install_github('Rapporter/pander')
 ```
 
-Or download the [sources](https://github.com/Rapporter/pander/zipball/master) and build manually. If you're running R on Windows, you need to install [Rtools](http://cran.stat.ucla.edu/bin/windows/Rtools/).
+Or download the [sources](https://github.com/Rapporter/pander/zipball/master) and build manually. If you're running R on Windows, you will need to install [Rtools](http://cran.stat.ucla.edu/bin/windows/Rtools/).
 
 ## Dependencies
 
@@ -34,8 +33,9 @@ And there are also a few optional suggested or supported R packages, such as:
 
  * [koRpus](http://cran.r-project.org/web/packages/koRpus/index.html) to use hyphenation when splitting large table cells,
  * [lattice](http://cran.r-project.org/web/packages/lattice/index.html) and [ggplot2](http://cran.r-project.org/web/packages/ggplot2/index.html) for unified plot theme,
- * [survival](http://cran.r-project.org/web/packages/survival/index.html), [microbenchmark](http://cran.r-project.org/web/packages/microbenchmark/index.html), [zoo](http://cran.r-project.org/web/packages/zoo/index.html), [nlme](http://cran.r-project.org/web/packages/nlme/index.html), [descr](http://cran.r-project.org/web/packages/descr/index.html), [MASS](http://cran.r-project.org/web/packages/MASS/index.html) packages includes some supported R classes,
- * and *pander* can be also very useful inside of [knitr](http://cran.r-project.org/web/packages/knitr/index.html).
+ * [futile.logger](https://cran.r-project.org/web/packages/futile.logger/index.html) for logging capabilities inside `evals`,
+ * [survival](http://cran.r-project.org/web/packages/survival/index.html), [microbenchmark](http://cran.r-project.org/web/packages/microbenchmark/index.html), [zoo](http://cran.r-project.org/web/packages/zoo/index.html), [nlme](http://cran.r-project.org/web/packages/nlme/index.html), [descr](http://cran.r-project.org/web/packages/descr/index.html), [MASS](http://cran.r-project.org/web/packages/MASS/index.html), [tables](https://cran.r-project.org/web/packages/tables/index.html), [reshape](https://cran.r-project.org/web/packages/reshape/index.html), [memisc](https://cran.r-project.org/web/packages/memisc/), [Epi](https://cran.r-project.org/web/packages/Epi/), [randomForest](https://cran.r-project.org/web/packages/randomForest/), [tseries](https://cran.r-project.org/web/packages/tseries/), [rms](https://cran.r-project.org/web/packages/rms/) packages include some supported R classes,
+ * and *pander* can be also very useful inside of [knitr](http://cran.r-project.org/web/packages/knitr/index.html). More information about how to use *pander* and *knitr* can be found specialized vignette, which can be accessed by `vignette('knitr', package = 'pander')` or available online [here](http://rapporter.github.io/pander/knitr.html).
 
 ### Pandoc
 
@@ -105,7 +105,9 @@ II. Second element
 
 # Markdown tables
 
-One of the most popular feature in *pander* is `pandoc.table`, rendering most tabular R objects into markdown tables with various options and settings (e.g. [style](#style), [caption](#caption), [cell highlighting](#highlight-cells), [cell alignment](#cell-alignment), [width](#table-and-cell-width)):
+One of the most popular feature in *pander* is `pandoc.table`, rendering most tabular R objects into markdown tables with various options and settings (e.g. [style](#style), [caption](#caption), [cell highlighting](#highlight-cells), [cell alignment](#cell-alignment), [width](#table-and-cell-width)). This section aims to provide quick introduction to most common options, but for more usage/implementation details and examples, please refer to specialized vignette, which can be accessed by `vignette('pandoc_table')` or available online [here](http://rapporter.github.io/pander/pandoc_table.html).
+
+Let's start with a small example:
 
 ```r
 > pandoc.table(mtcars[1:3, 1:4])
@@ -115,9 +117,9 @@ Which command produces the following output by default:
 -------------------------------------------
       &nbsp;         mpg   cyl   disp   hp 
 ------------------- ----- ----- ------ ----
-   **Mazda RX4**    21.0    6    160   110
+   **Mazda RX4**     21     6    160   110 
 
- **Mazda RX4 Wag**  21.0    6    160   110
+ **Mazda RX4 Wag**   21     6    160   110 
 
   **Datsun 710**    22.8    4    108    93 
 -------------------------------------------
@@ -238,32 +240,35 @@ One of the fanciest features in *pander* is the ease of highlighting rows, colum
 
 This can be achieved by calling `pandoc.table` directly and passing any (or more) of the following arguments **or** calling the R function with the same names before rendering a table with either the `pander` [generic S3 method](#generic-pander-method) or via `pandoc.table`:
 
-  * emphasize.rows
-  * emphasize.cols
-  * emphasize.cells
-  * emphasize.strong.rows
-  * emphasize.strong.cols
-  * emphasize.strong.cells
+* emphasize.italics.rows
+* emphasize.italics.cols
+* emphasize.italics.cells
+* emphasize.strong.rows
+* emphasize.strong.cols
+* emphasize.strong.cells
+* emphasize.verbatim.rows
+* emphasize.verbatim.cols
+* emphasize.verbatim.cells
 
-The `emphasize` helpers would turn the affected cells to *italic*, while `emphasize.strong` would apply a **bold style** to the cell. Of course a cell can be also ***italic and strong*** at the same time.
+The `emphasize.italics` helpers would turn the affected cells to *italic*, `emphasize.strong` would apply a **bold** style to the cell and `emphasize.verbatim` would apply a `verbatim` style to the cell. A cell can be also *italic*,  **bold** and `verbatim` at the same time.
 
 Those functions and arguments ending in `rows` or `cols` take a vector (like which columns or rows to emphasize in a table), while the `cells` argument take either a vector (for one dimensional "tables") or an array-like data structure with two columns holding row and column indexes of cells to be emphasized -- just like what `which(..., arr.ind = TRUE)` returns. A quick-example:
 
 ```rout
 > t <- mtcars[1:3, 1:5]
-> emphasize.cols(1)
-> emphasize.rows(1)
+> emphasize.italics.cols(1)
+> emphasize.italics.rows(1)
 > emphasize.strong.cells(which(t > 20, arr.ind = TRUE))
 > pandoc.table(t)
 
 ---------------------------------------------------------------
-      &nbsp;           mpg      cyl    disp       hp      drat
+      &nbsp;           mpg      cyl    disp       hp      drat 
 ------------------- ---------- ----- --------- --------- ------
-   **Mazda RX4**    ***21.0***  *6*  ***160*** ***110*** *3.90*
+   **Mazda RX4**     ***21***   *6*  ***160*** ***110*** *3.9* 
 
- **Mazda RX4 Wag**  ***21.0***   6    **160**   **110**   3.90
+ **Mazda RX4 Wag**   ***21***    6    **160**   **110**   3.9  
 
-  **Datsun 710**    ***22.8***   4    **108**   **93**    3.85
+  **Datsun 710**    ***22.8***   4    **108**   **93**    3.85 
 ---------------------------------------------------------------
 
 ```
@@ -282,7 +287,7 @@ You can specify the alignment of the cells (left, right or center/centre) in a t
 -------------- ------------- --------------
            5.1      3.5      1.4           
 
-           4.9      3.0      1.4
+           4.9       3       1.4           
 -------------------------------------------
 
 ```
@@ -318,7 +323,7 @@ Sepal.Length   Sepal.Width     Petal.Length
 -------------- ------------- --------------
 5.1            3.5                      1.4
 
-4.9            3.0                      1.4
+4.9            3                        1.4
 -------------------------------------------
 
 ```
@@ -333,7 +338,7 @@ Sepal.Length   Sepal.Width     Petal.Length
 +---------------------+-------+-------+--------+------+--------+-------+
 |       &nbsp;        |  mpg  |  cyl  |  disp  |  hp  |  drat  |  wt   |
 +=====================+=======+=======+========+======+========+=======+
-|    **Mazda RX4**    |  21   |   6   |  160   | 110  |  3.9   | 2.620 |
+|    **Mazda RX4**    |  21   |   6   |  160   | 110  |  3.9   | 2.62  |
 +---------------------+-------+-------+--------+------+--------+-------+
 |  **Mazda RX4 Wag**  |  21   |   6   |  160   | 110  |  3.9   | 2.875 |
 +---------------------+-------+-------+--------+------+--------+-------+
@@ -399,9 +404,80 @@ foo-
 
 ## Minor features
 
-The `pandoc.table` helper function turning any tabular R data into markdown table comes with a variety of further options and features. For example, the function automatically omits all line breaks found in each table cell to be able to apply the `table.split` functionality. To preserve line breaks inside cells `keep.line.breaks` parameter should be used.
+Funtionality described in other sections is most notable, but `pander/pandoc.table` also has smaller nifty features that are worth mentioning:
 
-Similarly, to print tables in plain ASCII without any markdown markup, set the `plain.ascii` parameter to `TRUE`, or if you do not like the row names to be highlighted in the tables, simply disable `emphasize.rownames`. To see all possible options, please check [`?pandoc.table`](http://www.rdocumentation.org/packages/pander/functions/pandoc.table.return)
+* `plain.ascii` - allows to have the output without `markdown` markup:
+
+```rout
+> pandoc.table(mtcars[1:3, 1:4])
+
+-------------------------------------------
+      &nbsp;         mpg   cyl   disp   hp 
+------------------- ----- ----- ------ ----
+   **Mazda RX4**     21     6    160   110 
+
+ **Mazda RX4 Wag**   21     6    160   110 
+
+  **Datsun 710**    22.8    4    108    93 
+-------------------------------------------
+
+> pandoc.table(mtcars[1:3, 1:4], plain.ascii = TRUE)
+
+-------------------------------------------
+                     mpg   cyl   disp   hp 
+------------------- ----- ----- ------ ----
+     Mazda RX4       21     6    160   110 
+
+   Mazda RX4 Wag     21     6    160   110 
+
+    Datsun 710      22.8    4    108    93 
+-------------------------------------------
+
+```
+
+* `missing` - set a string to replace missing values:
+
+```rout
+> m <- mtcars[1:3, 1:5]
+> m$mpg <- NA
+> pandoc.table(m, missing = '?')
+
+--------------------------------------------------
+      &nbsp;         mpg   cyl   disp   hp   drat 
+------------------- ----- ----- ------ ---- ------
+   **Mazda RX4**      ?     6    160   110   3.9  
+
+ **Mazda RX4 Wag**    ?     6    160   110   3.9  
+
+  **Datsun 710**      ?     4    108    93   3.85 
+--------------------------------------------------
+
+```
+
+* `keep.line.breaks` - allows to preserve line breaks inside cells. Not that by default `pandoc.table` automatically omits all line breaks found in each table cell to be able to apply the `table.split` functionality.
+
+```rout
+> m <- data.frame(a="foo\nbar", b="pander")
+> pandoc.table(m)
+
+--------------
+   a      b   
+------- ------
+foo bar pander
+--------------
+
+> pandoc.table(m, keep.line.breaks = TRUE)
+
+----------
+ a    b   
+--- ------
+foo pander
+bar       
+----------
+
+```
+
+To see all possible options, please check [`?pandoc.table`](http://www.rdocumentation.org/packages/pander/functions/pandoc.table.return)
 
 And please note, that all above mentioned features are also supported by the `pander` [generic S3 method](#generic-pander-method) and defaults can be updated via [`panderOptions`](#pander-options) for permanent settings.
 
@@ -413,20 +489,23 @@ And please note, that all above mentioned features are also supported by the `pa
 
 ```rout
 > methods(pander)
- [1] pander.anova           pander.aov             pander.aovlist         pander.call            pander.cast_df
- [6] pander.character       pander.clogit          pander.coxph           pander.CrossTable      pander.data.frame
-[11] pander.Date            pander.default         pander.density         pander.describe        pander.evals
-[16] pander.factor          pander.formula         pander.ftable          pander.function        pander.glm
-[21] pander.htest           pander.image           pander.list            pander.lm              pander.lme
-[26] pander.logical         pander.matrix          pander.microbenchmark  pander.mtable          pander.NULL
-[31] pander.numeric         pander.option*         pander.POSIXct         pander.POSIXlt         pander.prcomp
-[36] pander.rapport         pander.return          pander.rlm             pander.sessionInfo     pander.smooth.spline
-[41] pander.stat.table      pander.summary.aov     pander.summary.aovlist pander.summary.glm     pander.summary.lm
-[46] pander.summary.prcomp  pander.survdiff        pander.survfit         pander.table           pander.ts
-[51] pander.zoo
+ [1] pander.anova*           pander.aov*             pander.aovlist*         pander.Arima*           pander.call*
+ [6] pander.cast_df*         pander.character*       pander.clogit*          pander.coxph*           pander.CrossTable*
+[11] pander.data.frame*      pander.Date*            pander.default*         pander.density*         pander.describe*
+[16] pander.evals*           pander.factor*          pander.formula*         pander.ftable*          pander.function*
+[21] pander.glm*             pander.gtable*          pander.htest*           pander.image*           pander.irts*
+[26] pander.list*            pander.lm*              pander.lme*             pander.logical*         pander.manova*
+[31] pander.matrix*          pander.microbenchmark*  pander.mtable*          pander.name*            pander.nls*
+[36] pander.NULL*            pander.numeric*         pander.option           pander.polr*            pander.POSIXct*
+[41] pander.POSIXlt*         pander.prcomp*          pander.randomForest*    pander.rapport*         pander.return
+[46] pander.rlm*             pander.sessionInfo*     pander.smooth.spline*   pander.stat.table*      pander.summary.aov*
+[51] pander.summary.aovlist* pander.summary.glm*     pander.summary.lm*      pander.summary.lme*     pander.summary.manova*
+[56] pander.summary.nls*     pander.summary.polr*    pander.summary.prcomp*  pander.summary.survreg* pander.summary.table*
+[61] pander.survdiff*        pander.survfit*         pander.survreg*         pander.table*           pander.tabular*
+[66] pander.ts*              pander.zoo*
 ```
 
-If you think that `pander` lacks support for any other R class(es), please feel free to leave change request [here](https://github.com/Rapporter/pander/issues) and we will be happy to extend the package.
+If you think that pander lacks support for any other R class(es), please feel free to open a [ticket](https://github.com/Rapporter/pander/pulls) suggesting a new feature or submit [pull request](https://github.com/Rapporter/pander/issues) and we will be happy to extend the package.
 
 Besides the most basic R object types (vectors, matrices, tables or data frames), list-support might be interesting for you:
 
@@ -514,9 +593,9 @@ But the output of different **statistical methods** are tried to be prettyfied. 
 > pander(chisq.test(table(mtcars$am, mtcars$gear)))
 
 -------------------------------
- Test statistic   df   P value
+ Test statistic   df   P value 
 ---------------- ---- ---------
-     20.94        2     * * *
+     20.94        2     * * *  
 -------------------------------
 
 Table: Pearson's Chi-squared test: `table(mtcars$am, mtcars$gear)`
@@ -532,7 +611,7 @@ A few other examples on the supported R classes:
 ---------------------------------------------------------
  Test statistic   df    P value   Alternative hypothesis 
 ---------------- ----- --------- ------------------------
-     -1.861      17.78                  two.sided
+     -1.861      17.78                  two.sided        
 ---------------------------------------------------------
 
 Table: Welch Two Sample t-test: `extra` by `group`
@@ -544,19 +623,19 @@ Table: Welch Two Sample t-test: `extra` by `group`
 > m <- glm(counts ~ outcome + treatment, family = poisson())
 > pander(m)
 
----------------------------------------------------------------
-     &nbsp;        Estimate   Std. Error   z value    Pr(>|z|)
------------------ ---------- ------------ ---------- ----------
-  **outcome2**    -4.543e-01    0.2022    -2.247e+00 2.465e-02
+--------------------------------------------------------------
+     &nbsp;        Estimate   Std. Error   z value   Pr(>|z|) 
+----------------- ---------- ------------ --------- ----------
+  **outcome2**     -0.4543      0.2022     -2.247    0.02465  
 
-  **outcome3**    -2.930e-01    0.1927    -1.520e+00 1.285e-01
+  **outcome3**      -0.293      0.1927      -1.52     0.1285  
 
- **treatment2**   1.338e-15     0.2000    6.690e-15  1.000e+00
+ **treatment2**   1.338e-15      0.2      6.69e-15      1     
 
- **treatment3**   1.421e-15     0.2000    7.105e-15  1.000e+00
+ **treatment3**   1.421e-15      0.2      7.105e-15     1     
 
- **(Intercept)**  3.045e+00     0.1709    1.781e+01  5.427e-71
----------------------------------------------------------------
+ **(Intercept)**    3.045       0.1709      17.81   5.427e-71 
+--------------------------------------------------------------
 
 Table: Fitting generalized (poisson/log) linear model: counts ~ outcome + treatment
 
@@ -565,9 +644,9 @@ Table: Fitting generalized (poisson/log) linear model: counts ~ outcome + treatm
 --------------------------------------------------------
     &nbsp;       Df   Deviance   Resid. Df   Resid. Dev 
 --------------- ---- ---------- ----------- ------------
-   **NULL**      NA      NA          8         10.581
+   **NULL**      NA      NA          8         10.58    
 
-  **outcome**    2   5.452e+00       6         5.129
+  **outcome**    2     5.452         6         5.129    
 
  **treatment**   2   2.665e-15       4         5.129    
 --------------------------------------------------------
@@ -579,11 +658,11 @@ Table: Analysis of Deviance Table
 -----------------------------------------------------------
     &nbsp;       Df   Sum Sq    Mean Sq   F value   Pr(>F) 
 --------------- ---- --------- --------- --------- --------
-  **outcome**    2   9.267e+01 4.633e+01 2.224e+00  0.2242
+  **outcome**    2     92.67     46.33     2.224    0.2242 
 
- **treatment**   2   8.382e-31 4.191e-31 2.012e-32  1.0000
+ **treatment**   2   8.382e-31 4.191e-31 2.012e-32    1    
 
- **Residuals**   4   8.333e+01 2.083e+01    NA        NA
+ **Residuals**   4     83.33     20.83      NA        NA   
 -----------------------------------------------------------
 
 Table: Analysis of Variance Model
@@ -593,13 +672,13 @@ Table: Analysis of Variance Model
 -------------------------------------------------
     &nbsp;       PC1     PC2      PC3      PC4   
 -------------- ------- -------- -------- --------
-  **Murder**   0.04170 -0.04482 0.07989  -0.99492
+  **Murder**   0.0417  -0.04482 0.07989  -0.9949 
 
- **Assault**   0.99522 -0.05876 -0.06757 0.03894
+ **Assault**   0.9952  -0.05876 -0.06757 0.03894 
 
- **UrbanPop**  0.04634 0.97686  -0.20055 -0.05817
+ **UrbanPop**  0.04634  0.9769  -0.2005  -0.05817
 
-   **Rape**    0.07516 0.20072  0.97408  0.07233
+   **Rape**    0.07516  0.2007   0.9741  0.07233 
 -------------------------------------------------
 
 Table: Principal Components Analysis
@@ -609,17 +688,17 @@ Table: Principal Components Analysis
 --------------------------------------------
    &nbsp;      Coordinates   Density values 
 ------------- ------------- ----------------
-  **Min.**       -32.12        0.0000050
+  **Min.**       -32.12          5e-06      
 
  **1st Qu.**      80.69        0.0004068    
 
- **Median**      193.50        0.0016650
+ **Median**       193.5         0.001665    
 
-  **Mean**       193.50        0.0022140
+  **Mean**        193.5         0.002214    
 
- **3rd Qu.**     306.30        0.0040900
+ **3rd Qu.**      306.3         0.00409     
 
-  **Max.**       419.10        0.0060510
+  **Max.**        419.1         0.006051    
 --------------------------------------------
 
 Table: Kernel density of *mtcars$hp* (bandwidth: 28.04104)
@@ -631,17 +710,17 @@ Table: Kernel density of *mtcars$hp* (bandwidth: 28.04104)
 --------------------------------------------
    &nbsp;      Coordinates   Density values 
 ------------- ------------- ----------------
-  **Min.**       -32.12           0.00
+  **Min.**       -32.12            0        
 
- **1st Qu.**      80.69           0.00
+ **1st Qu.**      80.69            0        
 
- **Median**      193.50           0.00
+ **Median**       193.5            0        
 
-  **Mean**       193.50           0.00
+  **Mean**        193.5            0        
 
- **3rd Qu.**     306.30           0.00
+ **3rd Qu.**      306.3            0        
 
-  **Max.**       419.10           0.01
+  **Max.**        419.1           0.01      
 --------------------------------------------
 
 Table: Kernel density of *mtcars$hp* (bandwidth: 28.04104)
@@ -837,9 +916,9 @@ myReport$export(tempfile())
 myReport$export(open = FALSE)
 ```
 
-# Evals
+# Capturing evaluation information with evals
 
-When working on the [rapport package](http://rapport-package.info), I really needed some nifty R function that can evaluate R expression along with capturing errors and warnings. Unfortunately the `evaluate` package had only limited features at that time, as it could not return the raw R object, but only the standard output with messages. So I wrote my own function, and soon some further feature requests arose, like identifying if an R expression results in a plot etc.
+When working on the [rapport package](http://rapport-package.info), I really needed some nifty R function that can evaluate R expression along with capturing errors and warnings. Unfortunately the `evaluate` package had only limited features at that time, as it could not return the raw R object, but only the standard output with messages. So I wrote my own function, and soon some further feature requests arose, like identifying if an R expression results in a plot etc. This section aims to give a quick introduction to the functionality of `evals`, but for more usage/implementation details, please refer to specialized vignette, which can be accessed by `vignette('evals', package='pander')` or available online [here](http://rapporter.github.io/pander/evals.html).
 
 But probably it's easier to explain what `evals` can do with a simple example:
 
@@ -981,11 +1060,11 @@ evals('mean(xx)')
 
 The package comes with a variety of globally adjustable options, which have an effect on the result of your reports. You can query and update these options with the `panderOptions` function:
 
-  * `digits`: numeric (default: `2`) passed to `format`
+  * `digits`: numeric (default: `2`) passed to `format`.  Can be a vector specifying values for each column (has to be the same length as number of columns). Values for non-numeric columns will be disregarded.
   * `decimal.mark`: string (default: `.`) passed to `format`
   * `formula.caption.prefix`: string (default: `Formula: `) passed to `pandoc.formula` to be used as caption prefix. Be sure about what you are doing if changing to other than `Formula: ` or `:`.
   * `big.mark`: string (default: ``) passed to `format`
-  * `round`: numeric (default: `Inf`) passed to `round`
+  * `round`: numeric (default: `Inf`) passed to `round`. Can be a vector specifying values for each column (has to be the same length as number of columns). Values for non-numeric columns will be disregarded.
   * `keep.trailing.zeros`: boolean (default: `FALSE`) show or remove trailing zeros in numbers (e.g. in numeric vectors or in columns of tables with numeric values)
   * `keep.line.breaks`: boolean (default: `FALSE`) to keep or remove line breaks from cells in a table
   * `missing`: string (default: `NA`) to replace missing values in vectors, tables etc.
