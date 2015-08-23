@@ -19,7 +19,7 @@ cat(t, file = 'index.html', sep = '\n')
 ## add README to the pkg (not only to the gh-pages branch)
 file.copy('index', 'README.md', overwrite = TRUE)
 file.remove('index')
-files_to_remove <- diff(list.files('plots/', full.names = TRUE),
+files_to_remove <- setdiff(list.files('plots/', full.names = TRUE),
                         list.files('plots/', full.names = TRUE, pattern = "^evals"))
 file.remove(files_to_remove)
 examples <- gsub("(.*)\\.brew$", "\\1", list.files("../inst/examples/"))

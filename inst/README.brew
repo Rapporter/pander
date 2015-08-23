@@ -837,7 +837,6 @@ But if you stick with `pander`'s literate programming engine, then there's not m
 
 Based on the fact that `pander` transforms R objects into markdown, **no "traditional" R console output is shown** in the resulting document (nor in markdown, nor in exported docs), but **all R objects are transformed to tables, list etc**. Well, there is an option (`show.src`) to show the original R commands before the formatted output, and `pander` calls can be also easily tweaked to return the printed version of the R objects - if you would need that in some strange situation - like writing an R tutorial. But  really think that nor R code, nor raw R results have anything to do with an exported report.
 
-
 Of course **all warnings, messages and errors are captured** while evaluating R expressions just like `stdout` besides the **raw R objects**. So the resulting report also includes the raw R objects for further edits if needed - which is a very unique feature.
 
 **Graphs and plots are automatically identified** in code chunks and saved to disk in a `png` file linked in the resulting document. This means that if you create a report (e.g. `brew` a text file) and export it to PDF/docx etc. all the plots/images would be there. There are some parameters to specify the resolution of the image and also the type (e.g. `jpg`, `svg` or `pdf`) besides a **wide variety of [theme options](#pander-options)**. About the latter, please check the `graphs.brew` example [above](#examples).

@@ -45,8 +45,7 @@ methods(pander)
 And it's integrated with `knitr` by default. `pander` simply identifies if `knitr` is running in the backgorund, and if so, it `capture.output` and return the resulting string as an `knit_asis` object, so that you do not need to specify the `results='asis'` option in your knitr chunk:
 ```{r, error = TRUE}
 library(descr, quietly = TRUE)
-ct <- CrossTable(mtcars$gear, mtcars$cyl)
-pander(ct)
+pander(CrossTable(mtcars$gear, mtcars$cyl))
 library(tables, quietly = TRUE)
 tab <- tabular( (Species + 1) ~ (n=1) + Format(digits=2)*
          (Sepal.Length + Sepal.Width)*(mean + sd), data=iris )

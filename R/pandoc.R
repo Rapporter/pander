@@ -692,7 +692,7 @@ pandoc.table.return <- function(t, caption, digits = panderOptions('digits'), de
         }
 
         res <- NULL
-
+        rn <- rownames(cells)
         ## single value and vectors/lists
         if (length(dim(cells)) < 2) {
 
@@ -725,7 +725,7 @@ pandoc.table.return <- function(t, caption, digits = panderOptions('digits'), de
             }
 
         }
-
+        rownames(res) <- rn
         ## return
         res
 
