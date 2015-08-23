@@ -12,12 +12,12 @@ git config user.email "travis"
 
 # handle master
 git checkout master
-CHANGED_FILES=`git diff-tree --no-commit-id --name-only -r $TRAVIS_COMMIT`
+CHANGED_FILES=`git show --stat $TRAVIS_COMMIT`
 # check if vignettes were updated
-if [[ $CHANGED_FILES =~ .*\.Rmd.* ]]
+if [[ $CHANGED_FILES =~ .*vignettes.*\.Rmd.* ]]
 then
-  R -e 'devtools::build_vignettes()'
-  git add inst\doc
+  R -e 'devtools::install_github("rstudio/rmarkdown"); devtools::build_vignettes()'
+  git add inst/doc
 fi
 # check if readme was update
 if [[ $CHANGED_FILES =~ .*README\.brew.* ]]
@@ -27,7 +27,17 @@ then
 fi
 git commit -m "Update by travis after $TRAVIS_COMMIT"
 git push origin master
-git stash
+cd ../
+git pull origin master
+rm -rf out
+
+mkdir out
+cd out
+git init
+git remote add origin $FULL_REPO
+git fetch
+git config user.name "rapporter-travis"
+git config user.email "travis"
 
 # gh-pages handling
 git checkout gh-pages
@@ -35,8 +45,12 @@ for files in '../inst/doc/*.html'; do
         cp $files .
 done
 
-R -f ../.brewer.R
+if [[ $CHANGED_FILES =~ .*\.brew.* ]]
+then
+  R -f ../.brewer.R
+fi
 
 git add .
+git reset README.md
 git commit -m "GH-Pages update by travis after $TRAVIS_COMMIT"
 git push origin gh-pages
