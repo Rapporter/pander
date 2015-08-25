@@ -1203,6 +1203,14 @@ pandoc.table.return <- function(t, caption, digits = panderOptions('digits'), de
 
         res <- paste0(res, paste(apply(t, 1, function(x) paste0(table.expand(x, t.width, justify, sep.col), sep.row)), collapse = '\n')) #nolint
 
+        ## It is possible for a multiline table to have just one row,
+        ## but the row should be followed by a blank line (and then
+        ## the row of dashes that ends the table), or the table may
+        ## be interpreted as a simple table.
+        if (style == 'multiline' & nrow(t) == 1 & length(t.colnames) == 0) {
+            res <- paste0(res, '\n')
+        }
+
         ## footer
         if (style != 'grid') {
             res <- paste0(res, sep.btn, '\n\n')
