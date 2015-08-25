@@ -2,7 +2,7 @@
 % Please edit documentation in R/S3.R
 \name{pander.lm}
 \alias{pander.lm}
-\title{Pander method for summary.glm class}
+\title{Pander method for summary.lm class}
 \usage{
 \method{pander}{lm}(x, caption = attr(x, "caption"), covariate.labels, omit,
   ...)
@@ -19,6 +19,6 @@
 \item{...}{optional parameters passed to raw \code{pandoc.table} function}
 }
 \description{
-Prints a summary.glm object in Pandoc's markdown.
+Prints a summary.lm object in Pandoc's markdown.
 }
 

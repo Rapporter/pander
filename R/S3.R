@@ -390,9 +390,9 @@ pander.summary.glm <- function(x, caption = attr(x, 'caption'), covariate.labels
     pander.summary.lm(x, caption = caption, summary = summary, covariate.labels = covariate.labels, omit = omit, ...)
 
 
-#' Pander method for summary.glm class
+#' Pander method for summary.lm class
 #'
-#' Prints a summary.glm object in Pandoc's markdown.
+#' Prints a summary.lm object in Pandoc's markdown.
 #' @param x a summary.glm object
 #' @param caption caption (string) to be shown under the table
 #' @param covariate.labels vector to replace covariate lables in the table
@@ -2134,7 +2134,7 @@ pander.lrm <- function (x, coefs = TRUE, ...)  {
 #' Prints an orm object from rms package in Pandoc's markdown.
 #' @param x an orm object
 #' @param coefs if to the table of model coefficients, standard errors, etc. default(\code{TRUE})
-#' @param intercepts if to print intercepts, by default, intercepts are only printed if there are fewer than 10 of them 
+#' @param intercepts if to print intercepts, by default, intercepts are only printed if there are fewer than 10 of them
 #' @param ... optional parameters passed to raw \code{pandoc.table} function
 #' @export
 pander.orm <- function (x, coefs = TRUE, intercepts = x$non.slopes < 10, ...) {
@@ -2218,6 +2218,7 @@ pander.orm <- function (x, coefs = TRUE, intercepts = x$non.slopes < 10, ...) {
 #' @param coefs if to the table of model coefficients, standard errors, etc. default(\code{TRUE})
 #' @param ... optional parameters passed to raw \code{pandoc.table} function
 #' @export
+#' @rdname pander.glm.rms
 pander.Glm <- function (x, coefs = TRUE, ...) {
     requireNamespace('rms', quietly = TRUE)
     cof <- coef(x)
