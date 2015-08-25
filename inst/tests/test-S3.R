@@ -500,7 +500,7 @@ test_that('Behavior for empty objects is correct', {
     mt <- mtcars[mtcars$mpg < 0, 1:4]
     res <- pander_return(mt)
     expect_equal(res[3], '**mpg** **cyl** **disp** **hp**')
-    expect_equal(length(res), 5)
+    expect_equal(length(res), 6)
     colnames(mt) <- NULL
     res <- suppressWarnings(pander_return(mt))
     expect_equal(length(res), 0)
@@ -512,7 +512,7 @@ test_that('Behavior for empty objects is correct', {
     colnames(mt) <- 1:5
     res <- pander_return(mt)
     expect_equal(res[3], '**1** **2** **3** **4** **5**')
-    expect_equal(length(res), 5)
+    expect_equal(length(res), 6)
     expect_equal(length(pander_return(data.frame())), 0)
     expect_warning(pander_return(data.frame()))
 })
