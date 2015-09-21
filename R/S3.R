@@ -557,7 +557,7 @@ pander.htest <- function(x, caption = attr(x, 'caption'), ...) {
         res[names(x$parameter)] <- x$parameter
     }
     if (!is.null(x$p.value)) {
-        res$'P value' <- add.significance.stars(x$p.value)
+        res$'P value' <- c(paste(add.significance.stars(x$p.value), round(x$p.value, 5)))
     }
     if (!is.null(x$alternative)) {
         res['Alternative hypothesis'] <- x$alternative
