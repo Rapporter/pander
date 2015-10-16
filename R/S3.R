@@ -557,7 +557,12 @@ pander.htest <- function(x, caption = attr(x, 'caption'), ...) {
         res[names(x$parameter)] <- x$parameter
     }
     if (!is.null(x$p.value)) {
-        res$'P value' <- add.significance.stars(x$p.value)
+        res$'P value' <- paste(
+          format(round(x$p.value, panderOptions('round')),
+                 trim         = TRUE,
+                 digits       = panderOptions("digits"),
+                 decimal.mark = panderOptions("decimal.mark")),
+          add.significance.stars(x$p.value))
     }
     if (!is.null(x$alternative)) {
         res['Alternative hypothesis'] <- x$alternative
