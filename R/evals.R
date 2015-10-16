@@ -245,32 +245,62 @@ eval.msgs <- function(src, env = NULL, showInvisible = FALSE, graph.unify = eval
                     ## colors
                     rv$theme$plot.background  <- ggplot2::element_rect(fill = bc, colour = NA)
                     rv$theme$axis.ticks       <- ggplot2::element_line(colour = gc, size = 0.2)
+
                     ## point shape still has to be updated
                     for (i in length(rv$layers)) {
-                        if (rv$layers[[i]]$geom$objname %in% c('point')) {
-                            rv$layers[[i]]$geom_params$size   <- 3
-                            rv$layers[[i]]$geom_params$shape  <- gs
+                        if (packageVersion('ggplot2') <= '1.0.1') {
+                            if (rv$layers[[i]]$geom$objname %in% c('point')) {
+                                rv$layers[[i]]$geom_params$size   <- 3
+                                rv$layers[[i]]$geom_params$shape  <- gs
+                            }
+                        } else {
+                            if (inherits(rv$layers[[i]]$geom, 'GeomPoint')) {
+                                rv$layers[[i]]$aes_params$size  <- 3
+                                rv$layers[[i]]$aes_params$shape <- gs
+                            }
                         }
                     }
+
                     ## geom colors
                     if (is.null(rv$labels$colour) & is.null(rv$labels$fill)) {
 
                         ## update layers with one color
-                        ## this is an ugly hack but `update_geom_defaults` is not reversible :(
-                        for (i in 1:length(rv$layers)) {
-                            if (rv$layers[[i]]$geom$objname %in% c('histogram', 'bar')) {
-                                rv$layers[[i]]$geom_params$fill   <- cs[i]
-                                rv$layers[[i]]$geom_params$colour <- tc
-                            } else {
-                                if (rv$layers[[i]]$geom$objname %in% c('boxplot')) {
+                        ## this is an ugly hack but `update_geom_defaults`
+                        ## is not reversible :(
+                        if (packageVersion('ggplot2') <= '1.0.1') {
+                            for (i in 1:length(rv$layers)) {
+                                if (rv$layers[[i]]$geom$objname %in% c('histogram', 'bar')) {
                                     rv$layers[[i]]$geom_params$fill   <- cs[i]
-                                    rv$layers[[i]]$geom_params$colour <- 'black'
+                                    rv$layers[[i]]$geom_params$colour <- tc
                                 } else {
-                                    if (rv$layers[[i]]$geom$objname %in% c('point')) {
-                                        rv$layers[[i]]$geom_params$fill   <- tc
-                                        rv$layers[[i]]$geom_params$colour <- cs[i]
-                                    } else
-                                        rv$layers[[i]]$geom_params$colour <- cs[i]
+                                    if (rv$layers[[i]]$geom$objname %in% c('boxplot')) {
+                                        rv$layers[[i]]$geom_params$fill   <- cs[i]
+                                        rv$layers[[i]]$geom_params$colour <- 'black'
+                                    } else {
+                                        if (rv$layers[[i]]$geom$objname %in% c('point')) {
+                                            rv$layers[[i]]$geom_params$fill   <- tc
+                                            rv$layers[[i]]$geom_params$colour <- cs[i]
+                                        } else
+                                            rv$layers[[i]]$geom_params$colour <- cs[i]
+                                    }
+                                }
+                            }
+                        } else {
+                            for (i in 1:length(rv$layers)) {
+                                if (inherits(rv$layers[[i]]$geom, 'GeomBar')) {
+                                    rv$layers[[i]]$aes_params$fill   <- cs[i]
+                                    rv$layers[[i]]$aes_params$colour <- tc
+                                } else {
+                                    if (inherits(rv$layers[[i]]$geom, 'GeomBoxplot')) {
+                                        rv$layers[[i]]$aes_params$fill   <- cs[i]
+                                        rv$layers[[i]]$aes_params$colour <- 'black'
+                                    } else {
+                                        if (inherits(rv$layers[[i]]$geom, 'GeomPoint')) {
+                                            rv$layers[[i]]$aes_params$fill   <- tc
+                                            rv$layers[[i]]$aes_params$colour <- cs[i]
+                                        } else
+                                            rv$layers[[i]]$aes_params$colour <- cs[i]
+                                    }
                                 }
                             }
                         }
