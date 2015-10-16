@@ -1,6 +1,9 @@
 library(testthat)
 library(pander)
 
+## reset later
+original_contrasts_options <- getOption('contrasts')
+
 context('pandoc.table')
 
 tables <- list(
@@ -646,7 +649,7 @@ test_that('pander.anova behaves correctly', {
 })
 
 test_that('pander.aovlist/pander.summary.aovlist behaves correctly', {
-    options(contrasts=c('contr.helmert', 'contr.poly'))
+    options(contrasts = c('contr.helmert', 'contr.poly'))
     N <- c(0,1,0,1,1,1,0,0,0,1,1,0,1,1,0,0,1,0,1,0,1,1,0,0)
     P <- c(1,1,0,0,0,1,0,1,1,1,0,0,0,1,0,1,1,0,0,1,0,1,1,0)
     K <- c(1,0,0,1,0,1,1,0,0,1,0,1,0,1,1,0,0,0,1,1,1,0,1,0)
@@ -1054,6 +1057,7 @@ test_that('pander.Glm works correctly', {
 })
 
 test_that('pander.cph', {
+    options(contrasts = original_contrasts_options)
     suppressMessages(require(rms))
     n <- 1000
     set.seed(731)
@@ -1069,7 +1073,7 @@ test_that('pander.cph', {
     units(dt) <- 'Year'
     dd <- datadist(age, sex)
     S <- Surv(dt,e)
-    capture.output(f <- cph(S ~ rcs(age,4) + sex, x=TRUE, y=TRUE))
+    f <- cph(S ~ rcs(age,4) + sex, x=TRUE, y=TRUE)
     res <- pander_return(f)
     expect_equal(length(res), 43)
     expect_true(any(grep('S ~ rcs\\(age, 4\\) \\+ sex', res)))
