@@ -4,7 +4,7 @@ author: "Roman Tsegelskyi, Gergely Daróczi"
 date: "`r Sys.Date()`"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{Pandoc.table}
+  %\VignetteIndexEntry{Rendering tables with pandoc.table}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
