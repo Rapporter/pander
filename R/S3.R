@@ -110,19 +110,6 @@ pander <- function(x = NULL, ...) {
 }
 
 
-#' Deprecated pander.return
-#'
-#' This is a wrapper function around \code{pander} but instead of printing to \code{stdout}, this function returns a character vector of the captured lines.
-#' @param ... everything passed to \code{pander}
-#' @export pander.return
-#' @usage pander.return(...)
-#' @seealso pander
-pander.return <- function(...) {
-    .Deprecated('pander_return')
-    capture.output(pander(...))
-}
-
-
 #' Pander and capture output
 #'
 #' This is a wrapper function around \code{pander} but instead of printing to \code{stdout}, this function returns a character vector of the captured lines.

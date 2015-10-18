@@ -255,7 +255,6 @@ masked.plots$plot <- masked.plots$barplot <- masked.plots$lines <- masked.plots$
 #' @param value value to assign (optional)
 #' @export
 #' @seealso \code{\link{evalsOptions}}
-#' @note \code{pander.option} is deprecated and is to be removed in future releases.
 #' @examples \dontrun{
 #' panderOptions()
 #' panderOptions('digits')
@@ -297,20 +296,6 @@ panderOptions <- function(o, value) {
 }
 
 
-#' Deprecated panderOptions
-#' @usage pander.option(x, ...)
-#' @param x passed to \code{panderOptions}
-#' @param ... passed to \code{panderOptions}
-#' @export pander.option
-#' @seealso panderOptions
-pander.option <- function(x, ...) {
-    .Deprecated('panderOptions')
-    mc <- match.call(panderOptions)
-    mc[[1]] <- quote(panderOptions)
-    eval(mc)
-}
-
-
 #' Querying/setting evals option
 #'
 #' To list all \code{evals} options, just run this function without any parameters provided. To query only one value, pass the first parameter. To set that, use the \code{value} parameter too.
@@ -346,8 +331,6 @@ pander.option <- function(x, ...) {
 #' @param value value to assign (optional)
 #' @export
 #' @seealso \code{\link{evals}} \code{\link{panderOptions}}
-#' @note \code{evals.option} is deprecated and is to be removed in future releases.
-#' @aliases evals.option
 #' @examples
 #' evalsOptions()
 #' evalsOptions('cache')
@@ -386,6 +369,3 @@ evalsOptions <- function(o, value) {
     }
 
 }
-
-#' @export
-evals.option <- evalsOptions

@@ -70,9 +70,6 @@ The following \code{pander} options are available:
      \item \code{pandoc.binary}: full path of \code{pandoc}'s binary. By default, \code{pandoc} is in the path.
 }
 }
-\note{
-\code{pander.option} is deprecated and is to be removed in future releases.
-}
 \examples{
 \dontrun{
 panderOptions()
