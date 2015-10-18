@@ -24,6 +24,7 @@
 #' @param ... additional parameters passed to \code{\link{Pandoc.convert}}
 #' @note Only one of the input parameters (\code{file} or \code{text}) is to be used at once!
 #' @export
+#' @importFrom utils tail head capture.output
 #' @return converted file name with full path if \code{convert} is set, none otherwise
 #' @references \itemize{
 #'      \item Jeffrey Horner (2011). _brew: Templating Framework for Report Generation._ \url{http://CRAN.R-project.org/package=brew}
