@@ -10,7 +10,7 @@
 
 <meta name="author" content="Roman Tsegelskyi, Gergely Daróczi" />
 
-<meta name="date" content="2015-10-17" />
+<meta name="date" content="2015-10-19" />
 
 <title>Using pander with knitr</title>
 
@@ -54,7 +54,7 @@ code > span.er { color: #ff0000; font-weight: bold; }
 <div id="header">
 <h1 class="title">Using pander with knitr</h1>
 <h4 class="author"><em>Roman Tsegelskyi, Gergely Daróczi</em></h4>
-<h4 class="date"><em>2015-10-17</em></h4>
+<h4 class="date"><em>2015-10-19</em></h4>
 </div>
 
 
@@ -164,23 +164,22 @@ knitr::<span class="kw">kable</span>(tab)
 <span class="co">#&gt; [35] pander.microbenchmark*  pander.mtable*         </span>
 <span class="co">#&gt; [37] pander.name*            pander.nls*            </span>
 <span class="co">#&gt; [39] pander.NULL*            pander.numeric*        </span>
-<span class="co">#&gt; [41] pander.ols*             pander.option          </span>
-<span class="co">#&gt; [43] pander.orm*             pander.polr*           </span>
-<span class="co">#&gt; [45] pander.POSIXct*         pander.POSIXlt*        </span>
-<span class="co">#&gt; [47] pander.prcomp*          pander.randomForest*   </span>
-<span class="co">#&gt; [49] pander.rapport*         pander.return          </span>
-<span class="co">#&gt; [51] pander.rlm*             pander.sessionInfo*    </span>
-<span class="co">#&gt; [53] pander.smooth.spline*   pander.stat.table*     </span>
-<span class="co">#&gt; [55] pander.summary.aov*     pander.summary.aovlist*</span>
-<span class="co">#&gt; [57] pander.summary.glm*     pander.summary.lm*     </span>
-<span class="co">#&gt; [59] pander.summary.lme*     pander.summary.manova* </span>
-<span class="co">#&gt; [61] pander.summary.nls*     pander.summary.polr*   </span>
-<span class="co">#&gt; [63] pander.summary.prcomp*  pander.summary.rms*    </span>
-<span class="co">#&gt; [65] pander.summary.survreg* pander.summary.table*  </span>
-<span class="co">#&gt; [67] pander.survdiff*        pander.survfit*        </span>
-<span class="co">#&gt; [69] pander.survreg*         pander.table*          </span>
-<span class="co">#&gt; [71] pander.tabular*         pander.ts*             </span>
-<span class="co">#&gt; [73] pander.zoo*            </span>
+<span class="co">#&gt; [41] pander.ols*             pander.orm*            </span>
+<span class="co">#&gt; [43] pander.polr*            pander.POSIXct*        </span>
+<span class="co">#&gt; [45] pander.POSIXlt*         pander.prcomp*         </span>
+<span class="co">#&gt; [47] pander.randomForest*    pander.rapport*        </span>
+<span class="co">#&gt; [49] pander.rlm*             pander.sessionInfo*    </span>
+<span class="co">#&gt; [51] pander.smooth.spline*   pander.stat.table*     </span>
+<span class="co">#&gt; [53] pander.summary.aov*     pander.summary.aovlist*</span>
+<span class="co">#&gt; [55] pander.summary.glm*     pander.summary.lm*     </span>
+<span class="co">#&gt; [57] pander.summary.lme*     pander.summary.manova* </span>
+<span class="co">#&gt; [59] pander.summary.nls*     pander.summary.polr*   </span>
+<span class="co">#&gt; [61] pander.summary.prcomp*  pander.summary.rms*    </span>
+<span class="co">#&gt; [63] pander.summary.survreg* pander.summary.table*  </span>
+<span class="co">#&gt; [65] pander.survdiff*        pander.survfit*        </span>
+<span class="co">#&gt; [67] pander.survreg*         pander.table*          </span>
+<span class="co">#&gt; [69] pander.tabular*         pander.ts*             </span>
+<span class="co">#&gt; [71] pander.zoo*            </span>
 <span class="co">#&gt; see '?methods' for accessing help and source code</span></code></pre>
 <p>And it’s integrated with <code>knitr</code> by default. <code>pander</code> simply identifies if <code>knitr</code> is running in the backgorund, and if so, it <code>capture.output</code> and return the resulting string as an <code>knit_asis</code> object, so that you do not need to specify the <code>results='asis'</code> option in your knitr chunk:</p>
 <pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(descr, <span class="dt">quietly =</span> <span class="ot">TRUE</span>)

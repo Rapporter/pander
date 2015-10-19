@@ -424,19 +424,20 @@ bar
 <p><a id="supported-r-classes"></a></p>
 <pre class="rout"><code>&gt; methods(pander)
  [1] pander.anova*           pander.aov*             pander.aovlist*         pander.Arima*           pander.call*
- [6] pander.cast_df*         pander.character*       pander.clogit*          pander.coxph*           pander.CrossTable*
-[11] pander.data.frame*      pander.Date*            pander.default*         pander.density*         pander.describe*
-[16] pander.evals*           pander.factor*          pander.formula*         pander.ftable*          pander.function*
-[21] pander.glm*             pander.gtable*          pander.htest*           pander.image*           pander.irts*
-[26] pander.list*            pander.lm*              pander.lme*             pander.logical*         pander.manova*
-[31] pander.matrix*          pander.microbenchmark*  pander.mtable*          pander.name*            pander.nls*
-[36] pander.NULL*            pander.numeric*         pander.option           pander.polr*            pander.POSIXct*
-[41] pander.POSIXlt*         pander.prcomp*          pander.randomForest*    pander.rapport*         pander.return
-[46] pander.rlm*             pander.sessionInfo*     pander.smooth.spline*   pander.stat.table*      pander.summary.aov*
-[51] pander.summary.aovlist* pander.summary.glm*     pander.summary.lm*      pander.summary.lme*     pander.summary.manova*
-[56] pander.summary.nls*     pander.summary.polr*    pander.summary.prcomp*  pander.summary.survreg* pander.summary.table*
-[61] pander.survdiff*        pander.survfit*         pander.survreg*         pander.table*           pander.tabular*
-[66] pander.ts*              pander.zoo*</code></pre>
+ [6] pander.cast_df*         pander.character*       pander.clogit*          pander.coxph*           pander.cph*
+[11] pander.CrossTable*      pander.data.frame*      pander.Date*            pander.default*         pander.density*
+[16] pander.describe*        pander.evals*           pander.factor*          pander.formula*         pander.ftable*
+[21] pander.function*        pander.glm*             pander.Glm*             pander.gtable*          pander.htest*
+[26] pander.image*           pander.irts*            pander.list*            pander.lm*              pander.lme*
+[31] pander.logical*         pander.lrm*             pander.manova*          pander.matrix*          pander.microbenchmark*
+[36] pander.mtable*          pander.name*            pander.nls*             pander.NULL*            pander.numeric*
+[41] pander.ols*             pander.orm*             pander.polr*            pander.POSIXct*         pander.POSIXlt*
+[46] pander.prcomp*          pander.randomForest*    pander.rapport*         pander.rlm*             pander.sessionInfo*
+[51] pander.smooth.spline*   pander.stat.table*      pander.summary.aov*     pander.summary.aovlist* pander.summary.glm*
+[56] pander.summary.lm*      pander.summary.lme*     pander.summary.manova*  pander.summary.nls*     pander.summary.polr*
+[61] pander.summary.prcomp*  pander.summary.rms*     pander.summary.survreg* pander.summary.table*   pander.survdiff*
+[66] pander.survfit*         pander.survreg*         pander.table*           pander.tabular*         pander.ts*
+[71] pander.zoo*</code></pre>
 <p>If you think that pander lacks support for any other R class(es), please feel free to open a <a href="https://github.com/Rapporter/pander/pulls">ticket</a> suggesting a new feature or submit <a href="https://github.com/Rapporter/pander/issues">pull request</a> and we will be happy to extend the package.</p>
 <p>Besides the most basic R object types (vectors, matrices, tables or data frames), list-support might be interesting for you:</p>
 <pre class="rout"><code>&gt; pander(list(a = 1, b = 2, c = table(mtcars$am), x = list(myname = 1, 2), 56))
@@ -512,11 +513,11 @@ bar
 <p>But the output of different <strong>statistical methods</strong> are tried to be prettyfied. Some the above call normally returns like:</p>
 <pre class="rout"><code>&gt; pander(chisq.test(table(mtcars$am, mtcars$gear)))
 
--------------------------------
- Test statistic   df   P value 
----------------- ---- ---------
-     20.94        2     * * *  
--------------------------------
+-------------------------------------
+ Test statistic   df      P value    
+---------------- ---- ---------------
+     20.94        2   2.831e-05 * * *
+-------------------------------------
 
 Table: Pearson&#39;s Chi-squared test: `table(mtcars$am, mtcars$gear)`
 
@@ -527,7 +528,7 @@ Table: Pearson&#39;s Chi-squared test: `table(mtcars$am, mtcars$gear)`
 ---------------------------------------------------------
  Test statistic   df    P value   Alternative hypothesis 
 ---------------- ----- --------- ------------------------
-     -1.861      17.78                  two.sided        
+     -1.861      17.78  0.07939         two.sided        
 ---------------------------------------------------------
 
 Table: Welch Two Sample t-test: `extra` by `group`
@@ -956,7 +957,7 @@ evals(&#39;mean(xx)&#39;)</code></pre>
 <li><code>cache.time</code>: number of seconds to limit caching based on <code>proc.time</code>. If set to <code>0</code>, all R commands, if set to <code>Inf</code>, none is cached (despite the <code>cache</code> parameter).</li>
 <li><code>cache.copy.images</code>: copy images to new file names if an image is returned from the <em>disk</em> cache? If set to <code>FALSE</code> (default), the cached path would be returned.</li>
 <li><code>classes</code>: a vector or list of classes which should be returned. If set to <code>NULL</code> (by default) all R objects will be returned.</li>
-<li><code>hooks</code>: list of hooks to be run for given classes in the form of <code>list(class = fn)</code>. If you would also specify some parameters of the function, a list should be provided in the form of <code>list(fn, param1, param2=NULL)</code> etc. So the hooks would become <code>list(class1=list(fn, param1, param2=NULL), ...)</code>. See example of <a href="#evals"><code>evals</code></a> for more details. A default hook can be specified too by setting the class to <code>'default'</code>. This can be handy if you do not want to define separate methods/functions to each possible class, but automatically apply the default hook to all classes not mentioned in the list. You may also specify only one element in the list like: <code>hooks=list('default' = pander.return)</code>. Please note, that nor error/warning messages, nor stdout is captured (so: updated) while running hooks!</li>
+<li><code>hooks</code>: list of hooks to be run for given classes in the form of <code>list(class = fn)</code>. If you would also specify some parameters of the function, a list should be provided in the form of <code>list(fn, param1, param2=NULL)</code> etc. So the hooks would become <code>list(class1=list(fn, param1, param2=NULL), ...)</code>. See example of <a href="#evals"><code>evals</code></a> for more details. A default hook can be specified too by setting the class to <code>'default'</code>. This can be handy if you do not want to define separate methods/functions to each possible class, but automatically apply the default hook to all classes not mentioned in the list. You may also specify only one element in the list like: <code>hooks=list('default' = pander_return)</code>. Please note, that nor error/warning messages, nor stdout is captured (so: updated) while running hooks!</li>
 <li><code>length</code>: any R object exceeding the specified length will not be returned. The default value (<code>Inf</code>) does not filter out any R objects.</li>
 <li><code>output</code>: a character vector of required returned values. This might be useful if you are only interested in the <code>result</code>, and do not want to save/see e.g. <code>messages</code> or <code>print</code>ed <code>output</code>. See examples of <a href="#evals"><code>evals</code></a>.</li>
 <li><code>graph.unify</code>: should <code>evals</code> try to unify the style of (<code>base</code>, <code>lattice</code> and <code>ggplot2</code>) plots? If set to <code>TRUE</code>, some <code>panderOptions()</code> would apply. By default this is disabled not to freak out useRs :)</li>

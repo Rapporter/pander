@@ -55,11 +55,11 @@ As you can see some formatting was added to the returned table and was also spli
 
 We could try other R objects too, for example let us check `chisq.test` on some variables of `mtcars`:
 
--------------------------------
- Test statistic   df   P value 
----------------- ---- ---------
-     20.94        2     * * *  
--------------------------------
+-------------------------------------
+ Test statistic   df      P value    
+---------------- ---- ---------------
+     20.94        2   2.831e-05 * * *
+-------------------------------------
 
 Table: Pearson's Chi-squared test: `mtcars$am` and `mtcars$gear`
 
