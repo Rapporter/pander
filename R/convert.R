@@ -49,6 +49,7 @@ openFileInOS <- function(f) {
 #' @note This function depends on \code{Pandoc} which should be pre-installed on user's machine. See the \code{INSTALL} file of the package.
 #' @return Converted file's path.
 #' @importFrom tools file_path_sans_ext
+#' @importFrom utils packageDescription
 #' @export
 #' @examples \dontrun{
 #' Pandoc.convert(text = c('# Demo', 'with a paragraph'))

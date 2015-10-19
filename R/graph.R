@@ -6,6 +6,7 @@
 #' @param grid show grid lines at minor ticks?
 #' @keywords internal
 #' @references This function is a forked version of \code{Hmisc::minor.tick}
+#' @importFrom graphics par axis abline
 add.minor.ticks <- function (nx = 4, ny = 4, grid = TRUE) {
 
     ax <- function(w, n, grid) {

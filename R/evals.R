@@ -494,7 +494,7 @@ eval.msgs <- function(src, env = NULL, showInvisible = FALSE, graph.unify = eval
 #' @param cache.copy.images copy images to new file names if an image is returned from the \emph{disk} cache? If set to \code{FALSE} (default), the cached path would be returned.
 #' @param showInvisible return \code{invisible} results?
 #' @param classes a vector or list of classes which should be returned. If set to \code{NULL} (by default) all R objects will be returned.
-#' @param hooks list of hooks to be run for given classes in the form of \code{list(class = fn)}. If you would also specify some parameters of the function, a list should be provided in the form of \code{list(fn, param1, param2=NULL)} etc. So the hooks would become \code{list(class1=list(fn, param1, param2=NULL), ...)}. See example below. A default hook can be specified too by setting the class to \code{'default'}. This can be handy if you do not want to define separate methods/functions to each possible class, but automatically apply the default hook to all classes not mentioned in the list. You may also specify only one element in the list like: \code{hooks=list('default' = pander.return)}. Please note, that nor error/warning messages, nor stdout is captured (so: updated) while running hooks!
+#' @param hooks list of hooks to be run for given classes in the form of \code{list(class = fn)}. If you would also specify some parameters of the function, a list should be provided in the form of \code{list(fn, param1, param2=NULL)} etc. So the hooks would become \code{list(class1=list(fn, param1, param2=NULL), ...)}. See example below. A default hook can be specified too by setting the class to \code{'default'}. This can be handy if you do not want to define separate methods/functions to each possible class, but automatically apply the default hook to all classes not mentioned in the list. You may also specify only one element in the list like: \code{hooks=list('default' = pander_return)}. Please note, that nor error/warning messages, nor stdout is captured (so: updated) while running hooks!
 #' @param length any R object exceeding the specified length will not be returned. The default value (\code{Inf}) does not filter out any R objects.
 #' @param output a character vector of required returned values. This might be useful if you are only interested in the \code{result}, and do not want to save/see e.g. \code{messages} or \code{print}ed \code{output}. See examples below.
 #' @param env environment where evaluation takes place. If not set (by default), a new temporary environment is created.
@@ -716,6 +716,8 @@ eval.msgs <- function(src, env = NULL, showInvisible = FALSE, graph.unify = eval
 #' }
 #' @export
 #' @importFrom digest digest
+#' @importFrom grDevices dev.list dev.off dev.control dev.list recordPlot
+#' @importFrom utils packageVersion object.size
 evals <- function(txt, parse = evalsOptions('parse'), cache = evalsOptions('cache'), cache.mode = evalsOptions('cache.mode'), cache.dir = evalsOptions('cache.dir'), cache.time = evalsOptions('cache.time'), cache.copy.images = evalsOptions('cache.copy.images'), showInvisible = FALSE, classes = evalsOptions('classes'), hooks = evalsOptions('hooks'), length = evalsOptions('length'), output = evalsOptions('output'), env = NULL, graph.unify = evalsOptions('graph.unify'), graph.name = evalsOptions('graph.name'), graph.dir = evalsOptions('graph.dir'), graph.output = evalsOptions('graph.output'), width = evalsOptions('width'), height = evalsOptions('height'), res = evalsOptions('res'), hi.res = evalsOptions('hi.res'), hi.res.width = evalsOptions('hi.res.width'), hi.res.height = 960 * (height / width), hi.res.res = res * (hi.res.width / width), graph.env = evalsOptions('graph.env'), graph.recordplot = evalsOptions('graph.recordplot'), graph.RDS = evalsOptions('graph.RDS'), log = evalsOptions('log'), ...) { #nolint
 
     if (missing(txt)) {
@@ -1384,6 +1386,8 @@ redraw.recordedplot <- function(file) {
 #' @references Thanks to Jeroen Ooms \url{http://permalink.gmane.org/gmane.comp.lang.r.devel/29897}, JJ Allaire \url{https://github.com/rstudio/rstudio/commit/eb5f6f1db4717132c2ff111f068ffa6e8b2a5f0b}, and Gabriel Becker.
 #' @seealso \code{\link{redraw.recordedplot}}
 #' @export
+#' @importFrom methods is
+#' @importFrom grDevices replayPlot
 redrawPlot <- function(rec_plot) {
     ## this allows us to deal with trellis/grid/ggplot objects as well ...
     if (!is(rec_plot, 'recordedplot')) {
@@ -1420,6 +1424,6 @@ redrawPlot <- function(rec_plot) {
             warning('Loading plot snapshot from a different session with possible side effects or errors.')
             attr(rec_plot, 'pid') <- Sys.getpid()
         }
-        suppressWarnings(grDevices::replayPlot(rec_plot))
+        suppressWarnings(replayPlot(rec_plot))
     }
 }

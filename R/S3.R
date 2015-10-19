@@ -110,19 +110,6 @@ pander <- function(x = NULL, ...) {
 }
 
 
-#' Deprecated pander.return
-#'
-#' This is a wrapper function around \code{pander} but instead of printing to \code{stdout}, this function returns a character vector of the captured lines.
-#' @param ... everything passed to \code{pander}
-#' @export pander.return
-#' @usage pander.return(...)
-#' @seealso pander
-pander.return <- function(...) {
-    .Deprecated('pander_return')
-    capture.output(pander(...))
-}
-
-
 #' Pander and capture output
 #'
 #' This is a wrapper function around \code{pander} but instead of printing to \code{stdout}, this function returns a character vector of the captured lines.
@@ -791,6 +778,7 @@ pander.ftable <- function(x, ...)
 #' @param caption caption (string) to be shown under the table
 #' @param ... optional parameters passed to raw \code{pandoc.table} function
 #' @export
+#' @importFrom stats ftable
 pander.mtable <- function(x, caption = attr(x, 'caption'), ...) {
     if (is.null(caption) & !is.null(storage$caption)) {
         caption <- get.caption()
@@ -1004,6 +992,7 @@ pander.CrossTable <- function(x, caption = attr(x, 'caption'), digits = panderOp
 #' @param caption caption (string) to be shown under the table
 #' @param ... optional parameters passed to raw \code{pandoc.table} function
 #' @export
+#' @importFrom stats time cycle frequency start end time
 pander.ts <- function(x, caption = attr(x, 'caption'), ...) {
 
     if (is.null(caption) & !is.null(storage$caption)) {
@@ -1078,6 +1067,7 @@ pander.name <- function(x, ...)
 #' @param caption caption (string) to be shown under the table
 #' @param ... optional parameters passed to raw \code{pandoc.table} function
 #' @export
+#' @importFrom stats pchisq naprint
 pander.coxph <- function(x, caption = attr(x, 'caption'), ...) {
 
     if (is.null(caption)) {
@@ -1301,6 +1291,7 @@ pander.survdiff <- function(x, caption = attr(x, 'caption'), ...) {
 #' @param print.rmean,rmean options for computation and display of the restricted mean
 #' @param ... optional parameters passed to raw \code{pandoc.table} function
 #' @export
+#' @importFrom utils getFromNamespace
 pander.survfit <- function (x, caption = attr(x, 'caption'),
                             scale = 1, print.rmean = getOption('survfit.print.rmean'),
                             rmean = getOption('survfit.rmean'), ...) {
@@ -1883,6 +1874,7 @@ pander.polr <- function (x, ...) {
 #' @param round passed to \code{round}. Can be a vector specifying values for each column (has to be the same length as number of columns). Values for non-numeric columns will be disregarded.
 #' @param ... optional parameters passed to raw \code{pandoc.table} function
 #' @export
+#' @importFrom stats quantile
 pander.ols <- function (x, long = FALSE, coefs = TRUE,
                         digits = panderOptions('digits'), round = panderOptions('round'), ...) {
     requireNamespace('rms', quietly = TRUE)
@@ -2223,6 +2215,7 @@ pander.orm <- function (x, coefs = TRUE, intercepts = x$non.slopes < 10, ...) {
 #' @param coefs if to the table of model coefficients, standard errors, etc. default(\code{TRUE})
 #' @param ... optional parameters passed to raw \code{pandoc.table} function
 #' @export
+#' @importFrom stats coef pchisq vcov
 #' @rdname pander.glm.rms
 pander.Glm <- function (x, coefs = TRUE, ...) {
     requireNamespace('rms', quietly = TRUE)
@@ -2254,6 +2247,7 @@ pander.Glm <- function (x, coefs = TRUE, ...) {
 #' @param coefs if to the table of model coefficients, standard errors, etc. default(\code{TRUE})
 #' @param ... optional parameters passed to raw \code{pandoc.table} function
 #' @export
+#' @importFrom stats qnorm
 pander.cph <- function (x, table = TRUE, conf.int = FALSE, coefs = TRUE, ...) {
     requireNamespace('rms', quietly = TRUE)
     if (table && length(x$n) && is.matrix(x$n)) {

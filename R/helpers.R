@@ -240,13 +240,13 @@ get.alignment <- function(df) {
 #' emphasize.strong.cols(x)
 #'
 #' emphasize.strong.cells(x)
-#' 
+#'
 #' emphasize.italics.rows(x)
 #'
 #' emphasize.italics.cols(x)
 #'
 #' emphasize.italics.cells(x)
-#' 
+#'
 #' emphasize.verbatim.rows(x)
 #'
 #' emphasize.verbatim.cols(x)
@@ -461,6 +461,7 @@ multitable <- function(v) {
 #' @param obj object list
 #' @param coefs numeric value if to print only the first n regression coefficients in the model.
 #' @return coeficients matrix
+#' @importFrom stats pt pchisq
 coef_mat <- function(obj, coefs) {
     errordf <- obj$errordf
     beta <- obj$coef
