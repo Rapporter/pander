@@ -72,11 +72,15 @@ Fixes:
 Other changes:
  * pander.return and pander.option will be deprecated in the next release (#171)
 
+Full changelog: https://github.com/Rapporter/pander/compare/v0.5.1...v0.5.2
+
 pander 0.5.1 (2014-10-29)
 ----------------------------------------------------------------
 
  * refix S3 method exports in NAMESPACE
  * revert to non-Rcpp solution with Unicode characters
+
+Full changelog: https://github.com/Rapporter/pander/compare/v0.5.0...v0.5.1
 
 pander 0.5.0 (2014-10-27)
 ----------------------------------------------------------------
@@ -143,11 +147,15 @@ pander 0.3.8 (2013-08-29)
  * fix: suppress empty rownames
  * further minor fixes: caption, par, text, pander.booelan
 
+Full changelog: https://github.com/Rapporter/pander/compare/v0.3.7...v0.3.8
+
 pander 0.3.7 (2013-05-27)
 ----------------------------------------------------------------
 
  * new options for default cell alignment (#41)
  * new optional HTML class to manually exclude headers from TOC (#40)
+
+Full changelog: https://github.com/Rapporter/pander/compare/v0.3.6...v0.3.7
 
 pander 0.3.6 (2013-05-15)
 ----------------------------------------------------------------
@@ -156,6 +164,8 @@ pander 0.3.6 (2013-05-15)
  * fixed header and footer line of simple and multiline tables
  * updated `set.alignment` to also work outside of `Pandoc.brew`
  * minor bugfixes for in pandoc helpers, emphasize and S3 methods (#33 #34 among others)
+
+Full changelog: https://github.com/Rapporter/pander/compare/v0.3.5...v0.3.6
 
 pander 0.3.5 (2013-04-10)
 ----------------------------------------------------------------
@@ -167,11 +177,15 @@ pander 0.3.5 (2013-04-10)
  * fixing alignment of cells with helper outside of `Pandoc.brew`
  * minor documentation improvements
 
+Full changelog: https://github.com/Rapporter/pander/compare/v0.3.4...v0.3.5
+
 pander 0.3.4 (2013-04-05)
 ----------------------------------------------------------------
 
  * new options: table caption prefix and split caption messages (#28)
  * fix for a rather unnoticeable but rapport-related critical bug that resulted in an invisibly returned wrong chunk type (concatenated image URL to the next paragraph)
+
+Full changelog: https://github.com/Rapporter/pander/compare/v0.3.3...v0.3.4
 
 pander 0.3.3 (2013-03-27)
 ----------------------------------------------------------------
@@ -179,10 +193,14 @@ pander 0.3.3 (2013-03-27)
  * new option: keep or ditch trailing zeros (#27)
  * minor bugfixes (#22 #23 #26)
 
+Full changelog: https://github.com/Rapporter/pander/compare/v0.3.2...v0.3.3
+
 pander 0.3.2 (2013-03-20)
 ----------------------------------------------------------------
 
  * new table style: rmarkdown thanks to @onesandzeroes
+
+Full changelog: https://github.com/Rapporter/pander/compare/v0.3.1...v0.3.2
 
 pander 0.3.1 (2013-03-10)
 ----------------------------------------------------------------
@@ -192,6 +210,8 @@ pander 0.3.1 (2013-03-10)
  * more informative error messages for `evals` about plotting
  * support for CJK chars (#18)
  * minor bugfixes (#7 #12 and #16)
+
+Full changelog: https://github.com/Rapporter/pander/compare/v0.3...v0.3.1
 
 pander 0.3   (2012-10-24)
 ----------------------------------------------------------------
@@ -204,6 +224,7 @@ pander 0.3   (2012-10-24)
  * a few minor bugfixes
  * new demo document for brewing about Olympics
 
+Full changelog: https://github.com/Rapporter/pander/compare/v0.2...v0.3
 
 pander 0.2   (2012-08-17)
 ----------------------------------------------------------------
