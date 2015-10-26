@@ -1,5 +1,8 @@
-pander DEV (xxxx-xx-xx)
+pander 0.6.0 (2015-10-27)
 ----------------------------------------------------------------
+
+This is a major release with 200+ new commits since last version:
+  https://github.com/Rapporter/pander/compare/v0.5.2...v0.6.0
 
 New fetures:
  * added logging for evals using futile.logger (#124)
@@ -15,6 +18,11 @@ Fixes:
  * correct rendering for horizontal mtables (#174)
  * correct splitting of tables based on style (#164)
  * correct rendering for rmarkdown tables with | (#186)
+ * pandoc.list with zero element (#191)
+ * assigning NULL to a list element in (pander|evals)Options
+ * missing blank line in one-row multiline tables without header (#224)
+ * adding p-value to htest tables (#227)
+ * support for ggplot2 1.1.0 (pander and the unify.graphs)
 
 New classes supported by the `pander` generic S3 method:
  * summary.table
@@ -36,6 +44,7 @@ New classes supported by the `pander` generic S3 method:
 
 Other changes:
  * Pandoc.convert will not add a footer to the document by dafault (#173)
+ * deprecating pander.return, pander.option and evals.option functions, use pander_return, panderOptions and evalsOptions instead (#229)
 
 pander 0.5.2 (2015-04-19)
 ----------------------------------------------------------------
@@ -59,6 +68,9 @@ Fixes:
  * render header for 1D tables (#138)
  * emphasize cells with missing/empty values (#156)
  * total.r and total.c support for CrossTable (#211)
+
+Other changes:
+ * pander.return and pander.option will be deprecated in the next release (#171)
 
 pander 0.5.1 (2014-10-29)
 ----------------------------------------------------------------
