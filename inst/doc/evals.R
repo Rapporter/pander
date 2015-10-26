@@ -2,9 +2,9 @@
 knitr::opts_chunk$set(collapse = T, comment = "#>")
 library(pander)
 library(futile.logger)
-evals.option('graph.name', 'test')
-evals.option('graph.dir', 'my_plots')
-evals.option('graph.output', 'jpg')
+evalsOptions('graph.name', 'test')
+evalsOptions('graph.dir', 'my_plots')
+evalsOptions('graph.output', 'jpg')
 
 ## ------------------------------------------------------------------------
 evals('1:10')

@@ -13,9 +13,9 @@ vignette: >
 knitr::opts_chunk$set(collapse = T, comment = "#>")
 library(pander)
 library(futile.logger)
-evals.option('graph.name', 'test')
-evals.option('graph.dir', 'my_plots')
-evals.option('graph.output', 'jpg')
+evalsOptions('graph.name', 'test')
+evalsOptions('graph.dir', 'my_plots')
+evalsOptions('graph.output', 'jpg')
 ```
 
 `evals` is aimed at collecting as much information as possible while evaluating R code. It can evaluate a character vector of R expressions, and it returns a list of captured information while running those:
