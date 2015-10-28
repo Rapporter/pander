@@ -901,7 +901,7 @@ pandoc.table.return <- function(t, caption, digits = panderOptions('digits'), de
     #to support digits and round params as vectors with values for each column.
     rn <- rownames(t)
     cln <- colnames(t)
-    if (inherits(t, 'matrix')) {
+    if (inherits(t, 'matrix') & !inherits(t, 'table')) {
       rownames(t) <- NULL
       temp.t <- as.data.frame(t)
     } else {

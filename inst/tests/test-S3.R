@@ -15,8 +15,9 @@ tables <- list(
     table(mtcars$am) + 0.1,
     table(mtcars$am, mtcars$gear) + 0.1,
     summary(lm(mtcars$hp~1))$coeff,
-    table(mtcars$am, mtcars$gear, mtcars$carb)
-    )
+    table(mtcars$am, mtcars$gear, mtcars$carb),
+    addmargins(table(mtcars$gear, mtcars$carb))
+)
 
 test_that('no error: multiline', {
     for (t in tables)
