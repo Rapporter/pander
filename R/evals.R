@@ -310,11 +310,18 @@ eval.msgs <- function(src, env = NULL, showInvisible = FALSE, graph.unify = eval
                         ## we have a possible color scale (only dealing with discrete scales)
                         if (is.null(rv$labels$colour)) {
 
-                            if (length(rv$scales$scales) == 0) {
+                            ## the scale of geom_tile is continuous
+                            if (packageVersion('ggplot2') <= '1.0.1') {
+                                tile <- rv$layers[[1]]$geom$objname %in% 'tile'
+                            } else {
+                                tile <- inherits(rv$layers[[1]]$geom, 'GeomTile')
+                            }
+
+                            if (length(rv$scales$scales) == 0 & !tile) {
                                 rv <- rv + ggplot2::scale_fill_manual(values = cs)
                             } else {
                                 ## we still might have something without a guide
-                                if (!'continuous' %in% unlist(lapply(rv$scales$scales, class)))
+                                if (!'continuous' %in% unlist(lapply(rv$scales$scales, class)) & !tile)
                                     rv <- rv + ggplot2::scale_fill_manual(values = cs, guide = FALSE)
                             }
 
