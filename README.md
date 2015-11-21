@@ -8,13 +8,13 @@ Some CRAN statistics: [![](http://cranlogs.r-pkg.org/badges/pander)](http://cran
 
 # Installation
 
-The stable version [![](http://www.r-pkg.org/badges/version/pander)](http://cran.r-project.org/web/packages/pander/index.html) can be installed easily in the `R` console like any other package:
+The stable version [![](http://www.r-pkg.org/badges/version/pander)](http://https://cran.r-project.org/package=pander) can be installed easily in the `R` console like any other package:
 
 ```r
 install.packages('pander')
 ```
 
-On the other hand, I welcome everyone to use the most recent version of the package with quick-fixes, new features and probably new bugs. It's currently hosted on [GitHub](https://github.com/Rapporter/pander). To get the latest development version from [GitHub](https://github.com/Rapporter/pander) of the `devtools` package from [CRAN](http://cran.r-project.org/web/packages/devtools/index.html):
+On the other hand, I welcome everyone to use the most recent version of the package with quick-fixes, new features and probably new bugs. It's currently hosted on [GitHub](https://github.com/Rapporter/pander). To get the latest development version from [GitHub](https://github.com/Rapporter/pander) of the `devtools` package from [CRAN](https://cran.r-project.org/package=devtools):
 
 ```r
 devtools::install_github('Rapporter/pander')
@@ -26,16 +26,16 @@ Or download the [sources](https://github.com/Rapporter/pander/zipball/master) an
 
 Few cool packages from CRAN are needed for installing and/or using `pander`:
 
- * [digest](http://cran.r-project.org/web/packages/digest/index.html) to compute hashes while caching,
- * [Rcpp](http://cran.r-project.org/web/packages/Rcpp/index.html) to compile certain functions used by the package.
+ * [digest](https://cran.r-project.org/package=digest) to compute hashes while caching,
+ * [Rcpp](https://cran.r-project.org/package=Rcpp) to compile certain functions used by the package.
 
 And there are also a few optional suggested or supported R packages, such as:
 
- * [koRpus](http://cran.r-project.org/web/packages/koRpus/index.html) to use hyphenation when splitting large table cells,
- * [lattice](http://cran.r-project.org/web/packages/lattice/index.html) and [ggplot2](http://cran.r-project.org/web/packages/ggplot2/index.html) for unified plot theme,
- * [futile.logger](https://cran.r-project.org/web/packages/futile.logger/index.html) for logging capabilities inside `evals`,
- * [survival](http://cran.r-project.org/web/packages/survival/index.html), [microbenchmark](http://cran.r-project.org/web/packages/microbenchmark/index.html), [zoo](http://cran.r-project.org/web/packages/zoo/index.html), [nlme](http://cran.r-project.org/web/packages/nlme/index.html), [descr](http://cran.r-project.org/web/packages/descr/index.html), [MASS](http://cran.r-project.org/web/packages/MASS/index.html), [tables](https://cran.r-project.org/web/packages/tables/index.html), [reshape](https://cran.r-project.org/web/packages/reshape/index.html), [memisc](https://cran.r-project.org/web/packages/memisc/), [Epi](https://cran.r-project.org/web/packages/Epi/), [randomForest](https://cran.r-project.org/web/packages/randomForest/), [tseries](https://cran.r-project.org/web/packages/tseries/), [rms](https://cran.r-project.org/web/packages/rms/) packages include some supported R classes,
- * and *pander* can be also very useful inside of [knitr](http://cran.r-project.org/web/packages/knitr/index.html). More information about how to use *pander* and *knitr* can be found specialized vignette, which can be accessed by `vignette('knitr', package = 'pander')` or available online [here](http://rapporter.github.io/pander/knitr.html).
+ * [koRpus](https://cran.r-project.org/package=koRpus) to use hyphenation when splitting large table cells,
+ * [lattice](https://cran.r-project.org/package=lattice) and [ggplot2](https://cran.r-project.org/package=ggplot2) for unified plot theme,
+ * [futile.logger](https://cran.r-project.org/package=futile.logger) for logging capabilities inside `evals`,
+ * [survival](https://cran.r-project.org/package=survival), [microbenchmark](https://cran.r-project.org/package=microbenchmark), [zoo](https://cran.r-project.org/package=zoo), [nlme](https://cran.r-project.org/package=nlme), [descr](https://cran.r-project.org/package=descr), [MASS](https://cran.r-project.org/package=MASS), [tables](https://cran.r-project.org/package=tables), [reshape](https://cran.r-project.org/package=reshape), [memisc](https://cran.r-project.org/package=memisc), [Epi](https://cran.r-project.org/package=Epi), [randomForest](https://cran.r-project.org/package=randomForest), [tseries](https://cran.r-project.org/package=tseries), [rms](https://cran.r-project.org/package=rms) packages include some supported R classes,
+ * and *pander* can be also very useful inside of [knitr](https://cran.r-project.org/package=knitr). More information about how to use *pander* and *knitr* can be found specialized vignette, which can be accessed by `vignette('knitr', package = 'pander')` or available online [here](http://rapporter.github.io/pander/knitr.html).
 
 ### Pandoc
 
@@ -736,7 +736,7 @@ The package is also capable of creating complex Pandoc documents (reports) from 
 
   * create somehow a markdown text file (e.g. with `brew`, `knitr` or any scripts of yours, maybe with `Pandoc.brew` - see just [below](#brew-to-pandoc)) and transform that to other formats (like HTML, odt, PDF, docx etc.) with `Pandoc.convert` - similarly to [`pandoc` function in knitr](http://yihui.name/knitr/demo/pandoc/). Basically this is a wrapper around a [Pandoc](http://johnmacfarlane.net/pandoc/) call, which has not much to do with R actually.
 
-  * users might write some reports with literate programming (similar to `knitr`) in a forked version of [brew](http://cran.r-project.org/web/packages/brew/index.html) syntax resulting. This means that the user can include R code chunks in a document, and brewing that results in a pretty Pandoc's markdown document and also in a **bunch of other formats** (like HTML, odt, PDF, docx etc.). The great advantage of this [function](#brew-to-pandoc) is that you do not have to transform your R objects to markdown manually, it's all handled automagically.
+  * users might write some reports with literate programming (similar to `knitr`) in a forked version of [brew](https://cran.r-project.org/package=brew) syntax resulting. This means that the user can include R code chunks in a document, and brewing that results in a pretty Pandoc's markdown document and also in a **bunch of other formats** (like HTML, odt, PDF, docx etc.). The great advantage of this [function](#brew-to-pandoc) is that you do not have to transform your R objects to markdown manually, it's all handled automagically.
 
     *Example*: this [`README.md`](https://github.com/Rapporter/pander/blob/master/README.md) is cooked with [`Pandoc.brew`](#brew-to-pandoc) based on [`inst/README.brew`](https://github.com/Rapporter/pander/blob/master/inst/README.brew) and also exported to [HTML](http://rapporter.github.com/pander/). Details can be found [below](#brew-to-pandoc) or head directly to [examples](#examples).
 
@@ -746,7 +746,7 @@ The package is also capable of creating complex Pandoc documents (reports) from 
 
 ## Brew to Pandoc
 
-The [brew](http://cran.r-project.org/web/packages/brew/index.html) package, which is a templating framework for report generation, has not been updated since 2011, but it's still used in bunch of R projects based on its simple design and useful features in literate programming. For a quick overview, please see the following documents if you are not familiar with `brew`:
+The [brew](https://cran.r-project.org/package=brew) package, which is a templating framework for report generation, has not been updated since 2011, but it's still used in bunch of R projects based on its simple design and useful features in literate programming. For a quick overview, please see the following documents if you are not familiar with `brew`:
 
   * [slides on "Building a reporting sytem with BREW"](http://www.slideshare.net/xavierguardiola/building-a-reporting-sytem-with-brew)
   * [learnr blogpost on brew](http://learnr.wordpress.com/2009/09/09/brew-creating-repetitive-reports/)
@@ -763,7 +763,7 @@ This latter tries to be smart in some ways:
   * All warnings/messages and errors are recorded in the blocks and returned in the document as footnotes or inline messages.
   * All heavy R commands (e.g. those taking more then 0.1 sec to evaluate) are [**cached**](#caching) so re`brew`ing a report would not result in a coffee break.
 
-Besides this, the custom `brew` function can do more and also less compared to the original [`brew` package](http://cran.r-project.org/web/packages/brew/index.html). First of all, the internal caching mechanism of `brew` has been removed and rewritten for some extra profits besides improved caching.
+Besides this, the custom `brew` function can do more and also less compared to the original [`brew` package](https://cran.r-project.org/package=brew). First of all, the internal caching mechanism of `brew` has been removed and rewritten for some extra profits besides improved caching.
 
 For example now multiple R expressions can be passed between the `<%= ... %>` tags, and not only the text results, but **the evaluated R objects** are also (invisibly) returned in a structured list. This can be really useful while post-processing the results of `brew`. Quick example:
 
