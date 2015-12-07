@@ -2342,6 +2342,6 @@ pander.ets <- function(x, digits = panderOptions('digits'),...) {
   if (!is.null(x$logik))
     cat(': log likelihood = ', format(round(x$loglik, 2)))
   if (!is.null(x$aic))
-    cat(', aic = ', format(round(x$aic, 2)), '\n', sep = ''))
+    cat(', aic = ', format(round(x$aic, 2)), '\n', sep = '')
   invisible(x)
 }
