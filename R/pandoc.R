@@ -921,10 +921,11 @@ pandoc.table.return <- function(t, caption, digits = panderOptions('digits'), de
             for (j in 1:ncol(temp.t)) {
                 temp.t[, j] <- sapply(temp.t[, j],
                                       format,
-                                      trim = TRUE,
-                                      digits = digits[j],
+                                      trim         = TRUE,
+                                      digits       = digits[j],
                                       decimal.mark = decimal.mark,
-                                      big.mark = big.mark)
+                                      big.mark     = big.mark,
+                                      quote        = FALSE)
             }
         }
     }
@@ -935,13 +936,15 @@ pandoc.table.return <- function(t, caption, digits = panderOptions('digits'), de
         for (j in 1:ncol(t)) {
             temp.t[, j] <- sapply(temp.t[, j],
                                   format,
-                                  trim = TRUE,
-                                  digits = digits[j],
+                                  trim         = TRUE,
+                                  digits       = digits[j],
                                   decimal.mark = decimal.mark,
-                                  big.mark = big.mark)
+                                  big.mark     = big.mark,
+                                  quote        = FALSE)
         }
     } else {
-        temp.t <- format(temp.t, trim = TRUE)  ### here adds unneeded zero's
+        ## here adds unneeded zero's
+        temp.t <- format(temp.t, trim = TRUE, quote = FALSE)
     }
     t <- as.matrix(temp.t)
     colnames(t) <- cln
