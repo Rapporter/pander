@@ -1084,3 +1084,16 @@ test_that('pander.cph', {
     expect_true(any(grep('S ~ rcs\\(age, 4\\) \\+ sex', res)))
     expect_equal(length(grep('Table', res)), 3)
 })
+
+test_that('pander.ets works correctly', {
+  suppressMessages(require(forecast))
+  res<-pander_return(ets(lh, model="AAN", lambda=.5))
+  expect_equal(length(res), 27)
+  expect_true(any(grep('Box-Cox', res)))
+  res<-pander_return(ets(lh, model="ANN"))
+  expect_equal(length(res), 25)
+  expect_false(any(grep('Box-Cox', res)))
+  res<-pander_return(ets(lh, model="AAN", damped=TRUE))
+  expect_equal(length(res), 25)
+  expect_true(any(grep('phi', res)))
+})
