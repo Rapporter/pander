@@ -1,4 +1,4 @@
-﻿Package: pander
+Package: pander
 Maintainer: Gergely Daróczi <daroczig@rapporter.net>
 Title: An R Pandoc Writer
 Type: Package
