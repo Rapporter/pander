@@ -2338,12 +2338,12 @@ pander.ets <- function(x, digits = panderOptions('digits'),...) {
         sp<-c(sp,x$par["phi"])
     }
     if (!is.null(lambda)){
-        cat("\nBox-Cox transformation: lambda =", round(lambda, panderOptions('digits')), "\n\n")
+        cat("\nBox-Cox transformation: lambda =", round(lambda, panderOptions('digits')), "\n")
     }
     pandoc.table(sp, caption = 'Smoothing parameters', digits = digits, ...)
     pandoc.table(initstate, caption = 'Initial states', digits = digits, ...)
-    cat('\nsigma^2 estimated as ', format(x$sigma2, digits = digits))
-    if (!is.null(x$logik)){
+    cat('\nsigma^2 estimated as', format(x$sigma2, digits = digits))
+    if (!is.null(x$loglik)){
         cat(': log likelihood = ', format(round(x$loglik, 2)))
     }
     if (!is.null(x$aic)){
