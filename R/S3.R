@@ -2321,27 +2321,33 @@ pander.summary.rms <- function (x, ...) {
 #' @param ... optional parameters passed to raw \code{pandoc.table} function
 #' @export
 pander.ets <- function(x, digits = panderOptions('digits'),...) {
-  cat('\nCall:', pandoc.formula.return(x$call), '', sep = '\n')
-  cat('Type of ets: ', x$method, '\n', sep = '')
-  lambda<-x$lambda
-  isn <- names(x$initstate)
-  initstate <- matrix(x$initstate, nrow = 1)
-  colnames(initstate) <- isn
-  sp<-x$par["alpha"]
-  if (x$components[2] != "N")
-    sp<-c(sp, x$par["beta"])
-  if (x$components[3] != "N")
-    sp<-c(sp, x$par["gamma"])
-  if (x$components[4] != "FALSE")
-    sp<-c(sp,x$par["phi"])
-  if (!is.null(lambda)) 
-    cat("\nBox-Cox transformation: lambda =", round(lambda, panderOptions('digits')), "\n\n")
-  pandoc.table(sp, caption = 'Smoothing parameters', digits = digits, ...)
-  pandoc.table(initstate, caption = 'Initial states', digits = digits, ...)
-  cat('\nsigma^2 estimated as ', format(x$sigma2, digits = digits))
-  if (!is.null(x$logik))
-    cat(': log likelihood = ', format(round(x$loglik, 2)))
-  if (!is.null(x$aic))
-    cat(', aic = ', format(round(x$aic, 2)), '\n', sep = '')
-  invisible(x)
+    cat('\nCall:', pandoc.formula.return(x$call), '', sep = '\n')
+    cat('Type of ets: ', x$method, '\n', sep = '')
+    lambda<-x$lambda
+    isn <- names(x$initstate)
+    initstate <- matrix(x$initstate, nrow = 1)
+    colnames(initstate) <- isn
+    sp<-x$par["alpha"]
+    if (x$components[2] != "N"){
+        sp<-c(sp, x$par["beta"])
+    }
+    if (x$components[3] != "N"){
+        sp<-c(sp, x$par["gamma"])
+    }
+    if (x$components[4] != "FALSE"){
+        sp<-c(sp,x$par["phi"])
+    }
+    if (!is.null(lambda)){
+        cat("\nBox-Cox transformation: lambda =", round(lambda, panderOptions('digits')), "\n\n")
+    }
+    pandoc.table(sp, caption = 'Smoothing parameters', digits = digits, ...)
+    pandoc.table(initstate, caption = 'Initial states', digits = digits, ...)
+    cat('\nsigma^2 estimated as ', format(x$sigma2, digits = digits))
+    if (!is.null(x$logik)){
+        cat(': log likelihood = ', format(round(x$loglik, 2)))
+    }
+    if (!is.null(x$aic)){
+        cat(', aic = ', format(round(x$aic, 2)), '\n', sep = '')
+    }
+    invisible(x)
 }

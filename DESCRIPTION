@@ -1,4 +1,4 @@
-Package: pander
+﻿Package: pander
 Maintainer: Gergely Daróczi <daroczig@rapporter.net>
 Title: An R Pandoc Writer
 Type: Package
@@ -49,8 +49,10 @@ Suggests:
     randomForest,
     tseries,
     gtable,
-    rms
+    rms,
+    forecast
 SystemRequirements: pandoc (http://johnmacfarlane.net/pandoc) for exporting
     markdown files to other formats.
 LinkingTo: Rcpp
 VignetteBuilder: knitr
+RoxygenNote: 5.0.1

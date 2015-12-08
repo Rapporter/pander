@@ -1,3 +1,9 @@
+pander DEV (xxxx-xx-xx)
+----------------------------------------------------------------
+
+New classes supported by the `pander` generic S3 method:
+ * ets
+
 pander 0.6.0 (2015-10-27)
 ----------------------------------------------------------------
 
@@ -41,7 +47,6 @@ New classes supported by the `pander` generic S3 method:
  * lrm
  * summary.rms
  * polr/summary.polr
- * ets
 
 Other changes:
  * Pandoc.convert will not add a footer to the document by dafault (#173)
