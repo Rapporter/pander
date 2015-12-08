@@ -772,7 +772,11 @@ pandoc.table.return <- function(t, caption, digits = panderOptions('digits'), de
             }
         }
     }
+
     ## converting a table to intermediate representation
+    if (inherits(t, 'tbl_df')) {
+        t <- as.data.frame(t)
+    }
     if (length(dim(t)) > 2){
         t <- ftable(t)
     } else if (length(dim(t)) < 2) {
