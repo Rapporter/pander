@@ -478,7 +478,7 @@ pander.anova <- function(x, caption = attr(x, 'caption'), add.significance.stars
     }
     pandoc.table(x, caption = caption, ...)
     if (add.significance.stars) {
-        cat('Signif. codes:  0 \'***\' 0.001 \'**\' 0.01 \'*\' 0.05 \'.\' 0.1 \' \' 1\n')
+        cat('Signif. codes:  0 \'\\*\\*\\*\' 0.001 \'\\*\\*\' 0.01 \'\\*\' 0.05 \'.\' 0.1 \' \' 1\n')
     }
 }
 
