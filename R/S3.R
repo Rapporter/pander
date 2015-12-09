@@ -474,7 +474,7 @@ pander.anova <- function(x, caption = attr(x, 'caption'), add.significance.stars
         caption <- get.caption()
     }
     if (add.significance.stars) {
-        x[, 5] <- add.significance.stars(x[, 5])
+        x <- cbind(x, ' ' = add.significance.stars(x[, 4]))
     }
     pandoc.table(x, caption = caption, ...)
     if (add.significance.stars) {
