@@ -82,14 +82,6 @@ Pandoc.convert <- function(f, text, format = 'html', open = TRUE, options = '',
     ## content
     rl <- readLines(f, warn = FALSE)
 
-    ## force UTF-8 encoding
-    if (!grepl('utf', Sys.getlocale())) {
-        text <- iconv(readLines(f, warn = FALSE), from = '', to = 'UTF-8')
-        con <- file(f, 'w', encoding = 'UTF-8')
-        cat(text, file = con, sep = '\n')
-        close(con)
-    }
-
     ## dealing with URLs
     if (grepl('^https*://.*', f)) {
         f.dir <- tempdir()
@@ -98,6 +90,26 @@ Pandoc.convert <- function(f, text, format = 'html', open = TRUE, options = '',
         f.dir <- dirname(f)
         f.out <- paste0(file_path_sans_ext(f), '.', format)
     }
+
+    ## force UTF-8 encoding
+    ## if (!grepl('utf', Sys.getlocale())) {
+
+        ## convert content to UTF-8
+        text <- iconv(readLines(f, warn = FALSE), from = '', to = 'UTF-8')
+
+        ## do not touch original input file
+        if (!missing(f)) {
+            f <- tempfile()
+            ## remove tempfile if not needed any more
+            on.exit(unlink(f))
+        }
+
+        ## write content with UTF-8 encoding
+        con <- file(f, 'w', encoding = 'UTF-8')
+        cat(text, file = con, sep = '\n')
+        close(con)
+
+    ## }
 
     ## add nifty HTML/CSS/JS components
     if (format == 'html') {
