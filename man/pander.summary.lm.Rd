@@ -5,7 +5,8 @@
 \title{Pander method for summary.lm class}
 \usage{
 \method{pander}{summary.lm}(x, caption = attr(x, "caption"), covariate.labels,
-  omit, summary = TRUE, add.significance.stars = FALSE, ...)
+  omit, summary = TRUE, add.significance.stars = FALSE,
+  move.intercept = FALSE, ...)
 }
 \arguments{
 \item{x}{an summary.lm object}
@@ -19,6 +20,8 @@
 \item{summary}{(defaut:\code{TRUE}) if used for summary.lm or lm}
 
 \item{add.significance.stars}{if significance stars should be shown for P value}
+
+\item{move.intercept}{by default, the Intercept is the first coefficient in the table, which can be moved to the bottom of the table}
 
 \item{...}{optional parameters passed to special methods and/or raw \code{pandoc.*} functions}
 }

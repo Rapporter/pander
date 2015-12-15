@@ -299,11 +299,12 @@ pander.cast_df <- function(x, caption = attr(x, 'caption'), ...) {
 #' @param omit vector of variable to omit for priting in resulting table
 #' @param summary (defaut:\code{TRUE}) if used for summary.lm or lm
 #' @param add.significance.stars if significance stars should be shown for P value
+#' @param move.intercept by default, the Intercept is the first coefficient in the table, which can be moved to the bottom of the table
 #' @param ... optional parameters passed to special methods and/or raw \code{pandoc.*} functions
 #' @return By default this function outputs (see: \code{cat}) the result. If you would want to catch the result instead, then call the function ending in \code{.return}.
 #' @export
 pander.summary.lm <- function(x, caption = attr(x, 'caption'), covariate.labels,
-                              omit, summary = TRUE, add.significance.stars = FALSE, ...) {
+                              omit, summary = TRUE, add.significance.stars = FALSE, move.intercept = FALSE, ...) {
 
     if (is.null(caption)) {
         if (is.null(storage$caption)) {
@@ -315,7 +316,7 @@ pander.summary.lm <- function(x, caption = attr(x, 'caption'), covariate.labels,
 
     res <- as.data.frame(x$coeff)
 
-    if (rownames(res)[1] == '(Intercept)' & nrow(res) > 1) {
+    if (move.intercept && rownames(res)[1] == '(Intercept)' & nrow(res) > 1) {
         res <- res[c(2:nrow(res), 1), ]
     }
 
