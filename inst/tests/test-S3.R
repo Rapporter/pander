@@ -266,7 +266,7 @@ test_that('digits param', {
     res <- pander_return(m, digits = c(2))
     expect_equal(res[3],'0.11 0.11 0.11')
     mt <- mtcars[1:4, 5:8]
-    res <- pander_return(mt, digits = c(1,4,3,4), keep.trailing.zeros = T)
+    res <- pander_return(mt, digits = c(1,4,3,4), keep.trailing.zeros = TRUE)
     expect_equal(res[5], '   **Mazda RX4**       4    2.62   16.5   0  ')
 })
 
@@ -333,9 +333,9 @@ context('split.cells')
 test_that('split.cells works correctly',{
   x <- data.frame(a = 'foo bar\nfo bar')
   # single line break behaves correctly combines with keep line breaks
-  expect_equal(pandoc.table.return(x, keep.line.breaks = T, split.cells = 7),
+  expect_equal(pandoc.table.return(x, keep.line.breaks = TRUE, split.cells = 7),
                '\n-------\n   a   \n-------\nfoo bar\nfo bar \n-------\n\n')
-  expect_equal(pandoc.table.return(x, keep.line.breaks = T, split.cells = 6),
+  expect_equal(pandoc.table.return(x, keep.line.breaks = TRUE, split.cells = 6),
                '\n------\n  a   \n------\n foo  \n bar  \nfo bar\n------\n\n')
   # Corner values of split.cells
   x <- data.frame(a = 'foo bar', b = 'foo bar')
@@ -371,8 +371,8 @@ context('table.expand')
 
 test_that('produces.errors',{
   x <- data.frame(a='Pander\nPackage')
-  expect_error(pander(x, style='simple', keep.line.breaks = T))
-  expect_error(pander(x, style='rmarkdown', keep.line.breaks = T))
+  expect_error(pander(x, style='simple', keep.line.breaks = TRUE))
+  expect_error(pander(x, style='rmarkdown', keep.line.breaks = TRUE))
 })
 
 table.expand <- function(cells, cols.width, justify, sep.cols, style) {
@@ -526,19 +526,19 @@ context('plain.ascii')
 test_that('plain.ascii option works correctly', {
     # dim is NULL
     x <- 1:10
-    res <- pandoc.table.return(x, emphasize.cells=c(3,4), plain.ascii = T)
+    res <- pandoc.table.return(x, emphasize.cells=c(3,4), plain.ascii = TRUE)
     res <- strsplit(res, '\n')[[1]]
     expect_false(any(grepl('\\*', res)))
     expect_equal(res[3], '1 2 3 4 5 6 7 8 9 10')
     # length(dim) == 1
     x <- array(1:10)
-    res <- pandoc.table.return(x, emphasize.cells=c(3,4), plain.ascii = T)
+    res <- pandoc.table.return(x, emphasize.cells=c(3,4), plain.ascii = TRUE)
     res <- strsplit(res, '\n')[[1]]
     expect_false(any(grepl('\\*', res)))
     expect_equal(res[3], '1 2 3 4 5 6 7 8 9 10')
     # length(dim) > 1
     x <- mtcars[1:3, 1:4]
-    res <- pandoc.table.return(x, emphasize.rows = 2, plain.ascii = T)
+    res <- pandoc.table.return(x, emphasize.rows = 2, plain.ascii = TRUE)
     expect_false(grepl('&nbsp;', res))
     expect_false(grepl('\\*', res))
 })
@@ -565,7 +565,7 @@ test_that('pander.CrossTable behaves correctly', {
     expect_true(any(grepl(gsub('\\$', '\\\\$', x$ColData), res))) #nolint
     expect_true(any(grepl(gsub('\\$', '\\\\$', x$RowData), res))) #nolint
     # expected N, residual, std residual, adj std residual rownames was not included
-    x <- suppressWarnings(CrossTable(mtcars$cyl, mtcars$gear, expected = T, resid = T, sresid = T, asresid = T))
+    x <- suppressWarnings(CrossTable(mtcars$cyl, mtcars$gear, expected = TRUE, resid = TRUE, sresid = TRUE, asresid = TRUE))
     res <- pander_return(x)
     expect_true(any(grepl('Expected N', res)))
     expect_true(any(grepl('Residual', res)))
@@ -783,7 +783,7 @@ test_that('pander.survfit works correctly', {
     expect_equal(length(res), 20)
     expect_true(any(grepl('Table', res)))
     # using additional options
-    res <- pander_return(survfit(Surv(time, status) ~ x, data = aml), print.rmean = T)
+    res <- pander_return(survfit(Surv(time, status) ~ x, data = aml), print.rmean = TRUE)
     expect_equal(length(res), 21)
     expect_equal(res[21], '* restricted mean with upper limit =  103')
 })
@@ -834,7 +834,7 @@ test_that('pander.function works correctly', {
     res <- pander_return(testf)
     expect_true(all(grepl('\t', res)))
     expect_equal(length(res), 5)
-    res <- pander_return(testf, syntax.highlighting = T, add.name = T)
+    res <- pander_return(testf, syntax.highlighting = TRUE, add.name = TRUE)
     expect_equal(length(res), 7)
     expect_equal(res[1], '```r')
     expect_true(grepl('testf', res[2]))
@@ -928,16 +928,16 @@ test_that('pander.nls/pander.summary.nls works correctly', {
     with(muscle, table(Strip))
     musc.1 <- nls(Length ~ cbind(1, exp(-Conc / th)), muscle,
                 start = list(th = 1), algorithm = 'plinear')
-    res <- pander_return(musc.1, show.convergence = T)
+    res <- pander_return(musc.1, show.convergence = TRUE)
     expect_equal(length(res), 17)
     res <- pander_return(musc.1)
     expect_equal(length(res), 14)
     musc.1.s <- summary(musc.1)
     res <- pander_return(musc.1.s)
     expect_equal(length(res), 18)
-    res <- pander_return(musc.1.s, show.convergence = T)
+    res <- pander_return(musc.1.s, show.convergence = TRUE)
     expect_equal(length(res), 21)
-    musc.1.s <- summary(musc.1, correlation = T)
+    musc.1.s <- summary(musc.1, correlation = TRUE)
     res <- pander_return(musc.1.s)
     expect_true(any(grepl('Correlation', res)))
     expect_equal(length(res), 31)
