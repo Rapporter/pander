@@ -89,7 +89,7 @@ test_that('pandoc.table.return behaves correctly', {
     t <- mtcars[1:3, 1:2]
     attr(t, 'alignment') <- 'left'
     attr(t, 'caption') <- 'simplified mtcars'
-    res <- pander_return(t, emphasize.rownames = F)
+    res <- pander_return(t, emphasize.rownames = FALSE)
     expect_false(any(grep('^[[:space:]]', res))) # because of left alignment
     expect_true(any(grep('simplified mtcars', res)))
     expect_error(pander_return(t, justify = c('left', 'right'))) # needs 3 because of rownames
@@ -793,7 +793,7 @@ test_that('pander.sessionInfo works correctly', {
     res <- pander_return(sessionInfo())
     expect_true(any(grepl('locale', res)))
     expect_true(any(grepl('attached base package', res)))
-    res <- pander_return(sessionInfo(), locale = F, compact = F)
+    res <- pander_return(sessionInfo(), locale = FALSE, compact = FALSE)
     expect_false(any(grepl('locale', res)))
     expect_true(any(grepl('utils', res)))
 })
@@ -854,7 +854,7 @@ test_that('pander.summary.table works correctly', {
     res <- pander_return(ts)
     expect_equal(res[6], ' Chisq   df   p.value ' )
     expect_equal(length(res), 13)
-    res <- pander_return(ts, print.call = F)
+    res <- pander_return(ts, print.call = FALSE)
     expect_false(any(grepl('Calls', res)))
     expect_equal(length(res), 12)
     res <- pander_return(ts, caption = 'Factor')
