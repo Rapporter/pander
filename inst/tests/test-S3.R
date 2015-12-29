@@ -16,7 +16,8 @@ tables <- list(
     table(mtcars$am, mtcars$gear) + 0.1,
     summary(lm(mtcars$hp~1))$coeff,
     table(mtcars$am, mtcars$gear, mtcars$carb),
-    addmargins(table(mtcars$gear, mtcars$carb))
+    addmargins(table(mtcars$gear, mtcars$carb)),
+    summary(Sys.Date() + 0:5)
 )
 
 test_that('no error: multiline', {
@@ -112,6 +113,10 @@ test_that('decimal mark', {
 })
 
 panderOptions('decimal.mark', dm)
+
+test_that('Date is preserved', {
+    expect_equal(grep('2015', pander_return(summary(as.Date('2015-01-01') + 0:5))), 5)
+})
 
 context('highlight tables')
 

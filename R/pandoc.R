@@ -773,37 +773,63 @@ pandoc.table.return <- function(t, caption, digits = panderOptions('digits'), de
         }
     }
 
-    ## converting a table to intermediate representation
+    ## #########################################################################
+    ## converting the table into intermediate representation
+    ## #########################################################################
+
+    ## revert dplyr to a normal data.frame
     if (inherits(t, 'tbl_df')) {
         t <- as.data.frame(t)
     }
+
+    ## we have a high-dimensional table to be converted to 2D
     if (length(dim(t)) > 2){
         t <- ftable(t)
-    } else if (length(dim(t)) < 2) {
-        tn <- names(t)
-        t <- rbind(matrix(nrow = 0, ncol = length(t)), t)
-        colnames(t) <- tn
-        rownames(t) <- NULL
-        # special conversion for emphasize.cells, emphasize.strong.cells
-        if (!missing(emphasize.cells)) {
-            emphasize.cells <- cbind(rep(1, length(emphasize.cells)), emphasize.cells)
-        }
-        if (!missing(emphasize.verbatim.cells)) {
-            emphasize.verbatim.cells <- cbind(rep(1, length(emphasize.verbatim.cells)), emphasize.verbatim.cells)
-        }
-        if (!missing(emphasize.italics.cells)) {
-            emphasize.italics.cells <- cbind(rep(1, length(emphasize.italics.cells)), emphasize.italics.cells)
-        }
-        if (!missing(emphasize.strong.cells)) {
-            emphasize.strong.cells <- cbind(rep(1, length(emphasize.strong.cells)), emphasize.strong.cells)
-        }
-    } else if (dim(t)[1] == 0) {
-        # check for empty objects
-        if (!is.null(colnames(t)) && length(colnames(t)) > 0) {
-            t <- matrix(data = pandoc.strong.return(colnames(t)), nrow = 1)
+
+    } else {
+
+        ## we have a pseudo-table with only one or NULL dimension
+        if (length(dim(t)) < 2) {
+
+            tn <- names(t)
+
+            ## matrix/rbind will coerce cells to atomic (e.g. Date to numeric)
+            ## so we should first convert these values to a character vector
+            if (!is.numeric(t)) {
+                t <- as.character(t)
+            }
+
+            ## make a table
+            t <- rbind(matrix(nrow = 0, ncol = length(t)), t)
+
+            ## restore col/row names
+            colnames(t) <- tn
+            rownames(t) <- NULL
+
+            ## special conversion for emphasize.cells, emphasize.strong.cells
+            if (!missing(emphasize.cells)) {
+                emphasize.cells <- cbind(rep(1, length(emphasize.cells)), emphasize.cells)
+            }
+            if (!missing(emphasize.verbatim.cells)) {
+                emphasize.verbatim.cells <- cbind(rep(1, length(emphasize.verbatim.cells)), emphasize.verbatim.cells)
+            }
+            if (!missing(emphasize.italics.cells)) {
+                emphasize.italics.cells <- cbind(rep(1, length(emphasize.italics.cells)), emphasize.italics.cells)
+            }
+            if (!missing(emphasize.strong.cells)) {
+                emphasize.strong.cells <- cbind(rep(1, length(emphasize.strong.cells)), emphasize.strong.cells)
+            }
+
         } else {
-            warning('Object is empty and without header. No output will be produced')
-            return(invisible())
+            if (dim(t)[1] == 0) {
+                ## check for empty objects
+                if (!is.null(colnames(t)) && length(colnames(t)) > 0) {
+                    t <- matrix(data = pandoc.strong.return(colnames(t)), nrow = 1)
+                } else {
+                    warning('Object is empty and without header. No output will be produced')
+                    return(invisible())
+                }
+            }
         }
     }
 
@@ -899,10 +925,12 @@ pandoc.table.return <- function(t, caption, digits = panderOptions('digits'), de
 
     ## round numbers & cut digits & apply decimal mark & optionally remove trailing zeros
     digits <- check_digits(digits, 'digits', ncol(t))
-    # we need a temporary conversion of matrix to data.frame, because matrix columns
-    # can't be formated separately (as soon as first column is formatted all others are fomatted too).
-    # Formatting each column separately is needed
-    #to support digits and round params as vectors with values for each column.
+
+    ## Temporary conversion of matrix to data.frame,
+    ## because matrix columns can't be formatted separately:
+    ## as soon as first column is formatted all others are fomatted too.
+    ## Formatting each column separately is needed
+    ## to support digits and round params as vectors with values for each column.
     rn <- rownames(t)
     cln <- colnames(t)
     if (inherits(t, 'matrix') & !inherits(t, 'table')) {
@@ -950,10 +978,13 @@ pandoc.table.return <- function(t, caption, digits = panderOptions('digits'), de
         ## here adds unneeded zero's
         temp.t <- format(temp.t, trim = TRUE, quote = FALSE)
     }
+
+    ## transform to matrix with proper row/colnames
     t <- as.matrix(temp.t)
     colnames(t) <- cln
     rownames(t) <- rn
-    ## force possible factors to character vectors
+
+    ## force all non-numeric cells to character vectors
     wf <- which(sapply(t, is.factor))
     if (length(wf) > 0) {
         t[, wf] <- apply(t[wf], 2, as.character)
