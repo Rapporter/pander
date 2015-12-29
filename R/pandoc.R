@@ -833,6 +833,11 @@ pandoc.table.return <- function(t, caption, digits = panderOptions('digits'), de
         }
     }
 
+
+    ## #########################################################################
+    ## check passed parameters and set sane defaults
+    ## #########################################################################
+
     ## check correct split.cells param
     if (length(split.cells) == 0) {
         warning('split.cells is a vector of length 0, reverting to default value')
@@ -888,6 +893,7 @@ pandoc.table.return <- function(t, caption, digits = panderOptions('digits'), de
             caption <- attr(t, 'caption')
         }
     }
+
     ## check if emphasize parameters were passed
     emphasize.parameters <- c('emphasize.rows',
                               'emphasize.cols',
@@ -922,6 +928,10 @@ pandoc.table.return <- function(t, caption, digits = panderOptions('digits'), de
 
     ## store missing values
     wm <- which(is.na(t), arr.ind = TRUE)
+
+    ## #########################################################################
+    ## update numeric values
+    ## #########################################################################
 
     ## round numbers & cut digits & apply decimal mark & optionally remove trailing zeros
     digits <- check_digits(digits, 'digits', ncol(t))
@@ -995,7 +1005,10 @@ pandoc.table.return <- function(t, caption, digits = panderOptions('digits'), de
         t[wm] <- missing
     }
 
+    ## #########################################################################
     ## adding formatting (emphasis, strong etc.)
+    ## #########################################################################
+
     if (is.null(emphasize.italics.rows)) {
         emphasize.italics.rows <- emphasize.rows
     }
@@ -1052,6 +1065,9 @@ pandoc.table.return <- function(t, caption, digits = panderOptions('digits'), de
         t[emphasize.strong.cells] <- pandoc.strong.return(t[emphasize.strong.cells])
     }
 
+    ## #########################################################################
+    ## (re)set row and column names
+    ## #########################################################################
 
     ## get (col/row)names if any
     t.colnames <- tryCatch(colnames(t), error = function(e) NULL)
@@ -1073,6 +1089,11 @@ pandoc.table.return <- function(t, caption, digits = panderOptions('digits'), de
         colnames(t) <- t.colnames
     }
 
+    ## #########################################################################
+    ## compute column width
+    ## #########################################################################
+
+    ## header width
     if (!is.null(t.colnames)) {
         t.colnames <- replace(t.colnames, which(t.colnames == ''), '&nbsp;')
         t.colnames <- split.large.cells(t.colnames)
@@ -1082,8 +1103,10 @@ pandoc.table.return <- function(t, caption, digits = panderOptions('digits'), de
     } else {
         t.colnames.width <- 0
     }
+
     ## remove traling spaces, because they affect formatting negatively
     t <- apply(t, c(1,2), function(x) gsub('[[:space:]]*$', '', x))
+
     ## also dealing with cells split by newlines
     t.width <-  as.numeric(apply(cbind(t.colnames.width, apply(t, 2, function(x) max(sapply(strsplit(x,'\n'), function(x) max(nchar(x, type = 'width'), 0))))), 1, max)) #nolint
 
@@ -1146,11 +1169,18 @@ pandoc.table.return <- function(t, caption, digits = panderOptions('digits'), de
         stop('Invalid values passed for `justify` that can be "left", "right" or "centre/center".')
     }
 
+    ## #########################################################################
     ## split too wide tables
-    extra.spaces.width <- switch(style, # detrmine wheather separator influences column's width (#164)
-                                 'grid'=, 'rmarkdown' = 3, # 3 because 2 spaces and one sep
+    ## #########################################################################
+
+    ## determine weather separator influences column's width (#164)
+    extra.spaces.width <- switch(style,
+                                 ## 3 because 2 spaces + 1 separator
+                                 'grid'=, 'rmarkdown' = 3,
                                  'multiline' = ,'simple' = 0)
-    if (sum(t.width + extra.spaces.width) + 1 > split.tables # +1 for the middle separator
+
+    ## +1 for the middle separator
+    if (sum(t.width + extra.spaces.width) + 1 > split.tables
         & length(t.width) > 1 + (length(t.rownames) != 0)) {
 
         t.split <- max(which(cumsum(t.width + extra.spaces.width + 1) > split.tables + 1)[1] - 1, 1)
@@ -1182,6 +1212,11 @@ pandoc.table.return <- function(t, caption, digits = panderOptions('digits'), de
         return(res)
 
     } else {
+
+        ## #########################################################################
+        ## define markdown dialects
+        ## #########################################################################
+
 
         switch(style,
                'grid'      = {
@@ -1227,7 +1262,10 @@ pandoc.table.return <- function(t, caption, digits = panderOptions('digits'), de
             t.colnames <- sapply(t.colnames, to.plain.ascii)
         }
 
+        ## #########################################################################
         ## Actual printing starts here
+        ## #########################################################################
+
         ## header
         if (length(t.colnames) != 0) {
             res <- paste(res, sep.top,
