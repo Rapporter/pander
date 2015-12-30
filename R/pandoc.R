@@ -793,6 +793,12 @@ pandoc.table.return <- function(t, caption, digits = panderOptions('digits'), de
 
             tn <- names(t)
 
+            ## print.summaryDefault stores NAs in a very special way
+            ## see eg: pander(summary(c(Sys.Date(), NA)))
+            if ((inherits(t, "Date") || inherits(t, "POSIXct")) & length(attr(t, "NAs"))) {
+                tn <- c(tn, 'NAs')
+            }
+
             ## matrix/rbind will coerce cells to atomic (e.g. Date to numeric)
             ## so we should first convert these values to a character vector
             if (!is.numeric(t)) {
