@@ -951,7 +951,7 @@ pandoc.table.return <- function(t, caption, digits = panderOptions('digits'), de
     cln <- colnames(t)
     if (inherits(t, 'matrix') & !inherits(t, 'table')) {
       rownames(t) <- NULL
-      temp.t <- as.data.frame(t)
+      temp.t <- t <- as.data.frame(t)
     } else {
       temp.t <- t
     }
@@ -961,13 +961,13 @@ pandoc.table.return <- function(t, caption, digits = panderOptions('digits'), de
         # for-loop is needed to preserve row/col names and use index to get appropriate value from round vector
         for (j in 1:ncol(temp.t)) {
             if (j %in% t.n) {
-                temp.t[, j] <- round(temp.t[, j], digits = round[j])
+                t[, j] <- round(t[, j], digits = round[j])
             }
         }
         if (!keep.trailing.zeros) {
             # for-loop is needed to preserve row/col names and use index to get appropriate value from digits vector
             for (j in 1:ncol(temp.t)) {
-                temp.t[, j] <- sapply(temp.t[, j],
+                temp.t[, j] <- sapply(t[, j],
                                       format,
                                       trim         = TRUE,
                                       digits       = digits[j],
@@ -982,7 +982,7 @@ pandoc.table.return <- function(t, caption, digits = panderOptions('digits'), de
     if (keep.trailing.zeros) {
         # for-loop is needed to preserve row/col names and use index to get appropriate value from digits vector
         for (j in 1:ncol(t)) {
-            temp.t[, j] <- sapply(temp.t[, j],
+            temp.t[, j] <- sapply(t[, j],
                                   format,
                                   trim         = TRUE,
                                   digits       = digits[j],
