@@ -42,6 +42,7 @@ Suggests:
     descr,
     MASS,
     knitr,
+    rmarkdown,
     tables,
     reshape,
     memisc,
