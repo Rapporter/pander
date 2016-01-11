@@ -989,22 +989,15 @@ test_that('pander.survreg/summary.survreg works correctly', {
 
 test_that('pander.ols works correctly', {
     suppressMessages(require(rms))
-    set.seed(123)
-    n <- 1000
-    age <- rnorm(n, 50, 10)
-    cholesterol <- rnorm(n, 200, 25)
-    sex <- factor(sample(c('female', 'male'), n, TRUE))
-    health <- data.frame(age, cholesterol)
-    dd <- datadist(age, sex)
-    fit1 <- ols(cholesterol ~ age)
-    fit2 <- ols(cholesterol ~ age + sex)
-
-    res1 <- pander_return(fit1)
-    expect_equal(length(res1), 40)
-    expect_equal(length(grep('Table', res1)), 3)
-    res2 <- pander_return(fit2, coefs = FALSE)
-    expect_equal(length(res2), 29)
-    expect_equal(length(grep('Table', res2)), 2)
+    set.seed(1)
+    x1 <- runif(200)
+    x2 <- sample(0:3, 200, TRUE)
+    distance <- (x1 + x2/3 + rnorm(200))^2
+    d <- datadist(x1,x2)
+    f <- ols(sqrt(distance) ~ rcs(x1,4) + scored(x2), x=TRUE)
+    res <- pander_return(f)
+    expect_equal(length(res), 50)
+    expect_equal(length(grep('Table', res)), 3)
 })
 
 test_that('pander.lrm works correctly', {
@@ -1048,17 +1041,18 @@ test_that('pander.orm works correctly', {
 
 test_that('pander.Glm works correctly', {
     suppressMessages(require(rms))
-    counts <- c(18,17,15,20,10,20,25,13,12)
-    outcome <- gl(3,1,9)
-    treatment <- gl(3,3)
-    f <- Glm(counts ~ outcome + treatment, family=poisson())
+    clotting <- data.frame(
+        u = c(5,10,15,20,30,40,60,80,100),
+        lot1 = c(118,58,42,35,27,25,21,19,18),
+        lot2 = c(69,35,26,21,18,16,13,12,12))
+    f <- Glm(lot1 ~ log(u), data = clotting, family = Gamma)
     res <- pander_return(f)
-    expect_equal(length(res), 37)
-    expect_true(any(grep('counts ~ outcome \\+ treatment', res)))
+    expect_equal(length(res), 31)
+    expect_true(any(grep('lot1 ~ log\\(u\\)', res)))
     expect_equal(length(grep('Table', res)), 2)
     res <- pander_return(f, coefs = FALSE)
     expect_equal(length(res), 20)
-    expect_true(any(grep('counts ~ outcome \\+ treatment', res)))
+    expect_true(any(grep('ot1 ~ log\\(u\\)', res)))
     expect_equal(length(grep('Table', res)), 1)
 })
 
