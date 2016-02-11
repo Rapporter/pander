@@ -784,6 +784,10 @@ pander.mtable <- function(x, caption = attr(x, 'caption'),
                           ...
 ){
   
+  if (is.null(caption) & !is.null(storage$caption)) {
+    caption <- get.caption()
+  }
+  
   coefs <- x$coefficients
   summaries <- x$summaries
   
