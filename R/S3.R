@@ -240,24 +240,25 @@ pander.table <- function(x, caption = attr(x, 'caption'), ...) {
 
 #' Pander method for data.table class
 #'
-#' Prints a data.table object in Pandoc's markdown. Data.tables drop attributes (like row names) when called. 
+#' Prints a data.table object in Pandoc's markdown. Data.tables drop attributes (like row names) when called.
 #' @param x a data.table object
 #' @param caption caption (string) to be shown under the table
 #' @param keys.as.row.names controls whether to use data.table key as row names when calling pandoc.table
 #' @param ... optional parameters passed to raw \code{pandoc.table} function
 #' @export
-pander.data.table <- function(x, caption = attr(x, 'caption'),keys.as.row.names = TRUE,  ...) {
+pander.data.table <- function(x, caption = attr(x, 'caption'),
+                              keys.as.row.names = TRUE, ...) {
 
     if (is.null(caption) & !is.null(storage$caption)) {
         caption <- get.caption()
     }
-    if(keys.as.row.names){
-        if(haskey(x)){
-            row.names.dt <- x[[key(x)[1]]]
-            x <- x[,setdiff(colnames(x), key(x)[1]), with=FALSE]
-            setattr(x, "row.names", row.names.dt)
-        }
+
+    if (keys.as.row.names && haskey(x)) {
+        row.names.dt <- x[[key(x)[1]]]
+        x <- x[, setdiff(colnames(x), key(x)[1]), with = FALSE]
+        setattr(x, 'row.names', row.names.dt)
     }
+
     pandoc.table(x, caption = caption, ...)
 
 }
@@ -806,49 +807,49 @@ pander.ftable <- function(x, ...)
 pander.mtable <- function(x, caption = attr(x, 'caption'),
                           ...
 ){
-  
+
   if (is.null(caption) & !is.null(storage$caption)) {
     caption <- get.caption()
   }
-  
+
   coefs <- x$coefficients
   summaries <- x$summaries
-  
+
   num.models <- length(coefs)
-  
+
   coef.dims <- lapply(coefs,dim)
   coef.ldim <- sapply(coef.dims,length)
   max.coef.ldim <- max(coef.ldim)
-  
+
   coef.dims1 <- unique(sapply(coef.dims,"[[",1))
   stopifnot(length(coef.dims1)==1)
-  
-  grp.coefs <- max.coef.ldim > 3 
+
+  grp.coefs <- max.coef.ldim > 3
   if(grp.coefs){
     coef.dims4 <- sapply(coef.dims[coef.ldim>3],"[",4)
     grp.coefs <- grp.coefs && any(coef.dims4>1)
   }
-  
+
   coef.names <- dimnames(coefs[[1]])[[3]]
 
   mtab <- character()
-  
+
   frmt1 <- function(name,coefs,summaries){
-    
+
     coef.tab <- coefs
     dm <- dim(coefs)
     if(length(dm)==3) dm <- c(dm,1)
     dim(coef.tab) <- dm
-    
+
     if(dm[1]>1){
       coef.tab <- apply(coef.tab,2:4,paste,collapse="\\ \n")
     }
     else {
       coef.tab <- apply(coef.tab,c(1,3:4),paste,collapse=" ")
     }
-    
+
     dim(coef.tab) <- dim(coef.tab)[-1]
-    
+
     if(grp.coefs){
       hdr <- character(ncol(coef.tab))
       if(length(dim(coefs))>3){
@@ -856,7 +857,7 @@ pander.mtable <- function(x, caption = attr(x, 'caption'),
           eq.names <- dimnames(coefs)[[4]]
         else
           eq.names <- ""
-        
+
         ii <- seq(from=1,length=dm[4],by=dm[2])
         hdr[ii] <- eq.names
       }
@@ -872,25 +873,25 @@ pander.mtable <- function(x, caption = attr(x, 'caption'),
     }
     coef.tab
   }
-  
+
   for(i in 1:length(coefs)){
     mtab <- cbind(mtab,frmt1(names(coefs)[i],coefs[[i]],summaries[,i]))
-  }    
-  
+  }
+
   colnames(mtab) <- mtab[1,]
   mtab <- mtab[-1,,drop=FALSE]
-  
+
   ldr <- coef.names
-  
+
   hldr <- NULL
   if(grp.coefs)
     hldr <- c(hldr,"")
   if(length(x$model.groups))
     hldr <- c("",hldr)
   ldr <- c(hldr,ldr,rownames(summaries))
-  
+
   rownames(mtab) <- ldr
-  
+
   pandoc.table(mtab, caption = caption, keep.line.breaks = TRUE, ...)
 }
 
