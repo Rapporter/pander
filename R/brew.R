@@ -172,10 +172,6 @@ Pandoc.brew <- function(file = stdin(), output = stdout(), convert = FALSE, open
         Pandoc.convert(output, format = convert, open = open, proc.time = as.numeric(proc.time() - timer)[3], ...)
     }
 
-    ## remove trailing line-break text
-    ## if (tail(get('.storage', envir = envir), 1)[[1]]$text$eval == '\n')
-    ##     assign('brew', head(get('.storage', envir = envir), -1), envir = envir)
-
     ## there is no sense of chunkID outside of brew
     assign('chunkID', NULL, envir = debug)
     assign('cmdID', NULL, envir = debug)
@@ -190,8 +186,8 @@ Pandoc.brew <- function(file = stdin(), output = stdout(), convert = FALSE, open
 
 
 ######################################################################################
-## This is a forked/patched version of `brew` package made by Jeffrey Horner (c) 2007.
-## Original sources can be found at: http://cran.r-project.org/web/packages/brew/
+# This is a forked/patched version of `brew` package made by Jeffrey Horner (c) 2007.
+# Original sources can be found at: http://cran.r-project.org/web/packages/brew/
 ######################################################################################
 
 BRTEXT <- 1
@@ -199,10 +195,10 @@ BRCODE <- 2
 BRCOMMENT <- 3
 BRCATCODE <- 4
 DELIM <- list()
-DELIM[[BRTEXT]] <- c('','')
-DELIM[[BRCODE]] <- c('<%','%>')
-DELIM[[BRCOMMENT]] <- c('<%#','%>')
-DELIM[[BRCATCODE]] <- c('<%=','%>')
+DELIM[[BRTEXT]] <- c('', '')
+DELIM[[BRCODE]] <- c('<%', '%>')
+DELIM[[BRCOMMENT]] <- c('<%#', '%>')
+DELIM[[BRCATCODE]] <- c('<%=', '%>')
 
 #' Patched brew
 #'
@@ -238,17 +234,17 @@ DELIM[[BRCATCODE]] <- c('<%=','%>')
     textStart <- as.integer(1)
     line <- ''
 
-    while(TRUE){
+    while (TRUE) {
         if (!nchar(line)){
-            line <- readLines(icon,1)
+            line <- readLines(icon, 1)
             if (length(line) != 1){
                 break
             }
-            line <- paste(line,'\n',sep='')
+            line <- paste(line, '\n', sep = '')
         }
         if (state == BRTEXT){
 
-            spl <- strsplit(line,DELIM[[BRCODE]],fixed=TRUE)[[1]]
+            spl <- strsplit(line, DELIM[[BRCODE]], fixed = TRUE)[[1]]
 
             ## Beginning markup found
             if (length(spl) > 1){
@@ -257,21 +253,21 @@ DELIM[[BRCATCODE]] <- c('<%=','%>')
                     text[textLen + 1] <- spl[1]
                     textLen <- textLen + 1
                 }
-                line <- paste(spl[-1],collapse='<%')
+                line <- paste(spl[-1], collapse = '<%')
 
                 ## We know we've found this so far, so go ahead and set up state.
                 state <- BRCODE
 
                 ## Now let's search for additional markup.
-                if (regexpr('^=',spl[2]) > 0){
+                if (regexpr('^=', spl[2]) > 0){
                     state <- BRCATCODE
-                    line <- sub('^=','',line)
-                } else if (regexpr('^#',spl[2]) > 0){
+                    line <- sub('^=', '', line)
+                } else if (regexpr('^#', spl[2]) > 0){
                     state <- BRCOMMENT
                 }
 
                 if (textStart <= textLen) {
-                    code[codeLen + 1] <- paste('showText(',textStart,',',textLen,')',sep='')
+                    code[codeLen + 1] <- paste('showText(', textStart, ',', textLen, ')', sep = '')
                     codeLen <- codeLen + 1
                     textStart <- textLen + 1
                 }
@@ -281,36 +277,36 @@ DELIM[[BRCATCODE]] <- c('<%=','%>')
                 line <- ''
             }
         } else {
-            if (regexpr('%>',line,perl=TRUE) > 0){
-                spl <- strsplit(line,'%>',fixed=TRUE)[[1]]
-                line <- paste(spl[-1],collapse='%>')
+            if (regexpr('%>', line, perl = TRUE) > 0){
+                spl <- strsplit(line, '%>', fixed = TRUE)[[1]]
+                line <- paste(spl[-1], collapse = '%>')
 
                 n <- nchar(spl[1])
-                ## test  for '-' immediately preceding %> will strip trailing newline from line
+                # test  for '-' immediately preceding %> will strip trailing newline from line
                 if (n > 0) {
-                    if (substr(spl[1],n,n) == '-') {
-                        line <- substr(line,1,nchar(line) - 1)
-                        spl[1] <- substr(spl[1],1,n - 1)
+                    if (substr(spl[1], n, n) == '-') {
+                        line <- substr(line, 1, nchar(line) - 1)
+                        spl[1] <- substr(spl[1], 1, n - 1)
                     }
                     text[textLen + 1] <- spl[1]
                     textLen <- textLen + 1
                 }
 
-                ## We've found the end of a brew section, but we only care if the
-                ## section is a BRCODE or BRCATCODE. We just implicitly drop BRCOMMENT sections
+                # We've found the end of a brew section, but we only care if the
+                # section is a BRCODE or BRCATCODE. We just implicitly drop BRCOMMENT sections
                 if (state == BRCODE){
-                    code[codeLen + 1] <- paste(text[textStart:textLen],collapse='')
+                    code[codeLen + 1] <- paste(text[textStart:textLen], collapse = '')
                     codeLen <- codeLen + 1
                 } else if (state == BRCATCODE){
                     code[codeLen + 1] <- paste0('showCode(',
-                                                deparse(paste(text[textStart:textLen],collapse = '\n')), ')')
+                                                deparse(paste(text[textStart:textLen], collapse = '\n')), ')')
                     codeLen <- codeLen + 1
                 }
                 textStart <- textLen + 1
                 state <- BRTEXT
-            } else if (regexpr('<%',line,perl=TRUE) > 0){
+            } else if (regexpr('<%', line, perl = TRUE) > 0){
                 stop('Oops! Someone forgot to close a tag. We saw: ',
-                     DELIM[[state]][1],' and we need ',
+                     DELIM[[state]][1], ' and we need ',
                      DELIM[[state]][2])
             } else {
                 text[textLen + 1] <- line
@@ -321,13 +317,13 @@ DELIM[[BRCATCODE]] <- c('<%=','%>')
     }
     if (state == BRTEXT){
         if (textStart <= textLen) {
-            code[codeLen + 1] <- paste('showText(',textStart,',',textLen,')',sep='')
+            code[codeLen + 1] <- paste('showText(', textStart, ',', textLen, ')', sep = '')
             codeLen <- codeLen + 1
             textStart <- textLen + 1
         }
     } else {
         stop('Oops! Someone forgot to close a tag. We saw: ',
-             DELIM[[state]][1],' and we need ',
+             DELIM[[state]][1], ' and we need ',
              DELIM[[state]][2], call. = FALSE)
     }
 
@@ -432,10 +428,6 @@ DELIM[[BRCATCODE]] <- c('<%=','%>')
     } else {
         assign('last', list(code = code, text = text, result = e), envir = debug) # debug
     }
-
-    ## safety check: not leaving any `sink` open
-    ## while (sink.number() != 0)
-    ##     sink()
 
     invisible()
 

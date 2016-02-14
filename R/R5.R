@@ -48,7 +48,7 @@
 #' ## Exporting to PDF (default)
 #' myReport$export()
 #'
-#' ## Or to docx in tempdir():
+#' # Or to docx in tempdir():
 #' myReport$format <- 'docx'
 #' myReport$export(tempfile())
 #'

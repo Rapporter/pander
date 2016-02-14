@@ -24,7 +24,7 @@ openFileInOS <- function(f) {
             # Mac
             system(paste(shQuote('open'), shQuote(f)), wait = FALSE, ignore.stderr = TRUE)
         } else {
-            # Linux-like
+            # Linux
             system(paste(shQuote('/usr/bin/xdg-open'), shQuote(f)), #nolint
                    wait = FALSE,
                    ignore.stdout = TRUE)
@@ -54,10 +54,10 @@ openFileInOS <- function(f) {
 #' @examples \dontrun{
 #' Pandoc.convert(text = c('# Demo', 'with a paragraph'))
 #' Pandoc.convert('http://rapporter.github.io/pander/minimal.md')
-#' ## Note: the generated HTML is not showing images with relative path from the above file.
-#' ## Based on that `pdf`, `docx` etc. formats would not work! If you want to convert an
-#' ## online markdown file to other formats with this function, please pre-process the file
-#' ## to have absolute paths instead.
+#' # Note: the generated HTML is not showing images with relative path from the above file.
+#' # Based on that `pdf`, `docx` etc. formats would not work! If you want to convert an
+#' # online markdown file to other formats with this function, please pre-process the file
+#' # to have absolute paths instead.
 #' }
 Pandoc.convert <- function(f, text, format = 'html', open = TRUE, options = '',
                            footer = FALSE, proc.time, portable.html = TRUE,
@@ -91,32 +91,32 @@ Pandoc.convert <- function(f, text, format = 'html', open = TRUE, options = '',
         f.out <- paste0(file_path_sans_ext(f), '.', format)
     }
 
-    ## force UTF-8 encoding
-    ## if (!grepl('utf', Sys.getlocale())) {
+    ## force UTF-8 encoding #nolint
+    ## if (!grepl('utf', Sys.getlocale())) { #nolint
 
-        ## convert content to UTF-8
+        # convert content to UTF-8
         text <- iconv(readLines(f, warn = FALSE), from = '', to = 'UTF-8')
 
-        ## do not touch original input file
+        # do not touch original input file
         if (!missing(f)) {
             f <- tempfile()
-            ## remove tempfile if not needed any more
+            # remove tempfile if not needed any more
             on.exit(unlink(f))
         }
 
-        ## write content with UTF-8 encoding
+        # write content with UTF-8 encoding
         con <- file(f, 'w', encoding = 'UTF-8')
         cat(text, file = con, sep = '\n')
         close(con)
 
-    ## }
+    ## } #nolint
 
-    ## add nifty HTML/CSS/JS components
+    # add nifty HTML/CSS/JS components
     if (format == 'html') {
 
         if (options == '') {
 
-            options <- sprintf('-A "%s"', system.file('includes/html/footer.html', package='pander'))
+            options <- sprintf('-A "%s"', system.file('includes/html/footer.html', package = 'pander'))
 
             if (portable.html) {
                 options <- paste('--self-contain', options)
@@ -160,12 +160,12 @@ Pandoc.convert <- function(f, text, format = 'html', open = TRUE, options = '',
 
         rl <- readLines(f.out, warn = FALSE)
         he <- grep('</head>', rl)
-        ho <- readLines(system.file('includes/html/header.html', package='pander'), warn = FALSE)
+        ho <- readLines(system.file('includes/html/header.html', package = 'pander'), warn = FALSE)
 
         if (portable.html) {
             ch <- ho
         } else {
-            ch <- gsub('http://cdn.rapporter.net/pander', system.file('includes/', package='pander'), ho)
+            ch <- gsub('http://cdn.rapporter.net/pander', system.file('includes/', package = 'pander'), ho)
         }
 
         writeLines(c(rl[1 : (he - 1)], ch, rl[he:length(rl)]), f.out)

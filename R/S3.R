@@ -91,12 +91,12 @@ pander <- function(x = NULL, ...) {
                 panderOptions('knitr.auto.asis', kaao)
             }
 
-            ## revert R output back to normal
+            # revert R output back to normal
             sink()
             sink(type = 'message')
             close(con)
 
-            ## re-add the final line-break
+            # re-add the final line-break
             if (tail(stdout, 1) == '') {
                 stdout <- c(stdout, '')
             }
@@ -353,7 +353,7 @@ pander.summary.lm <- function(x, caption = attr(x, 'caption'), covariate.labels,
     }
 
     if (add.significance.stars) {
-        res <- cbind(res, ' '=add.significance.stars(res[, 4]))
+        res <- cbind(res, ' ' = add.significance.stars(res[, 4]))
     }
 
     if (summary) {
@@ -572,8 +572,8 @@ pander.htest <- function(x, caption = attr(x, 'caption'), ...) {
         res$'P value' <- paste(
           format(round(x$p.value, panderOptions('round')),
                  trim         = TRUE,
-                 digits       = panderOptions("digits"),
-                 decimal.mark = panderOptions("decimal.mark")),
+                 digits       = panderOptions('digits'),
+                 decimal.mark = panderOptions('decimal.mark')),
           add.significance.stars(x$p.value))
     }
     if (!is.null(x$alternative)) {
@@ -729,7 +729,7 @@ pander.evals <- function(x, ...) {
 
     o <- pander(x$result)
 
-    if(panderOptions('evals.messages')) {
+    if (panderOptions('evals.messages')) {
         if (!is.null(x$msg$messages)) {
             o <- paste0(o, ' **MESSAGE**', pandoc.footnote.return(x$msg$messages))
         }
@@ -815,80 +815,76 @@ pander.mtable <- function(x, caption = attr(x, 'caption'),
   coefs <- x$coefficients
   summaries <- x$summaries
 
-  num.models <- length(coefs)
-
-  coef.dims <- lapply(coefs,dim)
-  coef.ldim <- sapply(coef.dims,length)
+  coef.dims <- lapply(coefs, dim)
+  coef.ldim <- sapply(coef.dims, length)
   max.coef.ldim <- max(coef.ldim)
 
-  coef.dims1 <- unique(sapply(coef.dims,"[[",1))
-  stopifnot(length(coef.dims1)==1)
+  coef.dims1 <- unique(sapply(coef.dims, '[[', 1))
+  stopifnot(length(coef.dims1) == 1)
 
   grp.coefs <- max.coef.ldim > 3
-  if(grp.coefs){
-    coef.dims4 <- sapply(coef.dims[coef.ldim>3],"[",4)
-    grp.coefs <- grp.coefs && any(coef.dims4>1)
+  if (grp.coefs){
+    coef.dims4 <- sapply(coef.dims[coef.ldim > 3], '[', 4)
+    grp.coefs <- grp.coefs && any(coef.dims4 > 1)
   }
 
   coef.names <- dimnames(coefs[[1]])[[3]]
 
   mtab <- character()
 
-  frmt1 <- function(name,coefs,summaries){
+  frmt1 <- function(name, coefs, summaries){
 
     coef.tab <- coefs
     dm <- dim(coefs)
-    if(length(dm)==3) dm <- c(dm,1)
+    if (length(dm) == 3) dm <- c(dm, 1)
     dim(coef.tab) <- dm
 
-    if(dm[1]>1){
-      coef.tab <- apply(coef.tab,2:4,paste,collapse="\\ \n")
-    }
-    else {
-      coef.tab <- apply(coef.tab,c(1,3:4),paste,collapse=" ")
+    if (dm[1] > 1){
+      coef.tab <- apply(coef.tab, 2:4, paste, collapse = '\\ \n')
+    } else {
+      coef.tab <- apply(coef.tab, c(1, 3:4), paste, collapse = ' ')
     }
 
     dim(coef.tab) <- dim(coef.tab)[-1]
 
-    if(grp.coefs){
+    if (grp.coefs){
       hdr <- character(ncol(coef.tab))
-      if(length(dim(coefs))>3){
-        if(dm[4]>1)
+      if (length(dim(coefs)) > 3){
+        if (dm[4] > 1)
           eq.names <- dimnames(coefs)[[4]]
         else
-          eq.names <- ""
-
-        ii <- seq(from=1,length=dm[4],by=dm[2])
+          eq.names <- ''
+        ii <- seq(from = 1, length = dm[4], by = dm[2])
         hdr[ii] <- eq.names
       }
-      coef.tab <- rbind(hdr,coef.tab)
+      coef.tab <- rbind(hdr, coef.tab)
     }
     hdr <- character(ncol(coef.tab))
     hdr[1] <- name
-    coef.tab <- rbind(hdr,coef.tab)
-    if(length(summaries)){
-      sum.tab <- matrix("",nrow=length(summaries),ncol=ncol(coef.tab))
-      sum.tab[,1] <- summaries
-      coef.tab <- rbind(coef.tab,sum.tab)
+    coef.tab <- rbind(hdr, coef.tab)
+    if (length(summaries)){
+      sum.tab <- matrix('', nrow = length(summaries), ncol = ncol(coef.tab))
+      sum.tab[, 1] <- summaries
+      coef.tab <- rbind(coef.tab, sum.tab)
     }
     coef.tab
   }
 
-  for(i in 1:length(coefs)){
-    mtab <- cbind(mtab,frmt1(names(coefs)[i],coefs[[i]],summaries[,i]))
+  for (i in 1:length(coefs)) {
+    mtab <- cbind(mtab, frmt1(names(coefs)[i], coefs[[i]], summaries[, i]))
   }
 
-  colnames(mtab) <- mtab[1,]
-  mtab <- mtab[-1,,drop=FALSE]
+  colnames(mtab) <- mtab[1, ]
+  mtab <- mtab[-1,, drop = FALSE] #nolint
 
   ldr <- coef.names
 
   hldr <- NULL
-  if(grp.coefs)
-    hldr <- c(hldr,"")
-  if(length(x$model.groups))
-    hldr <- c("",hldr)
-  ldr <- c(hldr,ldr,rownames(summaries))
+  if (grp.coefs)
+    hldr <- c(hldr, '')
+  if (length(x$model.groups))
+    hldr <- c('', hldr)
+  ldr <- c(hldr, ldr, rownames(summaries))
 
   rownames(mtab) <- ldr
 
@@ -1028,12 +1024,12 @@ pander.CrossTable <- function(x, caption = attr(x, 'caption'), digits = panderOp
     for (i in 1:nr) {
         res.r <- paste(pandoc.strong.return(nt[1 + or * (i - 1), 1]),
                        'N',
-                       paste(nt[ (2 + or * (i - 1)) : (i * or), 1],collapse = '\\ \n'),
+                       paste(nt[ (2 + or * (i - 1)) : (i * or), 1], collapse = '\\ \n'),
                    sep = '\\ \n')
         for (j in 2:nc) {
             res.r <- cbind(res.r,
                            paste('&nbsp;',
-                                 paste(nt[ (1 + or * (i - 1)) : (i * or),j], collapse = '\\  \n'),
+                                 paste(nt[ (1 + or * (i - 1)) : (i * or), j], collapse = '\\  \n'),
                                  sep = '\\ \n'))
         }
         res <- rbind(res, res.r)
@@ -1050,11 +1046,11 @@ pander.CrossTable <- function(x, caption = attr(x, 'caption'), digits = panderOp
         cln <- c(cln, 'Total')
     }
     if (ColData != '') {
-        cln.t <- paste(c('&nbsp;', ColData, rep('&nbsp;', nc - 2)), rep('\\\n', nc - 1), sep='')
-        cln <- paste(cln.t, cln, sep='')
+        cln.t <- paste(c('&nbsp;', ColData, rep('&nbsp;', nc - 2)), rep('\\\n', nc - 1), sep = '')
+        cln <- paste(cln.t, cln, sep = '')
     }
     colnames(res) <- cln
-    pandoc.table(res, caption = caption, keep.line.breaks = TRUE,...)
+    pandoc.table(res, caption = caption, keep.line.breaks = TRUE, ...)
 }
 
 
@@ -1704,8 +1700,8 @@ pander.summary.table <- function(x, caption = attr(x, 'caption'), print.call = T
     cat('Number of factors:', x$n.vars, '\n')
     if (x$n.vars > 1) {
         ch <- x$statistic
-        tdf <- data.frame('Chisq'=ch, 'df'=x$parameter, 'p-value'=x$p.value)
-        pandoc.table(tdf, caption=caption, ...)
+        tdf <- data.frame('Chisq' = ch, 'df' = x$parameter, 'p-value' = x$p.value)
+        pandoc.table(tdf, caption = caption, ...)
         if (!x$approx.ok) {
             cat('Chi-squared approximation may be incorrect\n')
         }
@@ -1892,7 +1888,7 @@ pander.nls <- function(x, digits = panderOptions('digits'), show.convergence = F
 #' @param se if to include standard error in coefficients table (default \code{TRUE})
 #' @param ... optional parameters passed to raw \code{pandoc.table} function
 #' @export
-pander.Arima <- function(x, digits = panderOptions('digits'), se = TRUE,...) {
+pander.Arima <- function(x, digits = panderOptions('digits'), se = TRUE, ...) {
     cat('\nCall:', pandoc.formula.return(x$call), '', sep = '\n')
     cn <- names(x$coef)
     coef <- matrix(x$coef, nrow = 1)
@@ -2007,7 +2003,7 @@ pander.ols <- function (x, long = FALSE, coefs = TRUE,
             correl[ll] <- format(round(correl[ll], digits = round), digits = digits, ...)
             correl[!ll] <- ''
             pandoc.table(correl[-1, - (p + 1), drop = FALSE],
-                         caption ='Correlation of Coefficients',
+                         caption = 'Correlation of Coefficients',
                          digits = digits,
                          round = round, ...)
         }
@@ -2029,12 +2025,12 @@ pander.summary.polr <- function(x, digits = panderOptions('digits'), round = pan
     }
     pc <- x$pc
     if (pc > 0) {
-        pander(x$coefficients[seq_len(pc), , drop = FALSE], caption = 'Coeficients',
+        pander(x$coefficients[seq_len(pc), , drop = FALSE], caption = 'Coeficients', #nolint
                digits = digits, round = round, keep.trailing.zeros = keep.trailing.zeros, ...)
     } else {
         cat('\nNo coefficients\n')
     }
-    pander(x$coefficients[ (pc + 1L):nrow(x$coefficients), , drop = FALSE], caption = 'Intercepts',
+    pander(x$coefficients[ (pc + 1L):nrow(x$coefficients), , drop = FALSE], caption = 'Intercepts', #nolint
           digits = digits, round = round, keep.trailing.zeros = keep.trailing.zeros, ...)
     cat('\nResidual Deviance:', format(x$deviance, nsmall = 2L), '\n\n')
     cat('AIC:', format(x$deviance + 2 * x$edf, nsmall = 2L), '\n\n')
@@ -2043,7 +2039,7 @@ pander.summary.polr <- function(x, digits = panderOptions('digits'), round = pan
     }
     if (!is.null(correl <- x$correlation)) {
         ll <- lower.tri(correl)
-        correl <- apply(correl, c(1,2),
+        correl <- apply(correl, c(1, 2),
                         p, wrap = '', digits = digits, round = round, keep.trailing.zeros = keep.trailing.zeros)
         correl[!ll] <- ''
         pander(correl[-1L, -ncol(correl)],
@@ -2092,7 +2088,7 @@ pander.summary.survreg <- function(x, summary = TRUE, digits = panderOptions('di
                 sep = '')
         }
         pandoc.table(coef, caption = 'Coefficients',
-                     digits = digits, round = round, keep.trailing.zeros = keep.trailing.zeros,...)
+                     digits = digits, round = round, keep.trailing.zeros = keep.trailing.zeros, ...)
 
     }
     if (nrow(x$var) == length(coef)) {
@@ -2105,10 +2101,10 @@ pander.summary.survreg <- function(x, summary = TRUE, digits = panderOptions('di
     nobs <- length(x$linear)
     chi <- 2 * diff(x$loglik)
     df <- sum(x$df) - x$idf
-    pandoc.table(data.frame('Loglik(model)'=x$loglik[2], 'Loglik(intercept only)'=x$loglik[1]), ...)
+    pandoc.table(data.frame('Loglik(model)' = x$loglik[2], 'Loglik(intercept only)' = x$loglik[1]), ...)
     if (df > 0) {
         cat('Chisq=', p(chi, wrap = ''), 'on', p(df, wrap = ''),
-            'degrees of freedom, p=',p(signif(1 - pchisq(chi, df), 2), wrap = ''), '\n\n')
+            'degrees of freedom, p=', p(signif(1 - pchisq(chi, df), 2), wrap = ''), '\n\n')
     } else {
         cat('\n')
     }
@@ -2116,7 +2112,7 @@ pander.summary.survreg <- function(x, summary = TRUE, digits = panderOptions('di
         if (x$robust) {
             cat('(Loglikelihood assumes independent observations)\n\n')
         }
-        cat('Number of Newton-Raphson Iterations:', p(trunc(x$iter), wrap =),'\n\n')
+        cat('Number of Newton-Raphson Iterations:', p(trunc(x$iter), wrap =), '\n\n') #nolint
     }
     omit <- x$na.action
     if (length(omit)) {
@@ -2129,7 +2125,7 @@ pander.summary.survreg <- function(x, summary = TRUE, digits = panderOptions('di
             p <- dim(correl)[2]
             if (p > 1) {
                 ll <- lower.tri(correl)
-                correl <- apply(correl, c(1,2),
+                correl <- apply(correl, c(1, 2),
                                 p, wrap = '', digits = digits, round = round, keep.trailing.zeros = keep.trailing.zeros)
                 correl[!ll] <- ''
                 pander(correl[-1L, -ncol(correl)],
@@ -2356,7 +2352,7 @@ pander.cph <- function (x, table = TRUE, conf.int = FALSE, coefs = TRUE, ...) {
                          exp(beta - zcrit * se),
                          exp(beta + zcrit * se))
             dimnames(tmp) <- list(names(beta),
-                                  c('exp(coef)','exp(-coef)',
+                                  c('exp(coef)', 'exp(-coef)',
                                     paste('lower ', p(conf.int, wrap = ''), sep = ''),
                                     paste('upper ', p(conf.int, wrap = ''), sep = '')))
             pandoc.table(tmp, caption = 'Confidence interval', ...)
@@ -2374,7 +2370,7 @@ pander.summary.rms <- function (x, ...) {
     for (i in 1:7) cstats <- cbind(cstats, signif(x[, i], 5))
     dimnames(cstats) <- list(rep('', nrow(cstats)), c('Factor', dimnames(x)[[2]][1:7]))
     pandoc.table(cstats, ...)
-    if ((A <- attr(x, 'adjust')) != '')
+    if ( (A <- attr(x, 'adjust')) != '')
         cat('\nAdjusted to:', A, '\n')
     blab <- switch(attr(x, 'conf.type'),
                    `bootstrap nonparametric percentile` = 'Bootstrap nonparametric percentile confidence intervals',
@@ -2393,25 +2389,25 @@ pander.summary.rms <- function (x, ...) {
 #' @param digits number of digits of precision
 #' @param ... optional parameters passed to raw \code{pandoc.table} function
 #' @export
-pander.ets <- function(x, digits = panderOptions('digits'),...) {
+pander.ets <- function(x, digits = panderOptions('digits'), ...) {
     cat('\nCall:', pandoc.formula.return(x$call), '', sep = '\n')
     cat('Type of ets: ', x$method, '\n', sep = '')
-    lambda<-x$lambda
+    lambda <- x$lambda
     isn <- names(x$initstate)
     initstate <- matrix(x$initstate, nrow = 1)
     colnames(initstate) <- isn
-    sp<-x$par["alpha"]
-    if (x$components[2] != "N"){
-        sp<-c(sp, x$par["beta"])
+    sp <- x$par['alpha']
+    if (x$components[2] != 'N'){
+        sp <- c(sp, x$par['beta'])
     }
-    if (x$components[3] != "N"){
-        sp<-c(sp, x$par["gamma"])
+    if (x$components[3] != 'N'){
+        sp <- c(sp, x$par['gamma'])
     }
-    if (x$components[4] != "FALSE"){
-        sp<-c(sp,x$par["phi"])
+    if (x$components[4] != 'FALSE'){
+        sp <- c(sp, x$par['phi'])
     }
     if (!is.null(lambda)){
-        cat("\nBox-Cox transformation: lambda =", round(lambda, panderOptions('digits')), "\n")
+        cat('\nBox-Cox transformation: lambda =', round(lambda, panderOptions('digits')), '\n')
     }
     pandoc.table(sp, caption = 'Smoothing parameters', digits = digits, ...)
     pandoc.table(initstate, caption = 'Initial states', digits = digits, ...)
