@@ -241,20 +241,22 @@ pander.table <- function(x, caption = attr(x, 'caption'), ...) {
 #' Pander method for data.table class
 #'
 #' Prints a data.table object in Pandoc's markdown. Data.tables drop attributes (like row names) when called. 
-#' @param x a data.frame object
+#' @param x a data.table object
 #' @param caption caption (string) to be shown under the table
+#' @param keys.as.row.names controls whether to use data.table key as row names when calling pandoc.table
 #' @param ... optional parameters passed to raw \code{pandoc.table} function
 #' @export
-pander.data.table <- function(x, caption = attr(x, 'caption'), ...) {
+pander.data.table <- function(x, caption = attr(x, 'caption'),keys.as.row.names = TRUE,  ...) {
 
     if (is.null(caption) & !is.null(storage$caption)) {
         caption <- get.caption()
     }
-    if(haskey(x)){
-
-        row.names.dt <- test[[key(test)[1]]]
-        x <- x[ ,!(colnames(x) %in% key(test)[1])]
-        setattr(x, "row.names", row.names.dt)
+    if(keys.as.row.names){
+        if(haskey(x)){
+            row.names.dt <- x[[key(x)[1]]]
+            x <- x[,setdiff(colnames(x), key(x)[1]), with=FALSE]
+            setattr(x, "row.names", row.names.dt)
+        }
     }
     pandoc.table(x, caption = caption, ...)
 
