@@ -680,13 +680,13 @@ test_that('pander.mtable behaves correctly', {
     berk1 <- glm(cbind(Admitted,Rejected)~Gender,data=berkeley,family='binomial')
     berk2 <- glm(cbind(Admitted,Rejected)~Gender + Dept,data=berkeley,family='binomial')
     pm <- pander_return(mtable(berk0, summary.stats=NULL), style='grid') # only one row
-    expect_equal(length(pm), 7)
+    expect_equal(length(pm), 9)
     # horizontal, produced an error before
     x <- memisc::mtable(berk0,berk1,berk2,
            coef.style='horizontal',
            summary.stats=c('Deviance','AIC','N'))
-    pm <- pander_return(x, style='grid')
-    expect_equal(length(pm), 33)
+    pm <- pander_return(x, style='grid',split.tables=Inf)
+    expect_equal(length(pm), 26)
     expect_true(all(sapply(colnames(x$coeficient), grepl, pm[4])))
 
     # more complex mtable
@@ -1082,4 +1082,17 @@ test_that('pander.cph', {
     expect_equal(length(res), 58)
     expect_true(any(grep('S ~ rcs\\(age, 4\\) \\+ sex', res)))
     expect_equal(length(grep('Table', res)), 3)
+})
+
+test_that('pander.ets works correctly', {
+  suppressMessages(require(forecast))
+  res<-pander_return(ets(lh, model="AAN", lambda=.5))
+  expect_equal(length(res), 27)
+  expect_true(any(grep('Box-Cox', res)))
+  res<-pander_return(ets(lh, model="ANN"))
+  expect_equal(length(res), 25)
+  expect_false(any(grep('Box-Cox', res)))
+  res<-pander_return(ets(lh, model="AAN", damped=TRUE))
+  expect_equal(length(res), 25)
+  expect_true(any(grep('phi', res)))
 })

@@ -801,47 +801,95 @@ pander.ftable <- function(x, ...)
 #' @param ... optional parameters passed to raw \code{pandoc.table} function
 #' @export
 #' @importFrom stats ftable
-pander.mtable <- function(x, caption = attr(x, 'caption'), ...) {
-    if (is.null(caption) & !is.null(storage$caption)) {
-        caption <- get.caption()
-    }
-    horizontal <- FALSE
-    coefs <- ftable(as.table(x$coefficients), row.vars = rev(x$as.row), col.vars = rev(x$as.col))
-    col.size <- ifelse(length(dimnames(x$coefficients)) > 3, length(dimnames(x$coefficients)[[4]]), 1)
-    row.size <- length(dimnames(x$coefficients)[[3]])
-    nrows.coefs <- nrow(coefs)
-    k <- nrows.coefs / row.size
-    if (k == 1) {
-        horizontal <- TRUE
-    }
+pander.mtable <- function(x, caption = attr(x, 'caption'),
+                          ...
+){
+  
+  if (is.null(caption) & !is.null(storage$caption)) {
+    caption <- get.caption()
+  }
+  
+  coefs <- x$coefficients
+  summaries <- x$summaries
+  
+  num.models <- length(coefs)
+  
+  coef.dims <- lapply(coefs,dim)
+  coef.ldim <- sapply(coef.dims,length)
+  max.coef.ldim <- max(coef.ldim)
+  
+  coef.dims1 <- unique(sapply(coef.dims,"[[",1))
+  stopifnot(length(coef.dims1)==1)
+  
+  grp.coefs <- max.coef.ldim > 3 
+  if(grp.coefs){
+    coef.dims4 <- sapply(coef.dims[coef.ldim>3],"[",4)
+    grp.coefs <- grp.coefs && any(coef.dims4>1)
+  }
+  
+  coef.names <- dimnames(coefs[[1]])[[3]]
 
-    zeros <- rep(0, (col.size) * (row.size))
-    temp <- matrix(zeros, ncol = (col.size))
-    temp <- as.table(temp)
-
-    if (horizontal) {
-        for (i in 1:row.size) {
-            s <- coefs[i, ]
-            tmp.row <- vector()
-            for (j in 1:col.size) {
-                tmp.row <- c(tmp.row, paste(s[2 * j - 1], s[2 * j], sep = '\\ \n'))
-            }
-            temp[i, ] <- tmp.row
-        }
-    } else {
-        for (i in 1:row.size) {
-            tmp.row <- vector()
-            s <- as.matrix(coefs[ (i * k - k + 1) : (i * k), ])
-            for (j in 1:col.size) {
-                tmp.row <- c(tmp.row, paste(s[,j], collapse = '\\ \n'))
-            }
-            temp[i, ] <- tmp.row
-        }
+  mtab <- character()
+  
+  frmt1 <- function(name,coefs,summaries){
+    
+    coef.tab <- coefs
+    dm <- dim(coefs)
+    if(length(dm)==3) dm <- c(dm,1)
+    dim(coef.tab) <- dm
+    
+    if(dm[1]>1){
+      coef.tab <- apply(coef.tab,2:4,paste,collapse="\\ \n")
     }
-    temp <- rbind(temp, x$summaries)
-    rownames(temp) <- c(dimnames(x$coefficients)[[3]], rownames(x$summaries))
-    colnames(temp) <- colnames(x$summaries)
-    pandoc.table(temp, caption = caption, keep.line.breaks = TRUE, ...)
+    else {
+      coef.tab <- apply(coef.tab,c(1,3:4),paste,collapse=" ")
+    }
+    
+    dim(coef.tab) <- dim(coef.tab)[-1]
+    
+    if(grp.coefs){
+      hdr <- character(ncol(coef.tab))
+      if(length(dim(coefs))>3){
+        if(dm[4]>1)
+          eq.names <- dimnames(coefs)[[4]]
+        else
+          eq.names <- ""
+        
+        ii <- seq(from=1,length=dm[4],by=dm[2])
+        hdr[ii] <- eq.names
+      }
+      coef.tab <- rbind(hdr,coef.tab)
+    }
+    hdr <- character(ncol(coef.tab))
+    hdr[1] <- name
+    coef.tab <- rbind(hdr,coef.tab)
+    if(length(summaries)){
+      sum.tab <- matrix("",nrow=length(summaries),ncol=ncol(coef.tab))
+      sum.tab[,1] <- summaries
+      coef.tab <- rbind(coef.tab,sum.tab)
+    }
+    coef.tab
+  }
+  
+  for(i in 1:length(coefs)){
+    mtab <- cbind(mtab,frmt1(names(coefs)[i],coefs[[i]],summaries[,i]))
+  }    
+  
+  colnames(mtab) <- mtab[1,]
+  mtab <- mtab[-1,,drop=FALSE]
+  
+  ldr <- coef.names
+  
+  hldr <- NULL
+  if(grp.coefs)
+    hldr <- c(hldr,"")
+  if(length(x$model.groups))
+    hldr <- c("",hldr)
+  ldr <- c(hldr,ldr,rownames(summaries))
+  
+  rownames(mtab) <- ldr
+  
+  pandoc.table(mtab, caption = caption, keep.line.breaks = TRUE, ...)
 }
 
 #' Pander method for CrossTable class
@@ -2335,4 +2383,41 @@ pander.summary.rms <- function (x, ...) {
     }
     cat('\n')
     invisible()
+}
+
+#' Prints an ets object from forecast package in Pandoc's markdown.
+#' @param x an ets object
+#' @param digits number of digits of precision
+#' @param ... optional parameters passed to raw \code{pandoc.table} function
+#' @export
+pander.ets <- function(x, digits = panderOptions('digits'),...) {
+    cat('\nCall:', pandoc.formula.return(x$call), '', sep = '\n')
+    cat('Type of ets: ', x$method, '\n', sep = '')
+    lambda<-x$lambda
+    isn <- names(x$initstate)
+    initstate <- matrix(x$initstate, nrow = 1)
+    colnames(initstate) <- isn
+    sp<-x$par["alpha"]
+    if (x$components[2] != "N"){
+        sp<-c(sp, x$par["beta"])
+    }
+    if (x$components[3] != "N"){
+        sp<-c(sp, x$par["gamma"])
+    }
+    if (x$components[4] != "FALSE"){
+        sp<-c(sp,x$par["phi"])
+    }
+    if (!is.null(lambda)){
+        cat("\nBox-Cox transformation: lambda =", round(lambda, panderOptions('digits')), "\n")
+    }
+    pandoc.table(sp, caption = 'Smoothing parameters', digits = digits, ...)
+    pandoc.table(initstate, caption = 'Initial states', digits = digits, ...)
+    cat('\nsigma^2 estimated as', format(x$sigma2, digits = digits))
+    if (!is.null(x$loglik)){
+        cat(': log likelihood = ', format(round(x$loglik, 2)))
+    }
+    if (!is.null(x$aic)){
+        cat(', aic = ', format(round(x$aic, 2)), '\n', sep = '')
+    }
+    invisible(x)
 }
