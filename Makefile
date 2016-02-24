@@ -5,7 +5,7 @@ PKGSRC  := $(shell basename `pwd`)
 
 build:
 	cd ..;\
-	R CMD build $(PKGSRC)
+	R CMD build --no-build-vignettes $(PKGSRC)
 
 install: build
 	cd ..;\
