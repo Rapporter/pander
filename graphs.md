@@ -122,15 +122,17 @@ I have no idea how to do that besides `par(mfrow=c(foo, bar))`.
 
 ### Base R plot
 
-![](./plots/graphs-17.png) **WARNING**^[Applying default formatting to image is somehow compromised (the result could differ from what you specified in `panderOptions`). Hints: printing `lattice`/`ggplot2` is not needed and tweaking `base` plots with `par` might have some side-effects!]
+ **ERROR**^[<text>:1:1: unexpected '/'
+1: /
+    ^]
 
 ### lattice
 
-![](./plots/graphs-18.png)
+![](./plots/graphs-17.png)
 
 ### ggplot2
 
-![](./plots/graphs-19.png)
+![](./plots/graphs-18.png)
 
 # Custom options
 
@@ -153,51 +155,53 @@ panderOptions('graph.symbol', 22)
 
 ### Base R plot
 
-![](./plots/graphs-20.png)
+![](./plots/graphs-19.png)
 
 ### lattice
 
-![](./plots/graphs-21.png)
+![](./plots/graphs-20.png)
 
 ### ggplot2
 
-![](./plots/graphs-22.png)
+![](./plots/graphs-21.png)
 
 ## Barplot
 
 ### Base R plot
 
-![](./plots/graphs-23.png)
+![](./plots/graphs-22.png)
 
 Yeah, the "Foo bar" label is cropped. We need a custom `mar` option here:
 
-![](./plots/graphs-24.png)
+![](./plots/graphs-23.png)
 
 But wait, we lost the color! Right: unfortunately coloring base R plots is really hackish, `pander` is adding the `col` attribute to the calls. If you start to tweak `par` in a chunk, you should prepare to some unwanted side-effects. Solution:
 
-![](./plots/graphs-25.png)
+![](./plots/graphs-24.png)
 
 ### lattice
 
-![](./plots/graphs-26.png)
+![](./plots/graphs-25.png)
 
 ### ggplot2
 
-![](./plots/graphs-27.png)
+![](./plots/graphs-26.png)
 
 ## Points
 
 ### Base R plot
 
-![](./plots/graphs-28.png)
+ **ERROR**^[<text>:1:1: unexpected '/'
+1: /
+    ^]
 
 ### lattice
 
-![](./plots/graphs-29.png)
+![](./plots/graphs-27.png)
 
 ### ggplot2
 
-![](./plots/graphs-30.png)
+![](./plots/graphs-28.png)
 
 ## Grouped plot
 
@@ -207,11 +211,11 @@ I have no idea how to do that besides manually adding `points`.
 
 ### lattice
 
-![](./plots/graphs-31.png)
+![](./plots/graphs-29.png)
 
 ### ggplot2
 
-![](./plots/graphs-32.png)
+![](./plots/graphs-30.png)
 
 ## Facets
 
@@ -221,17 +225,33 @@ I have no idea how to do that besides `par(mfrow=c(foo, bar))`.
 
 ### lattice
 
-![](./plots/graphs-33.png)
+![](./plots/graphs-31.png)
 
 ### ggplot2
 
-![](./plots/graphs-34.png)
+![](./plots/graphs-32.png)
 
 ## Boxplot
 
 ### Base R plot
 
+![](./plots/graphs-33.png)
+
+### lattice
+
+![](./plots/graphs-34.png)
+
+### ggplot2
+
 ![](./plots/graphs-35.png)
+
+## Lines
+
+### Base R plot
+
+ **ERROR**^[<text>:1:1: unexpected '/'
+1: /
+    ^]
 
 ### lattice
 
@@ -240,19 +260,5 @@ I have no idea how to do that besides `par(mfrow=c(foo, bar))`.
 ### ggplot2
 
 ![](./plots/graphs-37.png)
-
-## Lines
-
-### Base R plot
-
-![](./plots/graphs-38.png)
-
-### lattice
-
-![](./plots/graphs-39.png)
-
-### ggplot2
-
-![](./plots/graphs-40.png)
 
  

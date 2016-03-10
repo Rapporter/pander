@@ -1,6 +1,6 @@
 % Gergely Daróczi
 % Looong report
-% Mon Dec  7 06:08:02 2015
+% Thu Mar 10 22:54:36 2016
 
 I have written the below report in 10 mins :)
 
@@ -541,9 +541,9 @@ A simple linear model: `mtcars$wt ~ mtcars$mpg`
 --------------------------------------------------------------
      &nbsp;        Estimate   Std. Error   t value   Pr(>|t|) 
 ----------------- ---------- ------------ --------- ----------
- **Independent**   -0.1409     0.01474     -9.559   1.294e-10 
-
  **(Intercept)**    6.047       0.3087      19.59   1.204e-18 
+
+ **Independent**   -0.1409     0.01474     -9.559   1.294e-10 
 --------------------------------------------------------------
 
 Table: Fitting linear model: mtcars$wt ~ Independent
@@ -555,9 +555,9 @@ A simple linear model: `mtcars$wt ~ mtcars$cyl`
 --------------------------------------------------------------
      &nbsp;        Estimate   Std. Error   t value   Pr(>|t|) 
 ----------------- ---------- ------------ --------- ----------
- **Independent**    0.4287     0.06228      6.883   1.218e-07 
-
  **(Intercept)**    0.5646      0.4006      1.409     0.169   
+
+ **Independent**    0.4287     0.06228      6.883   1.218e-07 
 --------------------------------------------------------------
 
 Table: Fitting linear model: mtcars$wt ~ Independent
@@ -569,9 +569,9 @@ A simple linear model: `mtcars$wt ~ mtcars$disp`
 --------------------------------------------------------------
      &nbsp;        Estimate   Std. Error   t value   Pr(>|t|) 
 ----------------- ---------- ------------ --------- ----------
- **Independent**   0.00701    0.0006629     10.58   1.222e-11 
-
  **(Intercept)**     1.6        0.173       9.248   2.738e-10 
+
+ **Independent**   0.00701    0.0006629     10.58   1.222e-11 
 --------------------------------------------------------------
 
 Table: Fitting linear model: mtcars$wt ~ Independent
@@ -583,9 +583,9 @@ A simple linear model: `mtcars$wt ~ mtcars$hp`
 --------------------------------------------------------------
      &nbsp;        Estimate   Std. Error   t value   Pr(>|t|) 
 ----------------- ---------- ------------ --------- ----------
- **Independent**   0.009401    0.00196      4.796   4.146e-05 
-
  **(Intercept)**    1.838       0.3165      5.808   2.389e-06 
+
+ **Independent**   0.009401    0.00196      4.796   4.146e-05 
 --------------------------------------------------------------
 
 Table: Fitting linear model: mtcars$wt ~ Independent
@@ -597,9 +597,9 @@ A simple linear model: `mtcars$wt ~ mtcars$drat`
 --------------------------------------------------------------
      &nbsp;        Estimate   Std. Error   t value   Pr(>|t|) 
 ----------------- ---------- ------------ --------- ----------
- **Independent**    -1.304      0.2345     -5.561   4.784e-06 
-
  **(Intercept)**    7.906       0.8522      9.277   2.547e-10 
+
+ **Independent**    -1.304      0.2345     -5.561   4.784e-06 
 --------------------------------------------------------------
 
 Table: Fitting linear model: mtcars$wt ~ Independent
@@ -611,9 +611,9 @@ A simple linear model: `mtcars$wt ~ mtcars$qsec`
 --------------------------------------------------------------
      &nbsp;        Estimate   Std. Error   t value   Pr(>|t|) 
 ----------------- ---------- ------------ --------- ----------
- **Independent**   -0.09567    0.09843     -0.9719    0.3389  
-
  **(Intercept)**    4.925       1.765       2.79     0.009081 
+
+ **Independent**   -0.09567    0.09843     -0.9719    0.3389  
 --------------------------------------------------------------
 
 Table: Fitting linear model: mtcars$wt ~ Independent
@@ -625,9 +625,9 @@ A simple linear model: `mtcars$wt ~ mtcars$vs`
 --------------------------------------------------------------
      &nbsp;        Estimate   Std. Error   t value   Pr(>|t|) 
 ----------------- ---------- ------------ --------- ----------
- **Independent**    -1.077      0.2949     -3.654   0.0009798 
-
  **(Intercept)**    3.689       0.195       18.91   3.203e-18 
+
+ **Independent**    -1.077      0.2949     -3.654   0.0009798 
 --------------------------------------------------------------
 
 Table: Fitting linear model: mtcars$wt ~ Independent
@@ -639,9 +639,9 @@ A simple linear model: `mtcars$wt ~ mtcars$am`
 --------------------------------------------------------------
      &nbsp;        Estimate   Std. Error   t value   Pr(>|t|) 
 ----------------- ---------- ------------ --------- ----------
- **Independent**    -1.358      0.2583     -5.258   1.125e-05 
-
  **(Intercept)**    3.769       0.1646      22.89    1.49e-20 
+
+ **Independent**    -1.358      0.2583     -5.258   1.125e-05 
 --------------------------------------------------------------
 
 Table: Fitting linear model: mtcars$wt ~ Independent
@@ -653,9 +653,9 @@ A simple linear model: `mtcars$wt ~ mtcars$gear`
 --------------------------------------------------------------
      &nbsp;        Estimate   Std. Error   t value   Pr(>|t|) 
 ----------------- ---------- ------------ --------- ----------
- **Independent**   -0.7735      0.1967     -3.933   0.0004587 
-
  **(Intercept)**     6.07       0.7392      8.212   3.632e-09 
+
+ **Independent**   -0.7735      0.1967     -3.933   0.0004587 
 --------------------------------------------------------------
 
 Table: Fitting linear model: mtcars$wt ~ Independent
@@ -667,9 +667,9 @@ A simple linear model: `mtcars$wt ~ mtcars$carb`
 --------------------------------------------------------------
      &nbsp;        Estimate   Std. Error   t value   Pr(>|t|) 
 ----------------- ---------- ------------ --------- ----------
- **Independent**    0.259      0.09998      2.591    0.01464  
-
  **(Intercept)**    2.489       0.323       7.705   1.353e-08 
+
+ **Independent**    0.259      0.09998      2.591    0.01464  
 --------------------------------------------------------------
 
 Table: Fitting linear model: mtcars$wt ~ Independent
