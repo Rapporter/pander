@@ -132,7 +132,7 @@ Please note that all below features are also supported by the more concise `pand
 
 ## Formats
 
-All [four Pandoc formats](http://johnmacfarlane.net/pandoc/README.html#tables) are supported by *pander*. From those (*multiline*, *simple*, *grid*, *pipe/rmarkdown*), I'd suggest sticking to the default `multiline` format with the most features, except when using `rmarkdown` v1.0 or jupyter notebook, where `multiline` is not supported (for this end the default table format is `rmarkdown` when `pander` is called inside of a jupyter notebook). Please see a few examples below
+All [four Pandoc formats](http://johnmacfarlane.net/pandoc/README.html#tables) are supported by *pander*. From those (*multiline*, *simple*, *grid*, *pipe/rmarkdown*), I'd suggest sticking to the default `multiline` format with the most features, except when using `rmarkdown` v1.0 or jupyter notebook, where `multiline` is not supported (for this end the default table format is `rmarkdown` when `pander` is called inside of a jupyter notebook). Please see a few examples below:
 
 <a id="multiline-table"></a>
 
@@ -564,23 +564,23 @@ A nested list can be seen above with a table and all (optional) list names. As a
 
   * **residuals**:
 
-    --------------------------------------------------
-    &nbsp;    3            4                 5
-    ------- ------ ----------------- -----------------
-     **0**  2.042  -1.17073226447712 -1.72300609401128
+    ----------------------------
+    &nbsp;    3      4      5
+    ------- ------ ------ ------
+     **0**  2.042  -1.171 -1.723
 
-     **1**  -2.469 1.41534629268074  2.08301279585419
-    --------------------------------------------------
+     **1**  -2.469 1.415  2.083
+    ----------------------------
 
   * **stdres**:
 
-    -------------------------------------------------
-    &nbsp;    3            4                5
-    ------- ------ ----------------- ----------------
-     **0**  4.395  -2.32338345119108 -2.9429523715087
+    ----------------------------
+    &nbsp;    3      4      5
+    ------- ------ ------ ------
+     **0**  4.395  -2.323 -2.943
 
-     **1**  -4.395 2.32338345119108  2.9429523715087
-    -------------------------------------------------
+     **1**  -4.395 2.323  2.943
+    ----------------------------
 
 <!-- end of list -->
 
@@ -627,6 +627,8 @@ Table: Welch Two Sample t-test: `extra` by `group`
 --------------------------------------------------------------
      &nbsp;        Estimate   Std. Error   z value   Pr(>|z|) 
 ----------------- ---------- ------------ --------- ----------
+ **(Intercept)**    3.045       0.1709      17.81   5.427e-71 
+
   **outcome2**     -0.4543      0.2022     -2.247    0.02465  
 
   **outcome3**      -0.293      0.1927      -1.52     0.1285  
@@ -634,8 +636,6 @@ Table: Welch Two Sample t-test: `extra` by `group`
  **treatment2**   1.338e-15      0.2      6.69e-15      1     
 
  **treatment3**   1.421e-15      0.2      7.105e-15     1     
-
- **(Intercept)**    3.045       0.1709      17.81   5.427e-71 
 --------------------------------------------------------------
 
 Table: Fitting generalized (poisson/log) linear model: counts ~ outcome + treatment

@@ -25,9 +25,11 @@ str(Pandoc.brew(text ='
 + '))
 
 ## ------------------------------------------------------------------------
+pots <- panderOptions("table.style")
 panderOptions("table.style", "simple")
 pander(mtcars[1:3, 1:4])
 pander(head(iris))
 panderOptions("table.style", "grid")
 pander(head(iris))
+panderOptions("table.style", pots)
 
