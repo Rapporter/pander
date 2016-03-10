@@ -921,6 +921,7 @@ test_that('pander.manova/summary.manova works correctly', {
 
 test_that('pander.gtable works correctly', {
     suppressMessages(require(gtable))
+    suppressMessages(require(grid))
     a <- gtable(unit(1:3, c('cm')), unit(5, 'cm'))
     rect <- rectGrob(gp = gpar(fill = 'black'))
     a <- gtable_add_grob(a, rect, 1, 1)
