@@ -1,6 +1,4 @@
 language: r
-cache: packages
-sudo: false
 env:
   matrix:
   - LINTR_COMMENT_BOT=true
