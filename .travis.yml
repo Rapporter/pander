@@ -9,6 +9,8 @@ env:
 r_binary_packages:
 - Rcpp
 - testthat
+r_packages:
+- nlme
 r_github_packages:
 - jimhester/covr
 - jimhester/lintr
