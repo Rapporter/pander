@@ -15,19 +15,19 @@ git checkout master
 CHANGED_FILES=`git show --stat $TRAVIS_COMMIT`
 echo -e "\nChanged files:\n\n$CHANGED_FILES\n\n"
 # check if vignettes were updated
-# if [[ $CHANGED_FILES =~ .*vignettes.*\.Rmd.* ]]
-# then
+if [[ $CHANGED_FILES =~ .*vignettes.*\.Rmd.* ]]
+then
   echo "Updating vignettes..."
   R -e 'devtools::install_github("rstudio/rmarkdown"); devtools::build_vignettes()'
   git add inst/doc
-# fi
+fi
 # check if readme was update
-# if [[ $CHANGED_FILES =~ .*README\.brew.* ]]
-# then
+if [[ $CHANGED_FILES =~ .*README\.brew.* ]]
+then
   echo "Updating README..."
   R -f ../.brewer.R
   git add README.md
-# fi
+fi
 git commit -m "Update by travis after $TRAVIS_COMMIT"
 git push origin master
 cd ../
@@ -48,10 +48,10 @@ for files in '../inst/doc/*.html'; do
         cp $files .
 done
 
-# if [[ $CHANGED_FILES =~ .*\.brew.* ]]
-# then
+if [[ $CHANGED_FILES =~ .*\.brew.* ]]
+then
   R -f ../.brewer.R
-# fi
+fi
 
 git add .
 git reset README.md
