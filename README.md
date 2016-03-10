@@ -132,11 +132,11 @@ Please note that all below features are also supported by the more concise `pand
 
 ## Formats
 
-All [four Pandoc formats](http://johnmacfarlane.net/pandoc/README.html#tables) are supported by *pander*. From those (*multiline*, *simple*, *grid*, *pipe/rmarkdown*), I'd suggest sticking to the default `multiline` format with the most features, although `rmarkdown` v1.0 fanatics might better like the `pipe` table format. Please see a few examples below:
+All [four Pandoc formats](http://johnmacfarlane.net/pandoc/README.html#tables) are supported by *pander*. From those (*multiline*, *simple*, *grid*, *pipe/rmarkdown*), I'd suggest sticking to the default `multiline` format with the most features, except when using `rmarkdown` v1.0 or jupyter notebook, where `multiline` is not supported (for this end the default table format is `rmarkdown` when `pander` is called inside of a jupyter notebook). Please see a few examples below
 
 <a id="multiline-table"></a>
 
-The default style is the [`multiline` format](http://johnmacfarlane.net/pandoc/README.html#multiline-tables) as most features (e.g. multi-line cells and alignment) are supported:
+The default style is the [`multiline` format](http://johnmacfarlane.net/pandoc/README.html#multiline-tables) (except for calling `pander` inside of a of a jupyter notebook) as most features (e.g. multi-line cells and alignment) are supported:
 
 ```rout
 > m <- mtcars[1:2, 1:3]

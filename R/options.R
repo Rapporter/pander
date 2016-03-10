@@ -12,7 +12,11 @@
                 'date'                     = '%Y/%m/%d %X',
                 'header.style'             = 'atx',
                 'list.style'               = 'bullet',
-                'table.style'              = 'multiline',
+                'table.style'              = ifelse(
+                    getOption('jupyter.in_kernel', FALSE),
+                    ## The jupyter notebook does not understand the multiline table format
+                    'rmarkdown',
+                    'multiline'),
                 'table.emphasize.rownames' = TRUE,
                 'table.split.table'        = 80,
                 'table.split.cells'        = 30,
