@@ -5,8 +5,8 @@ env:
   global:
   - secure: Z6B4cfVy35zX71imDZbJe2RIG5s0CoU5Vkezgnb3HkrvlNLiRvjqimlDCEnltwlcLoNgUqaBsaxGB7bum5+hn/TUYnvvVsAA8xaMQgH6P2Rfa9zU0lko/7DfvUluuhHRrFRaNca2Gj/cf0Mbce90W2q8MtxP5bpPuVSqd6GbWYI=
 before_install:
-  - sudo add-apt-repository ppa:edd/misc
-  - sudo apt-get update -q
+  - sudo add-apt-repository ppa:edd/misc -y
+  - sudo apt-get update -q -y
   - sudo apt-get install libpcre3-dev -y
 r_binary_packages:
 - Rcpp
