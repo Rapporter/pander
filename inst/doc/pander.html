@@ -183,9 +183,9 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <p>As <code>pander</code> package was originally developed in conjunction with <a href="https://github.com/Rapporter/rapport">rapport</a> package, there was a needed for functionality that can evaluate <code>R</code> expression along with capturing errors and warnings. So <code>evals</code> emerged and soon some further feature requests arose, like identifying if an R expression results in a plot etc.</p>
 <p>But probably it’s easier to explain what <code>evals</code> can do with a simple example:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">evals</span>(<span class="st">'1:10'</span>)
-<span class="co">#&gt; INFO [2016-03-10 23:11:13] Command run: 1:10</span>
-<span class="co">#&gt; TRACE [2016-03-10 23:11:13] Cached result</span>
-<span class="co">#&gt; DEBUG [2016-03-10 23:11:13] Returned object: class = integer, length = 10, dim = , size = 88 bytes</span>
+<span class="co">#&gt; INFO [2016-03-10 23:17:38] Command run: 1:10</span>
+<span class="co">#&gt; TRACE [2016-03-10 23:17:38] Cached result</span>
+<span class="co">#&gt; DEBUG [2016-03-10 23:17:38] Returned object: class = integer, length = 10, dim = , size = 88 bytes</span>
 <span class="co">#&gt; [[1]]</span>
 <span class="co">#&gt; $src</span>
 <span class="co">#&gt; [1] &quot;1:10&quot;</span>
@@ -252,14 +252,14 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <span class="st">+   `&lt;%= runif(10) %&gt;`</span>
 <span class="st">+ '</span>))
 <span class="co">#&gt; </span>
-<span class="co">#&gt; +   Pi equals to `INFO [2016-03-10 23:11:13] Command run: pi</span>
-<span class="co">#&gt; TRACE [2016-03-10 23:11:13] Cached result</span>
-<span class="co">#&gt; DEBUG [2016-03-10 23:11:13] Returned object: class = numeric, length = 1, dim = , size = 48 bytes</span>
+<span class="co">#&gt; +   Pi equals to `INFO [2016-03-10 23:17:38] Command run: pi</span>
+<span class="co">#&gt; TRACE [2016-03-10 23:17:38] Cached result</span>
+<span class="co">#&gt; DEBUG [2016-03-10 23:17:38] Returned object: class = numeric, length = 1, dim = , size = 48 bytes</span>
 <span class="co">#&gt; _3.142_`.</span>
 <span class="co">#&gt; +   And here are some random data:</span>
-<span class="co">#&gt; +   `INFO [2016-03-10 23:11:13] Command run: runif(10)</span>
-<span class="co">#&gt; TRACE [2016-03-10 23:11:13] Cached result</span>
-<span class="co">#&gt; DEBUG [2016-03-10 23:11:13] Returned object: class = numeric, length = 10, dim = , size = 168 bytes</span>
+<span class="co">#&gt; +   `INFO [2016-03-10 23:17:38] Command run: runif(10)</span>
+<span class="co">#&gt; TRACE [2016-03-10 23:17:38] Cached result</span>
+<span class="co">#&gt; DEBUG [2016-03-10 23:17:38] Returned object: class = numeric, length = 10, dim = , size = 168 bytes</span>
 <span class="co">#&gt; _0.6509_, _0.258_, _0.4785_, _0.7663_, _0.08425_, _0.8753_, _0.3391_, _0.8394_, _0.3467_ and _0.3338_`</span>
 <span class="co">#&gt; +  </span>
 <span class="co">#&gt; List of 1</span>
