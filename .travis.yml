@@ -1,12 +1,11 @@
 language: r
+cache: packages
+sudo: false
 env:
   matrix:
   - LINTR_COMMENT_BOT=true
   global:
   - secure: Z6B4cfVy35zX71imDZbJe2RIG5s0CoU5Vkezgnb3HkrvlNLiRvjqimlDCEnltwlcLoNgUqaBsaxGB7bum5+hn/TUYnvvVsAA8xaMQgH6P2Rfa9zU0lko/7DfvUluuhHRrFRaNca2Gj/cf0Mbce90W2q8MtxP5bpPuVSqd6GbWYI=
-apt_packages:
-- r-base
-- r-base-dev
 r_binary_packages:
 - Rcpp
 - testthat
