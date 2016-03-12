@@ -45,7 +45,7 @@ Not all the information might be useful, so `evals` makes it is possible to capt
 evals('1:10', output = c('result', 'output'))
 ```
 
-One of the neat features of `evals` that it catches errors/warnings without interrupting the evaluation and saves them. 
+One of the neat features of `evals` that it catches errors/warnings without interrupting the evaluation and saves them.
 ```{r}
 evals('x')[[1]]$msg
 evals('as.numeric("1.1a")')[[1]]$msg
@@ -60,7 +60,7 @@ As mentioned before, `evals` capture the output to graphical devices and saves i
 evals('plot(mtcars)')[[1]]$result
 ```
 
-![](https://raw.githubusercontent.com/Rapporter/pander/gh-pages/plots/evals-mtcars.jpeg)
+![](http://rapporter.github.io/pander/plots/evals-mtcars.jpeg)
 
 You can specify output directory using `graph.dir` parameter and output type using `graph.output` parameter. Currently it could be any of grDevices: png, bmp, jpeg, jpg, tiff, svg or pdf.
 
@@ -76,7 +76,7 @@ Moreover, `evals` provides facilities to:
 
 ### Style unification
 
-`evals` provides a very powerful facilities to unify with styling each of your images produced by different packages like `ggplot2` or `lattice`. 
+`evals` provides a very powerful facilities to unify with styling each of your images produced by different packages like `ggplot2` or `lattice`.
 
 Let's prepare the data for plotting first:
 
@@ -104,8 +104,8 @@ evals('ggplot(df) + geom_histogram(aes(x = hp), binwidth = 50) + ggtitle("Histog
 evalsOptions('graph.unify', FALSE)
 ```
 
-![](https://raw.githubusercontent.com/Rapporter/pander/gh-pages/plots/evals-lattice.jpeg)
-![](https://raw.githubusercontent.com/Rapporter/pander/gh-pages/plots/evals-ggplot2.jpeg)
+![](http://rapporter.github.io/pander/plots/evals-lattice.jpeg)
+![](http://rapporter.github.io/pander/plots/evals-ggplot2.jpeg)
 
 Options for unification can be set with `panderOptions`, for example:
 
@@ -214,7 +214,7 @@ x <- 1
 res <- evals('x <- 1:10;')
 ```
 
-`x <- 1:10` will be cached, so if the same assignment occurs again we won't need to evaluate it. But what about the change of `x` when we get the result from the cache? `evals` takes care of that. 
+`x <- 1:10` will be cached, so if the same assignment occurs again we won't need to evaluate it. But what about the change of `x` when we get the result from the cache? `evals` takes care of that.
 
 So in the following example we can see that `x <- 1:10` is not evaluated, but retrieved from cache with the the change to `x` in the environment.
 
