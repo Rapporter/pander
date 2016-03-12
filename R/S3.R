@@ -102,11 +102,14 @@ pander <- function(x = NULL, ...) {
                 stdout <- c(stdout, '')
             }
 
+            ## collapse character vector into a string
+            stdout <- paste(stdout, collapse = '\n')
+
             ## return string for Jupyter and "asis" output for knitr
             if (isTRUE(getOption('jupyter.in_kernel'))) {
-                return(stdout)
+                return(structure(stdout, class = 'pander_output'))
             } else {
-                return(knitr::asis_output(paste(stdout, collapse = '\n')))
+                return(knitr::asis_output(stdout))
             }
 
         })
