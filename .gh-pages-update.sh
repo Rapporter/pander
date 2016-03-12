@@ -17,6 +17,7 @@ CHANGED_FILES=`git show --stat $TRAVIS_COMMIT`
 if [[ $CHANGED_FILES =~ .*vignettes.*\.Rmd.* ]]
 then
   R -e 'devtools::install_github("rstudio/rmarkdown"); devtools::build_vignettes()'
+  rm -f inst/doc/*.R
   git add inst/doc
 fi
 # check if readme was update
