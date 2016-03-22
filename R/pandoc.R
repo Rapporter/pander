@@ -1105,7 +1105,7 @@ pandoc.table.return <- function(t, caption, digits = panderOptions('digits'), de
         t.colnames <- split.large.cells(t.colnames)
         t.colnames.width <- sapply(t.colnames,
                                    function(x) max(nchar(strsplit(x, '\n')[[1]], type = 'width'), 0),
-                                   USE.NAMES = FALSE) + 2
+                                   USE.NAMES = FALSE)
     } else {
         t.colnames.width <- 0
     }
@@ -1145,7 +1145,7 @@ pandoc.table.return <- function(t, caption, digits = panderOptions('digits'), de
             t.colnames <- c('&nbsp;', t.colnames)
         }
         t.width <- c(max(sapply(strsplit(t.rownames, '\n'), function(x) max(nchar(x, type = 'width'), 0))), t.width)
-        t.width[1] <- t.width[1] + 2
+        t.width[1] <- t.width[1]
 
         ## if we have a non-breaking space in the header
         if (!is.null(t.colnames)) {
@@ -1185,6 +1185,11 @@ pandoc.table.return <- function(t, caption, digits = panderOptions('digits'), de
                                  'grid'=, 'rmarkdown' = 3,
                                  'multiline' = ,'simple' = 0)
 
+    ## add extra 2 spaces for alignment
+    if (style %in% c('simple', 'multiline')) {
+        t.width <- t.width + 2
+    }
+
     ## +1 for the middle separator
     if (sum(t.width + extra.spaces.width) + 1 > split.tables
         & length(t.width) > 1 + (length(t.rownames) != 0)) {
@@ -1222,7 +1227,6 @@ pandoc.table.return <- function(t, caption, digits = panderOptions('digits'), de
         ## #########################################################################
         ## define markdown dialects
         ## #########################################################################
-
 
         switch(style,
                'grid'      = {
