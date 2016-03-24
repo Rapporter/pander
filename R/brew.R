@@ -282,7 +282,7 @@ DELIM[[BRCATCODE]] <- c('<%=', '%>')
                 line <- paste(spl[-1], collapse = '%>')
 
                 n <- nchar(spl[1])
-                # test  for '-' immediately preceding %> will strip trailing newline from line
+                ## test  for '-' immediately preceding %> will strip trailing newline from line
                 if (n > 0) {
                     if (substr(spl[1], n, n) == '-') {
                         line <- substr(line, 1, nchar(line) - 1)
@@ -292,8 +292,8 @@ DELIM[[BRCATCODE]] <- c('<%=', '%>')
                     textLen <- textLen + 1
                 }
 
-                # We've found the end of a brew section, but we only care if the
-                # section is a BRCODE or BRCATCODE. We just implicitly drop BRCOMMENT sections
+                ## We've found the end of a brew section, but we only care if the
+                ## section is a BRCODE or BRCATCODE. We just implicitly drop BRCOMMENT sections
                 if (state == BRCODE){
                     code[codeLen + 1] <- paste(text[textStart:textLen], collapse = '')
                     codeLen <- codeLen + 1

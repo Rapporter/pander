@@ -91,12 +91,12 @@ pander <- function(x = NULL, ...) {
                 panderOptions('knitr.auto.asis', kaao)
             }
 
-            # revert R output back to normal
+            ## revert R output back to normal
             sink()
             sink(type = 'message')
             close(con)
 
-            # re-add the final line-break
+            ## restore the final line break
             if (tail(stdout, 1) == '') {
                 stdout <- c(stdout, '')
             }
@@ -1010,7 +1010,7 @@ pander.CrossTable <- function(x, caption = attr(x, 'caption'), digits = panderOp
     len <- dim(nt)[1]
     rownames(nt) <- as.character(1:len)
 
-    # merging and print
+    ## merging and print
     ts <- ifelse(!is.na(x$prop.col[1]), 2, 1)
     or <- (nrow(nt) - ts) / nr
     nt.nr <- nrow(nt)
@@ -1658,7 +1658,7 @@ pander.tabular <- function(x, caption = attr(x, 'caption'),
     clabels <- attr(x, 'colLabels')
     clabels[is.na(clabels)] <- ''
     if (!is.null(colnames(rlabels))) {
-        # needed for case of more complex tabular structure (see examples)
+        ## needed for case of more complex tabular structure (see examples)
         cl <- colnames(rlabels)
         data <- cbind(rlabels, data)
         clabels <- cbind(rbind(matrix('',

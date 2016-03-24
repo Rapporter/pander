@@ -17,14 +17,14 @@ openFileInOS <- function(f) {
     }
 
     if (grepl('w|W', .Platform$OS.type)) {
-        # we are on Windows
+        ## we are on Windows
         shell.exec(f) #nolint
     } else {
         if (grepl('darwin', version$os)) {
-            # Mac
+            ## Mac
             system(paste(shQuote('open'), shQuote(f)), wait = FALSE, ignore.stderr = TRUE)
         } else {
-            # Linux
+            ## Linux
             system(paste(shQuote('/usr/bin/xdg-open'), shQuote(f)), #nolint
                    wait = FALSE,
                    ignore.stdout = TRUE)
@@ -94,24 +94,24 @@ Pandoc.convert <- function(f, text, format = 'html', open = TRUE, options = '',
     ## force UTF-8 encoding #nolint
     ## if (!grepl('utf', Sys.getlocale())) { #nolint
 
-        # convert content to UTF-8
+        ## convert content to UTF-8
         text <- iconv(readLines(f, warn = FALSE), from = '', to = 'UTF-8')
 
-        # do not touch original input file
+        ## do not touch original input file
         if (!missing(f)) {
             f <- tempfile()
-            # remove tempfile if not needed any more
+            ## remove tempfile if not needed any more
             on.exit(unlink(f))
         }
 
-        # write content with UTF-8 encoding
+        ## write content with UTF-8 encoding
         con <- file(f, 'w', encoding = 'UTF-8')
         cat(text, file = con, sep = '\n')
         close(con)
 
     ## } #nolint
 
-    # add nifty HTML/CSS/JS components
+    ## add nifty HTML/CSS/JS components
     if (format == 'html') {
 
         if (options == '') {
