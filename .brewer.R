@@ -13,6 +13,7 @@ Pandoc.brew('../inst/README.brew', output = 'index', convert = 'html', open = FA
 t <- readLines('index.html')
 t <- gsub('/usr/lib/R/library/pander/includes//', '', t, fixed = TRUE)
 t <- gsub('/usr/local/lib/R/site-library/pander/includes//', '', t, fixed = TRUE)
+t <- gsub('/home/travis/R/Library/pander/includes//', '', t, fixed = TRUE)
 t <- gsub('/Library/Frameworks/R.framework/Versions/3.2/Resources/library/pander/includes//', '', t, fixed = TRUE)
 
 cat(t, file = 'index.html', sep = '\n')
