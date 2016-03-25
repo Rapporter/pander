@@ -333,17 +333,22 @@ get.storage <- function(what) {
 #'
 #' This function adds significance stars to passed \code{p} value(s) as: one star for value below \code{0.05}, two for \code{0.01} and three for \code{0.001}.
 #' @param p numeric vector or tabular data
+#' @param cutoffs the cutoffs for the 1/2/3 significance stars
 #' @return character vector
 #' @export
-add.significance.stars <- function(p) {
+add.significance.stars <- function(p, cutoffs = c(0.05, 0.01, 0.001)) {
+
+    stopifnot(length(cutoffs)==3)
 
     if (inherits(p, c('matrix', 'data.frame')) && length(dim(p)) == 2) {
-        apply(p, c(1,2), add.significance.stars)
+        apply(p, c(1,2), add.significance.stars, cutoffs = cutoffs)
     } else {
         if (length(p) > 1) {
-            sapply(p, add.significance.stars)
+            sapply(p, add.significance.stars, cutoffs = cutoffs)
         } else {
-            ifelse(p > 0.05, '', ifelse(p > 0.01, ' *', ifelse(p > 0.001, ' * *', ' * * *')))
+            ifelse(p > cutoffs[1], '',
+                   ifelse(p > cutoffs[2], ' *',
+                          ifelse(p > cutoffs[3], ' * *', ' * * *')))
         }
     }
 }
