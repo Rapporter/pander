@@ -12,7 +12,7 @@
 
 <meta name="author" content="Roman Tsegelskyi, Gergely Daróczi" />
 
-<meta name="date" content="2016-03-10" />
+<meta name="date" content="2016-03-28" />
 
 <title>Capturing evaluation information with evals</title>
 
@@ -58,6 +58,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 </style>
 
 
+
 <link href="data:text/css;charset=utf-8,body%20%7B%0Abackground%2Dcolor%3A%20%23fff%3B%0Amargin%3A%201em%20auto%3B%0Amax%2Dwidth%3A%20700px%3B%0Aoverflow%3A%20visible%3B%0Apadding%2Dleft%3A%202em%3B%0Apadding%2Dright%3A%202em%3B%0Afont%2Dfamily%3A%20%22Open%20Sans%22%2C%20%22Helvetica%20Neue%22%2C%20Helvetica%2C%20Arial%2C%20sans%2Dserif%3B%0Afont%2Dsize%3A%2014px%3B%0Aline%2Dheight%3A%201%2E35%3B%0A%7D%0A%23header%20%7B%0Atext%2Dalign%3A%20center%3B%0A%7D%0A%23TOC%20%7B%0Aclear%3A%20both%3B%0Amargin%3A%200%200%2010px%2010px%3B%0Apadding%3A%204px%3B%0Awidth%3A%20400px%3B%0Aborder%3A%201px%20solid%20%23CCCCCC%3B%0Aborder%2Dradius%3A%205px%3B%0Abackground%2Dcolor%3A%20%23f6f6f6%3B%0Afont%2Dsize%3A%2013px%3B%0Aline%2Dheight%3A%201%2E3%3B%0A%7D%0A%23TOC%20%2Etoctitle%20%7B%0Afont%2Dweight%3A%20bold%3B%0Afont%2Dsize%3A%2015px%3B%0Amargin%2Dleft%3A%205px%3B%0A%7D%0A%23TOC%20ul%20%7B%0Apadding%2Dleft%3A%2040px%3B%0Amargin%2Dleft%3A%20%2D1%2E5em%3B%0Amargin%2Dtop%3A%205px%3B%0Amargin%2Dbottom%3A%205px%3B%0A%7D%0A%23TOC%20ul%20ul%20%7B%0Amargin%2Dleft%3A%20%2D2em%3B%0A%7D%0A%23TOC%20li%20%7B%0Aline%2Dheight%3A%2016px%3B%0A%7D%0Atable%20%7B%0Amargin%3A%201em%20auto%3B%0Aborder%2Dwidth%3A%201px%3B%0Aborder%2Dcolor%3A%20%23DDDDDD%3B%0Aborder%2Dstyle%3A%20outset%3B%0Aborder%2Dcollapse%3A%20collapse%3B%0A%7D%0Atable%20th%20%7B%0Aborder%2Dwidth%3A%202px%3B%0Apadding%3A%205px%3B%0Aborder%2Dstyle%3A%20inset%3B%0A%7D%0Atable%20td%20%7B%0Aborder%2Dwidth%3A%201px%3B%0Aborder%2Dstyle%3A%20inset%3B%0Aline%2Dheight%3A%2018px%3B%0Apadding%3A%205px%205px%3B%0A%7D%0Atable%2C%20table%20th%2C%20table%20td%20%7B%0Aborder%2Dleft%2Dstyle%3A%20none%3B%0Aborder%2Dright%2Dstyle%3A%20none%3B%0A%7D%0Atable%20thead%2C%20table%20tr%2Eeven%20%7B%0Abackground%2Dcolor%3A%20%23f7f7f7%3B%0A%7D%0Ap%20%7B%0Amargin%3A%200%2E5em%200%3B%0A%7D%0Ablockquote%20%7B%0Abackground%2Dcolor%3A%20%23f6f6f6%3B%0Apadding%3A%200%2E25em%200%2E75em%3B%0A%7D%0Ahr%20%7B%0Aborder%2Dstyle%3A%20solid%3B%0Aborder%3A%20none%3B%0Aborder%2Dtop%3A%201px%20solid%20%23777%3B%0Amargin%3A%2028px%200%3B%0A%7D%0Adl%20%7B%0Amargin%2Dleft%3A%200%3B%0A%7D%0Adl%20dd%20%7B%0Amargin%2Dbottom%3A%2013px%3B%0Amargin%2Dleft%3A%2013px%3B%0A%7D%0Adl%20dt%20%7B%0Afont%2Dweight%3A%20bold%3B%0A%7D%0Aul%20%7B%0Amargin%2Dtop%3A%200%3B%0A%7D%0Aul%20li%20%7B%0Alist%2Dstyle%3A%20circle%20outside%3B%0A%7D%0Aul%20ul%20%7B%0Amargin%2Dbottom%3A%200%3B%0A%7D%0Apre%2C%20code%20%7B%0Abackground%2Dcolor%3A%20%23f7f7f7%3B%0Aborder%2Dradius%3A%203px%3B%0Acolor%3A%20%23333%3B%0Awhite%2Dspace%3A%20pre%2Dwrap%3B%20%0A%7D%0Apre%20%7B%0Aborder%2Dradius%3A%203px%3B%0Amargin%3A%205px%200px%2010px%200px%3B%0Apadding%3A%2010px%3B%0A%7D%0Apre%3Anot%28%5Bclass%5D%29%20%7B%0Abackground%2Dcolor%3A%20%23f7f7f7%3B%0A%7D%0Acode%20%7B%0Afont%2Dfamily%3A%20Consolas%2C%20Monaco%2C%20%27Courier%20New%27%2C%20monospace%3B%0Afont%2Dsize%3A%2085%25%3B%0A%7D%0Ap%20%3E%20code%2C%20li%20%3E%20code%20%7B%0Apadding%3A%202px%200px%3B%0A%7D%0Adiv%2Efigure%20%7B%0Atext%2Dalign%3A%20center%3B%0A%7D%0Aimg%20%7B%0Abackground%2Dcolor%3A%20%23FFFFFF%3B%0Apadding%3A%202px%3B%0Aborder%3A%201px%20solid%20%23DDDDDD%3B%0Aborder%2Dradius%3A%203px%3B%0Aborder%3A%201px%20solid%20%23CCCCCC%3B%0Amargin%3A%200%205px%3B%0A%7D%0Ah1%20%7B%0Amargin%2Dtop%3A%200%3B%0Afont%2Dsize%3A%2035px%3B%0Aline%2Dheight%3A%2040px%3B%0A%7D%0Ah2%20%7B%0Aborder%2Dbottom%3A%204px%20solid%20%23f7f7f7%3B%0Apadding%2Dtop%3A%2010px%3B%0Apadding%2Dbottom%3A%202px%3B%0Afont%2Dsize%3A%20145%25%3B%0A%7D%0Ah3%20%7B%0Aborder%2Dbottom%3A%202px%20solid%20%23f7f7f7%3B%0Apadding%2Dtop%3A%2010px%3B%0Afont%2Dsize%3A%20120%25%3B%0A%7D%0Ah4%20%7B%0Aborder%2Dbottom%3A%201px%20solid%20%23f7f7f7%3B%0Amargin%2Dleft%3A%208px%3B%0Afont%2Dsize%3A%20105%25%3B%0A%7D%0Ah5%2C%20h6%20%7B%0Aborder%2Dbottom%3A%201px%20solid%20%23ccc%3B%0Afont%2Dsize%3A%20105%25%3B%0A%7D%0Aa%20%7B%0Acolor%3A%20%230033dd%3B%0Atext%2Ddecoration%3A%20none%3B%0A%7D%0Aa%3Ahover%20%7B%0Acolor%3A%20%236666ff%3B%20%7D%0Aa%3Avisited%20%7B%0Acolor%3A%20%23800080%3B%20%7D%0Aa%3Avisited%3Ahover%20%7B%0Acolor%3A%20%23BB00BB%3B%20%7D%0Aa%5Bhref%5E%3D%22http%3A%22%5D%20%7B%0Atext%2Ddecoration%3A%20underline%3B%20%7D%0Aa%5Bhref%5E%3D%22https%3A%22%5D%20%7B%0Atext%2Ddecoration%3A%20underline%3B%20%7D%0A%0Acode%20%3E%20span%2Ekw%20%7B%20color%3A%20%23555%3B%20font%2Dweight%3A%20bold%3B%20%7D%20%0Acode%20%3E%20span%2Edt%20%7B%20color%3A%20%23902000%3B%20%7D%20%0Acode%20%3E%20span%2Edv%20%7B%20color%3A%20%2340a070%3B%20%7D%20%0Acode%20%3E%20span%2Ebn%20%7B%20color%3A%20%23d14%3B%20%7D%20%0Acode%20%3E%20span%2Efl%20%7B%20color%3A%20%23d14%3B%20%7D%20%0Acode%20%3E%20span%2Ech%20%7B%20color%3A%20%23d14%3B%20%7D%20%0Acode%20%3E%20span%2Est%20%7B%20color%3A%20%23d14%3B%20%7D%20%0Acode%20%3E%20span%2Eco%20%7B%20color%3A%20%23888888%3B%20font%2Dstyle%3A%20italic%3B%20%7D%20%0Acode%20%3E%20span%2Eot%20%7B%20color%3A%20%23007020%3B%20%7D%20%0Acode%20%3E%20span%2Eal%20%7B%20color%3A%20%23ff0000%3B%20font%2Dweight%3A%20bold%3B%20%7D%20%0Acode%20%3E%20span%2Efu%20%7B%20color%3A%20%23900%3B%20font%2Dweight%3A%20bold%3B%20%7D%20%20code%20%3E%20span%2Eer%20%7B%20color%3A%20%23a61717%3B%20background%2Dcolor%3A%20%23e3d2d2%3B%20%7D%20%0A" rel="stylesheet" type="text/css" />
 
 </head>
@@ -71,7 +72,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 
 <h1 class="title">Capturing evaluation information with evals</h1>
 <h4 class="author"><em>Roman Tsegelskyi, Gergely Daróczi</em></h4>
-<h4 class="date"><em>2016-03-10</em></h4>
+<h4 class="date"><em>2016-03-28</em></h4>
 
 </div>
 
@@ -211,23 +212,23 @@ df$time &lt;-<span class="st"> </span><span class="dv">1</span>:<span class="kw"
 <h2>Logging</h2>
 <p>To make execution and debug more understandable <code>evals</code> provides a possibility for logging with <code>log</code> parameter. Logging in <code>evals</code> relies on <a href="cran.r-project.org/web/packages/futile.logger/futile.logger.pdf">futile.logger</a> package which provides logging API similar to <code>log4j</code>. Basic example:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">x &lt;-<span class="st"> </span><span class="kw">evals</span>(<span class="st">'1:10'</span>, <span class="dt">log =</span> <span class="st">'foo'</span>)
-<span class="co">#&gt; INFO [2016-03-10 23:17:31] Command run: 1:10</span></code></pre></div>
+<span class="co">#&gt; INFO [2016-03-28 03:08:02] Command run: 1:10</span></code></pre></div>
 <p><code>futile.logger</code>’s thresholds range from most verbose to least verbose: <code>TRACE</code>, <code>DEBUG</code>, <code>INFO</code>, <code>WARN</code>, <code>ERROR</code>, <code>FATAL</code>. By default threshold is set to <code>INFO</code> which will hide some unessential information. To permanently set the threshold for logger use <code>flog.threshold</code>:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">evalsOptions</span>(<span class="st">'log'</span>, <span class="st">'evals'</span>)
 <span class="kw">flog.threshold</span>(TRACE, <span class="st">'evals'</span>)
 <span class="co">#&gt; NULL</span>
 x &lt;-<span class="st"> </span><span class="kw">evals</span>(<span class="st">'1:10'</span>, <span class="dt">cache.time =</span> <span class="dv">0</span>)
-<span class="co">#&gt; INFO [2016-03-10 23:17:31] Command run: 1:10</span>
-<span class="co">#&gt; TRACE [2016-03-10 23:17:31] Cached result</span>
-<span class="co">#&gt; DEBUG [2016-03-10 23:17:31] Returned object: class = integer, length = 10, dim = , size = 88 bytes</span></code></pre></div>
+<span class="co">#&gt; INFO [2016-03-28 03:08:02] Command run: 1:10</span>
+<span class="co">#&gt; TRACE [2016-03-28 03:08:02] Cached result</span>
+<span class="co">#&gt; DEBUG [2016-03-28 03:08:02] Returned object: class = integer, length = 10, dim = , size = 88 bytes</span></code></pre></div>
 <p><code>futile.logger</code> also provides a very useful functionality of write logs to files instead of printing them to promt:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">t &lt;-<span class="st"> </span><span class="kw">tempfile</span>()
 <span class="kw">flog.appender</span>(<span class="kw">appender.file</span>(t), <span class="dt">name =</span> <span class="st">'evals'</span>)
 <span class="co">#&gt; NULL</span>
 x &lt;-<span class="st"> </span><span class="kw">evals</span>(<span class="st">'1:10'</span>, <span class="dt">log =</span> <span class="st">'evals'</span>)
 <span class="kw">readLines</span>(t)
-<span class="co">#&gt; [1] &quot;INFO [2016-03-10 23:17:31] Command run: 1:10&quot;          </span>
-<span class="co">#&gt; [2] &quot;TRACE [2016-03-10 23:17:31] Returning cached R object.&quot;</span>
+<span class="co">#&gt; [1] &quot;INFO [2016-03-28 03:08:02] Command run: 1:10&quot;          </span>
+<span class="co">#&gt; [2] &quot;TRACE [2016-03-28 03:08:02] Returning cached R object.&quot;</span>
 <span class="co"># revert back to console</span>
 <span class="kw">flog.appender</span>(<span class="kw">appender.console</span>(), <span class="dt">name =</span> <span class="st">'evals'</span>)
 <span class="co">#&gt; NULL</span></code></pre></div>
@@ -255,32 +256,32 @@ x &lt;-<span class="st"> </span><span class="kw">evals</span>(<span class="st">'
 <span class="co">#&gt; NULL</span></code></pre></div>
 <p>Let’s start with small example.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">system.time</span>(<span class="kw">evals</span>(<span class="st">'1:1e5'</span>))
-<span class="co">#&gt; INFO [2016-03-10 23:17:31] Command run: 1:1e+05</span>
-<span class="co">#&gt; TRACE [2016-03-10 23:17:32] Cached result</span>
-<span class="co">#&gt; DEBUG [2016-03-10 23:17:32] Returned object: class = integer, length = 100000, dim = , size = 400040 bytes</span>
+<span class="co">#&gt; INFO [2016-03-28 03:08:02] Command run: 1:1e+05</span>
+<span class="co">#&gt; TRACE [2016-03-28 03:08:03] Cached result</span>
+<span class="co">#&gt; DEBUG [2016-03-28 03:08:03] Returned object: class = integer, length = 100000, dim = , size = 400040 bytes</span>
 <span class="co">#&gt;    user  system elapsed </span>
-<span class="co">#&gt;   0.877   0.012   0.889</span>
+<span class="co">#&gt;   0.727   0.004   0.732</span>
 <span class="kw">system.time</span>(<span class="kw">evals</span>(<span class="st">'1:1e5'</span>))
-<span class="co">#&gt; INFO [2016-03-10 23:17:32] Command run: 1:1e+05</span>
-<span class="co">#&gt; TRACE [2016-03-10 23:17:32] Returning cached R object.</span>
+<span class="co">#&gt; INFO [2016-03-28 03:08:03] Command run: 1:1e+05</span>
+<span class="co">#&gt; TRACE [2016-03-28 03:08:03] Returning cached R object.</span>
 <span class="co">#&gt;    user  system elapsed </span>
-<span class="co">#&gt;   0.005   0.000   0.005</span></code></pre></div>
+<span class="co">#&gt;   0.005   0.000   0.004</span></code></pre></div>
 <p>Results cached by <code>evals</code> can be stored in an <em>environment</em> in current <code>R</code> session or permanently on disk by setting <code>cache.mode</code> parameter appropriately.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">res &lt;-<span class="st"> </span><span class="kw">evals</span>(<span class="st">'1:1e5'</span>, <span class="dt">cache.mode =</span> <span class="st">'disk'</span>, <span class="dt">cache.dir =</span> <span class="st">'cachedir'</span>)
-<span class="co">#&gt; INFO [2016-03-10 23:17:32] Command run: 1:1e+05</span>
-<span class="co">#&gt; TRACE [2016-03-10 23:17:33] Cached result</span>
-<span class="co">#&gt; DEBUG [2016-03-10 23:17:33] Returned object: class = integer, length = 100000, dim = , size = 400040 bytes</span>
+<span class="co">#&gt; INFO [2016-03-28 03:08:03] Command run: 1:1e+05</span>
+<span class="co">#&gt; TRACE [2016-03-28 03:08:04] Cached result</span>
+<span class="co">#&gt; DEBUG [2016-03-28 03:08:04] Returned object: class = integer, length = 100000, dim = , size = 400040 bytes</span>
 <span class="kw">list.files</span>(<span class="st">'cachedir'</span>)
 <span class="co">#&gt; [1] &quot;a2981aad427c02fcd69c29dfa1f089b9848a51c9&quot;</span></code></pre></div>
 <p>Since the hash for caching computed based on the <em>structure</em> and <em>content</em> of the R commands instead of the used variable names or R expressions, <code>evals</code> is able to achieve great results:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">x &lt;-<span class="st"> </span>mtcars$hp
 y &lt;-<span class="st"> </span><span class="fl">1e3</span>
 <span class="kw">system.time</span>(<span class="kw">evals</span>(<span class="st">'sapply(rep(x, y), mean)'</span>))
-<span class="co">#&gt; INFO [2016-03-10 23:17:33] Command run: sapply(rep(x, y), mean)</span>
-<span class="co">#&gt; TRACE [2016-03-10 23:17:33] Cached result</span>
-<span class="co">#&gt; DEBUG [2016-03-10 23:17:33] Returned object: class = numeric, length = 32000, dim = , size = 256040 bytes</span>
+<span class="co">#&gt; INFO [2016-03-28 03:08:04] Command run: sapply(rep(x, y), mean)</span>
+<span class="co">#&gt; TRACE [2016-03-28 03:08:04] Cached result</span>
+<span class="co">#&gt; DEBUG [2016-03-28 03:08:04] Returned object: class = numeric, length = 32000, dim = , size = 256040 bytes</span>
 <span class="co">#&gt;    user  system elapsed </span>
-<span class="co">#&gt;   0.221   0.004   0.225</span></code></pre></div>
+<span class="co">#&gt;   0.197   0.012   0.210</span></code></pre></div>
 <p>Let us create some custom functions and variables, which are not identical to the above call:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">f &lt;-<span class="st"> </span>sapply
 g &lt;-<span class="st"> </span>rep
@@ -288,36 +289,36 @@ h &lt;-<span class="st"> </span>mean
 X &lt;-<span class="st"> </span>mtcars$hp *<span class="st"> </span><span class="dv">1</span>
 Y &lt;-<span class="st"> </span><span class="dv">1000</span>
 <span class="kw">system.time</span>(<span class="kw">evals</span>(<span class="st">'f(g(X, Y), h)'</span>))
-<span class="co">#&gt; INFO [2016-03-10 23:17:33] Command run: f(g(X, Y), h)</span>
-<span class="co">#&gt; TRACE [2016-03-10 23:17:33] Returning cached R object.</span>
+<span class="co">#&gt; INFO [2016-03-28 03:08:04] Command run: f(g(X, Y), h)</span>
+<span class="co">#&gt; TRACE [2016-03-28 03:08:04] Returning cached R object.</span>
 <span class="co">#&gt;    user  system elapsed </span>
-<span class="co">#&gt;   0.005   0.000   0.005</span></code></pre></div>
+<span class="co">#&gt;   0.006   0.000   0.006</span></code></pre></div>
 <p>Another important feature of <code>evals</code> is that it takes notes the changes in the evaluation environment. For example:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">x &lt;-<span class="st"> </span><span class="dv">1</span>
 res &lt;-<span class="st"> </span><span class="kw">evals</span>(<span class="st">'x &lt;- 1:10;'</span>)
-<span class="co">#&gt; INFO [2016-03-10 23:17:33] Command run: x &lt;- 1:10</span>
-<span class="co">#&gt; TRACE [2016-03-10 23:17:33] Cached result</span></code></pre></div>
+<span class="co">#&gt; INFO [2016-03-28 03:08:04] Command run: x &lt;- 1:10</span>
+<span class="co">#&gt; TRACE [2016-03-28 03:08:04] Cached result</span></code></pre></div>
 <p><code>x &lt;- 1:10</code> will be cached, so if the same assignment occurs again we won’t need to evaluate it. But what about the change of <code>x</code> when we get the result from the cache? <code>evals</code> takes care of that.</p>
 <p>So in the following example we can see that <code>x &lt;- 1:10</code> is not evaluated, but retrieved from cache with the the change to <code>x</code> in the environment.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">evals</span>(<span class="st">'x &lt;- 1:10; x[3]'</span>)[[<span class="dv">2</span>]]$result
-<span class="co">#&gt; INFO [2016-03-10 23:17:33] Command run: x &lt;- 1:10</span>
-<span class="co">#&gt; TRACE [2016-03-10 23:17:33] Returning cached R object.</span>
-<span class="co">#&gt; INFO [2016-03-10 23:17:33] Command run: x[3]</span>
-<span class="co">#&gt; TRACE [2016-03-10 23:17:33] Cached result</span>
-<span class="co">#&gt; DEBUG [2016-03-10 23:17:33] Returned object: class = integer, length = 1, dim = , size = 48 bytes</span>
+<span class="co">#&gt; INFO [2016-03-28 03:08:04] Command run: x &lt;- 1:10</span>
+<span class="co">#&gt; TRACE [2016-03-28 03:08:04] Returning cached R object.</span>
+<span class="co">#&gt; INFO [2016-03-28 03:08:04] Command run: x[3]</span>
+<span class="co">#&gt; TRACE [2016-03-28 03:08:04] Cached result</span>
+<span class="co">#&gt; DEBUG [2016-03-28 03:08:04] Returned object: class = integer, length = 1, dim = , size = 48 bytes</span>
 <span class="co">#&gt; [1] 3</span></code></pre></div>
 <p>Also <code>evals</code> is able to cache output to graphical devices produces during evaluation:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">system.time</span>(<span class="kw">evals</span>(<span class="st">'plot(mtcars)'</span>))
-<span class="co">#&gt; INFO [2016-03-10 23:17:33] Command run: plot(mtcars)</span>
-<span class="co">#&gt; TRACE [2016-03-10 23:17:34] Image file written: my_plots/test.jpeg</span>
-<span class="co">#&gt; TRACE [2016-03-10 23:17:34] Cached result</span>
+<span class="co">#&gt; INFO [2016-03-28 03:08:04] Command run: plot(mtcars)</span>
+<span class="co">#&gt; TRACE [2016-03-28 03:08:05] Image file written: my_plots/test.jpeg</span>
+<span class="co">#&gt; TRACE [2016-03-28 03:08:05] Cached result</span>
 <span class="co">#&gt;    user  system elapsed </span>
-<span class="co">#&gt;   0.171   0.000   0.171</span>
+<span class="co">#&gt;   0.158   0.004   0.162</span>
 <span class="kw">system.time</span>(<span class="kw">evals</span>(<span class="st">'plot(mtcars)'</span>))
-<span class="co">#&gt; INFO [2016-03-10 23:17:34] Command run: plot(mtcars)</span>
-<span class="co">#&gt; TRACE [2016-03-10 23:17:34] Image found in cache: my_plots/test.jpeg</span>
+<span class="co">#&gt; INFO [2016-03-28 03:08:05] Command run: plot(mtcars)</span>
+<span class="co">#&gt; TRACE [2016-03-28 03:08:05] Image found in cache: my_plots/test.jpeg</span>
 <span class="co">#&gt;    user  system elapsed </span>
-<span class="co">#&gt;   0.004   0.000   0.004</span></code></pre></div>
+<span class="co">#&gt;   0.005   0.000   0.004</span></code></pre></div>
 </div>
 </div>
 
