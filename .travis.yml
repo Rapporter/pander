@@ -19,6 +19,6 @@ script:
 - make check
 - make test
 after_success:
-- Rscript -e 'lintr::lint_package()'
+- test $TRAVIS_PULL_REQUEST == "true" && Rscript -e 'lintr::lint_package()'
 - Rscript -e 'covr::codecov()'
 - test $TRAVIS_PULL_REQUEST == "false" && test $TRAVIS_BRANCH == "master" && bash .gh-pages-update.sh

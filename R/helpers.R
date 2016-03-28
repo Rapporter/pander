@@ -338,7 +338,7 @@ get.storage <- function(what) {
 #' @export
 add.significance.stars <- function(p, cutoffs = c(0.05, 0.01, 0.001)) {
 
-    stopifnot(length(cutoffs)==3)
+    stopifnot(length(cutoffs) == 3)
 
     if (inherits(p, c('matrix', 'data.frame')) && length(dim(p)) == 2) {
         apply(p, c(1,2), add.significance.stars, cutoffs = cutoffs)

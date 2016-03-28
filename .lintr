@@ -3,7 +3,8 @@ exclusions: list(
     "inst/doc/knitr.R",
     "inst/doc/pander.R",
     "inst/doc/pandoc_table.R",
-    "R/RcppExports.R"
+    "R/RcppExports.R",
+    "R/S3.R" = c(257, 258, 259)
     )
 linters: with_defaults(
     line_length_linter(120),
