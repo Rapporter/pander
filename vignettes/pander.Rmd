@@ -88,11 +88,7 @@ This latter tries to be smart in some ways:
 Besides this, the custom brew function can do more and also less compared to the original brew package. First of all, the internal caching mechanism of brew has been removed and rewritten for some extra profits besides improved caching. Quick example:
 
 ```{r}
-str(Pandoc.brew(text ='
-+   Pi equals to `<%= pi %>`.
-+   And here are some random data:
-+   `<%= runif(10) %>`
-+ '))
+str(Pandoc.brew(text ='Pi equals to `<%= pi %>`. And here are some random data: `<%= runif(10)%>`'))
 ```
 
 The package bundles some examples for `Pandoc.brew` to let you check its features pretty fast.

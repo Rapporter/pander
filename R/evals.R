@@ -806,7 +806,7 @@ evals <- function(txt, parse = evalsOptions('parse'), cache = evalsOptions('cach
         env <- new.env()
     }
     for (p in c('plot', 'barplot', 'lines', 'pie', 'boxplot', 'polygon',
-                'points','legend', 'hist', 'pairs', 'stripchart')) {
+                'points', 'legend', 'hist', 'pairs', 'stripchart')) {
         if (exists(p, envir = env, inherits = FALSE)) {
             stop(paste0('Using a reserved word as variable: `', p, '`'))
         }
@@ -938,7 +938,7 @@ evals <- function(txt, parse = evalsOptions('parse'), cache = evalsOptions('cach
                 }
 
             } else {
-                # cache is in environment
+                ## cache is in environment
                 ## load cached result
                 if (exists(cached, envir = cached.results, inherits = FALSE)) {
                     cached.result <- get(cached, envir = cached.results)
@@ -1049,7 +1049,7 @@ evals <- function(txt, parse = evalsOptions('parse'), cache = evalsOptions('cach
                 do.call('cairo_pdf', list(file,
                                           width = width / res,
                                           height = height / res,
-                                          bg = pbg,...)) # TODO: font-family?
+                                          bg = pbg, ...)) # TODO: font-family?
             }
 
             ## start recordPlot
@@ -1184,10 +1184,10 @@ evals <- function(txt, parse = evalsOptions('parse'), cache = evalsOptions('cach
                 } else {
 
                     if (.Platform$OS.type == 'unix') {
-                        # a symlink would be fine for vector formats on a unix-like OS
+                        ## a symlink would be fine for vector formats on a unix-like OS
                         file.symlink(file, file.hi.res)
                     } else {
-                        # we have no option to do so on Windows (to be backward compatible)
+                        ## we have no option to do so on Windows (to be backward compatible)
                         do.call(graph.output, list(file.hi.res,
                                                    width = hi.res.width / hi.res.res,
                                                    height = hi.res.height / hi.res.res,
@@ -1197,8 +1197,8 @@ evals <- function(txt, parse = evalsOptions('parse'), cache = evalsOptions('cach
 
                 ## render high resolution image (if needed)
                 if ((graph.output %in% c('bmp', 'jpeg', 'png', 'tiff')) | (.Platform$OS.type != 'unix')) {
-                    # we need eval.msgs() here instead of simple eval()
-                    # to prevent unprinted lattice/ggplot2 objects' issues
+                    ## we need eval.msgs() here instead of simple eval()
+                    ## to prevent unprinted lattice/ggplot2 objects' issues
                     eval.msgs(src, env = env.hires)
                     clear.devs()
                 }

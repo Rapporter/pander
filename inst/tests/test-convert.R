@@ -3,7 +3,7 @@ library(pander)
 context('Pandoc.convert')
 
 test_that('openFileInOS works correctly', {
-    tf <- paste(tempfile(), '.txt', sep='')
+    tf <- paste(tempfile(), '.txt', sep = '')
     sink(file = tf)
     cat('Some info')
     sink()

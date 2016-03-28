@@ -21,7 +21,7 @@ test_that('has.rownames: FALSE', {
 
 context('splitLine')
 
-test_that('splitLine leaves non-string arguments and empty string unchanged',{
+test_that('splitLine leaves non-string arguments and empty string unchanged', {
   expect_equal(1, splitLine(1))
   expect_equal(1:10, splitLine(1:10))
   expect_equal(c('string 1', 'string 2', 'string 3'), splitLine(c('string 1', 'string 2', 'string 3')))
@@ -32,7 +32,7 @@ test_that('splitLine leaves non-string arguments and empty string unchanged',{
   expect_equal(splitLine('', Inf), '')
 })
 
-test_that('splitLine without hyphening behaves correctly',{
+test_that('splitLine without hyphening behaves correctly', {
   widthSpaced <- function(x, max.width, type='max'){
     if (type == 'max')
       max(sapply(strsplit(splitLine(x, max.width), '\n'), function(x) nchar(x) * grepl(' ', x)))
@@ -47,7 +47,7 @@ test_that('splitLine without hyphening behaves correctly',{
                'Each\ncharacter\nstring in\nthe input\nis first\nsplit into\nparagraphs\n(or lines\ncontaining\nwhitespace\nonly)') #nolint
   expect_equal(splitLine(x, 20),
                'Each character\nstring in the input\nis first split into\nparagraphs (or lines\ncontaining\nwhitespace only)') #nolint
-  expect_equal(splitLine(x, 0), paste(strwrap(x, 0), collapse='\n')) # zero width replaces whitespaces by line breaks
+  expect_equal(splitLine(x, 0), paste(strwrap(x, 0), collapse = '\n')) # zero width replaces whitespaces by line breaks
   expect_equal(splitLine(x, Inf), x) # Infinite does not change
   x <- 'Really do clean up and test your code and think twice before you even start contemplating optimizing the code'
   expect_true(widthSpaced(x, 5, 'max') <= 5) # max width of line is less than 5 (in case it has spaces)
@@ -58,7 +58,7 @@ test_that('splitLine without hyphening behaves correctly',{
   expect_equal(length(strsplit(splitLine(x, 2), '\n')[[1]]), 19) # when max.width param is small, every word is a line
 })
 
-test_that('splitLine with hyphening behaves correctly',{
+test_that('splitLine with hyphening behaves correctly', {
   x <- 'Really do clean up and test your code and think twice before you even start contemplating optimizing the code'
   widthSpaced <- function(x, max.width, type='max'){
     if (type == 'max')
