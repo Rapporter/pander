@@ -8,7 +8,7 @@ Some CRAN statistics: [![](http://cranlogs.r-pkg.org/badges/pander)](http://cran
 
 # Installation
 
-The stable version [![](http://www.r-pkg.org/badges/version/pander)](http://https://cran.r-project.org/package=pander) can be installed easily in the `R` console like any other package:
+The stable version [![](http://www.r-pkg.org/badges/version/pander)](https://cran.r-project.org/package=pander) can be installed easily in the `R` console like any other package:
 
 ```r
 install.packages('pander')
