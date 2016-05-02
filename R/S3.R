@@ -552,7 +552,7 @@ pander.htest <- function(x, caption = attr(x, 'caption'), ...) {
 
     if (is.null(caption)) {
         if (is.null(storage$caption)) {
-            caption <- paste0(x$method, ': `', gsub('( and | by )', '`\\1`', x$data.name), '`')
+            caption <- paste0(x$method, ': `', gsub('( and | by )', '`\\1`', paste0(x$data.name)), '`')
         } else {
             caption <- get.caption()
         }
