@@ -969,7 +969,6 @@ pandoc.table.return <- function(t, caption, digits = panderOptions('digits'), de
             ## why are we doing this to all columns if we only come here if (length(t.n) > 0)? If we only need to operate
             ## on numeric columns, let's check below. If we want to operate on all columns it should be out of the if (length(t.n) > 0) condition
             for (j in 1:ncol(temp.t)) {
-                if (j %in% t.n) {
                                       temp.t[, j] <- sapply(t[, j],
                                       format,
                                       trim         = TRUE,
@@ -978,7 +977,6 @@ pandoc.table.return <- function(t, caption, digits = panderOptions('digits'), de
                                       big.mark     = big.mark,
                                       quote        = FALSE,
                                       simplify     = (! is.list(temp.t[, j]))
-                }
             }
         }
     }
