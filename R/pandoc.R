@@ -973,7 +973,8 @@ pandoc.table.return <- function(t, caption, digits = panderOptions('digits'), de
                                       digits       = digits[j],
                                       decimal.mark = decimal.mark,
                                       big.mark     = big.mark,
-                                      quote        = FALSE)
+                                      quote        = FALSE,
+                                      simplify     = FALSE)
             }
         }
     }
