@@ -977,6 +977,16 @@ pandoc.table.return <- function(t, caption, digits = panderOptions('digits'), de
                                       decimal.mark = decimal.mark,
                                       big.mark     = big.mark,
                                       quote        = FALSE)
+                    } else
+                if (is.list(temp.t[, j])) {
+                    temp.t[, j] <- list(lapply(t[, j],
+                                        format,
+                                        trim            = TRUE,
+                                        digits          = digits[j],
+                                        decimal.mark    = decimal.mark,
+                                        big.mark        = big.mark,
+                                        quote           = FALSE))
+                    }
                 }
             }
         }
