@@ -1105,7 +1105,7 @@ pandoc.table.return <- function(t, caption, digits = panderOptions('digits'), de
         t.colnames <- split.large.cells(t.colnames)
         t.colnames.width <- sapply(t.colnames,
                                    function(x) max(nchar(strsplit(x, '\n')[[1]], type = 'width'), 0),
-                                   USE.NAMES = FALSE) + 2
+                                   USE.NAMES = FALSE)
     } else {
         t.colnames.width <- 0
     }
@@ -1115,15 +1115,6 @@ pandoc.table.return <- function(t, caption, digits = panderOptions('digits'), de
 
     ## also dealing with cells split by newlines
     t.width <-  as.numeric(apply(cbind(t.colnames.width, apply(t, 2, function(x) max(sapply(strsplit(x,'\n'), function(x) max(nchar(x, type = 'width'), 0))))), 1, max)) #nolint
-
-    ## add an extra space to the column width
-    ##   if there are no column headers
-    ##   and the alignment depends on the first line of the table
-    if (length(t.colnames.width) == 1 &&
-        t.colnames.width == 0 &&
-        style %in% c('simple', 'multiline')) {
-        t.width <- mapply(max, nchar(t[1, ]) + 1, t.width)
-    }
 
     ## remove obvious row.names
     if (all(t.rownames == 1:nrow(t)) | all(t.rownames == '')) {
@@ -1145,7 +1136,7 @@ pandoc.table.return <- function(t, caption, digits = panderOptions('digits'), de
             t.colnames <- c('&nbsp;', t.colnames)
         }
         t.width <- c(max(sapply(strsplit(t.rownames, '\n'), function(x) max(nchar(x, type = 'width'), 0))), t.width)
-        t.width[1] <- t.width[1] + 2
+        t.width[1] <- t.width[1]
 
         ## if we have a non-breaking space in the header
         if (!is.null(t.colnames)) {
@@ -1185,6 +1176,11 @@ pandoc.table.return <- function(t, caption, digits = panderOptions('digits'), de
                                  'grid' =, 'rmarkdown' = 3, #nolint
                                  'multiline' = , 'simple' = 0) #nolint
 
+    ## add extra 2 spaces for alignment
+    if (style %in% c('simple', 'multiline')) {
+        t.width <- t.width + 2
+    }
+
     ## +1 for the middle separator
     if (sum(t.width + extra.spaces.width) + 1 > split.tables
         & length(t.width) > 1 + (length(t.rownames) != 0)) {
@@ -1222,7 +1218,6 @@ pandoc.table.return <- function(t, caption, digits = panderOptions('digits'), de
         ## #########################################################################
         ## define markdown dialects
         ## #########################################################################
-
 
         switch(style,
                'grid'      = {

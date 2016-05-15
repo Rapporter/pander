@@ -62,10 +62,17 @@ test_that('split.tables', {
     res_grid <- pander_return(t, style = 'grid', split.tables = 22)
     expect_equal(length(res_grid), 18)
     expect_true(any(grepl('Table', res_grid)))
+<<<<<<< HEAD
+    res_simple <- pander_return(t, style='simple', split.tables = 21)
+    expect_equal(length(res_simple), 6)
+    expect_false(any(grepl('Table', res_simple)))
+    res_simple <- pander_return(t, style='simple', split.tables = 20)
+=======
     res_simple <- pander_return(t, style = 'simple', split.tables = 17)
     expect_equal(length(res_simple), 6)
     expect_false(any(grepl('Table', res_simple)))
     res_simple <- pander_return(t, style = 'simple', split.tables = 16)
+>>>>>>> master
     expect_equal(length(res_simple), 14)
     expect_true(any(grepl('Table', res_simple)))
 })
@@ -157,6 +164,25 @@ test_that('no warning for highlight NA/empty strings', {
 
 test_that('emphasize.italics.rows works correctly', {
     # test for issue 176
+<<<<<<< HEAD
+    df <- data.frame(a=1:3, b=1:3, c=1:3)
+    res <- capture.output(pander(df, emphasize.italics.rows = c(1,2), style = 'simple'))
+    expect_equal(res[5], ' *1*   *1*   *1* ')
+    expect_equal(res[6], ' *2*   *2*   *2* ')
+    res <- capture.output(pander(df, emphasize.strong.rows = c(1,2), style = 'simple'))
+    expect_equal(res[5], ' **1**   **1**   **1** ')
+    expect_equal(res[6], ' **2**   **2**   **2** ')
+})
+
+test_that('emphasize.verbatim works correctly', {
+    df <- data.frame(a=1:3, b=4:6, c=7:9)
+    res <- pander_return(df, emphasize.verbatim.rows = c(1,2), style = 'simple')
+    expect_equal(res[5], ' `1`   `4`   `7` ')
+    expect_equal(res[6], ' `2`   `5`   `8` ')
+    res <- pander_return(df, emphasize.verbatim.cols = c(1,2), style = 'simple')
+    expect_equal(res[5], ' `1`   `4`   7 ')
+    expect_equal(res[6], ' `2`   `5`   8 ')
+=======
     df <- data.frame(a = 1:3, b = 1:3, c = 1:3)
     res <- capture.output(pander(df, emphasize.italics.rows = c(1, 2), style = 'simple'))
     expect_equal(res[5], '*1* *1* *1*')
@@ -174,13 +200,20 @@ test_that('emphasize.verbatim works correctly', {
     res <- pander_return(df, emphasize.verbatim.cols = c(1, 2), style = 'simple')
     expect_equal(res[5], '`1` `4`  7 ')
     expect_equal(res[6], '`2` `5`  8 ')
+>>>>>>> master
     res <- pander_return(df, emphasize.verbatim.cells = which(df > 5, arr.ind = TRUE), style = 'simple')
-    expect_equal(res[5], ' 1   4  `7`')
-    expect_equal(res[6], ' 2   5  `8`')
+    expect_equal(res[5], ' 1    4    `7` ')
+    expect_equal(res[6], ' 2    5    `8` ')
     res <- pander_return(df, emphasize.verbatim.cells = which(df > 5, arr.ind = TRUE),
+<<<<<<< HEAD
+                         emphasize.strong.rows = c(1,2), style = 'simple')
+    expect_equal(res[5], ' **1**   **4**   **`7`** ')
+    expect_equal(res[7], '   3      `6`      `9`   ')
+=======
                          emphasize.strong.rows = c(1, 2), style = 'simple')
     expect_equal(res[5], '**1** **4** **`7`**')
     expect_equal(res[7], '  3    `6`    `9`  ')
+>>>>>>> master
 })
 
 
@@ -265,6 +298,16 @@ panderOptions('table.alignment.rownames', tar)
 
 test_that('digits param', {
     m <- matrix(rep(0.111111, 6), nrow = 2)
+<<<<<<< HEAD
+    res <- pander_return(m, digits = c(2,4,1))
+    expect_equal(res[3], ' 0.11   0.1111   0.1 ')
+    expect_warning(pander_return(m, digits=c(1,2)))
+    res <- pander_return(m, digits = c(2))
+    expect_equal(res[3],' 0.11   0.11   0.11 ')
+    mt <- mtcars[1:4, 5:8]
+    res <- pander_return(mt, digits = c(1,4,3,4), keep.trailing.zeros = TRUE)
+    expect_equal(res[5], '   **Mazda RX4**       4     2.62    16.5   0  ')
+=======
     res <- pander_return(m, digits = c(2, 4, 1))
     expect_equal(res[3], '0.11  0.1111  0.1 ')
     expect_warning(pander_return(m, digits = c(1, 2)))
@@ -273,15 +316,24 @@ test_that('digits param', {
     mt <- mtcars[1:4, 5:8]
     res <- pander_return(mt, digits = c(1, 4, 3, 4), keep.trailing.zeros = TRUE)
     expect_equal(res[5], '   **Mazda RX4**       4    2.62   16.5   0  ')
+>>>>>>> master
 })
 
 test_that('round param', {
     m <- matrix(rep(0.111111, 6), nrow = 2)
+<<<<<<< HEAD
+    res <- pander_return(m, round = c(2,4,1))
+    expect_equal(res[3], ' 0.11   0.1111   0.1 ')
+    expect_warning(pander_return(m, round=c(1,2)))
+    res <- pander_return(m, round = c(2))
+    expect_equal(res[3],' 0.11   0.11   0.11 ')
+=======
     res <- pander_return(m, round = c(2, 4, 1))
     expect_equal(res[3], '0.11  0.1111  0.1 ')
     expect_warning(pander_return(m, round = c(1, 2)))
     res <- pander_return(m, round = c(2))
     expect_equal(res[3], '0.11  0.11  0.11 ')
+>>>>>>> master
 })
 
 context('keep.line.breaks')
@@ -339,18 +391,18 @@ test_that('split.cells works correctly', {
   x <- data.frame(a = 'foo bar\nfo bar')
   # single line break behaves correctly combines with keep line breaks
   expect_equal(pandoc.table.return(x, keep.line.breaks = TRUE, split.cells = 7),
-               '\n-------\n   a   \n-------\nfoo bar\nfo bar \n-------\n\n')
+               '\n---------\n    a    \n---------\n foo bar \n fo bar  \n---------\n\n')
   expect_equal(pandoc.table.return(x, keep.line.breaks = TRUE, split.cells = 6),
-               '\n------\n  a   \n------\n foo  \n bar  \nfo bar\n------\n\n')
+               '\n--------\n   a    \n--------\n  foo   \n  bar   \n fo bar \n--------\n\n')
   # Corner values of split.cells
   x <- data.frame(a = 'foo bar', b = 'foo bar')
   expect_equal(length(strsplit(pandoc.table.return(x, split.cells = c(6, Inf)), '\n')[[1]]), 8)
   expect_equal(pandoc.table.return(x, split.cells = c(6, Inf)),
-               '\n-----------\n a     b   \n--- -------\nfoo foo bar\nbar        \n-----------\n\n')
+               '\n---------------\n  a       b    \n----- ---------\n foo   foo bar \n bar           \n---------------\n\n')
   expect_equal(pandoc.table.return(x, split.cells = c(Inf, 6)),
-               '\n-----------\n   a     b \n------- ---\nfoo bar foo\n        bar\n-----------\n\n')
+               '\n---------------\n    a       b  \n--------- -----\n foo bar   foo \n           bar \n---------------\n\n')
   expect_equal(pandoc.table.return(x, split.cells = c(7, 7)),
-               '\n---------------\n   a       b   \n------- -------\nfoo bar foo bar\n---------------\n\n')
+               '\n-------------------\n    a         b    \n--------- ---------\n foo bar   foo bar \n-------------------\n\n')
   expect_equal(pandoc.table.return(x, split.cells = c(7, 7)), pandoc.table.return(x, split.cells = Inf))
   expect_equal(pandoc.table.return(x, split.cells = c(6, 6)), pandoc.table.return(x, split.cells = 6))
   expect_equal(pandoc.table.return(x, split.cells = c(7, 7)), pandoc.table.return(x, split.cells = 7))
@@ -492,15 +544,25 @@ test_that('table.expand behaves correctly', {
   expect_equal(res, '        ')
 
   # backslashes issue (#22)
+<<<<<<< HEAD
+  expect_equal(pandoc.table.return(data.frame(a='\\1 \\ 32',b='23')),
+               '\n--------------\n    a      b  \n--------- ----\n \\1 \\ 32   23 \n--------------\n\n')
+  expect_equal(pandoc.table.return(data.frame(a='\\1 \\ 32',b='23'), justify = 'right'),
+               '\n--------------\n        a    b\n--------- ----\n  \\1 \\ 32   23\n--------------\n\n')
+  expect_equal(pandoc.table.return(data.frame(a='\\1',b='23')),
+               '\n---------\n a    b  \n---- ----\n \\1   23 \n---------\n\n')
+=======
   expect_equal(pandoc.table.return(data.frame(a = '\\1 \\ 32', b = '23')),
                '\n-----------\n   a     b \n------- ---\n\\1 \\ 32 23 \n-----------\n\n')
   expect_equal(pandoc.table.return(data.frame(a = '\\1 \\ 32', b = '23'), justify = 'right'),
                '\n-----------\n      a   b\n------- ---\n\\1 \\ 32  23\n-----------\n\n')
   expect_equal(pandoc.table.return(data.frame(a = '\\1', b = '23')),
                '\n-------\n a   b \n--- ---\n\\1  23 \n-------\n\n')
+>>>>>>> master
 
   # unicode string issue
-  expect_equal(pandoc.table.return(data.frame(a = 'ßß')), '\n---\n a \n---\nßß \n---\n\n')
+  expect_equal(pandoc.table.return(data.frame(a = 'ßß')),
+               '\n----\n a  \n----\n ßß \n----\n\n')
 })
 
 context('Empty objects')
@@ -508,7 +570,7 @@ context('Empty objects')
 test_that('Behavior for empty objects is correct', {
     mt <- mtcars[mtcars$mpg < 0, 1:4]
     res <- pander_return(mt)
-    expect_equal(res[3], '**mpg**  **cyl**  **disp**  **hp** ')
+    expect_equal(res[3], ' **mpg**   **cyl**   **disp**   **hp** ')
     expect_equal(length(res), 6)
     colnames(mt) <- NULL
     res <- suppressWarnings(pander_return(mt))
@@ -520,7 +582,7 @@ test_that('Behavior for empty objects is correct', {
     expect_warning(pander_return(mt))
     colnames(mt) <- 1:5
     res <- pander_return(mt)
-    expect_equal(res[3], '**1**  **2**  **3**  **4**  **5** ')
+    expect_equal(res[3], ' **1**   **2**   **3**   **4**   **5** ')
     expect_equal(length(res), 6)
     expect_equal(length(pander_return(data.frame())), 0)
     expect_warning(pander_return(data.frame()))
@@ -534,13 +596,13 @@ test_that('plain.ascii option works correctly', {
     res <- pandoc.table.return(x, emphasize.cells = c(3, 4), plain.ascii = TRUE)
     res <- strsplit(res, '\n')[[1]]
     expect_false(any(grepl('\\*', res)))
-    expect_equal(res[3], '1  2  3  4  5  6  7  8  9  10 ')
+    expect_equal(res[3], ' 1   2   3   4   5   6   7   8   9   10 ')
     # length(dim) == 1
     x <- array(1:10)
     res <- pandoc.table.return(x, emphasize.cells = c(3, 4), plain.ascii = TRUE)
     res <- strsplit(res, '\n')[[1]]
     expect_false(any(grepl('\\*', res)))
-    expect_equal(res[3], '1  2  3  4  5  6  7  8  9  10 ')
+    expect_equal(res[3], ' 1   2   3   4   5   6   7   8   9   10 ')
     # length(dim) > 1
     x <- mtcars[1:3, 1:4]
     res <- pandoc.table.return(x, emphasize.rows = 2, plain.ascii = TRUE)
@@ -611,7 +673,7 @@ test_that('pander.lm/pander.summary.lm behaves correctly', {
     lm.D9 <- lm(weight ~ group)
     res1 <- pander_return(lm.D9)
     expect_equal(length(res1), 11)
-    expect_equal(max(nchar(res1)), 62)
+    expect_equal(max(nchar(res1)), 63)
     res <- pander_return(summary(lm.D9))
     expect_true(any(grepl('Fitting linear model', res)))
     expect_true(any(grepl('Observations', res)))
@@ -717,7 +779,7 @@ test_that('pander.coxph behaves correctly', {
                   sex = c(0, 0, 0, 0, 1, 1, 1))
     # Fit a stratified model
     res <- pander_return(coxph(Surv(time, status) ~ x + strata(sex), test1))
-    expect_equal(res[3], '&nbsp;   coef   exp(coef)   se(coef)    z      p   ')
+    expect_equal(res[3], ' &nbsp;    coef    exp(coef)   se(coef)     z        p    ')
     expect_equal(length(res), 10)
 })
 
@@ -729,7 +791,7 @@ test_that('pander.clogit works correctly', {
                          id = indx,
                          tocc = factor(rep(resp, each = n)))
     logan2$case <- (logan2$occupation == logan2$tocc)
-    res <- pander_return(suppressWarnings(clogit(case ~ tocc + tocc:education + strata(id), logan2)))
+    res <- pander_return(suppressWarnings(clogit(case ~ tocc + tocc:education + strata(id), logan2)), split.table = Inf)
     expect_true(grepl('Fitting Conditional logistic regression', res[24]))
     expect_equal(length(res), 26)
 })
@@ -772,7 +834,7 @@ test_that('pander.survdiff works correctly', {
     suppressMessages(require(survival))
     res <- pander_return(survdiff(Surv(futime, fustat) ~ rx, data = ovarian))
     expect_equal(length(res), 12)
-    expect_equal(res[3], '  &nbsp;    N   Observed   Expected   (O-E)^2/E   (O-E)^2/V ')
+    expect_equal(res[3], '  &nbsp;    N    Observed   Expected   (O-E)^2/E   (O-E)^2/V ')
     # length(x$n) == 1
     expect <- survexp(futime ~ ratetable(age = (accept.dt - birth.dt),
                                          sex = 1,
@@ -780,7 +842,7 @@ test_that('pander.survdiff works correctly', {
                                          race = 'white'),
                       jasa, cohort = FALSE, ratetable = survexp.usr)
     res <- pander_return(survdiff(Surv(jasa$futime, jasa$fustat) ~ offset(expect)))
-    expect_equal(res[3], ' Observed   Expected    Z     p ')
+    expect_equal(res[3], ' Observed   Expected     Z      p ')
     expect_equal(length(res), 9)
 })
 
@@ -809,8 +871,13 @@ test_that('pander.stat.table works correctly', {
     suppressMessages(require(Epi))
     res <- pander_return(stat.table(tension, list(count(), mean(breaks)), data = warpbreaks))
     expect_equal(length(res), 11)
+<<<<<<< HEAD
+    expect_equal(res[3], ' &nbsp;   count()   mean(breaks) ')
+    res <- pander_return(stat.table(index=list(tension,wool),mean(breaks),data=warpbreaks))
+=======
     expect_equal(res[3], '&nbsp;   count()   mean(breaks) ')
     res <- pander_return(stat.table(index = list(tension, wool), mean(breaks), data = warpbreaks))
+>>>>>>> master
     expect_equal(length(res), 13)
     # here add test
 })
@@ -859,7 +926,7 @@ test_that('pander.rlm works correctly', {
 test_that('pander.summary.table works correctly', {
     ts <- summary(xtabs(cbind(ncases, ncontrols) ~ ., data = esoph))
     res <- pander_return(ts)
-    expect_equal(res[6], ' Chisq   df   p.value ' )
+    expect_equal(res[6], ' Chisq   df     p.value  ')
     expect_equal(length(res), 13)
     res <- pander_return(ts, print.call = FALSE)
     expect_false(any(grepl('Calls', res)))
