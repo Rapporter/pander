@@ -174,14 +174,15 @@ test_that('emphasize.verbatim works correctly', {
     res <- pander_return(df, emphasize.verbatim.cols = c(1,2), style = 'simple')
     expect_equal(res[5], ' `1`   `4`   7 ')
     expect_equal(res[6], ' `2`   `5`   8 ')
-=======
     df <- data.frame(a = 1:3, b = 1:3, c = 1:3)
-    res <- capture.output(pander(df, emphasize.italics.rows = c(1, 2), style = 'simple'))
-    expect_equal(res[5], '*1* *1* *1*')
-    expect_equal(res[6], '*2* *2* *2*')
-    res <- capture.output(pander(df, emphasize.strong.rows = c(1, 2), style = 'simple'))
-    expect_equal(res[5], '**1** **1** **1**')
-    expect_equal(res[6], '**2** **2** **2**')
+    res <- pander_return(df, emphasize.italics.rows = c(1, 2),
+                         style = 'simple')
+    expect_equal(res[5], ' *1*   *1*   *1* ')
+    expect_equal(res[6], ' *2*   *2*   *2* ')
+    res <- pander_return(df, emphasize.strong.rows = c(1, 2),
+                         style = 'simple')
+    expect_equal(res[5], ' **1**   **1**   **1** ')
+    expect_equal(res[6], ' **2**   **2**   **2** ')
 })
 
 test_that('emphasize.verbatim works correctly', {
