@@ -51,13 +51,13 @@ repChar <- function(x, n, sep = '')
 #' @return a string with concatenated vector contents
 #' @examples
 #' p(c('fee', 'fi', 'foo', 'fam'))
-#' ## [1] '_fee_, _fi_, _foo_ and _fam_'
+#' # [1] '_fee_, _fi_, _foo_ and _fam_'
 #' p(1:3, wrap = '')
-#' ## [1] '1, 2 and 3'
+#' # [1] '1, 2 and 3'
 #' p(LETTERS[1:5], copula = 'and the letter')
-#' ## [1] '_A_, _B_, _C_, _D_ and the letter _E_'
+#' # [1] '_A_, _B_, _C_, _D_ and the letter _E_'
 #' p(c('Thelma', 'Louise'), wrap = '', copula = '&')
-#' ## [1] 'Thelma & Louise'
+#' # [1] 'Thelma & Louise'
 #' @export
 #' @author Aleksandar Blagotic
 #' @references This function was moved from \code{rapport} package: \url{http://rapport-package.info}.
@@ -141,7 +141,7 @@ has.rownames <- function(x) {
 #' @param permanent (default \code{FALSE}) if caption is permanent (for all future tables) or not
 #' @export
 set.caption <- function(x, permanent = FALSE){
-    assign('caption', x , envir = storage)
+    assign('caption', x, envir = storage)
     if (!is.null(x)) {
         attr(storage$caption, 'permanent') <- permanent
     }
@@ -165,7 +165,7 @@ get.caption <- function()
 #' @param permanent (default \code{FALSE}) if alignment is permanent (for all future tables) or not. It's cleaner to use \code{panderOptions} instead.
 #' @export
 set.alignment <- function(default = panderOptions('table.alignment.default'), row.names = panderOptions('table.alignment.rownames'), permanent = FALSE) { #nolint
-    assign('alignment', list(default = default, row.names = row.names) , envir = storage)
+    assign('alignment', list(default = default, row.names = row.names), envir = storage)
     attr(storage$alignment, 'permanent') <- permanent
 }
 
@@ -263,7 +263,7 @@ get.alignment <- function(df) {
 #' pander(n)
 #' }
 emphasize.rows <- function(x)
-    assign(deparse(match.call()[[1]]), x , envir = storage)
+    assign(deparse(match.call()[[1]]), x, envir = storage)
 #' @export
 emphasize.strong.rows <- emphasize.rows
 #' @export
@@ -323,7 +323,7 @@ get.emphasize <- function(df) {
 get.storage <- function(what) {
     res <- tryCatch(get(what, envir = storage, inherits = FALSE), error = function(e) NULL)
     if (is.null(attr(res, 'permanent')) || !attr(res, 'permanent')) {
-        assign(what, NULL , envir = storage)
+        assign(what, NULL, envir = storage)
     }
     return(res)
 }
@@ -338,7 +338,7 @@ get.storage <- function(what) {
 #' @export
 add.significance.stars <- function(p, cutoffs = c(0.05, 0.01, 0.001)) {
 
-    stopifnot(length(cutoffs)==3)
+    stopifnot(length(cutoffs) == 3)
 
     if (inherits(p, c('matrix', 'data.frame')) && length(dim(p)) == 2) {
         apply(p, c(1,2), add.significance.stars, cutoffs = cutoffs)
@@ -452,7 +452,7 @@ multitable <- function(v) {
     mod <- lapply(1:length(v),
                   function(i)  {
                       uv <- unlist(c(rbind(pandoc.strong.return(names(v[[i]])),
-                                           sapply(v[[i]], p, wrap=''))))
+                                           sapply(v[[i]], p, wrap = ''))))
                       if (length(v[[i]]) < ml)
                           uv <- c(uv, rep('', 2 * (ml - length(v[[i]]))))
                       uv
@@ -472,7 +472,7 @@ coef_mat <- function(obj, coefs) {
     beta <- obj$coef
     se <- obj$se
     Z <- beta / se
-    if(length(errordf)) {
+    if (length(errordf)) {
         P <- 2 * (1 - pt(abs(Z), errordf))
     } else {
         P <- 1 - pchisq(Z ^ 2, 1)
@@ -488,7 +488,7 @@ coef_mat <- function(obj, coefs) {
         colnames(U)[ncol(U)] <- obj$auxname
     }
     if (is.numeric(coefs)) {
-        U <- U[1:coefs, , drop = FALSE]
+        U <- U[1:coefs, , drop = FALSE] #nolint
         U <- rbind(U, rep('', ncol(U)))
         rownames(U)[nrow(U)] <- '. . .'
     }

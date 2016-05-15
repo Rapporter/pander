@@ -1,5 +1,20 @@
-linters: with_defaults(line_length_linter(120), camel_case_linter = NULL, snake_case_linter = NULL, multiple_dots_linter = NULL, single_quotes_linter = NULL,
-                 double_quotes_linter = function(source_file) {
+exclusions: list(
+    "inst/doc/evals.R",
+    "inst/doc/knitr.R",
+    "inst/doc/pander.R",
+    "inst/doc/pandoc_table.R",
+    "R/RcppExports.R",
+    "R/S3.R" = c(257, 258, 259)
+    )
+linters: with_defaults(
+    line_length_linter(120),
+    camel_case_linter = NULL,
+    snake_case_linter = NULL,
+    multiple_dots_linter = NULL,
+    commented_code_linter = NULL, # 114
+    spaces_left_parentheses_linter = NULL, # 6
+    double_quotes_linter = NULL,
+    single_quotes_linter = function(source_file) {
            lapply(ids_with_token(source_file, "STR_CONST"),
            function(id) {
                parsed <- with_id(source_file, id)
@@ -13,5 +28,6 @@ linters: with_defaults(line_length_linter(120), camel_case_linter = NULL, snake_
                        line = source_file$lines[as.character(parsed$line1)],
                        ranges = list(c(parsed$col1, parsed$col2)),
                        linter = "double_quotes_linter"
-                   )}})})
-exclusions: list("R/RcppExports.R", "inst/doc/pandoc_table.R", "inst/doc/knitr.R", "inst/doc/evals.R")
+                   )}})},
+    NULL
+  )

@@ -17,7 +17,7 @@ panderOptions('knitr.auto.asis', FALSE)
 panderOptions('plain.ascii', TRUE)
 ```
 
-`Pander` is designed to provide a minimal and easy tool for rendering `R` objects into [Pandoc](http://pandoc.org/)'s markdown. This vignette aims to introduce `pander` package and it's core pieces of functionality. It is intented to be a general overview with pointers to places with detailed information. This vignette will talk about:
+`Pander` is designed to provide a minimal and easy tool for rendering `R` objects into [Pandoc](http://pandoc.org/)'s markdown. This vignette aims to introduce the `pander` package and its core pieces of functionality. It is intended to be a general overview with pointers to places with detailed information. This vignette will talk about:
 
 * core functionality for rendering objects in `Pandoc`'s markdown with generic S3 [pander method](#rendering-r-objects).
 * functionality for capturing various information when evaluating R expressions with [evals](#evals).
@@ -26,7 +26,7 @@ panderOptions('plain.ascii', TRUE)
 
 ## Rendering R objects
 
-The core functionality of `pander` is centered around rendering `R` objects into `Pandoc`'s markdown. Let's dive in the demo of the most common usage of `pander`:
+The core functionality of `pander` is centered around rendering `R` objects into `Pandoc`'s markdown. Let's dive in to a demo of the most common usage of `pander`:
 
 ```{r}
 pander(head(iris))
@@ -35,7 +35,7 @@ pander(tabular( (Species + 1) ~ (n=1) + Format(digits=2)*
          (Sepal.Length + Sepal.Width)*(mean + sd), data=iris ))
 ```
 
-As you have probably guess, this is achieved via generic `pander` `S3` method. Out of the box, `pander` supports a variety of classes:
+As you have probably guessed, this is achieved via the generic `pander` `S3` method. Out of the box, `pander` supports a variety of classes:
 
 ```{r}
 methods(pander)
@@ -43,11 +43,11 @@ methods(pander)
 
 If you think that pander lacks support for any other R class(es), please feel free to open a [ticket](https://github.com/Rapporter/pander/pulls) suggesting a new feature or submit [pull request](https://github.com/Rapporter/pander/issues) and we will be happy to extend the package.
 
-Under the hood, `pander` S3 methods rely on different `pandoc.*` methods, where most of functionality is implemented in `pandoc.table` which is used for rendering tables. `pandoc.table` provides similar to `knitr::kable` functionality in rendering markdown, but also adds a truly rich functionality with many different rendering options that `pander` inherits. For more usage/implementation details and examples, please refer to specialized vignette, which can be accessed by `vignette('pandoc_table')` or available online [here](http://rapporter.github.io/pander/pandoc_table.html).
+Under the hood, `pander` S3 methods rely on different `pandoc.*` methods, where most of functionality is implemented in `pandoc.table` which is used for rendering tables. `pandoc.table` provides functionality similar to `knitr::kable` in rendering markdown, but also adds a truly rich functionality with a variety of rendering options inherited from `pander`. For more usage/implementation details and examples, please refer to the `pandoc.table` vignette, which can be accessed by `vignette('pandoc_table')` (and is also available [online](http://rapporter.github.io/pander/pandoc_table.html)).
 
 ## Evals
 
-As `pander` package was originally developed in conjunction with [rapport](https://github.com/Rapporter/rapport) package, there was a needed for functionality that can evaluate `R` expression along with capturing errors and warnings. So `evals` emerged and soon some further feature requests arose, like identifying if an R expression results in a plot etc.
+The `pander` package was originally developed in conjunction with [rapport](https://github.com/Rapporter/rapport) package, when a need arose for a function that could evaluate `R` expressions while also capturing errors and warnings. So `evals` emerged and soon some further feature requests arose, like identifying if an R expression results in a plot, etc.
 
 But probably it's easier to explain what `evals` can do with a simple example:
 
@@ -55,48 +55,44 @@ But probably it's easier to explain what `evals` can do with a simple example:
 evals('1:10')
 ```
 
-`evals` is aimed at collecting as much information as possible while evaluating R code. It can evaluate a character vector of R expressions, and it returns a list of captured information while running those:
+`evals` is aimed at collecting as much information as possible while evaluating R code. It can evaluate a character vector of R expressions, and it returns a list of information captured while running them:
 
 * `src` holds the R expression,
-* `result` contains the raw R object as is,
+* `result` contains the raw R object as-is,
 * `output` represents how the R object is printed to the standard output,
 * `type` is the class of the returned R object,
-* `msg` is a list of possible messages captured while evaluating the R expression and. Among other messages, warnings/errors will appear here.
-* `stdout` contains if anything was written to the standard output.
+* `msg` is a list of possible messages captured while evaluating the R expression. Among other messages, warnings/errors will appear here.
+* `stdout` contains what, if anything, was written to the standard output.
 
-For more usage/implementation details and examples, please refer to specialized vignette, which can be accessed by `vignette('evals')` or available online [here](http://rapporter.github.io/pander/evals.html).
+For more usage/implementation details and examples, please refer to the `evals` vignette, which can be accessed by `vignette('evals')` (also available [online](http://rapporter.github.io/pander/evals.html)).
 
 ## Brew to Pandoc
 
-The [brew](https://cran.r-project.org/package=brew) package, which is a templating framework for report generation, has not been updated since 2011, but it's still some of R projects based on its simple design and useful features in literate programming. For a quick overview, please see the following documents if you are not familiar with brew:
+The [brew](https://cran.r-project.org/package=brew) package, a templating framework for report generation, has not been updated since 2011, but it's still some of R projects based on its simple design and useful literate programming features. For a quick overview, please see the following documents if you are not familiar with brew:
 
 * [slides on "Building a reporting sytem with BREW"](http://www.slideshare.net/xavierguardiola/building-a-reporting-sytem-with-brew)
 * [learnr blogpost on brew](https://learnr.wordpress.com/2009/09/09/brew-creating-repetitive-reports/)
 
 A brew document is a simple text file with some special tags. `Pandoc.brew` uses only two of them (as building on a personalized version of Jeff's really great brew function):
 
-* `<% ... %>` stand for running inline R commands as usual,
-* `<%= ... %>` does pretty much the same but applies pander to the returning R object (instead of cat like the original brew function does). So putting there any R object, it would return in a nice Pandoc's markdown format with all possible error/warning messages etc.
+* `<% ... %>` stands for running inline R commands as usual,
+* `<%= ... %>` does pretty much the same but applies pander to the returning R object (instead of `cat` like the original brew function does). So inserting any R object into the tag would return it in Pandoc markdown format, with all possible error/warning messages, etc.
 
-This latter tries to be smart in some ways:
+The latter tries to be smart in some ways:
 
 * A code chunk block (`R` commands between the tags) can return any number of values at any part of the block.
 * Plots and images are grabbed in the document, rendered to a png file and pander method would result in a Pandoc markdown formatted image link. This means that the image would be rendered/shown/included in the exported document.
 * All warnings/messages and errors are recorded in the blocks and returned in the document as footnotes or inline messages.
 * All heavy `R` commands (e.g. those taking more then 0.1 sec to evaluate) are cached so rebrewing a report would not result in a coffee break.
 
-Besides this, the custom brew function can do more and also less compared to the original brew package. First of all, the internal caching mechanism of brew has been removed and rewritten for some extra profits besides improved caching. Quick example:
+Besides this, the custom brew function can do more and also less compared to the original brew package. First of all, the internal caching mechanism of brew has been rewritten for benefits besides improved caching. Quick example:
 
 ```{r}
-str(Pandoc.brew(text ='
-+   Pi equals to `<%= pi %>`.
-+   And here are some random data:
-+   `<%= runif(10) %>`
-+ '))
+str(Pandoc.brew(text ='Pi equals to `<%= pi %>`. And here are some random data: `<%= runif(10)%>`'))
 ```
 
-The package bundles some examples for `Pandoc.brew` to let you check its features pretty fast.
-To brew these examples on your machine, try to run the followings commands:
+The package bundles some examples for `Pandoc.brew` to let you quickly check its features.
+To brew these examples on your machine, run the following commands:
 
 ```
 Pandoc.brew(system.file('examples/minimal.brew', package='pander'))
@@ -114,7 +110,7 @@ Pandoc.brew(system.file('examples/graphs.brew', package='pander'),
 
 ## General Options
 
-The package comes with a variety of globally adjustable options, which have an effect on the result of your reports. Full list of options can be viewed by calling `?panderOptions` or in the online [readme](https://github.com/Rapporter/pander#general-options).
+The package comes with a variety of globally adjustable options that have an effect on the result of your reports. A full list of options can be viewed by calling `?panderOptions` or in the online [readme](https://github.com/Rapporter/pander#general-options).
 
 You can query and update these options with the `panderOptions` function:
 

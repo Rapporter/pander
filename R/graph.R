@@ -68,7 +68,7 @@ add.lattice.grid <- function (side = c('top', 'bottom', 'left', 'right'), ..., t
 
     side <- match.arg(side)
     ticks <- match.arg(ticks)
-    scales.tck <- switch(side, left = , bottom = scales$tck[1], right = , top = scales$tck[2])
+    scales.tck <- switch(side, left = , bottom = scales$tck[1], right = , top = scales$tck[2]) #nolint
     comps.major <- components
     mycomps <- components[[side]]
 

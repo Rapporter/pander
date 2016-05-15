@@ -12,7 +12,7 @@
 
 <meta name="author" content="Roman Tsegelskyi, Gergely Daróczi" />
 
-<meta name="date" content="2016-03-10" />
+<meta name="date" content="2016-05-13" />
 
 <title>Using pander with knitr</title>
 
@@ -58,6 +58,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 </style>
 
 
+
 <link href="data:text/css;charset=utf-8,body%20%7B%0Abackground%2Dcolor%3A%20%23fff%3B%0Amargin%3A%201em%20auto%3B%0Amax%2Dwidth%3A%20700px%3B%0Aoverflow%3A%20visible%3B%0Apadding%2Dleft%3A%202em%3B%0Apadding%2Dright%3A%202em%3B%0Afont%2Dfamily%3A%20%22Open%20Sans%22%2C%20%22Helvetica%20Neue%22%2C%20Helvetica%2C%20Arial%2C%20sans%2Dserif%3B%0Afont%2Dsize%3A%2014px%3B%0Aline%2Dheight%3A%201%2E35%3B%0A%7D%0A%23header%20%7B%0Atext%2Dalign%3A%20center%3B%0A%7D%0A%23TOC%20%7B%0Aclear%3A%20both%3B%0Amargin%3A%200%200%2010px%2010px%3B%0Apadding%3A%204px%3B%0Awidth%3A%20400px%3B%0Aborder%3A%201px%20solid%20%23CCCCCC%3B%0Aborder%2Dradius%3A%205px%3B%0Abackground%2Dcolor%3A%20%23f6f6f6%3B%0Afont%2Dsize%3A%2013px%3B%0Aline%2Dheight%3A%201%2E3%3B%0A%7D%0A%23TOC%20%2Etoctitle%20%7B%0Afont%2Dweight%3A%20bold%3B%0Afont%2Dsize%3A%2015px%3B%0Amargin%2Dleft%3A%205px%3B%0A%7D%0A%23TOC%20ul%20%7B%0Apadding%2Dleft%3A%2040px%3B%0Amargin%2Dleft%3A%20%2D1%2E5em%3B%0Amargin%2Dtop%3A%205px%3B%0Amargin%2Dbottom%3A%205px%3B%0A%7D%0A%23TOC%20ul%20ul%20%7B%0Amargin%2Dleft%3A%20%2D2em%3B%0A%7D%0A%23TOC%20li%20%7B%0Aline%2Dheight%3A%2016px%3B%0A%7D%0Atable%20%7B%0Amargin%3A%201em%20auto%3B%0Aborder%2Dwidth%3A%201px%3B%0Aborder%2Dcolor%3A%20%23DDDDDD%3B%0Aborder%2Dstyle%3A%20outset%3B%0Aborder%2Dcollapse%3A%20collapse%3B%0A%7D%0Atable%20th%20%7B%0Aborder%2Dwidth%3A%202px%3B%0Apadding%3A%205px%3B%0Aborder%2Dstyle%3A%20inset%3B%0A%7D%0Atable%20td%20%7B%0Aborder%2Dwidth%3A%201px%3B%0Aborder%2Dstyle%3A%20inset%3B%0Aline%2Dheight%3A%2018px%3B%0Apadding%3A%205px%205px%3B%0A%7D%0Atable%2C%20table%20th%2C%20table%20td%20%7B%0Aborder%2Dleft%2Dstyle%3A%20none%3B%0Aborder%2Dright%2Dstyle%3A%20none%3B%0A%7D%0Atable%20thead%2C%20table%20tr%2Eeven%20%7B%0Abackground%2Dcolor%3A%20%23f7f7f7%3B%0A%7D%0Ap%20%7B%0Amargin%3A%200%2E5em%200%3B%0A%7D%0Ablockquote%20%7B%0Abackground%2Dcolor%3A%20%23f6f6f6%3B%0Apadding%3A%200%2E25em%200%2E75em%3B%0A%7D%0Ahr%20%7B%0Aborder%2Dstyle%3A%20solid%3B%0Aborder%3A%20none%3B%0Aborder%2Dtop%3A%201px%20solid%20%23777%3B%0Amargin%3A%2028px%200%3B%0A%7D%0Adl%20%7B%0Amargin%2Dleft%3A%200%3B%0A%7D%0Adl%20dd%20%7B%0Amargin%2Dbottom%3A%2013px%3B%0Amargin%2Dleft%3A%2013px%3B%0A%7D%0Adl%20dt%20%7B%0Afont%2Dweight%3A%20bold%3B%0A%7D%0Aul%20%7B%0Amargin%2Dtop%3A%200%3B%0A%7D%0Aul%20li%20%7B%0Alist%2Dstyle%3A%20circle%20outside%3B%0A%7D%0Aul%20ul%20%7B%0Amargin%2Dbottom%3A%200%3B%0A%7D%0Apre%2C%20code%20%7B%0Abackground%2Dcolor%3A%20%23f7f7f7%3B%0Aborder%2Dradius%3A%203px%3B%0Acolor%3A%20%23333%3B%0Awhite%2Dspace%3A%20pre%2Dwrap%3B%20%0A%7D%0Apre%20%7B%0Aborder%2Dradius%3A%203px%3B%0Amargin%3A%205px%200px%2010px%200px%3B%0Apadding%3A%2010px%3B%0A%7D%0Apre%3Anot%28%5Bclass%5D%29%20%7B%0Abackground%2Dcolor%3A%20%23f7f7f7%3B%0A%7D%0Acode%20%7B%0Afont%2Dfamily%3A%20Consolas%2C%20Monaco%2C%20%27Courier%20New%27%2C%20monospace%3B%0Afont%2Dsize%3A%2085%25%3B%0A%7D%0Ap%20%3E%20code%2C%20li%20%3E%20code%20%7B%0Apadding%3A%202px%200px%3B%0A%7D%0Adiv%2Efigure%20%7B%0Atext%2Dalign%3A%20center%3B%0A%7D%0Aimg%20%7B%0Abackground%2Dcolor%3A%20%23FFFFFF%3B%0Apadding%3A%202px%3B%0Aborder%3A%201px%20solid%20%23DDDDDD%3B%0Aborder%2Dradius%3A%203px%3B%0Aborder%3A%201px%20solid%20%23CCCCCC%3B%0Amargin%3A%200%205px%3B%0A%7D%0Ah1%20%7B%0Amargin%2Dtop%3A%200%3B%0Afont%2Dsize%3A%2035px%3B%0Aline%2Dheight%3A%2040px%3B%0A%7D%0Ah2%20%7B%0Aborder%2Dbottom%3A%204px%20solid%20%23f7f7f7%3B%0Apadding%2Dtop%3A%2010px%3B%0Apadding%2Dbottom%3A%202px%3B%0Afont%2Dsize%3A%20145%25%3B%0A%7D%0Ah3%20%7B%0Aborder%2Dbottom%3A%202px%20solid%20%23f7f7f7%3B%0Apadding%2Dtop%3A%2010px%3B%0Afont%2Dsize%3A%20120%25%3B%0A%7D%0Ah4%20%7B%0Aborder%2Dbottom%3A%201px%20solid%20%23f7f7f7%3B%0Amargin%2Dleft%3A%208px%3B%0Afont%2Dsize%3A%20105%25%3B%0A%7D%0Ah5%2C%20h6%20%7B%0Aborder%2Dbottom%3A%201px%20solid%20%23ccc%3B%0Afont%2Dsize%3A%20105%25%3B%0A%7D%0Aa%20%7B%0Acolor%3A%20%230033dd%3B%0Atext%2Ddecoration%3A%20none%3B%0A%7D%0Aa%3Ahover%20%7B%0Acolor%3A%20%236666ff%3B%20%7D%0Aa%3Avisited%20%7B%0Acolor%3A%20%23800080%3B%20%7D%0Aa%3Avisited%3Ahover%20%7B%0Acolor%3A%20%23BB00BB%3B%20%7D%0Aa%5Bhref%5E%3D%22http%3A%22%5D%20%7B%0Atext%2Ddecoration%3A%20underline%3B%20%7D%0Aa%5Bhref%5E%3D%22https%3A%22%5D%20%7B%0Atext%2Ddecoration%3A%20underline%3B%20%7D%0A%0Acode%20%3E%20span%2Ekw%20%7B%20color%3A%20%23555%3B%20font%2Dweight%3A%20bold%3B%20%7D%20%0Acode%20%3E%20span%2Edt%20%7B%20color%3A%20%23902000%3B%20%7D%20%0Acode%20%3E%20span%2Edv%20%7B%20color%3A%20%2340a070%3B%20%7D%20%0Acode%20%3E%20span%2Ebn%20%7B%20color%3A%20%23d14%3B%20%7D%20%0Acode%20%3E%20span%2Efl%20%7B%20color%3A%20%23d14%3B%20%7D%20%0Acode%20%3E%20span%2Ech%20%7B%20color%3A%20%23d14%3B%20%7D%20%0Acode%20%3E%20span%2Est%20%7B%20color%3A%20%23d14%3B%20%7D%20%0Acode%20%3E%20span%2Eco%20%7B%20color%3A%20%23888888%3B%20font%2Dstyle%3A%20italic%3B%20%7D%20%0Acode%20%3E%20span%2Eot%20%7B%20color%3A%20%23007020%3B%20%7D%20%0Acode%20%3E%20span%2Eal%20%7B%20color%3A%20%23ff0000%3B%20font%2Dweight%3A%20bold%3B%20%7D%20%0Acode%20%3E%20span%2Efu%20%7B%20color%3A%20%23900%3B%20font%2Dweight%3A%20bold%3B%20%7D%20%20code%20%3E%20span%2Eer%20%7B%20color%3A%20%23a61717%3B%20background%2Dcolor%3A%20%23e3d2d2%3B%20%7D%20%0A" rel="stylesheet" type="text/css" />
 
 </head>
@@ -66,18 +67,15 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 
 
 
-<div class="fluid-row" id="header">
 
-
-<h1 class="title">Using pander with knitr</h1>
+<h1 class="title toc-ignore">Using pander with knitr</h1>
 <h4 class="author"><em>Roman Tsegelskyi, Gergely Daróczi</em></h4>
-<h4 class="date"><em>2016-03-10</em></h4>
-
-</div>
+<h4 class="date"><em>2016-05-13</em></h4>
 
 
-<p>While functionality of <code>pander</code> and <code>knitr</code> overlap in report generation, we have the feeling that the best way to use all power of <code>R/knitr/pander</code> for report generation is to utilize them together. This short vignette aims to explain how to embed output of <code>pander</code> in reports generated by <code>knitr</code>. If you are not aware of what <code>knitr</code> is, be sure to check out project’s <a href="http://yihui.name/knitr/">homepage</a> which contains extensive documentation and examples.</p>
-<p>One of the most useful feature of <code>knitr</code> is the ability to convert tables to output format on the fly. For example:</p>
+
+<p>While the report generation functionality of <code>pander</code> and <code>knitr</code> do overlap, we feel that the most powerful way to use <code>R/knitr/pander</code> for report generation is to utilize them together. This short vignette aims to explain how to embed <code>pander</code> output in reports generated by <code>knitr</code>. If you are not aware of <code>knitr</code>, be sure to check out the project’s <a href="http://yihui.name/knitr/">homepage</a> for extensive documentation and examples.</p>
+<p>One of <code>knitr</code>’s most useful features is the ability to convert tables to output format on the fly. For example:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">head</span>(iris)
 <span class="co">#&gt;   Sepal.Length Sepal.Width Petal.Length Petal.Width Species</span>
 <span class="co">#&gt; 1          5.1         3.5          1.4         0.2  setosa</span>
@@ -142,7 +140,7 @@ knitr::<span class="kw">kable</span>(<span class="kw">head</span>(iris))</code><
 </tr>
 </tbody>
 </table>
-<p>However, <code>kable</code> table generator is simple by design, and does not capture all the variety of classes that <code>R</code> has to offer. For example, <code>CrossTable</code> and <code>tabular</code> is not supported:</p>
+<p>However, <code>kable</code> table generator is simple by design, and does not capture all the variety of classes that <code>R</code> has to offer. For example, <code>CrossTable</code> and <code>tabular</code> are not supported:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(descr, <span class="dt">quietly =</span> <span class="ot">TRUE</span>)
 ct &lt;-<span class="st"> </span><span class="kw">CrossTable</span>(mtcars$gear, mtcars$cyl)
 <span class="co">#&gt; Warning in chisq.test(tab, correct = FALSE, ...): Chi-squared approximation</span>
@@ -159,7 +157,7 @@ tab &lt;-<span class="st"> </span><span class="kw">tabular</span>( (Species +<sp
 <span class="st">         </span>(Sepal.Length +<span class="st"> </span>Sepal.Width)*(mean +<span class="st"> </span>sd), <span class="dt">data=</span>iris )
 knitr::<span class="kw">kable</span>(tab)
 <span class="co">#&gt; Error in `colnames&lt;-`(`*tmp*`, value = c(&quot;term&quot;, &quot;term&quot;, &quot;term&quot;, &quot;term&quot;, : length of 'dimnames' [2] not equal to array extent</span></code></pre></div>
-<p>This is where <code>pander</code> comes handy. <code>pander</code> support rendering for many popular classes:</p>
+<p>This is where <code>pander</code> comes in handy, as <code>pander</code> supports rendering for many popular classes:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">methods</span>(pander)
 <span class="co">#&gt;  [1] pander.anova*           pander.aov*            </span>
 <span class="co">#&gt;  [3] pander.aovlist*         pander.Arima*          </span>
@@ -199,7 +197,7 @@ knitr::<span class="kw">kable</span>(tab)
 <span class="co">#&gt; [71] pander.tabular*         pander.ts*             </span>
 <span class="co">#&gt; [73] pander.zoo*            </span>
 <span class="co">#&gt; see '?methods' for accessing help and source code</span></code></pre></div>
-<p>And it’s integrated with <code>knitr</code> by default. <code>pander</code> simply identifies if <code>knitr</code> is running in the backgorund, and if so, it <code>capture.output</code> and return the resulting string as an <code>knit_asis</code> object, so that you do not need to specify the <code>results='asis'</code> option in your knitr chunk:</p>
+<p>Also, <code>pander</code> is integrated with <code>knitr</code> by default. <code>pander</code> simply identifies if <code>knitr</code> is running in the background, and if so, it uses <code>capture.output</code> to return the resulting string as an <code>knit_asis</code> object, meaning that you do not need to specify the <code>results='asis'</code> option in your knitr chunk:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(descr, <span class="dt">quietly =</span> <span class="ot">TRUE</span>)
 <span class="kw">pander</span>(<span class="kw">CrossTable</span>(mtcars$gear, mtcars$cyl))
 <span class="co">#&gt; Warning in chisq.test(tab, correct = FALSE, ...): Chi-squared approximation</span>
@@ -401,8 +399,8 @@ sd</th>
 </tr>
 </tbody>
 </table>
-<p>In a nutshell, this is achieved by modification that whenever you call <code>pander</code> inside of a <code>knitr</code> document, instead of returning the markdown text to the standard output (as it used to happen), pander returns a <code>knit_asis</code> class object, which renders fine in the resulting document — without the double comment chars, so rendering the tables in HTML, pdf or other document formats just fine.</p>
-<p>If by any chance you actually want results of <code>pander</code> not to be converted automatically, just specify <code>knitr.auto.asis</code> to <code>FALSE</code> either using <code>panderOptions</code>:</p>
+<p>In a nutshell, this is achieved by modification that whenever you call <code>pander</code> inside of a <code>knitr</code> document, instead of returning the markdown text to the standard output (the default behavior), <code>pander</code> returns a <code>knit_asis</code> class object, which renders correctly in the resulting document — without the double comment chars, thus properly rendering the tables in HTML, PDF, or other document formats.</p>
+<p>If you don’t want the results of <code>pander</code> to be converted automatically, just set <code>knitr.auto.asis</code> to <code>FALSE</code> using <code>panderOptions</code>:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">panderOptions</span>(<span class="st">'knitr.auto.asis'</span>, <span class="ot">FALSE</span>)
 <span class="kw">pander</span>(<span class="kw">head</span>(iris))
 <span class="co">#&gt; </span>
@@ -424,7 +422,7 @@ sd</th>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">panderOptions</span>(<span class="st">'knitr.auto.asis'</span>, <span class="ot">TRUE</span>)</code></pre></div>
 <div id="rendering-markdown-inside-loopvectorized-function" class="section level4">
 <h4>Rendering markdown inside loop/vectorized function</h4>
-<p>One question that is being asked a lot is how to use <code>pander</code> with <code>knitr</code> in a loop or with vectorized function. For example we have 3 tables that we want to render and we want to do it using <code>lapply</code>:</p>
+<p>One frequenly asked question is how to use <code>pander</code> with <code>knitr</code> in a loop or vectorized function. For example, we have 3 tables that we want to render using <code>lapply</code>:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">dfs &lt;-<span class="st"> </span><span class="kw">list</span>(mtcars[<span class="dv">1</span>:<span class="dv">3</span>, <span class="dv">1</span>:<span class="dv">4</span>], mtcars[<span class="dv">4</span>:<span class="dv">6</span>, <span class="dv">1</span>:<span class="dv">4</span>], mtcars[<span class="dv">7</span>:<span class="dv">9</span>, <span class="dv">1</span>:<span class="dv">4</span>])
 <span class="kw">lapply</span>(dfs, pander)
 <span class="co">#&gt; [[1]]</span>
@@ -432,23 +430,22 @@ sd</th>
 <span class="co">#&gt; attr(,&quot;class&quot;)</span>
 <span class="co">#&gt; [1] &quot;knit_asis&quot;</span>
 <span class="co">#&gt; attr(,&quot;knit_cacheable&quot;)</span>
-<span class="co">#&gt; [1] TRUE</span>
+<span class="co">#&gt; [1] NA</span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; [[2]]</span>
 <span class="co">#&gt; [1] &quot;\n-----------------------------------------------\n        &amp;nbsp;           mpg   cyl   disp   hp \n----------------------- ----- ----- ------ ----\n  **Hornet 4 Drive**    21.4    6    258   110 \n\n **Hornet Sportabout**  18.7    8    360   175 \n\n      **Valiant**       18.1    6    225   105 \n-----------------------------------------------\n\n&quot;</span>
 <span class="co">#&gt; attr(,&quot;class&quot;)</span>
 <span class="co">#&gt; [1] &quot;knit_asis&quot;</span>
 <span class="co">#&gt; attr(,&quot;knit_cacheable&quot;)</span>
-<span class="co">#&gt; [1] TRUE</span>
+<span class="co">#&gt; [1] NA</span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; [[3]]</span>
 <span class="co">#&gt; [1] &quot;\n----------------------------------------\n     &amp;nbsp;       mpg   cyl   disp   hp \n---------------- ----- ----- ------ ----\n **Duster 360**  14.3    8    360   245 \n\n **Merc 240D**   24.4    4   146.7   62 \n\n  **Merc 230**   22.8    4   140.8   95 \n----------------------------------------\n\n&quot;</span>
 <span class="co">#&gt; attr(,&quot;class&quot;)</span>
 <span class="co">#&gt; [1] &quot;knit_asis&quot;</span>
 <span class="co">#&gt; attr(,&quot;knit_cacheable&quot;)</span>
-<span class="co">#&gt; [1] TRUE</span></code></pre></div>
-<p>As you can see, this doesn’t work correctly, due to fact that when run inside <code>knitr</code>, <code>pander</code> tries to return <code>knit_asis</code> class object, but for loops/vectorized functions this results in incorrect output.</p>
-<p>Recommended way to solve this is to disable <code>pander</code> trying to return <code>knit_asis</code> class object by setting <code>knitr.auto.asis</code> to <code>FALSE</code> using <code>panderOptions</code>. However, in that case to we also need to tell <code>knitr</code> to convert table on the fly by specifying <code>results='asis'</code> for <code>knitr</code> chunk:</p>
+<span class="co">#&gt; [1] NA</span></code></pre></div>
+<p>As you can see, this doesn’t work correctly because <code>pander</code> tries to return a <code>knit_asis</code> class object when run inside <code>knitr</code>, but for loops/vectorized functions this results in incorrect output. The recommended way to solve this is to disable this behavior by setting <code>knitr.auto.asis</code> to <code>FALSE</code> using <code>panderOptions</code>. However, we also need to tell <code>knitr</code> to convert the table on the fly by specifying <code>results='asis'</code> in the chunk options:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">panderOptions</span>(<span class="st">'knitr.auto.asis'</span>, <span class="ot">FALSE</span>)
 dfs &lt;-<span class="st"> </span><span class="kw">list</span>(mtcars[<span class="dv">1</span>:<span class="dv">3</span>, <span class="dv">1</span>:<span class="dv">4</span>], mtcars[<span class="dv">4</span>:<span class="dv">6</span>, <span class="dv">1</span>:<span class="dv">4</span>], mtcars[<span class="dv">7</span>:<span class="dv">9</span>, <span class="dv">1</span>:<span class="dv">4</span>])
 <span class="kw">invisible</span>(<span class="kw">lapply</span>(dfs, pander))</code></pre></div>
