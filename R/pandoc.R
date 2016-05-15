@@ -1116,15 +1116,6 @@ pandoc.table.return <- function(t, caption, digits = panderOptions('digits'), de
     ## also dealing with cells split by newlines
     t.width <-  as.numeric(apply(cbind(t.colnames.width, apply(t, 2, function(x) max(sapply(strsplit(x,'\n'), function(x) max(nchar(x, type = 'width'), 0))))), 1, max)) #nolint
 
-    ## add an extra space to the column width
-    ##   if there are no column headers
-    ##   and the alignment depends on the first line of the table
-    if (length(t.colnames.width) == 1 &&
-        t.colnames.width == 0 &&
-        style %in% c('simple', 'multiline')) {
-        t.width <- mapply(max, nchar(t[1, ]) + 1, t.width)
-    }
-
     ## remove obvious row.names
     if (all(t.rownames == 1:nrow(t)) | all(t.rownames == '')) {
         t.rownames <- NULL
