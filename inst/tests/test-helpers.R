@@ -89,3 +89,16 @@ test_that('options', {
     expect_error(panderOptions('foobar'))
     expect_error(evalsOptions('foobar'))
 })
+
+context('p function')
+test_that('p', {
+    expect_equal(p(character(0)), '')
+    expect_equal(p(1), '_1_')
+    expect_equal(p(1:3), '_1_, _2_ and _3_')
+    expect_equal(p(1, wrap = ''), '1')
+    expect_equal(p(1:3, wrap = '', sep = '|', copula = '|'), '1|2|3')
+    expect_equal(p(seq(1, 1.2, 0.1)), '_1_, _1.1_ and _1.2_')
+    expect_equal(p(seq(1, 1.2, 0.1), keep.trailing.zeros = TRUE),
+                 '_1.0_, _1.1_ and _1.2_')
+    expect_error(p(1:10, limit = 3))
+})
