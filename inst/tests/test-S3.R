@@ -167,8 +167,9 @@ test_that('emphasize.italics.rows works correctly', {
 })
 
 test_that('emphasize.verbatim works correctly', {
-    df <- data.frame(a=1:3, b=4:6, c=7:9)
-    res <- pander_return(df, emphasize.verbatim.rows = c(1,2), style = 'simple')
+    df <- data.frame(a = 1:3, b = 4:6, c = 7:9)
+    res <- pander_return(df, emphasize.verbatim.rows = c(1, 2),
+                         style = 'simple')
     expect_equal(res[5], ' `1`   `4`   `7` ')
     expect_equal(res[6], ' `2`   `5`   `8` ')
     res <- pander_return(df, emphasize.verbatim.cols = c(1,2), style = 'simple')
@@ -187,12 +188,14 @@ test_that('emphasize.verbatim works correctly', {
 
 test_that('emphasize.verbatim works correctly', {
     df <- data.frame(a = 1:3, b = 4:6, c = 7:9)
-    res <- pander_return(df, emphasize.verbatim.rows = c(1, 2), style = 'simple')
-    expect_equal(res[5], '`1` `4` `7`')
-    expect_equal(res[6], '`2` `5` `8`')
-    res <- pander_return(df, emphasize.verbatim.cols = c(1, 2), style = 'simple')
-    expect_equal(res[5], '`1` `4`  7 ')
-    expect_equal(res[6], '`2` `5`  8 ')
+    res <- pander_return(df, emphasize.verbatim.rows = c(1, 2),
+                         style = 'simple')
+    expect_equal(res[5], ' `1`   `4`   `7` ')
+    expect_equal(res[6], ' `2`   `5`   `8` ')
+    res <- pander_return(df, emphasize.verbatim.cols = c(1, 2),
+                         style = 'simple')
+    expect_equal(res[5], ' `1`   `4`   7 ')
+    expect_equal(res[6], ' `2`   `5`   8 ')
     res <- pander_return(df, emphasize.verbatim.cells =
                                  which(df > 5, arr.ind = TRUE),
                          style = 'simple')
