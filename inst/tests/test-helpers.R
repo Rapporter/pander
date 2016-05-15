@@ -84,3 +84,8 @@ test_that('splitLine with hyphening behaves correctly', {
   # infinite width
   expect_equal(splitLine(x, Inf, TRUE), x)
 })
+
+test_that('options', {
+    expect_error(panderOptions('foobar'))
+    expect_error(evalsOptions('foobar'))
+})
