@@ -157,7 +157,6 @@ test_that('no warning for highlight NA/empty strings', {
 
 test_that('emphasize.italics.rows works correctly', {
     # test for issue 176
-<<<<<<< HEAD
     df <- data.frame(a=1:3, b=1:3, c=1:3)
     res <- capture.output(pander(df, emphasize.italics.rows = c(1,2), style = 'simple'))
     expect_equal(res[5], ' *1*   *1*   *1* ')
