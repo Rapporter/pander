@@ -309,3 +309,12 @@ test_that('output param works correctly', {
 evalsOptions('cache.dir',  cache.dir)
 evalsOptions('graph.dir',  graph.dir)
 setwd(wd)
+
+test_that('switching cache works', {
+    co <- evalsOptions('cache')
+    evalsOptions('cache', FALSE)
+    expect_false(evalsOptions('cache'))
+    evalsOptions('cache', TRUE)
+    expect_true(evalsOptions('cache'))
+    evalsOptions('cache', co)
+})

@@ -312,6 +312,12 @@ test_that('round param', {
     expect_equal(res[3],' 0.11   0.11   0.11 ')
 })
 
+context('keep.trailing.zeros')
+test_that('digits param', {
+    expect_true(grepl('3.90', pander_return(mtcars[2:3, 1:5], keep.trailing.zeros = TRUE)[5]))
+    expect_false(grepl('3.90', pander_return(mtcars[2:3, 1:5], keep.trailing.zeros = FALSE)[5]))
+})
+
 context('keep.line.breaks')
 test_that('keep.line.breaks works correctly', {
   # keeping line breaks in a simple data.frame with one line breaks differs lines amount by one
