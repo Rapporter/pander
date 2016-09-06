@@ -1350,7 +1350,7 @@ pandoc.formula.return <- function(x, text = NULL, max.width = 80, caption, add.l
     }
     ## (optional) caption
     if (!is.null(caption) && caption != '' && check_caption(caption)) {
-        res <- paste0(res, panderOptions('formula.caption.prefix'), caption, '\n\n')
+        res <- paste0(res, '\n\n', panderOptions('formula.caption.prefix'), caption, '\n\n')
     }
     return(res)
 }
