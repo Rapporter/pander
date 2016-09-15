@@ -12,7 +12,7 @@
 
 <meta name="author" content="Roman Tsegelskyi, Gergely Daróczi" />
 
-<meta name="date" content="2016-03-28" />
+<meta name="date" content="2016-05-13" />
 
 <title>Rendering tables with pandoc.table</title>
 
@@ -67,23 +67,20 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 
 
 
-<div class="fluid-row" id="header">
 
-
-<h1 class="title">Rendering tables with pandoc.table</h1>
+<h1 class="title toc-ignore">Rendering tables with pandoc.table</h1>
 <h4 class="author"><em>Roman Tsegelskyi, Gergely Daróczi</em></h4>
-<h4 class="date"><em>2016-03-28</em></h4>
-
-</div>
+<h4 class="date"><em>2016-05-13</em></h4>
 
 
-<p>Core functionality of <code>pander</code> is centered around <code>pandoc.table</code> which is aimed at rendering tables in <code>markdown</code>. In case of 2D tables, <code>pander</code> calls <code>pandoc.table</code> internally, thus in such cases <code>pander</code> and <code>pandoc.table</code> support the same argument and in this vignette will be used iterchangingly. <code>pandoc.table</code> has big variety of options (<a href="#highlighting-cells">highlighting</a>, <a href="#table-styles">styles</a>, etc.) and this vignette aims to give a more details overview of most common options. <code>pander</code> comes with a variety of globally adjustable options, which have an effect on the result of your reports. You can query and update these options with the <code>panderOptions</code> function.</p>
+
+<p>Core functionality of <code>pander</code> is centered around <code>pandoc.table</code>, which is aimed at rendering tables in <code>markdown</code>. In case of 2D tables, <code>pander</code> calls <code>pandoc.table</code> internally, thus in such cases <code>pander</code> and <code>pandoc.table</code> support the same argument and in this vignette will be used iterchangingly. <code>pandoc.table</code> has a wide variety of options (<a href="#highlighting-cells">highlighting</a>, <a href="#table-styles">styles</a>, etc.) and this vignette aims to give a more detailed overview of the most common options. <code>pander</code> comes with a variety of globally adjustable options, which have an effect on the result of your reports. You can query and update these options with the <code>panderOptions</code> function.</p>
 <div id="table-styles" class="section level2">
 <h2>Table styles</h2>
-<p>Since <code>pander</code> aims at rendering R objects into <a href="http://pandoc.org/">Pandoc</a>’s markdown all four (<code>multiline</code>, <code>simple</code>, <code>grid</code>, <code>rmarkdown</code>) of <a href="http://johnmacfarlane.net/pandoc/README.html#tables">Pandoc</a>’s formats are supported. General advices is to stick with default <code>multiline</code> style, but if there is a need to change it either specify <code>style</code> argument when calling <code>pander/pandoc.table</code> or change default <code>style</code> using <code>panderOptions</code>.</p>
+<p>Since <code>pander</code> aims at rendering R objects into <a href="http://pandoc.org/">Pandoc</a>’s markdown all four (<code>multiline</code>, <code>simple</code>, <code>grid</code>, <code>rmarkdown</code>) of <a href="http://johnmacfarlane.net/pandoc/README.html#tables">Pandoc</a>’s formats are supported. Users are advised to stick with the default <code>multiline</code> style, but if there is a need to change it either specify <code>style</code> argument when calling <code>pander/pandoc.table</code> or change the default <code>style</code> using <code>panderOptions</code>.</p>
 <div id="multiline-tables" class="section level3">
 <h3>multiline tables</h3>
-<p><code>multiline</code> tables allow headers and table rows to span multiple lines of text (but cells that span multiple columns or rows of the table are not supported). Also note, that, by default, line breaks are removed from cells for simplicity, so multiline cells are typically the result of <a href="#table-and-cell-width">splitting large cells</a> or setting <code>keep.line.breaks</code> to <code>TRUE</code>:</p>
+<p><code>multiline</code> tables allow headers and table rows to span multiple lines of text (but cells that span multiple columns or rows of the table are not supported). Also note that, for simplicity, line breaks are removed from cells by default, so multiline cells are typically the result of <a href="#table-and-cell-width">splitting large cells</a> or setting <code>keep.line.breaks</code> to <code>TRUE</code>:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">m &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span class="st">'Value</span><span class="ch">\n</span><span class="st">1'</span>, <span class="st">'Value</span><span class="ch">\n</span><span class="st">2'</span>)
 <span class="kw">colnames</span>(m) &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">'Multiline</span><span class="ch">\n</span><span class="st">Col1'</span>, <span class="st">'Multiline</span><span class="ch">\n</span><span class="st">Col2'</span>)
 <span class="kw">pandoc.table</span>(m, <span class="dt">keep.line.breaks =</span> <span class="ot">TRUE</span>)
@@ -127,7 +124,7 @@ m &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span class="
 </div>
 <div id="grid-tables" class="section level3">
 <h3>grid tables</h3>
-<p><code>grid</code> format is really handy for <code>emacs</code> users (<a href="http://table.sourceforge.net/">Emacs table mod</a>) and it does support block elements (multiple paragraphs, code blocks, lists, etc.) inside cells. Alignments are not supported for grid tables by most parsers, meaning that even though <code>pander</code> will produce a table with alightnment, it will be lost during conversion from <code>markdown</code> to <code>HTML/PDF/DOCX</code>, and cells can’t span multiple columns or rows.</p>
+<p><code>grid</code> format is really handy for <code>emacs</code> users (<a href="http://table.sourceforge.net/">Emacs table mod</a>) and it does support block elements (multiple paragraphs, code blocks, lists, etc.) inside cells, but cells can’t span multiple columns or rows. Alignments are not supported for grid tables by most parsers, meaning that even though <code>pander</code> will produce a table with alignment, it will be lost during conversion from <code>markdown</code> to <code>HTML/PDF/DOCX</code>.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">m &lt;-<span class="st"> </span>mtcars[<span class="dv">1</span>:<span class="dv">3</span>, <span class="dv">1</span>:<span class="dv">4</span>]
 <span class="kw">pandoc.table</span>(m, <span class="dt">style =</span> <span class="st">'grid'</span>)
 <span class="co">#&gt; </span>
@@ -156,7 +153,7 @@ m &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span class="
 </div>
 <div id="rmarkdown-tables" class="section level3">
 <h3>rmarkdown tables</h3>
-<p><code>rmarkdown</code> or pipe table format is often used directly with <code>knitr</code>, since it was supportered by the first versions of the <code>markdown</code> package. It is similar to <code>simple</code> table, meaning that multiline cells are not supported. The beginning and ending pipe characters are optional, but pipes are required between all columns:</p>
+<p><code>rmarkdown</code> or pipe table format, is often used directly with <code>knitr</code>, since it was supported by the first versions of the <code>markdown</code> package. It is similar to <code>simple</code> table in that multiline cells are also not supported. The beginning and ending pipe characters are optional, but pipes are required between all columns:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">m &lt;-<span class="st"> </span>mtcars[<span class="dv">1</span>:<span class="dv">3</span>, <span class="dv">1</span>:<span class="dv">4</span>]
 <span class="kw">pandoc.table</span>(m, <span class="dt">style =</span> <span class="st">'rmarkdown'</span>)
 <span class="co">#&gt; </span>
@@ -172,9 +169,9 @@ m &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span class="
 <span class="co">#&gt; Error in eval(expr, envir, enclos): Pandoc does not support newlines in simple or Rmarkdown table format!</span></code></pre></div>
 </div>
 </div>
-<div id="cell-alighnment" class="section level2">
-<h2>Cell alighnment</h2>
-<p><code>pander</code> allows users to control cell alignment (<code>left</code>, <code>right</code> or <code>center/centre</code>) in a table directly by setting the <code>justify</code> parameter when calling <code>pander/pandoc.table</code>. Note that it is possible to specify alighnment for each column separately by supplying a vector to justify:</p>
+<div id="cell-alignment" class="section level2">
+<h2>Cell alignment</h2>
+<p><code>pander</code> allows users to control cell alignment (<code>left</code>, <code>right</code> or <code>center/centre</code>) in a table directly by setting the <code>justify</code> parameter when calling <code>pander/pandoc.table</code>. Note that it is possible to specify alignment for each column separately by supplying a vector to justify:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">pandoc.table</span>(<span class="kw">head</span>(iris[,<span class="dv">1</span>:<span class="dv">3</span>], <span class="dv">2</span>), <span class="dt">justify =</span> <span class="st">'right'</span>)
 <span class="co">#&gt; </span>
 <span class="co">#&gt; -------------------------------------------</span>
@@ -193,7 +190,7 @@ m &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span class="
 <span class="co">#&gt; </span>
 <span class="co">#&gt;            4.9       3       1.4           </span>
 <span class="co">#&gt; -------------------------------------------</span></code></pre></div>
-<p>Another possible way to define alignment is by using a permanent option <code>table.alignment.default/table.alignment.rownames</code> in <code>panderOptions</code> (prefered way) or by using <code>set.alignment</code> function (legacy way of setting alignment for next table or permanently) which support setting alignment separately for cells and rownames:</p>
+<p>Another way to define alignment is by using a permanent option <code>table.alignment.default/table.alignment.rownames</code> in <code>panderOptions</code> (preferred way) or by using <code>set.alignment</code> function (legacy way of setting alignment for next table or permanently) which support setting alignment separately for cells and rownames:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">set.alignment</span>(<span class="st">'left'</span>, <span class="dt">row.names =</span> <span class="st">'right'</span>) <span class="co"># set only for next table since permanent parameter is falce</span>
 <span class="kw">pandoc.table</span>(mtcars[<span class="dv">1</span>:<span class="dv">2</span>,  <span class="dv">1</span>:<span class="dv">5</span>])
 <span class="co">#&gt; </span>
@@ -262,11 +259,11 @@ m &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span class="
 <span class="co">#&gt; </span>
 <span class="co">#&gt;     Datsun 710      22.8    4    108    93   3.85 </span>
 <span class="co">#&gt; --------------------------------------------------</span></code></pre></div>
-<p>For more ellaborative examples, please see our blog post - <a href="http://blog.rapporter.net/2013/04/hihglight-cells-in-markdown-tables.html">Highlight cells in markdown tables</a>.</p>
+<p>For more elaborative examples, please see our blog post - <a href="http://blog.rapporter.net/2013/04/hihglight-cells-in-markdown-tables.html">Highlight cells in markdown tables</a>.</p>
 </div>
 <div id="table-and-cell-width" class="section level2">
 <h2>Table and Cell width</h2>
-<p><code>pander/pandoc.table</code> is able to deal with the problem of wide tables. Ever had an issue in <code>LaTeX</code> or <code>MS Word</code> when tried to print a correlation matrix of 40 variables? This problem is carefully addressed with <code>split.table</code> parameter:</p>
+<p><code>pander/pandoc.table</code> is able to deal with wide tables. Ever had an issue in <code>LaTeX</code> or <code>MS Word</code> when trying to print a correlation matrix of 40 variables? This problem is carefully addressed with <code>split.table</code> parameter:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">pandoc.table</span>(mtcars[<span class="dv">1</span>:<span class="dv">2</span>, ], <span class="dt">style =</span> <span class="st">&quot;grid&quot;</span>, <span class="dt">caption =</span> <span class="st">&quot;Wide table to be split!&quot;</span>)
 <span class="co">#&gt; </span>
 <span class="co">#&gt; </span>
@@ -303,7 +300,7 @@ m &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span class="
 <span class="co">#&gt; +---------------------+-------+-------+--------+------+--------+-------+--------+------+------+--------+--------+</span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; Table: Wide table to be split!</span></code></pre></div>
-<p>Also, <code>pander</code> tries to split too wide cells into multiline cells. The maximum number of characters in a cell is specified by <code>split.cells</code> parameter (defaults to 30), which can be a single value, vector (values for each column separately) and relative vector (percentages of <code>split.tables</code> parameter). Please not that this only works for <code>multiline</code> and <code>grid</code> tables:</p>
+<p>Also, <code>pander</code> tries to split too wide cells into multiline cells. The maximum number of characters in a cell is specified by the <code>split.cells</code> parameter (defaults to 30), which can be a single value, vector (values for each column separately) and relative vector (percentages of <code>split.tables</code> parameter). Please not that this only works for <code>multiline</code> and <code>grid</code> tables:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">df &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span class="dt">a =</span> <span class="st">'Lorem ipsum'</span>, <span class="dt">b =</span> <span class="st">'dolor sit'</span>, <span class="dt">c =</span> <span class="st">'amet'</span>)
 <span class="kw">pandoc.table</span>(df, <span class="dt">split.cells =</span> <span class="dv">5</span>)
 <span class="co">#&gt; </span>
@@ -335,7 +332,7 @@ m &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span class="
 <span class="co">#&gt;      a          b      c  </span>
 <span class="co">#&gt; ----------- --------- ----</span>
 <span class="co">#&gt; Lorem ipsum dolor sit amet</span></code></pre></div>
-<p>In some cases it is also useful to split too long words like with hyphens, and <code>pander</code> uses <code>koRpus</code> functionality for that. Just specify <code>use.hyphening</code> argument and have <code>koRpus</code> installed:</p>
+<p>In some cases it is also useful to split too long words with hyphens, and <code>pander</code> uses <code>koRpus</code> functionality for that. Just specify <code>use.hyphening</code> argument and have <code>koRpus</code> installed:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">pandoc.table</span>(<span class="kw">data.frame</span>(<span class="dt">baz =</span> <span class="st">'foobar'</span>, <span class="dt">foo=</span><span class="st">'accoutrements'</span>),
              <span class="dt">use.hyphening =</span> <span class="ot">TRUE</span>, <span class="dt">split.cells =</span> <span class="dv">3</span>)
 <span class="co">#&gt; </span>
@@ -355,7 +352,7 @@ m &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span class="
 <li><code>digits</code> to specify how many significant digits are to be used for numeric</li>
 <li><code>decimal.mark/big.mark</code> to specify character for decimal point/orders of magnitude</li>
 </ul>
-<p><code>round</code> and <code>digits</code> param can be a vector specifying values for each column (has to be the same length as number of columns). Values for non-numeric columns will be disregarded.</p>
+<p><code>round</code> and <code>digits</code> parameter can be a vector specifying values for each column (has to be the same length as number of columns). Values for non-numeric columns will be disregarded.</p>
 <p>Now let’s get to some examples:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">r &lt;-<span class="st"> </span><span class="kw">matrix</span>(<span class="kw">c</span>(<span class="fl">283764.97430</span>, <span class="fl">29.12345678901</span>, -<span class="fl">7.1234</span>, -<span class="fl">100.1</span>), <span class="dt">ncol =</span> <span class="dv">2</span>)
 <span class="kw">pandoc.table</span>(r, <span class="dt">round =</span> <span class="dv">2</span>)
@@ -403,7 +400,7 @@ m &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span class="
 </div>
 <div id="other-options" class="section level2">
 <h2>Other options</h2>
-<p>Funtionality described in other sections is most notable, but <code>pander/pandoc.table</code> also has smaller nifty features that are worth mentioning:</p>
+<p>Functionality described in other sections is most notable, but <code>pander/pandoc.table</code> also has smaller nifty features that are worth mentioning:</p>
 <ul>
 <li><code>plain.ascii</code> - allows to have the output without <code>markdown</code> markup:</li>
 </ul>

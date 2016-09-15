@@ -14,15 +14,15 @@ knitr::opts_chunk$set(collapse = T, comment = "#>")
 library(pander)
 ```
 
-Core functionality of `pander` is centered around `pandoc.table` which is aimed at rendering tables in `markdown`. In case of 2D tables, `pander` calls `pandoc.table` internally, thus in such cases `pander` and `pandoc.table` support the same argument and in this vignette will be used iterchangingly. `pandoc.table` has big variety of options ([highlighting](#highlighting-cells), [styles](#table-styles), etc.) and this vignette aims to give a more details overview of most common options. `pander` comes with a variety of globally adjustable options, which have an effect on the result of your reports. You can query and update these options with the `panderOptions` function.
+Core functionality of `pander` is centered around `pandoc.table`, which is aimed at rendering tables in `markdown`. In case of 2D tables, `pander` calls `pandoc.table` internally, thus in such cases `pander` and `pandoc.table` support the same argument and in this vignette will be used iterchangingly. `pandoc.table` has a wide variety of options ([highlighting](#highlighting-cells), [styles](#table-styles), etc.) and this vignette aims to give a more detailed overview of the most common options. `pander` comes with a variety of globally adjustable options, which have an effect on the result of your reports. You can query and update these options with the `panderOptions` function.
 
 ## Table styles
 
-Since `pander` aims at rendering R objects into [Pandoc](http://pandoc.org/)'s markdown all four (`multiline`, `simple`, `grid`, `rmarkdown`) of  [Pandoc](http://johnmacfarlane.net/pandoc/README.html#tables)'s formats are supported. General advices is to stick with default `multiline` style, but if there is a need to change it either specify `style` argument when calling `pander/pandoc.table` or change default `style` using `panderOptions`.
+Since `pander` aims at rendering R objects into [Pandoc](http://pandoc.org/)'s markdown all four (`multiline`, `simple`, `grid`, `rmarkdown`) of  [Pandoc](http://johnmacfarlane.net/pandoc/README.html#tables)'s formats are supported. Users are advised to stick with the default `multiline` style, but if there is a need to change it either specify `style` argument when calling `pander/pandoc.table` or change the default `style` using `panderOptions`.
 
 ### multiline tables
 
-`multiline` tables allow headers and table rows to span multiple lines of text (but cells that span multiple columns or rows of the table are not supported). Also note, that, by default, line breaks are removed from cells for simplicity, so multiline cells are typically the result of [splitting large cells](#table-and-cell-width) or setting `keep.line.breaks` to `TRUE`:
+`multiline` tables allow headers and table rows to span multiple lines of text (but cells that span multiple columns or rows of the table are not supported). Also note that, for simplicity, line breaks are removed from cells by default, so multiline cells are typically the result of [splitting large cells](#table-and-cell-width) or setting `keep.line.breaks` to `TRUE`:
 
 ```{r}
 m <- data.frame('Value\n1', 'Value\n2')
@@ -46,7 +46,7 @@ pandoc.table(m, keep.line.breaks = TRUE, style='simple')
 
 ### grid tables
 
-`grid` format is really handy for `emacs` users ([Emacs table mod](http://table.sourceforge.net/)) and it does support block elements (multiple paragraphs, code blocks, lists, etc.) inside cells. Alignments are not supported for grid tables by most parsers, meaning that even though `pander` will produce a table with alightnment, it will be lost during conversion from `markdown` to `HTML/PDF/DOCX`, and cells can't span multiple columns or rows.
+`grid` format is really handy for `emacs` users ([Emacs table mod](http://table.sourceforge.net/)) and it does support block elements (multiple paragraphs, code blocks, lists, etc.) inside cells, but cells can't span multiple columns or rows. Alignments are not supported for grid tables by most parsers, meaning that even though `pander` will produce a table with alignment, it will be lost during conversion from `markdown` to `HTML/PDF/DOCX`.
 
 ```{r, error=TRUE}
 m <- mtcars[1:3, 1:4]
@@ -58,7 +58,7 @@ pandoc.table(m, keep.line.breaks = TRUE, style='grid')
 
 ### rmarkdown tables
 
-`rmarkdown` or pipe table format is often used directly with `knitr`, since it was supportered by the first versions of the `markdown` package. It is similar to `simple` table, meaning that multiline cells are not supported. The beginning and ending pipe characters are optional, but pipes are required between all columns:
+`rmarkdown` or pipe table format, is often used directly with `knitr`, since it was supported by the first versions of the `markdown` package. It is similar to `simple` table in that multiline cells are also not supported. The beginning and ending pipe characters are optional, but pipes are required between all columns:
 
 ```{r, error=TRUE}
 m <- mtcars[1:3, 1:4]
@@ -68,16 +68,16 @@ colnames(m) <- c('Multiline\nCol1', 'Multiline\nCol2')
 pandoc.table(m, keep.line.breaks = TRUE, style='rmarkdown')
 ```
 
-## Cell alighnment
+## Cell alignment
 
-`pander` allows users to control cell alignment (`left`, `right` or `center/centre`) in a table directly by setting the `justify` parameter when calling `pander/pandoc.table`. Note that it is possible to specify alighnment for each column separately by supplying a vector to justify:
+`pander` allows users to control cell alignment (`left`, `right` or `center/centre`) in a table directly by setting the `justify` parameter when calling `pander/pandoc.table`. Note that it is possible to specify alignment for each column separately by supplying a vector to justify:
 
 ```{r}
 pandoc.table(head(iris[,1:3], 2), justify = 'right')
 pandoc.table(head(iris[,1:3], 2), justify = c('right', 'center', 'left'))
 ```
 
-Another possible way to define alignment is by using a permanent option `table.alignment.default/table.alignment.rownames` in `panderOptions` (prefered way) or by using `set.alignment` function (legacy way of setting alignment for next table or permanently) which support setting alignment separately for cells and rownames:
+Another  way to define alignment is by using a permanent option `table.alignment.default/table.alignment.rownames` in `panderOptions` (preferred way) or by using `set.alignment` function (legacy way of setting alignment for next table or permanently) which support setting alignment separately for cells and rownames:
 
 ```{r}
 set.alignment('left', row.names = 'right') # set only for next table since permanent parameter is falce
@@ -122,11 +122,11 @@ pandoc.table(t)
 pandoc.table(t, emphasize.verbatim.rows = 1, emphasize.strong.cells = which(t > 20, arr.ind = TRUE))
 ```
 
-For more ellaborative examples, please see our blog post - [Highlight cells in markdown tables](http://blog.rapporter.net/2013/04/hihglight-cells-in-markdown-tables.html).
+For more elaborative examples, please see our blog post - [Highlight cells in markdown tables](http://blog.rapporter.net/2013/04/hihglight-cells-in-markdown-tables.html).
 
 ## Table and Cell width
 
-`pander/pandoc.table` is able to deal with the problem of  wide tables. Ever had an issue in `LaTeX` or `MS Word` when tried to print a correlation matrix of 40 variables? This problem is carefully addressed with `split.table` parameter:
+`pander/pandoc.table` is able to deal with wide tables. Ever had an issue in `LaTeX` or `MS Word` when trying to print a correlation matrix of 40 variables? This problem is carefully addressed with `split.table` parameter:
 
 ```{r}
 pandoc.table(mtcars[1:2, ], style = "grid", caption = "Wide table to be split!")
@@ -139,7 +139,7 @@ pandoc.table(mtcars[1:2, ], style = "grid",
              caption = "Wide table to be split!", split.table = Inf)
 ```
 
-Also, `pander` tries to split too wide cells into multiline cells. The maximum number of characters in a cell is specified by `split.cells` parameter (defaults to 30), which can be a single value, vector (values for each column separately) and relative vector (percentages of `split.tables` parameter). Please not that this only works for `multiline` and `grid` tables:
+Also, `pander` tries to split too wide cells into multiline cells. The maximum number of characters in a cell is specified by the `split.cells` parameter (defaults to 30), which can be a single value, vector (values for each column separately) and relative vector (percentages of `split.tables` parameter). Please not that this only works for `multiline` and `grid` tables:
 
 ```{r, error=TRUE}
 df <- data.frame(a = 'Lorem ipsum', b = 'dolor sit', c = 'amet')
@@ -149,7 +149,7 @@ pandoc.table(df, split.cells = c("80%", "10%", "10%"))
 pandoc.table(df, split.cells = 5, style = 'simple')
 ```
 
-In some cases it is also useful to split too long words like with hyphens, and `pander` uses `koRpus` functionality for that. Just specify `use.hyphening` argument and have `koRpus` installed:
+In some cases it is also useful to split too long words with hyphens, and `pander` uses `koRpus` functionality for that. Just specify `use.hyphening` argument and have `koRpus` installed:
 
 ```{r}
 pandoc.table(data.frame(baz = 'foobar', foo='accoutrements'),
@@ -164,7 +164,7 @@ pandoc.table(data.frame(baz = 'foobar', foo='accoutrements'),
 * `digits` to specify how many significant digits are to be used for numeric
 * `decimal.mark/big.mark` to specify character for decimal point/orders of magnitude
 
-`round` and `digits` param can be a vector specifying values for each column (has to be the same length as number of columns). Values for non-numeric columns will be disregarded.
+`round` and `digits` parameter can be a vector specifying values for each column (has to be the same length as number of columns). Values for non-numeric columns will be disregarded.
 
 Now let's get to some examples:
 ```{r}
@@ -178,7 +178,7 @@ pandoc.table(r, decimal.mark = ',')
 ```
 ## Other options
 
-Funtionality described in other sections is most notable, but `pander/pandoc.table` also has smaller nifty features that are worth mentioning:
+Functionality described in other sections is most notable, but `pander/pandoc.table` also has smaller nifty features that are worth mentioning:
 
 * `plain.ascii` - allows to have the output without `markdown` markup:
 ```{r}

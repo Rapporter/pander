@@ -12,7 +12,7 @@
 
 <meta name="author" content="Roman Tsegelskyi, Gergely Daróczi" />
 
-<meta name="date" content="2016-03-28" />
+<meta name="date" content="2016-05-13" />
 
 <title>Rendering markdown with pander</title>
 
@@ -67,17 +67,14 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 
 
 
-<div class="fluid-row" id="header">
 
-
-<h1 class="title">Rendering markdown with pander</h1>
+<h1 class="title toc-ignore">Rendering markdown with pander</h1>
 <h4 class="author"><em>Roman Tsegelskyi, Gergely Daróczi</em></h4>
-<h4 class="date"><em>2016-03-28</em></h4>
-
-</div>
+<h4 class="date"><em>2016-05-13</em></h4>
 
 
-<p><code>Pander</code> is designed to provide a minimal and easy tool for rendering <code>R</code> objects into <a href="http://pandoc.org/">Pandoc</a>’s markdown. This vignette aims to introduce <code>pander</code> package and it’s core pieces of functionality. It is intented to be a general overview with pointers to places with detailed information. This vignette will talk about:</p>
+
+<p><code>Pander</code> is designed to provide a minimal and easy tool for rendering <code>R</code> objects into <a href="http://pandoc.org/">Pandoc</a>’s markdown. This vignette aims to introduce the <code>pander</code> package and its core pieces of functionality. It is intended to be a general overview with pointers to places with detailed information. This vignette will talk about:</p>
 <ul>
 <li>core functionality for rendering objects in <code>Pandoc</code>’s markdown with generic S3 <a href="#rendering-r-objects">pander method</a>.</li>
 <li>functionality for capturing various information when evaluating R expressions with <a href="#evals">evals</a>.</li>
@@ -86,7 +83,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 </ul>
 <div id="rendering-r-objects" class="section level2">
 <h2>Rendering R objects</h2>
-<p>The core functionality of <code>pander</code> is centered around rendering <code>R</code> objects into <code>Pandoc</code>’s markdown. Let’s dive in the demo of the most common usage of <code>pander</code>:</p>
+<p>The core functionality of <code>pander</code> is centered around rendering <code>R</code> objects into <code>Pandoc</code>’s markdown. Let’s dive in to a demo of the most common usage of <code>pander</code>:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">pander</span>(<span class="kw">head</span>(iris))
 <span class="co">#&gt; </span>
 <span class="co">#&gt; -------------------------------------------------------------------</span>
@@ -136,7 +133,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <span class="co">#&gt; </span>
 <span class="co">#&gt;    All     150        5.84       0.83      3.06       0.44</span>
 <span class="co">#&gt; ----------------------------------------------------------</span></code></pre></div>
-<p>As you have probably guess, this is achieved via generic <code>pander</code> <code>S3</code> method. Out of the box, <code>pander</code> supports a variety of classes:</p>
+<p>As you have probably guessed, this is achieved via the generic <code>pander</code> <code>S3</code> method. Out of the box, <code>pander</code> supports a variety of classes:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">methods</span>(pander)
 <span class="co">#&gt;  [1] pander.anova*           pander.aov*            </span>
 <span class="co">#&gt;  [3] pander.aovlist*         pander.Arima*          </span>
@@ -177,16 +174,16 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <span class="co">#&gt; [73] pander.zoo*            </span>
 <span class="co">#&gt; see '?methods' for accessing help and source code</span></code></pre></div>
 <p>If you think that pander lacks support for any other R class(es), please feel free to open a <a href="https://github.com/Rapporter/pander/pulls">ticket</a> suggesting a new feature or submit <a href="https://github.com/Rapporter/pander/issues">pull request</a> and we will be happy to extend the package.</p>
-<p>Under the hood, <code>pander</code> S3 methods rely on different <code>pandoc.*</code> methods, where most of functionality is implemented in <code>pandoc.table</code> which is used for rendering tables. <code>pandoc.table</code> provides similar to <code>knitr::kable</code> functionality in rendering markdown, but also adds a truly rich functionality with many different rendering options that <code>pander</code> inherits. For more usage/implementation details and examples, please refer to specialized vignette, which can be accessed by <code>vignette('pandoc_table')</code> or available online <a href="http://rapporter.github.io/pander/pandoc_table.html">here</a>.</p>
+<p>Under the hood, <code>pander</code> S3 methods rely on different <code>pandoc.*</code> methods, where most of functionality is implemented in <code>pandoc.table</code> which is used for rendering tables. <code>pandoc.table</code> provides functionality similar to <code>knitr::kable</code> in rendering markdown, but also adds a truly rich functionality with a variety of rendering options inherited from <code>pander</code>. For more usage/implementation details and examples, please refer to the <code>pandoc.table</code> vignette, which can be accessed by <code>vignette('pandoc_table')</code> (and is also available <a href="http://rapporter.github.io/pander/pandoc_table.html">online</a>).</p>
 </div>
 <div id="evals" class="section level2">
 <h2>Evals</h2>
-<p>As <code>pander</code> package was originally developed in conjunction with <a href="https://github.com/Rapporter/rapport">rapport</a> package, there was a needed for functionality that can evaluate <code>R</code> expression along with capturing errors and warnings. So <code>evals</code> emerged and soon some further feature requests arose, like identifying if an R expression results in a plot etc.</p>
+<p>The <code>pander</code> package was originally developed in conjunction with <a href="https://github.com/Rapporter/rapport">rapport</a> package, when a need arose for a function that could evaluate <code>R</code> expressions while also capturing errors and warnings. So <code>evals</code> emerged and soon some further feature requests arose, like identifying if an R expression results in a plot, etc.</p>
 <p>But probably it’s easier to explain what <code>evals</code> can do with a simple example:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">evals</span>(<span class="st">'1:10'</span>)
-<span class="co">#&gt; INFO [2016-03-28 03:08:06] Command run: 1:10</span>
-<span class="co">#&gt; TRACE [2016-03-28 03:08:06] Cached result</span>
-<span class="co">#&gt; DEBUG [2016-03-28 03:08:06] Returned object: class = integer, length = 10, dim = , size = 88 bytes</span>
+<span class="co">#&gt; INFO [2016-05-13 04:44:00] Command run: 1:10</span>
+<span class="co">#&gt; TRACE [2016-05-13 04:44:00] Cached result</span>
+<span class="co">#&gt; DEBUG [2016-05-13 04:44:00] Returned object: class = integer, length = 10, dim = , size = 88 bytes</span>
 <span class="co">#&gt; [[1]]</span>
 <span class="co">#&gt; $src</span>
 <span class="co">#&gt; [1] &quot;1:10&quot;</span>
@@ -216,44 +213,44 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <span class="co">#&gt; </span>
 <span class="co">#&gt; attr(,&quot;class&quot;)</span>
 <span class="co">#&gt; [1] &quot;evals&quot;</span></code></pre></div>
-<p><code>evals</code> is aimed at collecting as much information as possible while evaluating R code. It can evaluate a character vector of R expressions, and it returns a list of captured information while running those:</p>
+<p><code>evals</code> is aimed at collecting as much information as possible while evaluating R code. It can evaluate a character vector of R expressions, and it returns a list of information captured while running them:</p>
 <ul>
 <li><code>src</code> holds the R expression,</li>
-<li><code>result</code> contains the raw R object as is,</li>
+<li><code>result</code> contains the raw R object as-is,</li>
 <li><code>output</code> represents how the R object is printed to the standard output,</li>
 <li><code>type</code> is the class of the returned R object,</li>
-<li><code>msg</code> is a list of possible messages captured while evaluating the R expression and. Among other messages, warnings/errors will appear here.</li>
-<li><code>stdout</code> contains if anything was written to the standard output.</li>
+<li><code>msg</code> is a list of possible messages captured while evaluating the R expression. Among other messages, warnings/errors will appear here.</li>
+<li><code>stdout</code> contains what, if anything, was written to the standard output.</li>
 </ul>
-<p>For more usage/implementation details and examples, please refer to specialized vignette, which can be accessed by <code>vignette('evals')</code> or available online <a href="http://rapporter.github.io/pander/evals.html">here</a>.</p>
+<p>For more usage/implementation details and examples, please refer to the <code>evals</code> vignette, which can be accessed by <code>vignette('evals')</code> (also available <a href="http://rapporter.github.io/pander/evals.html">online</a>).</p>
 </div>
 <div id="brew-to-pandoc" class="section level2">
 <h2>Brew to Pandoc</h2>
-<p>The <a href="https://cran.r-project.org/package=brew">brew</a> package, which is a templating framework for report generation, has not been updated since 2011, but it’s still some of R projects based on its simple design and useful features in literate programming. For a quick overview, please see the following documents if you are not familiar with brew:</p>
+<p>The <a href="https://cran.r-project.org/package=brew">brew</a> package, a templating framework for report generation, has not been updated since 2011, but it’s still some of R projects based on its simple design and useful literate programming features. For a quick overview, please see the following documents if you are not familiar with brew:</p>
 <ul>
 <li><a href="http://www.slideshare.net/xavierguardiola/building-a-reporting-sytem-with-brew">slides on “Building a reporting sytem with BREW”</a></li>
 <li><a href="https://learnr.wordpress.com/2009/09/09/brew-creating-repetitive-reports/">learnr blogpost on brew</a></li>
 </ul>
 <p>A brew document is a simple text file with some special tags. <code>Pandoc.brew</code> uses only two of them (as building on a personalized version of Jeff’s really great brew function):</p>
 <ul>
-<li><code>&lt;% ... %&gt;</code> stand for running inline R commands as usual,</li>
-<li><code>&lt;%= ... %&gt;</code> does pretty much the same but applies pander to the returning R object (instead of cat like the original brew function does). So putting there any R object, it would return in a nice Pandoc’s markdown format with all possible error/warning messages etc.</li>
+<li><code>&lt;% ... %&gt;</code> stands for running inline R commands as usual,</li>
+<li><code>&lt;%= ... %&gt;</code> does pretty much the same but applies pander to the returning R object (instead of <code>cat</code> like the original brew function does). So inserting any R object into the tag would return it in Pandoc markdown format, with all possible error/warning messages, etc.</li>
 </ul>
-<p>This latter tries to be smart in some ways:</p>
+<p>The latter tries to be smart in some ways:</p>
 <ul>
 <li>A code chunk block (<code>R</code> commands between the tags) can return any number of values at any part of the block.</li>
 <li>Plots and images are grabbed in the document, rendered to a png file and pander method would result in a Pandoc markdown formatted image link. This means that the image would be rendered/shown/included in the exported document.</li>
 <li>All warnings/messages and errors are recorded in the blocks and returned in the document as footnotes or inline messages.</li>
 <li>All heavy <code>R</code> commands (e.g. those taking more then 0.1 sec to evaluate) are cached so rebrewing a report would not result in a coffee break.</li>
 </ul>
-<p>Besides this, the custom brew function can do more and also less compared to the original brew package. First of all, the internal caching mechanism of brew has been removed and rewritten for some extra profits besides improved caching. Quick example:</p>
+<p>Besides this, the custom brew function can do more and also less compared to the original brew package. First of all, the internal caching mechanism of brew has been rewritten for benefits besides improved caching. Quick example:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">str</span>(<span class="kw">Pandoc.brew</span>(<span class="dt">text =</span><span class="st">'Pi equals to `&lt;%= pi %&gt;`. And here are some random data: `&lt;%= runif(10)%&gt;`'</span>))
-<span class="co">#&gt; Pi equals to `INFO [2016-03-28 03:08:06] Command run: pi</span>
-<span class="co">#&gt; TRACE [2016-03-28 03:08:06] Cached result</span>
-<span class="co">#&gt; DEBUG [2016-03-28 03:08:06] Returned object: class = numeric, length = 1, dim = , size = 48 bytes</span>
-<span class="co">#&gt; _3.142_`. And here are some random data: `INFO [2016-03-28 03:08:06] Command run: runif(10)</span>
-<span class="co">#&gt; TRACE [2016-03-28 03:08:06] Cached result</span>
-<span class="co">#&gt; DEBUG [2016-03-28 03:08:06] Returned object: class = numeric, length = 10, dim = , size = 168 bytes</span>
+<span class="co">#&gt; Pi equals to `INFO [2016-05-13 04:44:00] Command run: pi</span>
+<span class="co">#&gt; TRACE [2016-05-13 04:44:00] Cached result</span>
+<span class="co">#&gt; DEBUG [2016-05-13 04:44:00] Returned object: class = numeric, length = 1, dim = , size = 48 bytes</span>
+<span class="co">#&gt; _3.142_`. And here are some random data: `INFO [2016-05-13 04:44:00] Command run: runif(10)</span>
+<span class="co">#&gt; TRACE [2016-05-13 04:44:00] Cached result</span>
+<span class="co">#&gt; DEBUG [2016-05-13 04:44:00] Returned object: class = numeric, length = 10, dim = , size = 168 bytes</span>
 <span class="co">#&gt; _0.6509_, _0.258_, _0.4785_, _0.7663_, _0.08425_, _0.8753_, _0.3391_, _0.8394_, _0.3467_ and _0.3338_` </span>
 <span class="co">#&gt; List of 1</span>
 <span class="co">#&gt;  $ :List of 4</span>
@@ -268,7 +265,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <span class="co">#&gt;   .. ..$ messages: NULL</span>
 <span class="co">#&gt;   .. ..$ warnings: NULL</span>
 <span class="co">#&gt;   .. ..$ errors  : NULL</span></code></pre></div>
-<p>The package bundles some examples for <code>Pandoc.brew</code> to let you check its features pretty fast. To brew these examples on your machine, try to run the followings commands:</p>
+<p>The package bundles some examples for <code>Pandoc.brew</code> to let you quickly check its features. To brew these examples on your machine, run the following commands:</p>
 <pre><code>Pandoc.brew(system.file('examples/minimal.brew', package='pander'))
 Pandoc.brew(system.file('examples/minimal.brew', package='pander'),
             output = tempfile(), convert = 'html')
@@ -283,7 +280,7 @@ Pandoc.brew(system.file('examples/graphs.brew', package='pander'),
 </div>
 <div id="general-options" class="section level2">
 <h2>General Options</h2>
-<p>The package comes with a variety of globally adjustable options, which have an effect on the result of your reports. Full list of options can be viewed by calling <code>?panderOptions</code> or in the online <a href="https://github.com/Rapporter/pander#general-options">readme</a>.</p>
+<p>The package comes with a variety of globally adjustable options that have an effect on the result of your reports. A full list of options can be viewed by calling <code>?panderOptions</code> or in the online <a href="https://github.com/Rapporter/pander#general-options">readme</a>.</p>
 <p>You can query and update these options with the <code>panderOptions</code> function:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">pots &lt;-<span class="st"> </span><span class="kw">panderOptions</span>(<span class="st">&quot;table.style&quot;</span>)
 <span class="kw">panderOptions</span>(<span class="st">&quot;table.style&quot;</span>, <span class="st">&quot;simple&quot;</span>)
