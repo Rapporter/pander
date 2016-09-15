@@ -579,6 +579,13 @@ pander.htest <- function(x, caption = attr(x, 'caption'), ...) {
     if (!is.null(x$alternative)) {
         res['Alternative hypothesis'] <- x$alternative
     }
+    if (!is.null(x$estimate)) {
+        if (!is.null(names(x$estimate))) {
+            res[names(x$estimate)] <- x$estimate
+        } else {
+            res['Estimate'] <- x$estimate
+        }
+    }
 
     ## drop placeholder
     res$placeholder <- NULL
