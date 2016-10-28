@@ -492,6 +492,10 @@ pandoc.list <- function(...)
 #' For more details please see the parameters above and passed arguments of \code{\link{panderOptions}}.
 #' @param t data frame, matrix or table
 #' @param caption caption (string) to be shown under the table
+#' @param row.names a logical value indicating whether to include row names; by
+#'   default, row names are included if \code{rownames(x)} is neither
+#'   \code{NULL} nor identical to \code{1:nrow(x)}
+#' @param col.names a character vector of column names to be used in the table
 #' @param digits passed to \code{format}. Can be a vector specifying values for each column (has to be the same length as number of columns).
 #' @param decimal.mark passed to \code{format}
 #' @param big.mark passed to \code{format}
@@ -627,7 +631,18 @@ pandoc.list <- function(...)
 #' x <- data.frame(a = "Can be also supplied as a vector, for each cell separately",
 #'        b = "Can be also supplied as a vector, for each cell separately")
 #' pandoc.table(x, split.cells = 10, use.hyphening = TRUE)
-pandoc.table.return <- function(t, caption, digits = panderOptions('digits'), decimal.mark = panderOptions('decimal.mark'), big.mark = panderOptions('big.mark'), round = panderOptions('round'), missing = panderOptions('missing'), justify, style = c('multiline', 'grid', 'simple', 'rmarkdown'), split.tables = panderOptions('table.split.table'), split.cells = panderOptions('table.split.cells'), keep.trailing.zeros = panderOptions('keep.trailing.zeros'), keep.line.breaks = panderOptions('keep.line.breaks'), plain.ascii = panderOptions('plain.ascii'), use.hyphening = panderOptions('use.hyphening'), emphasize.rownames = panderOptions('table.emphasize.rownames'), emphasize.rows, emphasize.cols, emphasize.cells, emphasize.strong.rows, emphasize.strong.cols, emphasize.strong.cells, emphasize.italics.rows, emphasize.italics.cols, emphasize.italics.cells, emphasize.verbatim.rows, emphasize.verbatim.cols, emphasize.verbatim.cells, ...) { #nolint
+pandoc.table.return <- function(t, caption, row.names, col.names, digits = panderOptions('digits'), decimal.mark = panderOptions('decimal.mark'), big.mark = panderOptions('big.mark'), round = panderOptions('round'), missing = panderOptions('missing'), justify, style = c('multiline', 'grid', 'simple', 'rmarkdown'), split.tables = panderOptions('table.split.table'), split.cells = panderOptions('table.split.cells'), keep.trailing.zeros = panderOptions('keep.trailing.zeros'), keep.line.breaks = panderOptions('keep.line.breaks'), plain.ascii = panderOptions('plain.ascii'), use.hyphening = panderOptions('use.hyphening'), emphasize.rownames = panderOptions('table.emphasize.rownames'), emphasize.rows, emphasize.cols, emphasize.cells, emphasize.strong.rows, emphasize.strong.cols, emphasize.strong.cells, emphasize.italics.rows, emphasize.italics.cols, emphasize.italics.cells, emphasize.verbatim.rows, emphasize.verbatim.cols, emphasize.verbatim.cells, ...) { #nolint
+
+    if (!missing(row.names)) {
+      if (row.names[1] == FALSE) {
+        rownames(t) <- NULL
+      } else {
+        rownames(t) <- row.names
+      }
+    }
+    if (!missing(col.names)) {
+      colnames(t) <- col.names
+    }
 
     ## expands cells for output
     table.expand <- function(cells, cols.width, justify, sep.cols) {
@@ -900,6 +915,7 @@ pandoc.table.return <- function(t, caption, digits = panderOptions('digits'), de
         }
     }
 
+
     ## check if emphasize parameters were passed
     emphasize.parameters <- c('emphasize.rows',
                               'emphasize.cols',
@@ -1078,7 +1094,7 @@ pandoc.table.return <- function(t, caption, digits = panderOptions('digits'), de
     t.colnames <- tryCatch(colnames(t), error = function(e) NULL)
     t.rownames <- tryCatch(rownames(t), error = function(e) NULL)
 
-    ## fixed for incorrect pipilining with rmarkdown (#186)
+    ## fixed for incorrect pipelining with rmarkdown (#186)
     if (style == 'rmarkdown') {
         t <- apply(t, c(1,2), function(x) gsub('\\|', '\\\\|', x)) #nolint
         t.rownames <- sapply(t.rownames, function(x) gsub('\\|', '\\\\|', x)) #nolint

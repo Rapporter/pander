@@ -251,6 +251,38 @@ evalsOptions('cache.dir',  cache.dir)
 evalsOptions('graph.dir',  graph.dir)
 setwd(wd)
 
+context('row and column names')
+
+library(testthat)
+library(pander)
+
+tables <- list(
+  mtcars[1:2, 1:2],
+  data.frame(x = 1:2, y = 2:3),
+  data.frame(x = 1:3, y = 2:4)[c(1, 3), ]
+  )
+
+t <- tables[[1]]
+
+test_that('row names can be suppressed', {
+  for (t in tables) {
+    expect_false(grepl("&nbsp;", pandoc.table.return(t, row.names = FALSE)))
+  }
+})
+
+test_that('row names can be set', {
+  for (t in tables) {
+    expect_true(grepl("\\n \\*\\*a\\*\\*", pandoc.table.return(t, row.names = c("a", "b"))))
+  }
+})
+
+test_that('column names can be set', {
+  for (t in tables) {
+    res <- capture.output(pandoc.table(t, col.names = c("a", "b")))
+    expect_true(grepl("a *b", res[3]))
+  }
+})
+
 context('default alignments')
 
 tables <- list(
