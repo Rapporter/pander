@@ -492,8 +492,7 @@ pandoc.list <- function(...)
 #' For more details please see the parameters above and passed arguments of \code{\link{panderOptions}}.
 #' @param t data frame, matrix or table
 #' @param caption caption (string) to be shown under the table
-#' @param row.names a logical value indicating whether to include row names; by
-#'   default, row names are included if \code{rownames(x)} is neither
+#' @param row.names if \code{FALSE}, row names are suppressed. A character vector of row names can also be specified here. By default, row names are included if \code{rownames(t)} is neither
 #'   \code{NULL} nor identical to \code{1:nrow(x)}
 #' @param col.names a character vector of column names to be used in the table
 #' @param digits passed to \code{format}. Can be a vector specifying values for each column (has to be the same length as number of columns).
