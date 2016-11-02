@@ -4,13 +4,16 @@ pander DEV (xxxx-xx-xx)
 New classes supported by the `pander` generic S3 method:
  * ets
 
+New features:
+ * pandoc.table gains `row.names` and `col.names` arguments
+
 pander 0.6.0 (2015-10-27)
 ----------------------------------------------------------------
 
 This is a major release with 200+ new commits since last version:
   https://github.com/Rapporter/pander/compare/v0.5.2...v0.6.0
 
-New fetures:
+New features:
  * added logging for evals using futile.logger (#124)
  * added support for digits/round as a vector (#146)
  * added support for emphasize.verbatim (#221)

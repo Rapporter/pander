@@ -492,9 +492,6 @@ pandoc.list <- function(...)
 #' For more details please see the parameters above and passed arguments of \code{\link{panderOptions}}.
 #' @param t data frame, matrix or table
 #' @param caption caption (string) to be shown under the table
-#' @param row.names if \code{FALSE}, row names are suppressed. A character vector of row names can also be specified here. By default, row names are included if \code{rownames(t)} is neither
-#'   \code{NULL} nor identical to \code{1:nrow(x)}
-#' @param col.names a character vector of column names to be used in the table
 #' @param digits passed to \code{format}. Can be a vector specifying values for each column (has to be the same length as number of columns).
 #' @param decimal.mark passed to \code{format}
 #' @param big.mark passed to \code{format}
@@ -508,6 +505,9 @@ pandoc.list <- function(...)
 #' @param keep.line.breaks (default: \code{FALSE}) if to keep or remove line breaks from cells in a table
 #' @param plain.ascii (default: \code{FALSE}) if output should be in plain ascii (without markdown markup) or not
 #' @param use.hyphening boolean (default: \code{FALSE}) if try to use hyphening when splitting large cells according to table.split.cells. Requires koRpus package.
+#' @param row.names if \code{FALSE}, row names are suppressed. A character vector of row names can also be specified here. By default, row names are included if \code{rownames(t)} is neither
+#'   \code{NULL} nor identical to \code{1:nrow(x)}
+#' @param col.names a character vector of column names to be used in the table
 #' @param emphasize.rownames boolean (default: \code{TRUE}) if row names should be highlighted
 #' @param emphasize.rows deprecated for \code{emphasize.italics.rows} argument
 #' @param emphasize.cols deprecated for \code{emphasize.italics.cols} argument
@@ -630,7 +630,7 @@ pandoc.list <- function(...)
 #' x <- data.frame(a = "Can be also supplied as a vector, for each cell separately",
 #'        b = "Can be also supplied as a vector, for each cell separately")
 #' pandoc.table(x, split.cells = 10, use.hyphening = TRUE)
-pandoc.table.return <- function(t, caption, row.names, col.names, digits = panderOptions('digits'), decimal.mark = panderOptions('decimal.mark'), big.mark = panderOptions('big.mark'), round = panderOptions('round'), missing = panderOptions('missing'), justify, style = c('multiline', 'grid', 'simple', 'rmarkdown'), split.tables = panderOptions('table.split.table'), split.cells = panderOptions('table.split.cells'), keep.trailing.zeros = panderOptions('keep.trailing.zeros'), keep.line.breaks = panderOptions('keep.line.breaks'), plain.ascii = panderOptions('plain.ascii'), use.hyphening = panderOptions('use.hyphening'), emphasize.rownames = panderOptions('table.emphasize.rownames'), emphasize.rows, emphasize.cols, emphasize.cells, emphasize.strong.rows, emphasize.strong.cols, emphasize.strong.cells, emphasize.italics.rows, emphasize.italics.cols, emphasize.italics.cells, emphasize.verbatim.rows, emphasize.verbatim.cols, emphasize.verbatim.cells, ...) { #nolint
+pandoc.table.return <- function(t, caption, digits = panderOptions('digits'), decimal.mark = panderOptions('decimal.mark'), big.mark = panderOptions('big.mark'), round = panderOptions('round'), missing = panderOptions('missing'), justify, style = c('multiline', 'grid', 'simple', 'rmarkdown'), split.tables = panderOptions('table.split.table'), split.cells = panderOptions('table.split.cells'), keep.trailing.zeros = panderOptions('keep.trailing.zeros'), keep.line.breaks = panderOptions('keep.line.breaks'), plain.ascii = panderOptions('plain.ascii'), use.hyphening = panderOptions('use.hyphening'), row.names, col.names, emphasize.rownames = panderOptions('table.emphasize.rownames'), emphasize.rows, emphasize.cols, emphasize.cells, emphasize.strong.rows, emphasize.strong.cols, emphasize.strong.cells, emphasize.italics.rows, emphasize.italics.cols, emphasize.italics.cells, emphasize.verbatim.rows, emphasize.verbatim.cols, emphasize.verbatim.cells, ...) { #nolint
 
     if (!missing(row.names)) {
       if (row.names[1] == FALSE) {
