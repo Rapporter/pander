@@ -975,7 +975,7 @@ So instead of a captured R object (which would be `NULL` in this situation by th
 
 ![](https://raw.githubusercontent.com/Rapporter/pander/gh-pages/plots/graphs-1.png)
 
-Well, this is not a standard histogram usually returned by the `hist` function, right? As mentioned before, `evals` have some extra features like applying the user defined theme on various plots automatically. Please see the `graphs.brew` example [above](#examples) for further details, or check the related [global options](#evals-options). If you do not like this feature, simply add `evalsOptions('graph.unify`, FALSE)` to your `.Rprofile`.
+Well, this is not a standard histogram usually returned by the `hist` function, right? As mentioned before, `evals` have some extra features like applying the user defined theme on various plots automatically. Please see the `graphs.brew` example [above](#examples) for further details, or check the related [global options](#evals-options). If you do not like this feature, simply add `evalsOptions('graph.unify', FALSE)` to your `.Rprofile`.
 
 Further features are described in the [technical docs](http://www.rdocumentation.org/packages/pander/functions/evals), and now I'll only give a brief introduction to another important feature of `evals`.
 
@@ -987,7 +987,7 @@ As `pander::evals` is using a **custom caching algorithm** in the means of evalu
   * Each parsed expression's **part** (let it be a function, variable, constant etc.) is evaluated (as `name`) separately to a `list`. This list describes the unique structure *and* the content of the passed R expressions. This has some really great benefits (see below).
   * A **hash** is computed of each list element and *cached* too in `pander`'s local environments. This is useful if you are using large data frames, just imagine: the caching algorithm would have to compute the hash for the same data frame each time it's touched! This way the hash is recomputed only if the R object with the given name is changed.
   * The list of such R objects is serialized, then an `SHA-1` hash is computed, which is unique and there is no real risk of collision.
-  * If [`evals`](#evals) can find the cached results in an environment of `pander`'s namespace (if `cache.mode` set to `enviroment` - see [below](#pander-options)) or in a file named to the computed hash (if `ċache.mode` set to `disk`), then it is returned on the spot. *The objects modified/created by the cached code are also updated.*
+  * If [`evals`](#evals) can find the cached results in an environment of `pander`'s namespace (if `cache.mode` set to `enviroment` - see [below](#pander-options)) or in a file named to the computed hash (if `cache.mode` set to `disk`), then it is returned on the spot. *The objects modified/created by the cached code are also updated.*
   * Otherwise the call is evaluated and the results and the modified R objects of the environment are optionally saved to cache (e.g. if `cache` is active *and* if the `proc.time()` of the evaluation is higher then it is defined in `cache.time` - see details in [evals' options](#evals-options)).
 
 <a id="in-practice"></a>
@@ -1064,7 +1064,7 @@ The package comes with a variety of globally adjustable options, which have an e
   * `digits`: numeric (default: `2`) passed to `format`.  Can be a vector specifying values for each column (has to be the same length as number of columns). Values for non-numeric columns will be disregarded.
   * `decimal.mark`: string (default: `.`) passed to `format`
   * `formula.caption.prefix`: string (default: `Formula: `) passed to `pandoc.formula` to be used as caption prefix. Be sure about what you are doing if changing to other than `Formula: ` or `:`.
-  * `big.mark`: string (default: ``) passed to `format`
+  * `big.mark`: string (default: `''`) passed to `format`
   * `round`: numeric (default: `Inf`) passed to `round`. Can be a vector specifying values for each column (has to be the same length as number of columns). Values for non-numeric columns will be disregarded.
   * `keep.trailing.zeros`: boolean (default: `FALSE`) show or remove trailing zeros in numbers (e.g. in numeric vectors or in columns of tables with numeric values)
   * `keep.line.breaks`: boolean (default: `FALSE`) to keep or remove line breaks from cells in a table
