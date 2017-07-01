@@ -1109,7 +1109,7 @@ The package comes with a variety of globally adjustable options, which have an e
       *  `4`: vertical.
 
   * `graph.symbol`: numeric (default: `1`) specifying a symbol (see the `pch` parameter of `par`)
-  * `knitr.auto.asis`: boolean (default: `TRUE`) if the results of `pander` should be considered as `asis` in `knitr`. Equals to specifying `results='asis'` in the R chunk, so thus there is no need to do so if set tot `TRUE`.
+  * `knitr.auto.asis`: boolean (default: `TRUE`) if the results of `pander` should be considered as `asis` in `knitr`. Equals to specifying `results='asis'` in the R chunk, so thus there is no need to do so if set to `TRUE`.
 
 <a id='evals-options'></a><a id='evalsoptions'></a>
 
