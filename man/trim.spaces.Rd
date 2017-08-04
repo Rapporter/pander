@@ -18,4 +18,3 @@ Trim leading and trailing spaces
 \seealso{
 \code{trim.space} in \code{rapport} package
 }
-

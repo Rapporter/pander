@@ -16,4 +16,3 @@
 \description{
 Prints a timeseries object in Pandoc's markdown.
 }
-

@@ -19,4 +19,3 @@
 \description{
 Prints a image object in Pandoc's markdown.
 }
-

@@ -22,4 +22,3 @@ This function takes care of that
 pander:::multitable(list(list(a=1, b=2),list(c=3, d=4)))
 }
 \keyword{internal}
-

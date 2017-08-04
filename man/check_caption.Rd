@@ -16,4 +16,3 @@ boolean
 Check if caption is valid
 }
 \keyword{internal}
-

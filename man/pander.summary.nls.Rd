@@ -24,4 +24,3 @@
 \description{
 Prints an summary.nls object from stats package in Pandoc's markdown.
 }
-

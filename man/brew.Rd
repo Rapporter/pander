@@ -34,4 +34,3 @@ Jeffrey Horner (2011). _brew: Templating Framework for Report Generation._ \url{
 \code{\link{Pandoc.brew}}
 }
 \keyword{internal}
-

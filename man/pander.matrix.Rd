@@ -16,4 +16,3 @@
 \description{
 Prints a matrix object in Pandoc's markdown.
 }
-

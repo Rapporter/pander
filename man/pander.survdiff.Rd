@@ -16,4 +16,3 @@
 \description{
 Prints an survdiff object in Pandoc's markdown.
 }
-

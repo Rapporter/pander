@@ -14,4 +14,3 @@ set.caption(x, permanent = FALSE)
 \description{
 This is a helper function to add a caption to the returning image/table.
 }
-

@@ -16,4 +16,3 @@
 \description{
 Prints a mtable object in Pandoc's markdown.
 }
-

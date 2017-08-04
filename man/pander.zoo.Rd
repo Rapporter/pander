@@ -16,4 +16,3 @@
 \description{
 Prints a zoo object in Pandoc's markdown.
 }
-

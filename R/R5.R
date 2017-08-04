@@ -55,7 +55,7 @@
 #' ## You do not want to see the generated report after generation?
 #' myReport$export(open = FALSE)
 #' }
-#' @importFrom methods setRefClass new
+#' @importFrom methods setRefClass new getGeneric
 Pandoc <- setRefClass('Pandoc', fields = list('author' = 'character',
                                               'title' = 'character',
                                               'date' = 'character',

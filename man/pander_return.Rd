@@ -15,4 +15,3 @@ This is a wrapper function around \code{pander} but instead of printing to \code
 \seealso{
 pander
 }
-

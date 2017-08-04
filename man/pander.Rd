@@ -82,4 +82,3 @@ pander(x)
   \item Hlavac, Marek (2013): _stargazer: LaTeX code for well-formatted regression and summary statistics tables._ \url{http://CRAN.R-project.org/package=stargazer}
 }
 }
-

@@ -16,4 +16,3 @@
 \description{
 Prints a htest object in Pandoc's markdown.
 }
-

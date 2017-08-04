@@ -16,4 +16,3 @@
 \description{
 Prints an Grm object from rms package in Pandoc's markdown.
 }
-

@@ -16,4 +16,3 @@
 \description{
 Prints a prcomp object in Pandoc's markdown.
 }
-

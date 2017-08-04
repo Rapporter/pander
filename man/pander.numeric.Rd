@@ -14,4 +14,3 @@
 \description{
 Prints a numeric class in Pandoc's markdown.
 }
-

@@ -19,4 +19,3 @@
 \description{
 Prints an irts object from tseries package in Pandoc's markdown.
 }
-

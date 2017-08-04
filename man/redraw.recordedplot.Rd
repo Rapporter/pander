@@ -18,4 +18,3 @@ Thanks to Jeroen Ooms \url{http://permalink.gmane.org/gmane.comp.lang.r.devel/29
 \seealso{
 \code{\link{evals}}
 }
-

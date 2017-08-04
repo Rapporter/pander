@@ -80,4 +80,3 @@ panderOptions('digits', 5)
 \seealso{
 \code{\link{evalsOptions}}
 }
-

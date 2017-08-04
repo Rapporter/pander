@@ -14,4 +14,3 @@
 \description{
 Prints an summary.rms from rms package in Pandoc's markdown.
 }
-

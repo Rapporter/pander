@@ -19,4 +19,3 @@
 \description{
 Prints an anova object in Pandoc's markdown.
 }
-

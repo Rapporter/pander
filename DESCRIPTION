@@ -56,4 +56,4 @@ SystemRequirements: pandoc (http://johnmacfarlane.net/pandoc) for exporting
     markdown files to other formats.
 LinkingTo: Rcpp
 VignetteBuilder: knitr
-RoxygenNote: 5.0.1
+RoxygenNote: 6.0.1

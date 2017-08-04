@@ -20,4 +20,3 @@ Adds minor tick marks to an existing \code{base} plot.
 This function is a forked version of \code{Hmisc::minor.tick}
 }
 \keyword{internal}
-

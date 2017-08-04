@@ -14,4 +14,3 @@
 \description{
 Prints a rapport object in Pandoc's markdown.
 }
-

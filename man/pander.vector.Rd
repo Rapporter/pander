@@ -15,4 +15,3 @@
 Helper function to deal with atomic vectors
 }
 \keyword{internal}
-

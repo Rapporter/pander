@@ -14,4 +14,3 @@
 \description{
 Prints a list object in Pandoc's markdown.
 }
-

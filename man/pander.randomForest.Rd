@@ -16,4 +16,3 @@
 \description{
 Renders an randomForest object in Pandoc's markdown.
 }
-

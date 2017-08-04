@@ -18,4 +18,3 @@
 \description{
 Prints an arima object from stats package in Pandoc's markdown.
 }
-

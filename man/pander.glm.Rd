@@ -16,4 +16,3 @@
 \description{
 Prints a summary.glm object in Pandoc's markdown.
 }
-

@@ -14,4 +14,3 @@
 \description{
 Prints a character class in Pandoc's markdown.
 }
-

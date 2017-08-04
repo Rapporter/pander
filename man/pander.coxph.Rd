@@ -16,4 +16,3 @@
 \description{
 Prints a coxph object in Pandoc's markdown.
 }
-

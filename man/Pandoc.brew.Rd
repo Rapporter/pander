@@ -89,4 +89,3 @@ Pi has a lot (<\%=i\%>) of power: <\%=pi^i\%><\%}\%>'))
      \item John MacFarlane (2012): _Pandoc User's Guide_. \url{http://johnmacfarlane.net/pandoc/README.html}
 }
 }
-

@@ -14,4 +14,3 @@
 \description{
 Prints an polr object from MASS package in Pandoc's markdown.
 }
-

@@ -24,4 +24,3 @@
 \description{
 Prints a CrossTable object in Pandoc's markdown.
 }
-

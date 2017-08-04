@@ -14,4 +14,3 @@
 \description{
 Prints a Date object in Pandoc's markdown.
 }
-

@@ -21,4 +21,3 @@
 \description{
 Prints an microbenchmark object in Pandoc's markdown.
 }
-

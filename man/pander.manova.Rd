@@ -19,4 +19,3 @@
 \description{
 Prints an manova object in Pandoc's markdown.
 }
-

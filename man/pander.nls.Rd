@@ -19,4 +19,3 @@
 \description{
 Prints an nls object from stats package in Pandoc's markdown.
 }
-

@@ -19,4 +19,3 @@
 \description{
 Prints a data.table object in Pandoc's markdown. Data.tables drop attributes (like row names) when called.
 }
-

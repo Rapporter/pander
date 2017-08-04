@@ -25,4 +25,3 @@ splitLine('foo bar', 6)
 splitLine('foo bar', 7)
 splitLine('Pandoc Package', 3, TRUE)
 }
-

@@ -12,4 +12,3 @@ add.blank.lines(x)
 \description{
 Adds a line break before \emph{and} after the character string(s).
 }
-

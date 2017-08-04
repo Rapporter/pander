@@ -17,4 +17,3 @@ set.alignment(default = panderOptions("table.alignment.default"),
 \description{
 This is a helper function to update the alignment (\code{justify} parameter in \code{pandoc.table}) of the next returning table. Possible values are: \code{centre} or \code{center}, \code{right}, \code{left}.
 }
-

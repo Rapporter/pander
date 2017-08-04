@@ -20,4 +20,3 @@
 \description{
 Prints an cph object from rms package in Pandoc's markdown.
 }
-

@@ -21,4 +21,3 @@
 \description{
 Prints a summary.lm object in Pandoc's markdown.
 }
-

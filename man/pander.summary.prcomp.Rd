@@ -19,4 +19,3 @@
 \description{
 Prints a summary.prcomp object in Pandoc's markdown.
 }
-

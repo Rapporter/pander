@@ -20,4 +20,3 @@ original vector if size is good, vector of default values otherwise
 Check if vector parameter for round/digits and adjust accodingly
 }
 \keyword{internal}
-
