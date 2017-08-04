@@ -253,10 +253,10 @@ pander.data.table <- function(x, caption = attr(x, 'caption'),
         caption <- get.caption()
     }
 
-    if (keys.as.row.names && haskey(x)) {
+    if (keys.as.row.names && data.table::haskey(x)) {
         row.names.dt <- x[[key(x)[1]]]
-        x <- x[, setdiff(colnames(x), key(x)[1]), with = FALSE]
-        setattr(x, 'row.names', row.names.dt)
+        x <- x[, setdiff(colnames(x), data.table::key(x)[1]), with = FALSE]
+        data.table::setattr(x, 'row.names', row.names.dt)
     }
 
     pandoc.table(x, caption = caption, ...)
