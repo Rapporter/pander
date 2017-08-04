@@ -20,11 +20,14 @@ Fixes:
  * `keep.trailing.zeros` regression bug (#259)
  * `pandoc.formula` with caption (#274)
  * show estimes of `htest` (#277)
- * `rms` update 0.5 fixes on `reVector` to `reListclean` 
+ * `rms` update 0.5 fixes on `reVector` to `reListclean`
 
 New classes supported by the `pander` generic S3 method:
  * ets (#231)
  * data.table (#241)
+
+Classes no longer supported by the `pander` generic S3 method:
+ * due to the major updates in the `memisc` package, for at least temporarily, we have removed `mtable` support
 
 pander 0.6.0 (2015-10-27)
 ----------------------------------------------------------------
