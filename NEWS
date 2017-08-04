@@ -20,6 +20,7 @@ Fixes:
  * `keep.trailing.zeros` regression bug (#259)
  * `pandoc.formula` with caption (#274)
  * show estimes of `htest` (#277)
+ * `rms` update 0.5 fixes on `reVector` to `reListclean` 
 
 New classes supported by the `pander` generic S3 method:
  * ets (#231)

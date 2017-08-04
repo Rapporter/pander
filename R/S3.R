@@ -1971,9 +1971,9 @@ pander.ols <- function (x, long = FALSE, coefs = TRUE,
     lrchisq <- stats['Model L.R.']
     ci <- x$clusterInfo
     if (lst <- length(stats)) {
-        misc <- rms::reVector(Obs = stats['n'], sigma = sigma, d.f. = df[2], `Cluster on` = ci$name, Clusters = ci$n) #nolint
-        lr <- rms::reVector(`LR chi2` = lrchisq, d.f. = ndf, `Pr(> chi2)` = 1 - pchisq(lrchisq, ndf)) #nolint
-        disc <- rms::reVector(R2 = r2, `R2 adj` = rsqa, g = stats['g']) #nolint
+        misc <- rms::reListclean(Obs = stats['n'], sigma = sigma, d.f. = df[2], `Cluster on` = ci$name, Clusters = ci$n) #nolint
+        lr <- rms::reListclean(`LR chi2` = lrchisq, d.f. = ndf, `Pr(> chi2)` = 1 - pchisq(lrchisq, ndf)) #nolint
+        disc <- rms::reListclean(R2 = r2, `R2 adj` = rsqa, g = stats['g']) #nolint
         sdf <- multitable(list(misc, lr, disc))
         colnames(sdf) <- c('', 'Model Likelihood\nRatio Test', 'Discrimination\nIndexes')
         caption <- pandoc.formula.return(x$call$formula, text = 'Fitting linear model:')
@@ -2174,7 +2174,7 @@ pander.lrm <- function (x, coefs = TRUE, ...)  {
     stats <- x$stats
     maxd <- signif(stats['Max Deriv'], 1)
     ci <- x$clusterInfo
-    misc <- rms::reVector(Obs = stats['Obs'],
+    misc <- rms::reListclean(Obs = stats['Obs'],
                      `Sum of weights` = stats['Sum of Weights'],
                      Strata = if (nstrata > 1) nstrata,
                      `Cluster on` = ci$name, Clusters = ci$n,
@@ -2183,13 +2183,13 @@ pander.lrm <- function (x, coefs = TRUE, ...)  {
         names(x$freq) <- paste(' ', names(x$freq), sep = '')
         misc <- c(misc[1], x$freq, misc[-1])
     }
-    lr <- rms::reVector(`LR chi2` = stats['Model L.R.'],
+    lr <- rms::reListclean(`LR chi2` = stats['Model L.R.'],
                    d.f. = stats['d.f.'],
                    `Pr(> chi2)` = stats['P'],
                    Penalty = penaltyFactor)
-    disc <- rms::reVector(R2 = stats['R2'], g = stats['g'], gr = stats['gr'],
+    disc <- rms::reListclean(R2 = stats['R2'], g = stats['g'], gr = stats['gr'],
                      gp = stats['gp'], Brier = stats['Brier'])
-    discr <- rms::reVector(C = stats['C'], Dxy = stats['Dxy'], gamma = stats['Gamma'],
+    discr <- rms::reListclean(C = stats['C'], Dxy = stats['Dxy'], gamma = stats['Gamma'],
                       `tau-a` = stats['Tau-a'])
     sdf <- multitable(list(misc, lr, disc, discr))
     colnames(sdf) <- c('', 'Model Likelihood\nRatio Test',
@@ -2246,21 +2246,21 @@ pander.orm <- function (x, coefs = TRUE, intercepts = x$non.slopes < 10, ...) {
     stats <- x$stats
     maxd <- signif(stats['Max Deriv'], 1)
     ci <- x$clusterInfo
-    misc <- rms::reVector(Obs = stats['Obs'], `Unique Y` = stats['Unique Y'],
+    misc <- rms::reListclean(Obs = stats['Obs'], `Unique Y` = stats['Unique Y'],
                      `Cluster on` = ci$name, Clusters = ci$n, `Median Y` = stats['Median Y'],
                      `max |deriv|` = maxd)
     if (length(x$freq) < 4) {
         names(x$freq) <- paste(' ', names(x$freq), sep = '')
         misc <- c(misc[1], x$freq, misc[-1])
     }
-    lr <- rms::reVector(`LR chi2` = stats['Model L.R.'], #nolint
+    lr <- rms::reListclean(`LR chi2` = stats['Model L.R.'], #nolint
                    d.f. = stats['d.f.'],
                    `Pr(> chi2)` = stats['P'],
                    `Score chi2` = stats['Score'],
                    `Pr(> chi2)` = stats['Score P'], Penalty = penaltyFactor)
-    disc <- rms::reVector(R2 = stats['R2'], g = stats['g'], gr = stats['gr'], #nolint
+    disc <- rms::reListclean(R2 = stats['R2'], g = stats['g'], gr = stats['gr'], #nolint
                      `|Pr(Y>=median)-0.5|` = stats['pdm'])
-    discr <- rms::reVector(rho = stats['rho']) #nolint
+    discr <- rms::reListclean(rho = stats['rho']) #nolint
     sdf <- multitable(list(misc, lr, disc, discr))
     colnames(sdf) <- c('', 'Model Likelihood\nRatio Test',
                        'Discrimination\nIndexes', 'Rank Discrim.\nIndexes')
@@ -2300,9 +2300,9 @@ pander.Glm <- function (x, coefs = TRUE, ...) {
     dof <- x$rank - (names(cof)[1] == 'Intercept')
     pval <- 1 - pchisq(lr, dof)
     ci <- x$clusterInfo
-    misc <- rms::reVector(Obs = length(x$residuals), `Residual d.f.` = x$df.residual,
+    misc <- rms::reListclean(Obs = length(x$residuals), `Residual d.f.` = x$df.residual,
                      `Cluster on` = ci$name, Clusters = ci$n, g = x$g)
-    lr <- rms::reVector(`LR chi2` = lr, d.f. = dof, `Pr(> chi2)` = pval) #nolint
+    lr <- rms::reListclean(`LR chi2` = lr, d.f. = dof, `Pr(> chi2)` = pval) #nolint
     sdf <- multitable(list(misc, lr))
     colnames(sdf) <- c('', 'Model Likelihood\nRatio Test')
     caption <- pandoc.formula.return(x$call$formula, text = 'General Linear Model')
@@ -2332,13 +2332,13 @@ pander.cph <- function (x, table = TRUE, conf.int = FALSE, coefs = TRUE, ...) {
     if (length(x$coef)) {
         stats <- x$stats
         ci <- x$clusterInfo
-        misc <- rms::reVector(Obs = stats['Obs'], Events = stats['Events'],
+        misc <- rms::reListclean(Obs = stats['Obs'], Events = stats['Events'],
                          `Cluster on` = ci$name, Clusters = ci$n,
                          Center = x$center)
-        lr <- rms::reVector(`LR chi2` = stats['Model L.R.'], d.f. = stats['d.f.'],
+        lr <- rms::reListclean(`LR chi2` = stats['Model L.R.'], d.f. = stats['d.f.'],
                        `Pr(> chi2)` = stats['P'], `Score chi2` = stats['Score'],
                        `Pr(> chi2)` = stats['Score P'])
-        disc <- rms::reVector(R2 = stats['R2'], Dxy = stats['Dxy'],
+        disc <- rms::reListclean(R2 = stats['R2'], Dxy = stats['Dxy'],
                          g = stats['g'], gr = stats['gr'])
         sdf <- multitable(list(misc, lr, disc))
         colnames(sdf) <- c('', 'Model Likelihood\nRatio Test',
