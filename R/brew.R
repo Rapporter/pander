@@ -27,7 +27,7 @@
 #' @importFrom utils tail head capture.output
 #' @return converted file name with full path if \code{convert} is set, none otherwise
 #' @references \itemize{
-#'      \item Jeffrey Horner (2011). _brew: Templating Framework for Report Generation._ \url{http://CRAN.R-project.org/package=brew}
+#'      \item Jeffrey Horner (2011). _brew: Templating Framework for Report Generation._ \url{http://cran.r-project.org/package=brew}
 #'      \item John MacFarlane (2012): _Pandoc User's Guide_. \url{http://johnmacfarlane.net/pandoc/README.html}
 #' }
 #' @examples \dontrun{
@@ -214,7 +214,7 @@ DELIM[[BRCATCODE]] <- c('<%=', '%>')
 #' @return \code{brew}ed document to \code{stdout} and raw results while evaluating the \code{text} in a structured list.
 #' @note This function should be never called directly (use \code{brew::brew} instead) as being a helper function of \code{Pandoc.brew}.
 #' @seealso \code{\link{Pandoc.brew}}
-#' @references Jeffrey Horner (2011). _brew: Templating Framework for Report Generation._ \url{http://CRAN.R-project.org/package=brew}z
+#' @references Jeffrey Horner (2011). _brew: Templating Framework for Report Generation._ \url{http://cran.r-project.org/package=brew}z
 #' @keywords internal
 `brew` <- function(text = NULL, envir = parent.frame()) {
 

@@ -7,8 +7,8 @@
 #' @note This function can be called by \code{pander} and \code{pandoc} too.
 #' @references \itemize{
 #'   \item John MacFarlane (2013): _Pandoc User's Guide_. \url{http://johnmacfarlane.net/pandoc/README.html}
-#'   \item David Hajage (2011): _ascii. Export R objects to several markup languages._ \url{http://CRAN.R-project.org/package=ascii}
-#'   \item Hlavac, Marek (2013): _stargazer: LaTeX code for well-formatted regression and summary statistics tables._ \url{http://CRAN.R-project.org/package=stargazer}
+#'   \item David Hajage (2011): _ascii. Export R objects to several markup languages._ \url{https://cran.r-project.org/package=ascii}
+#'   \item Hlavac, Marek (2013): _stargazer: LaTeX code for well-formatted regression and summary statistics tables._ \url{http://cran.r-project.org/package=stargazer}
 #' }
 #' @export
 #' @examples
@@ -253,8 +253,9 @@ pander.data.table <- function(x, caption = attr(x, 'caption'),
         caption <- get.caption()
     }
 
+    requireNamespace('data.table', quietly = TRUE)
     if (keys.as.row.names && data.table::haskey(x)) {
-        row.names.dt <- x[[key(x)[1]]]
+        row.names.dt <- x[[data.table::key(x)[1]]]
         x <- x[, setdiff(colnames(x), data.table::key(x)[1]), with = FALSE]
         data.table::setattr(x, 'row.names', row.names.dt)
     }
