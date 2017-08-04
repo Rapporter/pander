@@ -152,7 +152,7 @@ test_that('emphasize: error', {
 })
 
 test_that('no warning for highlight NA/empty strings', {
-    expect_that(pandoc.table(data.frame(x = 1:2, y = c(1, NA)), emphasize.italics.cols = 2), not(gives_warning()))
+    expect_warning(pandoc.table(data.frame(x = 1:2, y = c(1, NA)), emphasize.italics.cols = 2), regexp = NA)
 })
 
 test_that('emphasize.italics.rows works correctly', {
@@ -592,7 +592,7 @@ test_that('Behavior for empty objects is correct', {
     res <- pander_return(mt)
     expect_equal(res[3], ' **1**   **2**   **3**   **4**   **5** ')
     expect_equal(length(res), 6)
-    expect_equal(length(pander_return(data.frame())), 0)
+    expect_equal(length(suppressWarnings(pander_return(data.frame()))), 0)
     expect_warning(pander_return(data.frame()))
 })
 
@@ -648,7 +648,7 @@ test_that('pander.CrossTable behaves correctly', {
     expect_true(any(grepl('Std Residual', res)))
     expect_true(any(grepl('Adj Std Resid', res)))
     # issue 211 support for total.r total.c
-    x <- CrossTable(mtcars$cyl, mtcars$gear)
+    x <- suppressWarnings(CrossTable(mtcars$cyl, mtcars$gear))
     res <- pander_return(x, total.c = FALSE)
     expect_equal(length(res), 27)
     expect_equal(length(grep('Total', res)), 4)
