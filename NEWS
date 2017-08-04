@@ -1,11 +1,29 @@
-pander DEV (xxxx-xx-xx)
+pander 0.6.1 (2017-08-04)
 ----------------------------------------------------------------
 
-New classes supported by the `pander` generic S3 method:
- * ets
+This is rather a maintainence release without major updates, but still 100+ commits since last version:
+  https://github.com/Rapporter/pander/compare/v0.6.0...v0.6.1
 
-New features:
- * pandoc.table gains `row.names` and `col.names` arguments
+New fetures:
+ * placement of coefficients in `pander.lm` is now optional (#232)
+ * cutoff overrides for the significance stars (#255)
+ * row and columns names in `pandoc.table` (#281)
+
+Fixes:
+ * dplyr/tibble support (#234)
+ * overriding p values with stars and fix significance stars markdown (#230)
+ * don't update original markdown file when calling `Pandoc.brew` (#173)
+ * column alignment of tables without a header (#233)
+ * matrix coercion issues, eg date accidently converted to integer (#237)
+ * formatting of multiple columns instead of the first one
+ * `pander.mtable` fix after `memisc` update (#246)
+ * `keep.trailing.zeros` regression bug (#259)
+ * `pandoc.formula` with caption (#274)
+ * show estimes of `htest` (#277)
+
+New classes supported by the `pander` generic S3 method:
+ * ets (#231)
+ * data.table (#241)
 
 pander 0.6.0 (2015-10-27)
 ----------------------------------------------------------------
