@@ -51,7 +51,8 @@ Suggests:
     tseries,
     gtable,
     rms,
-    forecast
+    forecast,
+    data.table
 SystemRequirements: pandoc (http://johnmacfarlane.net/pandoc) for exporting
     markdown files to other formats.
 LinkingTo: Rcpp
