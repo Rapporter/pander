@@ -1176,8 +1176,6 @@ Few options of `pander-mode`: `M-x customize-group pander`
 
 To use this small lib, just type: `M-x pander-mode` on any document. It might be useful to add a hook to `markdown-mode` if you find this useful.
 
-![](https://cruel-carlota.gopagoda.com/9dfac0c1da37bd83d1848289630631fd "githalytics.com")
-
 <script type="text/javascript">
     $(document).ready(function() {
         $('#logo').empty();
