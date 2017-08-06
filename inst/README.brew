@@ -20,7 +20,7 @@ On the other hand, I welcome everyone to use the most recent version of the pack
 devtools::install_github('Rapporter/pander')
 ```
 
-Or download the [sources](https://github.com/Rapporter/pander/zipball/master) and build manually. If you're running R on Windows, you will need to install [Rtools](https://cran.stat.ucla.edu/bin/windows/Rtools/).
+Or download the [sources](https://github.com/Rapporter/pander/zipball/master) and build manually. If you're running R on Windows, you will need to install [Rtools](https://cran.r-project.org/bin/windows/Rtools/).
 
 ## Dependencies
 
