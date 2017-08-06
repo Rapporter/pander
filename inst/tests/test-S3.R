@@ -894,6 +894,7 @@ test_that('pander.function works correctly', {
 })
 
 test_that('pander.rlm works correctly', {
+    suppressMessages(require(MASS))
     res <- pander_return(rlm(stack.loss ~ ., stackloss))
     expect_equal(res[4], ' (Intercept)   Air.Flow   Water.Temp   Acid.Conc. ')
     expect_equal(length(res), 13)
