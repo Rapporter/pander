@@ -11,9 +11,8 @@ r_binary_packages:
 - testthat
 r_packages:
 - nlme
-r_github_packages:
-- jimhester/covr
-- jimhester/lintr
+- covr
+- lintr
 script:
 - make install
 - make check
