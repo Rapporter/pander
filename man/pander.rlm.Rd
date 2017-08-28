@@ -16,4 +16,3 @@
 \description{
 Prints an rlm object in Pandoc's markdown.
 }
-

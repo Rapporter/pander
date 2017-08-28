@@ -18,4 +18,3 @@
 \description{
 Prints an sessionInfo object in Pandoc's markdown.
 }
-

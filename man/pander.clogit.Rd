@@ -16,4 +16,3 @@
 \description{
 Prints a clogit object in Pandoc's markdown.
 }
-

@@ -21,4 +21,3 @@
 \description{
 Prints an function object in Pandoc's markdown.
 }
-

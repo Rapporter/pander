@@ -27,4 +27,3 @@ Exactly the same fn as  see \code{latticeExtra::axis.grid} but using \code{grid}
 This function is a forked version of \code{latticeExtra::axis.grid}
 }
 \keyword{internal}
-

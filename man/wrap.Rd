@@ -23,10 +23,9 @@ wrap('foobar')
 wrap(c('fee', 'fi', 'foo', 'fam'), '_')
 }
 }
-\author{
-Aleksandar Blagotic
-}
 \references{
 This function was moved from \code{rapport} package: \url{http://rapport-package.info}.
 }
-
+\author{
+Aleksandar Blagotic
+}

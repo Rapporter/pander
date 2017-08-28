@@ -14,4 +14,3 @@
 \description{
 Prints an smooth.spline object in Pandoc's markdown.
 }
-

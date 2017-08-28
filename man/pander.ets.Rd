@@ -16,4 +16,3 @@
 \description{
 Prints an ets object from forecast package in Pandoc's markdown.
 }
-

@@ -22,4 +22,3 @@
 \description{
 Prints an summary.polr object from MASS package in Pandoc's markdown.
 }
-

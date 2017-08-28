@@ -152,7 +152,7 @@ test_that('emphasize: error', {
 })
 
 test_that('no warning for highlight NA/empty strings', {
-    expect_that(pandoc.table(data.frame(x = 1:2, y = c(1, NA)), emphasize.italics.cols = 2), not(gives_warning()))
+    expect_warning(pandoc.table(data.frame(x = 1:2, y = c(1, NA)), emphasize.italics.cols = 2), regexp = NA)
 })
 
 test_that('emphasize.italics.rows works correctly', {
@@ -592,7 +592,7 @@ test_that('Behavior for empty objects is correct', {
     res <- pander_return(mt)
     expect_equal(res[3], ' **1**   **2**   **3**   **4**   **5** ')
     expect_equal(length(res), 6)
-    expect_equal(length(pander_return(data.frame())), 0)
+    expect_equal(length(suppressWarnings(pander_return(data.frame()))), 0)
     expect_warning(pander_return(data.frame()))
 })
 
@@ -648,7 +648,7 @@ test_that('pander.CrossTable behaves correctly', {
     expect_true(any(grepl('Std Residual', res)))
     expect_true(any(grepl('Adj Std Resid', res)))
     # issue 211 support for total.r total.c
-    x <- CrossTable(mtcars$cyl, mtcars$gear)
+    x <- suppressWarnings(CrossTable(mtcars$cyl, mtcars$gear))
     res <- pander_return(x, total.c = FALSE)
     expect_equal(length(res), 27)
     expect_equal(length(grep('Total', res)), 4)
@@ -738,34 +738,6 @@ test_that('pander.aovlist/pander.summary.aovlist behaves correctly', {
     a <- aov(yield ~  N * P * K + Error(block), npk)
     pa <- pander_return(a, style = 'simple')
     expect_equal(length(pa), 14)
-})
-
-test_that('pander.mtable behaves correctly', {
-    suppressMessages(require(memisc))
-    lm0 <- lm(sr ~ pop15 + pop75, data = LifeCycleSavings)
-    pm <- pander_return(memisc::mtable(lm0), style = 'grid') # produces 2 columns, corner case
-    expect_equal(length(strsplit(pm[3], '\\+')[[1]]), 3)
-    expect_equal(length(pm), 35)
-
-    berkeley <- Aggregate(Table(Admit, Freq)~., data = UCBAdmissions)
-    berk0 <- glm(cbind(Admitted, Rejected)~1, data = berkeley, family = 'binomial')
-    berk1 <- glm(cbind(Admitted, Rejected)~Gender, data = berkeley, family = 'binomial')
-    berk2 <- glm(cbind(Admitted, Rejected)~Gender + Dept, data = berkeley, family = 'binomial')
-    pm <- pander_return(mtable(berk0, summary.stats = NULL), style = 'grid') # only one row
-    expect_equal(length(pm), 9)
-    # horizontal, produced an error before
-    x <- memisc::mtable(berk0, berk1, berk2,
-           coef.style = 'horizontal',
-           summary.stats = c('Deviance', 'AIC', 'N'))
-    pm <- pander_return(x, style = 'grid', split.tables = Inf)
-    expect_equal(length(pm), 26)
-    expect_true(all(sapply(colnames(x$coeficient), grepl, pm[4])))
-
-    # more complex mtable
-    pm <- pander_return(memisc::mtable(berk0, berk1, berk2,
-           coef.style = 'all',
-           summary.stats = c('Deviance', 'AIC', 'N')), style = 'grid')
-    expect_equal(length(pm), 47)
 })
 
 test_that('pander.ts behaves correctly', {
@@ -922,6 +894,7 @@ test_that('pander.function works correctly', {
 })
 
 test_that('pander.rlm works correctly', {
+    suppressMessages(require(MASS))
     res <- pander_return(rlm(stack.loss ~ ., stackloss))
     expect_equal(res[4], ' (Intercept)   Air.Flow   Water.Temp   Acid.Conc. ')
     expect_equal(length(res), 13)

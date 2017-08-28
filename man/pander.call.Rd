@@ -14,4 +14,3 @@
 \description{
 Prints a call object in Pandoc's markdown.
 }
-

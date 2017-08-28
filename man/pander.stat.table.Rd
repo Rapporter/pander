@@ -16,4 +16,3 @@
 \description{
 Prints an stat.table object in Pandoc's markdown.
 }
-

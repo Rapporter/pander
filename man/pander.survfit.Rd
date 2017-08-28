@@ -22,4 +22,3 @@
 \description{
 Prints an survfit object in Pandoc's markdown.
 }
-

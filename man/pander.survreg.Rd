@@ -14,4 +14,3 @@
 \description{
 Prints an survreg object from survival package in Pandoc's markdown.
 }
-

@@ -16,4 +16,3 @@
 \description{
 Prints a density object in Pandoc's markdown.
 }
-

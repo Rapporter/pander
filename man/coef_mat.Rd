@@ -19,4 +19,3 @@ coeficients matrix
 Calculate coef matrix for models from rms package
 Forked from prModFit from rms
 }
-

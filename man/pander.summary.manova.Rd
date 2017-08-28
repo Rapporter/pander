@@ -19,4 +19,3 @@
 \description{
 Prints an summary.manova object from stats package in Pandoc's markdown.
 }
-

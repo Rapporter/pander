@@ -7,8 +7,8 @@
 #' @note This function can be called by \code{pander} and \code{pandoc} too.
 #' @references \itemize{
 #'   \item John MacFarlane (2013): _Pandoc User's Guide_. \url{http://johnmacfarlane.net/pandoc/README.html}
-#'   \item David Hajage (2011): _ascii. Export R objects to several markup languages._ \url{http://CRAN.R-project.org/package=ascii}
-#'   \item Hlavac, Marek (2013): _stargazer: LaTeX code for well-formatted regression and summary statistics tables._ \url{http://CRAN.R-project.org/package=stargazer}
+#'   \item David Hajage (2011): _ascii. Export R objects to several markup languages._ \url{https://cran.r-project.org/package=ascii}
+#'   \item Hlavac, Marek (2013): _stargazer: LaTeX code for well-formatted regression and summary statistics tables._ \url{https://cran.r-project.org/package=stargazer}
 #' }
 #' @export
 #' @examples
@@ -253,10 +253,11 @@ pander.data.table <- function(x, caption = attr(x, 'caption'),
         caption <- get.caption()
     }
 
-    if (keys.as.row.names && haskey(x)) {
-        row.names.dt <- x[[key(x)[1]]]
-        x <- x[, setdiff(colnames(x), key(x)[1]), with = FALSE]
-        setattr(x, 'row.names', row.names.dt)
+    requireNamespace('data.table', quietly = TRUE)
+    if (keys.as.row.names && data.table::haskey(x)) {
+        row.names.dt <- x[[data.table::key(x)[1]]]
+        x <- x[, setdiff(colnames(x), data.table::key(x)[1]), with = FALSE]
+        data.table::setattr(x, 'row.names', row.names.dt)
     }
 
     pandoc.table(x, caption = caption, ...)
@@ -802,101 +803,6 @@ pander.Date <- function(x, ...)
 pander.ftable <- function(x, ...)
     pandoc.table(x, ...)
 
-
-#' Pander method for mtable class
-#'
-#' Prints a mtable object in Pandoc's markdown.
-#' @param x a mtable object
-#' @param caption caption (string) to be shown under the table
-#' @param ... optional parameters passed to raw \code{pandoc.table} function
-#' @export
-#' @importFrom stats ftable
-pander.mtable <- function(x, caption = attr(x, 'caption'),
-                          ...
-){
-
-  if (is.null(caption) & !is.null(storage$caption)) {
-    caption <- get.caption()
-  }
-
-  coefs <- x$coefficients
-  summaries <- x$summaries
-
-  coef.dims <- lapply(coefs, dim)
-  coef.ldim <- sapply(coef.dims, length)
-  max.coef.ldim <- max(coef.ldim)
-
-  coef.dims1 <- unique(sapply(coef.dims, '[[', 1))
-  stopifnot(length(coef.dims1) == 1)
-
-  grp.coefs <- max.coef.ldim > 3
-  if (grp.coefs){
-    coef.dims4 <- sapply(coef.dims[coef.ldim > 3], '[', 4)
-    grp.coefs <- grp.coefs && any(coef.dims4 > 1)
-  }
-
-  coef.names <- dimnames(coefs[[1]])[[3]]
-
-  mtab <- character()
-
-  frmt1 <- function(name, coefs, summaries){
-
-    coef.tab <- coefs
-    dm <- dim(coefs)
-    if (length(dm) == 3) dm <- c(dm, 1)
-    dim(coef.tab) <- dm
-
-    if (dm[1] > 1){
-      coef.tab <- apply(coef.tab, 2:4, paste, collapse = '\\ \n')
-    } else {
-      coef.tab <- apply(coef.tab, c(1, 3:4), paste, collapse = ' ')
-    }
-
-    dim(coef.tab) <- dim(coef.tab)[-1]
-
-    if (grp.coefs){
-      hdr <- character(ncol(coef.tab))
-      if (length(dim(coefs)) > 3){
-        if (dm[4] > 1)
-          eq.names <- dimnames(coefs)[[4]]
-        else
-          eq.names <- ''
-        ii <- seq(from = 1, length = dm[4], by = dm[2])
-        hdr[ii] <- eq.names
-      }
-      coef.tab <- rbind(hdr, coef.tab)
-    }
-    hdr <- character(ncol(coef.tab))
-    hdr[1] <- name
-    coef.tab <- rbind(hdr, coef.tab)
-    if (length(summaries)){
-      sum.tab <- matrix('', nrow = length(summaries), ncol = ncol(coef.tab))
-      sum.tab[, 1] <- summaries
-      coef.tab <- rbind(coef.tab, sum.tab)
-    }
-    coef.tab
-  }
-
-  for (i in 1:length(coefs)) {
-    mtab <- cbind(mtab, frmt1(names(coefs)[i], coefs[[i]], summaries[, i]))
-  }
-
-  colnames(mtab) <- mtab[1, ]
-  mtab <- mtab[-1,, drop = FALSE] #nolint
-
-  ldr <- coef.names
-
-  hldr <- NULL
-  if (grp.coefs)
-    hldr <- c(hldr, '')
-  if (length(x$model.groups))
-    hldr <- c('', hldr)
-  ldr <- c(hldr, ldr, rownames(summaries))
-
-  rownames(mtab) <- ldr
-
-  pandoc.table(mtab, caption = caption, keep.line.breaks = TRUE, ...)
-}
 
 #' Pander method for CrossTable class
 #'
@@ -1971,9 +1877,9 @@ pander.ols <- function (x, long = FALSE, coefs = TRUE,
     lrchisq <- stats['Model L.R.']
     ci <- x$clusterInfo
     if (lst <- length(stats)) {
-        misc <- rms::reVector(Obs = stats['n'], sigma = sigma, d.f. = df[2], `Cluster on` = ci$name, Clusters = ci$n) #nolint
-        lr <- rms::reVector(`LR chi2` = lrchisq, d.f. = ndf, `Pr(> chi2)` = 1 - pchisq(lrchisq, ndf)) #nolint
-        disc <- rms::reVector(R2 = r2, `R2 adj` = rsqa, g = stats['g']) #nolint
+        misc <- rms::reListclean(Obs = stats['n'], sigma = sigma, d.f. = df[2], `Cluster on` = ci$name, Clusters = ci$n) #nolint
+        lr <- rms::reListclean(`LR chi2` = lrchisq, d.f. = ndf, `Pr(> chi2)` = 1 - pchisq(lrchisq, ndf)) #nolint
+        disc <- rms::reListclean(R2 = r2, `R2 adj` = rsqa, g = stats['g']) #nolint
         sdf <- multitable(list(misc, lr, disc))
         colnames(sdf) <- c('', 'Model Likelihood\nRatio Test', 'Discrimination\nIndexes')
         caption <- pandoc.formula.return(x$call$formula, text = 'Fitting linear model:')
@@ -2174,7 +2080,7 @@ pander.lrm <- function (x, coefs = TRUE, ...)  {
     stats <- x$stats
     maxd <- signif(stats['Max Deriv'], 1)
     ci <- x$clusterInfo
-    misc <- rms::reVector(Obs = stats['Obs'],
+    misc <- rms::reListclean(Obs = stats['Obs'],
                      `Sum of weights` = stats['Sum of Weights'],
                      Strata = if (nstrata > 1) nstrata,
                      `Cluster on` = ci$name, Clusters = ci$n,
@@ -2183,13 +2089,13 @@ pander.lrm <- function (x, coefs = TRUE, ...)  {
         names(x$freq) <- paste(' ', names(x$freq), sep = '')
         misc <- c(misc[1], x$freq, misc[-1])
     }
-    lr <- rms::reVector(`LR chi2` = stats['Model L.R.'],
+    lr <- rms::reListclean(`LR chi2` = stats['Model L.R.'],
                    d.f. = stats['d.f.'],
                    `Pr(> chi2)` = stats['P'],
                    Penalty = penaltyFactor)
-    disc <- rms::reVector(R2 = stats['R2'], g = stats['g'], gr = stats['gr'],
+    disc <- rms::reListclean(R2 = stats['R2'], g = stats['g'], gr = stats['gr'],
                      gp = stats['gp'], Brier = stats['Brier'])
-    discr <- rms::reVector(C = stats['C'], Dxy = stats['Dxy'], gamma = stats['Gamma'],
+    discr <- rms::reListclean(C = stats['C'], Dxy = stats['Dxy'], gamma = stats['Gamma'],
                       `tau-a` = stats['Tau-a'])
     sdf <- multitable(list(misc, lr, disc, discr))
     colnames(sdf) <- c('', 'Model Likelihood\nRatio Test',
@@ -2246,21 +2152,21 @@ pander.orm <- function (x, coefs = TRUE, intercepts = x$non.slopes < 10, ...) {
     stats <- x$stats
     maxd <- signif(stats['Max Deriv'], 1)
     ci <- x$clusterInfo
-    misc <- rms::reVector(Obs = stats['Obs'], `Unique Y` = stats['Unique Y'],
+    misc <- rms::reListclean(Obs = stats['Obs'], `Unique Y` = stats['Unique Y'],
                      `Cluster on` = ci$name, Clusters = ci$n, `Median Y` = stats['Median Y'],
                      `max |deriv|` = maxd)
     if (length(x$freq) < 4) {
         names(x$freq) <- paste(' ', names(x$freq), sep = '')
         misc <- c(misc[1], x$freq, misc[-1])
     }
-    lr <- rms::reVector(`LR chi2` = stats['Model L.R.'], #nolint
+    lr <- rms::reListclean(`LR chi2` = stats['Model L.R.'], #nolint
                    d.f. = stats['d.f.'],
                    `Pr(> chi2)` = stats['P'],
                    `Score chi2` = stats['Score'],
                    `Pr(> chi2)` = stats['Score P'], Penalty = penaltyFactor)
-    disc <- rms::reVector(R2 = stats['R2'], g = stats['g'], gr = stats['gr'], #nolint
+    disc <- rms::reListclean(R2 = stats['R2'], g = stats['g'], gr = stats['gr'], #nolint
                      `|Pr(Y>=median)-0.5|` = stats['pdm'])
-    discr <- rms::reVector(rho = stats['rho']) #nolint
+    discr <- rms::reListclean(rho = stats['rho']) #nolint
     sdf <- multitable(list(misc, lr, disc, discr))
     colnames(sdf) <- c('', 'Model Likelihood\nRatio Test',
                        'Discrimination\nIndexes', 'Rank Discrim.\nIndexes')
@@ -2300,9 +2206,9 @@ pander.Glm <- function (x, coefs = TRUE, ...) {
     dof <- x$rank - (names(cof)[1] == 'Intercept')
     pval <- 1 - pchisq(lr, dof)
     ci <- x$clusterInfo
-    misc <- rms::reVector(Obs = length(x$residuals), `Residual d.f.` = x$df.residual,
+    misc <- rms::reListclean(Obs = length(x$residuals), `Residual d.f.` = x$df.residual,
                      `Cluster on` = ci$name, Clusters = ci$n, g = x$g)
-    lr <- rms::reVector(`LR chi2` = lr, d.f. = dof, `Pr(> chi2)` = pval) #nolint
+    lr <- rms::reListclean(`LR chi2` = lr, d.f. = dof, `Pr(> chi2)` = pval) #nolint
     sdf <- multitable(list(misc, lr))
     colnames(sdf) <- c('', 'Model Likelihood\nRatio Test')
     caption <- pandoc.formula.return(x$call$formula, text = 'General Linear Model')
@@ -2332,13 +2238,13 @@ pander.cph <- function (x, table = TRUE, conf.int = FALSE, coefs = TRUE, ...) {
     if (length(x$coef)) {
         stats <- x$stats
         ci <- x$clusterInfo
-        misc <- rms::reVector(Obs = stats['Obs'], Events = stats['Events'],
+        misc <- rms::reListclean(Obs = stats['Obs'], Events = stats['Events'],
                          `Cluster on` = ci$name, Clusters = ci$n,
                          Center = x$center)
-        lr <- rms::reVector(`LR chi2` = stats['Model L.R.'], d.f. = stats['d.f.'],
+        lr <- rms::reListclean(`LR chi2` = stats['Model L.R.'], d.f. = stats['d.f.'],
                        `Pr(> chi2)` = stats['P'], `Score chi2` = stats['Score'],
                        `Pr(> chi2)` = stats['Score P'])
-        disc <- rms::reVector(R2 = stats['R2'], Dxy = stats['Dxy'],
+        disc <- rms::reListclean(R2 = stats['R2'], Dxy = stats['Dxy'],
                          g = stats['g'], gr = stats['gr'])
         sdf <- multitable(list(misc, lr, disc))
         colnames(sdf) <- c('', 'Model Likelihood\nRatio Test',

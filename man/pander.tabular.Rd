@@ -21,4 +21,3 @@
 \description{
 Renders an tabular object in Pandoc's markdown.
 }
-

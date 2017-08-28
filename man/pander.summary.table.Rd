@@ -19,4 +19,3 @@
 \description{
 Renders an summary.table object in Pandoc's markdown.
 }
-

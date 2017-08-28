@@ -21,4 +21,3 @@ See \code{latticeExtra::xscale.components.subticks}.
 This is a simplified verwion of \code{latticeExtra::xscale.components.subticks}.
 }
 \keyword{internal}
-

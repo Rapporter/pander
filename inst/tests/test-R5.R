@@ -2,7 +2,10 @@ library(testthat)
 library(pander)
 context('Pandoc R5 reference class')
 
-test_that('quic demo on R5 refclass', {
+graph.dir <- evalsOptions('graph.dir')
+evalsOptions('graph.dir',  file.path(tempdir(), 'plots'))
+
+test_that('quick demo on R5 refclass', {
     myReport <- Pandoc$new()
     myReport$add.paragraph('Hello there!')
     myReport$add(head(mtcars))
@@ -14,3 +17,5 @@ test_that('quic demo on R5 refclass', {
     expect_equal(myReport$export(t, open = FALSE), paste0(t, '.html'))
     unlink(t)
 })
+
+evalsOptions('graph.dir',  graph.dir)

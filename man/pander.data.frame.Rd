@@ -16,4 +16,3 @@
 \description{
 Prints a data.frame object in Pandoc's markdown.
 }
-

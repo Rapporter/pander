@@ -19,4 +19,3 @@
 \description{
 Prints a describe object in Pandoc's markdown.
 }
-

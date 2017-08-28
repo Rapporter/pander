@@ -14,4 +14,3 @@
 \description{
 Prints a ftable object in Pandoc's markdown.
 }
-

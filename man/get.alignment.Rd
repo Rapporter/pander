@@ -13,4 +13,3 @@ vector of alignment parameters
 Get alignment from temporary environment, truncating that and applying rownames and other columns alignment to passed \code{df}.
 }
 \keyword{internal}
-

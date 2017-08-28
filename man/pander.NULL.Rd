@@ -14,4 +14,3 @@
 \description{
 Prints a NULL object in Pandoc's markdown.
 }
-

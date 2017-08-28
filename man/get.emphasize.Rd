@@ -16,4 +16,3 @@ R object passed as \code{df} with possibly added \code{attr}s captured from inte
 And truncate content.
 }
 \keyword{internal}
-

@@ -4,7 +4,7 @@ The main aim of the *pander* [R](http://r-project.org) package is to provide a m
 
 Current build and test coverage status: [![](https://travis-ci.org/Rapporter/pander.png?branch=master)](https://travis-ci.org/Rapporter/pander) [![](http://codecov.io/github/Rapporter/pander/coverage.svg?branch=master)](http://codecov.io/github/Rapporter/pander?branch=master).
 
-Some CRAN statistics: [![](http://cranlogs.r-pkg.org/badges/pander)](http://cran.rstudio.com/web/packages/pander/index.html) [![](http://cranlogs.r-pkg.org/badges/grand-total/pander)](http://cran.rstudio.com/web/packages/pander/index.html)
+Some CRAN statistics: [![](http://cranlogs.r-pkg.org/badges/pander)](https://cran.r-project.org/package=pander) [![](http://cranlogs.r-pkg.org/badges/grand-total/pander)](https://cran.r-project.org/package=pander)
 
 # Installation
 
@@ -20,7 +20,7 @@ On the other hand, I welcome everyone to use the most recent version of the pack
 devtools::install_github('Rapporter/pander')
 ```
 
-Or download the [sources](https://github.com/Rapporter/pander/zipball/master) and build manually. If you're running R on Windows, you will need to install [Rtools](http://cran.stat.ucla.edu/bin/windows/Rtools/).
+Or download the [sources](https://github.com/Rapporter/pander/zipball/master) and build manually. If you're running R on Windows, you will need to install [Rtools](https://cran.r-project.org/bin/windows/Rtools/).
 
 ## Dependencies
 
@@ -1175,8 +1175,6 @@ Few options of `pander-mode`: `M-x customize-group pander`
   * `pander-show-source`: If non-nil then the source of R commands would also show up in generated documents while running 'pander-eval'. This would not affect `brew` functions ATM.
 
 To use this small lib, just type: `M-x pander-mode` on any document. It might be useful to add a hook to `markdown-mode` if you find this useful.
-
-![](https://cruel-carlota.gopagoda.com/9dfac0c1da37bd83d1848289630631fd "githalytics.com")
 
 <script type="text/javascript">
     $(document).ready(function() {

@@ -26,4 +26,3 @@ By default this function outputs (see: \code{cat}) the result. If you would want
 \description{
 Prints a summary.glm object in Pandoc's markdown.
 }
-

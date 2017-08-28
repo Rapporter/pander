@@ -14,4 +14,3 @@
 \description{
 Prints a POSIXlt object in Pandoc's markdown.
 }
-

@@ -51,4 +51,3 @@ evalsOptions('cache', FALSE)
 \seealso{
 \code{\link{evals}} \code{\link{panderOptions}}
 }
-

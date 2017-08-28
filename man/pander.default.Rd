@@ -14,4 +14,3 @@
 \description{
 Method to be used, when no exact S3 method for given object is found. Tries to render object as a list
 }
-

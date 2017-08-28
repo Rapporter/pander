@@ -23,4 +23,3 @@
 \description{
 Prints an ols object from rms package in Pandoc's markdown.
 }
-

@@ -19,4 +19,3 @@ character vector
 \description{
 Repeating a string \code{n} times and returning a concatenated character vector.
 }
-

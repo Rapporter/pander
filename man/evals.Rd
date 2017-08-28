@@ -333,4 +333,3 @@ evals('foo')
 \seealso{
 \code{\link{eval.msgs}} \code{\link{evalsOptions}}
 }
-

@@ -28,10 +28,9 @@ This custom function can do more and also less compared to the original \code{br
 This function should be never called directly (use \code{brew::brew} instead) as being a helper function of \code{Pandoc.brew}.
 }
 \references{
-Jeffrey Horner (2011). _brew: Templating Framework for Report Generation._ \url{http://CRAN.R-project.org/package=brew}z
+Jeffrey Horner (2011). _brew: Templating Framework for Report Generation._ \url{https://cran.r-project.org/package=brew}
 }
 \seealso{
 \code{\link{Pandoc.brew}}
 }
 \keyword{internal}
-

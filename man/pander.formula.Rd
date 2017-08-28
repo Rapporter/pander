@@ -19,4 +19,3 @@
 \description{
 Prints a formula object in Pandoc's markdown.
 }
-

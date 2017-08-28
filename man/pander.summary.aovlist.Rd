@@ -16,4 +16,3 @@
 \description{
 Prints a summary.aovlist object in Pandoc's markdown.
 }
-

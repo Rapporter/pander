@@ -16,4 +16,3 @@
 \description{
 Prints an lrm object from rms package in Pandoc's markdown.
 }
-

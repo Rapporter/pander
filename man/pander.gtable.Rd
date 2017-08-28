@@ -16,4 +16,3 @@
 \description{
 Renders an gtable object in Pandoc's markdown.
 }
-

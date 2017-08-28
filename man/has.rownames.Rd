@@ -15,4 +15,3 @@ has.rownames(x)
 \description{
 Dummy helper to check if the R object has real rownames or not.
 }
-

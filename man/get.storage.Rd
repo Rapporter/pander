@@ -13,4 +13,3 @@ get.storage(what)
 And truncate content.
 }
 \keyword{internal}
-

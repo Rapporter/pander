@@ -2,8 +2,8 @@
 % Please edit documentation in R/R5.R
 \docType{class}
 \name{Pandoc-class}
-\alias{Pandoc}
 \alias{Pandoc-class}
+\alias{Pandoc}
 \title{Reporting with Pandoc}
 \arguments{
 \item{...}{this is an R5 object without any direct params but it should be documented, right?}
@@ -17,6 +17,7 @@ This \code{R5} reference class can hold bunch of elements (text or R objects) fr
 \item{\code{export(Class)}}{Returns the result of coercing the object to
 Class.  No effect on the object itself.}
 }}
+
 \examples{
 \dontrun{
 ## Initialize a new Pandoc object
@@ -63,7 +64,7 @@ myReport
 ## Exporting to PDF (default)
 myReport$export()
 
-## Or to docx in tempdir():
+## Or to docx in tempdir:
 myReport$format <- 'docx'
 myReport$export(tempfile())
 
@@ -71,4 +72,3 @@ myReport$export(tempfile())
 myReport$export(open = FALSE)
 }
 }
-

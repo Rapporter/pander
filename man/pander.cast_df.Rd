@@ -16,4 +16,3 @@
 \description{
 Prints a cast_df object in Pandoc's markdown.
 }
-

@@ -19,4 +19,3 @@ pandoc.indent('FOO', 1)
 pandoc.indent(pandoc.table.return(table(mtcars$gear)), 2)
 cat(pandoc.indent(pandoc.table.return(table(mtcars$gear)), 3))
 }
-

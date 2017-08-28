@@ -16,4 +16,3 @@
 \description{
 Prints a table object in Pandoc's markdown.
 }
-

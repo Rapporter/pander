@@ -14,4 +14,3 @@
 \description{
 Prints a factor object in Pandoc's markdown.
 }
-

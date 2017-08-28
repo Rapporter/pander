@@ -13,4 +13,3 @@ stored caption as string
 Get caption from temporary environment and truncates that
 }
 \keyword{internal}
-

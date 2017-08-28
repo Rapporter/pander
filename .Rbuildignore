@@ -9,3 +9,4 @@ TODO.md
 \.gh-pages-update.sh
 pull.sh
 \.brewer.R
+.*.sh

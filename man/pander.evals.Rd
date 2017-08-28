@@ -14,4 +14,3 @@
 \description{
 Prints a evals object in Pandoc's markdown.
 }
-

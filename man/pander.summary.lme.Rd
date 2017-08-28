@@ -19,4 +19,3 @@
 \description{
 Prints a lme object in Pandoc's markdown.
 }
-

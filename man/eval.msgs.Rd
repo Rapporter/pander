@@ -67,4 +67,3 @@ eval.msgs('cat("writing to console");1:4')
 \seealso{
 \code{\link{evals}}
 }
-

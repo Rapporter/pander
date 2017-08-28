@@ -14,4 +14,3 @@
 \description{
 Prints a logical object in Pandoc's markdown.
 }
-
