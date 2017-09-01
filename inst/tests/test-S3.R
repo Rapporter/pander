@@ -276,6 +276,10 @@ test_that('row names can be set', {
   }
 })
 
+test_that('obvious row names can be preserved', {
+    expect_true(grepl(".*1.*2.*3.*", pandoc.table.return(data.table(a = 7:9), row.names = 1:3)))
+})
+
 test_that('column names can be set', {
   for (t in tables) {
     res <- capture.output(pandoc.table(t, col.names = c("a", "b")))

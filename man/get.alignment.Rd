@@ -4,7 +4,12 @@
 \alias{get.alignment}
 \title{Get alignment}
 \usage{
-get.alignment(df)
+get.alignment(df, remove.obious.rownames = TRUE)
+}
+\arguments{
+\item{df}{data.frame}
+
+\item{remove.obious.rownames}{if this rule should be applied or not}
 }
 \value{
 vector of alignment parameters

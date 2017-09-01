@@ -175,7 +175,9 @@ set.alignment <- function(default = panderOptions('table.alignment.default'), ro
 #' Get alignment from temporary environment, truncating that and applying rownames and other columns alignment to passed \code{df}.
 #' @return vector of alignment parameters
 #' @keywords internal
-get.alignment <- function(df) {
+#' @param df data.frame
+#' @param remove.obious.rownames if this rule should be applied or not
+get.alignment <- function(df, remove.obious.rownames = TRUE) {
 
     if (is.null(attr(df, 'alignment'))) {
 
@@ -184,7 +186,7 @@ get.alignment <- function(df) {
         if (is.null(a)) {
             ad <- panderOptions('table.alignment.default')
             ar <- panderOptions('table.alignment.rownames')
-            if (!has.rownames(df)) {
+            if (remove.obious.rownames && !has.rownames(df)) {
                 ar <- NULL
             }
             if (is.function(ar)) {
@@ -206,7 +208,7 @@ get.alignment <- function(df) {
         } else {
             w <- ncol(df)
             n <- rownames(df)
-            if (all(n == 1:nrow(df))) {
+            if (isTRUE(remove.obious.rownames) && all(n == 1:nrow(df))) {
                 n <- NULL
             }
         }
