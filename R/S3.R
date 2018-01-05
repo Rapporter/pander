@@ -372,12 +372,14 @@ pander.summary.lm <- function(x, caption = attr(x, 'caption'), covariate.labels,
             colnames(stats) <- NULL
             pandoc.table(stats, keep.trailing.zeros = TRUE, ...)
         } else {
-            pandoc.table(data.frame(
+            stats <- data.frame(
                 'Observations'        = length(x$residuals),
                 'Residual Std. Error' = x$sigma,
                 '$R^2$'               = x$r.squared,
                 'Adjusted $R^2$'      = x$adj.r.squared,
-                check.names = FALSE), keep.trailing.zeros = TRUE, caption = caption, digits = panderOptions('digits'))
+                check.names = FALSE
+            )
+            pandoc.table(stats, keep.trailing.zeros = TRUE, caption = caption, digits = panderOptions('digits'))
         }
     } else {
 
