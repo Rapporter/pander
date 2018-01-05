@@ -358,7 +358,7 @@ pander.summary.lm <- function(x, caption = attr(x, 'caption'), covariate.labels,
     }
 
     if (summary) {
-        pandoc.table(res, ...)
+        pandoc.table(res, caption = NULL, ...)
         if (class(x) == 'summary.glm') {
             cat('\n(Dispersion parameter for ', x$family$family, ' family taken to be ',
                 format(x$dispersion), ')\n\n')
