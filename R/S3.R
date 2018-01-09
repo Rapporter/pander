@@ -370,7 +370,7 @@ pander.summary.lm <- function(x, caption = attr(x, 'caption'), covariate.labels,
                                1L, paste, collapse = ' '))
             rownames(stats) <- NULL
             colnames(stats) <- NULL
-            pandoc.table(stats, keep.trailing.zeros = TRUE, ...)
+            pandoc.table(stats, keep.trailing.zeros = TRUE, caption = caption, ...)
         } else {
             stats <- data.frame(
                 'Observations'        = length(x$residuals),
