@@ -344,10 +344,10 @@ pandoc.title.return <- function(author = '', title = '', date = '') {
     }
     ## updating title tags
     if (any(author != '')) {
-        author <- paste('%', paste(author, collapse = '; '))
+        author <- paste('%', paste(Filter(function(x) x != '', author), collapse = '; '))
     }
     if (any(title != '')) {
-        title  <- paste0('% ', gsub('[\t ][\t ]*', '  ', gsub('\n', '\n  ', paste(title, collapse = '\n'))))
+        title  <- paste0('% ', gsub('[\t ][\t ]*', '  ', gsub('\n', '\n  ', paste(Filter(function(x) x != '', title), collapse = '\n'))))
     }
 
     ## formatting result
