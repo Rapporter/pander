@@ -343,11 +343,13 @@ pandoc.title.return <- function(author = '', title = '', date = '') {
         stop('You cannot create a title with only date specified!')
     }
     ## updating title tags
-    if (author != '') {
-        author <- paste('%', paste(author, collapse = '; '))
+    if (length(author) > 1 && author != '') {
+        author <- paste('%', paste(author[author != ''], collapse = '; '))
     }
-    if (title != '') {
-        title  <- paste0('% ', gsub('[\t ][\t ]*', '  ', gsub('\n', '\n  ', paste(title, collapse = '\n'))))
+    if (length(title) > 1 && title != '') {
+        title  <- paste0(
+            '% ',
+            gsub('[\t ][\t ]*', '  ', gsub('\n', '\n  ', paste(title[title != ''], collapse = '\n'))))
     }
 
     ## formatting result
