@@ -977,6 +977,12 @@ pandoc.table.return <- function(t, caption, digits = panderOptions('digits'), de
     }
     t.n <- which(sapply(1:ncol(t), function(x) is.numeric(t[, x])))
     if (length(t.n) > 0) {
+        ## make sure it's numeric (eg convert integer64 first as sapply having issues)
+        ## see eg: sapply(bit64::as.integer64(1:5), format)
+        for (j in t.n) {
+            t[, j] <- as.numeric(t[, j])
+        }
+        ## round digits as needed
         round <- check_digits(round, 'round', ncol(t))
         ## for-loop is needed to preserve row/col names and use index to get appropriate value from round vector
         for (j in 1:ncol(temp.t)) {
