@@ -13,7 +13,7 @@ redraw.recordedplot(file)
 This function is a wrapper around \code{redrawPlot}.
 }
 \references{
-Thanks to Jeroen Ooms \url{http://permalink.gmane.org/gmane.comp.lang.r.devel/29897}, JJ Allaire \url{https://github.com/rstudio/rstudio/commit/eb5f6f1db4717132c2ff111f068ffa6e8b2a5f0b}, and Gabriel Becker.
+Thanks to Jeroen Ooms \url{https://stat.ethz.ch/pipermail/r-devel/2012-January/062973.html}, JJ Allaire \url{https://github.com/rstudio/rstudio/commit/eb5f6f1db4717132c2ff111f068ffa6e8b2a5f0b}, and Gabriel Becker.
 }
 \seealso{
 \code{\link{evals}}
