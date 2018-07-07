@@ -753,7 +753,7 @@ The [brew](https://cran.r-project.org/package=brew) package, which is a templati
 
 **In short**: a `brew` document is a simple text file with some special tags. `Pandoc.brew` uses only two of them (as building on a personalized version of Jeff's really great `brew` function):
 
-  * `<%= ... %>` stand for running inline R commands as usual,
+  * `<% ... %>` stand for running inline R commands as usual,
   * `<%= ... %>` does pretty much the same but applies `pander` to the returning R object (instead of `cat` like the original `brew` function does). So putting there any R object, it would return in a nice Pandoc's markdown format with all possible error/warning messages etc.
 
 This latter tries to be smart in some ways:
