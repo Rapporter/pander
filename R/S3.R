@@ -254,13 +254,15 @@ pander.data.table <- function(x, caption = attr(x, 'caption'),
     }
 
     requireNamespace('data.table', quietly = TRUE)
-    if (keys.as.row.names && data.table::haskey(x)) {
-        row.names.dt <- x[[data.table::key(x)[1]]]
-        x <- x[, setdiff(colnames(x), data.table::key(x)[1]), with = FALSE]
-        data.table::setattr(x, 'row.names', row.names.dt)
+    xx <- copy(x)
+    if (keys.as.row.names && data.table::haskey(xx)) {
+        firstkey <- data.table::key(xx)[1]
+        row.names.dt <- as.character(xx[[firstkey]])
+        xx <- xx[, setdiff(colnames(xx), firstkey), with = FALSE, drop = FALSE]
+        data.table::setattr(xx, 'row.names', row.names.dt)
     }
 
-    pandoc.table(x, caption = caption, ...)
+    pandoc.table(xx, caption = caption, ...)
 
 }
 
