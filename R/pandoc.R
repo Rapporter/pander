@@ -633,7 +633,7 @@ pandoc.list <- function(...)
 #' x <- data.frame(a = "Can be also supplied as a vector, for each cell separately",
 #'        b = "Can be also supplied as a vector, for each cell separately")
 #' pandoc.table(x, split.cells = 10, use.hyphening = TRUE)
-pandoc.table.return <- function(t, caption, digits = panderOptions('digits'), decimal.mark = panderOptions('decimal.mark'), big.mark = panderOptions('big.mark'), round = panderOptions('round'), missing = panderOptions('missing'), justify, style = c('multiline', 'grid', 'simple', 'rmarkdown'), split.tables = panderOptions('table.split.table'), split.cells = panderOptions('table.split.cells'), keep.trailing.zeros = panderOptions('keep.trailing.zeros'), keep.line.breaks = panderOptions('keep.line.breaks'), plain.ascii = panderOptions('plain.ascii'), use.hyphening = panderOptions('use.hyphening'), row.names, col.names, emphasize.rownames = panderOptions('table.emphasize.rownames'), emphasize.rows, emphasize.cols, emphasize.cells, emphasize.strong.rows, emphasize.strong.cols, emphasize.strong.cells, emphasize.italics.rows, emphasize.italics.cols, emphasize.italics.cells, emphasize.verbatim.rows, emphasize.verbatim.cols, emphasize.verbatim.cells, ...) { #nolint
+pandoc.table.return <- function(t, caption, digits = panderOptions('digits'), decimal.mark = panderOptions('decimal.mark'), big.mark = panderOptions('big.mark'), round = panderOptions('round'), missing = panderOptions('missing'), justify, style = c('multiline', 'grid', 'simple', 'rmarkdown', 'jira'), split.tables = panderOptions('table.split.table'), split.cells = panderOptions('table.split.cells'), keep.trailing.zeros = panderOptions('keep.trailing.zeros'), keep.line.breaks = panderOptions('keep.line.breaks'), plain.ascii = panderOptions('plain.ascii'), use.hyphening = panderOptions('use.hyphening'), row.names, col.names, emphasize.rownames = panderOptions('table.emphasize.rownames'), emphasize.rows, emphasize.cols, emphasize.cells, emphasize.strong.rows, emphasize.strong.cols, emphasize.strong.cells, emphasize.italics.rows, emphasize.italics.cols, emphasize.italics.cells, emphasize.verbatim.rows, emphasize.verbatim.cols, emphasize.verbatim.cells, ...) { #nolint
 
     row.names.provided <- !missing(row.names)
 
@@ -1190,6 +1190,33 @@ pandoc.table.return <- function(t, caption, digits = panderOptions('digits'), de
     justify <- sub('^center$', 'centre', justify)
     if (!all(justify %in% c('left', 'right', 'centre'))) {
         stop('Invalid values passed for `justify` that can be "left", "right" or "centre/center".')
+    }
+
+    ## #########################################################################
+    ## Jira format is simple, let's print early
+    ## #########################################################################
+
+    if (style == 'jira') {
+
+        if (length(t.rownames) != 0) {
+            t <- cbind(t.rownames, t)
+        }
+
+        if (length(t.colnames) != 0) {
+            res <- paste0('|', paste(wrap(t.colnames, '|'), collapse = ''), '|')
+        } else {
+            res <- ''
+        }
+
+        for (i in seq_len(nrow(t))) {
+            res <- paste0(res, '\n|')
+            for (j in seq_len(ncol(t))) {
+                res <- paste0(res, t[i, j], '|')
+            }
+        }
+
+        return(paste0(res, '\n\n'))
+
     }
 
     ## #########################################################################
