@@ -254,7 +254,7 @@ pander.data.table <- function(x, caption = attr(x, 'caption'),
     }
 
     requireNamespace('data.table', quietly = TRUE)
-    xx <- copy(x)
+    xx <- data.table::copy(x)
     if (keys.as.row.names && data.table::haskey(xx)) {
         firstkey <- data.table::key(xx)[1]
         row.names.dt <- as.character(xx[[firstkey]])
