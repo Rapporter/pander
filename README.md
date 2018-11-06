@@ -31,7 +31,7 @@ Few cool packages from CRAN are needed for installing and/or using `pander`:
 
 And there are also a few optional suggested or supported R packages, such as:
 
- * [koRpus](https://cran.r-project.org/package=koRpus) to use hyphenation when splitting large table cells,
+ * [sylly](https://cran.r-project.org/package=sylly) to use hyphenation when splitting large table cells,
  * [lattice](https://cran.r-project.org/package=lattice) and [ggplot2](https://cran.r-project.org/package=ggplot2) for unified plot theme,
  * [futile.logger](https://cran.r-project.org/package=futile.logger) for logging capabilities inside `evals`,
  * [survival](https://cran.r-project.org/package=survival), [microbenchmark](https://cran.r-project.org/package=microbenchmark), [zoo](https://cran.r-project.org/package=zoo), [nlme](https://cran.r-project.org/package=nlme), [descr](https://cran.r-project.org/package=descr), [MASS](https://cran.r-project.org/package=MASS), [tables](https://cran.r-project.org/package=tables), [reshape](https://cran.r-project.org/package=reshape), [memisc](https://cran.r-project.org/package=memisc), [Epi](https://cran.r-project.org/package=Epi), [randomForest](https://cran.r-project.org/package=randomForest), [tseries](https://cran.r-project.org/package=tseries), [rms](https://cran.r-project.org/package=rms) packages include some supported R classes,
@@ -388,7 +388,7 @@ Lorem ipsum dolor amet
 
 ```
 
-If the `koRpus` package is installed, `pandoc.table` can even split the cells with hyphening support:
+If the `sylly` package is installed, `pandoc.table` can even split the cells with hyphening support:
 
 ```rout
 > pandoc.table(data.frame(baz = 'foobar'), use.hyphening = TRUE, split.cells = 3)
@@ -1081,7 +1081,7 @@ The package comes with a variety of globally adjustable options, which have an e
   * `table.continues.affix`: string (default: `(continued below)`) passed to `pandoc.table` to be used as an affix concatenated to the user defined caption for long (split) tables
   * `table.alignment.default`: string (default: `centre`) that defines the default alignment of cells. Can be `left`, `right` or `centre` that latter can be also spelled as `center`
   * `table.alignment.rownames`: string (default: `centre`) that defines the alignment of rownames in tables. Can be `left`, `right` or `centre` that latter can be also spelled as `center`
-  * `use.hyphening`: boolean (default: `FALSE`) if try to use hyphening when splitting large cells according to table.split.cells. Requires `koRpus` package.
+  * `use.hyphening`: boolean (default: `FALSE`) if try to use hyphening when splitting large cells according to table.split.cells. Requires `sylly` package.
   * `evals.messages`: boolean (default: `TRUE`) passed to `evals`' `pander` method specifying if messages should be rendered
   * `p.wrap`: a string (default:`'_'`) to wrap vector elements passed to `p` function
   * `p.sep`: a string (default: `', '`) with the main separator passed to `p` function

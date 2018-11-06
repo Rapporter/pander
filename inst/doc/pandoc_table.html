@@ -332,7 +332,7 @@ m &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span class="
 <span class="co">#&gt;      a          b      c  </span>
 <span class="co">#&gt; ----------- --------- ----</span>
 <span class="co">#&gt; Lorem ipsum dolor sit amet</span></code></pre></div>
-<p>In some cases it is also useful to split too long words with hyphens, and <code>pander</code> uses <code>koRpus</code> functionality for that. Just specify <code>use.hyphening</code> argument and have <code>koRpus</code> installed:</p>
+<p>In some cases it is also useful to split too long words with hyphens, and <code>pander</code> uses <code>sylly</code> functionality for that. Just specify <code>use.hyphening</code> argument and have <code>koRpus</code> installed:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">pandoc.table</span>(<span class="kw">data.frame</span>(<span class="dt">baz =</span> <span class="st">'foobar'</span>, <span class="dt">foo=</span><span class="st">'accoutrements'</span>),
              <span class="dt">use.hyphening =</span> <span class="ot">TRUE</span>, <span class="dt">split.cells =</span> <span class="dv">3</span>)
 <span class="co">#&gt; </span>

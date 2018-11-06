@@ -377,7 +377,7 @@ cache.on <- function()
 #' This is a helper function to insert line breaks depending on (\code{split.cells} parameter of \code{pandoc.table}) of the returning table.
 #' @param x string to be split. Works only with one string. Non-string arguments and multi-dimensional arguments are returned unchaged
 #' @param max.width default integer value specyfing max number of characters between line breaks
-#' @param use.hyphening (default: \code{FALSE}) if try to use hyphening when splitting large cells according to table.split.cells. Requires koRpus package.
+#' @param use.hyphening (default: \code{FALSE}) if try to use hyphening when splitting large cells according to table.split.cells. Requires \pkg{sylly}.
 #' @return character string with line breaks
 #' @export
 #' @examples
@@ -397,11 +397,15 @@ splitLine <- function(x, max.width = panderOptions('table.split.cells'), use.hyp
     if (is.infinite(max.width)) {
         max.width <- .Machine$integer.max
     }
-    if (use.hyphening && !requireNamespace('koRpus', quietly = TRUE)) {
-        use.hyphening <- FALSE
+    if (use.hyphening) {
+        if (requireNamespace('sylly', quietly = TRUE) && requireNamespace('sylly.en', quietly = TRUE)) {
+            sylly.en::hyph.support.en()
+        } else {
+            use.hyphening <- FALSE
+        }
     }
     hyphen_f <- function(s)
-        koRpus::hyphen(s, hyph.pattern = 'en.us', quiet = TRUE)@hyphen[1, 2]
+        sylly::hyphen(s, hyph.pattern = 'en', quiet = TRUE)@hyphen[1, 2]
     .Call('pander_splitLine_cpp', PACKAGE = 'pander', x, max.width, use.hyphening, hyphen_f)
 }
 

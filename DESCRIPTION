@@ -33,7 +33,7 @@ Suggests:
     grid,
     lattice,
     ggplot2 (>= 0.9.2),
-    koRpus,
+    sylly,
     futile.logger,
     survival,
     microbenchmark,

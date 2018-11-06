@@ -507,7 +507,7 @@ pandoc.list <- function(...)
 #' @param keep.trailing.zeros to show or remove trailing zeros in numbers on a column basis width
 #' @param keep.line.breaks (default: \code{FALSE}) if to keep or remove line breaks from cells in a table
 #' @param plain.ascii (default: \code{FALSE}) if output should be in plain ascii (without markdown markup) or not
-#' @param use.hyphening boolean (default: \code{FALSE}) if try to use hyphening when splitting large cells according to table.split.cells. Requires koRpus package.
+#' @param use.hyphening boolean (default: \code{FALSE}) if try to use hyphening when splitting large cells according to table.split.cells. Requires \pkg{sylly}.
 #' @param row.names if \code{FALSE}, row names are suppressed. A character vector of row names can also be specified here. By default, row names are included if \code{rownames(t)} is neither
 #'   \code{NULL} nor identical to \code{1:nrow(x)}
 #' @param col.names a character vector of column names to be used in the table

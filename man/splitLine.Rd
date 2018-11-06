@@ -12,7 +12,7 @@ splitLine(x, max.width = panderOptions("table.split.cells"),
 
 \item{max.width}{default integer value specyfing max number of characters between line breaks}
 
-\item{use.hyphening}{(default: \code{FALSE}) if try to use hyphening when splitting large cells according to table.split.cells. Requires koRpus package.}
+\item{use.hyphening}{(default: \code{FALSE}) if try to use hyphening when splitting large cells according to table.split.cells. Requires \pkg{sylly}.}
 }
 \value{
 character string with line breaks
