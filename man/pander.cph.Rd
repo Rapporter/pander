@@ -4,7 +4,8 @@
 \alias{pander.cph}
 \title{Prints an cph object from rms package in Pandoc's markdown.}
 \usage{
-\method{pander}{cph}(x, table = TRUE, conf.int = FALSE, coefs = TRUE, ...)
+\method{pander}{cph}(x, table = TRUE, conf.int = FALSE, coefs = TRUE,
+  ...)
 }
 \arguments{
 \item{x}{an cph object}

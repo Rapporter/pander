@@ -4,8 +4,8 @@
 \alias{pander.formula}
 \title{Pander method for formula class}
 \usage{
-\method{pander}{formula}(x, max.width = 80, caption = attr(x, "caption"),
-  ...)
+\method{pander}{formula}(x, max.width = 80, caption = attr(x,
+  "caption"), ...)
 }
 \arguments{
 \item{x}{a formula object}
@@ -14,7 +14,7 @@
 
 \item{caption}{caption (string) to be shown under the formula}
 
-\item{...}{optional parameters passed to raw \code{pandoc.table} function}
+\item{...}{optional parameters passed to raw \code{pandoc.formula} function}
 }
 \description{
 Prints a formula object in Pandoc's markdown.

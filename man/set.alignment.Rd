@@ -5,7 +5,8 @@
 \title{Sets alignment for tables}
 \usage{
 set.alignment(default = panderOptions("table.alignment.default"),
-  row.names = panderOptions("table.alignment.rownames"), permanent = FALSE)
+  row.names = panderOptions("table.alignment.rownames"),
+  permanent = FALSE)
 }
 \arguments{
 \item{default}{character vector which length equals to one (would be repeated \code{n} times) ot \code{n} - where \code{n} equals to the number of columns in the following table}

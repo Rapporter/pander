@@ -4,8 +4,8 @@
 \alias{pander.microbenchmark}
 \title{Pander method for microbenchmark class}
 \usage{
-\method{pander}{microbenchmark}(x, caption = attr(x, "caption"), expr.labels,
-  unit, ...)
+\method{pander}{microbenchmark}(x, caption = attr(x, "caption"),
+  expr.labels, unit, ...)
 }
 \arguments{
 \item{x}{an microbenchmark object}

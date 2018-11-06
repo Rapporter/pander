@@ -4,7 +4,8 @@
 \alias{evals}
 \title{Evaluate and Process R Code}
 \usage{
-evals(txt, parse = evalsOptions("parse"), cache = evalsOptions("cache"),
+evals(txt, parse = evalsOptions("parse"),
+  cache = evalsOptions("cache"),
   cache.mode = evalsOptions("cache.mode"),
   cache.dir = evalsOptions("cache.dir"),
   cache.time = evalsOptions("cache.time"),
@@ -22,7 +23,8 @@ evals(txt, parse = evalsOptions("parse"), cache = evalsOptions("cache"),
   (height/width), hi.res.res = res * (hi.res.width/width),
   graph.env = evalsOptions("graph.env"),
   graph.recordplot = evalsOptions("graph.recordplot"),
-  graph.RDS = evalsOptions("graph.RDS"), log = evalsOptions("log"), ...)
+  graph.RDS = evalsOptions("graph.RDS"), log = evalsOptions("log"),
+  ...)
 }
 \arguments{
 \item{txt}{a character vector containing R code. This could be a list/vector of lines of code or a simple string holding R code separated by \code{;} or \code{\\n}.}

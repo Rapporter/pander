@@ -4,9 +4,9 @@
 \alias{pander.summary.lm}
 \title{Pander method for summary.lm class}
 \usage{
-\method{pander}{summary.lm}(x, caption = attr(x, "caption"), covariate.labels,
-  omit, summary = TRUE, add.significance.stars = FALSE,
-  move.intercept = FALSE, ...)
+\method{pander}{summary.lm}(x, caption = attr(x, "caption"),
+  covariate.labels, omit, summary = TRUE,
+  add.significance.stars = FALSE, move.intercept = FALSE, ...)
 }
 \arguments{
 \item{x}{an summary.lm object}

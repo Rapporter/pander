@@ -5,8 +5,8 @@
 \title{Brew in pandoc format}
 \usage{
 Pandoc.brew(file = stdin(), output = stdout(), convert = FALSE,
-  open = TRUE, graph.name, graph.dir, graph.hi.res = FALSE, text = NULL,
-  envir = parent.frame(), append = FALSE, ...)
+  open = TRUE, graph.name, graph.dir, graph.hi.res = FALSE,
+  text = NULL, envir = parent.frame(), append = FALSE, ...)
 }
 \arguments{
 \item{file}{file path of the brew template. As this is passed to \code{readLines}, \code{file} could be an URL too, but not over SSL (for that latter \code{RCurl} would be needed).}

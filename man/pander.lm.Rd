@@ -4,8 +4,8 @@
 \alias{pander.lm}
 \title{Pander method for summary.lm class}
 \usage{
-\method{pander}{lm}(x, caption = attr(x, "caption"), covariate.labels, omit,
-  ...)
+\method{pander}{lm}(x, caption = attr(x, "caption"), covariate.labels,
+  omit, ...)
 }
 \arguments{
 \item{x}{a summary.glm object}

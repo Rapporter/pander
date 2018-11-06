@@ -4,7 +4,8 @@
 \alias{pander.Arima}
 \title{Prints an arima object from stats package in Pandoc's markdown.}
 \usage{
-\method{pander}{Arima}(x, digits = panderOptions("digits"), se = TRUE, ...)
+\method{pander}{Arima}(x, digits = panderOptions("digits"), se = TRUE,
+  ...)
 }
 \arguments{
 \item{x}{an arima object}

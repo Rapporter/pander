@@ -5,7 +5,8 @@
 \title{Prints an ols object from rms package in Pandoc's markdown.}
 \usage{
 \method{pander}{ols}(x, long = FALSE, coefs = TRUE,
-  digits = panderOptions("digits"), round = panderOptions("round"), ...)
+  digits = panderOptions("digits"), round = panderOptions("round"),
+  ...)
 }
 \arguments{
 \item{x}{an ols object}
