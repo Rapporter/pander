@@ -13,8 +13,8 @@ Description: Contains some functions catching all messages, 'stdout' and other
     class with a smarty caching 'backend'.
 Author: Gergely Daróczi <daroczig@rapporter.net>, Roman Tsegelskyi
     <roman.tsegelskyi@gmail.com>
-Version: 0.6.2
-Date: 2018-07-07
+Version: 0.6.3
+Date: 2018-11-06
 URL: http://rapporter.github.io/pander
 BugReports: https://github.com/rapporter/pander/issues
 License: AGPL-3 | file LICENSE
