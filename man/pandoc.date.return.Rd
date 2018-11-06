@@ -5,7 +5,7 @@
 \alias{pandoc.date}
 \title{Dates}
 \usage{
-pandoc.date.return(x, inline = TRUE, simplified = FALSE)
+pandoc.date.return(x, inline = TRUE, simplified = FALSE, ...)
 }
 \arguments{
 \item{x}{date or vector of dates}
@@ -13,6 +13,8 @@ pandoc.date.return(x, inline = TRUE, simplified = FALSE)
 \item{inline}{if to render vector of dates as inline paragraph or not (as list)}
 
 \item{simplified}{if just add date formatting to vector of dates}
+
+\item{...}{extra arguments passed by from parent call, disregarded}
 }
 \value{
 By default this function outputs (see: \code{cat}) the result. If you would want to catch the result instead, then call the function ending in \code{.return}.

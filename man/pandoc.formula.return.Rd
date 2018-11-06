@@ -6,7 +6,7 @@
 \title{Formulas}
 \usage{
 pandoc.formula.return(x, text = NULL, max.width = 80, caption,
-  add.line.breaks = FALSE)
+  add.line.breaks = FALSE, ...)
 }
 \arguments{
 \item{x}{formula}
@@ -18,6 +18,8 @@ pandoc.formula.return(x, text = NULL, max.width = 80, caption,
 \item{caption}{caption (string) to be shown under the formula}
 
 \item{add.line.breaks}{if to add 2 line breaks after formula}
+
+\item{...}{extra arguments passed by from parent call, disregarded}
 }
 \value{
 By default this function outputs (see: \code{cat}) the result. If you would want to catch the result instead, then call the function ending in \code{.return}.

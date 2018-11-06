@@ -1016,13 +1016,13 @@ pander.ts <- function(x, caption = attr(x, 'caption'), ...) {
 #' @param x a formula object
 #' @param max.width maximum width in characters per line
 #' @param caption caption (string) to be shown under the formula
-#' @param ... optional parameters passed to raw \code{pandoc.table} function
+#' @param ... optional parameters passed to raw \code{pandoc.formula} function
 #' @export
 pander.formula <- function(x, max.width = 80, caption = attr(x, 'caption'), ...) {
     if (is.null(caption) & !is.null(storage$caption)) {
         caption <- get.caption()
     }
-    pandoc.formula(x, max.width = max.width, caption = caption)
+    pandoc.formula(x, max.width = max.width, caption = caption, ...)
 }
 
 

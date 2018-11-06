@@ -7,7 +7,7 @@
 \usage{
 pandoc.list.return(elements, style = c("bullet", "ordered", "roman"),
   loose = FALSE, add.line.breaks = TRUE, add.end.of.list = TRUE,
-  indent.level = 0, missing = panderOptions("missing"))
+  indent.level = 0, missing = panderOptions("missing"), ...)
 }
 \arguments{
 \item{elements}{character vector of strings}
@@ -23,6 +23,8 @@ pandoc.list.return(elements, style = c("bullet", "ordered", "roman"),
 \item{indent.level}{the level of indent}
 
 \item{missing}{string to replace missing values}
+
+\item{...}{extra arguments passed by from parent call, disregarded}
 }
 \value{
 By default this function outputs (see: \code{cat}) the result. If you would want to catch the result instead, then call the function ending in \code{.return}.
