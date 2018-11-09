@@ -698,7 +698,7 @@ pander.list <- function(x, ...) {
     ## capture pandoc output of list element
     res <- paste(unlist(lapply(1:length(x), function(i) {
 
-        res.i <- paste(capture.output(pander(x[[i]], indent = indent + 1)), collapse = '\n')
+        res.i <- paste(capture.output(pander(x[[i]], indent = 1)), collapse = '\n')
         if (grepl('\n', res.i) & !grepl('\n *\\* ', res.i)) {
             res.i <- sub('^\n', '\n\n', res.i)
             res.i <- pandoc.indent(res.i, 1)
