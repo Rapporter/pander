@@ -670,6 +670,11 @@ pander.density <- function(x, caption = attr(x, 'caption'), ...) {
 #' @export
 pander.list <- function(x, ...) {
 
+    ## early exit on no values
+    if (length(x) == 0) {
+        return(pander(NULL))
+    }
+
     ## match call
     mc <- match.call()
     if (is.null(mc$indent)) {
