@@ -1153,3 +1153,15 @@ test_that('pander.ets works correctly', {
   expect_equal(length(res), 25)
   expect_true(any(grep('phi', res)))
 })
+
+test_that('pander.list works correctly', {
+  res <- pander_return(list(1:10))
+  expect_equal(length(res), 7)
+  expect_true(any(grep('end of list', res)))
+  res <- pander_return(list(a = 1:10, b = list()))
+  expect_equal(length(res), 8)
+  expect_true(any(grep('end of list', res)))
+  res <- pander_return(list(a = list(b = list(c = 5))))
+  expect_equal(length(res), 13)
+  expect_true(any(grep('end of list', res)))
+})
