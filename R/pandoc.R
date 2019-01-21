@@ -640,6 +640,10 @@ pandoc.table.return <- function(t, caption, digits = panderOptions('digits'), de
 
     ## expands cells for output
     table.expand <- function(cells, cols.width, justify, sep.cols) {
+        ## fix encoding issue in C++ on Windows
+        if (l10n_info()$`UTF-8` == FALSE) {
+            cells <- enc2native(cells)
+        }
         .Call('pander_tableExpand_cpp', PACKAGE = 'pander', cells, cols.width, justify, sep.cols, style)
     }
 
