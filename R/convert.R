@@ -44,7 +44,7 @@ openFileInOS <- function(f) {
 #' @param footer add footer to document with meta-information
 #' @param proc.time optionally passed number in seconds which would be shown in the generated document's footer
 #' @param portable.html instead of using local files, rather linking JS/CSS files to an online CDN for portability and including base64-encoded images if converting to \code{HTML} without custom \code{options}
-#' @param pandoc.binary path to \code{pandoc}'s binary if not found in the path
+#' @param pandoc.binary custom path to \code{pandoc}'s binary if not found in the path or not set in the \code{RSTUDIO_PANDOC} env var
 #' @references John MacFarlane (2012): _Pandoc User's Guide_. \url{http://johnmacfarlane.net/pandoc/README.html}
 #' @note This function depends on \code{Pandoc} which should be pre-installed on user's machine. See the \code{INSTALL} file of the package.
 #' @return Converted file's path.

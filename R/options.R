@@ -48,7 +48,7 @@
                 'graph.axis.angle'         = 1,
                 'graph.symbol'             = 1,
                 'knitr.auto.asis'          = TRUE,
-                'pandoc.binary'            = Sys.which('pandoc')
+                'pandoc.binary'            = Sys.getenv('RSTUDIO_PANDOC', Sys.which('pandoc'))
                 ))
 
     ## evals options

@@ -25,7 +25,7 @@ Pandoc.convert(f, text, format = "html", open = TRUE, options = "",
 
 \item{portable.html}{instead of using local files, rather linking JS/CSS files to an online CDN for portability and including base64-encoded images if converting to \code{HTML} without custom \code{options}}
 
-\item{pandoc.binary}{path to \code{pandoc}'s binary if not found in the path}
+\item{pandoc.binary}{custom path to \code{pandoc}'s binary if not found in the path or not set in the \code{RSTUDIO_PANDOC} env var}
 }
 \value{
 Converted file's path.
