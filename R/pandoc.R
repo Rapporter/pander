@@ -1124,6 +1124,10 @@ pandoc.table.return <- function(t, caption, digits = panderOptions('digits'), de
     ## #########################################################################
     ## compute column width
     ## #########################################################################
+    
+    if (plain.ascii) {
+        t <- apply(t, c(1, 2), to.plain.ascii)
+    }
 
     ## header width
     if (!is.null(t.colnames)) {
@@ -1311,8 +1315,7 @@ pandoc.table.return <- function(t, caption, digits = panderOptions('digits'), de
                    sep.col <- c('| ', ' | ', ' |')
                })
 
-        if (plain.ascii){
-            t <- apply(t, c(1, 2), to.plain.ascii)
+        if (plain.ascii) {
             t.rownames <- sapply(t.rownames, to.plain.ascii)
             t.colnames <- sapply(t.colnames, to.plain.ascii)
         }
