@@ -147,7 +147,7 @@ Pandoc.convert <- function(f, text, format = 'html', open = TRUE, options = '',
     setwd(f.dir)
 
     ## call Pandoc
-    cmd <- sprintf('%s -f markdown -s %s %s -o %s', pandoc.binary, options, shQuote(f), shQuote(f.out))
+    cmd <- sprintf('%s -f markdown -s %s %s -o %s', shQuote(pandoc.binary), options, shQuote(f), shQuote(f.out))
     if (grepl('w|W', .Platform$OS.type)) {
         res <- suppressWarnings(tryCatch(shell(cmd, intern = TRUE), error = function(e) e)) #nolint
     } else {
