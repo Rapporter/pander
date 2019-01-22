@@ -746,7 +746,7 @@ The package is also capable of creating complex Pandoc documents (reports) from 
 
 ## Brew to Pandoc
 
-The [brew](https://cran.r-project.org/package=brew) package, which is a templating framework for report generation, has not been updated since 2011, but it's still used in bunch of R projects based on its simple design and useful features in literate programming. For a quick overview, please see the following documents if you are not familiar with `brew`:
+The [brew](https://cran.r-project.org/package=brew) package, which is a templating framework for report generation, has not been updated on CRAN since 2011, but it's still used in bunch of R projects based on its simple design and useful features in literate programming. For a quick overview, please see the following documents if you are not familiar with `brew`:
 
   * [slides on "Building a reporting sytem with BREW"](http://www.slideshare.net/xavierguardiola/building-a-reporting-sytem-with-brew)
   * [learnr blogpost on brew](http://learnr.wordpress.com/2009/09/09/brew-creating-repetitive-reports/)
