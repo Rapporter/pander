@@ -10,3 +10,4 @@ TODO.md
 pull.sh
 \.brewer.R
 .*.sh
+^appveyor\.yml$
