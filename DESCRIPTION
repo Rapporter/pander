@@ -13,7 +13,7 @@ Description: Contains some functions catching all messages, 'stdout' and other
     resulting) complex 'pandoc' documents to e.g. HTML, 'PDF', 'docx' or 'odt'. This
     latter reporting feature is supported in brew syntax or with a custom reference
     class with a smarty caching 'backend'.
-Version: 0.6.3
+Version: 0.6.4
 Date: 2018-11-06
 URL: http://rapporter.github.io/pander
 BugReports: https://github.com/rapporter/pander/issues
