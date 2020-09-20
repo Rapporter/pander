@@ -215,20 +215,28 @@ pandoc.link <- function(...)
 #' pandoc.image('foo.png')
 #' pandoc.image('foo.png', 'Nice image, huh?')
 #' @references John MacFarlane (2012): _Pandoc User's Guide_. \url{http://johnmacfarlane.net/pandoc/README.html}
-pandoc.image.return <- function(img, caption = storage$caption) {
+pandoc.image.return <- function(img, caption = storage$caption, pandoc_attributes = '') {
 
     check_caption(caption)
 
     if (is.null(caption)) {
         caption <- ''
     }
-
+    if (pandoc_attributes=='') {
+        if (!is.null(attr(img, 'pandoc_attributes'))) {
+            pandoc_attributes <- attr(img, 'pandoc_attributes')
+        }
+    }
+  
     ## truncating caption buffer if needed
     if (!is.null(storage$caption)) {
         storage$caption <- NULL
     }
-
-    sprintf('![%s](%s)', caption, img)
+    if(pandoc_attributes=='') {
+      sprintf('![%s](%s)', caption, img)
+    } else {
+      sprintf('![%s](%s){%s}', caption, img, pandoc_attributes)
+    }
 }
 
 #' @export
