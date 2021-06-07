@@ -4,8 +4,7 @@
 \alias{pander.orm}
 \title{Prints an orm object from rms package in Pandoc's markdown.}
 \usage{
-\method{pander}{orm}(x, coefs = TRUE, intercepts = x$non.slopes < 10,
-  ...)
+\method{pander}{orm}(x, coefs = TRUE, intercepts = x$non.slopes < 10, ...)
 }
 \arguments{
 \item{x}{an orm object}

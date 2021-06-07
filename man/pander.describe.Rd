@@ -4,8 +4,7 @@
 \alias{pander.describe}
 \title{Pander method for describe class}
 \usage{
-\method{pander}{describe}(x, caption = attr(x, "caption"),
-  digits = panderOptions("digits"), ...)
+\method{pander}{describe}(x, caption = attr(x, "caption"), digits = panderOptions("digits"), ...)
 }
 \arguments{
 \item{x}{an describe object}

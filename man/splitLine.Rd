@@ -4,8 +4,11 @@
 \alias{splitLine}
 \title{Split line with line breaks depending on max.width}
 \usage{
-splitLine(x, max.width = panderOptions("table.split.cells"),
-  use.hyphening = FALSE)
+splitLine(
+  x,
+  max.width = panderOptions("table.split.cells"),
+  use.hyphening = FALSE
+)
 }
 \arguments{
 \item{x}{string to be split. Works only with one string. Non-string arguments and multi-dimensional arguments are returned unchaged}

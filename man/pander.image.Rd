@@ -4,8 +4,7 @@
 \alias{pander.image}
 \title{Pander method for image class}
 \usage{
-\method{pander}{image}(x, caption = attr(x, "caption"), href = attr(x,
-  "href"), ...)
+\method{pander}{image}(x, caption = attr(x, "caption"), href = attr(x, "href"), ...)
 }
 \arguments{
 \item{x}{a image object}

@@ -4,9 +4,14 @@
 \alias{pander.CrossTable}
 \title{Pander method for CrossTable class}
 \usage{
-\method{pander}{CrossTable}(x, caption = attr(x, "caption"),
-  digits = panderOptions("digits"), total.r = x$total.r,
-  total.c = x$total.c, ...)
+\method{pander}{CrossTable}(
+  x,
+  caption = attr(x, "caption"),
+  digits = panderOptions("digits"),
+  total.r = x$total.r,
+  total.c = x$total.c,
+  ...
+)
 }
 \arguments{
 \item{x}{a CrossTable object}

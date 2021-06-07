@@ -4,9 +4,14 @@
 \alias{pander.survfit}
 \title{Pander method for survfit class}
 \usage{
-\method{pander}{survfit}(x, caption = attr(x, "caption"), scale = 1,
+\method{pander}{survfit}(
+  x,
+  caption = attr(x, "caption"),
+  scale = 1,
   print.rmean = getOption("survfit.print.rmean"),
-  rmean = getOption("survfit.rmean"), ...)
+  rmean = getOption("survfit.rmean"),
+  ...
+)
 }
 \arguments{
 \item{x}{the result of a call to the survfit function.}

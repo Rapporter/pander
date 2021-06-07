@@ -4,8 +4,7 @@
 \alias{pander.irts}
 \title{Prints an irts object from tseries package in Pandoc's markdown.}
 \usage{
-\method{pander}{irts}(x, caption = attr(x, "caption"),
-  format = panderOptions("date"), ...)
+\method{pander}{irts}(x, caption = attr(x, "caption"), format = panderOptions("date"), ...)
 }
 \arguments{
 \item{x}{an irts object}

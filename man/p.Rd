@@ -4,11 +4,17 @@
 \alias{p}
 \title{Inline Printing}
 \usage{
-p(x, wrap = panderOptions("p.wrap"), sep = panderOptions("p.sep"),
-  copula = panderOptions("p.copula"), limit = Inf,
+p(
+  x,
+  wrap = panderOptions("p.wrap"),
+  sep = panderOptions("p.sep"),
+  copula = panderOptions("p.copula"),
+  limit = Inf,
   keep.trailing.zeros = panderOptions("keep.trailing.zeros"),
-  missing = panderOptions("missing"), digits = panderOptions("digits"),
-  round = panderOptions("round"))
+  missing = panderOptions("missing"),
+  digits = panderOptions("digits"),
+  round = panderOptions("round")
+)
 }
 \arguments{
 \item{x}{an atomic vector to get merged for inline printing}

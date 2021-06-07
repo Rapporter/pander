@@ -4,8 +4,7 @@
 \alias{pander.nls}
 \title{Prints an nls object from stats package in Pandoc's markdown.}
 \usage{
-\method{pander}{nls}(x, digits = panderOptions("digits"),
-  show.convergence = FALSE, ...)
+\method{pander}{nls}(x, digits = panderOptions("digits"), show.convergence = FALSE, ...)
 }
 \arguments{
 \item{x}{an nls object}

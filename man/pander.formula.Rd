@@ -4,8 +4,7 @@
 \alias{pander.formula}
 \title{Pander method for formula class}
 \usage{
-\method{pander}{formula}(x, max.width = 80, caption = attr(x,
-  "caption"), ...)
+\method{pander}{formula}(x, max.width = 80, caption = attr(x, "caption"), ...)
 }
 \arguments{
 \item{x}{a formula object}

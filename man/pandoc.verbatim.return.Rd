@@ -5,8 +5,7 @@
 \alias{pandoc.verbatim}
 \title{Add verbatim}
 \usage{
-pandoc.verbatim.return(x, style = c("inline", "indent", "delim"),
-  attrs = "")
+pandoc.verbatim.return(x, style = c("inline", "indent", "delim"), attrs = "")
 }
 \arguments{
 \item{x}{character vector}
@@ -28,8 +27,8 @@ pandoc.verbatim('FOO')
 src <- c('FOO', 'indent', 'BAR' )
 pandoc.verbatim(src)
 pandoc.verbatim.return(src)
-pandoc.verbatim(c('FOOO\\nBAR  ', ' I do R'), 'indent')
-pandoc.verbatim(c('FOOO\\nBAR  ', ' I do R'), 'delim')
+pandoc.verbatim(c('FOOO\nBAR  ', ' I do R'), 'indent')
+pandoc.verbatim(c('FOOO\nBAR  ', ' I do R'), 'delim')
 
 # add highlighting and HTML/LaTeX ID and classes (even custom attribute)
 pandoc.verbatim(c('cat("FOO")', 'mean(bar)'), 'delim', '.R #MyCode custom_var="10"')

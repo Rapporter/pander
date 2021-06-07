@@ -4,8 +4,13 @@
 \alias{pander.tabular}
 \title{Pander method for tabular class}
 \usage{
-\method{pander}{tabular}(x, caption = attr(x, "caption"),
-  emphasize.rownames = TRUE, digits = panderOptions("digits"), ...)
+\method{pander}{tabular}(
+  x,
+  caption = attr(x, "caption"),
+  emphasize.rownames = TRUE,
+  digits = panderOptions("digits"),
+  ...
+)
 }
 \arguments{
 \item{x}{an function object}

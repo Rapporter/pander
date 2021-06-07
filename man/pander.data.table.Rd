@@ -4,8 +4,7 @@
 \alias{pander.data.table}
 \title{Pander method for data.table class}
 \usage{
-\method{pander}{data.table}(x, caption = attr(x, "caption"),
-  keys.as.row.names = TRUE, ...)
+\method{pander}{data.table}(x, caption = attr(x, "caption"), keys.as.row.names = TRUE, ...)
 }
 \arguments{
 \item{x}{a data.table object}

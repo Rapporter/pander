@@ -4,27 +4,37 @@
 \alias{evals}
 \title{Evaluate and Process R Code}
 \usage{
-evals(txt, parse = evalsOptions("parse"),
+evals(
+  txt,
+  parse = evalsOptions("parse"),
   cache = evalsOptions("cache"),
   cache.mode = evalsOptions("cache.mode"),
   cache.dir = evalsOptions("cache.dir"),
   cache.time = evalsOptions("cache.time"),
   cache.copy.images = evalsOptions("cache.copy.images"),
-  showInvisible = FALSE, classes = evalsOptions("classes"),
-  hooks = evalsOptions("hooks"), length = evalsOptions("length"),
-  output = evalsOptions("output"), env = NULL,
+  showInvisible = FALSE,
+  classes = evalsOptions("classes"),
+  hooks = evalsOptions("hooks"),
+  length = evalsOptions("length"),
+  output = evalsOptions("output"),
+  env = NULL,
   graph.unify = evalsOptions("graph.unify"),
   graph.name = evalsOptions("graph.name"),
   graph.dir = evalsOptions("graph.dir"),
   graph.output = evalsOptions("graph.output"),
-  width = evalsOptions("width"), height = evalsOptions("height"),
-  res = evalsOptions("res"), hi.res = evalsOptions("hi.res"),
-  hi.res.width = evalsOptions("hi.res.width"), hi.res.height = 960 *
-  (height/width), hi.res.res = res * (hi.res.width/width),
+  width = evalsOptions("width"),
+  height = evalsOptions("height"),
+  res = evalsOptions("res"),
+  hi.res = evalsOptions("hi.res"),
+  hi.res.width = evalsOptions("hi.res.width"),
+  hi.res.height = 960 * (height/width),
+  hi.res.res = res * (hi.res.width/width),
   graph.env = evalsOptions("graph.env"),
   graph.recordplot = evalsOptions("graph.recordplot"),
-  graph.RDS = evalsOptions("graph.RDS"), log = evalsOptions("log"),
-  ...)
+  graph.RDS = evalsOptions("graph.RDS"),
+  log = evalsOptions("log"),
+  ...
+)
 }
 \arguments{
 \item{txt}{a character vector containing R code. This could be a list/vector of lines of code or a simple string holding R code separated by \code{;} or \code{\\n}.}

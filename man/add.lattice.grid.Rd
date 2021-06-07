@@ -4,8 +4,14 @@
 \alias{add.lattice.grid}
 \title{Add grids}
 \usage{
-add.lattice.grid(side = c("top", "bottom", "left", "right"), ...,
-  ticks = c("default", "yes", "no"), scales, components, line.col)
+add.lattice.grid(
+  side = c("top", "bottom", "left", "right"),
+  ...,
+  ticks = c("default", "yes", "no"),
+  scales,
+  components,
+  line.col
+)
 }
 \arguments{
 \item{side}{see \code{latticeExtra::axis.grid}}

@@ -4,8 +4,7 @@
 \alias{pander.summary.prcomp}
 \title{Pander method for summary.prcomp class}
 \usage{
-\method{pander}{summary.prcomp}(x, caption = attr(x, "caption"),
-  summary = TRUE, ...)
+\method{pander}{summary.prcomp}(x, caption = attr(x, "caption"), summary = TRUE, ...)
 }
 \arguments{
 \item{x}{a summary.prcomp object}

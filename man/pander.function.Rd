@@ -4,8 +4,7 @@
 \alias{pander.function}
 \title{Pander method for function class}
 \usage{
-\method{pander}{function}(x, add.name = FALSE, verbatim = TRUE,
-  syntax.highlighting = FALSE, ...)
+\method{pander}{`function`}(x, add.name = FALSE, verbatim = TRUE, syntax.highlighting = FALSE, ...)
 }
 \arguments{
 \item{x}{an function object}

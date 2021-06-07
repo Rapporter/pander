@@ -4,9 +4,14 @@
 \alias{pander.summary.survreg}
 \title{Prints an survreg object from survival package in Pandoc's markdown.}
 \usage{
-\method{pander}{summary.survreg}(x, summary = TRUE,
-  digits = panderOptions("digits"), round = panderOptions("round"),
-  keep.trailing.zeros = panderOptions("keep.trailing.zeros"), ...)
+\method{pander}{summary.survreg}(
+  x,
+  summary = TRUE,
+  digits = panderOptions("digits"),
+  round = panderOptions("round"),
+  keep.trailing.zeros = panderOptions("keep.trailing.zeros"),
+  ...
+)
 }
 \arguments{
 \item{x}{an survreg object}

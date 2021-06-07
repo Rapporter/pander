@@ -5,9 +5,16 @@
 \alias{pandoc.list}
 \title{Create a list}
 \usage{
-pandoc.list.return(elements, style = c("bullet", "ordered", "roman"),
-  loose = FALSE, add.line.breaks = TRUE, add.end.of.list = TRUE,
-  indent.level = 0, missing = panderOptions("missing"), ...)
+pandoc.list.return(
+  elements,
+  style = c("bullet", "ordered", "roman"),
+  loose = FALSE,
+  add.line.breaks = TRUE,
+  add.end.of.list = TRUE,
+  indent.level = 0,
+  missing = panderOptions("missing"),
+  ...
+)
 }
 \arguments{
 \item{elements}{character vector of strings}

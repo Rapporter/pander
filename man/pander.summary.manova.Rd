@@ -4,8 +4,7 @@
 \alias{pander.summary.manova}
 \title{Prints an summary.manova object from stats package in Pandoc's markdown.}
 \usage{
-\method{pander}{summary.manova}(x, caption = attr(x, "caption"),
-  add.significance.stars = FALSE, ...)
+\method{pander}{summary.manova}(x, caption = attr(x, "caption"), add.significance.stars = FALSE, ...)
 }
 \arguments{
 \item{x}{an summary.manova object}

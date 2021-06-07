@@ -4,8 +4,7 @@
 \alias{pander.summary.lme}
 \title{Pander method for summary.lme class}
 \usage{
-\method{pander}{summary.lme}(x, caption = attr(x, "caption"),
-  summary = TRUE, ...)
+\method{pander}{summary.lme}(x, caption = attr(x, "caption"), summary = TRUE, ...)
 }
 \arguments{
 \item{x}{a lme object}

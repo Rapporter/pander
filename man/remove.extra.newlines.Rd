@@ -13,5 +13,5 @@ remove.extra.newlines(x)
 Remove more then two joined newlines
 }
 \examples{
-remove.extra.newlines(c('\\n\\n\\n', '\\n\\n', '\\n'))
+remove.extra.newlines(c('\n\n\n', '\n\n', '\n'))
 }

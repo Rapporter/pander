@@ -4,7 +4,7 @@
 \alias{pander.NULL}
 \title{Pander method for a NULL object}
 \usage{
-\method{pander}{NULL}(x, ...)
+\method{pander}{`NULL`}(x, ...)
 }
 \arguments{
 \item{x}{a NULL object}

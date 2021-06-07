@@ -4,8 +4,12 @@
 \alias{eval.msgs}
 \title{Evaluate with messages}
 \usage{
-eval.msgs(src, env = NULL, showInvisible = FALSE,
-  graph.unify = evalsOptions("graph.unify"))
+eval.msgs(
+  src,
+  env = NULL,
+  showInvisible = FALSE,
+  graph.unify = evalsOptions("graph.unify")
+)
 }
 \arguments{
 \item{src}{character values containing R code}

@@ -5,22 +5,39 @@
 \alias{pandoc.table}
 \title{Create a table}
 \usage{
-pandoc.table.return(t, caption, digits = panderOptions("digits"),
+pandoc.table.return(
+  t,
+  caption,
+  digits = panderOptions("digits"),
   decimal.mark = panderOptions("decimal.mark"),
-  big.mark = panderOptions("big.mark"), round = panderOptions("round"),
-  missing = panderOptions("missing"), justify, style = c("multiline",
-  "grid", "simple", "rmarkdown", "jira"),
+  big.mark = panderOptions("big.mark"),
+  round = panderOptions("round"),
+  missing = panderOptions("missing"),
+  justify,
+  style = c("multiline", "grid", "simple", "rmarkdown", "jira"),
   split.tables = panderOptions("table.split.table"),
   split.cells = panderOptions("table.split.cells"),
   keep.trailing.zeros = panderOptions("keep.trailing.zeros"),
   keep.line.breaks = panderOptions("keep.line.breaks"),
   plain.ascii = panderOptions("plain.ascii"),
-  use.hyphening = panderOptions("use.hyphening"), row.names, col.names,
+  use.hyphening = panderOptions("use.hyphening"),
+  row.names,
+  col.names,
   emphasize.rownames = panderOptions("table.emphasize.rownames"),
-  emphasize.rows, emphasize.cols, emphasize.cells, emphasize.strong.rows,
-  emphasize.strong.cols, emphasize.strong.cells, emphasize.italics.rows,
-  emphasize.italics.cols, emphasize.italics.cells, emphasize.verbatim.rows,
-  emphasize.verbatim.cols, emphasize.verbatim.cells, ...)
+  emphasize.rows,
+  emphasize.cols,
+  emphasize.cells,
+  emphasize.strong.rows,
+  emphasize.strong.cols,
+  emphasize.strong.cells,
+  emphasize.italics.rows,
+  emphasize.italics.cols,
+  emphasize.italics.cells,
+  emphasize.verbatim.rows,
+  emphasize.verbatim.cols,
+  emphasize.verbatim.cells,
+  ...
+)
 }
 \arguments{
 \item{t}{data frame, matrix or table}
@@ -134,7 +151,7 @@ pandoc.table(mtcars, caption = 'Only once after the first part!')
 ## tables with line breaks in cells
 ## NOTE: line breaks are removed from table content in case keep.line.breaks is set to FALSE
 ## and added automatically based on "split.cells" parameter!
-t <- data.frame(a = c('hundreds\\nof\\nmouses', '3 cats'), b=c('FOO is nice', 'BAR\\nBAR2'))
+t <- data.frame(a = c('hundreds\nof\nmouses', '3 cats'), b=c('FOO is nice', 'BAR\nBAR2'))
 pandoc.table(t)
 pandoc.table(t, split.cells = 5)
 
@@ -171,7 +188,7 @@ pandoc.table(t)
 pandoc.table(mtcars[1:3, 1:3], plain.ascii = TRUE)
 
 ### keep.line.breaks
-x <- data.frame(a="Pandoc\\nPackage")
+x <- data.frame(a="Pandoc\nPackage")
 pandoc.table(x)
 pandoc.table(x, keep.line.breaks = TRUE)
 

@@ -4,8 +4,7 @@
 \alias{pander.summary.table}
 \title{Pander method for summary.table class}
 \usage{
-\method{pander}{summary.table}(x, caption = attr(x, "caption"),
-  print.call = T, ...)
+\method{pander}{summary.table}(x, caption = attr(x, "caption"), print.call = T, ...)
 }
 \arguments{
 \item{x}{an function object}

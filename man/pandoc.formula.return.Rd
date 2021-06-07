@@ -5,8 +5,14 @@
 \alias{pandoc.formula}
 \title{Formulas}
 \usage{
-pandoc.formula.return(x, text = NULL, max.width = 80, caption,
-  add.line.breaks = FALSE, ...)
+pandoc.formula.return(
+  x,
+  text = NULL,
+  max.width = 80,
+  caption,
+  add.line.breaks = FALSE,
+  ...
+)
 }
 \arguments{
 \item{x}{formula}

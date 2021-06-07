@@ -4,9 +4,14 @@
 \alias{pander.summary.nls}
 \title{Prints an summary.nls object from stats package in Pandoc's markdown.}
 \usage{
-\method{pander}{summary.nls}(x, summary = TRUE,
-  add.significance.stars = FALSE, digits = panderOptions("digits"),
-  show.convergence = FALSE, ...)
+\method{pander}{summary.nls}(
+  x,
+  summary = TRUE,
+  add.significance.stars = FALSE,
+  digits = panderOptions("digits"),
+  show.convergence = FALSE,
+  ...
+)
 }
 \arguments{
 \item{x}{an summary.nls object}

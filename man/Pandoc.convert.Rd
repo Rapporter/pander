@@ -4,9 +4,17 @@
 \alias{Pandoc.convert}
 \title{Converts Pandoc to other format}
 \usage{
-Pandoc.convert(f, text, format = "html", open = TRUE, options = "",
-  footer = FALSE, proc.time, portable.html = TRUE,
-  pandoc.binary = panderOptions("pandoc.binary"))
+Pandoc.convert(
+  f,
+  text,
+  format = "html",
+  open = TRUE,
+  options = "",
+  footer = FALSE,
+  proc.time,
+  portable.html = TRUE,
+  pandoc.binary = panderOptions("pandoc.binary")
+)
 }
 \arguments{
 \item{f}{Pandoc's markdown format file path. If URL is provided then the generated file's path is \code{tempfile()} but please bear in mind that this way only images with absolute path would shown up in the document.}

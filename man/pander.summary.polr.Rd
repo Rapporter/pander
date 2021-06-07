@@ -4,9 +4,13 @@
 \alias{pander.summary.polr}
 \title{Prints an summary.polr object from MASS package in Pandoc's markdown.}
 \usage{
-\method{pander}{summary.polr}(x, digits = panderOptions("digits"),
+\method{pander}{summary.polr}(
+  x,
+  digits = panderOptions("digits"),
   round = panderOptions("round"),
-  keep.trailing.zeros = panderOptions("keep.trailing.zeros"), ...)
+  keep.trailing.zeros = panderOptions("keep.trailing.zeros"),
+  ...
+)
 }
 \arguments{
 \item{x}{an summary.polr object}

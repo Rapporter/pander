@@ -4,8 +4,7 @@
 \alias{pander.anova}
 \title{Pander method for anova class}
 \usage{
-\method{pander}{anova}(x, caption = attr(x, "caption"),
-  add.significance.stars = FALSE, ...)
+\method{pander}{anova}(x, caption = attr(x, "caption"), add.significance.stars = FALSE, ...)
 }
 \arguments{
 \item{x}{an anova object}

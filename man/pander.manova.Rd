@@ -4,8 +4,7 @@
 \alias{pander.manova}
 \title{Pander method for manova class}
 \usage{
-\method{pander}{manova}(x, caption = attr(x, "caption"),
-  add.significance.stars = FALSE, ...)
+\method{pander}{manova}(x, caption = attr(x, "caption"), add.significance.stars = FALSE, ...)
 }
 \arguments{
 \item{x}{an manovv object}
