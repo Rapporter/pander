@@ -2,10 +2,10 @@
 # Generator token: 10BE3573-1514-4C36-9D1C-5A225CD40393
 
 splitLine_cpp <- function(str, max_width, use_hyphening, hyphen) {
-    .Call('pander_splitLine_cpp', PACKAGE = 'pander', str, max_width, use_hyphening, hyphen)
+    .Call('_pander_splitLine_cpp', PACKAGE = 'pander', str, max_width, use_hyphening, hyphen)
 }
 
 tableExpand_cpp <- function(cells, colsWidth, justify, sepCols, style) {
-    .Call('pander_tableExpand_cpp', PACKAGE = 'pander', cells, colsWidth, justify, sepCols, style)
+    .Call('_pander_tableExpand_cpp', PACKAGE = 'pander', cells, colsWidth, justify, sepCols, style)
 }
 

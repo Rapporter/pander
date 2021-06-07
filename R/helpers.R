@@ -406,7 +406,7 @@ splitLine <- function(x, max.width = panderOptions('table.split.cells'), use.hyp
     }
     hyphen_f <- function(s)
         sylly::hyphen(s, hyph.pattern = 'en', quiet = TRUE)@hyphen[1, 2]
-    .Call('pander_splitLine_cpp', PACKAGE = 'pander', x, max.width, use.hyphening, hyphen_f)
+    splitLine_cpp(x, max.width, use.hyphening, hyphen_f)
 }
 
 

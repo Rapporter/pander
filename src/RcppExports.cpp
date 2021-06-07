@@ -7,7 +7,7 @@ using namespace Rcpp;
 
 // splitLine_cpp
 std::string splitLine_cpp(std::string str, int max_width, bool use_hyphening, Rcpp::Function hyphen);
-RcppExport SEXP pander_splitLine_cpp(SEXP strSEXP, SEXP max_widthSEXP, SEXP use_hypheningSEXP, SEXP hyphenSEXP) {
+RcppExport SEXP _pander_splitLine_cpp(SEXP strSEXP, SEXP max_widthSEXP, SEXP use_hypheningSEXP, SEXP hyphenSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -21,7 +21,7 @@ END_RCPP
 }
 // tableExpand_cpp
 std::string tableExpand_cpp(CharacterVector cells, IntegerVector colsWidth, CharacterVector justify, CharacterVector sepCols, std::string style);
-RcppExport SEXP pander_tableExpand_cpp(SEXP cellsSEXP, SEXP colsWidthSEXP, SEXP justifySEXP, SEXP sepColsSEXP, SEXP styleSEXP) {
+RcppExport SEXP _pander_tableExpand_cpp(SEXP cellsSEXP, SEXP colsWidthSEXP, SEXP justifySEXP, SEXP sepColsSEXP, SEXP styleSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -36,8 +36,8 @@ END_RCPP
 }
 
 static const R_CallMethodDef CallEntries[] = {
-    {"pander_splitLine_cpp", (DL_FUNC) &pander_splitLine_cpp, 4},
-    {"pander_tableExpand_cpp", (DL_FUNC) &pander_tableExpand_cpp, 5},
+    {"_pander_splitLine_cpp", (DL_FUNC) &_pander_splitLine_cpp, 4},
+    {"_pander_tableExpand_cpp", (DL_FUNC) &_pander_tableExpand_cpp, 5},
     {NULL, NULL, 0}
 };
 

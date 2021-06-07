@@ -644,7 +644,7 @@ pandoc.table.return <- function(t, caption, digits = panderOptions('digits'), de
         if (l10n_info()$`UTF-8` == FALSE) {
             cells <- enc2native(cells)
         }
-        .Call('pander_tableExpand_cpp', PACKAGE = 'pander', cells, cols.width, justify, sep.cols, style)
+        tableExpand_cpp(cells, cols.width, justify, sep.cols, style)
     }
 
     ## cell conversion to plain-ascii (deletion of markup characters)
