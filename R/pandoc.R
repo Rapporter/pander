@@ -339,17 +339,18 @@ pandoc.header <- function(...)
 #' pandoc.title(title = 'Render pandoc in R', date= '2012-05-16')
 pandoc.title.return <- function(author = '', title = '', date = '') {
 
-    if (author == '' && title == '' && date != '') {
-        stop('You cannot create a title with only date specified!')
-    }
     ## updating title tags
-    if (length(author) > 1 && author != '') {
-        author <- paste('%', paste(author[author != ''], collapse = '; '))
+    if (length(author) > 1) {
+        author <- paste('%', paste(author, collapse = '; '))
     }
-    if (length(title) > 1 && title != '') {
+    if (length(title) > 1) {
         title  <- paste0(
             '% ',
-            gsub('[\t ][\t ]*', '  ', gsub('\n', '\n  ', paste(title[title != ''], collapse = '\n'))))
+            gsub('[\t ][\t ]*', '  ', gsub('\n', '\n  ', paste(title, collapse = '\n'))))
+    }
+
+    if (author == '' && title == '' && date != '') {
+        stop('You cannot create a title with only date specified!')
     }
 
     ## formatting result
@@ -1128,7 +1129,7 @@ pandoc.table.return <- function(t, caption, digits = panderOptions('digits'), de
     ## #########################################################################
     ## compute column width
     ## #########################################################################
-    
+
     if (plain.ascii) {
         t <- apply(t, c(1, 2), to.plain.ascii)
     }
