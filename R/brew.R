@@ -10,7 +10,7 @@
 #'      \item all warnings/messages and errors are recorded in the blocks and returned in the document as a footnote
 #' }
 #'
-#' Please see my Github page for details (\url{http://rapporter.github.com/pander/#brew-to-pandoc}) and examples (\url{http://rapporter.github.com/pander/#examples}).
+#' Please see my Github page for details (\url{https://rapporter.github.iocom/pander/#brew-to-pandoc}) and examples (\url{https://rapporter.github.io/pander/#examples}).
 #' @param file file path of the brew template. As this is passed to \code{readLines}, \code{file} could be an URL too, but not over SSL (for that latter \code{RCurl} would be needed).
 #' @param output (optional) file path of the output file
 #' @param convert string: format of required output document (besides Pandoc's markdown). Pandoc is called if set via \code{Pandoc.convert} and the converted document could be also opened automatically (see below).

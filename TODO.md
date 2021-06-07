@@ -168,7 +168,7 @@ Global options for: `lattice`, `ggplot2` and `base` plots
 
 # ESS
 
-  * ~~integrate (add some Lisp functions/optional key-bindings) `evals`/`pander`/`Pander.brew` - thanks for great ideas [*Michael Lawrence* @ [ESS] mail list](https://stat.ethz.ch/pipermail/ess-help/attachments/20120602/554dfb2f/attachment.pl)~~: http://rapporter.github.com/pander/#ess
+  * ~~integrate (add some Lisp functions/optional key-bindings) `evals`/`pander`/`Pander.brew` - thanks for great ideas [*Michael Lawrence* @ [ESS] mail list](https://stat.ethz.ch/pipermail/ess-help/attachments/20120602/554dfb2f/attachment.pl)~~: https://rapporter.github.io/pander/#ess
 
 # Great ideas
 

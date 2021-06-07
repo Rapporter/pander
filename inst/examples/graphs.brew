@@ -31,7 +31,7 @@ There are a bunch of options you might want to check out, these are:
 
 <%=as.list(names(panderOptions())[grepl('^graph', names(panderOptions()))])%>
 
-Find more details on [`pander`'s homepage](http://rapporter.github.com/pander/#pander-options).
+Find more details on [`pander`'s homepage](https://rapporter.github.io/pander/#pander-options).
 
 # Default options
 

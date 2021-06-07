@@ -738,7 +738,7 @@ The package is also capable of creating complex Pandoc documents (reports) from 
 
   * users might write some reports with literate programming (similar to `knitr`) in a forked version of [brew](https://cran.r-project.org/package=brew) syntax resulting. This means that the user can include R code chunks in a document, and brewing that results in a pretty Pandoc's markdown document and also in a **bunch of other formats** (like HTML, odt, PDF, docx etc.). The great advantage of this [function](#brew-to-pandoc) is that you do not have to transform your R objects to markdown manually, it's all handled automagically.
 
-    *Example*: this [`README.md`](https://github.com/Rapporter/pander/blob/master/README.md) is cooked with [`Pandoc.brew`](#brew-to-pandoc) based on [`inst/README.brew`](https://github.com/Rapporter/pander/blob/master/inst/README.brew) and also exported to [HTML](http://rapporter.github.com/pander/). Details can be found [below](#brew-to-pandoc) or head directly to [examples](#examples).
+    *Example*: this [`README.md`](https://github.com/Rapporter/pander/blob/master/README.md) is cooked with [`Pandoc.brew`](#brew-to-pandoc) based on [`inst/README.brew`](https://github.com/Rapporter/pander/blob/master/inst/README.brew) and also exported to [HTML](https://rapporter.github.io/pander/). Details can be found [below](#brew-to-pandoc) or head directly to [examples](#examples).
 
 <!-- endlist -->
 
@@ -854,9 +854,9 @@ Pandoc.brew(system.file('examples/graphs.brew', package='pander'), output = temp
 
 For easier access, I have uploaded some exported documents of the above examples as well:
 
-  * minimal.brew: [markdown](http://rapporter.github.com/pander/minimal.md) [html](http://rapporter.github.com/pander/minimal.html) [pdf](http://rapporter.github.com/pander/minimal.pdf) [odt](http://rapporter.github.com/pander/minimal.odt) [docx](http://rapporter.github.com/pander/minimal.docx)
-  * short-code-long-report.brew: [markdown](http://rapporter.github.com/pander/short-code-long-report.md) [html](http://rapporter.github.com/pander/short-code-long-report.html) [pdf](http://rapporter.github.com/pander/short-code-long-report.pdf) [odt](http://rapporter.github.com/pander/short-code-long-report.odt) [docx](http://rapporter.github.com/pander/short-code-long-report.docx)
-  * graphs.brew: [markdown](http://rapporter.github.com/pander/graphs.md) [html](http://rapporter.github.com/pander/graphs.html) [pdf](http://rapporter.github.com/pander/graphs.pdf) [odt](http://rapporter.github.com/pander/graphs.odt) [docx](http://rapporter.github.com/pander/graphs.docx)
+  * minimal.brew: [markdown](https://rapporter.github.io/pander/minimal.md) [html](https://rapporter.github.io/pander/minimal.html) [pdf](https://rapporter.github.io/pander/minimal.pdf) [odt](https://rapporter.github.io/pander/minimal.odt) [docx](https://rapporter.github.io/pander/minimal.docx)
+  * short-code-long-report.brew: [markdown](https://rapporter.github.io/pander/short-code-long-report.md) [html](https://rapporter.github.io/pander/short-code-long-report.html) [pdf](https://rapporter.github.io/pander/short-code-long-report.pdf) [odt](https://rapporter.github.io/pander/short-code-long-report.odt) [docx](https://rapporter.github.io/pander/short-code-long-report.docx)
+  * graphs.brew: [markdown](https://rapporter.github.io/pander/graphs.md) [html](https://rapporter.github.io/pander/graphs.html) [pdf](https://rapporter.github.io/pander/graphs.pdf) [odt](https://rapporter.github.io/pander/graphs.odt) [docx](https://rapporter.github.io/pander/graphs.docx)
 
 Please check out `pdf`, `docx`, `odt` and other formats by changing the above `convert` option on your machine, and do not forget to [give some feedback](https://github.com/Rapporter/pander/issues)!
 

@@ -56,7 +56,7 @@ This parser tries to be smart in some ways:
      \item all warnings/messages and errors are recorded in the blocks and returned in the document as a footnote
 }
 
-Please see my Github page for details (\url{http://rapporter.github.com/pander/#brew-to-pandoc}) and examples (\url{http://rapporter.github.com/pander/#examples}).
+Please see my Github page for details (\url{https://rapporter.github.io/pander/#brew-to-pandoc}) and examples (\url{https://rapporter.github.io/pander/#examples}).
 }
 \note{
 Only one of the input parameters (\code{file} or \code{text}) is to be used at once!
