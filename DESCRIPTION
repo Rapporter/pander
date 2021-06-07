@@ -54,7 +54,7 @@ Suggests:
     rms,
     forecast,
     data.table
-SystemRequirements: pandoc (http://johnmacfarlane.net/pandoc) for exporting
+SystemRequirements: pandoc (https://johnmacfarlane.net/pandoc) for exporting
     markdown files to other formats.
 LinkingTo: Rcpp
 VignetteBuilder: knitr

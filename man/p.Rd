@@ -52,7 +52,7 @@ p(c('Thelma', 'Louise'), wrap = '', copula = '&')
 # [1] 'Thelma & Louise'
 }
 \references{
-This function was moved from \code{rapport} package: \url{http://rapport-package.info}.
+This function was moved from \code{rapport} package: \url{https://rapporter.github.io/rapport/}.
 }
 \author{
 Aleksandar Blagotic

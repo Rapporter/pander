@@ -14,5 +14,5 @@ By default this function outputs (see: \code{cat}) the result. If you would want
 Creates a Pandoc's markdown format horizontal line with trailing and leading newlines.
 }
 \references{
-John MacFarlane (2012): _Pandoc User's Guide_. \url{http://johnmacfarlane.net/pandoc/README.html}
+John MacFarlane (2012): _Pandoc User's Guide_. \url{https://johnmacfarlane.net/pandoc/README.html}
 }

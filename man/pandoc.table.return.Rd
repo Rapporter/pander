@@ -221,7 +221,7 @@ x <- data.frame(a = "Can be also supplied as a vector, for each cell separately"
 pandoc.table(x, split.cells = 10, use.hyphening = TRUE)
 }
 \references{
-John MacFarlane (2012): _Pandoc User's Guide_. \url{http://johnmacfarlane.net/pandoc/README.html}
+John MacFarlane (2012): _Pandoc User's Guide_. \url{https://johnmacfarlane.net/pandoc/README.html}
 }
 \seealso{
 \code{\link{set.caption}}, \code{\link{set.alignment}}

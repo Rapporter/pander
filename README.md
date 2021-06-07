@@ -1,8 +1,8 @@
 # [pander: An R Pandoc Writer](https://github.com/Rapporter/pander)
 
-The main aim of the *pander* [R](http://r-project.org) package is to provide a minimal and easy tool for rendering **R objects** into [Pandoc](http://johnmacfarlane.net/pandoc/)'s **markdown**. The package is also capable of exporting/converting complex Pandoc documents (reports) in [various ways](#creating-pandoc-documents). Regarding the difference between `pander` and other packages for exporting R objects to different file formats, please refer to this [section](#difference-from-other-rendering-packages).
+The main aim of the *pander* [R](https://r-project.org) package is to provide a minimal and easy tool for rendering **R objects** into [Pandoc](https://johnmacfarlane.net/pandoc/)'s **markdown**. The package is also capable of exporting/converting complex Pandoc documents (reports) in [various ways](#creating-pandoc-documents). Regarding the difference between `pander` and other packages for exporting R objects to different file formats, please refer to this [section](#difference-from-other-rendering-packages).
 
-Current build and test coverage status: [![](https://travis-ci.org/Rapporter/pander.png?branch=master)](https://travis-ci.org/Rapporter/pander) [![](http://codecov.io/github/Rapporter/pander/coverage.svg?branch=master)](http://codecov.io/github/Rapporter/pander?branch=master).
+Current build and test coverage status: [![](https://travis-ci.org/Rapporter/pander.png?branch=master)](https://travis-ci.org/Rapporter/pander) [![](https://codecov.io/github/Rapporter/pander/coverage.svg?branch=master)](https://codecov.io/github/Rapporter/pander?branch=master).
 
 Some CRAN statistics: [![](http://cranlogs.r-pkg.org/badges/pander)](https://cran.r-project.org/package=pander) [![](http://cranlogs.r-pkg.org/badges/grand-total/pander)](https://cran.r-project.org/package=pander)
 
@@ -35,15 +35,15 @@ And there are also a few optional suggested or supported R packages, such as:
  * [lattice](https://cran.r-project.org/package=lattice) and [ggplot2](https://cran.r-project.org/package=ggplot2) for unified plot theme,
  * [futile.logger](https://cran.r-project.org/package=futile.logger) for logging capabilities inside `evals`,
  * [survival](https://cran.r-project.org/package=survival), [microbenchmark](https://cran.r-project.org/package=microbenchmark), [zoo](https://cran.r-project.org/package=zoo), [nlme](https://cran.r-project.org/package=nlme), [descr](https://cran.r-project.org/package=descr), [MASS](https://cran.r-project.org/package=MASS), [tables](https://cran.r-project.org/package=tables), [reshape](https://cran.r-project.org/package=reshape), [memisc](https://cran.r-project.org/package=memisc), [Epi](https://cran.r-project.org/package=Epi), [randomForest](https://cran.r-project.org/package=randomForest), [tseries](https://cran.r-project.org/package=tseries), [rms](https://cran.r-project.org/package=rms) packages include some supported R classes,
- * and *pander* can be also very useful inside of [knitr](https://cran.r-project.org/package=knitr). More information about how to use *pander* and *knitr* can be found specialized vignette, which can be accessed by `vignette('knitr', package = 'pander')` or available online [here](http://rapporter.github.io/pander/knitr.html).
+ * and *pander* can be also very useful inside of [knitr](https://cran.r-project.org/package=knitr). More information about how to use *pander* and *knitr* can be found specialized vignette, which can be accessed by `vignette('knitr', package = 'pander')` or available online [here](https://rapporter.github.io/pander/knitr.html).
 
 ### Pandoc
 
-*pander* heavily builds on [Pandoc](http://johnmacfarlane.net/pandoc), which should be **pre-installed** before trying to convert your reports to [different formats](http://johnmacfarlane.net/pandoc/). Although **main functions work without Pandoc**, e.g. you can transform R objects into markdown or generate a markdown formatted report via [Pandoc.brew](#brew-to-pandoc) or the custom [reference class](#live-report-generation), but installing that great piece of software is suggested if you want to convert markdown to PDF/docx/HTML or other formats.
+*pander* heavily builds on [Pandoc](https://johnmacfarlane.net/pandoc), which should be **pre-installed** before trying to convert your reports to [different formats](https://johnmacfarlane.net/pandoc/). Although **main functions work without Pandoc**, e.g. you can transform R objects into markdown or generate a markdown formatted report via [Pandoc.brew](#brew-to-pandoc) or the custom [reference class](#live-report-generation), but installing that great piece of software is suggested if you want to convert markdown to PDF/docx/HTML or other formats.
 
 Starting v0.98.932 [RStudio](http://www.rstudio.com/) comes with a bundled `Pandoc` binary, so one can save the tedious steps of installing Pandoc.
 
-If you do not have RStudio installed, please refer to the [installation process of Pandoc](http://johnmacfarlane.net/pandoc/installing.html), which is quite straightforward on most-popular operating systems: download and run the binary (a few megabytes), and get a full-blown document converter in a few seconds/minutes. On some Linux distributions, it might be a bit more complicated (as repositories tend to provide out-dated versions of Pandoc, so you would need `cabal-install` to [install from sources](http://johnmacfarlane.net/pandoc/installing.html#all-platforms)). Please do not forget to restart your R session to update your `PATH` after installation!
+If you do not have RStudio installed, please refer to the [installation process of Pandoc](https://johnmacfarlane.net/pandoc/installing.html), which is quite straightforward on most-popular operating systems: download and run the binary (a few megabytes), and get a full-blown document converter in a few seconds/minutes. On some Linux distributions, it might be a bit more complicated (as repositories tend to provide out-dated versions of Pandoc, so you would need `cabal-install` to [install from sources](https://johnmacfarlane.net/pandoc/installing.html#all-platforms)). Please do not forget to restart your R session to update your `PATH` after installation!
 
 # Helper functions
 
@@ -83,19 +83,19 @@ For example there is a helper function rendering R **lists** into markdown:
 ```
 Which command produces the following output:
 ```
-I. First list element 
-    I. 1. subelement 
-    II. 2. subelement 
-    III. 3. subelement 
-    IV. 4. subelement 
-    V. 5. subelement  
-II. Second element 
-    I. F 
-    II. B 
-    III. I 
-        I. phone 
-        II. pad 
-        III. talics   
+I. First list element
+    I. 1. subelement
+    II. 2. subelement
+    III. 3. subelement
+    IV. 4. subelement
+    V. 5. subelement
+II. Second element
+    I. F
+    II. B
+    III. I
+        I. phone
+        II. pad
+        III. talics
 
 <!-- end of list -->
 
@@ -105,7 +105,7 @@ II. Second element
 
 # Markdown tables
 
-One of the most popular feature in *pander* is `pandoc.table`, rendering most tabular R objects into markdown tables with various options and settings (e.g. [style](#style), [caption](#caption), [cell highlighting](#highlight-cells), [cell alignment](#cell-alignment), [width](#table-and-cell-width)). This section aims to provide quick introduction to most common options, but for more usage/implementation details and examples, please refer to specialized vignette, which can be accessed by `vignette('pandoc_table')` or available online [here](http://rapporter.github.io/pander/pandoc_table.html).
+One of the most popular feature in *pander* is `pandoc.table`, rendering most tabular R objects into markdown tables with various options and settings (e.g. [style](#style), [caption](#caption), [cell highlighting](#highlight-cells), [cell alignment](#cell-alignment), [width](#table-and-cell-width)). This section aims to provide quick introduction to most common options, but for more usage/implementation details and examples, please refer to specialized vignette, which can be accessed by `vignette('pandoc_table')` or available online [here](https://rapporter.github.io/pander/pandoc_table.html).
 
 Let's start with a small example:
 
@@ -115,13 +115,13 @@ Let's start with a small example:
 Which command produces the following output by default:
 ```
 -------------------------------------------
-      &nbsp;         mpg   cyl   disp   hp 
+      &nbsp;         mpg   cyl   disp   hp
 ------------------- ----- ----- ------ ----
-   **Mazda RX4**     21     6    160   110 
+   **Mazda RX4**     21     6    160   110
 
- **Mazda RX4 Wag**   21     6    160   110 
+ **Mazda RX4 Wag**   21     6    160   110
 
-  **Datsun 710**    22.8    4    108    93 
+  **Datsun 710**    22.8    4    108    93
 -------------------------------------------
 
 ```
@@ -132,39 +132,39 @@ Please note that all below features are also supported by the more concise `pand
 
 ## Formats
 
-All [four Pandoc formats](http://johnmacfarlane.net/pandoc/README.html#tables) are supported by *pander*. From those (*multiline*, *simple*, *grid*, *pipe/rmarkdown*), I'd suggest sticking to the default `multiline` format with the most features, except when using `rmarkdown` v1.0 or jupyter notebook, where `multiline` is not supported (for this end the default table format is `rmarkdown` when `pander` is called inside of a jupyter notebook). Please see a few examples below:
+All [four Pandoc formats](https://johnmacfarlane.net/pandoc/README.html#tables) are supported by *pander*. From those (*multiline*, *simple*, *grid*, *pipe/rmarkdown*), I'd suggest sticking to the default `multiline` format with the most features, except when using `rmarkdown` v1.0 or jupyter notebook, where `multiline` is not supported (for this end the default table format is `rmarkdown` when `pander` is called inside of a jupyter notebook). Please see a few examples below:
 
 <a id="multiline-table"></a>
 
-The default style is the [`multiline` format](http://johnmacfarlane.net/pandoc/README.html#multiline-tables) (except for calling `pander` inside of a of a jupyter notebook) as most features (e.g. multi-line cells and alignment) are supported:
+The default style is the [`multiline` format](https://johnmacfarlane.net/pandoc/README.html#multiline-tables) (except for calling `pander` inside of a of a jupyter notebook) as most features (e.g. multi-line cells and alignment) are supported:
 
 ```rout
 > m <- mtcars[1:2, 1:3]
 > pandoc.table(m)
 
 --------------------------------------
-      &nbsp;         mpg   cyl   disp 
+      &nbsp;         mpg   cyl   disp
 ------------------- ----- ----- ------
-   **Mazda RX4**     21     6    160  
+   **Mazda RX4**     21     6    160
 
- **Mazda RX4 Wag**   21     6    160  
+ **Mazda RX4 Wag**   21     6    160
 --------------------------------------
 
 ```
 
-While [`simple` tables](http://johnmacfarlane.net/pandoc/README.html#simple-tables) are much more compact, but do not support line breaks in cells:
+While [`simple` tables](https://johnmacfarlane.net/pandoc/README.html#simple-tables) are much more compact, but do not support line breaks in cells:
 
 ```rout
 > pandoc.table(m, style = "simple")
 
-      &nbsp;         mpg   cyl   disp 
+      &nbsp;         mpg   cyl   disp
 ------------------- ----- ----- ------
-   **Mazda RX4**     21     6    160  
- **Mazda RX4 Wag**   21     6    160  
+   **Mazda RX4**     21     6    160
+ **Mazda RX4 Wag**   21     6    160
 
 ```
 
-My personal favorite, the [`grid` format](http://johnmacfarlane.net/pandoc/README.html#grid-tables) is really handy for [emacs](http://emacswiki.org/emacs/TableMode) users and it does support line breaks inside of cells, but cell alignment is not possible in most parsers:
+My personal favorite, the [`grid` format](https://johnmacfarlane.net/pandoc/README.html#grid-tables) is really handy for [emacs](https://emacswiki.org/emacs/TableMode) users and it does support line breaks inside of cells, but cell alignment is not possible in most parsers:
 
 ```rout
 > pandoc.table(m, style = "grid")
@@ -179,7 +179,7 @@ My personal favorite, the [`grid` format](http://johnmacfarlane.net/pandoc/READM
 
 ```
 
-And the so called `rmarkdown` or [pipe table format](http://johnmacfarlane.net/pandoc/README.html#pipe-tables) is often used directly with `knitr`, since it was supporters by the first versions of the `markdown` package:
+And the so called `rmarkdown` or [pipe table format](https://johnmacfarlane.net/pandoc/README.html#pipe-tables) is often used directly with `knitr`, since it was supporters by the first versions of the `markdown` package:
 
 ```rout
 > pandoc.table(m, style = "rmarkdown")
@@ -219,11 +219,11 @@ For more convenient and flexible usage, you might be interested in the special `
 > pandoc.table(m)
 
 --------------------------------------
-      &nbsp;         mpg   cyl   disp 
+      &nbsp;         mpg   cyl   disp
 ------------------- ----- ----- ------
-   **Mazda RX4**     21     6    160  
+   **Mazda RX4**     21     6    160
 
- **Mazda RX4 Wag**   21     6    160  
+ **Mazda RX4 Wag**   21     6    160
 --------------------------------------
 
 Table: Hello caption!
@@ -262,13 +262,13 @@ Those functions and arguments ending in `rows` or `cols` take a vector (like whi
 > pandoc.table(t)
 
 ---------------------------------------------------------------
-      &nbsp;           mpg      cyl    disp       hp      drat 
+      &nbsp;           mpg      cyl    disp       hp      drat
 ------------------- ---------- ----- --------- --------- ------
-   **Mazda RX4**     ***21***   *6*  ***160*** ***110*** *3.9* 
+   **Mazda RX4**     ***21***   *6*  ***160*** ***110*** *3.9*
 
- **Mazda RX4 Wag**   ***21***    6    **160**   **110**   3.9  
+ **Mazda RX4 Wag**   ***21***    6    **160**   **110**   3.9
 
-  **Datsun 710**    ***22.8***   4    **108**   **93**    3.85 
+  **Datsun 710**    ***22.8***   4    **108**   **93**    3.85
 ---------------------------------------------------------------
 
 ```
@@ -283,11 +283,11 @@ You can specify the alignment of the cells (left, right or center/centre) in a t
 > pandoc.table(head(iris[,1:3], 2), justify = c('right', 'center', 'left'))
 
 -------------------------------------------
-  Sepal.Length  Sepal.Width  Petal.Length  
+  Sepal.Length  Sepal.Width  Petal.Length
 -------------- ------------- --------------
-           5.1      3.5      1.4           
+           5.1      3.5      1.4
 
-           4.9       3       1.4           
+           4.9       3       1.4
 -------------------------------------------
 
 ```
@@ -299,11 +299,11 @@ Or pre-define the alignment for (all future) `pandoc.table` or the `pander` [S3 
 > pandoc.table(mtcars[1:2,  1:5])
 
 --------------------------------------------------
-             &nbsp; mpg   cyl   disp   hp   drat  
+             &nbsp; mpg   cyl   disp   hp   drat
 ------------------- ----- ----- ------ ---- ------
-      **Mazda RX4** 21    6     160    110  3.9   
+      **Mazda RX4** 21    6     160    110  3.9
 
-  **Mazda RX4 Wag** 21    6     160    110  3.9   
+  **Mazda RX4 Wag** 21    6     160    110  3.9
 --------------------------------------------------
 
 ```
@@ -362,28 +362,28 @@ And too wide cells can also be split by line breaks. The maximum number of chara
 > pandoc.table(df, split.cells = 5)
 
 ----------------
-  a     b    c  
+  a     b    c
 ----- ----- ----
 Lorem dolor amet
-ipsum  sit      
+ipsum  sit
 ----------------
 
 > pandoc.table(df, split.cells = c(5, 20, 5))
 
 --------------------
-  a       b      c  
+  a       b      c
 ----- --------- ----
 Lorem dolor sit amet
-ipsum               
+ipsum
 --------------------
 
 > pandoc.table(df, split.cells = c("80%", "10%", "10%"))
 
 ----------------------
-     a        b    c  
+     a        b    c
 ----------- ----- ----
 Lorem ipsum dolor amet
-             sit      
+             sit
 ----------------------
 
 ```
@@ -394,10 +394,10 @@ If the `sylly` package is installed, `pandoc.table` can even split the cells wit
 > pandoc.table(data.frame(baz = 'foobar'), use.hyphening = TRUE, split.cells = 3)
 
 -----
- baz 
+ baz
 -----
-foo- 
- bar 
+foo-
+ bar
 -----
 
 ```
@@ -412,25 +412,25 @@ Funtionality described in other sections is most notable, but `pander/pandoc.tab
 > pandoc.table(mtcars[1:3, 1:4])
 
 -------------------------------------------
-      &nbsp;         mpg   cyl   disp   hp 
+      &nbsp;         mpg   cyl   disp   hp
 ------------------- ----- ----- ------ ----
-   **Mazda RX4**     21     6    160   110 
+   **Mazda RX4**     21     6    160   110
 
- **Mazda RX4 Wag**   21     6    160   110 
+ **Mazda RX4 Wag**   21     6    160   110
 
-  **Datsun 710**    22.8    4    108    93 
+  **Datsun 710**    22.8    4    108    93
 -------------------------------------------
 
 > pandoc.table(mtcars[1:3, 1:4], plain.ascii = TRUE)
 
 -------------------------------------------
-                     mpg   cyl   disp   hp 
+                     mpg   cyl   disp   hp
 ------------------- ----- ----- ------ ----
-     Mazda RX4       21     6    160   110 
+     Mazda RX4       21     6    160   110
 
-   Mazda RX4 Wag     21     6    160   110 
+   Mazda RX4 Wag     21     6    160   110
 
-    Datsun 710      22.8    4    108    93 
+    Datsun 710      22.8    4    108    93
 -------------------------------------------
 
 ```
@@ -443,13 +443,13 @@ Funtionality described in other sections is most notable, but `pander/pandoc.tab
 > pandoc.table(m, missing = '?')
 
 --------------------------------------------------
-      &nbsp;         mpg   cyl   disp   hp   drat 
+      &nbsp;         mpg   cyl   disp   hp   drat
 ------------------- ----- ----- ------ ---- ------
-   **Mazda RX4**      ?     6    160   110   3.9  
+   **Mazda RX4**      ?     6    160   110   3.9
 
- **Mazda RX4 Wag**    ?     6    160   110   3.9  
+ **Mazda RX4 Wag**    ?     6    160   110   3.9
 
-  **Datsun 710**      ?     4    108    93   3.85 
+  **Datsun 710**      ?     4    108    93   3.85
 --------------------------------------------------
 
 ```
@@ -461,7 +461,7 @@ Funtionality described in other sections is most notable, but `pander/pandoc.tab
 > pandoc.table(m)
 
 --------------
-   a      b   
+   a      b
 ------- ------
 foo bar pander
 --------------
@@ -469,10 +469,10 @@ foo bar pander
 > pandoc.table(m, keep.line.breaks = TRUE)
 
 ----------
- a    b   
+ a    b
 --- ------
 foo pander
-bar       
+bar
 ----------
 
 ```
@@ -586,7 +586,7 @@ A nested list can be seen above with a table and all (optional) list names. As a
 
 ```
 
-So `pander` showed a not known class in an (almost) user-friendly way. And we got some warnings too styled with [Pandoc **footnote**](http://johnmacfarlane.net/pandoc/README.html#footnotes)! If that document is exported to e.g. `HTML` or `pdf`, then the error/warning message could be found on the bottom of the page with a link. *Note*: there were two warnings in the above call - both captured and returned! Well, this is the feature of `Pandoc.brew`, see [below](#brew-to-pandoc).
+So `pander` showed a not known class in an (almost) user-friendly way. And we got some warnings too styled with [Pandoc **footnote**](https://johnmacfarlane.net/pandoc/README.html#footnotes)! If that document is exported to e.g. `HTML` or `pdf`, then the error/warning message could be found on the bottom of the page with a link. *Note*: there were two warnings in the above call - both captured and returned! Well, this is the feature of `Pandoc.brew`, see [below](#brew-to-pandoc).
 
 But the output of different **statistical methods** are tried to be prettyfied. Some the above call normally returns like:
 
@@ -594,7 +594,7 @@ But the output of different **statistical methods** are tried to be prettyfied. 
 > pander(chisq.test(table(mtcars$am, mtcars$gear)))
 
 -------------------------------------
- Test statistic   df      P value    
+ Test statistic   df      P value
 ---------------- ---- ---------------
      20.94        2   2.831e-05 * * *
 -------------------------------------
@@ -610,9 +610,9 @@ A few other examples on the supported R classes:
 > pander(t.test(extra ~ group, data = sleep))
 
 ---------------------------------------------------------
- Test statistic   df    P value   Alternative hypothesis 
+ Test statistic   df    P value   Alternative hypothesis
 ---------------- ----- --------- ------------------------
-     -1.861      17.78  0.07939         two.sided        
+     -1.861      17.78  0.07939         two.sided
 ---------------------------------------------------------
 
 Table: Welch Two Sample t-test: `extra` by `group`
@@ -625,17 +625,17 @@ Table: Welch Two Sample t-test: `extra` by `group`
 > pander(m)
 
 --------------------------------------------------------------
-     &nbsp;        Estimate   Std. Error   z value   Pr(>|z|) 
+     &nbsp;        Estimate   Std. Error   z value   Pr(>|z|)
 ----------------- ---------- ------------ --------- ----------
- **(Intercept)**    3.045       0.1709      17.81   5.427e-71 
+ **(Intercept)**    3.045       0.1709      17.81   5.427e-71
 
-  **outcome2**     -0.4543      0.2022     -2.247    0.02465  
+  **outcome2**     -0.4543      0.2022     -2.247    0.02465
 
-  **outcome3**      -0.293      0.1927      -1.52     0.1285  
+  **outcome3**      -0.293      0.1927      -1.52     0.1285
 
- **treatment2**   1.338e-15      0.2      6.69e-15      1     
+ **treatment2**   1.338e-15      0.2      6.69e-15      1
 
- **treatment3**   1.421e-15      0.2      7.105e-15     1     
+ **treatment3**   1.421e-15      0.2      7.105e-15     1
 --------------------------------------------------------------
 
 Table: Fitting generalized (poisson/log) linear model: counts ~ outcome + treatment
@@ -643,13 +643,13 @@ Table: Fitting generalized (poisson/log) linear model: counts ~ outcome + treatm
 > pander(anova(m))
 
 --------------------------------------------------------
-    &nbsp;       Df   Deviance   Resid. Df   Resid. Dev 
+    &nbsp;       Df   Deviance   Resid. Df   Resid. Dev
 --------------- ---- ---------- ----------- ------------
-   **NULL**      NA      NA          8         10.58    
+   **NULL**      NA      NA          8         10.58
 
-  **outcome**    2     5.452         6         5.129    
+  **outcome**    2     5.452         6         5.129
 
- **treatment**   2   2.665e-15       4         5.129    
+ **treatment**   2   2.665e-15       4         5.129
 --------------------------------------------------------
 
 Table: Analysis of Deviance Table
@@ -657,13 +657,13 @@ Table: Analysis of Deviance Table
 > pander(aov(m))
 
 -----------------------------------------------------------
-    &nbsp;       Df   Sum Sq    Mean Sq   F value   Pr(>F) 
+    &nbsp;       Df   Sum Sq    Mean Sq   F value   Pr(>F)
 --------------- ---- --------- --------- --------- --------
-  **outcome**    2     92.67     46.33     2.224    0.2242 
+  **outcome**    2     92.67     46.33     2.224    0.2242
 
- **treatment**   2   8.382e-31 4.191e-31 2.012e-32    1    
+ **treatment**   2   8.382e-31 4.191e-31 2.012e-32    1
 
- **Residuals**   4     83.33     20.83      NA        NA   
+ **Residuals**   4     83.33     20.83      NA        NA
 -----------------------------------------------------------
 
 Table: Analysis of Variance Model
@@ -671,15 +671,15 @@ Table: Analysis of Variance Model
 > pander(prcomp(USArrests))
 
 -------------------------------------------------
-    &nbsp;       PC1     PC2      PC3      PC4   
+    &nbsp;       PC1     PC2      PC3      PC4
 -------------- ------- -------- -------- --------
-  **Murder**   0.0417  -0.04482 0.07989  -0.9949 
+  **Murder**   0.0417  -0.04482 0.07989  -0.9949
 
- **Assault**   0.9952  -0.05876 -0.06757 0.03894 
+ **Assault**   0.9952  -0.05876 -0.06757 0.03894
 
  **UrbanPop**  0.04634  0.9769  -0.2005  -0.05817
 
-   **Rape**    0.07516  0.2007   0.9741  0.07233 
+   **Rape**    0.07516  0.2007   0.9741  0.07233
 -------------------------------------------------
 
 Table: Principal Components Analysis
@@ -687,19 +687,19 @@ Table: Principal Components Analysis
 > pander(density(mtcars$hp))
 
 --------------------------------------------
-   &nbsp;      Coordinates   Density values 
+   &nbsp;      Coordinates   Density values
 ------------- ------------- ----------------
-  **Min.**       -32.12          5e-06      
+  **Min.**       -32.12          5e-06
 
- **1st Qu.**      80.69        0.0004068    
+ **1st Qu.**      80.69        0.0004068
 
- **Median**       193.5         0.001665    
+ **Median**       193.5         0.001665
 
-  **Mean**        193.5         0.002214    
+  **Mean**        193.5         0.002214
 
- **3rd Qu.**      306.3         0.00409     
+ **3rd Qu.**      306.3         0.00409
 
-  **Max.**        419.1         0.006051    
+  **Max.**        419.1         0.006051
 --------------------------------------------
 
 Table: Kernel density of *mtcars$hp* (bandwidth: 28.04104)
@@ -709,19 +709,19 @@ Table: Kernel density of *mtcars$hp* (bandwidth: 28.04104)
 > pander(density(mtcars$hp))
 
 --------------------------------------------
-   &nbsp;      Coordinates   Density values 
+   &nbsp;      Coordinates   Density values
 ------------- ------------- ----------------
-  **Min.**       -32.12            0        
+  **Min.**       -32.12            0
 
- **1st Qu.**      80.69            0        
+ **1st Qu.**      80.69            0
 
- **Median**       193.5            0        
+ **Median**       193.5            0
 
-  **Mean**        193.5            0        
+  **Mean**        193.5            0
 
- **3rd Qu.**      306.3            0        
+ **3rd Qu.**      306.3            0
 
-  **Max.**        419.1           0.01      
+  **Max.**        419.1           0.01
 --------------------------------------------
 
 Table: Kernel density of *mtcars$hp* (bandwidth: 28.04104)
@@ -734,7 +734,7 @@ And of course tables are formatted (e.g. auto add of line breaks, splitting up t
 
 The package is also capable of creating complex Pandoc documents (reports) from **R objects** in multiple ways:
 
-  * create somehow a markdown text file (e.g. with `brew`, `knitr` or any scripts of yours, maybe with `Pandoc.brew` - see just [below](#brew-to-pandoc)) and transform that to other formats (like HTML, odt, PDF, docx etc.) with `Pandoc.convert` - similarly to [`pandoc` function in knitr](http://yihui.name/knitr/demo/pandoc/). Basically this is a wrapper around a [Pandoc](http://johnmacfarlane.net/pandoc/) call, which has not much to do with R actually.
+  * create somehow a markdown text file (e.g. with `brew`, `knitr` or any scripts of yours, maybe with `Pandoc.brew` - see just [below](#brew-to-pandoc)) and transform that to other formats (like HTML, odt, PDF, docx etc.) with `Pandoc.convert` - similarly to [`pandoc` function in knitr](http://yihui.name/knitr/demo/pandoc/). Basically this is a wrapper around a [Pandoc](https://johnmacfarlane.net/pandoc/) call, which has not much to do with R actually.
 
   * users might write some reports with literate programming (similar to `knitr`) in a forked version of [brew](https://cran.r-project.org/package=brew) syntax resulting. This means that the user can include R code chunks in a document, and brewing that results in a pretty Pandoc's markdown document and also in a **bunch of other formats** (like HTML, odt, PDF, docx etc.). The great advantage of this [function](#brew-to-pandoc) is that you do not have to transform your R objects to markdown manually, it's all handled automagically.
 
@@ -749,7 +749,7 @@ The package is also capable of creating complex Pandoc documents (reports) from 
 The [brew](https://cran.r-project.org/package=brew) package, which is a templating framework for report generation, has not been updated on CRAN since 2011, but it's still used in bunch of R projects based on its simple design and useful features in literate programming. For a quick overview, please see the following documents if you are not familiar with `brew`:
 
   * [slides on "Building a reporting sytem with BREW"](http://www.slideshare.net/xavierguardiola/building-a-reporting-sytem-with-brew)
-  * [learnr blogpost on brew](http://learnr.wordpress.com/2009/09/09/brew-creating-repetitive-reports/)
+  * [learnr blogpost on brew](https://learnr.wordpress.com/2009/09/09/brew-creating-repetitive-reports/)
 
 **In short**: a `brew` document is a simple text file with some special tags. `Pandoc.brew` uses only two of them (as building on a personalized version of Jeff's really great `brew` function):
 
@@ -919,7 +919,7 @@ myReport$export(open = FALSE)
 
 # Capturing evaluation information with evals
 
-When working on the [rapport package](http://rapport-package.info), I really needed some nifty R function that can evaluate R expression along with capturing errors and warnings. Unfortunately the `evaluate` package had only limited features at that time, as it could not return the raw R object, but only the standard output with messages. So I wrote my own function, and soon some further feature requests arose, like identifying if an R expression results in a plot etc. This section aims to give a quick introduction to the functionality of `evals`, but for more usage/implementation details, please refer to specialized vignette, which can be accessed by `vignette('evals', package='pander')` or available online [here](http://rapporter.github.io/pander/evals.html).
+When working on the [rapport package](https://rapporter.github.io/rapport/), I really needed some nifty R function that can evaluate R expression along with capturing errors and warnings. Unfortunately the `evaluate` package had only limited features at that time, as it could not return the raw R object, but only the standard output with messages. So I wrote my own function, and soon some further feature requests arose, like identifying if an R expression results in a plot etc. This section aims to give a quick introduction to the functionality of `evals`, but for more usage/implementation details, please refer to specialized vignette, which can be accessed by `vignette('evals', package='pander')` or available online [here](https://rapporter.github.io/pander/evals.html).
 
 But probably it's easier to explain what `evals` can do with a simple example:
 
@@ -1099,7 +1099,7 @@ The package comes with a variety of globally adjustable options, which have an e
   * `graph.legend.position`: string (default: `'right'`) specifying the position of the legend: 'top', 'right', 'bottom' or 'left'
   * `graph.background`: string (default: `'white'`) specifying the plots main background's color
   * `graph.panel.background`: string (default: `'transparent'`) specifying the plot's main panel background. Please *note*, that this option is not supported with `base` graphics.
-  * `graph.colors`: character vector of default color palette (defaults to a [colorblind theme](http://jfly.iam.u-tokyo.ac.jp/color/)). Please *note* that this update work with `base` plots by appending the `col` argument to the call if not set.
+  * `graph.colors`: character vector of default color palette (defaults to a [colorblind theme](https://jfly.iam.u-tokyo.ac.jp/color/)). Please *note* that this update work with `base` plots by appending the `col` argument to the call if not set.
   * `graph.color.rnd`: boolean (default: `FALSE`) specifying if the palette should be reordered randomly before rendering each plot to get colorful images
   * `graph.axis.angle`: numeric (default: `1`) specifying the angle of axes' labels. The available options are based on `par(les)` and sets if the labels should be:
 
@@ -1185,4 +1185,4 @@ To use this small lib, just type: `M-x pander-mode` on any document. It might be
         $("img").unbind("click");
     });
 </script>
-<a href="https://github.com/Rapporter/pander"><img style="position: fixed; top: -5px; right: -5px; border: 0;" src="https://camo.githubusercontent.com/38ef81f8aca64bb9a64448d0d70f1308ef5341ab/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f72696768745f6461726b626c75655f3132313632312e706e67" data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_right_darkblue_121621.png"></a> 
+<a href="https://github.com/Rapporter/pander"><img style="position: fixed; top: -5px; right: -5px; border: 0;" src="https://camo.githubusercontent.com/38ef81f8aca64bb9a64448d0d70f1308ef5341ab/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f72696768745f6461726b626c75655f3132313632312e706e67" data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_right_darkblue_121621.png"></a>

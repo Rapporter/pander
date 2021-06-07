@@ -33,7 +33,7 @@ pandoc.indent <- function(x, level = 0) {
 #' @export
 #' @aliases pandoc.p
 #' @seealso \code{\link{pandoc.emphasis}} \code{\link{pandoc.strikeout}} \code{\link{pandoc.verbatim}}
-#' @references John MacFarlane (2012): _Pandoc User's Guide_. \url{http://johnmacfarlane.net/pandoc/README.html}
+#' @references John MacFarlane (2012): _Pandoc User's Guide_. \url{https://johnmacfarlane.net/pandoc/README.html}
 #' @examples
 #' pandoc.p('FOO')
 #' pandoc.p(c('Lorem', 'ipsum', 'lorem ipsum'))
@@ -83,7 +83,7 @@ pandoc.add.formatting <- function(x, f) {
 #' @export
 #' @aliases pandoc.strong
 #' @seealso \code{\link{pandoc.emphasis}} \code{\link{pandoc.strikeout}} \code{\link{pandoc.verbatim}}
-#' @references John MacFarlane (2012): _Pandoc User's Guide_. \url{http://johnmacfarlane.net/pandoc/README.html}
+#' @references John MacFarlane (2012): _Pandoc User's Guide_. \url{https://johnmacfarlane.net/pandoc/README.html}
 #' @examples
 #' pandoc.strong('FOO')
 #' pandoc.strong(c('FOO', '**FOO**'))
@@ -104,7 +104,7 @@ pandoc.strong <- function(...)
 #' @export
 #' @aliases pandoc.emphasis
 #' @seealso \code{\link{pandoc.strong}} \code{\link{pandoc.strikeout}} \code{\link{pandoc.verbatim}}
-#' @references John MacFarlane (2012): _Pandoc User's Guide_. \url{http://johnmacfarlane.net/pandoc/README.html}
+#' @references John MacFarlane (2012): _Pandoc User's Guide_. \url{https://johnmacfarlane.net/pandoc/README.html}
 #' @examples
 #' pandoc.emphasis('FOO')
 #' pandoc.emphasis(c('FOO', '*FOO*'))
@@ -125,7 +125,7 @@ pandoc.emphasis <- function(...)
 #' @export
 #' @aliases pandoc.strikeout
 #' @seealso \code{\link{pandoc.emphasis}} \code{\link{pandoc.strong}} \code{\link{pandoc.verbatim}}
-#' @references John MacFarlane (2012): _Pandoc User's Guide_. \url{http://johnmacfarlane.net/pandoc/README.html}
+#' @references John MacFarlane (2012): _Pandoc User's Guide_. \url{https://johnmacfarlane.net/pandoc/README.html}
 #' @examples
 #' pandoc.strikeout('FOO')
 #' pandoc.strikeout(c('FOO', '~~FOO~~'))
@@ -148,7 +148,7 @@ pandoc.strikeout <- function(...)
 #' @export
 #' @aliases pandoc.verbatim
 #' @seealso \code{\link{pandoc.emphasis}} \code{\link{pandoc.strikeout}} \code{\link{pandoc.strong}}
-#' @references John MacFarlane (2012): _Pandoc User's Guide_. \url{http://johnmacfarlane.net/pandoc/README.html}
+#' @references John MacFarlane (2012): _Pandoc User's Guide_. \url{https://johnmacfarlane.net/pandoc/README.html}
 #' @examples
 #' # different styles/formats
 #' pandoc.verbatim('FOO')
@@ -190,9 +190,9 @@ pandoc.verbatim <- function(...)
 #' @export
 #' @aliases pandoc.link
 #' @examples
-#' pandoc.link('http://r-project.org')
-#' pandoc.link('http://r-project.org', 'R')
-#' @references John MacFarlane (2012): _Pandoc User's Guide_. \url{http://johnmacfarlane.net/pandoc/README.html}
+#' pandoc.link('https://r-project.org')
+#' pandoc.link('https://r-project.org', 'R')
+#' @references John MacFarlane (2012): _Pandoc User's Guide_. \url{https://johnmacfarlane.net/pandoc/README.html}
 pandoc.link.return <- function(url, text = url)
     sprintf('[%s](%s)', text, url)
 
@@ -214,7 +214,7 @@ pandoc.link <- function(...)
 #' @examples
 #' pandoc.image('foo.png')
 #' pandoc.image('foo.png', 'Nice image, huh?')
-#' @references John MacFarlane (2012): _Pandoc User's Guide_. \url{http://johnmacfarlane.net/pandoc/README.html}
+#' @references John MacFarlane (2012): _Pandoc User's Guide_. \url{https://johnmacfarlane.net/pandoc/README.html}
 pandoc.image.return <- function(img, caption = storage$caption) {
 
     check_caption(caption)
@@ -245,7 +245,7 @@ pandoc.image <- function(...)
 #' @aliases pandoc.footnote
 #' @examples
 #' pandoc.footnote('Automatically numbered footnote, right?')
-#' @references John MacFarlane (2012): _Pandoc User's Guide_. \url{http://johnmacfarlane.net/pandoc/README.html}
+#' @references John MacFarlane (2012): _Pandoc User's Guide_. \url{https://johnmacfarlane.net/pandoc/README.html}
 pandoc.footnote.return <- function(x)
     gsub('[\n][\n]*', '\n', sprintf('^[%s]', paste(x, collapse = ' ')))
 
@@ -260,7 +260,7 @@ pandoc.footnote <- function(...)
 #' @return By default this function outputs (see: \code{cat}) the result. If you would want to catch the result instead, then call the function ending in \code{.return}.
 #' @export
 #' @aliases pandoc.horizontal.rule
-#' @references John MacFarlane (2012): _Pandoc User's Guide_. \url{http://johnmacfarlane.net/pandoc/README.html}
+#' @references John MacFarlane (2012): _Pandoc User's Guide_. \url{https://johnmacfarlane.net/pandoc/README.html}
 pandoc.horizontal.rule.return <- function()
     add.blank.lines('---')
 
@@ -278,7 +278,7 @@ pandoc.horizontal.rule <- function(...)
 #' @return By default this function outputs (see: \code{cat}) the result. If you would want to catch the result instead, then call the function ending in \code{.return}.
 #' @export
 #' @aliases pandoc.header
-#' @references John MacFarlane (2012): _Pandoc User's Guide_. \url{http://johnmacfarlane.net/pandoc/README.html}
+#' @references John MacFarlane (2012): _Pandoc User's Guide_. \url{https://johnmacfarlane.net/pandoc/README.html}
 #' @examples
 #' pandoc.header('Foo!', 4)
 #' pandoc.header('Foo!', 2, 'setext')
@@ -324,7 +324,7 @@ pandoc.header <- function(...)
 #' @return By default this function outputs (see: \code{cat}) the result. If you would want to catch the result instead, then call the function ending in \code{.return}.
 #' @export
 #' @aliases pandoc.title
-#' @references John MacFarlane (2012): _Pandoc User's Guide_. \url{http://johnmacfarlane.net/pandoc/README.html}
+#' @references John MacFarlane (2012): _Pandoc User's Guide_. \url{https://johnmacfarlane.net/pandoc/README.html}
 #' @examples
 #' pandoc.title('Tom', 'Render pandoc in R', '2012-05-16')
 #' pandoc.title(c('Tom', 'Jerry'), 'Render pandoc in R', '2012-05-16')
@@ -401,7 +401,7 @@ pandoc.title <- function(...)
 #' @return By default this function outputs (see: \code{cat}) the result. If you would want to catch the result instead, then call the function ending in \code{.return}.
 #' @export
 #' @aliases pandoc.list
-#' @references John MacFarlane (2012): _Pandoc User's Guide_. \url{http://johnmacfarlane.net/pandoc/README.html}
+#' @references John MacFarlane (2012): _Pandoc User's Guide_. \url{https://johnmacfarlane.net/pandoc/README.html}
 #' @examples
 #' ## basic lists
 #' pandoc.list(letters[1:5])
@@ -534,7 +534,7 @@ pandoc.list <- function(...)
 #' @aliases pandoc.table
 #' @seealso \code{\link{set.caption}}, \code{\link{set.alignment}}
 #' @note If \code{caption} is missing, then the value is first checked in \code{t} object's \code{caption} attribute and if not found in an internal buffer set by \code{link{set.caption}}. \code{justify} parameter works similarly, see \code{\link{set.alignment}} for details.
-#' @references John MacFarlane (2012): _Pandoc User's Guide_. \url{http://johnmacfarlane.net/pandoc/README.html}
+#' @references John MacFarlane (2012): _Pandoc User's Guide_. \url{https://johnmacfarlane.net/pandoc/README.html}
 #' @examples
 #' pandoc.table(mtcars)
 #'

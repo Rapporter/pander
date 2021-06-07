@@ -8,11 +8,11 @@ We have two meta-information above:
   * author
   * title
 
-A third field could be there too: date. For details, please check out [Pandoc's homepage](http://johnmacfarlane.net/pandoc/README.html#title-block) or just use `pandoc.title` function of this package.
+A third field could be there too: date. For details, please check out [Pandoc's homepage](https://johnmacfarlane.net/pandoc/README.html#title-block) or just use `pandoc.title` function of this package.
 
 As you can see writing and formatting paragraphs cannot be easier :)
 
-But what about [R](http://www.r-project.org/)? Let us return pi: <%=pi%>
+But what about [R](https://www.r-project.org/)? Let us return pi: <%=pi%>
 
 # R objects
 

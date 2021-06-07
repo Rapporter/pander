@@ -21,7 +21,7 @@ Pandoc.convert(
 
 \item{text}{Pandoc's markdown format character vector. Treated as the content of \code{f} file - so the \code{f} parameter is ignored. The generated file's path is \code{tempfile()}.}
 
-\item{format}{required output format. For all possible values here check out Pandoc homepage: \url{http://johnmacfarlane.net/pandoc/}}
+\item{format}{required output format. For all possible values here check out Pandoc homepage: \url{https://johnmacfarlane.net/pandoc/}}
 
 \item{open}{try to open converted document with operating system's default program}
 
@@ -47,7 +47,7 @@ This function depends on \code{Pandoc} which should be pre-installed on user's m
 \examples{
 \dontrun{
 Pandoc.convert(text = c('# Demo', 'with a paragraph'))
-Pandoc.convert('http://rapporter.github.io/pander/minimal.md')
+Pandoc.convert('https://rapporter.github.io/pander/minimal.md')
 # Note: the generated HTML is not showing images with relative path from the above file.
 # Based on that `pdf`, `docx` etc. formats would not work! If you want to convert an
 # online markdown file to other formats with this function, please pre-process the file
@@ -55,5 +55,5 @@ Pandoc.convert('http://rapporter.github.io/pander/minimal.md')
 }
 }
 \references{
-John MacFarlane (2012): _Pandoc User's Guide_. \url{http://johnmacfarlane.net/pandoc/README.html}
+John MacFarlane (2012): _Pandoc User's Guide_. \url{https://johnmacfarlane.net/pandoc/README.html}
 }

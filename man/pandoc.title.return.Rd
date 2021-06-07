@@ -34,5 +34,5 @@ pandoc.title('Tom; Jerry')
 pandoc.title(title = 'Render pandoc in R', date= '2012-05-16')
 }
 \references{
-John MacFarlane (2012): _Pandoc User's Guide_. \url{http://johnmacfarlane.net/pandoc/README.html}
+John MacFarlane (2012): _Pandoc User's Guide_. \url{https://johnmacfarlane.net/pandoc/README.html}
 }

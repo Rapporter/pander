@@ -17,7 +17,7 @@ panderOptions('knitr.auto.asis', FALSE)
 panderOptions('plain.ascii', TRUE)
 ```
 
-`Pander` is designed to provide a minimal and easy tool for rendering `R` objects into [Pandoc](http://pandoc.org/)'s markdown. This vignette aims to introduce the `pander` package and its core pieces of functionality. It is intended to be a general overview with pointers to places with detailed information. This vignette will talk about:
+`Pander` is designed to provide a minimal and easy tool for rendering `R` objects into [Pandoc](https://pandoc.org/)'s markdown. This vignette aims to introduce the `pander` package and its core pieces of functionality. It is intended to be a general overview with pointers to places with detailed information. This vignette will talk about:
 
 * core functionality for rendering objects in `Pandoc`'s markdown with generic S3 [pander method](#rendering-r-objects).
 * functionality for capturing various information when evaluating R expressions with [evals](#evals).
@@ -43,7 +43,7 @@ methods(pander)
 
 If you think that pander lacks support for any other R class(es), please feel free to open a [ticket](https://github.com/Rapporter/pander/pulls) suggesting a new feature or submit [pull request](https://github.com/Rapporter/pander/issues) and we will be happy to extend the package.
 
-Under the hood, `pander` S3 methods rely on different `pandoc.*` methods, where most of functionality is implemented in `pandoc.table` which is used for rendering tables. `pandoc.table` provides functionality similar to `knitr::kable` in rendering markdown, but also adds a truly rich functionality with a variety of rendering options inherited from `pander`. For more usage/implementation details and examples, please refer to the `pandoc.table` vignette, which can be accessed by `vignette('pandoc_table')` (and is also available [online](http://rapporter.github.io/pander/pandoc_table.html)).
+Under the hood, `pander` S3 methods rely on different `pandoc.*` methods, where most of functionality is implemented in `pandoc.table` which is used for rendering tables. `pandoc.table` provides functionality similar to `knitr::kable` in rendering markdown, but also adds a truly rich functionality with a variety of rendering options inherited from `pander`. For more usage/implementation details and examples, please refer to the `pandoc.table` vignette, which can be accessed by `vignette('pandoc_table')` (and is also available [online](https://rapporter.github.io/pander/pandoc_table.html)).
 
 ## Evals
 
@@ -64,7 +64,7 @@ evals('1:10')
 * `msg` is a list of possible messages captured while evaluating the R expression. Among other messages, warnings/errors will appear here.
 * `stdout` contains what, if anything, was written to the standard output.
 
-For more usage/implementation details and examples, please refer to the `evals` vignette, which can be accessed by `vignette('evals')` (also available [online](http://rapporter.github.io/pander/evals.html)).
+For more usage/implementation details and examples, please refer to the `evals` vignette, which can be accessed by `vignette('evals')` (also available [online](https://rapporter.github.io/pander/evals.html)).
 
 ## Brew to Pandoc
 

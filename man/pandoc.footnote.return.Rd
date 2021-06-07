@@ -20,5 +20,5 @@ Creates a Pandoc's markdown format footnote.
 pandoc.footnote('Automatically numbered footnote, right?')
 }
 \references{
-John MacFarlane (2012): _Pandoc User's Guide_. \url{http://johnmacfarlane.net/pandoc/README.html}
+John MacFarlane (2012): _Pandoc User's Guide_. \url{https://johnmacfarlane.net/pandoc/README.html}
 }

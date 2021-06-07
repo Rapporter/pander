@@ -38,14 +38,14 @@ openFileInOS <- function(f) {
 #' Calling John MacFarlane's great program to convert specified file (see \code{f} parameter below) or character vector {see \code{text} paramater} to other formats like \code{HTML}, \code{pdf}, \code{docx}, \code{odt} etc.
 #' @param f Pandoc's markdown format file path. If URL is provided then the generated file's path is \code{tempfile()} but please bear in mind that this way only images with absolute path would shown up in the document.
 #' @param text Pandoc's markdown format character vector. Treated as the content of \code{f} file - so the \code{f} parameter is ignored. The generated file's path is \code{tempfile()}.
-#' @param format required output format. For all possible values here check out Pandoc homepage: \url{http://johnmacfarlane.net/pandoc/}
+#' @param format required output format. For all possible values here check out Pandoc homepage: \url{https://johnmacfarlane.net/pandoc/}
 #' @param open try to open converted document with operating system's default program
 #' @param options optionally passed arguments to Pandoc (instead of \code{pander}'s default)
 #' @param footer add footer to document with meta-information
 #' @param proc.time optionally passed number in seconds which would be shown in the generated document's footer
 #' @param portable.html instead of using local files, rather linking JS/CSS files to an online CDN for portability and including base64-encoded images if converting to \code{HTML} without custom \code{options}
 #' @param pandoc.binary custom path to \code{pandoc}'s binary if not found in the path or not set in the \code{RSTUDIO_PANDOC} env var
-#' @references John MacFarlane (2012): _Pandoc User's Guide_. \url{http://johnmacfarlane.net/pandoc/README.html}
+#' @references John MacFarlane (2012): _Pandoc User's Guide_. \url{https://johnmacfarlane.net/pandoc/README.html}
 #' @note This function depends on \code{Pandoc} which should be pre-installed on user's machine. See the \code{INSTALL} file of the package.
 #' @return Converted file's path.
 #' @importFrom tools file_path_sans_ext
@@ -53,7 +53,7 @@ openFileInOS <- function(f) {
 #' @export
 #' @examples \dontrun{
 #' Pandoc.convert(text = c('# Demo', 'with a paragraph'))
-#' Pandoc.convert('http://rapporter.github.io/pander/minimal.md')
+#' Pandoc.convert('https://rapporter.github.io/pander/minimal.md')
 #' # Note: the generated HTML is not showing images with relative path from the above file.
 #' # Based on that `pdf`, `docx` etc. formats would not work! If you want to convert an
 #' # online markdown file to other formats with this function, please pre-process the file
@@ -138,7 +138,7 @@ Pandoc.convert <- function(f, text, format = 'html', open = TRUE, options = '',
     ## add footer to file
     if (footer) {
         if (length(rl) > 0 && !grepl('This report was generated', tail(rl, 1))) {
-            cat(sprintf('\n\n-------\nThis report was generated with [R](http://www.r-project.org/) (%s) and [pander](https://github.com/rapporter/pander) (%s)%son %s platform.', sprintf('%s.%s', R.version$major, R.version$minor), packageDescription('pander')$Version, ifelse(missing(proc.time), ' ', sprintf(' in %s sec ', format(proc.time))), R.version$platform), file = f, append = TRUE) #nolint
+            cat(sprintf('\n\n-------\nThis report was generated with [R](https://www.r-project.org/) (%s) and [pander](https://github.com/rapporter/pander) (%s)%son %s platform.', sprintf('%s.%s', R.version$major, R.version$minor), packageDescription('pander')$Version, ifelse(missing(proc.time), ' ', sprintf(' in %s sec ', format(proc.time))), R.version$platform), file = f, append = TRUE) #nolint
         }
     }
 

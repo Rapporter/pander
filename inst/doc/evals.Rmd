@@ -60,7 +60,7 @@ As mentioned before, `evals` captures the output to graphical devices and saves 
 evals('plot(mtcars)')[[1]]$result
 ```
 
-![](http://rapporter.github.io/pander/plots/evals-mtcars.jpeg)
+![](https://rapporter.github.io/pander/plots/evals-mtcars.jpeg)
 
 You can specify the output directory using the `graph.dir` parameter, and the output type using the `graph.output` parameter. Currently, it could be any of `grDevices`: `png`, `bmp`,` jpeg`,` jpg`, `tiff`, `svg`,  or `pdf`.
 
@@ -104,8 +104,8 @@ evals('ggplot(df) + geom_histogram(aes(x = hp), binwidth = 50) + ggtitle("Histog
 evalsOptions('graph.unify', FALSE)
 ```
 
-![](http://rapporter.github.io/pander/plots/evals-lattice.jpeg)
-![](http://rapporter.github.io/pander/plots/evals-ggplot2.jpeg)
+![](https://rapporter.github.io/pander/plots/evals-lattice.jpeg)
+![](https://rapporter.github.io/pander/plots/evals-ggplot2.jpeg)
 
 Options for unification can be set with `panderOptions`. For example:
 

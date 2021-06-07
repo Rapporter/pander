@@ -96,6 +96,6 @@ Pi has a lot (<\%=i\%>) of power: <\%=pi^i\%><\%}\%>'))
 \references{
 \itemize{
      \item Jeffrey Horner (2011). _brew: Templating Framework for Report Generation._ \url{https://cran.r-project.org/package=brew}
-     \item John MacFarlane (2012): _Pandoc User's Guide_. \url{http://johnmacfarlane.net/pandoc/README.html}
+     \item John MacFarlane (2012): _Pandoc User's Guide_. \url{https://johnmacfarlane.net/pandoc/README.html}
 }
 }

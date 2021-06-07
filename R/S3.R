@@ -6,7 +6,7 @@
 #' @return By default this function outputs (see: \code{cat}) the result. If you would want to catch the result instead, then call the function ending in \code{.return}.
 #' @note This function can be called by \code{pander} and \code{pandoc} too.
 #' @references \itemize{
-#'   \item John MacFarlane (2013): _Pandoc User's Guide_. \url{http://johnmacfarlane.net/pandoc/README.html}
+#'   \item John MacFarlane (2013): _Pandoc User's Guide_. \url{https://johnmacfarlane.net/pandoc/README.html}
 #'   \item David Hajage (2011): _ascii. Export R objects to several markup languages._ \url{https://cran.r-project.org/package=ascii}
 #'   \item Hlavac, Marek (2013): _stargazer: LaTeX code for well-formatted regression and summary statistics tables._ \url{https://cran.r-project.org/package=stargazer}
 #' }

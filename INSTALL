@@ -8,7 +8,7 @@ Of course the other features of `pander` can be used without installing Pandoc, 
 
 All major platforms are supported with a simple click-click-click installation binary (or compile from sources):
 
-    http://johnmacfarlane.net/pandoc/installing.html
+    https://johnmacfarlane.net/pandoc/installing.html
 
 Development version of pander
 =============================

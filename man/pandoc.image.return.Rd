@@ -26,7 +26,7 @@ pandoc.image('foo.png')
 pandoc.image('foo.png', 'Nice image, huh?')
 }
 \references{
-John MacFarlane (2012): _Pandoc User's Guide_. \url{http://johnmacfarlane.net/pandoc/README.html}
+John MacFarlane (2012): _Pandoc User's Guide_. \url{https://johnmacfarlane.net/pandoc/README.html}
 }
 \seealso{
 \code{\link{set.caption}}
