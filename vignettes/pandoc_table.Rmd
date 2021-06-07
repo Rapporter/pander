@@ -172,7 +172,7 @@ r <- matrix(c(283764.97430, 29.12345678901, -7.1234, -100.1), ncol = 2)
 pandoc.table(r, round = 2)
 pandoc.table(r, round = c(4,2)) # vector for each column
 pandoc.table(r, digits = 2)
-pandoc.table(r, digits = c(0, 5)) # vector for each column
+pandoc.table(r, digits = c(1, 5)) # vector for each column
 pandoc.table(r, big.mark = ',')
 pandoc.table(r, decimal.mark = ',')
 ```
