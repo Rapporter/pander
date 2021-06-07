@@ -1,7 +1,20 @@
+pander 0.6.4 (2021-06-08)
+----------------------------------------------------------------
+
+This is a maintenance release without major updates,
+  https://github.com/Rapporter/pander/compare/v0.6.3...v0.6.4
+
+Fixes:
+ * quote path to Pandoc binary (#331)
+ * auto-detect path to Pandoc in RStudio. (#332)
+ * character encoding issues on Windows (#280, #296)
+ * table column with fix (#321)
+ * list indent fix (#323)
+
 pander 0.6.3 (2018-10-06)
 ----------------------------------------------------------------
 
-This is a maintainence release without major updates,
+This is a maintenance release without major updates,
   https://github.com/Rapporter/pander/compare/v0.6.2...v0.6.3
 
 New fetures:
@@ -20,10 +33,10 @@ Maintainence release fixing having 1+ conditions in if statements.
 pander 0.6.1 (2017-08-04)
 ----------------------------------------------------------------
 
-This is rather a maintainence release without major updates, but still 100+ commits since last version:
+This is rather a maintenance release without major updates, but still 100+ commits since last version:
   https://github.com/Rapporter/pander/compare/v0.6.0...v0.6.1
 
-New fetures:
+New features:
  * placement of coefficients in `pander.lm` is now optional (#232)
  * cutoff overrides for the significance stars (#255)
  * row and columns names in `pandoc.table` (#281)
@@ -33,7 +46,7 @@ Fixes:
  * overriding p values with stars and fix significance stars markdown (#230)
  * don't update original markdown file when calling `Pandoc.brew` (#173)
  * column alignment of tables without a header (#233)
- * matrix coercion issues, eg date accidently converted to integer (#237)
+ * matrix coercion issues, eg date accidentally converted to integer (#237)
  * formatting of multiple columns instead of the first one
  * `pander.mtable` fix after `memisc` update (#246)
  * `keep.trailing.zeros` regression bug (#259)
