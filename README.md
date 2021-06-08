@@ -1,6 +1,6 @@
 # [pander: An R Pandoc Writer](https://github.com/Rapporter/pander)
 
-The main aim of the *pander* [R](https://r-project.org) package is to provide a minimal and easy tool for rendering **R objects** into [Pandoc](https://johnmacfarlane.net/pandoc/)'s **markdown**. The package is also capable of exporting/converting complex Pandoc documents (reports) in [various ways](#creating-pandoc-documents). Regarding the difference between `pander` and other packages for exporting R objects to different file formats, please refer to this [section](#difference-from-other-rendering-packages).
+The main aim of the *pander* [R](https://r-project.org/) package is to provide a minimal and easy tool for rendering **R objects** into [Pandoc](https://johnmacfarlane.net/pandoc/)'s **markdown**. The package is also capable of exporting/converting complex Pandoc documents (reports) in [various ways](#creating-pandoc-documents). Regarding the difference between `pander` and other packages for exporting R objects to different file formats, please refer to this [section](#difference-from-other-rendering-packages).
 
 Current build and test coverage status: [![](https://travis-ci.org/Rapporter/pander.png?branch=master)](https://travis-ci.org/Rapporter/pander) [![](https://codecov.io/github/Rapporter/pander/coverage.svg?branch=master)](https://codecov.io/github/Rapporter/pander?branch=master).
 
