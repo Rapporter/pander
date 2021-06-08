@@ -442,7 +442,7 @@ test_that('split.cells param produces expected warnings', {
   expect_warning(pander(mt, split.cells = c('30%', '30%', '40%')))
 })
 
-context('table.expand')
+context('tableExpand')
 
 test_that('produces.errors', {
   x <- data.frame(a = 'Pander\nPackage')
@@ -450,16 +450,12 @@ test_that('produces.errors', {
   expect_error(pander(x, style = 'rmarkdown', keep.line.breaks = TRUE))
 })
 
-table.expand <- function(cells, cols.width, justify, sep.cols, style) {
-  .Call('pander_tableExpand_cpp', PACKAGE = 'pander', cells, cols.width, justify, sep.cols, style)
-}
-
-test_that('table.expand behaves correctly', {
+test_that('tableExpand behaves correctly', {
   ## multiline style check
   argv <-  structure(list(txt = structure(c(1L, 4L, 2L, 3L), .Label = c('&nbsp;',  'cyl', 'disp', 'mpg'), class = 'factor'), width = c(19, 5, 5,  6), justify = structure(c(1L, 1L, 1L, 1L), .Label = 'centre', class = 'factor')), .Names = c('txt',  'width', 'justify'), row.names = c(NA, -4L), class = 'data.frame') #nolint
   sep.cols <-  c('', ' ', '')
   style <-  'multiline'
-  res <- table.expand(argv[, 1], argv[, 2], argv[, 3], sep.cols, style)
+  res <- tableExpand_cpp(argv[, 1], argv[, 2], argv[, 3], sep.cols, style)
   # max number of line breaks equals number of lines in the result
   expect_equal(max(sapply(strsplit(as.character(argv[, 1]), '\n'), length)),
                length(strsplit(res, '\n')[[1]]))
@@ -470,7 +466,7 @@ test_that('table.expand behaves correctly', {
   ## grid style check
   argv <-  structure(list(txt = structure(c(1L, 5L, 2L, 3L, 4L), .Label = c('&nbsp;',  'cyl', 'disp', 'hp', 'mpg'), class = 'factor'), width = c(20,  5, 5, 6, 4), justify = structure(c(1L, 1L, 1L, 1L, 1L), .Label = 'centre', class = 'factor')), .Names = c('txt',  'width', 'justify'), row.names = c(NA, -5L), class = 'data.frame') #nolint
   sep.cols <-  c('| ', ' | ', ' |')
-  res <- table.expand(argv[, 1], argv[, 2], argv[, 3], sep.cols, style)
+  res <- tableExpand_cpp(argv[, 1], argv[, 2], argv[, 3], sep.cols, style)
   # max number of line breaks equals number of lines in the result
   expect_equal(max(sapply(strsplit(as.character(argv[, 1]), '\n'), length)), length(strsplit(res, '\n')[[1]]))
   expect_equal(nchar(res), nchar(sep.cols)[1] + (length(argv[, 2]) - 1) * nchar(sep.cols)[2] + nchar(sep.cols)[3] + sum(argv[, 2])) #nolint
@@ -480,7 +476,7 @@ test_that('table.expand behaves correctly', {
   argv <-  structure(list(txt = structure(c(1L, 4L, 5L, 3L, 2L), .Label = c('**Mazda RX4**',  '110', '160', '21', '6'), class = 'factor'), width = c(20, 5,  5, 6, 4), justify = structure(c(1L, 1L, 1L, 1L, 1L), .Label = 'centre', class = 'factor')), .Names = c('txt',  'width', 'justify'), row.names = c('t.rownames', 'mpg', 'cyl',  'disp', 'hp'), class = 'data.frame') #nolint
   sep.cols <-  c('| ', ' | ', ' |')
   style <-  'rmarkdown'
-  res <- table.expand(argv[, 1], argv[, 2], argv[, 3], sep.cols, style)
+  res <- tableExpand_cpp(argv[, 1], argv[, 2], argv[, 3], sep.cols, style)
   # max number of line breaks equals number of lines in the result
   expect_equal(max(sapply(strsplit(as.character(argv[, 1]), '\n'), length)), length(strsplit(res, '\n')[[1]]))
   expect_equal(nchar(res),
@@ -491,7 +487,7 @@ test_that('table.expand behaves correctly', {
   argv <-  structure(list(txt = structure(c(1L, 3L, 4L, 2L, 5L), .Label = c('**Datsun 710**',  '108', '22.8', '4', '93'), class = 'factor'), width = c(20, 5,  5, 6, 4), justify = structure(c(1L, 1L, 1L, 1L, 1L), .Label = 'centre', class = 'factor')), .Names = c('txt',  'width', 'justify'), row.names = c('t.rownames', 'mpg', 'cyl',  'disp', 'hp'), class = 'data.frame') #nolint
   sep.cols <-  c('', ' ', '')
   style <-  'simple'
-  res <- table.expand(argv[, 1], argv[, 2], argv[, 3], sep.cols, style)
+  res <- tableExpand_cpp(argv[, 1], argv[, 2], argv[, 3], sep.cols, style)
   # max number of line breaks equals number of lines in the result
   expect_equal(max(sapply(strsplit(as.character(argv[, 1]), '\n'), length)), length(strsplit(res, '\n')[[1]]))
   expect_equal(nchar(res),
@@ -502,7 +498,7 @@ test_that('table.expand behaves correctly', {
   argv <-  structure(list(txt = structure(c(1L, 4L, 5L, 3L, 2L), .Label = c('**Mazda',  '110', '160', '21', '6'), class = 'factor'), width = c(10, 5,  5, 6, 4), justify = structure(c(1L, 1L, 1L, 1L, 1L), .Label = 'left', class = 'factor')), .Names = c('txt',  'width', 'justify'), row.names = c(NA, -5L), class = 'data.frame') #nolint
   sep.cols <-  c('', ' ', '')
   style <-  'multiline'
-  res <- table.expand(argv[, 1], argv[, 2], argv[, 3], sep.cols, style)
+  res <- tableExpand_cpp(argv[, 1], argv[, 2], argv[, 3], sep.cols, style)
   # max number of line breaks equals number of lines in the result
   expect_equal(max(sapply(strsplit(as.character(argv[, 1]), '\n'), length)), length(strsplit(res, '\n')[[1]]))
   expect_equal(nchar(res),
@@ -513,7 +509,7 @@ test_that('table.expand behaves correctly', {
   argv <-  structure(list(txt = structure(c(1L, 3L, 5L, 4L, 2L), .Label = c('**Hornet 4 Drive**',  '110', '21.4', '258', '6'), class = 'factor'), width = c(20,  5, 5, 6, 4), justify = structure(c(1L, 1L, 1L, 1L, 1L), .Label = 'right', class = 'factor')), .Names = c('txt',  'width', 'justify'), row.names = c('t.rownames', 'mpg', 'cyl',  'disp', 'hp'), class = 'data.frame') #nolint
   sep.cols <-  c('', ' ', '')
   style <-  'simple'
-  res <- table.expand(argv[, 1], argv[, 2], argv[, 3], sep.cols, style)
+  res <- tableExpand_cpp(argv[, 1], argv[, 2], argv[, 3], sep.cols, style)
   # max number of line breaks equals number of lines in the result
   expect_equal(max(sapply(strsplit(as.character(argv[, 1]), '\n'), length)), length(strsplit(res, '\n')[[1]]))
   expect_equal(nchar(res),
@@ -524,7 +520,7 @@ test_that('table.expand behaves correctly', {
   argv <-  structure(list(txt = structure(c(1L, 3L, 5L, 4L, 2L), .Label = c('**Hornet\n4\nDrive**',  '110', '21.4', '258', '6'), class = 'factor'), width = c(10,  5, 5, 6, 4), justify = structure(c(1L, 1L, 1L, 1L, 1L), .Label = 'left', class = 'factor')), .Names = c('txt',  'width', 'justify'), row.names = c('t.rownames', 'mpg', 'cyl',  'disp', 'hp'), class = 'data.frame') #nolint
   sep.cols <-  c('', ' ', '')
   style <-  'multiline'
-  res <- table.expand(argv[, 1], argv[, 2], argv[, 3], sep.cols, style)
+  res <- tableExpand_cpp(argv[, 1], argv[, 2], argv[, 3], sep.cols, style)
   # max number of line breaks equals number of lines in the result
   expect_equal(max(sapply(strsplit(as.character(argv[, 1]), '\n'), length)),
                length(strsplit(res, '\n')[[1]]))
@@ -535,7 +531,7 @@ test_that('table.expand behaves correctly', {
   argv <-  structure(list(txt = structure(c(1L, 3L, 4L, 2L, 5L), .Label = c('**Datsun\n710**',  '108', '22.8', '4', '93'), class = 'factor'), width = c(10, 5,  5, 6, 4), justify = structure(c(1L, 1L, 1L, 1L, 1L), .Label = 'left', class = 'factor')), .Names = c('txt',  'width', 'justify'), row.names = c('t.rownames', 'mpg', 'cyl',  'disp', 'hp'), class = 'data.frame') #nolint
   sep.cols <-  c('', ' ', '')
   style <-  'multiline'
-  res <- table.expand(argv[, 1], argv[, 2], argv[, 3], sep.cols, style)
+  res <- tableExpand_cpp(argv[, 1], argv[, 2], argv[, 3], sep.cols, style)
   # max number of line breaks equals number of lines in the result
   expect_equal(max(sapply(strsplit(as.character(argv[, 1]), '\n'), length)),
                length(strsplit(res, '\n')[[1]]))
@@ -544,7 +540,7 @@ test_that('table.expand behaves correctly', {
   argv <-  structure(list(txt = structure(c(1L, 4L, 5L, 3L, 2L), .Label = c('**Mazda\nRX4\nWag**',  '110', '160', '21', '6'), class = 'factor'), width = c(10, 5,  5, 6, 4), justify = structure(c(1L, 1L, 1L, 1L, 1L), .Label = 'left', class = 'factor')), .Names = c('txt',  'width', 'justify'), row.names = c('t.rownames', 'mpg', 'cyl',  'disp', 'hp'), class = 'data.frame') #nolint
   sep.cols <-  c('', ' ', '')
   style <-  'multiline'
-  res <- table.expand(argv[, 1], argv[, 2], argv[, 3], sep.cols, style)
+  res <- tableExpand_cpp(argv[, 1], argv[, 2], argv[, 3], sep.cols, style)
   # max number of line breaks equals number of lines in the result
   expect_equal(max(sapply(strsplit(as.character(argv[, 1]), '\n'), length)), length(strsplit(res, '\n')[[1]]))
   expect_equal(res, '**Mazda    21    6     160    110 \nRX4                               \nWag**                             '); #nolint
@@ -554,7 +550,7 @@ test_that('table.expand behaves correctly', {
   cols.width <- c(2, 2, 2)
   justify <- c('centre', 'centre', 'centre')
   sep.cols <- c('', ' ', '')
-  res <- table.expand(cells, cols.width, justify, sep.cols, 'multiline')
+  res <- tableExpand_cpp(cells, cols.width, justify, sep.cols, 'multiline')
   # when max.width param is small, every word is a line
   expect_equal(max(sapply(strsplit(as.character(cells), '\n'), length)), 0)
   expect_equal(nchar(res),
@@ -838,7 +834,7 @@ test_that('pander.survfit works correctly', {
     # using additional options
     res <- pander_return(survfit(Surv(time, status) ~ x, data = aml), print.rmean = TRUE)
     expect_equal(length(res), 21)
-    expect_equal(res[21], '* restricted mean with upper limit =  103')
+    expect_equal(res[21], '* restricted mean with upper limit =  161')
 })
 
 test_that('pander.sessionInfo works correctly', {
