@@ -35,7 +35,7 @@ Suggests:
     ggplot2 (>= 0.9.2),
     sylly,
     sylly.en,
-    futile.logger,
+    logger,
     survival,
     microbenchmark,
     zoo,

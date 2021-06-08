@@ -40,7 +40,7 @@ The following \code{evals} options are available:
      \item \code{graph.env}: save the environments in which plots were generated to distinct files (based on \code{graph.name}) with \code{env} extension?
      \item \code{graph.recordplot}: save the plot via \code{recordPlot} to distinct files (based on \code{graph.name}) with \code{recodplot} extension?
      \item \code{graph.RDS}: save the raw R object returned (usually with \code{lattice} or \code{ggplot2}) while generating the plots to distinct files (based on \code{graph.name}) with \code{RDS} extension?
-     \item \code{log}: \code{NULL} or  an optionally passed \emph{logger name} from \pkg{futile.logger} to record all info, trace, debug and error messages.
+     \item \code{log}: \code{NULL} or an optionally passed \emph{namespace} from \pkg{logger} to record all info, trace, debug and error messages.
 }
 }
 \examples{

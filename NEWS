@@ -4,6 +4,9 @@ pander 0.6.4 (2021-06-08)
 This is a maintenance release without major updates,
   https://github.com/Rapporter/pander/compare/v0.6.3...v0.6.4
 
+Changes:
+ * switch from `futile.logger` to `logger` in `evals`
+
 Fixes:
  * quote path to Pandoc binary (#331)
  * auto-detect path to Pandoc in RStudio. (#332)

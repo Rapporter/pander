@@ -207,27 +207,27 @@ df$time &lt;-<span class="st"> </span><span class="dv">1</span>:<span class="kw"
 </div>
 <div id="logging" class="section level2">
 <h2>Logging</h2>
-<p>To make execution and debugging easier to understand, <code>evals</code> provides logging with the <code>log</code> parameter. Logging in <code>evals</code> relies on the <a href="cran.r-project.org/web/packages/futile.logger/futile.logger.pdf"><code>futile.logger</code></a> package, which provides a logging API similar to <code>log4j</code>. Basic example:</p>
+<p>To make execution and debugging easier to understand, <code>evals</code> provides logging with the <code>log</code> parameter. Logging in <code>evals</code> relies on the <a href="https://cran.r-project.org/package=logger"><code>logger</code></a> package, which provides a logging API similar to <code>log4j</code>. Basic example:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">x &lt;-<span class="st"> </span><span class="kw">evals</span>(<span class="st">'1:10'</span>, <span class="dt">log =</span> <span class="st">'foo'</span>)
 <span class="co">#&gt; INFO [2016-05-13 04:43:55] Command run: 1:10</span></code></pre></div>
-<p><code>futile.logger</code>’s thresholds range from most verbose to least verbose: <code>TRACE</code>, <code>DEBUG</code>, <code>INFO</code>, <code>WARN</code>, <code>ERROR</code>, <code>FATAL</code>. The threshold defaults to <code>INFO</code>, which will hide some unessential information. To permanently set the threshold for logger use <code>flog.threshold</code>:</p>
+<p><code>logger</code>’s thresholds range from most verbose to least verbose: <code>TRACE</code>, <code>DEBUG</code>, <code>INFO</code>, <code>WARN</code>, <code>ERROR</code>, <code>FATAL</code>. The threshold defaults to <code>INFO</code>, which will hide some unessential information. To permanently set the threshold for logger use <code>log_threshold</code>:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">evalsOptions</span>(<span class="st">'log'</span>, <span class="st">'evals'</span>)
-<span class="kw">flog.threshold</span>(TRACE, <span class="st">'evals'</span>)
+<span class="kw">log_threshold</span>(TRACE, <span class="st">'evals'</span>)
 <span class="co">#&gt; NULL</span>
 x &lt;-<span class="st"> </span><span class="kw">evals</span>(<span class="st">'1:10'</span>, <span class="dt">cache.time =</span> <span class="dv">0</span>)
 <span class="co">#&gt; INFO [2016-05-13 04:43:55] Command run: 1:10</span>
 <span class="co">#&gt; TRACE [2016-05-13 04:43:55] Cached result</span>
 <span class="co">#&gt; DEBUG [2016-05-13 04:43:55] Returned object: class = integer, length = 10, dim = , size = 88 bytes</span></code></pre></div>
-<p><code>futile.logger</code> also provides a very useful ability to write logs to files instead of printing them to the prompt:</p>
+<p><code>logger</code> also provides a very useful ability to write logs to files instead of printing them to the prompt:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">t &lt;-<span class="st"> </span><span class="kw">tempfile</span>()
-<span class="kw">flog.appender</span>(<span class="kw">appender.file</span>(t), <span class="dt">name =</span> <span class="st">'evals'</span>)
+<span class="kw">log_appender</span>(<span class="kw">appender_file</span>(t), <span class="dt">namespace =</span> <span class="st">'evals'</span>)
 <span class="co">#&gt; NULL</span>
 x &lt;-<span class="st"> </span><span class="kw">evals</span>(<span class="st">'1:10'</span>, <span class="dt">log =</span> <span class="st">'evals'</span>)
 <span class="kw">readLines</span>(t)
 <span class="co">#&gt; [1] &quot;INFO [2016-05-13 04:43:55] Command run: 1:10&quot;          </span>
 <span class="co">#&gt; [2] &quot;TRACE [2016-05-13 04:43:55] Returning cached R object.&quot;</span>
 <span class="co"># revert back to console</span>
-<span class="kw">flog.appender</span>(<span class="kw">appender.console</span>(), <span class="dt">name =</span> <span class="st">'evals'</span>)
+<span class="kw">log_appender</span>(<span class="kw">appender_console</span>(), <span class="dt">namespace =</span> <span class="st">'evals'</span>)
 <span class="co">#&gt; NULL</span></code></pre></div>
 </div>
 <div id="result-caching" class="section level2">
@@ -249,7 +249,7 @@ x &lt;-<span class="st"> </span><span class="kw">evals</span>(<span class="st">'
 <p>We will set <code>cache.time</code> to 0, to cache all expressions regardless of time they took to evaluate. We will also use the logging facilites described above to simplify the understanding of how caching works.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">evalsOptions</span>(<span class="st">'cache.time'</span>, <span class="dv">0</span>)
 <span class="kw">evalsOptions</span>(<span class="st">'log'</span>, <span class="st">'evals'</span>)
-<span class="kw">flog.threshold</span>(TRACE, <span class="st">'evals'</span>)
+<span class="kw">log_threshold</span>(TRACE, <span class="st">'evals'</span>)
 <span class="co">#&gt; NULL</span></code></pre></div>
 <p>Let’s start with small example.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">system.time</span>(<span class="kw">evals</span>(<span class="st">'1:1e5'</span>))

@@ -1,6 +1,6 @@
 # [pander: An R Pandoc Writer](https://github.com/Rapporter/pander)
 
-The main aim of the *pander* [R](https://r-project.org/) package is to provide a minimal and easy tool for rendering **R objects** into [Pandoc](https://johnmacfarlane.net/pandoc/)'s **markdown**. The package is also capable of exporting/converting complex Pandoc documents (reports) in [various ways](#creating-pandoc-documents). Regarding the difference between `pander` and other packages for exporting R objects to different file formats, please refer to this [section](#difference-from-other-rendering-packages).
+The main aim of the *pander* [R](https://www.r-project.org/) package is to provide a minimal and easy tool for rendering **R objects** into [Pandoc](https://johnmacfarlane.net/pandoc/)'s **markdown**. The package is also capable of exporting/converting complex Pandoc documents (reports) in [various ways](#creating-pandoc-documents). Regarding the difference between `pander` and other packages for exporting R objects to different file formats, please refer to this [section](#difference-from-other-rendering-packages).
 
 Current build and test coverage status: [![](https://travis-ci.org/Rapporter/pander.png?branch=master)](https://travis-ci.org/Rapporter/pander) [![](https://codecov.io/github/Rapporter/pander/coverage.svg?branch=master)](https://codecov.io/github/Rapporter/pander?branch=master).
 
@@ -33,7 +33,7 @@ And there are also a few optional suggested or supported R packages, such as:
 
  * [sylly](https://cran.r-project.org/package=sylly) to use hyphenation when splitting large table cells,
  * [lattice](https://cran.r-project.org/package=lattice) and [ggplot2](https://cran.r-project.org/package=ggplot2) for unified plot theme,
- * [futile.logger](https://cran.r-project.org/package=futile.logger) for logging capabilities inside `evals`,
+ * [logger](https://cran.r-project.org/package=logger) for logging capabilities inside `evals`,
  * [survival](https://cran.r-project.org/package=survival), [microbenchmark](https://cran.r-project.org/package=microbenchmark), [zoo](https://cran.r-project.org/package=zoo), [nlme](https://cran.r-project.org/package=nlme), [descr](https://cran.r-project.org/package=descr), [MASS](https://cran.r-project.org/package=MASS), [tables](https://cran.r-project.org/package=tables), [reshape](https://cran.r-project.org/package=reshape), [memisc](https://cran.r-project.org/package=memisc), [Epi](https://cran.r-project.org/package=Epi), [randomForest](https://cran.r-project.org/package=randomForest), [tseries](https://cran.r-project.org/package=tseries), [rms](https://cran.r-project.org/package=rms) packages include some supported R classes,
  * and *pander* can be also very useful inside of [knitr](https://cran.r-project.org/package=knitr). More information about how to use *pander* and *knitr* can be found specialized vignette, which can be accessed by `vignette('knitr', package = 'pander')` or available online [here](https://rapporter.github.io/pander/knitr.html).
 
@@ -1139,7 +1139,7 @@ The list of possible options are:
   * `graph.env`: save the environments in which plots were generated to distinct files (based on `graph.name`) with `env` extension?
   * `graph.recordplot`: save the plot via `recordPlot` to distinct files (based on `graph.name`) with `recodplot` extension?
   * `graph.RDS` save the raw R object returned (usually with `lattice` or `ggplot2`) while generating the plots to distinct files (based on `graph.name`) with `RDS` extension?
-  * `log`: `NULL` or  an optionally passed *logger name* from `futile.logger` to record all info, trace, debug and error messages.
+  * `log`: `NULL` or an optionally passed *namespace* for `logger` to record all info, trace, debug and error messages.
 
 # Difference from other rendering packages
 

@@ -519,7 +519,7 @@ eval.msgs <- function(src, env = NULL, showInvisible = FALSE, graph.unify = eval
 #' @param graph.env save the environments in which plots were generated to distinct files (based on \code{graph.name}) with \code{env} extension?
 #' @param graph.recordplot save the plot via \code{recordPlot} to distinct files (based on \code{graph.name}) with \code{recodplot} extension?
 #' @param graph.RDS save the raw R object returned (usually with \code{lattice} or \code{ggplot2}) while generating the plots to distinct files (based on \code{graph.name}) with \code{RDS} extension?
-#' @param log an optionally passed \emph{logger name} from \pkg{futile.logger} to record all info, trace, debug and error messages. Logging to the console can be done by specifying e.g. \code{flog.namespace()}, and log to a file by previously calling \code{flog.appender} and \code{appender.file} on the given \emph{logger name}.
+#' @param log an optionally passed \emph{namespace} for \pkg{logger} to record all info, trace, debug and error messages.
 #' @param ... optional parameters passed to graphics device (e.g. \code{bg}, \code{pointsize} etc.)
 #' @return a list of parsed elements each containing: \code{src} (the command run), \code{result} (R object: \code{NULL} if nothing returned, path to image file if a plot was generated), \code{print}ed \code{output}, \code{type} (class of returned object if any), informative/wawrning and error messages (if any returned by the command run, otherwise set to \code{NULL}) and possible \code{stdout}t value. See Details above.
 #' @seealso \code{\link{eval.msgs}} \code{\link{evalsOptions}}
@@ -713,12 +713,12 @@ eval.msgs <- function(src, env = NULL, showInvisible = FALSE, graph.unify = eval
 #' x <- evals('1:10', log = 'foo')
 #' # log to file
 #' t <- tempfile()
-#' flog.appender(appender.file(t), name = 'evals')
+#' log_appender(appender_file(t), name = 'evals')
 #' x <- evals('1:10', log = 'evals')
 #' readLines(t)
 #' # permanent log for all events
 #' evalsOptions('log', 'evals')
-#' flog.threshold(TRACE, 'evals')
+#' log_threshold(TRACE, 'evals')
 #' evals('foo')
 #' }
 #' @export
@@ -733,7 +733,7 @@ evals <- function(txt, parse = evalsOptions('parse'), cache = evalsOptions('cach
     txt.original <- paste(txt, collapse = '\n')
 
     ## logging constant
-    logging <- !is.null(log) && requireNamespace('futile.logger', quietly = TRUE)
+    logging <- !is.null(log) && requireNamespace('logger', quietly = TRUE)
 
     ## parse provided code after concatenating
     if (parse) {
@@ -819,7 +819,7 @@ evals <- function(txt, parse = evalsOptions('parse'), cache = evalsOptions('cach
 
         ## log R expression
         if (logging) {
-            futile.logger::flog.info(paste('Command run:', gsub('[ ]+', ' ', gsub('\n', ' ', src))), name = log)
+            logger::log_info(paste('Command run:', gsub('[ ]+', ' ', gsub('\n', ' ', src))), namespace = log)
         }
 
         if (!is.na(graph.output)) {
@@ -978,7 +978,9 @@ evals <- function(txt, parse = evalsOptions('parse'), cache = evalsOptions('cach
                         cached.result$result <- file
                         class(cached.result$result) <- 'image'
                         if (logging) {
-                            futile.logger::flog.trace(paste('Image copied from cache:', file), name = log)
+                            logger::log_trace(
+                                paste('Image copied from cache:', file),
+                                namespace = log)
                         }
                         return(cached.result)
 
@@ -988,7 +990,9 @@ evals <- function(txt, parse = evalsOptions('parse'), cache = evalsOptions('cach
                         cached.image.file <- as.character(cached.result$result)
                         if (file.exists(cached.image.file)) {
                             if (logging) {
-                                futile.logger::flog.trace(paste('Image found in cache:', cached.image.file), name = log)
+                                logger::log_trace(
+                                    paste('Image found in cache:', cached.image.file),
+                                    namespace = log)
                             }
                             return(cached.result)
                         } else {
@@ -999,7 +1003,7 @@ evals <- function(txt, parse = evalsOptions('parse'), cache = evalsOptions('cach
 
                 } else {
                     if (logging) {
-                        futile.logger::flog.trace('Returning cached R object.', name = log)
+                        logger::log_trace('Returning cached R object.', namespace = log)
                     }
                     return(cached.result)
                 }
@@ -1123,7 +1127,7 @@ evals <- function(txt, parse = evalsOptions('parse'), cache = evalsOptions('cach
                 res$msg$errors <- 'plot.new has not been called yet - Please note that all R commands are parsed and evaluated separately. To override this default behavior, add a plus sign (+) as the first character of the line(s) to evaluate with the prior one(s).' #nolint
             }
             if (logging) {
-                futile.logger::flog.error(res$msg$errors, name = log)
+                logger::log_error(res$msg$errors, namespace = log)
             }
             return(res)
         }
@@ -1135,7 +1139,7 @@ evals <- function(txt, parse = evalsOptions('parse'), cache = evalsOptions('cach
 
             ## log image file name
             if (logging) {
-                futile.logger::flog.trace(paste('Image file written:', file), name = log)
+                logger::log_trace(paste('Image file written:', file), namespace = log)
             }
 
             ## save recorded plot on demand
@@ -1246,7 +1250,7 @@ evals <- function(txt, parse = evalsOptions('parse'), cache = evalsOptions('cach
                     fn <- fn[[1]]
                 }
                 if (logging) {
-                    futile.logger::flog.trace(paste('Calling hook for', hook.name), name = log)
+                    logger::log_trace(paste('Calling hook for', hook.name), namespace = log)
                 }
                 result <- do.call(fn, params)
             }
@@ -1317,7 +1321,7 @@ evals <- function(txt, parse = evalsOptions('parse'), cache = evalsOptions('cach
                         }
                     }
                     if (logging) {
-                        futile.logger::flog.trace('Cached result', name = log)
+                        logger::log_trace('Cached result', namespace = log)
                     }
                 }
 
@@ -1335,7 +1339,7 @@ evals <- function(txt, parse = evalsOptions('parse'), cache = evalsOptions('cach
                     }
 
                     if (logging) {
-                        futile.logger::flog.trace('Cached result', name = log)
+                        logger::log_trace('Cached result', namespace = log)
                     }
                 }
             }
@@ -1344,10 +1348,10 @@ evals <- function(txt, parse = evalsOptions('parse'), cache = evalsOptions('cach
         ## log
         if (logging) {
             if (!is.null(res$msg$warnings)) {
-                futile.logger::flog.warn(res$msg$warnings, name = log)
+                logger::log_warn(res$msg$warnings, namespace = log)
             }
             if (!is.null(res$result) && res$type != 'image') {
-                futile.logger::flog.debug(paste0(
+                logger::log_debug(paste0(
                     'Returned object: class = ',
                     res$type,
                     ', length = ',
@@ -1357,7 +1361,7 @@ evals <- function(txt, parse = evalsOptions('parse'), cache = evalsOptions('cach
                     ', size = ',
                     object.size(res$result),
                     ' bytes'
-                ), name = log)
+                ), namespace = log)
             }
         }
 
