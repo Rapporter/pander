@@ -18,7 +18,7 @@ Core functionality of `pander` is centered around `pandoc.table`, which is aimed
 
 ## Table styles
 
-Since `pander` aims at rendering R objects into [Pandoc](http://pandoc.org/)'s markdown all four (`multiline`, `simple`, `grid`, `rmarkdown`) of  [Pandoc](https://johnmacfarlane.net/pandoc/README.html#tables)'s formats are supported. Users are advised to stick with the default `multiline` style, but if there is a need to change it either specify `style` argument when calling `pander/pandoc.table` or change the default `style` using `panderOptions`.
+Since `pander` aims at rendering R objects into [Pandoc](https://pandoc.org/)'s markdown all four (`multiline`, `simple`, `grid`, `rmarkdown`) of  [Pandoc](https://johnmacfarlane.net/pandoc/README.html#tables)'s formats are supported. Users are advised to stick with the default `multiline` style, but if there is a need to change it either specify `style` argument when calling `pander/pandoc.table` or change the default `style` using `panderOptions`.
 
 ### multiline tables
 

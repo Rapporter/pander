@@ -3,7 +3,7 @@ $(document).ready(function() {
 
     var $b = $('body'),
         $h = $('#header'),
-        panderUrl = 'https://rapporter.github.io/pander';
+        panderUrl = 'https://rapporter.github.io/pander/';
 
     // add container div
     var $container = $('<div/>', {

@@ -190,8 +190,8 @@ pandoc.verbatim <- function(...)
 #' @export
 #' @aliases pandoc.link
 #' @examples
-#' pandoc.link('https://r-project.org')
-#' pandoc.link('https://r-project.org', 'R')
+#' pandoc.link('https://www.r-project.org/')
+#' pandoc.link('https://www.r-project.org/', 'R')
 #' @references John MacFarlane (2012): _Pandoc User's Guide_. \url{https://johnmacfarlane.net/pandoc/README.html}
 pandoc.link.return <- function(url, text = url)
     sprintf('[%s](%s)', text, url)

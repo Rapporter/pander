@@ -21,8 +21,8 @@ Create pandoc link
 Pandoc's markdown format link.
 }
 \examples{
-pandoc.link('https://r-project.org')
-pandoc.link('https://r-project.org', 'R')
+pandoc.link('https://www.r-project.org/')
+pandoc.link('https://www.r-project.org/', 'R')
 }
 \references{
 John MacFarlane (2012): _Pandoc User's Guide_. \url{https://johnmacfarlane.net/pandoc/README.html}

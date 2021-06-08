@@ -70,7 +70,7 @@ For more usage/implementation details and examples, please refer to the `evals` 
 
 The [brew](https://cran.r-project.org/package=brew) package, a templating framework for report generation, has not been updated since 2011, but it's still some of R projects based on its simple design and useful literate programming features. For a quick overview, please see the following documents if you are not familiar with brew:
 
-* [slides on "Building a reporting sytem with BREW"](http://www.slideshare.net/xavierguardiola/building-a-reporting-sytem-with-brew)
+* [slides on "Building a reporting sytem with BREW"](https://www.slideshare.net/xavierguardiola/building-a-reporting-sytem-with-brew)
 * [learnr blogpost on brew](https://learnr.wordpress.com/2009/09/09/brew-creating-repetitive-reports/)
 
 A brew document is a simple text file with some special tags. `Pandoc.brew` uses only two of them (as building on a personalized version of Jeff's really great brew function):

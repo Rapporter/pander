@@ -56,7 +56,7 @@ The following \code{pander} options are available:
      \item \code{graph.legend.position}: string (default: \code{'right'}) specifying the position of the legend: 'top', 'right', 'bottom' or 'left'
      \item \code{graph.background}: string (default: \code{'white'}) specifying the plots main background's color
      \item \code{graph.panel.background}: string (default: \code{'transparent'}) specifying the plot's main panel background. Please \emph{note}, that this option is not supported with \code{base} graphics.
-     \item \code{graph.colors}: character vector of default color palette (defaults to a colorblind theme: \url{https://jfly.iam.u-tokyo.ac.jp/color/}). Please \emph{note} that this update work with \code{base} plots by appending the \code{col} argument to the call if not set.
+     \item \code{graph.colors}: character vector of default color palette (defaults to a colorblind theme: \url{https://jfly.uni-koeln.de/color/}). Please \emph{note} that this update work with \code{base} plots by appending the \code{col} argument to the call if not set.
      \item \code{graph.color.rnd}: boolean (default: \code{FALSE}) specifying if the palette should be reordered randomly before rendering each plot to get colorful images
      \item \code{graph.axis.angle}: numeric (default: \code{1}) specifying the angle of axes' labels. The available options are based on \code{par(les)} and sets if the labels should be:
      \itemize{

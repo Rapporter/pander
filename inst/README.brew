@@ -132,7 +132,7 @@ pandoc.table.return(mtcars[1:2, 1:3], style = "simple")
 %>
 ```
 
-My personal favorite, the [`grid` format](https://johnmacfarlane.net/pandoc/README.html#grid-tables) is really handy for [emacs](https://emacswiki.org/emacs/TableMode) users and it does support line breaks inside of cells, but cell alignment is not possible in most parsers:
+My personal favorite, the [`grid` format](https://johnmacfarlane.net/pandoc/README.html#grid-tables) is really handy for [emacs](https://www.emacswiki.org/emacs/TableMode) users and it does support line breaks inside of cells, but cell alignment is not possible in most parsers:
 
 ```rout
 > pandoc.table(m, style = "grid")
@@ -461,7 +461,7 @@ The package is also capable of creating complex Pandoc documents (reports) from 
 
 The [brew](https://cran.r-project.org/package=brew) package, which is a templating framework for report generation, has not been updated on CRAN since 2011, but it's still used in bunch of R projects based on its simple design and useful features in literate programming. For a quick overview, please see the following documents if you are not familiar with `brew`:
 
-  * [slides on "Building a reporting sytem with BREW"](http://www.slideshare.net/xavierguardiola/building-a-reporting-sytem-with-brew)
+  * [slides on "Building a reporting sytem with BREW"](https://www.slideshare.net/xavierguardiola/building-a-reporting-sytem-with-brew)
   * [learnr blogpost on brew](https://learnr.wordpress.com/2009/09/09/brew-creating-repetitive-reports/)
 
 **In short**: a `brew` document is a simple text file with some special tags. `Pandoc.brew` uses only two of them (as building on a personalized version of Jeff's really great `brew` function):
@@ -787,7 +787,7 @@ The package comes with a variety of globally adjustable options, which have an e
   * `graph.legend.position`: string (default: `'right'`) specifying the position of the legend: 'top', 'right', 'bottom' or 'left'
   * `graph.background`: string (default: `'white'`) specifying the plots main background's color
   * `graph.panel.background`: string (default: `'transparent'`) specifying the plot's main panel background. Please *note*, that this option is not supported with `base` graphics.
-  * `graph.colors`: character vector of default color palette (defaults to a [colorblind theme](https://jfly.iam.u-tokyo.ac.jp/color/)). Please *note* that this update work with `base` plots by appending the `col` argument to the call if not set.
+  * `graph.colors`: character vector of default color palette (defaults to a [colorblind theme](https://jfly.uni-koeln.de/color/)). Please *note* that this update work with `base` plots by appending the `col` argument to the call if not set.
   * `graph.color.rnd`: boolean (default: `FALSE`) specifying if the palette should be reordered randomly before rendering each plot to get colorful images
   * `graph.axis.angle`: numeric (default: `1`) specifying the angle of axes' labels. The available options are based on `par(les)` and sets if the labels should be:
 
@@ -846,7 +846,7 @@ And `pander` uses its built-in (IMHO quite decent) [**caching**](#caching) engin
 
 # ESS
 
-I have created some simple LISP functions which would be handy if you are using the best damn IDE for R. These functions and default key-bindings are [shipped with the package](https://github.com/Rapporter/pander/tree/master/inst/pander.el), feel free to personalize.
+I have created some simple LISP functions which would be handy if you are using the best damn IDE for R. These functions and default key-bindings are [shipped with the package](https://github.com/Rapporter/pander/blob/master/inst/pander.el), feel free to personalize.
 
 As time passed these small functions grew heavier (with my Emacs knowledge) so I ended up with a small library:
 
