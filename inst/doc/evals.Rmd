@@ -148,7 +148,7 @@ log_appender(appender_file(t), namespace = 'evals')
 x <- evals('1:10', log = 'evals')
 readLines(t)
 # revert back to console
-log_appender(appender_console(), name = 'evals')
+log_appender(appender_stdout, name = 'evals')
 ```
 
 ## Result Caching
