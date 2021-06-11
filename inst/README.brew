@@ -20,8 +20,6 @@ On the other hand, I welcome everyone to use the most recent version of the pack
 devtools::install_github('Rapporter/pander')
 ```
 
-Or download the [sources](https://github.com/Rapporter/pander/zipball/master) and build manually. If you're running R on Windows, you will need to install [Rtools](https://cran.r-project.org/bin/windows/Rtools/).
-
 ## Dependencies
 
 Few cool packages from CRAN are needed for installing and/or using `pander`:
@@ -41,13 +39,13 @@ And there are also a few optional suggested or supported R packages, such as:
 
 *pander* heavily builds on [Pandoc](https://johnmacfarlane.net/pandoc), which should be **pre-installed** before trying to convert your reports to [different formats](https://johnmacfarlane.net/pandoc/). Although **main functions work without Pandoc**, e.g. you can transform R objects into markdown or generate a markdown formatted report via [Pandoc.brew](#brew-to-pandoc) or the custom [reference class](#live-report-generation), but installing that great piece of software is suggested if you want to convert markdown to PDF/docx/HTML or other formats.
 
-Starting v0.98.932 [RStudio](http://www.rstudio.com/) comes with a bundled `Pandoc` binary, so one can save the tedious steps of installing Pandoc.
+Starting v0.98.932 [RStudio](https://www.rstudio.com/) comes with a bundled `Pandoc` binary, so one can save the tedious steps of installing Pandoc.
 
 If you do not have RStudio installed, please refer to the [installation process of Pandoc](https://johnmacfarlane.net/pandoc/installing.html), which is quite straightforward on most-popular operating systems: download and run the binary (a few megabytes), and get a full-blown document converter in a few seconds/minutes. On some Linux distributions, it might be a bit more complicated (as repositories tend to provide out-dated versions of Pandoc, so you would need `cabal-install` to [install from sources](https://johnmacfarlane.net/pandoc/installing.html#all-platforms)). Please do not forget to restart your R session to update your `PATH` after installation!
 
 # Helper functions
 
-The package contains numerous helper functions, which render user specified inputs in Pandoc's markdown format or apply some extra formatting on it. All  Pandoc-related functions' names are starting with `pandoc`. For example `pandoc.table` is used for rendering tables in markdown. For a technical documentation, see the HTML help files of the package at [Rdocumentation](http://www.rdocumentation.org/packages/pander).
+The package contains numerous helper functions, which render user specified inputs in Pandoc's markdown format or apply some extra formatting on it. All  Pandoc-related functions' names are starting with `pandoc`. For example `pandoc.table` is used for rendering tables in markdown. For a technical documentation, see the HTML help files of the package at [Rdocumentation](https://www.rdocumentation.org/packages/pander).
 
 <a id="primitive-functions"></a>
 
@@ -339,7 +337,7 @@ pandoc.table.return(m, keep.line.breaks = TRUE)
 %>
 ```
 
-To see all possible options, please check [`?pandoc.table`](http://www.rdocumentation.org/packages/pander/functions/pandoc.table.return)
+To see all possible options, please check [`?pandoc.table`](https://www.rdocumentation.org/packages/pander/functions/pandoc.table.return)
 
 And please note, that all above mentioned features are also supported by the `pander` [generic S3 method](#generic-pander-method) and defaults can be updated via [`panderOptions`](#pander-options) for permanent settings.
 
@@ -447,7 +445,7 @@ And of course tables are formatted (e.g. auto add of line breaks, splitting up t
 
 The package is also capable of creating complex Pandoc documents (reports) from **R objects** in multiple ways:
 
-  * create somehow a markdown text file (e.g. with `brew`, `knitr` or any scripts of yours, maybe with `Pandoc.brew` - see just [below](#brew-to-pandoc)) and transform that to other formats (like HTML, odt, PDF, docx etc.) with `Pandoc.convert` - similarly to [`pandoc` function in knitr](http://yihui.name/knitr/demo/pandoc/). Basically this is a wrapper around a [Pandoc](https://johnmacfarlane.net/pandoc/) call, which has not much to do with R actually.
+  * create somehow a markdown text file (e.g. with `brew`, `knitr` or any scripts of yours, maybe with `Pandoc.brew` - see just [below](#brew-to-pandoc)) and transform that to other formats (like HTML, odt, PDF, docx etc.) with `Pandoc.convert` - similarly to [`pandoc` function in knitr](https://yihui.org/knitr/demo/pandoc/). Basically this is a wrapper around a [Pandoc](https://johnmacfarlane.net/pandoc/) call, which has not much to do with R actually.
 
   * users might write some reports with literate programming (similar to `knitr`) in a forked version of [brew](https://cran.r-project.org/package=brew) syntax resulting. This means that the user can include R code chunks in a document, and brewing that results in a pretty Pandoc's markdown document and also in a **bunch of other formats** (like HTML, odt, PDF, docx etc.). The great advantage of this [function](#brew-to-pandoc) is that you do not have to transform your R objects to markdown manually, it's all handled automagically.
 
@@ -665,7 +663,7 @@ So instead of a captured R object (which would be `NULL` in this situation by th
 Well, this is not a standard histogram usually returned by the `hist` function, right? As mentioned before, `evals` have some extra features like applying the user defined theme on various plots automatically. Please see the `graphs.brew` example [above](#examples) for further details, or check the related [global options](#evals-options). If you do not like this feature, simply add `evalsOptions('graph.unify`, FALSE)` to your `.Rprofile`.
 
 
-Further features are described in the [technical docs](http://www.rdocumentation.org/packages/pander/functions/evals), and now I'll only give a brief introduction to another important feature of `evals`.
+Further features are described in the [technical docs](https://www.rdocumentation.org/packages/pander/functions/evals), and now I'll only give a brief introduction to another important feature of `evals`.
 
 ## Caching
 
