@@ -149,7 +149,7 @@ pandoc.table(df, split.cells = c("80%", "10%", "10%"))
 pandoc.table(df, split.cells = 5, style = 'simple')
 ```
 
-In some cases it is also useful to split too long words with hyphens, and `pander` uses `sylly` functionality for that. Just specify `use.hyphening` argument and have `koRpus` installed:
+In some cases it is also useful to split too long words with hyphens, and `pander` uses `sylly` functionality for that. Just specify `use.hyphening` argument and have `sylly` installed:
 
 ```{r}
 pandoc.table(data.frame(baz = 'foobar', foo='accoutrements'),
@@ -172,7 +172,7 @@ r <- matrix(c(283764.97430, 29.12345678901, -7.1234, -100.1), ncol = 2)
 pandoc.table(r, round = 2)
 pandoc.table(r, round = c(4,2)) # vector for each column
 pandoc.table(r, digits = 2)
-pandoc.table(r, digits = c(0, 5)) # vector for each column
+pandoc.table(r, digits = c(1, 5)) # vector for each column
 pandoc.table(r, big.mark = ',')
 pandoc.table(r, decimal.mark = ',')
 ```
