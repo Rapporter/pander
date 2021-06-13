@@ -11,3 +11,6 @@ pull.sh
 \.brewer.R
 .*.sh
 ^appveyor\.yml$
+.backup
+^doc$
+^Meta$
