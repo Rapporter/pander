@@ -7,7 +7,7 @@ pander 0.6.5 (2022-03-17)
 ----------------------------------------------------------------
 
 This is a maintenance release without major updates,
-  https://github.com/Rapporter/pander/compare/v0.6.3...v0.6.4
+  https://github.com/Rapporter/pander/compare/v0.6.4...v0.6.5
 
 Fixes:
  * check for condition has length > 1
