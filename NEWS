@@ -1,7 +1,17 @@
-pander 0.6.5
+pander 0.6.6
 ----------------------------------------------------------------
 
 Development version on GitHub.
+
+pander 0.6.5 (2022-03-17)
+----------------------------------------------------------------
+
+This is a maintenance release without major updates,
+  https://github.com/Rapporter/pander/compare/v0.6.3...v0.6.4
+
+Fixes:
+ * check for condition has length > 1
+ * emphasize rows when no rows passed (#354)
 
 pander 0.6.4 (2021-06-08)
 ----------------------------------------------------------------
