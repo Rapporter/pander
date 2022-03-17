@@ -209,6 +209,13 @@ test_that('emphasize.verbatim works correctly', {
     expect_equal(res[7], '   3      `6`      `9`   ')
 })
 
+test_that('emphasize.strong.rows works correctly with no rows to emphasize #354', {
+    df <- data.frame(a = 1:3, b = 4:6, c = 7:9)
+    res <- pander_return(df, emphasize.strong.rows = integer(0), style = 'simple')
+    expect_equal(res[5], ' 1   4   7 ')
+    expect_equal(res[6], ' 2   5   8 ')
+    expect_equal(res[7], ' 3   6   9 ')
+})
 
 context('captions')
 

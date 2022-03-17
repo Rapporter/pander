@@ -1046,6 +1046,10 @@ pandoc.table.return <- function(t, caption, digits = panderOptions('digits'), de
     ## adding formatting (emphasis, strong etc.)
     ## #########################################################################
 
+    is.empty <- function(x) {
+        is.null(x) || length(x) == 0
+    }
+
     if (is.null(emphasize.italics.rows)) {
         emphasize.italics.rows <- emphasize.rows
     }
@@ -1055,48 +1059,48 @@ pandoc.table.return <- function(t, caption, digits = panderOptions('digits'), de
     if (is.null(emphasize.italics.cells)) {
         emphasize.italics.cells <- emphasize.cells
     }
-    if (!is.null(emphasize.verbatim.rows) && !plain.ascii) {
+    if (!is.empty(emphasize.verbatim.rows) && !plain.ascii) {
         check.highlight.parameters(emphasize.verbatim.rows, nrow(t))
         t[emphasize.verbatim.rows, ] <- apply(t[emphasize.verbatim.rows, , drop = FALSE], #nolint
                                               c(1, 2),
                                               pandoc.verbatim.return)
     }
-    if (!is.null(emphasize.verbatim.cols) && !plain.ascii) {
+    if (!is.empty(emphasize.verbatim.cols) && !plain.ascii) {
         check.highlight.parameters(emphasize.verbatim.cols, ncol(t))
         t[, emphasize.verbatim.cols] <- apply(t[, emphasize.verbatim.cols, drop = FALSE],
                                               c(1, 2), pandoc.verbatim.return)
     }
-    if (!is.null(emphasize.verbatim.cells) && !plain.ascii) {
+    if (!is.empty(emphasize.verbatim.cells) && !plain.ascii) {
         t <- as.matrix(t)
         check.highlight.parameters(emphasize.verbatim.cells, nrow(t), ncol(t))
         t[emphasize.verbatim.cells] <- sapply(t[emphasize.verbatim.cells], pandoc.verbatim.return)
     }
-    if (!is.null(emphasize.italics.rows) && !plain.ascii) {
+    if (!is.empty(emphasize.italics.rows) && !plain.ascii) {
         check.highlight.parameters(emphasize.italics.rows, nrow(t))
         t[emphasize.italics.rows, ] <- base::t(apply(t[emphasize.italics.rows, , drop = FALSE], #nolint
                                              c(1),
                                              pandoc.emphasis.return))
     }
-    if (!is.null(emphasize.strong.rows) && !plain.ascii) {
+    if (!is.empty(emphasize.strong.rows) && !plain.ascii) {
         check.highlight.parameters(emphasize.strong.rows, nrow(t))
         t[emphasize.strong.rows, ] <- base::t(apply(t[emphasize.strong.rows, , drop = FALSE], #nolint
                                                     c(1),
                                                     pandoc.strong.return))
     }
-    if (!is.null(emphasize.italics.cols) && !plain.ascii) {
+    if (!is.empty(emphasize.italics.cols) && !plain.ascii) {
         check.highlight.parameters(emphasize.italics.cols, ncol(t))
         t[, emphasize.italics.cols] <- apply(t[, emphasize.italics.cols, drop = FALSE], c(2), pandoc.emphasis.return)
     }
-    if (!is.null(emphasize.strong.cols) && !plain.ascii) {
+    if (!is.empty(emphasize.strong.cols) && !plain.ascii) {
         check.highlight.parameters(emphasize.strong.cols, ncol(t))
         t[, emphasize.strong.cols] <- apply(t[, emphasize.strong.cols, drop = FALSE], c(2), pandoc.strong.return)
     }
-    if (!is.null(emphasize.italics.cells) && !plain.ascii) {
+    if (!is.empty(emphasize.italics.cells) && !plain.ascii) {
         t <- as.matrix(t)
         check.highlight.parameters(emphasize.italics.cells, nrow(t), ncol(t))
         t[emphasize.italics.cells] <- pandoc.emphasis.return(t[emphasize.italics.cells])
     }
-    if (!is.null(emphasize.strong.cells) && !plain.ascii) {
+    if (!is.empty(emphasize.strong.cells) && !plain.ascii) {
         t <- as.matrix(t)
         check.highlight.parameters(emphasize.strong.cells, nrow(t), ncol(t))
         t[emphasize.strong.cells] <- pandoc.strong.return(t[emphasize.strong.cells])
