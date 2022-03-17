@@ -1153,7 +1153,7 @@ pandoc.table.return <- function(t, caption, digits = panderOptions('digits'), de
 
     ## remove obvious row.names
     if ((!row.names.provided && (all(t.rownames == 1:nrow(t)) | all(t.rownames == ''))) |
-        row.names.provided && row.names == FALSE) {
+        row.names.provided && length(row.names) == 1 && row.names == FALSE) {
         t.rownames <- NULL
     }
 
