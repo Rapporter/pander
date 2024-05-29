@@ -375,8 +375,8 @@ cache.on <- function()
 #' Split line with line breaks depending on max.width
 #'
 #' This is a helper function to insert line breaks depending on (\code{split.cells} parameter of \code{pandoc.table}) of the returning table.
-#' @param x string to be split. Works only with one string. Non-string arguments and multi-dimensional arguments are returned unchaged
-#' @param max.width default integer value specyfing max number of characters between line breaks
+#' @param x string to be split. Works only with one string. Non-string arguments and multi-dimensional arguments are returned unchanged
+#' @param max.width default integer value specifying max number of characters between line breaks
 #' @param use.hyphening (default: \code{FALSE}) if try to use hyphening when splitting large cells according to table.split.cells. Requires \pkg{sylly}.
 #' @return character string with line breaks
 #' @export
