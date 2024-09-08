@@ -341,7 +341,7 @@ pander.summary.lm <- function(x, caption = attr(x, 'caption'), covariate.labels,
         }
     }
 
-    res <- as.data.frame(x$coeff)
+    res <- as.data.frame(x$coefficients)
 
     if (move.intercept && rownames(res)[1] == '(Intercept)' & nrow(res) > 1) {
         res <- res[c(2:nrow(res), 1), ]
