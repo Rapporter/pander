@@ -361,7 +361,7 @@ pander.summary.lm <- function(x, caption = attr(x, 'caption'), covariate.labels,
 
     if (summary) {
         pandoc.table(res, ...)
-        if (class(x) == 'summary.glm') {
+        if (inherits(x, 'summary.glm')) {
             cat('\n(Dispersion parameter for ', x$family$family, ' family taken to be ',
                 format(x$dispersion), ')\n\n')
             stats <- cbind(paste(format(c('Null', 'Residual'), justify = 'right'), 'deviance:'),
