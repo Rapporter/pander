@@ -35,7 +35,7 @@ openFileInOS <- function(f) {
 
 #' Converts Pandoc to other format
 #'
-#' Calling John MacFarlane's great program to convert specified file (see \code{f} parameter below) or character vector {see \code{text} paramater} to other formats like \code{HTML}, \code{pdf}, \code{docx}, \code{odt} etc.
+#' Calling John MacFarlane's great program to convert specified file (see \code{f} parameter below) or character vector (see \code{text} parameter) to other formats like \code{HTML}, \code{pdf}, \code{docx}, \code{odt} etc.
 #' @param f Pandoc's markdown format file path. If URL is provided then the generated file's path is \code{tempfile()} but please bear in mind that this way only images with absolute path would shown up in the document.
 #' @param text Pandoc's markdown format character vector. Treated as the content of \code{f} file - so the \code{f} parameter is ignored. The generated file's path is \code{tempfile()}.
 #' @param format required output format. For all possible values here check out Pandoc homepage: \url{https://johnmacfarlane.net/pandoc/}

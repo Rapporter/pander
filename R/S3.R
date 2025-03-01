@@ -134,6 +134,7 @@ pander.NULL <- function(x, ...)
 #' @param x vector
 #' @param ... ignored parameters
 #' @keywords internal
+#' @export
 pander.vector <- function(x, ...) {
 
     if (!is.null(names(x))) {

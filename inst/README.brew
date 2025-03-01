@@ -2,7 +2,7 @@
 
 The main aim of the *pander* [R](https://r-project.org) package is to provide a minimal and easy tool for rendering **R objects** into [Pandoc](https://johnmacfarlane.net/pandoc/)'s **markdown**. The package is also capable of exporting/converting complex Pandoc documents (reports) in [various ways](#creating-pandoc-documents). Regarding the difference between `pander` and other packages for exporting R objects to different file formats, please refer to this [section](#difference-from-other-rendering-packages).
 
-Current build and test coverage status: [![](https://travis-ci.org/Rapporter/pander.png?branch=master)](https://travis-ci.org/Rapporter/pander) [![](https://codecov.io/github/Rapporter/pander/coverage.svg?branch=master)](https://codecov.io/github/Rapporter/pander?branch=master).
+Current build and test coverage status: [![](https://codecov.io/github/Rapporter/pander/coverage.svg?branch=master)](https://app.codecov.io/github/Rapporter/pander?branch=master).
 
 Some CRAN statistics: [![](http://cranlogs.r-pkg.org/badges/pander)](https://cran.r-project.org/package=pander) [![](http://cranlogs.r-pkg.org/badges/grand-total/pander)](https://cran.r-project.org/package=pander)
 
@@ -39,7 +39,7 @@ And there are also a few optional suggested or supported R packages, such as:
 
 *pander* heavily builds on [Pandoc](https://johnmacfarlane.net/pandoc), which should be **pre-installed** before trying to convert your reports to [different formats](https://johnmacfarlane.net/pandoc/). Although **main functions work without Pandoc**, e.g. you can transform R objects into markdown or generate a markdown formatted report via [Pandoc.brew](#brew-to-pandoc) or the custom [reference class](#live-report-generation), but installing that great piece of software is suggested if you want to convert markdown to PDF/docx/HTML or other formats.
 
-Starting v0.98.932 [RStudio](https://www.rstudio.com/) comes with a bundled `Pandoc` binary, so one can save the tedious steps of installing Pandoc.
+Starting v0.98.932 [RStudio](https://posit.co/) comes with a bundled `Pandoc` binary, so one can save the tedious steps of installing Pandoc.
 
 If you do not have RStudio installed, please refer to the [installation process of Pandoc](https://johnmacfarlane.net/pandoc/installing.html), which is quite straightforward on most-popular operating systems: download and run the binary (a few megabytes), and get a full-blown document converter in a few seconds/minutes. On some Linux distributions, it might be a bit more complicated (as repositories tend to provide out-dated versions of Pandoc, so you would need `cabal-install` to [install from sources](https://johnmacfarlane.net/pandoc/installing.html#all-platforms)). Please do not forget to restart your R session to update your `PATH` after installation!
 

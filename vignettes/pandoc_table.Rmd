@@ -46,7 +46,7 @@ pandoc.table(m, keep.line.breaks = TRUE, style='simple')
 
 ### grid tables
 
-`grid` format is really handy for `emacs` users ([Emacs table mod](http://table.sourceforge.net/)) and it does support block elements (multiple paragraphs, code blocks, lists, etc.) inside cells, but cells can't span multiple columns or rows. Alignments are not supported for grid tables by most parsers, meaning that even though `pander` will produce a table with alignment, it will be lost during conversion from `markdown` to `HTML/PDF/DOCX`.
+`grid` format is really handy for `emacs` users ([Emacs table mod](https://table.sourceforge.net/)) and it does support block elements (multiple paragraphs, code blocks, lists, etc.) inside cells, but cells can't span multiple columns or rows. Alignments are not supported for grid tables by most parsers, meaning that even though `pander` will produce a table with alignment, it will be lost during conversion from `markdown` to `HTML/PDF/DOCX`.
 
 ```{r, error=TRUE}
 m <- mtcars[1:3, 1:4]

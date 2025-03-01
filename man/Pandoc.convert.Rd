@@ -39,7 +39,7 @@ Pandoc.convert(
 Converted file's path.
 }
 \description{
-Calling John MacFarlane's great program to convert specified file (see \code{f} parameter below) or character vector {see \code{text} paramater} to other formats like \code{HTML}, \code{pdf}, \code{docx}, \code{odt} etc.
+Calling John MacFarlane's great program to convert specified file (see \code{f} parameter below) or character vector (see \code{text} parameter) to other formats like \code{HTML}, \code{pdf}, \code{docx}, \code{odt} etc.
 }
 \note{
 This function depends on \code{Pandoc} which should be pre-installed on user's machine. See the \code{INSTALL} file of the package.

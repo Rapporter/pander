@@ -14,7 +14,7 @@ Description: Contains some functions catching all messages, 'stdout' and other
     latter reporting feature is supported in brew syntax or with a custom reference
     class with a smarty caching 'backend'.
 Version: 0.6.6
-Date: 2022-03-17
+Date: 2025-03-01
 URL: https://rapporter.github.io/pander/
 BugReports: https://github.com/rapporter/pander/issues
 License: AGPL-3 | file LICENSE
@@ -58,4 +58,4 @@ SystemRequirements: pandoc (https://johnmacfarlane.net/pandoc) for exporting
     markdown files to other formats.
 LinkingTo: Rcpp
 VignetteBuilder: knitr
-RoxygenNote: 7.1.1
+RoxygenNote: 7.3.2
