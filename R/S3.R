@@ -70,9 +70,10 @@ pander <- function(x = NULL, ...) {
     ## save current knitr.auto.asis option
     kaao <- panderOptions('knitr.auto.asis')
 
-    if (isTRUE(panderOptions('knitr.auto.asis')) &&
-        isTRUE(getOption('knitr.in.progress')) &&
-        requireNamespace('knitr', quietly = TRUE)) {
+    if (isTRUE(getOption('jupyter.in_kernel')) |
+        (isTRUE(panderOptions('knitr.auto.asis')) &&
+         isTRUE(getOption('knitr.in.progress')) &&
+         requireNamespace('knitr', quietly = TRUE))) {
 
         ## override knitr.auto.asis option for nested calls
         panderOptions('knitr.auto.asis', FALSE)
@@ -101,7 +102,16 @@ pander <- function(x = NULL, ...) {
                 stdout <- c(stdout, '')
             }
 
-            return(knitr::asis_output(paste(stdout, collapse = '\n')))
+            ## collapse character vector into a string
+            stdout <- paste(stdout, collapse = '\n')
+
+            ## return string for Jupyter and "asis" output for knitr
+            if (isTRUE(getOption('jupyter.in_kernel'))) {
+                return(structure(stdout, class = 'pander_output'))
+            } else {
+                return(knitr::asis_output(stdout))
+            }
+
         })
     }
 
