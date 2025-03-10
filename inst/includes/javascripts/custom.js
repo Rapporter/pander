@@ -79,25 +79,11 @@ $(document).ready(function() {
     $('.content a > img:not([alt])').addClass('image_without_caption');
     $('img').closest('p').css('text-align', 'center');
 
-    // slimbox2
-    $('.content a > img:not([alt])').slimbox({
-        counterText: "Plot: {x} of {y}"
-    }, function(el) {
-	return [el.parentNode.href, el.title];
-    });
-
 });
 
 $(window).load(function() {
 
     // add title tags to imgs
     $('.content a > div.caption').each(function() {$(this).attr('title', $(this).children(':first-child').attr('alt'))});
-
-    // slimbox2
-    $('.content a > div.caption').slimbox({
-        counterText: "Plot: {x} of {y}"
-    }, function(el) {
-	return [el.parentNode.href, el.title];
-    });
 
 });
