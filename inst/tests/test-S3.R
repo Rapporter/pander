@@ -758,6 +758,18 @@ test_that('pander.ts behaves correctly', {
     expect_equal(length(res), 15)
 })
 
+test_that('pander.ts renders weekly (frequency = 7) ts', {
+    # univariate: day.abb must be defined in the univariate branch too,
+    # otherwise frequency-7 series crash with "object 'day.abb' not found"
+    res <- pander_return(ts(1:10, frequency = 7, start = c(1959, 2)), style = 'simple')
+    expect_equal(res[3], '  &nbsp;    Sun   Mon   Tue   Wed   Thu   Fri   Sat ')
+    expect_equal(length(res), 7)
+    # multivariate weekly: preserve existing behaviour
+    res <- pander_return(ts(matrix(1:21, 7, 3), start = c(1961, 1), frequency = 7), style = 'simple')
+    expect_equal(res[3], '     &nbsp;        Series.1   Series.2   Series.3 ')
+    expect_equal(length(res), 12)
+})
+
 test_that('pander.coxph behaves correctly', {
     suppressMessages(require(survival))
     test1 <- list(time = c(4, 3, 1, 1, 2, 2, 3),

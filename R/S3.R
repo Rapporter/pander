@@ -989,11 +989,11 @@ pander.ts <- function(x, caption = attr(x, 'caption'), ...) {
         caption <- get.caption()
     }
 
+    day.abb <- c('Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri',
+                 'Sat')
     if (!is.null(ncol(x))) {
         tp.1 <- trunc(time(x))
         tp.2 <- trunc(cycle(x))
-        day.abb <- c('Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri',
-                     'Sat')
         row.names <- switch(frequency(x), tp.1, 'Arg2', 'Arg3',
                             paste(tp.1, c('Q1', 'Q2', 'Q3', 'Q4')[tp.2], sep = ' '),
                             'Arg5', 'Arg6', paste('Wk.', tp.1, ' ', day.abb[tp.2],
